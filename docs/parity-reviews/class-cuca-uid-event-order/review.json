@@ -112,7 +112,7 @@
         "explicit aliases on preexisting targets",
         "post-declaration tail entity exposing the final shared counter"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_preexisting_reordered.puml",
@@ -123,7 +123,7 @@
         "extends crossed with implements",
         "post-declaration tail entity"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_inverted_links_missing_endpoints.puml",
@@ -134,7 +134,7 @@
         "Link.getInv transient replacement UID",
         "post-link tail entity"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_aliases_after_implicit_entities.puml",
@@ -145,7 +145,7 @@
         "two links separated by alias upgrades",
         "tail entity after all upgrades"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_without_base_control.puml",
@@ -156,7 +156,7 @@
         "temporary A-B link creation branch",
         "tail entity exposing the six-slot branch"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.puml",
@@ -167,7 +167,7 @@
         "later relation-created endpoint",
         "tail entity exposing downstream UID drift"
       ],
-      "result": "fail: Java removes existing lnk4 and consumes five association slots, emitting lnk8 through lnk10, MissingB ent0011, and Tail ent0013; Rust retains lnk4, consumes six association slots, emits lnk9 through lnk11, MissingB ent0012, and Tail ent0014"
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_notes_interleaved_links.puml",
@@ -178,7 +178,7 @@
         "second attached note after another relation-created endpoint",
         "tail entity after note-generated UID triples"
       ],
-      "result": "fail: UID values match Java, but Rust paints ordinary entities before generated attached-note entities; Java entity order is Anchor, GMN3, MissingOne, Floating, MissingTwo, GMN11, Tail while Rust order is Anchor, MissingOne, Floating, MissingTwo, Tail, GMN3, GMN11"
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_packages_reopen.puml",
@@ -189,7 +189,7 @@
         "reopening a phantom ancestor explicitly",
         "later qualified class and root tail entity"
       ],
-      "result": "fail: package shells, tab lines, and package titles are shifted left by 1.0011 px in Rust; no UID mismatch was reported"
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_relation_phantoms.puml",
@@ -200,7 +200,7 @@
         "later explicit reopen of the phantom package",
         "root tail entity"
       ],
-      "result": "fail: package shells, tab lines, and package titles are shifted left by 1.0011 px in Rust; no UID mismatch was reported"
+      "result": "fail"
     }
   ],
   "result_counts": {

@@ -54,7 +54,8 @@
       "metadata_result": "pass",
       "evidence": "Java and Rust entity-group data-qualified-name/data-source-line maps are exact: state and diamond omit source line; class, entity, object, and circle carry their declaration line.",
       "strict_render_result": "different",
-      "strict_render_note": "The no-oracle helper reports unrelated geometry and element-order differences; those are outside this metadata verdict."
+      "strict_render_note": "The no-oracle helper reports unrelated geometry and element-order differences; those are outside this metadata verdict.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_classlike_variants.puml",
@@ -70,7 +71,8 @@
       "metadata_result": "pass",
       "evidence": "All eight Java and Rust entity-group metadata records match exactly.",
       "strict_render_result": "different",
-      "strict_render_note": "Layout and body-painting deltas were explicitly excluded from the metadata comparison."
+      "strict_render_note": "Layout and body-painting deltas were explicitly excluded from the metadata comparison.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_alias_line_offsets.puml",
@@ -85,7 +87,8 @@
       "metadata_result": "pass",
       "evidence": "All five Java and Rust entity-group metadata records match exactly, including non-consecutive source lines 4, 6, and 9.",
       "strict_render_result": "different",
-      "strict_render_note": "The strict helper remains red on unrelated geometry."
+      "strict_render_note": "The strict helper remains red on unrelated geometry.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_multiple_symbol_instances.puml",
@@ -100,7 +103,8 @@
       "metadata_result": "pass",
       "evidence": "All ten Java and Rust entity-group metadata records match exactly; the predicate does not depend on entity count or declaration position.",
       "strict_render_result": "different",
-      "strict_render_note": "Only the targeted metadata layer was used for this verdict."
+      "strict_render_note": "Only the targeted metadata layer was used for this verdict.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_description_symbols.puml",
@@ -116,7 +120,8 @@
       "metadata_result": "fail",
       "evidence": "Java records ReleaseOperator=2, ApproveRollout=3, and PolicyEngine=4. Rust records 10, 10, and 11 because the class parser ignores their declarations and ClassParser::ensure_entity recreates class-shaped endpoints from relationship lines.",
       "strict_render_result": "different",
-      "strict_render_note": "The verdict is based on wrong source-line ownership, not the additional expected symbol-shape or layout differences."
+      "strict_render_note": "The verdict is based on wrong source-line ownership, not the additional expected symbol-shape or layout differences.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_deployment_description_symbols.puml",
@@ -132,7 +137,8 @@
       "metadata_result": "fail",
       "evidence": "Java records declaration locations MetricsStore=2, RetryQueue=3, EdgeHost=4, and TrustBoundary=5. Rust records relationship locations 16, 17, 15, and 18, and misqualifies the core entities beneath package-shaped containers because bare database, node, and rectangle declarations are parsed as open packages.",
       "strict_render_result": "different",
-      "strict_render_note": "The wrong identities and source lines are metadata/model failures. Remaining geometry differences are not part of the verdict."
+      "strict_render_note": "The wrong identities and source lines are metadata/model failures. Remaining geometry differences are not part of the verdict.",
+      "result": "fail"
     }
   ],
   "anti_overfit": {

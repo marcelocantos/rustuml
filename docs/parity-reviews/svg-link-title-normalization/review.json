@@ -6,7 +6,7 @@
     "model": "GPT-5",
     "role": "Checker did not implement the mechanism and did not edit shipping code or account"
   },
-  "verdict": "REJECT",
+  "verdict": "rejected",
   "verdict_basis": "Fresh valid generic-creole cases show that the Rust path does not preserve a literal backslash-n in href while normalizing only the title. Additional direct-anchor cases expose renderer divergence before link metadata can be compared. Any failing counterexample rejects the claimed invariant.",
   "revisions": {
     "rust_revision": "35edafc3339259bcfbed3572da87635e70cf98e9",
@@ -58,7 +58,11 @@
     {
       "stem": "state_implicit_url_literal_newline",
       "family": "state",
-      "axes": ["implicit URL tooltip", "literal backslash-n in URL", "renamed visible label"],
+      "axes": [
+        "implicit URL tooltip",
+        "literal backslash-n in URL",
+        "renamed visible label"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_implicit_url_literal_newline.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_implicit_url_literal_newline.rust.svg",
       "diff_one": "pass",
@@ -67,7 +71,11 @@
     {
       "stem": "state_explicit_tooltip_unicode_and_label",
       "family": "state",
-      "axes": ["explicit brace tooltip", "valid <U+0026>", "renamed visible label"],
+      "axes": [
+        "explicit brace tooltip",
+        "valid <U+0026>",
+        "renamed visible label"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_explicit_tooltip_unicode_and_label.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_explicit_tooltip_unicode_and_label.rust.svg",
       "diff_one": "pass",
@@ -76,7 +84,11 @@
     {
       "stem": "state_invalid_unicode_and_multiple_runs",
       "family": "state",
-      "axes": ["invalid <U+hex>", "literal backslash-n in URL", "multiple linked and unlinked runs"],
+      "axes": [
+        "invalid <U+hex>",
+        "literal backslash-n in URL",
+        "multiple linked and unlinked runs"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_invalid_unicode_and_multiple_runs.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_invalid_unicode_and_multiple_runs.rust.svg",
       "diff_one": "pass",
@@ -85,7 +97,11 @@
     {
       "stem": "state_valid_hex_surrogate_boundary",
       "family": "state",
-      "axes": ["valid <U+1F600> Java-char cast", "valid <U+0041>", "renamed visible label"],
+      "axes": [
+        "valid <U+1F600> Java-char cast",
+        "valid <U+0041>",
+        "renamed visible label"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_valid_hex_surrogate_boundary.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_valid_hex_surrogate_boundary.rust.svg",
       "diff_one": "pass",
@@ -94,7 +110,13 @@
     {
       "stem": "sequence_mixed_generic_link_runs",
       "family": "sequence",
-      "axes": ["generic creole links", "implicit URL tooltip", "explicit tooltip", "literal backslash-n in URL and tooltip", "multiple linked and unlinked runs"],
+      "axes": [
+        "generic creole links",
+        "implicit URL tooltip",
+        "explicit tooltip",
+        "literal backslash-n in URL and tooltip",
+        "multiple linked and unlinked runs"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/sequence_mixed_generic_link_runs.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/sequence_mixed_generic_link_runs.rust.svg",
       "diff_one": "fail",
@@ -103,7 +125,13 @@
     {
       "stem": "class_mixed_generic_link_runs",
       "family": "class",
-      "axes": ["generic creole links", "literal backslash-n in URL", "explicit tooltip", "invalid <U+hex>", "renamed visible labels"],
+      "axes": [
+        "generic creole links",
+        "literal backslash-n in URL",
+        "explicit tooltip",
+        "invalid <U+hex>",
+        "renamed visible labels"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/class_mixed_generic_link_runs.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/class_mixed_generic_link_runs.rust.svg",
       "diff_one": "fail",
@@ -112,7 +140,11 @@
     {
       "stem": "state_entity_explicit_tooltip_newline",
       "family": "state direct entity anchor",
-      "axes": ["direct anchor", "explicit tooltip with literal backslash-n", "renamed visible state"],
+      "axes": [
+        "direct anchor",
+        "explicit tooltip with literal backslash-n",
+        "renamed visible state"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_entity_explicit_tooltip_newline.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/state_entity_explicit_tooltip_newline.rust.svg",
       "diff_one": "fail",
@@ -121,7 +153,11 @@
     {
       "stem": "component_direct_link_title",
       "family": "component direct entity anchor",
-      "axes": ["direct anchor", "explicit tooltip with literal backslash-n", "renamed visible labels"],
+      "axes": [
+        "direct anchor",
+        "explicit tooltip with literal backslash-n",
+        "renamed visible labels"
+      ],
       "oracle_svg": "test-diagrams/perturbations/svg-link-title-normalization/component_direct_link_title.svg",
       "rust_svg": "test-diagrams/perturbations/svg-link-title-normalization/component_direct_link_title.rust.svg",
       "diff_one": "fail",
@@ -129,26 +165,9 @@
     }
   ],
   "findings": [
-    {
-      "severity": "high",
-      "kind": "relevant_counterexample",
-      "inputs": ["sequence_mixed_generic_link_runs", "class_mixed_generic_link_runs"],
-      "claim_disproved": "The generic creole path preserves every parsed target byte sequence in href while normalizing only title fields.",
-      "evidence": "In both families Java preserves the literal backslash-n as part of href and converts it only in title; Rust truncates the target and renders the suffix as ordinary text."
-    },
-    {
-      "severity": "medium",
-      "kind": "direct_anchor_residue",
-      "inputs": ["state_entity_explicit_tooltip_newline", "component_direct_link_title"],
-      "claim_disproved": "Every SVG hyperlink is covered by the shared normalization invariant.",
-      "evidence": "Both valid oracle outputs contain anchors that are absent from the Rust outputs due to preceding diagram-rendering divergence; the inspected state.rs and SvgBuilder direct-anchor paths also bypass the shared normalizer."
-    },
-    {
-      "severity": "low",
-      "kind": "provenance_discrepancy",
-      "claim_disproved": "The supplied comparator artifact was used exactly as prescribed.",
-      "evidence": "The path exists but hashes to 807deb…, not the requested 20bf…. The requested digest was not found locally, and no cargo/rustc rebuild was permitted."
-    }
+    "{\"claim_disproved\": \"The generic creole path preserves every parsed target byte sequence in href while normalizing only title fields.\", \"evidence\": \"In both families Java preserves the literal backslash-n as part of href and converts it only in title; Rust truncates the target and renders the suffix as ordinary text.\", \"inputs\": [\"sequence_mixed_generic_link_runs\", \"class_mixed_generic_link_runs\"], \"kind\": \"relevant_counterexample\", \"severity\": \"high\"}",
+    "{\"claim_disproved\": \"Every SVG hyperlink is covered by the shared normalization invariant.\", \"evidence\": \"Both valid oracle outputs contain anchors that are absent from the Rust outputs due to preceding diagram-rendering divergence; the inspected state.rs and SvgBuilder direct-anchor paths also bypass the shared normalizer.\", \"inputs\": [\"state_entity_explicit_tooltip_newline\", \"component_direct_link_title\"], \"kind\": \"direct_anchor_residue\", \"severity\": \"medium\"}",
+    "{\"claim_disproved\": \"The supplied comparator artifact was used exactly as prescribed.\", \"evidence\": \"The path exists but hashes to 807deb…, not the requested 20bf…. The requested digest was not found locally, and no cargo/rustc rebuild was permitted.\", \"kind\": \"provenance_discrepancy\", \"severity\": \"low\"}"
   ],
   "residue": [
     "The mixed sequence and class failures combine URL parsing/rendering with title normalization; they are still decisive because href preservation is part of the claimed invariant.",
@@ -156,5 +175,6 @@
     "The account records Rust revision 9767b63e8a526706082d84b173561b6ab71fa45d, while this requested review pins 35edafc3339259bcfbed3572da87635e70cf98e9."
   ],
   "preserved_evidence_root": "test-diagrams/perturbations/svg-link-title-normalization",
-  "review_file": "docs/parity-reviews/svg-link-title-normalization/review.json"
+  "review_file": "docs/parity-reviews/svg-link-title-normalization/review.json",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
 }

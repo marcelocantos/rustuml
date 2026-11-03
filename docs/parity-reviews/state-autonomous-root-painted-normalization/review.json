@@ -136,5 +136,93 @@
       }
     }
   ],
-  "verdict_detail": "No failing counterexample was found. The source-level account is consistent with the inspected Java and Rust data flow, and the five fresh held-out perturbations all passed no-oracle structural comparison."
+  "verdict_detail": "No failing counterexample was found. The source-level account is consistent with the inspected Java and Rust data flow, and the five fresh held-out perturbations all passed no-oracle structural comparison.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.svg",
+      "axes": [
+        "LR",
+        "all-autonomous root",
+        "nested composite",
+        "root pseudostates present"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "58a8d1e64b68a5daa3726238fcd2bcf08a59c20d797fad73121e92b1d1a45955",
+        "svg": "f95d470ae6df078abd34fe3908caad9ca9270d02a5f0cfb5b291343cbe12ee03"
+      },
+      "source": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.svg",
+      "axes": [
+        "TB",
+        "all-autonomous root",
+        "declaration order variation",
+        "rectangle-minimum control"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "a4e94cab9dafff4b5c8fb5c3a78882b2a3be8a1ebc8a200d345d39fb2c656931",
+        "svg": "3fef2cb4ddc40895dc5007c59651c31e4c9c16cb42df43e365011b61591c6872"
+      },
+      "source": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.svg",
+      "axes": [
+        "LR",
+        "all-autonomous root",
+        "concurrent regions",
+        "renamed labels"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "85bf4c890993ebdd5668dd998a998d53ee04a5c785c8514615e55127fa7fec74",
+        "svg": "950cb33e700da2cd3aa1ae689c29c99f83c824cb1203a504d741d24dd3121fed"
+      },
+      "source": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.svg",
+      "axes": [
+        "TB",
+        "all-autonomous root",
+        "root pseudostates absent",
+        "deeper nesting"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "052822038e0bf959b3ecbe9d12d4972c616bec6a6eebd9f1dd82400b411a3c67",
+        "svg": "68f8c9003922229e5765cd98637b04a848131bca85b6ac8e23b0a00a64c0df7f"
+      },
+      "source": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.svg",
+      "axes": [
+        "LR",
+        "live-cluster root control",
+        "cross-boundary topology",
+        "root pseudostate present"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "9394a740ac9c25522f81941e1a6342a0399f2e03f2edef3ea0d598180ad6e7d8",
+        "svg": "52bc2249ee96bb72f9cab8661be69c897553478af9e70f16b18bad5295024dee"
+      },
+      "source": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.svg"
+    }
+  ]
 }

@@ -256,5 +256,8 @@
   },
   "accepted": false,
   "verdict": "rejected",
-  "verdict_reason": "The corrective 16.16 model fixes fractional source advances but still assumes every assigned scalar's requested-size AWT advance is a linear scale of its 2048-point advance. Fresh valid U+231A WATCH perturbations disprove that assumption across sizes and all four faces while remaining exactly scalar-additive. T14 requires an in-scope held-out counterexample to reject the mechanism."
+  "verdict_reason": "The corrective 16.16 model fixes fractional source advances but still assumes every assigned scalar's requested-size AWT advance is a linear scale of its 2048-point advance. Fresh valid U+231A WATCH perturbations disprove that assumption across sizes and all four faces while remaining exactly scalar-additive. T14 requires an in-scope held-out counterexample to reject the mechanism.",
+  "account_commit": "d98cc0a7509161627ad55fef091c35b06670a17c",
+  "implementation_commit": "2eae99edf5a7722342a444efff7bf2a07348f156",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
 }

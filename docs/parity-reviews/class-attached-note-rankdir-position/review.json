@@ -183,5 +183,100 @@
     "java_syntax_errors": 0,
     "cargo_or_rustc_run": false
   },
-  "verdict": "ACCEPT"
+  "verdict": "accepted",
+  "account_commit": "85513d6415b4db1feeb8adfb186dcbec6e38ce63",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.svg",
+      "sha256": {
+        "puml": "c44097b321c1575b4c0f300b9c6e5fd95aaac50ccc0d2e4b7ccb888bcb8cf800",
+        "svg": "04fc050aac1a1fa8114d9b3ce2629a51086a4a5ce482b0d0ae07c26bd6019283"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "root ownership",
+        "all four attached-note positions",
+        "declaration-order permutation",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      },
+      "source": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.svg",
+      "sha256": {
+        "puml": "4c146458f9477fe57495806b1ee749be8f89d1f2a12bfbf93f153f78ac319963",
+        "svg": "fd94cbb0ad7ab29227e2f9fd05063a7e9443b274544b24e040a551c3d2e4586f"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "root ownership",
+        "all four attached-note positions",
+        "declaration-order permutation",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      },
+      "source": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.svg",
+      "sha256": {
+        "puml": "65ab6b1e4fdc1ed7dd3e72e4fd5b255fe16937fe74fbebd55f1d6d2cfe8cfabd",
+        "svg": "ffed8aede8f21aeba77f7e2f9dc3878423ff335c7b291f06b998dee5230dcb6e"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "direct package leaf versus nested descendant ownership",
+        "all four attached-note positions",
+        "interleaved targets",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      },
+      "source": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.svg",
+      "sha256": {
+        "puml": "6857a835c1e19629f3896c80cee0ff36156d748ccec124b025cbe7fe4a6a75cf",
+        "svg": "17281287827b735dfa3ec5cbaa2aba831e256edaa08769c8c7839a08807fd94f"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "direct package leaf versus nested descendant ownership",
+        "all four attached-note positions",
+        "interleaved targets",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      },
+      "source": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.svg",
+      "result": "pass"
+    }
+  ]
 }

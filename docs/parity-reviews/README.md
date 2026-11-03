@@ -71,3 +71,14 @@ perturbations passing. Earlier reviews may record `"result": "fail"` and
 
 Git history is the audit trail proving that the account preceded
 implementation and that the checker, not the maker, authored the review.
+
+The metadata-only recovery recorded in `evidence-recovery-2026-11-03.json`
+does not issue new checker verdicts. Its normalization manifest retains exact
+original Git blob IDs and SHA256 hashes at the immutable historical revision,
+plus reproducible field operations. Retrieve original bytes with
+`git cat-file blob <original_git_blob>`. Existing records stay at their guarded
+paths; unresolved evidence and failing inputs remain failures. Run
+`uv run --no-project python scripts/verify_historical_parity_recovery.py` to
+verify archival fidelity. This verifier does not replace either parity suite
+or the evidence guard, and it intentionally detects later edits to the
+normalized historical files.

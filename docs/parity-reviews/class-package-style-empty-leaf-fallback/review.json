@@ -81,16 +81,8 @@
     "valid_failed": 2
   },
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "The empty-leaf fallback is still not correct for node-style ordinary empty packages.",
-      "evidence": "Two fresh LR node fallback cases fail even after removing the explicit-symbol control. The source uses a single generic placement formula for every non-wrapped symbol leaf instead of reproducing node-specific title/stereotype placement."
-    },
-    {
-      "severity": "informational",
-      "summary": "Cloud fallback now behaves correctly on the fresh direct-empty top-level case.",
-      "evidence": "checker_empty_cloud_fallback_vs_explicit_tb passes structurally and confirms that the ordinary empty cloud case from the predecessor rejection is no longer broken."
-    }
+    "{\"evidence\": \"Two fresh LR node fallback cases fail even after removing the explicit-symbol control. The source uses a single generic placement formula for every non-wrapped symbol leaf instead of reproducing node-specific title/stereotype placement.\", \"severity\": \"rejecting\", \"summary\": \"The empty-leaf fallback is still not correct for node-style ordinary empty packages.\"}",
+    "{\"evidence\": \"checker_empty_cloud_fallback_vs_explicit_tb passes structurally and confirms that the ordinary empty cloud case from the predecessor rejection is no longer broken.\", \"severity\": \"informational\", \"summary\": \"Cloud fallback now behaves correctly on the fresh direct-empty top-level case.\"}"
   ],
   "artifacts": {
     "held_out_directory": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/",
@@ -98,5 +90,49 @@
     "production_files_modified": false,
     "account_modified": false
   },
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.svg",
+      "axes": [
+        "cloud fallback versus explicit cloud",
+        "ordinary empty leaf versus explicit symbol empty leaf",
+        "top-to-bottom"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.svg",
+      "axes": [
+        "node fallback versus explicit node",
+        "nested empty leaves",
+        "left-to-right",
+        "visible stereotype"
+      ],
+      "outcome": "fail: Rust shifts the fallback node stereotype/title block about four pixels to the right and slightly downward.",
+      "source": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.svg",
+      "axes": [
+        "node fallback only",
+        "left-to-right",
+        "visible stereotype",
+        "nested ordinary empty leaf"
+      ],
+      "outcome": "fail: the same fallback-node title/stereotype mis-centering reproduces without any explicit-symbol control present.",
+      "source": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.svg",
+      "result": "fail"
+    }
+  ]
 }

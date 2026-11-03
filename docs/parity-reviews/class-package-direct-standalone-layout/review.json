@@ -59,7 +59,7 @@
         "three-direct-leaf SquareMaker branch under a nested package",
         "top-to-bottom direction and declaration order"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_linked_five_standalones_ltr.puml",
@@ -69,7 +69,7 @@
         "five remaining standalones and non-square branch size three",
         "cross-package relationship and left-to-right direction"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_reordered_four_direct.puml",
@@ -79,7 +79,7 @@
         "renamed labels with intentionally non-alphabetical declaration order",
         "single-level package control"
       ],
-      "result": "pass: SVGs are structurally equivalent"
+      "result": "pass"
     }
   ],
   "findings": [

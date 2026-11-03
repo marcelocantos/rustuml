@@ -216,14 +216,5 @@
     "constant_provenance": "The newly introduced SELF_MSG_LIFELINE_CLOSE_INSET=7.0 has an adjacent DrawableSetInitializer.prepareLiveEvent citation. No unexplained fresh high-precision constant was found.",
     "skeptical_assessment": "There is no evidence of direct fixture-keyed cheating. The risk is structural overfitting by accumulation of consumer-specific formulas: several scans and topology branches reproduce known cases without porting Java's shared graphical-element and constraint model. Passing all historical/review6 cases while seven known review7 and seven fresh cases fail is the expected signature of that incomplete model."
   },
-  "verdict": {
-    "status": "reject",
-    "reason": "e490ea6f does not implement one accepted lifecycle history or one shared horizontal graphical-element envelope, does not satisfy its stated review7 acceptance matrix, and fails seven of eight fresh valid perturbations.",
-    "required_model_change": [
-      "Derive spacing snapshots from the same accepted variation object used for ordinate-based lifeline segments; do not replay events into a second return stack.",
-      "Represent notes, messages, external arrows, grouping elements, references, and dividers as concrete horizontal elements with starting/preferred/actual extents.",
-      "Register each concrete element with every active nested group and run one two-sided missing-space solve before frame, divider, external-arrow, and canvas geometry are consumed.",
-      "Retain all failing review7 and review8 inputs as executable counterexamples."
-    ]
-  }
+  "verdict": "rejected"
 }

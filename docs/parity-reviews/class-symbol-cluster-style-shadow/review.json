@@ -81,16 +81,8 @@
     "valid_failed": 1
   },
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "Shadow-envelope handling is still incomplete for rectangle-backed package clusters.",
-      "evidence": "A fresh shadowed frame/cloud LR case remains 5px too narrow. The reviewed source never adds the Java rectangle shadow max extension for frame-backed clusters, so the canvas owner can still be wrong."
-    },
-    {
-      "severity": "informational",
-      "summary": "The generic package color and no-shadow paths look healthy on fresh held-outs.",
-      "evidence": "The explicit/fallback node style case and the no-shadow rectangle case both pass structurally."
-    }
+    "{\"evidence\": \"A fresh shadowed frame/cloud LR case remains 5px too narrow. The reviewed source never adds the Java rectangle shadow max extension for frame-backed clusters, so the canvas owner can still be wrong.\", \"severity\": \"rejecting\", \"summary\": \"Shadow-envelope handling is still incomplete for rectangle-backed package clusters.\"}",
+    "{\"evidence\": \"The explicit/fallback node style case and the no-shadow rectangle case both pass structurally.\", \"severity\": \"informational\", \"summary\": \"The generic package color and no-shadow paths look healthy on fresh held-outs.\"}"
   ],
   "artifacts": {
     "held_out_directory": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/",
@@ -98,5 +90,49 @@
     "production_files_modified": false,
     "account_modified": false
   },
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.svg",
+      "axes": [
+        "explicit node versus fallback node",
+        "generic package colors",
+        "packageBorderThickness",
+        "shadow on"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.svg",
+      "axes": [
+        "fallback frame versus explicit cloud",
+        "generic versus symbol-specific style channels",
+        "left-to-right",
+        "shadow on"
+      ],
+      "outcome": "fail: Rust's canvas is 494px wide versus Java's 499px, consistent with missing rectangle/frame shadow envelope extension.",
+      "source": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.svg",
+      "axes": [
+        "explicit rectangle versus fallback rectangle",
+        "left-to-right",
+        "shadow off"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.svg",
+      "result": "pass"
+    }
+  ]
 }

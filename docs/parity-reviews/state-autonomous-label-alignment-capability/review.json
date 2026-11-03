@@ -6,7 +6,7 @@
     "model": "GPT-5 Codex",
     "role": "independent adversarial checker"
   },
-  "verdict": "REJECT",
+  "verdict": "rejected",
   "account_commit": "a3a24506ad46ba4f0248a499c8f00b1e93b4c8e8",
   "implementation_revision": "446dc5383741fd91f4613ee19e0d9e53a77764db",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
@@ -66,59 +66,110 @@
     {
       "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_alignment_concurrent.puml",
       "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_alignment_concurrent.svg",
-      "axes": ["defaultTextAlignment right", "nested concurrent regions", "renamed labels", "multiline label"],
+      "axes": [
+        "defaultTextAlignment right",
+        "nested concurrent regions",
+        "renamed labels",
+        "multiline label"
+      ],
       "result": "PASS",
       "default_comparator": "PASS",
       "no_oracle_comparator": "PASS",
-      "sha256": {"puml": "9a495a142632fd483574a5cdf191c32bc5580fab56c67a891163ca0b284494a2", "java_svg": "618c3d812fdd1ca24275a884ca5fe9aed898612b3284c665304a36e6b6d48059"}
+      "sha256": {
+        "puml": "9a495a142632fd483574a5cdf191c32bc5580fab56c67a891163ca0b284494a2",
+        "java_svg": "618c3d812fdd1ca24275a884ca5fe9aed898612b3284c665304a36e6b6d48059"
+      }
     },
     {
       "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_left_multilevel.puml",
       "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_left_multilevel.svg",
-      "axes": ["defaultTextAlignment left", "three nesting levels", "renamed labels", "multiline label"],
+      "axes": [
+        "defaultTextAlignment left",
+        "three nesting levels",
+        "renamed labels",
+        "multiline label"
+      ],
       "result": "PASS",
       "default_comparator": "PASS",
       "no_oracle_comparator": "PASS",
-      "sha256": {"puml": "3d6f4045b808cc133ba15a196a2148d43adaf3f29e30e27741e7eb210edada7d", "java_svg": "4fbb4de268d7c40a6eb82a17f8359c760d25bf5ccf58bddb26343f143807da1f"}
+      "sha256": {
+        "puml": "3d6f4045b808cc133ba15a196a2148d43adaf3f29e30e27741e7eb210edada7d",
+        "java_svg": "4fbb4de268d7c40a6eb82a17f8359c760d25bf5ccf58bddb26343f143807da1f"
+      }
     },
     {
       "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_natural_row_override_renamed.puml",
       "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_natural_row_override_renamed.svg",
-      "axes": ["stateMessageAlignment right", "natural left row override", "renamed labels", "nested composite"],
+      "axes": [
+        "stateMessageAlignment right",
+        "natural left row override",
+        "renamed labels",
+        "nested composite"
+      ],
       "result": "PASS",
       "default_comparator": "PASS",
       "no_oracle_comparator": "PASS",
-      "sha256": {"puml": "849886b54769e364e7c6e7369bc93e25f29530f1c141460eeeecbfaaff77ee45", "java_svg": "0cdf2d456ed169c7a2d7b08fdafa98682fe0993b2e9f09ccfefc39618c21c1aa"}
+      "sha256": {
+        "puml": "849886b54769e364e7c6e7369bc93e25f29530f1c141460eeeecbfaaff77ee45",
+        "java_svg": "0cdf2d456ed169c7a2d7b08fdafa98682fe0993b2e9f09ccfefc39618c21c1aa"
+      }
     },
     {
       "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_state_alignment_nested_lr.puml",
       "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_state_alignment_nested_lr.svg",
-      "axes": ["stateMessageAlignment left", "left-to-right", "nested autonomous scopes", "renamed labels", "multiline label"],
+      "axes": [
+        "stateMessageAlignment left",
+        "left-to-right",
+        "nested autonomous scopes",
+        "renamed labels",
+        "multiline label"
+      ],
       "result": "FAIL",
       "default_comparator": "PASS",
       "no_oracle_comparator": "FAIL",
       "finding": "The capability gate admits the composite and the output retains the frame/topology, but the no-oracle result has a systematic one-pixel origin drift and a 890x180 versus 892x181 envelope. Eligibility is correct for this input; the shipped full result is still not equivalent.",
-      "sha256": {"puml": "fda51ce6f943338aaea5b925ee5894d89e2f9023b0cd642acf1913e33557787d", "java_svg": "57cc2282dd87d4f0db8e004a01eb2bcdb4364dd2a4e1555deb8f020206f47b7d"}
+      "sha256": {
+        "puml": "fda51ce6f943338aaea5b925ee5894d89e2f9023b0cd642acf1913e33557787d",
+        "java_svg": "57cc2282dd87d4f0db8e004a01eb2bcdb4364dd2a4e1555deb8f020206f47b7d"
+      }
     },
     {
       "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_alignment_nested_times_font.puml",
       "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_alignment_nested_times_font.svg",
-      "axes": ["stateMessageAlignment right", "left-to-right", "nested composite", "Times New Roman 15px", "multiline label"],
+      "axes": [
+        "stateMessageAlignment right",
+        "left-to-right",
+        "nested composite",
+        "Times New Roman 15px",
+        "multiline label"
+      ],
       "result": "FAIL",
       "default_comparator": "FAIL",
       "no_oracle_comparator": "FAIL",
       "finding": "Alignment-enabled autonomous rendering reaches the intended path, but Java and Rust disagree on label widths and the resulting outer geometry for the non-default font. This is font/metrics residue, but it is a valid failure under the declared alignment-plus-topology matrix.",
-      "sha256": {"puml": "2f0eda54a6d77d2816a65f22913f26affd53221239bca26f58ac9555a7143218", "java_svg": "74b6368c60dc25807352f2b9ccbd9f6f1ce7289b8bc0ec193c98c379d6bac713"}
+      "sha256": {
+        "puml": "2f0eda54a6d77d2816a65f22913f26affd53221239bca26f58ac9555a7143218",
+        "java_svg": "74b6368c60dc25807352f2b9ccbd9f6f1ce7289b8bc0ec193c98c379d6bac713"
+      }
     },
     {
       "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_default_alignment_nested_raw_link.puml",
       "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_default_alignment_nested_raw_link.svg",
-      "axes": ["defaultTextAlignment left", "left-to-right", "nested composite", "raw link title newline", "outside multiline row"],
+      "axes": [
+        "defaultTextAlignment left",
+        "left-to-right",
+        "nested composite",
+        "raw link title newline",
+        "outside multiline row"
+      ],
       "result": "FAIL",
       "default_comparator": "FAIL",
       "no_oracle_comparator": "FAIL",
       "finding": "The autonomous path is retained, but Java link-title newline semantics differ from Rust and the no-oracle output also has a one-pixel origin/envelope drift. The capability predicate is not the direct cause, but the requested held-out result is failing.",
-      "sha256": {"puml": "38cc7536adaf7f10d62fd704e91a64b5737878f567b5f1ff019f7d4e4d001924", "java_svg": "a7de807b33590855f629c7507abe3f8a8cc36e88f8edead48a074e4ee47b2325"}
+      "sha256": {
+        "puml": "38cc7536adaf7f10d62fd704e91a64b5737878f567b5f1ff019f7d4e4d001924",
+        "java_svg": "a7de807b33590855f629c7507abe3f8a8cc36e88f8edead48a074e4ee47b2325"
+      }
     }
   ],
   "summary": {
@@ -127,7 +178,12 @@
     "failed_no_oracle": 3,
     "acceptance_gate": "failed",
     "primary_reject_reason": "The allowlist correction survives simple nested, concurrent, default-alignment, and natural-row cases, but nested LR alignment still fails the shipped comparator and the font/raw-link held-outs expose additional output residue.",
-    "residue": ["nested LR painted-envelope origin", "font family and metrics propagation", "raw link title/newline serialization"],
+    "residue": [
+      "nested LR painted-envelope origin",
+      "font family and metrics propagation",
+      "raw link title/newline serialization"
+    ],
     "recommendation": "Keep all six pairs preserved. The narrow capability claim is causally supported, but do not accept it while the declared no-oracle perturbation matrix contains failures. Resolve the named residues separately rather than widening the allowlist or changing comparator tolerance."
-  }
+  },
+  "implementation_commit": "446dc5383741fd91f4613ee19e0d9e53a77764db"
 }

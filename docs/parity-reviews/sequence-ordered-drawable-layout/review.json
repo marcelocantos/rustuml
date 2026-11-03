@@ -146,6 +146,47 @@
     "checker_renamed_deep_group_return_order.rust.svg": "1263413c03f33a79dfe7c9b069650253143b5b4804b05b19a864a75d9d4a2841",
     "checker_renamed_deep_group_return_order.diff.txt": "e00d1a97d8c79bc6cf1e6a3cc63760d25d1c48ce8cfc7df46e66697c4ce5f921"
   },
-  "verdict": "reject",
-  "verdict_reason": "A failing held-out counterexample rejects the implementation under the T14 adversarial gate. Here both fresh valid held-outs fail, and seven of eight preserved review8 perturbations still fail. The implementation also does not match the account's model shape: it keeps a late group-frame reconstruction plus group-only missing-space translation instead of a single ordered concrete drawable envelope."
+  "verdict": "rejected",
+  "verdict_reason": "A failing held-out counterexample rejects the implementation under the T14 adversarial gate. Here both fresh valid held-outs fail, and seven of eight preserved review8 perturbations still fail. The implementation also does not match the account's model shape: it keeps a late group-frame reconstruction plus group-only missing-space translation instead of a single ordered concrete drawable envelope.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "stem": "checker_renamed_nested_lifecycle_left",
+      "axes": [
+        "renamed labels",
+        "two-level group depth",
+        "left note envelope",
+        "activation and return lifecycle order"
+      ],
+      "puml": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml",
+      "java_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.svg",
+      "rust_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.rust.svg",
+      "diff": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.diff.txt",
+      "java_validity": "xmllint passed, no PlantUML error markers, data-diagram-type=\"SEQUENCE\" present.",
+      "diff_one_result": "failed",
+      "failure_summary": "Java outer and inner group frames start at x=9 and x=19 with widths 633.7432 and 613.7432. Rust starts them at x=10 and x=20 with widths 631.7432 and 611.7432. Participants, lifelines, notes, arrows, and texts are shifted one pixel left while frames shift one pixel right, contradicting a shared one-envelope translation.",
+      "source": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.svg",
+      "result": "fail"
+    },
+    {
+      "stem": "checker_renamed_deep_group_return_order",
+      "axes": [
+        "renamed labels",
+        "three-level group depth",
+        "external left ingress",
+        "activation and return lifecycle order"
+      ],
+      "puml": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml",
+      "java_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.svg",
+      "rust_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.rust.svg",
+      "diff": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.diff.txt",
+      "java_validity": "xmllint passed, no PlantUML error markers, data-diagram-type=\"SEQUENCE\" present.",
+      "diff_one_result": "failed",
+      "failure_summary": "Java group frames start at x=9, x=19, and x=29 with widths 752.2974, 732.2974, and 712.2974. Rust starts them at x=10, x=20, and x=30 with widths 750.2842, 730.2842, and 710.2842. Participants and message geometry are also shifted by about 1.0132px, so the recursive group envelope is not equivalent.",
+      "source": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml",
+      "golden": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.svg",
+      "result": "fail"
+    }
+  ]
 }

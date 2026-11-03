@@ -40,24 +40,18 @@
       ]
     }
   },
-  "commands": {
-    "source_audit": [
-      "git show --no-ext-diff --unified=80 --no-renames 09014421 -- crates/rustuml-render/src/class.rs",
-      "git diff --unified=0 09014421^ 09014421 -- crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs | rg '^\\+[^+].*(Fresh|7151|7101|checker_|test-diagrams|golden/|include_str!|read_to_string|replace\\(|d=\\\"M|999\\.0|888\\.0|170\\.|171\\.|99\\.|path d|split_once|contains\\()'",
-      "git diff --check 09014421^ 09014421 -- crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs"
-    ],
-    "java_reference_generation": [
-      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-cluster-post-normalization-dimensions/*.puml"
-    ],
-    "rust_validation": [
-      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_explicit_cloud_nested_noninteger.puml",
-      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_package_style_cloud_nested_linked.puml",
-      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_plain_complex.puml",
-      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_complex.puml",
-      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_no_color_complex.puml",
-      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_package_style_cloud_integerish.puml"
-    ]
-  },
+  "commands": [
+    "git show --no-ext-diff --unified=80 --no-renames 09014421 -- crates/rustuml-render/src/class.rs",
+    "git diff --unified=0 09014421^ 09014421 -- crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs | rg '^\\+[^+].*(Fresh|7151|7101|checker_|test-diagrams|golden/|include_str!|read_to_string|replace\\(|d=\\\"M|999\\.0|888\\.0|170\\.|171\\.|99\\.|path d|split_once|contains\\()'",
+    "git diff --check 09014421^ 09014421 -- crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-cluster-post-normalization-dimensions/*.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_explicit_cloud_nested_noninteger.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_package_style_cloud_nested_linked.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_plain_complex.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_complex.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_no_color_complex.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_package_style_cloud_integerish.puml"
+  ],
   "inputs": [
     {
       "puml": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_explicit_cloud_nested_noninteger.puml",
@@ -142,25 +136,105 @@
     }
   ],
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "Explicit cloud clusters with stereotypes are not modeled like Java.",
-      "evidence": "checker_cluster_tb_explicit_cloud_stereo_no_color_complex.puml fails. Java USymbolCloud.asBig draws stereotype at y=13 and title at 13 + stereotype height; Rust emit_layout_cloud_cluster measures and emits only the bold title at CLOUD_TITLE_BASELINE.",
-      "scope": "cluster title/intrinsic dimension ownership gap on a valid explicit-cloud perturbation; this is account-adjacent because the account claims final cloud dimensions are owned by the translated cluster model but does not cover the title/stereotype stack that feeds those dimensions."
-    },
-    {
-      "severity": "rejecting",
-      "summary": "Rust package parsing rejects Java-valid stereotype-before-color explicit cloud declarations.",
-      "evidence": "checker_cluster_tb_explicit_cloud_stereo_complex.puml is accepted by Java CommandPackageWithUSymbol, where stereotype/tags/url appear before color, but Rust try_package requires optional #color before optional <<stereotype>>. Rust then renders only top-level classes.",
-      "scope": "valid PlantUML parser divergence on explicit cloud plus stereotype/color; not a post-normalization arithmetic falsification by itself."
-    },
-    {
-      "severity": "supporting",
-      "summary": "The post-normalization endpoint-width account survived the plain controls.",
-      "evidence": "Plain explicit TB cloud, explicit LR nested cloud, packageStyle LR nested cloud, and packageStyle TB compact cloud all matched Java structurally through diff_one --no-oracle.",
-      "scope": "supports the account for unstereotyped cloud cluster dimensions across TB/LR, explicit/packageStyle, nested/linked, and compact/wider label cases."
-    }
+    "{\"evidence\": \"checker_cluster_tb_explicit_cloud_stereo_no_color_complex.puml fails. Java USymbolCloud.asBig draws stereotype at y=13 and title at 13 + stereotype height; Rust emit_layout_cloud_cluster measures and emits only the bold title at CLOUD_TITLE_BASELINE.\", \"scope\": \"cluster title/intrinsic dimension ownership gap on a valid explicit-cloud perturbation; this is account-adjacent because the account claims final cloud dimensions are owned by the translated cluster model but does not cover the title/stereotype stack that feeds those dimensions.\", \"severity\": \"rejecting\", \"summary\": \"Explicit cloud clusters with stereotypes are not modeled like Java.\"}",
+    "{\"evidence\": \"checker_cluster_tb_explicit_cloud_stereo_complex.puml is accepted by Java CommandPackageWithUSymbol, where stereotype/tags/url appear before color, but Rust try_package requires optional #color before optional <<stereotype>>. Rust then renders only top-level classes.\", \"scope\": \"valid PlantUML parser divergence on explicit cloud plus stereotype/color; not a post-normalization arithmetic falsification by itself.\", \"severity\": \"rejecting\", \"summary\": \"Rust package parsing rejects Java-valid stereotype-before-color explicit cloud declarations.\"}",
+    "{\"evidence\": \"Plain explicit TB cloud, explicit LR nested cloud, packageStyle LR nested cloud, and packageStyle TB compact cloud all matched Java structurally through diff_one --no-oracle.\", \"scope\": \"supports the account for unstereotyped cloud cluster dimensions across TB/LR, explicit/packageStyle, nested/linked, and compact/wider label cases.\", \"severity\": \"supporting\", \"summary\": \"The post-normalization endpoint-width account survived the plain controls.\"}"
   ],
-  "verdict": "REJECT",
-  "verdict_reason": "The endpoint-reconstruction account is supported by the plain controls, but valid held-out explicit-cloud stereotype cases fail. Because the requested validation includes explicit cloud and topology axes, and the failing cases exercise Java-accepted syntax and cluster title geometry, this mechanism cannot be accepted under the T14 held-out adversarial gate."
+  "verdict": "rejected",
+  "verdict_reason": "The endpoint-reconstruction account is supported by the plain controls, but valid held-out explicit-cloud stereotype cases fail. Because the requested validation includes explicit cloud and topology axes, and the failing cases exercise Java-accepted syntax and cluster title geometry, this mechanism cannot be accepted under the T14 held-out adversarial gate.",
+  "perturbations": [
+    {
+      "puml": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_explicit_cloud_nested_noninteger.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_explicit_cloud_nested_noninteger.svg",
+      "axes": [
+        "explicit cloud cluster",
+        "left-to-right direction",
+        "nested package",
+        "linked topology",
+        "noninteger text widths"
+      ],
+      "rust_status": 0,
+      "result": "pass",
+      "diff_summary": "SVGs are structurally equivalent.",
+      "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_explicit_cloud_nested_noninteger.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_explicit_cloud_nested_noninteger.svg"
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_package_style_cloud_nested_linked.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_package_style_cloud_nested_linked.svg",
+      "axes": [
+        "packageStyle cloud fallback cluster",
+        "left-to-right direction",
+        "nested package",
+        "linked topology"
+      ],
+      "rust_status": 0,
+      "result": "pass",
+      "diff_summary": "SVGs are structurally equivalent.",
+      "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_package_style_cloud_nested_linked.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_lr_package_style_cloud_nested_linked.svg"
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_plain_complex.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_plain_complex.svg",
+      "axes": [
+        "explicit cloud cluster",
+        "top-to-bottom direction",
+        "multi-entity topology",
+        "noninteger text widths"
+      ],
+      "rust_status": 0,
+      "result": "pass",
+      "diff_summary": "SVGs are structurally equivalent.",
+      "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_plain_complex.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_plain_complex.svg"
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_complex.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_complex.svg",
+      "axes": [
+        "explicit cloud cluster",
+        "top-to-bottom direction",
+        "stereotype plus color",
+        "multi-entity topology",
+        "noninteger text widths"
+      ],
+      "rust_status": 1,
+      "result": "fail",
+      "diff_summary": "Java accepts stereotype-before-color explicit cloud syntax and renders a cloud cluster; Rust misses the cloud declaration and renders only top-level classes.",
+      "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_complex.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_complex.svg"
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_no_color_complex.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_no_color_complex.svg",
+      "axes": [
+        "explicit cloud cluster",
+        "top-to-bottom direction",
+        "stereotype without color",
+        "multi-entity topology",
+        "noninteger text widths"
+      ],
+      "rust_status": 1,
+      "result": "fail",
+      "diff_summary": "Java emits italic stereotype text above the bold cloud title; Rust emits only the bold title at the stereotype y-position, shifting subsequent element order.",
+      "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_no_color_complex.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_no_color_complex.svg"
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_package_style_cloud_integerish.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_package_style_cloud_integerish.svg",
+      "axes": [
+        "packageStyle cloud fallback cluster",
+        "top-to-bottom direction",
+        "linked topology",
+        "integer-ish compact labels"
+      ],
+      "rust_status": 0,
+      "result": "pass",
+      "diff_summary": "SVGs are structurally equivalent.",
+      "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_package_style_cloud_integerish.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_package_style_cloud_integerish.svg"
+    }
+  ]
 }

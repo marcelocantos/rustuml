@@ -10,51 +10,15 @@
     "evidence": "The dedicated object renderer blob is unchanged from the green baseline through the current revision; this commit made any braced namespace or package-like symbol force class-factory dispatch."
   },
   "java_locations": [
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
-      "symbol": "ClassDiagramFactory.createEmptyDiagram",
-      "lines": "101-123",
-      "role": "Objects, maps, classes, packages, and namespaces share one command grammar and semantic diagram factory."
-    },
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
-      "symbol": "GeneralImageBuilder.createEntityImageBlock",
-      "lines": "174-190",
-      "role": "After shared parsing, dispatches an OBJECT leaf to EntityImageObject rather than treating shared grammar ownership as class rendering."
-    },
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageObject.java",
-      "symbols": [
-        "calculateDimensionSlow",
-        "drawU"
-      ],
-      "lines": "89-145",
-      "role": "Owns the object-specific header/body dimensions and paint."
-    },
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/command/CommandNamespace.java",
-      "symbol": "CommandNamespace.executeArg",
-      "lines": "81-114",
-      "role": "Materializes a dotted namespace path while attaching declaration location only to the declared group, not synthesized ancestors."
-    }
+    "{\"lines\": \"101-123\", \"path\": \"src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java\", \"role\": \"Objects, maps, classes, packages, and namespaces share one command grammar and semantic diagram factory.\", \"symbol\": \"ClassDiagramFactory.createEmptyDiagram\"}",
+    "{\"lines\": \"174-190\", \"path\": \"src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java\", \"role\": \"After shared parsing, dispatches an OBJECT leaf to EntityImageObject rather than treating shared grammar ownership as class rendering.\", \"symbol\": \"GeneralImageBuilder.createEntityImageBlock\"}",
+    "{\"lines\": \"89-145\", \"path\": \"src/main/java/net/sourceforge/plantuml/svek/image/EntityImageObject.java\", \"role\": \"Owns the object-specific header/body dimensions and paint.\", \"symbols\": [\"calculateDimensionSlow\", \"drawU\"]}",
+    "{\"lines\": \"81-114\", \"path\": \"src/main/java/net/sourceforge/plantuml/command/CommandNamespace.java\", \"role\": \"Materializes a dotted namespace path while attaching declaration location only to the declared group, not synthesized ancestors.\", \"symbol\": \"CommandNamespace.executeArg\"}"
   ],
   "rust_locations": [
-    {
-      "path": "crates/rustuml-parser/src/parse/mod.rs",
-      "symbols": [
-        "detect_uml_subtype",
-        "has_class_symbol_container"
-      ],
-      "role": "Conflates acceptance by the shared class-diagram grammar with selection of Diagram::Class whenever a braced package or namespace is present."
-    },
-    {
-      "path": "crates/rustuml-render/src/object.rs",
-      "role": "Already implements the exact object-specific header/body model and synthesized-ancestor source-location distinction."
-    },
-    {
-      "path": "crates/rustuml-render/src/class.rs",
-      "role": "The wrongly selected backend uses a generic class header envelope six pixels taller for these object leaves."
-    }
+    "{\"path\": \"crates/rustuml-parser/src/parse/mod.rs\", \"role\": \"Conflates acceptance by the shared class-diagram grammar with selection of Diagram::Class whenever a braced package or namespace is present.\", \"symbols\": [\"detect_uml_subtype\", \"has_class_symbol_container\"]}",
+    "{\"path\": \"crates/rustuml-render/src/object.rs\", \"role\": \"Already implements the exact object-specific header/body model and synthesized-ancestor source-location distinction.\"}",
+    "{\"path\": \"crates/rustuml-render/src/class.rs\", \"role\": \"The wrongly selected backend uses a generic class header envelope six pixels taller for these object leaves.\"}"
   ],
   "claimed_invariant": "Shared class-diagram grammar viability and renderer backend selection are separate decisions. A diagram containing only object/map leaves inside ordinary object-compatible package or namespace containers remains an object diagram; class-only leaves, package symbols, allowmixing, or incompatible mixed constructs select the class backend.",
   "causal_divergence": "Rust's has_class_symbol_container flag raises the class score above all competitors for every braced package or namespace. Four object-only container diagrams therefore bypass the exact object renderer and enter the class renderer, gaining six pixels per object header and incorrect synthesized-ancestor source metadata. Java shares parsing but later dispatches each leaf by LeafType.",
@@ -81,5 +45,7 @@
     "Parser and renderer library suites pass.",
     "The no-oracle object family returns to 155/155 without regressing class, component, deployment, or mixed families.",
     "An independent checker records a verdict at the exact implementation revision."
-  ]
+  ],
+  "invariant": "Shared class-diagram grammar viability and renderer backend selection are separate decisions. A diagram containing only object/map leaves inside ordinary object-compatible package or namespace containers remains an object diagram; class-only leaves, package symbols, allowmixing, or incompatible mixed constructs select the class backend.",
+  "planned_change": "Replace container-presence forcing with semantic backend evidence: track native object/map leaves, class-only or mixed constructs, and whether every container is an ordinary object-compatible package or namespace. Preserve class dispatch for genuine package symbols and mixed diagrams. Select Diagram::Object only when the leaf and container model is wholly object-compatible. Do not change object dimensions or add fixture-specific dispatch names."
 }

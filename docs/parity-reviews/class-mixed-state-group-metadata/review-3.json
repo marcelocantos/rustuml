@@ -100,7 +100,8 @@
       "metadata_result": "fail",
       "evidence": "Java produces a CLASS diagram with exactly QuasarPolicy=2, NimbusOperator=3, EmberRetry=4, and NimbusApproval=5. Rust auto-dispatches to DESCRIPTION, invents entities all and wmixing from the allowmixing directive, and assigns NimbusApproval line 6.",
       "strict_render_result": "different",
-      "strict_render_note": "The metadata failure is independently dispositive; geometry was not considered."
+      "strict_render_note": "The metadata failure is independently dispositive; geometry was not considered.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_reordered_links_before_aliases.puml",
@@ -116,7 +117,8 @@
       "metadata_result": "fail",
       "evidence": "Source ownership matches Java's first relationship creation lines, but qualified identity does not. Java emits CloudSteward, CloudReview, CloudEngine, and CloudBuffer; Rust emits Cloud Steward, Review Cloud Rollout, Cloud Policy Engine, and Cloud Retry Buffer because try_entity_decl does not set explicit_alias when updating an existing implicit entity.",
       "strict_render_result": "different",
-      "strict_render_note": "The verdict is based only on qualified-name metadata, not shape or layout."
+      "strict_render_note": "The verdict is based only on qualified-name metadata, not shape or layout.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_implicit_and_explicit_endpoints.puml",
@@ -131,7 +133,8 @@
       "metadata_result": "pass",
       "evidence": "All five entity qualified names and source lines match, including implicit endpoints owned by first relationship lines 6 and 7.",
       "strict_render_result": "different",
-      "strict_render_note": "Unrelated geometry differences were excluded."
+      "strict_render_note": "Unrelated geometry differences were excluded.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_alias_forms_and_order.puml",
@@ -146,7 +149,8 @@
       "metadata_result": "pass",
       "evidence": "VioletStore=2, VioletBoundary=3, VioletHost=4, and VioletPolicy=5 match exactly.",
       "strict_render_result": "different",
-      "strict_render_note": "Unrelated geometry differences were excluded."
+      "strict_render_note": "Unrelated geometry differences were excluded.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_database_leaf_container_boundary.puml",
@@ -161,7 +165,8 @@
       "metadata_result": "pass",
       "evidence": "Both implementations emit AuroraLedger=2, cluster AuroraVault=3, and AuroraVault.AuroraEntry=4.",
       "strict_render_result": "different",
-      "strict_render_note": "Unrelated geometry differences were excluded."
+      "strict_render_note": "Unrelated geometry differences were excluded.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_node_leaf_container_boundary.puml",
@@ -176,7 +181,8 @@
       "metadata_result": "pass",
       "evidence": "Both implementations emit CobaltAnchor=2, CobaltHost=3, cluster CobaltRack=4, and CobaltRack.CobaltService=5.",
       "strict_render_result": "different",
-      "strict_render_note": "Unrelated geometry differences were excluded."
+      "strict_render_note": "Unrelated geometry differences were excluded.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_rectangle_leaf_container_boundary.puml",
@@ -191,7 +197,8 @@
       "metadata_result": "pass",
       "evidence": "Both implementations emit SaffronBoundary=2, cluster SaffronZone=3, and SaffronZone.SaffronQueue=4.",
       "strict_render_result": "different",
-      "strict_render_note": "Unrelated geometry differences were excluded."
+      "strict_render_note": "Unrelated geometry differences were excluded.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_combined_leaf_container_reordering.puml",
@@ -206,7 +213,8 @@
       "metadata_result": "pass",
       "evidence": "All three cluster records and all six leaf records match exactly, including qualified nesting and declaration lines.",
       "strict_render_result": "different",
-      "strict_render_note": "Unrelated geometry differences were excluded."
+      "strict_render_note": "Unrelated geometry differences were excluded.",
+      "result": "fail"
     }
   ],
   "anti_overfit": {

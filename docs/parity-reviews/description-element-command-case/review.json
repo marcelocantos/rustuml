@@ -110,15 +110,48 @@
     }
   ],
   "findings": [
-    {
-      "severity": "high",
-      "summary": "The implementation fixed parser-local case handling but left the subtype detector case-sensitive for root DESCRIPTION keywords and quoted deployment containers.",
-      "details": [
-        "Uppercase `DATABASE AuditStore` still falls through to RustUML's welcome/error SVG instead of the Java DESCRIPTION database cylinder.",
-        "Mixed-case `NoDe \"Runtime Mesh\" as Mesh { ... }` does the same, proving the failure happens before the deployment parser can consume the now-case-folded tokens.",
-        "A mixed-case `FrAmE ... as ... { [Renderer] }` component-backed control passes, confirming the parser-local component fix is real and the remaining defect lives in detect_uml_subtype."
-      ]
-    }
+    "{\"details\": [\"Uppercase `DATABASE AuditStore` still falls through to RustUML's welcome/error SVG instead of the Java DESCRIPTION database cylinder.\", \"Mixed-case `NoDe \\\"Runtime Mesh\\\" as Mesh { ... }` does the same, proving the failure happens before the deployment parser can consume the now-case-folded tokens.\", \"A mixed-case `FrAmE ... as ... { [Renderer] }` component-backed control passes, confirming the parser-local component fix is real and the remaining defect lives in detect_uml_subtype.\"], \"severity\": \"high\", \"summary\": \"The implementation fixed parser-local case handling but left the subtype detector case-sensitive for root DESCRIPTION keywords and quoted deployment containers.\"}"
   ],
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "golden": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.svg",
+      "axes": [
+        "root ownership",
+        "uppercase keyword",
+        "bare leaf form",
+        "database family",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "failure_classification": "case-sensitive subtype detection"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "golden": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.svg",
+      "axes": [
+        "root ownership",
+        "mixed-case container keyword",
+        "quoted display with AS alias",
+        "mixed-case nested queue leaf",
+        "node and queue families",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "case-sensitive subtype detection"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.puml",
+      "golden": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.svg",
+      "axes": [
+        "root ownership",
+        "mixed-case shared container keyword",
+        "quoted display with AS alias",
+        "component-backed path",
+        "left-to-right direction"
+      ],
+      "result": "pass"
+    }
+  ]
 }

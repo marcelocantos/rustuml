@@ -3,9 +3,10 @@
   "mechanism": "state-themed-pseudostate-paint",
   "reviewer": {
     "identity": "Codex independent adversarial checker",
-    "model_tool": "GPT-5 / Codex desktop"
+    "model_tool": "GPT-5 / Codex desktop",
+    "model": "GPT-5 / Codex desktop"
   },
-  "verdict": "REJECT",
+  "verdict": "rejected",
   "revisions": {
     "implementation_commit": "22f8bf85d189e8b949630204dc85018b0decbbf9",
     "rust_exact_revision": "723af6cdc732456f7150e6501f1f0ad0c6f6ef0e",
@@ -75,26 +76,16 @@
     ]
   },
   "findings": [
-    {
-      "severity": "blocking",
-      "finding": "The required frozen no-oracle held-out matrix is not green. Initial invocations with the verified 7016... helper returned non-equivalence for the original minty, metal, activity/state conflict, vertical-gradient, history/bar, transparent-background, and plain-state probes. Later renderer-reachable reruns also returned non-equivalence for every probe except checker_history_font_state_channel, but the helper had then been replaced and those runs cannot count as the required frozen evidence.",
-      "consequence": "T14 rule 10 requires the no-oracle perturbation test to pass before acceptance. The review cannot convert known failures into acceptable residue merely because several visible paint attributes agree."
-    },
-    {
-      "severity": "medium",
-      "finding": "The initial flat probes that contain only reserved <<...>> state declarations are classified as SEQUENCE or CLASS by the Rust subtype detector, although Java renders them as valid state diagrams. Composite variants render as STATE but still expose existing autonomous composite layout and scoped-pseudostate identity divergence.",
-      "consequence": "This is not evidence of a theme-name shortcut, but it prevents the proposed mechanism from establishing product parity across the declared flat/nested axes."
-    },
-    {
-      "severity": "medium",
-      "finding": "Java treats 'state X <<fork>> <<priority>>' and 'state X <<deepHistory>>' as ordinary states. Rust also does not model those forms as the requested pseudostates. The preserved probes establish that these spellings are not valid tests of the claimed bar-stereotype or deep-history channels; the valid Rust/Java spelling for deep history is <<history*>>. Reserved <<fork>> and <<join>> style selectors did not override Java's activityBarColor in the tested source.",
-      "consequence": "The implementation should not claim support for an unproven independent bar-stereotype channel from these forms."
-    }
+    "{\"consequence\": \"T14 rule 10 requires the no-oracle perturbation test to pass before acceptance. The review cannot convert known failures into acceptable residue merely because several visible paint attributes agree.\", \"finding\": \"The required frozen no-oracle held-out matrix is not green. Initial invocations with the verified 7016... helper returned non-equivalence for the original minty, metal, activity/state conflict, vertical-gradient, history/bar, transparent-background, and plain-state probes. Later renderer-reachable reruns also returned non-equivalence for every probe except checker_history_font_state_channel, but the helper had then been replaced and those runs cannot count as the required frozen evidence.\", \"severity\": \"blocking\"}",
+    "{\"consequence\": \"This is not evidence of a theme-name shortcut, but it prevents the proposed mechanism from establishing product parity across the declared flat/nested axes.\", \"finding\": \"The initial flat probes that contain only reserved <<...>> state declarations are classified as SEQUENCE or CLASS by the Rust subtype detector, although Java renders them as valid state diagrams. Composite variants render as STATE but still expose existing autonomous composite layout and scoped-pseudostate identity divergence.\", \"severity\": \"medium\"}",
+    "{\"consequence\": \"The implementation should not claim support for an unproven independent bar-stereotype channel from these forms.\", \"finding\": \"Java treats 'state X <<fork>> <<priority>>' and 'state X <<deepHistory>>' as ordinary states. Rust also does not model those forms as the requested pseudostates. The preserved probes establish that these spellings are not valid tests of the claimed bar-stereotype or deep-history channels; the valid Rust/Java spelling for deep history is <<history*>>. Reserved <<fork>> and <<join>> style selectors did not override Java's activityBarColor in the tested source.\", \"severity\": \"medium\"}"
   ],
   "positive_evidence": [
     "checker_minty_flat_entity_ownership and checker_activity_state_channel_conflicts_lr show matching Java-owned start, end, choice, bar, and history paint values at the corresponding emitted primitives before unrelated layout divergence.",
     "checker_gradient_diagonal_policies_nested shows matching Java/Rust <linearGradient> definitions after correcting the input to a single backslash policy separator.",
     "checker_history_font_state_channel passes the strict structural comparator."
   ],
-  "required_follow_up": "Re-establish an immutable helper at the documented 7016... hash, rerun every preserved input, and resolve or explicitly target the flat subtype detection plus autonomous composite/scoped-pseudostate divergences. A fresh independent review is required after the no-oracle matrix is green."
+  "required_follow_up": "Re-establish an immutable helper at the documented 7016... hash, rerun every preserved input, and resolve or explicitly target the flat subtype detection plus autonomous composite/scoped-pseudostate divergences. A fresh independent review is required after the no-oracle matrix is green.",
+  "implementation_commit": "22f8bf85d189e8b949630204dc85018b0decbbf9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
 }

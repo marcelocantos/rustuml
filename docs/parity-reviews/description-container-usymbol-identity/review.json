@@ -6,7 +6,7 @@
     "tool": "Codex desktop",
     "date": "2026-07-31"
   },
-  "verdict": "reject",
+  "verdict": "rejected",
   "reason": "A fresh Java-valid held-out storage container with stereotype, explicit color, left-to-right layout, multiple children, and a root link fails the no-oracle comparison. Any valid counterexample rejects this mechanism.",
   "revisions": {
     "requested_implementation_revision": "54b10a247831a0b8a4742398210f3e55103b6e69",
@@ -60,56 +60,118 @@
     {
       "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_plain_tb.puml",
       "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_plain_tb.svg",
-      "axes": ["storage", "no stereotype", "root", "top-to-bottom", "single child", "renamed labels"],
+      "axes": [
+        "storage",
+        "no stereotype",
+        "root",
+        "top-to-bottom",
+        "single child",
+        "renamed labels"
+      ],
       "java_valid": true,
       "comparison": "pass",
-      "stdout": "SVGs are structurally equivalent"
+      "stdout": "SVGs are structurally equivalent",
+      "golden": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_plain_tb.svg",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.puml",
       "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.svg",
-      "axes": ["storage", "stereotype", "explicit color", "root", "left-to-right", "multiple children", "root link", "renamed labels"],
+      "axes": [
+        "storage",
+        "stereotype",
+        "explicit color",
+        "root",
+        "left-to-right",
+        "multiple children",
+        "root link",
+        "renamed labels"
+      ],
       "java_valid": true,
       "comparison": "fail",
       "stdout_excerpt": "SVG structural differences: element count expected 31, got 32; root svg expected width=464px height=239px, actual width=474px height=253px; cluster expected <rect>, actual <path>.",
-      "counterexample": true
+      "counterexample": true,
+      "golden": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.svg",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_nested_stereo_tb.puml",
       "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_nested_stereo_tb.svg",
-      "axes": ["storage", "stereotype", "nested", "top-to-bottom", "multiple children", "internal link", "renamed labels"],
+      "axes": [
+        "storage",
+        "stereotype",
+        "nested",
+        "top-to-bottom",
+        "multiple children",
+        "internal link",
+        "renamed labels"
+      ],
       "java_valid": true,
       "comparison": "pass",
-      "stdout": "SVGs are structurally equivalent"
+      "stdout": "SVGs are structurally equivalent",
+      "golden": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_nested_stereo_tb.svg",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_plain_lr.puml",
       "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_plain_lr.svg",
-      "axes": ["artifact", "no stereotype", "root", "left-to-right", "multiple children", "internal link", "renamed labels"],
+      "axes": [
+        "artifact",
+        "no stereotype",
+        "root",
+        "left-to-right",
+        "multiple children",
+        "internal link",
+        "renamed labels"
+      ],
       "java_valid": true,
       "comparison": "pass",
-      "stdout": "SVGs are structurally equivalent"
+      "stdout": "SVGs are structurally equivalent",
+      "golden": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_plain_lr.svg",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_stereo_tb_storage_child.puml",
       "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_stereo_tb_storage_child.svg",
-      "axes": ["artifact", "stereotype", "explicit color", "root", "top-to-bottom", "storage child", "internal link", "renamed labels"],
+      "axes": [
+        "artifact",
+        "stereotype",
+        "explicit color",
+        "root",
+        "top-to-bottom",
+        "storage child",
+        "internal link",
+        "renamed labels"
+      ],
       "java_valid": true,
       "comparison": "pass",
-      "stdout": "SVGs are structurally equivalent"
+      "stdout": "SVGs are structurally equivalent",
+      "golden": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_stereo_tb_storage_child.svg",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_nested_under_storage_lr.puml",
       "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_nested_under_storage_lr.svg",
-      "axes": ["artifact", "no artifact stereotype", "nested under stereotyped storage", "left-to-right", "multiple children", "cross links", "renamed labels"],
+      "axes": [
+        "artifact",
+        "no artifact stereotype",
+        "nested under stereotyped storage",
+        "left-to-right",
+        "multiple children",
+        "cross links",
+        "renamed labels"
+      ],
       "java_valid": true,
       "comparison": "pass",
-      "stdout": "SVGs are structurally equivalent"
+      "stdout": "SVGs are structurally equivalent",
+      "golden": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_nested_under_storage_lr.svg",
+      "result": "pass"
     }
   ],
   "syntax_validation": {
     "xmllint": "pass",
     "error_marker_scan": "pass: no syntax/error markers found"
   },
-  "conclusion": "Reject. The corrected account is well grounded in the cited Java model and most implementation constants have provenance, but the implementation does not fully preserve storage cluster shape dispatch and canvas/text placement across the held-out matrix. The preserved failing input is valid Java PlantUML and should remain executable until the underlying dispatch/frame model is fixed."
+  "conclusion": "Reject. The corrected account is well grounded in the cited Java model and most implementation constants have provenance, but the implementation does not fully preserve storage cluster shape dispatch and canvas/text placement across the held-out matrix. The preserved failing input is valid Java PlantUML and should remain executable until the underlying dispatch/frame model is fixed.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
 }

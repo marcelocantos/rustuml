@@ -225,31 +225,11 @@
     "oracle_errors": 0
   },
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "The account overgeneralizes from the original trailing-two-stereotype bug to mixed-slot syntax that Java does not model the same way.",
-      "evidence": "checker_three_explicit_split_root_lr is a valid fresh counterexample. Java renders only <<East>> above Split Explicit, while Rust merges both identity-slot stereotypes and the trailing stereotype into one sequence. That mismatch changes cluster height, path geometry, and text order."
-    },
-    {
-      "severity": "rejecting",
-      "summary": "The account's canonical ownership claim is false for mixed-slot package syntax.",
-      "evidence": "checker_three_fallback_split_nested_tb is a valid fresh counterexample. Java qualifies the nested group as Host.Split Fallback, but Rust qualifies it as Host.SplitFallback. A valid failing counterexample alone rejects the change under the T14 rules."
-    },
-    {
-      "severity": "rejecting",
-      "summary": "Invalid mixed-slot syntax still fails open on the Rust side.",
-      "evidence": "checker_negative_malformed_split_stereotype produces a Java syntax-error SVG, but a helper probe with a synthetic placeholder golden shows Rust rendering BrokenLeaf as a top-level class after discarding the malformed opener. That is precisely the kind of over-acceptance the user asked this review to search for."
-    },
-    {
-      "severity": "informational",
-      "summary": "The narrow ownership repair that motivated the account is real.",
-      "evidence": "All five preserved class-package-style-header-separation follow-ups that previously failed because a two-trailing-stereotype opener disappeared now pass exactly under the no-oracle helper."
-    },
-    {
-      "severity": "informational",
-      "summary": "No fixture-shaped logic or unexplained numeric tuning was found in the audited implementation diff.",
-      "evidence": "The diff changes only parser regexes and stereotype extraction. git diff --check is clean, and searches across the changed files found no held-out filenames, mechanism-name strings, test-diagram reads, include_str/include_bytes additions, or comparator manipulation."
-    }
+    "{\"evidence\": \"checker_three_explicit_split_root_lr is a valid fresh counterexample. Java renders only <<East>> above Split Explicit, while Rust merges both identity-slot stereotypes and the trailing stereotype into one sequence. That mismatch changes cluster height, path geometry, and text order.\", \"severity\": \"rejecting\", \"summary\": \"The account overgeneralizes from the original trailing-two-stereotype bug to mixed-slot syntax that Java does not model the same way.\"}",
+    "{\"evidence\": \"checker_three_fallback_split_nested_tb is a valid fresh counterexample. Java qualifies the nested group as Host.Split Fallback, but Rust qualifies it as Host.SplitFallback. A valid failing counterexample alone rejects the change under the T14 rules.\", \"severity\": \"rejecting\", \"summary\": \"The account's canonical ownership claim is false for mixed-slot package syntax.\"}",
+    "{\"evidence\": \"checker_negative_malformed_split_stereotype produces a Java syntax-error SVG, but a helper probe with a synthetic placeholder golden shows Rust rendering BrokenLeaf as a top-level class after discarding the malformed opener. That is precisely the kind of over-acceptance the user asked this review to search for.\", \"severity\": \"rejecting\", \"summary\": \"Invalid mixed-slot syntax still fails open on the Rust side.\"}",
+    "{\"evidence\": \"All five preserved class-package-style-header-separation follow-ups that previously failed because a two-trailing-stereotype opener disappeared now pass exactly under the no-oracle helper.\", \"severity\": \"informational\", \"summary\": \"The narrow ownership repair that motivated the account is real.\"}",
+    "{\"evidence\": \"The diff changes only parser regexes and stereotype extraction. git diff --check is clean, and searches across the changed files found no held-out filenames, mechanism-name strings, test-diagram reads, include_str/include_bytes additions, or comparator manipulation.\", \"severity\": \"informational\", \"summary\": \"No fixture-shaped logic or unexplained numeric tuning was found in the audited implementation diff.\"}"
   ],
   "artifact_hashes": {
     "helper": {
@@ -325,5 +305,153 @@
     "existing_review_records_modified": false,
     "rust_svgs_preserved": false
   },
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "implementation_commit": "30c0430d25f0be04597b48b3666e623693f5fe88",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.svg",
+      "valid": true,
+      "axes": [
+        "zero stereotypes",
+        "packageStyle fallback",
+        "root",
+        "tags plus URL plus color ordering",
+        "top-to-bottom"
+      ],
+      "outcome": "pass",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.svg",
+      "valid": true,
+      "axes": [
+        "one stereotype",
+        "pre-AS placement",
+        "explicit symbol",
+        "root",
+        "top-to-bottom"
+      ],
+      "outcome": "pass",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.svg",
+      "valid": true,
+      "axes": [
+        "one stereotype",
+        "post-identity placement",
+        "packageStyle fallback",
+        "nested",
+        "top-to-bottom"
+      ],
+      "outcome": "pass",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.svg",
+      "valid": true,
+      "axes": [
+        "two stereotypes",
+        "post-identity placement",
+        "packageStyle fallback",
+        "root",
+        "left-to-right"
+      ],
+      "outcome": "pass",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.svg",
+      "valid": true,
+      "axes": [
+        "two stereotypes",
+        "pre-AS placement",
+        "explicit symbol",
+        "nested",
+        "left-to-right"
+      ],
+      "outcome": "pass",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.svg",
+      "valid": true,
+      "axes": [
+        "three stereotypes",
+        "pre-AS placement",
+        "explicit symbol",
+        "root",
+        "top-to-bottom"
+      ],
+      "outcome": "pass",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.svg",
+      "valid": true,
+      "axes": [
+        "three stereotypes",
+        "split pre-AS plus post-identity placement",
+        "explicit symbol",
+        "root",
+        "left-to-right",
+        "tag plus trailing color ordering"
+      ],
+      "outcome": "fail: Java renders only the trailing stereotype <<East>> above the title Split Explicit, while Rust renders all three stereotype labels and expands the cloud cluster.",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.svg",
+      "valid": true,
+      "axes": [
+        "three stereotypes",
+        "split pre-AS plus post-identity placement",
+        "packageStyle fallback",
+        "nested",
+        "URL plus color ordering",
+        "top-to-bottom"
+      ],
+      "outcome": "fail: Java qualifies the group and child as Host.Split Fallback and Host.Split Fallback.SplitLeaf, while Rust uses the alias path Host.SplitFallback and Host.SplitFallback.SplitLeaf.",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.svg",
+      "valid": false,
+      "axes": [
+        "malformed trailing stereotype",
+        "split pre-AS plus post-identity placement",
+        "invalid syntax negative control"
+      ],
+      "java_outcome": "syntax error page; line 3 is flagged in the generated Java SVG",
+      "rust_probe_outcome": "fail-open: when paired with a synthetic placeholder SVG so the helper would parse the source, Rust rendered BrokenLeaf as a top-level class and silently discarded the malformed package opener.",
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.svg"
+    }
+  ]
 }

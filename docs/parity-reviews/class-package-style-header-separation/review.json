@@ -72,16 +72,8 @@
     "valid_failed": 2
   },
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "The implementation still conflates symbol-cluster headers with plain label-only titles.",
-      "evidence": "Both fresh held-outs fail because Java passes the stereotype block into symbol.asBig(), while Rust's emit_layout_symbol_cluster_title only writes the bold label. The missing stereotype shifts header ordering and cluster geometry."
-    },
-    {
-      "severity": "informational",
-      "summary": "The reviewed diff shows no fixture-shaped logic or post-hoc SVG surgery.",
-      "evidence": "Searches over shipping crates found no mechanism-name strings, held-out filenames, or coordinate-keyed SVG rewrites for this mechanism."
-    }
+    "{\"evidence\": \"Both fresh held-outs fail because Java passes the stereotype block into symbol.asBig(), while Rust's emit_layout_symbol_cluster_title only writes the bold label. The missing stereotype shifts header ordering and cluster geometry.\", \"severity\": \"rejecting\", \"summary\": \"The implementation still conflates symbol-cluster headers with plain label-only titles.\"}",
+    "{\"evidence\": \"Searches over shipping crates found no mechanism-name strings, held-out filenames, or coordinate-keyed SVG rewrites for this mechanism.\", \"severity\": \"informational\", \"summary\": \"The reviewed diff shows no fixture-shaped logic or post-hoc SVG surgery.\"}"
   ],
   "artifacts": {
     "held_out_directory": "test-diagrams/perturbations/class-package-style-header-separation/",
@@ -89,5 +81,36 @@
     "production_files_modified": false,
     "account_modified": false
   },
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.svg",
+      "axes": [
+        "packageStyle node versus explicit node",
+        "title plus visible stereotype",
+        "top-to-bottom",
+        "top-level clusters"
+      ],
+      "outcome": "fail: Rust drops the fallback package stereotype block and centers the title as though it were the first header line.",
+      "source": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.svg",
+      "axes": [
+        "packageStyle database versus explicit database",
+        "title plus visible stereotype",
+        "left-to-right",
+        "nested fallback cluster"
+      ],
+      "outcome": "fail: Rust again omits the fallback package stereotype block and mis-shapes the database header region.",
+      "source": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.svg",
+      "result": "fail"
+    }
+  ]
 }

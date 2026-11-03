@@ -447,45 +447,11 @@
     ]
   },
   "findings": [
-    {
-      "severity": "reject",
-      "title": "Valid Java allowmixing spellings still dispatch to DESCRIPTION",
-      "evidence": [
-        "review4_mixed_case_allowmixing.puml",
-        "review4_underscored_allow_mixing.puml"
-      ]
-    },
-    {
-      "severity": "reject",
-      "title": "Package aliases and nested qualified endpoints do not preserve quark-like ownership",
-      "evidence": [
-        "review4_nested_package_alias_after_links.puml",
-        "review4_namespace_container_reordered.puml"
-      ]
-    },
-    {
-      "severity": "major",
-      "title": "The causal response misstates Java's existing-entity type refinement",
-      "evidence": [
-        "CommandLinkClass creates LeafType.CLASS",
-        "CommandCreateElementFull2 only calls setDisplay on an existing entity"
-      ]
-    },
-    {
-      "severity": "major",
-      "title": "The changed dispatch condition accepts Java-invalid trailing command text",
-      "evidence": [
-        "Temporary probe allowmixing unexpected-token: Java error line 2; Rust CLASS with two entities"
-      ]
-    },
-    {
-      "severity": "gate",
-      "title": "Durable account and adjacent branch provenance requirements are unmet",
-      "evidence": [
-        "review-3-response.md is not account.json",
-        "Neither changed branch names its Java class/method beside the condition"
-      ]
-    }
+    "{\"evidence\": [\"review4_mixed_case_allowmixing.puml\", \"review4_underscored_allow_mixing.puml\"], \"severity\": \"reject\", \"title\": \"Valid Java allowmixing spellings still dispatch to DESCRIPTION\"}",
+    "{\"evidence\": [\"review4_nested_package_alias_after_links.puml\", \"review4_namespace_container_reordered.puml\"], \"severity\": \"reject\", \"title\": \"Package aliases and nested qualified endpoints do not preserve quark-like ownership\"}",
+    "{\"evidence\": [\"CommandLinkClass creates LeafType.CLASS\", \"CommandCreateElementFull2 only calls setDisplay on an existing entity\"], \"severity\": \"major\", \"title\": \"The causal response misstates Java's existing-entity type refinement\"}",
+    "{\"evidence\": [\"Temporary probe allowmixing unexpected-token: Java error line 2; Rust CLASS with two entities\"], \"severity\": \"major\", \"title\": \"The changed dispatch condition accepts Java-invalid trailing command text\"}",
+    "{\"evidence\": [\"review-3-response.md is not account.json\", \"Neither changed branch names its Java class/method beside the condition\"], \"severity\": \"gate\", \"title\": \"Durable account and adjacent branch provenance requirements are unmet\"}"
   ],
   "required_followup": [
     "Preserve all 14 review4_ source/SVG pairs, including the four direct failures.",
