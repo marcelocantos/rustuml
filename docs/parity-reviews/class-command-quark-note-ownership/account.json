@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not independently accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "34c51916fb59d5af7e5d02fa4b493463280caf94",
+  "negative_evidence_contract": "All preserved failures remain executable; previously passing comparisons and valid-input parseability must be preserved. Maker results are not acceptance.",
+  "mechanism": "class-command-quark-note-ownership",
+  "java_locations": [
+    "classdiagram/ClassDiagramFactory#initCommandsList",
+    "command/note/CommandFactoryNoteOnEntity#createMultiLine,executeInternal",
+    "command/note/CommandFactoryNote#getRegexConcat,executeInternal",
+    "command/CommandPackage#getRegexConcat,executeArg"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#native_container_candidate,parse_line,try_note,try_package",
+    "crates/rustuml-parser/src/diagram/class.rs#Package",
+    "crates/rustuml-render/src/class.rs#attached note endpoint layout"
+  ],
+  "invariant": "Successful native command execution selects Class regardless of root/group placement. A multiline note owns exactly its chosen terminator; note targets resolve quark data including groups. Package visibility and qualified note identity survive consumption.",
+  "causal_divergence": "The native trial imposes an extraneous nonempty-package prerequisite. Notes recognize only end-note termination and lookup entity_by_path only; Java resolves Quark<Entity> data which can be a group. Ordinary package visibility and dotted note code grammar are absent. Failed class trials can therefore fall through and lose native declarations.",
+  "planned_change": "Remove the package prerequisite for executed native commands; represent the selected note terminator in parser state, allow group target lookup, retain package visibility and dotted note aliases. Route group-attached notes through the same group endpoint layout used by ordinary links. Reject missing targets and duplicate quark materialization; do not ignore unknown commands or alter scores.",
+  "perturbation_axes": [
+    "root/native kinds versus nested groups and declaration order",
+    "brace versus end-note ownership with command-looking body text",
+    "qualified aliases, package visibility and mixing order"
+  ]
+}
