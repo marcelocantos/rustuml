@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "rust_revision": "95c114314f479be301ff9549f4f1d3edf2616a28",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "prior_evidence": "checker7 a7b3be50308f93ab2d97d6aee5fb9fbda522b7f2; prior rejected accounts and every blob unchanged",
+  "oracle_plan": [
+    "Replay checker7 fresh23 and retained1672 using existing references, unchanged CLI comparator and exact-source/model captures; welcome/errors remain nonpositive.",
+    "Compact source-derived independent axes via parent Monkey Man immutable TIM relay only. No local Java/javac/SSH.",
+    "Stable final parser/CLI/main2/standing/guards/format/clippy once; preserve failed iterations, real exits and downstream handoffs. No self-review or acceptance."
+  ],
+  "mechanism": "tim-duplicate-formal-binding",
+  "java_locations": [
+    "tim/TFunctionImpl.java:getNewMemory,canCover",
+    "tim/Eater.java:eatDeclareFunction",
+    "tim/expression/ReversePolishInterpretor.java"
+  ],
+  "invariant": "Each formal independently reads the named map without consuming it, otherwise consumes the next positional value or uses its captured default. Result memory stores the last assignment to each exact formal key; named lookup never advances the positional cursor.",
+  "causal_divergence": "Rust removes the first named value during binding, so a later duplicate formal incorrectly falls through to a positional/default value.",
+  "planned_change": "Change only formal binding to non-consuming typed named lookup, retaining declaration order, last-key overwrite, positional cursor, captured TValue defaults, signature selection and expression named-map lifetime.",
+  "perturbation_axes": [
+    "Duplicate bare versus dollar formal keys with named/default/positional mixtures",
+    "Duplicate names before/after another formal, declaration-time typed defaults and named argument side-effect evaluation count"
+  ]
+}

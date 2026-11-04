@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "rust_revision": "95c114314f479be301ff9549f4f1d3edf2616a28",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "prior_evidence": "checker7 a7b3be50308f93ab2d97d6aee5fb9fbda522b7f2; prior rejected accounts and every blob unchanged",
+  "oracle_plan": [
+    "Replay checker7 fresh23 and retained1672 using existing references, unchanged CLI comparator and exact-source/model captures; welcome/errors remain nonpositive.",
+    "Compact source-derived independent axes via parent Monkey Man immutable TIM relay only. No local Java/javac/SSH.",
+    "Stable final parser/CLI/main2/standing/guards/format/clippy once; preserve failed iterations, real exits and downstream handoffs. No self-review or acceptance."
+  ],
+  "mechanism": "tim-empty-sub-iterator-termination",
+  "java_locations": [
+    "tim/iterator/CodeIteratorSub.java:peek,next",
+    "tim/iterator/CodeIteratorImpl.java",
+    "tim/TContext.java:buildCodeIterator,executeLines,executeLinesInternal",
+    "tim/iterator/CodeIteratorReturnFunction.java:peek",
+    "tim/iterator/CodeIteratorProcedure.java:peek",
+    "tim/TimLoader.java:load",
+    "BlockUml.java:getDiagram",
+    "eggs/PSystemWelcomeFactory.java:createSystem"
+  ],
+  "invariant": "An empty collected sub installs an empty replay iterator; peek returns null before next can clear it, terminating that execution iterator. Later source/effects/end tags are not emitted. A nested executeLines invocation has its own iterator lifetime and returns to its caller; source projection retains the actually executed prefix.",
+  "causal_divergence": "Rust replays an empty vector as a no-op and continues the outer input, appending tail commands and end marker that Java never executes.",
+  "planned_change": "Track termination per execution iterator, set it only when collected replay is empty, stop the active source/buffered loop and restore caller iterator state at nested executeLines boundaries. Preserve function/conditional buffering, nonempty sub execution and origins. Carry truncated events unchanged into both projections. Exact factory welcome selection is unowned parse/mod.rs/renderer dependency and will be handed off, not fabricated through identity edits or reader normalization.",
+  "perturbation_axes": [
+    "Empty/comment-only versus blank-line/nonempty bodies, top-level versus pending procedure/return collectors",
+    "Empty replay in included execution versus caller continuation; suppressed tail errors/effects and unchanged nonempty sub replay"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "rust_revision": "95c114314f479be301ff9549f4f1d3edf2616a28",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "prior_evidence": "checker7 a7b3be50308f93ab2d97d6aee5fb9fbda522b7f2; prior rejected accounts and every blob unchanged",
+  "oracle_plan": [
+    "Replay checker7 fresh23 and retained1672 using existing references, unchanged CLI comparator and exact-source/model captures; welcome/errors remain nonpositive.",
+    "Compact source-derived independent axes via parent Monkey Man immutable TIM relay only. No local Java/javac/SSH.",
+    "Stable final parser/CLI/main2/standing/guards/format/clippy once; preserve failed iterations, real exits and downstream handoffs. No self-review or acceptance."
+  ],
+  "mechanism": "tim-memory-trie-text-lookup",
+  "java_locations": [
+    "tim/TrieImpl.java:add,remove,getLonguestMatchStartingIn",
+    "tim/TMemoryGlobal.java:putVariable,removeVariable,variablesNames3",
+    "tim/TMemoryLocal.java:variablesNames3,putVariable,removeVariable,getVariable",
+    "tim/VariableManager.java:getVarnameAt,replaceVariables",
+    "tim/TContext.java:applyFunctionsAndVariables",
+    "text/TLineType.java:isLetterOrEmojiOrUnderscoreOrDigit"
+  ],
+  "invariant": "Every admitted exact stored name is available to original-text lookup through the same live global/override/local memories. Trie traversal follows UTF-16 edges, does not backtrack to earlier terminals, retains prefix nodes after removal, and chooses the longest returned match across scopes before checking boundaries. Value precedence remains override/global/local. Inserted values are not rescanned.",
+  "causal_divergence": "Rust scans alphanumeric/underscore tokens instead of stored-name paths, so internal dollars/combining marks and arbitrary builtin-created names are unavailable to text although direct lookup works. A max-prefix scan would also misrepresent Java traversal and removal history.",
+  "planned_change": "Couple map mutation with name-index state in a private memory type; keep global/automatic-local indexes eager and override index lazy like Java. Use UTF-16 trie traversal, original source offsets and source-defined letter/ASCII digit/underscore/surrogate boundary predicate, then existing typed value and JSON projection. Preserve function priority, literal backslash-n exception and variable concatenation markers. Do not rescan appended values. NUL is not admitted by TrieImpl; isolated-surrogate display and Unicode-version table equivalence remain separate limits.",
+  "perturbation_axes": [
+    "Internal dollar, combining mark, punctuation/space names and overlapping prefix paths including mismatch and removal history",
+    "Global/override/local precedence and index lifetime; original boundary versus expanded text, function-looking replacement and concat markers"
+  ]
+}
