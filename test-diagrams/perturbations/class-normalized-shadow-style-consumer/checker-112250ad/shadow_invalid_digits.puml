@@ -1,0 +1,6 @@
+@startuml
+skinparam shadowing 1.2.3
+class Vessel
+class Cargo
+Vessel --> Cargo
+@enduml

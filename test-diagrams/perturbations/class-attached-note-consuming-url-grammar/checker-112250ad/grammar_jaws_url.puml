@@ -1,0 +1,6 @@
+@startuml
+class Vessel
+note left of Vessel [[manual path{read}]]
+receipt
+end note
+@enduml

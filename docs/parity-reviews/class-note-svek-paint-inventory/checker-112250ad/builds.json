@@ -1,0 +1,40 @@
+[
+  {
+    "variant": "before",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/before-source",
+    "exit": 0,
+    "seconds": 92.20582675933838,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-before",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "binary": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-before/release/rustuml",
+    "sha256": "dbab4d2d64928c321939c930969b10f0a769015e9e23bc17dc8f479a663f1d6b"
+  },
+  {
+    "variant": "after",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+    "exit": 0,
+    "seconds": 91.1507921218872,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+      "CARGO_BUILD_JOBS": "2"
+    },
+    "binary": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after/release/rustuml",
+    "sha256": "652871706304472161bbf8d508772820443848207ffd78458e028983a8ca539c"
+  }
+]

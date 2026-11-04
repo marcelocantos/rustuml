@@ -1,0 +1,511 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-svek-paint-inventory",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A89ccabb9-32b8-4e54-aae2-8aa7ed1860f6",
+    "model": "gpt-6-astra, high reasoning effort; Codex harness in T3 Code",
+    "tool": "functions.exec / exec_command; parent existing Monkey Man reference relay only",
+    "independence": "Separate task; did not implement production or author accounts; no children. Same model family is not model diversity."
+  },
+  "account_commit": "fd342b277a7e22830c6b1a85d1a66529a40b658d",
+  "implementation_commit": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+  "candidate_commit": "68ab512be964e243ae1943f7a9fefd3537091401",
+  "before_commit": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/builds.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/validate_refs.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/replay.py historical",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/replay.py fresh",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/final_binary_check.py",
+    "cargo fmt --check",
+    "cargo test --workspace --release --lib --no-fail-fast",
+    "cargo test --workspace --release --test pipe_mode --test error_paths --test doc_claims --no-fail-fast",
+    "cargo test --release --test golden_no_oracle -- --nocapture",
+    "cargo test --release --test golden_pairs -- --nocapture",
+    "cargo test --release --test parity_perturbations -- --nocapture",
+    "cargo test --release --test harness_guards -- --nocapture",
+    "cargo clippy --workspace --release -- -D warnings",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/validate_refs.py supplement-"
+  ],
+  "command_results": {
+    "builds": [
+      {
+        "variant": "before",
+        "command": [
+          "cargo",
+          "build",
+          "--release",
+          "-p",
+          "rustuml"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/before-source",
+        "exit": 0,
+        "seconds": 92.20582675933838,
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-before",
+          "CARGO_BUILD_JOBS": "2"
+        },
+        "binary": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-before/release/rustuml",
+        "sha256": "dbab4d2d64928c321939c930969b10f0a769015e9e23bc17dc8f479a663f1d6b"
+      },
+      {
+        "variant": "after",
+        "command": [
+          "cargo",
+          "build",
+          "--release",
+          "-p",
+          "rustuml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "exit": 0,
+        "seconds": 91.1507921218872,
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "2"
+        },
+        "binary": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after/release/rustuml",
+        "sha256": "652871706304472161bbf8d508772820443848207ffd78458e028983a8ca539c"
+      }
+    ],
+    "broad_gates": [
+      {
+        "name": "fmt",
+        "command": [
+          "cargo",
+          "fmt",
+          "--check"
+        ],
+        "exit": 0,
+        "seconds": 1.2497589588165283,
+        "log": "gate-fmt.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "units",
+        "command": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--release",
+          "--lib",
+          "--no-fail-fast"
+        ],
+        "exit": 0,
+        "seconds": 64.82815217971802,
+        "log": "gate-units.log",
+        "sha256": "4d77410b9f714c5161d3d0087d187184b7f00e0a5da3bad6b8b9e6bff73ae945",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "cli-errors",
+        "command": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--release",
+          "--test",
+          "pipe_mode",
+          "--test",
+          "error_paths",
+          "--test",
+          "doc_claims",
+          "--no-fail-fast"
+        ],
+        "exit": 0,
+        "seconds": 5.136792182922363,
+        "log": "gate-cli-errors.log",
+        "sha256": "1457934cb5c2cecab2f1fa99aa59c93cbaad1e37d4619f90c2dbccec1cf9e43c",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "no_oracle",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "golden_no_oracle",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 3.0582258701324463,
+        "log": "gate-no_oracle.log",
+        "sha256": "afb23028b222a9847f35aaeb3031ba96c7157b4d2c20ea20d3f5ed880839dd9a",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "assisted",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "golden_pairs",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 3.1076371669769287,
+        "log": "gate-assisted.log",
+        "sha256": "296d4f13b7bc52629476fbdfc1995c17ee83cfe1535a0f91fda82b1b8aa08805",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "standing",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "parity_perturbations",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 2.995220899581909,
+        "log": "gate-standing.log",
+        "sha256": "cf915cb738d076628487dc1ce435b6e76f67ba75086542f255d319b8d8df745c",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "guards",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "harness_guards",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 1.3848488330841064,
+        "log": "gate-guards.log",
+        "sha256": "c589c2af2ec344c411fd8ae85d40688f5777b59747d88e76b264ecc81cb01655",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "clippy",
+        "command": [
+          "cargo",
+          "clippy",
+          "--workspace",
+          "--release",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit": 101,
+        "seconds": 20.92335319519043,
+        "log": "gate-clippy.log",
+        "sha256": "3740b6d3c6c20cd13ea5e91753d354c19b230c7f1ace6e711838f0c6d5d9ab25",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      }
+    ],
+    "all_1851_maker_status_svg_yaml_hashes_reproduced": true,
+    "final_workspace_binary": {
+      "sha256": "02a859a947acc08924eace1c3a2ba944ed220ead4ecfd7ddafcc6f9192960a22",
+      "cases": 1884,
+      "differences": [],
+      "reason": "Cargo workspace CLI tests produced a second feature-unified executable for the same exact candidate after the independent standalone CLI replay. Preserve both actual binaries and verify the final executable outputs; no build, broad gate or reference generation is repeated."
+    },
+    "fresh_java_exits": {
+      "inventory_root_first.puml": 0,
+      "inventory_local_first.puml": 0,
+      "inventory_nested_empty.puml": 0,
+      "inventory_empty_native.puml": 0,
+      "inventory_two_empty_note.puml": 0,
+      "inventory_mixed.puml": 0,
+      "inventory_tim_repeat.puml": 0,
+      "inventory_group_note.puml": 0
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_root_first.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_root_first.svg",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "result": "fail",
+      "whole_case_status": "mismatch",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "invalid_rejected": false,
+      "source_sha256": "e1869182c2898f88523c91cdce160a89af36704703d4009ce1b663af3f54bfa3",
+      "java_svg_sha256": "6e098481aa4263bb6167a844a4175a8a66c396a72c90079641353121ab7f3778",
+      "rust_svg_sha256": "d5091ae62217eed81c2a4cdbf8c394d95b9a76c7c0f136ee83e2180c9dc21dd1",
+      "evidence_capture": "replay-fresh/0000-inventory_root_first.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_local_first.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_local_first.svg",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "result": "fail",
+      "whole_case_status": "mismatch",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "invalid_rejected": false,
+      "source_sha256": "2ced568475717596eb6903fb59ccbce57ebd9afa639ac3158edcb43e8cb5b3f2",
+      "java_svg_sha256": "3cef0c204c8b3767ab21b53e71efcc44b2a0f9b27ffb00b4ffedb1ccae537904",
+      "rust_svg_sha256": "df919422851048ed9ba0772e9dcf025d4227a5cc3ea428fb1bfd55646e76c4d3",
+      "evidence_capture": "replay-fresh/0001-inventory_local_first.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_nested_empty.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_nested_empty.svg",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "result": "fail",
+      "whole_case_status": "mismatch",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "invalid_rejected": false,
+      "source_sha256": "82ccedb56da87ff7f2e240295f9b0d3b069ad115256b7f1dc0ffb1187f53ec45",
+      "java_svg_sha256": "0575bd07845905aa9663fea1dd4c93248d1240a4496c0bfe3c6493e32283a7d0",
+      "rust_svg_sha256": "1e223bd1ba1f58474366489e57509bcf2cb30e3d12a71c051a6a6f9e14fa7859",
+      "evidence_capture": "replay-fresh/0002-inventory_nested_empty.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_empty_native.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_empty_native.svg",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "a5f1d29e2c4de1af1599e0b15bc27f4be327af18cbc67664b38c4a58cdbfbb85",
+      "java_svg_sha256": "be6cd31f4bb1915d4390ca325b27e6f2aed332da9da071a3cd3d1df349536cbc",
+      "rust_svg_sha256": "84e9a1ab93d34713168f0cdefb08d0300ae0535474f6765e60958df0119d9c37",
+      "evidence_capture": "replay-fresh/0003-inventory_empty_native.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_two_empty_note.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_two_empty_note.svg",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "8abeae4d845b68e9e259cdc850d7dc28cfb2e0d30060ce4092e360ec6f33126b",
+      "java_svg_sha256": "d39e8951342808823bafeb83bd009e41cbe29b20a5640cf5485022dbed72e474",
+      "rust_svg_sha256": "3e68be3553d3fc2b0e0cf8c618eaccb48247985158cc7ed5e15aee554907ce3e",
+      "evidence_capture": "replay-fresh/0004-inventory_two_empty_note.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_mixed.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_mixed.svg",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "5dba2a738ce871481a224ae0d932b291ead899b4dca351a29637dfe87d958480",
+      "java_svg_sha256": "c64a640cd3ac9338c124a6c67dabd60cfb693a5019332143d3c0c765a8b5142b",
+      "rust_svg_sha256": "5d1234aca37fbb8cae6a6933e980fc178270b824a8acafa0c898d5f93922a9cf",
+      "evidence_capture": "replay-fresh/0005-inventory_mixed.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_tim_repeat.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_tim_repeat.svg",
+      "axes": [
+        "repeated evaluated source lines",
+        "creation order/renamed labels"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "pass",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "2c91ba2ce338b7f9ebbb2ff1935cc74673facf457db023d7e161e1d2b64c5204",
+      "java_svg_sha256": "7a6ab627a9d7b8ead5c170d253ad348597a41ddcedbd555f11577169a10b9a51",
+      "rust_svg_sha256": "194663b95281348ece3a6cd31f91a91a6dfae66c00e2dc2018869df689438b2c",
+      "evidence_capture": "replay-fresh/0006-inventory_tim_repeat.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_group_note.puml",
+      "golden": "test-diagrams/perturbations/class-note-svek-paint-inventory/checker-112250ad/inventory_group_note.svg",
+      "axes": [
+        "group attachment",
+        "label width"
+      ],
+      "result": "fail",
+      "whole_case_status": "mismatch",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "invalid_rejected": false,
+      "source_sha256": "c42371b71ddd662bf3218b41a30841afd0fbdbc1d18c81f7542f041e2dcea563",
+      "java_svg_sha256": "0eec1b2023b88822280ee2876a202b97329e3abe9c6404c50be7e1a8fe86a64a",
+      "rust_svg_sha256": "f158f0e27c99fcb596de3459df6043ff0aa1ab3ab8f4c4a2b207f66e0fe99607",
+      "evidence_capture": "replay-fresh/0007-inventory_group_note.after.svg"
+    }
+  ],
+  "findings": [
+    "Bounded support: source-derived GraphvizImageBuilder owner traversal, Bibliotekon insertion order, and DotData complete no-group/no-link eligibility are implemented without UID renumbering or SVG reorder. Four of eight fresh whole cases match; no fixture-shaped production condition or unexplained new layout constant was found.",
+    "P1: inventory_root_first and inventory_local_first retain correct object/UID/paint order but remain Java442x212 and441x212 versus Rust533x120. inventory_nested_empty keeps619x187 yet swaps inner note/class geometry. Graph-input construction still deliberately separates notes from the shared paint inventory; source-line graph order is not an equivalence proof.",
+    "P2: inventory_group_note remains Java363x136 versus Rust361x136. Retained group-note305x199 versus301x199 cases remain failures. Metadata/owner/UID support does not waive whole geometry.",
+    "Repair guidance: preserve the fixed ownership/UID model; independently trace graph-slot, cluster/Opale and empty-image dataflow before any coordinate change. No native solver, fault, provider retry or environment compensation was attempted."
+  ],
+  "verdict": "rejected",
+  "bounded_support_only": true,
+  "denominators": {
+    "entries": 8,
+    "unique_sources": 8,
+    "duplicate_entries": 0,
+    "counts": {
+      "before": {
+        "mismatch": 7,
+        "pass": 1
+      },
+      "after": {
+        "mismatch": 4,
+        "pass": 4
+      }
+    }
+  },
+  "evidence": "docs/parity-reviews/class-note-svek-paint-inventory/checker-112250ad",
+  "residue": [
+    "Whole-case failures reject; DOM/model/UID agreement is not a geometry waiver. All fresh pairs, including negative error SVGs, are registered under the unchanged standing harness.",
+    "Broad gates ran once on clean exact candidate before new pair/review registration. No post-registration all-suite pass is claimed; no packaging rerun.",
+    "Original59d50dbc/importc51bb768 rejection, all9254 historical blobs, earlier missing fields/draft chronology defects and three inaccurate preimplementation location qualifiers remain unchanged. Later clarification is not retroactive provenance.",
+    "Group-note305vs301, shared fonts/Q/cloud/header/native point engine, rooted CommandLinkClass multipass, TIM source_line0 and nested-quote/generic integration remain unresolved.",
+    "No historical environment equivalence claim, local Java/javac, SSH, child, blocked-native retry, native/layout/fault work, shared-metric change, shipping or acceptance-policy change."
+  ]
+}

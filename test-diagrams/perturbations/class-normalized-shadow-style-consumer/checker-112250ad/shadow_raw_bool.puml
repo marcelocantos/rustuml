@@ -1,0 +1,10 @@
+@startuml
+<style>
+class {
+Shadowing false
+}
+</style>
+class Vessel
+class Cargo
+Vessel --> Cargo
+@enduml

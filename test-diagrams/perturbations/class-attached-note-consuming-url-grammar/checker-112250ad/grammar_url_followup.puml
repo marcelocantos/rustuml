@@ -1,0 +1,12 @@
+@startuml
+package Cove {
+class Vessel
+note left of “Vessel” [[manual{tip}]]
+first
+end note
+}
+url Cove.Vessel [[https://example.org/entity]]
+note right of Cove.Vessel [[file:/manual]] {
+second
+}
+@enduml

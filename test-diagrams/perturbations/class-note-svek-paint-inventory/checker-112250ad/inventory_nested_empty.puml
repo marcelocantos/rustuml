@@ -1,0 +1,13 @@
+@startuml
+note "outer" as N
+package Outer {
+class Anchor
+package Hollow {
+}
+package Inner {
+note "inner" as N
+class Vessel
+}
+note left of Anchor : local
+}
+@enduml

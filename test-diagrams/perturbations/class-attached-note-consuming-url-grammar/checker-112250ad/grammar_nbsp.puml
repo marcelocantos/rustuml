@@ -1,0 +1,6 @@
+@startuml
+class Vessel
+note right of Vessel [[manual label]]
+receipt
+end note
+@enduml

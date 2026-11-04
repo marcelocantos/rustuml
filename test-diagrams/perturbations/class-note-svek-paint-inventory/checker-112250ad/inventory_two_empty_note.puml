@@ -1,0 +1,7 @@
+@startuml
+package LeftBox {
+}
+note "root memo" as N
+package RightBox {
+}
+@enduml

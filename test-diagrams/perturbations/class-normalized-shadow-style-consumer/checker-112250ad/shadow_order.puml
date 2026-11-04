@@ -1,0 +1,6 @@
+@startuml
+class Vessel
+skinparam shadowing -2.5px
+class Cargo
+Vessel --> Cargo
+@enduml

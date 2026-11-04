@@ -1,0 +1,4 @@
+@startuml
+class Vessel
+note right of Vessel : bad
+@enduml

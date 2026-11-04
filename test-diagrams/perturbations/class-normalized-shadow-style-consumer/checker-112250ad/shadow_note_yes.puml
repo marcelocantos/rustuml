@@ -1,0 +1,9 @@
+@startuml
+allowmixing
+skinparam shadowing no
+skinparam noteShadowing yes
+actor Pilot
+class Vessel
+Pilot --> Vessel
+note right of Vessel : memo
+@enduml

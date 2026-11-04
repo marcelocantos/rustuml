@@ -1,0 +1,7 @@
+@startuml
+skinparam shadowing -2.5px
+skinparam classShadowing<<quiet>> false
+class Vessel <<quiet>>
+class Cargo
+Vessel --> Cargo
+@enduml

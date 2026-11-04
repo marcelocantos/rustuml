@@ -1,0 +1,5 @@
+@startuml
+class Anchor
+package Hollow {
+}
+@enduml

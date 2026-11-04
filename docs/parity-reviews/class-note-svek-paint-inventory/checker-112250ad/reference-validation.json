@@ -1,0 +1,1256 @@
+{
+  "gzip_sha256": "8c1a631eb921b899d55c808c83b6572024a51c1f5e10e72db875c1ddb1a358ee",
+  "manifest_sha256": "0c627fde5588d6d60304e10eaf64e72f1db206b96e50eea54d3b71231f72463b",
+  "environment": {
+    "batch": "checker-packet8-112250ad",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.xVMI6hUA",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "8063be11519441219e169e562e5f90c5389983b75a1d97fdc2a578e5522ec3db",
+    "manifest_sha256": "0c627fde5588d6d60304e10eaf64e72f1db206b96e50eea54d3b71231f72463b",
+    "env_overrides": {},
+    "environment_policy": "Inherited environment; wrapper removes JAVA_TOOL_OPTIONS, _JAVA_OPTIONS, JDK_JAVA_OPTIONS, CLASSPATH and sets GRAPHVIZ_DOT",
+    "timeout_seconds": 60,
+    "classification_performed": false,
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.YwcHmTC7/input.json.gz",
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "PRIVATE_CWD",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "PRIVATE_CWD",
+    "timezone": "GMT+11:00",
+    "candidate": "68ab512be964e243ae1943f7a9fefd3537091401",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_argv_provenance": "Unchanged wrapper execve construction and exact invocation arguments",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  },
+  "resources_requested": [],
+  "resources_returned": [],
+  "cases": [
+    {
+      "name": "inventory_root_first.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "e1869182c2898f88523c91cdce160a89af36704703d4009ce1b663af3f54bfa3",
+      "java_sha256": "6e098481aa4263bb6167a844a4175a8a66c396a72c90079641353121ab7f3778",
+      "entities": [
+        {
+          "class": "cluster",
+          "data-qualified-name": "Cove",
+          "data-source-line": "3",
+          "id": "ent0004"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Journal",
+          "data-source-line": "4",
+          "id": "ent0005"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Zed",
+          "data-source-line": "5",
+          "id": "ent0006"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Journal",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Zed",
+          "data-source-line": "2",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Tail",
+          "data-source-line": "7",
+          "id": "ent0007"
+        }
+      ],
+      "texts": [
+        "Cove",
+        "local memo",
+        "Zed",
+        "root memo",
+        "Zed",
+        "Tail"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "inventory_local_first.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "2ced568475717596eb6903fb59ccbce57ebd9afa639ac3158edcb43e8cb5b3f2",
+      "java_sha256": "3cef0c204c8b3767ab21b53e71efcc44b2a0f9b27ffb00b4ffedb1ccae537904",
+      "entities": [
+        {
+          "class": "cluster",
+          "data-qualified-name": "Cove",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Zed",
+          "data-source-line": "2",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Journal",
+          "data-source-line": "3",
+          "id": "ent0004"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Journal",
+          "data-source-line": "5",
+          "id": "ent0005"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Zed",
+          "data-source-line": "6",
+          "id": "ent0006"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Tail",
+          "data-source-line": "7",
+          "id": "ent0007"
+        }
+      ],
+      "texts": [
+        "Cove",
+        "Zed",
+        "local memo",
+        "root memo",
+        "Zed",
+        "Tail"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "inventory_nested_empty.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "82ccedb56da87ff7f2e240295f9b0d3b069ad115256b7f1dc0ffb1187f53ec45",
+      "java_sha256": "0575bd07845905aa9663fea1dd4c93248d1240a4496c0bfe3c6493e32283a7d0",
+      "entities": [
+        {
+          "class": "cluster",
+          "data-qualified-name": "Outer",
+          "data-source-line": "2",
+          "id": "ent0003"
+        },
+        {
+          "class": "cluster",
+          "data-qualified-name": "Outer.Inner",
+          "data-source-line": "6",
+          "id": "ent0006"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Outer.Anchor",
+          "data-source-line": "3",
+          "id": "ent0004"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Outer.GMN9",
+          "data-source-line": "10",
+          "id": "ent0010"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Outer.Inner.N",
+          "data-source-line": "7",
+          "id": "ent0007"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Outer.Inner.Vessel",
+          "data-source-line": "8",
+          "id": "ent0008"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "N",
+          "data-source-line": "1",
+          "id": "ent0002"
+        }
+      ],
+      "texts": [
+        "Outer",
+        "Inner",
+        "Anchor",
+        "local",
+        "Hollow",
+        "inner",
+        "Vessel",
+        "outer"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "inventory_empty_native.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "a5f1d29e2c4de1af1599e0b15bc27f4be327af18cbc67664b38c4a58cdbfbb85",
+      "java_sha256": "be6cd31f4bb1915d4390ca325b27e6f2aed332da9da071a3cd3d1df349536cbc",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Anchor",
+          "data-source-line": "1",
+          "id": "ent0002"
+        }
+      ],
+      "texts": [
+        "Hollow",
+        "Anchor"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "inventory_two_empty_note.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "8abeae4d845b68e9e259cdc850d7dc28cfb2e0d30060ce4092e360ec6f33126b",
+      "java_sha256": "d39e8951342808823bafeb83bd009e41cbe29b20a5640cf5485022dbed72e474",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "N",
+          "data-source-line": "3",
+          "id": "ent0003"
+        }
+      ],
+      "texts": [
+        "LeftBox",
+        "RightBox",
+        "root memo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "inventory_mixed.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "owner/declaration order",
+        "nested/empty group and native/description topology"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "5dba2a738ce871481a224ae0d932b291ead899b4dca351a29637dfe87d958480",
+      "java_sha256": "c64a640cd3ac9338c124a6c67dabd60cfb693a5019332143d3c0c765a8b5142b",
+      "entities": [
+        {
+          "class": "cluster",
+          "data-qualified-name": "Cove",
+          "data-source-line": "4",
+          "id": "ent0004"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Page",
+          "data-source-line": "5",
+          "id": "ent0005"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Index",
+          "data-source-line": "6",
+          "id": "ent0006"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.GMN7",
+          "data-source-line": "7",
+          "id": "ent0008"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Reader",
+          "data-source-line": "2",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "N",
+          "data-source-line": "3",
+          "id": "ent0003"
+        }
+      ],
+      "texts": [
+        "Cove",
+        "Page",
+        "Index",
+        "check",
+        "Reader",
+        "outer"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "inventory_tim_repeat.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "repeated evaluated source lines",
+        "creation order/renamed labels"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "2c91ba2ce338b7f9ebbb2ff1935cc74673facf457db023d7e161e1d2b64c5204",
+      "java_sha256": "7a6ab627a9d7b8ead5c170d253ad348597a41ddcedbd555f11577169a10b9a51",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Zed",
+          "data-source-line": "2",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "3",
+          "id": "ent0004"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Alpha",
+          "data-source-line": "2",
+          "id": "ent0006"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN7",
+          "data-source-line": "3",
+          "id": "ent0008"
+        }
+      ],
+      "texts": [
+        "Zed",
+        "memo",
+        "Alpha",
+        "memo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "inventory_group_note.puml",
+      "mechanism": "class-note-svek-paint-inventory",
+      "axes": [
+        "group attachment",
+        "label width"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "c42371b71ddd662bf3218b41a30841afd0fbdbc1d18c81f7542f041e2dcea563",
+      "java_sha256": "0eec1b2023b88822280ee2876a202b97329e3abe9c6404c50be7e1a8fe86a64a",
+      "entities": [
+        {
+          "class": "cluster",
+          "data-qualified-name": "Cove",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Anchor",
+          "data-source-line": "2",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN4",
+          "data-source-line": "4",
+          "id": "ent0005"
+        }
+      ],
+      "texts": [
+        "Cove",
+        "Anchor",
+        "extended group memo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "grammar_jaws_url.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "4a9393a9e521ebe84b10a38c4a77c5d9d22ada75ca73d31462c86a0a913bc581",
+      "java_sha256": "c0a74c0bd4755582bf26ce109f268b416f4c87ff1be3a40081222ef4a92fda58",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "3",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "grammar_curly_brace.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "2e48e8a54c73832315571c16bff145abf97d17c9d8d34ec22f2004772b31ac0a",
+      "java_sha256": "c67f750faa33d355297afa34c4be80ff946b110d15b61c84956b1e4bea768d42",
+      "entities": [
+        {
+          "class": "cluster",
+          "data-qualified-name": "Cove",
+          "data-source-line": "2",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Vessel",
+          "data-source-line": "3",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.GMN4",
+          "data-source-line": "5",
+          "id": "ent0005"
+        }
+      ],
+      "texts": [
+        "Cove",
+        "Vessel",
+        "class this is body"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "grammar_single_null.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "42b5f0c625b19c226872c740cd25cb03c10539baf8d2e5d9ae82e9c701f3c225",
+      "java_sha256": "6c86d6a6e37506e738acb1b58983c19b1f72fd43edc285b95ee14bb5df94c426",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "2",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "grammar_tooltip_only.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "51a3e3b5e7f8b0c65f0c6493f3997a007b34b74630aefeb2d0706233931d1699",
+      "java_sha256": "730bffcccf10b75f81b6464e73006238b24c07c02fc80929c6e3b6c960e7a7e4",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "2",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "4",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "grammar_brackets_quoted.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "733459d1754d2e4c377a55631746e4cf2d669749382e85c5385a4f16ca5592dc",
+      "java_sha256": "35eb3b0df0c3eecff430aeb5396cd74b7be9da464611affa61e60618011d950f",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "3",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "grammar_url_followup.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "81cecca569b9719d5757d2cd531ad66c6046a0a3e217dcbbfa5d2c370e38c228",
+      "java_sha256": "ea6d4bd2616b7d607d995e44678f11a269e418c7e6b0ade480e7d594976527c1",
+      "entities": [
+        {
+          "class": "cluster",
+          "data-qualified-name": "Cove",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.Vessel",
+          "data-source-line": "2",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cove.GMN4",
+          "data-source-line": "4",
+          "id": "ent0005"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN7",
+          "data-source-line": "9",
+          "id": "ent0008"
+        }
+      ],
+      "texts": [
+        "Cove",
+        "Vessel",
+        "first",
+        "second"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "grammar_empty_target.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": false,
+      "observed_valid": false,
+      "classification": "java_error_svg",
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "7ee76fa1cf51f9234d3a6c0bf675b15059908458513a508c23fb16c9c2517ce4",
+      "java_sha256": "9d8a92a3b01298d8a3b74854f6d328438c9cbc7dc8ba105f33f217fe539ba770",
+      "entities": [],
+      "texts": [
+        "Welcome to PlantUML!",
+        "\u00a0",
+        "You can start with a simple UML Diagram like:",
+        "\u00a0",
+        "Bob->Alice:\u00a0Hello",
+        "\u00a0",
+        "Or",
+        "\u00a0",
+        "class\u00a0Example",
+        "\u00a0",
+        "You will find more information about PlantUML syntax on",
+        "https://plantuml.com",
+        "\u00a0",
+        "(Details by typing",
+        "license",
+        "keyword)",
+        "\u00a0",
+        "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+        "[From string (line 3) ]",
+        "\u00a0",
+        "@startuml",
+        "class Vessel",
+        "note right of \"\" : bad",
+        "Syntax Error? (Assumed diagram type: class)"
+      ],
+      "comparator_self_exit": 2
+    },
+    {
+      "name": "grammar_jaws_target.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": false,
+      "observed_valid": false,
+      "classification": "java_error_svg",
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "8432d32085db57c1800e1b48af58315abf0bd795f9dbaf419511bca422908dab",
+      "java_sha256": "dfef2a7d050dce417a970bbbe781e01ef1dcd2b1eb184dfa3ef8aee77f21ac86",
+      "entities": [],
+      "texts": [
+        "Welcome to PlantUML!",
+        "\u00a0",
+        "You can start with a simple UML Diagram like:",
+        "\u00a0",
+        "Bob->Alice:\u00a0Hello",
+        "\u00a0",
+        "Or",
+        "\u00a0",
+        "class\u00a0Example",
+        "\u00a0",
+        "You will find more information about PlantUML syntax on",
+        "https://plantuml.com",
+        "\u00a0",
+        "(Details by typing",
+        "license",
+        "keyword)",
+        "\u00a0",
+        "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+        "[From string (line 3) ]",
+        "\u00a0",
+        "@startuml",
+        "class Vessel",
+        "note right of \ue121Vessel\ue121 : bad",
+        "Not known: \ue121Vessel\ue121 (Assumed diagram type: class)"
+      ],
+      "comparator_self_exit": 2
+    },
+    {
+      "name": "grammar_named_url.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": false,
+      "observed_valid": false,
+      "classification": "java_error_svg",
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "a08106b909c499334b4c38dad5b6ceb739df0355ab226f42e825817d3d3afa11",
+      "java_sha256": "6829e6db340db737ae21c6ed0430a95b01b0060942ae815ab647bd56160d368a",
+      "entities": [],
+      "texts": [
+        "Welcome to PlantUML!",
+        "\u00a0",
+        "You can start with a simple UML Diagram like:",
+        "\u00a0",
+        "Bob->Alice:\u00a0Hello",
+        "\u00a0",
+        "Or",
+        "\u00a0",
+        "class\u00a0Example",
+        "\u00a0",
+        "You will find more information about PlantUML syntax on",
+        "https://plantuml.com",
+        "\u00a0",
+        "(Details by typing",
+        "license",
+        "keyword)",
+        "\u00a0",
+        "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+        "[From string (line 2) ]",
+        "\u00a0",
+        "@startuml",
+        "note \"memo\" as Journal [[manual]]",
+        "Syntax Error? (Assumed diagram type: sequence)"
+      ],
+      "comparator_self_exit": 2
+    },
+    {
+      "name": "grammar_bad_empty_url.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "expected_java_valid": false,
+      "observed_valid": false,
+      "classification": "java_error_svg",
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "3350f84fdb01708d5020ae7ae875ccd10ec574d4fdb9e2c748da5ef0955bdbe4",
+      "java_sha256": "b22d18cd35f1c9620ab4a868b08b3784cb362b419e13ab0d77f69c864e2d2bfb",
+      "entities": [],
+      "texts": [
+        "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+        "[From string (line 3) ]",
+        "\u00a0",
+        "@startuml",
+        "class Vessel",
+        "note right of Vessel [[\u201c\u201d]]",
+        "Syntax Error? (Assumed diagram type: class)"
+      ],
+      "comparator_self_exit": 2
+    },
+    {
+      "name": "grammar_nbsp.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "Pattern2 whitespace versus Rust Unicode whitespace",
+        "unquoted link/label"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "793f6c7a19739d2c62691796f9f9916d483f86bd62e60ad1111e49900781b4c3",
+      "java_sha256": "670c259c88e92ce8f7a499e641b03f6fe9b4b30f2c7e9a600eb0285bee22e6d9",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "3",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_note_yes.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "463621010e9553b12c71626d2d8c634d285b3df7adf5733aa368e15992df7c9d",
+      "java_sha256": "e69ad4e574d01f49092f9381ddcd048029311ab3d84b0c6ca5fd3e4bd72fc3ad",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Pilot",
+          "data-source-line": "4",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "5",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN5",
+          "data-source-line": "7",
+          "id": "ent0006"
+        }
+      ],
+      "texts": [
+        "Pilot",
+        "Vessel",
+        "memo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_mapped_unit.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "9f744a92fa16b78dad19edbf2994b4ffc19b285ce3b5cf634b7f92449ed9752b",
+      "java_sha256": "a2358418fa668824d51a6d80ee360cc4bd5c82d2ef76fd4b6695f960bfbeaa6e",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Pilot",
+          "data-source-line": "3",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "4",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN5",
+          "data-source-line": "6",
+          "id": "ent0006"
+        }
+      ],
+      "texts": [
+        "Pilot",
+        "Vessel",
+        "memo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_mapped_yes.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "837313d9028987a7d4e0f9ce6c641e03e65c97eb2db9f0755ae72d11b5de4bba",
+      "java_sha256": "38f62df90a0ee7f81f05da4d6e0f6bc920671ecc75d1f35348fb65e134360440",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Pilot",
+          "data-source-line": "3",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "4",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN5",
+          "data-source-line": "6",
+          "id": "ent0006"
+        }
+      ],
+      "texts": [
+        "Pilot",
+        "Vessel",
+        "memo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_global_no.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "a7e4db107e34386f07eb61b73f80502808ae99a37dd634cf13747427b8998cb9",
+      "java_sha256": "48ef0714628906b4c2cf18e524f0bad1eb50bcd310c12b1144dd666710106d64",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Pilot",
+          "data-source-line": "3",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "4",
+          "id": "ent0003"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN5",
+          "data-source-line": "6",
+          "id": "ent0006"
+        }
+      ],
+      "texts": [
+        "Pilot",
+        "Vessel",
+        "memo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_stereo.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "50a3759c1fd7150f965aa9c90ee503016ef7510574b55e35cf31a5eff4c9c0af",
+      "java_sha256": "9e1a8e7e8adc5a6d8167fbed2ef739d89a8a806808a7e9c5e1a50e7f21960fa3",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "3",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cargo",
+          "data-source-line": "4",
+          "id": "ent0003"
+        }
+      ],
+      "texts": [
+        "\u00abquiet\u00bb",
+        "Vessel",
+        "Cargo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_order.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "39537ae7c81219f578b7edf4c6dd4101eaef51176b28e5ff26580c0a5e1a8425",
+      "java_sha256": "5d788db0460390f3cce555e90e4e05a42e239450c06d06a3afc6734bb8e730ef",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cargo",
+          "data-source-line": "3",
+          "id": "ent0003"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "Cargo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_raw_bool.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "e84b65177ac9f5711c98382f052a3bd87bc7a56866e1c0b24412c7b742479232",
+      "java_sha256": "09a87d54ab36fe31be91d5ab7449a9333715b95e7dc58188c55c69023a07237b",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "6",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cargo",
+          "data-source-line": "7",
+          "id": "ent0003"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "Cargo"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_boundary.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "9cbf40d4143cdc0d19cd4f2fe8414e676204e471e1bdeea3ca9db55a2d587c05",
+      "java_sha256": "0ed7c63e6915c4c3eeaa2671ee343301c2356a054859122f3589e6edd2509c06",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Gate",
+          "data-source-line": "3",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "4",
+          "id": "ent0003"
+        }
+      ],
+      "texts": [
+        "Gate",
+        "Vessel"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_degenerate.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "44e36ca994c5c45b5091be8a6264b362f7e50bfff28745fca0924013149d8c75",
+      "java_sha256": "dd1206f61c109e2f47120461def86419bb2179a0170358f660b48f81b7b8aacf",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "2",
+          "id": "ent0002"
+        }
+      ],
+      "texts": [
+        "Vessel"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_empty_group.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "mapped/global/raw conversion",
+        "per-entity style/topology/paint extent"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "8a74cf12617bb9999de3df475876beb1682982a353631f2b98f174e7e1cc9f2b",
+      "java_sha256": "f4c745368f2c83b239d31afbbb988470debe0b7b81e7a85dfedb0742e5e48f6b",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "2",
+          "id": "ent0002"
+        }
+      ],
+      "texts": [
+        "Hollow",
+        "Vessel"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "shadow_invalid_digits.puml",
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "axes": [
+        "ValueImpl malformed extracted double",
+        "native nondegenerate topology"
+      ],
+      "expected_java_valid": false,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "98de6535178bc1f14736c46c5857ea956d4aee7c9a630cb2c281cd490d9a53e4",
+      "java_sha256": "146c41e5276bf6319ab582407a477140f950eb172ab695bb7889e618ce2b68b7",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "2",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "Cargo",
+          "data-source-line": "3",
+          "id": "ent0003"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "Cargo"
+      ],
+      "comparator_self_exit": 0
+    }
+  ]
+}

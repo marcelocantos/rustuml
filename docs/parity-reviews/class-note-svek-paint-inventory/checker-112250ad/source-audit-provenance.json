@@ -1,0 +1,178 @@
+{
+  "java": [
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "sha256": "0195e8eca7e26b7300f70194a665f78b3224826ea761a673aea741242bba37af",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/StringUtils.java",
+      "sha256": "36a2ae5dfc1b2f4d2ce12861b0ae420cc80307c17467a731e6d7b72e32d3f1e8",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "sha256": "652b36312263c9fb8998b9f9028dc684446c3e5673b3f4bed4a907cc99322252",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/url/UrlBuilder.java",
+      "sha256": "4b349f8636eac12301a8a5e1d2f90eaa6d5b1f0e373597802cbc2929bc764432",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+      "sha256": "803a162f03659ed7ca6a48238145bd0f8c8176a5e6f01fc7c37c1013568ffa4b",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "sha256": "056e1590423d17fe4b4ba1a24c0f773d210ea0c7830415b5a0ba94b0abd74576",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "sha256": "b04ced59627d1d313e127bf5f28532bc162d4a629240a65f6d5730927f33c69d",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "sha256": "c479ef28db5aebca79293c01be674e88d4bd40a3da70eb1cf3aa45f0795d6178",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "sha256": "042dcdc675cf02aea9e8eb1d357a1d17ab4d4faf3681285c3467adf4071021b7",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "sha256": "934c994d396482815a66aa7c7e311c9051c924989004bc0af1a2e8723c87f73c",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/dot/DotData.java",
+      "sha256": "f786482534d5a548954cdfe788c8b38b1e8944b2e9d003f74fbdc4769bb5b6c4",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+      "sha256": "0edd4959c52fff7d3eaa42e22a8b970c883b16fffd6926920ae22ccf4b25aeb8",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+      "sha256": "3587109e9cba046a1e29b6bf4707a5b8c734d4651c2e534e40fa2592ab646fe2",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "sha256": "b6866edc25e6a35003067202a9167b24435387fdc7ce3f2f8759583fae985bfa",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolBoundary.java",
+      "sha256": "2f8c47287defffea98bf7758663a2d12404d4bb47062939643df48ccf0e1b559",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java",
+      "sha256": "67d8545288215f51cb12fcf64e939e059e418057b9ee671f85bda812f24c7c7f",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java",
+      "sha256": "fc54ae0fee21d32b68b2a3c920427d3e04066769eeb7db80f66ffd819d3147b3",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/EntityImageDegenerated.java",
+      "sha256": "84960c12a6364c56cdd04c58901487a44210ad903f378f6e75dd6c3f5bd34b51",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java",
+      "sha256": "7ef9718ded7d41323a4ed2903d980448d6514f32033b380472f84246203d627c",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "sha256": "5aab9c05752a57b4067781ccdba9794c5b7b9cc5eea1acbead12113491c47435",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  ],
+  "rust": [
+    {
+      "revision": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "sha256": "77bd265ed4601e864689813c162092a2c717ded68b9fb7ceb27d1ef05a4e1ef8"
+    },
+    {
+      "revision": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+      "path": "crates/rustuml-render/src/class.rs",
+      "sha256": "53168fa95815248eb70df5e0536dfca336e9449645dd970cec0cb207d819de75"
+    },
+    {
+      "revision": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+      "path": "crates/rustuml-parser/src/parse/style.rs",
+      "sha256": "57a9c456ee9036097f1e41549e94020b1ac52d16468168b92a4b2f03786d69af"
+    },
+    {
+      "revision": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+      "path": "Cargo.toml",
+      "sha256": "2c0fa53820d0bfa113c5f7e697ecef5dffb16ff4f3c639802131549b53c6b3c2"
+    },
+    {
+      "revision": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+      "path": "Cargo.lock",
+      "sha256": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd"
+    },
+    {
+      "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "sha256": "2f2913f5cf7667ff3ec8145d260c2db3d7457864a52a3c7ab84b3fa81fa23a23"
+    },
+    {
+      "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+      "path": "crates/rustuml-render/src/class.rs",
+      "sha256": "5f895b72c4a111529f04ec996294595b0c70deec9cb30375afc2d8c7be2f28ab"
+    },
+    {
+      "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+      "path": "crates/rustuml-parser/src/parse/style.rs",
+      "sha256": "57a9c456ee9036097f1e41549e94020b1ac52d16468168b92a4b2f03786d69af"
+    },
+    {
+      "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+      "path": "Cargo.toml",
+      "sha256": "2c0fa53820d0bfa113c5f7e697ecef5dffb16ff4f3c639802131549b53c6b3c2"
+    },
+    {
+      "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+      "path": "Cargo.lock",
+      "sha256": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd"
+    }
+  ],
+  "initial_build_interruption": {
+    "reason": "Host turn interruption killed both compile processes before completion; no success inferred. Partial logs retained; resumed same-target builds succeeded. No broad gate had yet begun.",
+    "logs": [
+      "before-build-interrupted.log",
+      "after-build-interrupted.log"
+    ]
+  },
+  "account_location_qualifiers": {
+    "originals_unchanged": true,
+    "corrections_postimplementation": true,
+    "qualifiers": [
+      "classdiagram/command/NameAndCodeParser is command/NameAndCodeParser",
+      "utils/StringUtils is package-root StringUtils",
+      "USymbolBoundary#getSkinParameter is getDrawing, with inherited USymbolSimpleAbstract#asSmall"
+    ],
+    "assessment": "Corrected paths/hashes verified against pinned Java. These are real mistakes in the preimplementation account. They do not invalidate the identified classes but cannot be relabeled accurate preimplementation provenance. Exact original chronology and older missing-mechanism/draft defects remain immutable."
+  }
+}

@@ -1,0 +1,8 @@
+@startuml
+!procedure $item($id)
+class $id
+note right of $id : memo
+!endprocedure
+$item("Zed")
+$item("Alpha")
+@enduml

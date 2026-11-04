@@ -1,0 +1,10 @@
+@startuml
+allowmixing
+actor Reader
+note "outer" as N
+package Cove {
+class Page
+rectangle Index
+note right of Page : check
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+note "root memo" as Journal
+class Zed
+package Cove {
+note "local memo" as Journal
+class Zed
+}
+class Tail
+@enduml

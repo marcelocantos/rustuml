@@ -1,0 +1,65 @@
+{
+  "batch": "checker-packet8-112250ad-cleanid",
+  "candidate": "68ab512be964e243ae1943f7a9fefd3537091401",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "wrapper_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timezone": "GMT+11:00",
+  "resources": [],
+  "inputs": [
+    {
+      "name": "cleanid_guillemets.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/supplement/cleanid_guillemets.puml",
+      "source_bytes": 89,
+      "source_sha256": "93fc8a398337ff29e6c9abf64fc1d865030e2ce6da5d1e0a8af9ce6514b3d3df",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIFZlc3NlbApub3RlIHJpZ2h0IG9mIMKrVmVzc2VswrsgW1ttYW51YWx7dGlwfV1dCnJlY2VpcHQKZW5kIG5vdGUKQGVuZHVtbAo=",
+      "remote_name": "cleanid_guillemets.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "cleanid_parentheses.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/supplement/cleanid_parentheses.puml",
+      "source_bytes": 87,
+      "source_sha256": "bee60863e840873e7886b8b453b5babf02fbb308abd4ea74b46f1b437d762768",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIFZlc3NlbApub3RlIHJpZ2h0IG9mIChWZXNzZWwpIFtbbWFudWFse3RpcH1dXQpyZWNlaXB0CmVuZCBub3RlCkBlbmR1bWwK",
+      "remote_name": "cleanid_parentheses.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "cleanid_brackets.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/supplement/cleanid_brackets.puml",
+      "source_bytes": 87,
+      "source_sha256": "ca084fadc86a8dd6b40af5fc10643d02c5fc6639adad55abb1ee41078e8adc74",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIFZlc3NlbApub3RlIHJpZ2h0IG9mIFtWZXNzZWxdIFtbbWFudWFse3RpcH1dXQpyZWNlaXB0CmVuZCBub3RlCkBlbmR1bWwK",
+      "remote_name": "cleanid_brackets.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    }
+  ]
+}

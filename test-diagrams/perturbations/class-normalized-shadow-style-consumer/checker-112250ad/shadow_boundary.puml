@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+skinparam shadowing -2.5px
+boundary Gate
+class Vessel
+Gate --> Vessel
+@enduml

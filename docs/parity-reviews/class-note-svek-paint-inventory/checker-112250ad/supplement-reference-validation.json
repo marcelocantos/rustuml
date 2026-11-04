@@ -1,0 +1,153 @@
+{
+  "gzip_sha256": "d983d4cd8c89d9b5511e7370b1706a6ce54c723fc70b5fc1e0e429092914708f",
+  "manifest_sha256": "5563e5877a1dca0fd32b2fac3474bf2af9fd39b50df938472c3fe154cd61bb9e",
+  "environment": {
+    "batch": "checker-packet8-112250ad-cleanid",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.u5IGwAQ7",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "99244721b15edb563c8b335d7d296a12f65002d38f03be4219ad55539331ea30",
+    "manifest_sha256": "5563e5877a1dca0fd32b2fac3474bf2af9fd39b50df938472c3fe154cd61bb9e",
+    "env_overrides": {},
+    "environment_policy": "Inherited environment; wrapper removes JAVA_TOOL_OPTIONS, _JAVA_OPTIONS, JDK_JAVA_OPTIONS, CLASSPATH and sets GRAPHVIZ_DOT",
+    "timeout_seconds": 60,
+    "classification_performed": false,
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.6jtCoZb8/input.json.gz",
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "PRIVATE_CWD",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "PRIVATE_CWD",
+    "timezone": "GMT+11:00",
+    "candidate": "68ab512be964e243ae1943f7a9fefd3537091401",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_argv_provenance": "Unchanged wrapper execve construction and exact invocation arguments",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  },
+  "resources_requested": [],
+  "resources_returned": [],
+  "cases": [
+    {
+      "name": "cleanid_guillemets.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "93fc8a398337ff29e6c9abf64fc1d865030e2ce6da5d1e0a8af9ce6514b3d3df",
+      "java_sha256": "350fcf22282adff5f0bb50173eed90ea102f29297a1bc1f0b26a67dbdd2c5c83",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "3",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "cleanid_parentheses.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "bee60863e840873e7886b8b453b5babf02fbb308abd4ea74b46f1b437d762768",
+      "java_sha256": "8968b9332cdf8ef4e7f37fd2d693a321df65c11f0beafb3f039c37f37360cd05",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "3",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    },
+    {
+      "name": "cleanid_brackets.puml",
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "expected_java_valid": true,
+      "observed_valid": true,
+      "classification": "valid_class_svg",
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "ca084fadc86a8dd6b40af5fc10643d02c5fc6639adad55abb1ee41078e8adc74",
+      "java_sha256": "f1846aae1781bbbfa291e39ef1f8e9560c8011702fe66d88ae5e1403adb31ec7",
+      "entities": [
+        {
+          "class": "entity",
+          "data-qualified-name": "Vessel",
+          "data-source-line": "1",
+          "id": "ent0002"
+        },
+        {
+          "class": "entity",
+          "data-qualified-name": "GMN3",
+          "data-source-line": "3",
+          "id": "ent0004"
+        }
+      ],
+      "texts": [
+        "Vessel",
+        "receipt"
+      ],
+      "comparator_self_exit": 0
+    }
+  ]
+}

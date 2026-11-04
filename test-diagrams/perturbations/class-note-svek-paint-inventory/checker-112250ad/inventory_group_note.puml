@@ -1,0 +1,6 @@
+@startuml
+package Cove {
+class Anchor
+}
+note right of Cove : extended group memo
+@enduml

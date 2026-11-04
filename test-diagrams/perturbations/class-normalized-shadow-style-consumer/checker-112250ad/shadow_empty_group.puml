@@ -1,0 +1,6 @@
+@startuml
+skinparam shadowing -2.5px
+class Vessel
+package Hollow {
+}
+@enduml

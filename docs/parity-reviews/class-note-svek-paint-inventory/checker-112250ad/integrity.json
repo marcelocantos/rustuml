@@ -1,0 +1,193 @@
+{
+  "package": {
+    "count": 295,
+    "mismatches": []
+  },
+  "archive": {
+    "count": 34246,
+    "mismatches": []
+  },
+  "archive_digest": "8fb7eb16f32bc0fea14a891ab8e5b84744e1fa7e5268cc38c0b596f60943f072",
+  "historical": {
+    "count": 9254,
+    "mismatches": []
+  },
+  "historical_git_blobs": {
+    "count": 9254,
+    "mismatches": []
+  },
+  "import_exact_diff": true,
+  "maker_binaries": [
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff8/final-rustuml",
+      "expected": "8d28895a57b6e8283120a9578cf9365ece02e715a83f2e88d75b7a77d7fce30a",
+      "actual": "8d28895a57b6e8283120a9578cf9365ece02e715a83f2e88d75b7a77d7fce30a"
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff8/draft2-rustuml",
+      "expected": "fab8e9b8a8d5ccee109a428182f7cca9b07fa3d0ab6a17daa6e1dbb8c33eb5df",
+      "actual": "fab8e9b8a8d5ccee109a428182f7cca9b07fa3d0ab6a17daa6e1dbb8c33eb5df"
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+      "expected": "cdc29cc286b9494660e30c09c88d4686d28ba82ae5810aed219941c7eed97e68",
+      "actual": "cdc29cc286b9494660e30c09c88d4686d28ba82ae5810aed219941c7eed97e68"
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+      "expected": "0e368102f36bfbc59efe141286df5935b785535db6c0cf537bdbadc9350f21cd",
+      "actual": "0e368102f36bfbc59efe141286df5935b785535db6c0cf537bdbadc9350f21cd"
+    }
+  ],
+  "accounts": [
+    {
+      "mechanism": "class-note-svek-paint-inventory",
+      "commit": "fd342b277a7e22830c6b1a85d1a66529a40b658d",
+      "sha256": "475c50ddcf19f2a60060a5691878cd744a4566ea1c35e7345ab3988f8eb426c1",
+      "original_bytes_unchanged": true
+    },
+    {
+      "mechanism": "class-attached-note-consuming-url-grammar",
+      "commit": "2b349ba5c9869cdb7e3ed28e7cd761f87cb0c1db",
+      "sha256": "bc4ee2a4c3e5d2a86ce332bae3eeccfb7a3d1202cf2ded40ad03bb9a78960e11",
+      "original_bytes_unchanged": true
+    },
+    {
+      "mechanism": "class-normalized-shadow-style-consumer",
+      "commit": "da5395c5ddda94a716209c362d49a49b7dc1d87a",
+      "sha256": "8c05440136567d35b227f66857707b34882067d32707d5052f8747483da3c25b",
+      "original_bytes_unchanged": true
+    }
+  ],
+  "java_source": [
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "sha256": "0195e8eca7e26b7300f70194a665f78b3224826ea761a673aea741242bba37af"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/StringUtils.java",
+      "sha256": "36a2ae5dfc1b2f4d2ce12861b0ae420cc80307c17467a731e6d7b72e32d3f1e8"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "sha256": "652b36312263c9fb8998b9f9028dc684446c3e5673b3f4bed4a907cc99322252"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/url/UrlBuilder.java",
+      "sha256": "4b349f8636eac12301a8a5e1d2f90eaa6d5b1f0e373597802cbc2929bc764432"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+      "sha256": "803a162f03659ed7ca6a48238145bd0f8c8176a5e6f01fc7c37c1013568ffa4b"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "sha256": "056e1590423d17fe4b4ba1a24c0f773d210ea0c7830415b5a0ba94b0abd74576"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "sha256": "b04ced59627d1d313e127bf5f28532bc162d4a629240a65f6d5730927f33c69d"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "sha256": "c479ef28db5aebca79293c01be674e88d4bd40a3da70eb1cf3aa45f0795d6178"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "sha256": "042dcdc675cf02aea9e8eb1d357a1d17ab4d4faf3681285c3467adf4071021b7"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "sha256": "934c994d396482815a66aa7c7e311c9051c924989004bc0af1a2e8723c87f73c"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/dot/DotData.java",
+      "sha256": "f786482534d5a548954cdfe788c8b38b1e8944b2e9d003f74fbdc4769bb5b6c4"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+      "sha256": "0edd4959c52fff7d3eaa42e22a8b970c883b16fffd6926920ae22ccf4b25aeb8"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+      "sha256": "3587109e9cba046a1e29b6bf4707a5b8c734d4651c2e534e40fa2592ab646fe2"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "sha256": "b6866edc25e6a35003067202a9167b24435387fdc7ce3f2f8759583fae985bfa"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolBoundary.java",
+      "sha256": "2f8c47287defffea98bf7758663a2d12404d4bb47062939643df48ccf0e1b559"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java",
+      "sha256": "67d8545288215f51cb12fcf64e939e059e418057b9ee671f85bda812f24c7c7f"
+    }
+  ],
+  "snapshot": {
+    "entries": 1851,
+    "unique_sources": 1777,
+    "duplicates": 74,
+    "hash_errors": []
+  },
+  "drafts": [
+    {
+      "path": "focused-units1.log",
+      "sha256": "88f7c5af6e23c54ec553cce1c38d4ceb1c8c32d7cdd72f59af84583bb76058fe",
+      "bytes": 22689
+    },
+    {
+      "path": "focused-units2.log",
+      "sha256": "f7e5caeb2dfa9514415519f1a509c7a3d449c487a1a30977053349983f24e4a2",
+      "bytes": 19793
+    },
+    {
+      "path": "build2.log",
+      "sha256": "662c04c9c6edb1e7a83f2852c58005c23bbdb64f346f2561dd04a33b568529e9",
+      "bytes": 265
+    },
+    {
+      "path": "build1.log",
+      "sha256": "1bf063794bc47cd799fc34ef602f17d95f7d0ef07bcea35d8bc98f1c8bf4acff",
+      "bytes": 608
+    },
+    {
+      "path": "draft2.patch",
+      "sha256": "e3ed64451c0c0bee152cab742d3980dcaf102f3660769a34655198e479dd8fdb",
+      "bytes": 33696
+    },
+    {
+      "path": "check1.log",
+      "sha256": "39fbed59b6fff1817e2dc5bab0de8d074f3cc2da31002eae9c2af2976133c884",
+      "bytes": 1202
+    },
+    {
+      "path": "draft1.patch",
+      "sha256": "9af38b3ec022bb4b1b004f2dd6afaed960d8d532d0e053f08dc1b5a28c6e2f79",
+      "bytes": 28042
+    },
+    {
+      "path": "final-build.log",
+      "sha256": "7646f4d9095b2a9641dd1780145e59e2cd8a350129da645b66b6613dc02e2ba3",
+      "bytes": 373
+    },
+    {
+      "path": "draft65.json",
+      "sha256": "cf5bba77fe2bb0cec86c57aff0efacf871522846ea2faa944cc5a065c68774a7",
+      "bytes": 96361
+    }
+  ],
+  "production_changed_files": [
+    "crates/rustuml-parser/src/parse/class.rs",
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "source_snapshot_before": "git archive 154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc; plain private source archive, not a worktree",
+  "candidate": "68ab512be964e243ae1943f7a9fefd3537091401",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)"
+}

@@ -1,0 +1,3 @@
+@startuml
+note "memo" as Journal [[manual]]
+@enduml

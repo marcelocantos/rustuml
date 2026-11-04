@@ -1,0 +1,4 @@
+@startuml
+class Vessel
+note bottom of “Vessel" [[{tip {nested}}]] : receipt
+@enduml

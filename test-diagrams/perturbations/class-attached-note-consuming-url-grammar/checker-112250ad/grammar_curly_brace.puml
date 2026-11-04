@@ -1,0 +1,9 @@
+@startuml
+skinparam topurl https://example.org/base/
+package Cove {
+class Vessel
+note right of ”Vessel“ [["manual path”{read me} label]] {
+class this is body
+}
+}
+@enduml

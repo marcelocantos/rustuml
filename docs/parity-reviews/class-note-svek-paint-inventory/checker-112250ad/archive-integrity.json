@@ -1,0 +1,15 @@
+{
+  "sha256": "04b3a35a827ce09ff9a7c9a148bd0ffa25f31f37ca949f3bd62b7dcbcfb53e92",
+  "bytes": 11814709,
+  "files_verified": 33858,
+  "excluded": [
+    "before-source",
+    "target-before",
+    "target-after",
+    "before-rustuml",
+    "replay-rustuml",
+    "post-gates-rustuml"
+  ],
+  "historical_maker_archive_sha256": "8fb7eb16f32bc0fea14a891ab8e5b84744e1fa7e5268cc38c0b596f60943f072",
+  "interpretation": "Integrity only; all three mechanism verdicts are rejected."
+}

@@ -1,0 +1,7 @@
+@startuml
+skinparam topurl https://example.org/base/
+class Vessel
+note top of Vessel [[{tip {nested}}]]
+receipt
+end note
+@enduml

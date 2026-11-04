@@ -1,0 +1,651 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-attached-note-consuming-url-grammar",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A89ccabb9-32b8-4e54-aae2-8aa7ed1860f6",
+    "model": "gpt-6-astra, high reasoning effort; Codex harness in T3 Code",
+    "tool": "functions.exec / exec_command; parent existing Monkey Man reference relay only",
+    "independence": "Separate task; did not implement production or author accounts; no children. Same model family is not model diversity."
+  },
+  "account_commit": "2b349ba5c9869cdb7e3ed28e7cd761f87cb0c1db",
+  "implementation_commit": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+  "candidate_commit": "68ab512be964e243ae1943f7a9fefd3537091401",
+  "before_commit": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/builds.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/validate_refs.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/replay.py historical",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/replay.py fresh",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/final_binary_check.py",
+    "cargo fmt --check",
+    "cargo test --workspace --release --lib --no-fail-fast",
+    "cargo test --workspace --release --test pipe_mode --test error_paths --test doc_claims --no-fail-fast",
+    "cargo test --release --test golden_no_oracle -- --nocapture",
+    "cargo test --release --test golden_pairs -- --nocapture",
+    "cargo test --release --test parity_perturbations -- --nocapture",
+    "cargo test --release --test harness_guards -- --nocapture",
+    "cargo clippy --workspace --release -- -D warnings",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/validate_refs.py supplement-"
+  ],
+  "command_results": {
+    "builds": [
+      {
+        "variant": "before",
+        "command": [
+          "cargo",
+          "build",
+          "--release",
+          "-p",
+          "rustuml"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/before-source",
+        "exit": 0,
+        "seconds": 92.20582675933838,
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-before",
+          "CARGO_BUILD_JOBS": "2"
+        },
+        "binary": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-before/release/rustuml",
+        "sha256": "dbab4d2d64928c321939c930969b10f0a769015e9e23bc17dc8f479a663f1d6b"
+      },
+      {
+        "variant": "after",
+        "command": [
+          "cargo",
+          "build",
+          "--release",
+          "-p",
+          "rustuml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "exit": 0,
+        "seconds": 91.1507921218872,
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "2"
+        },
+        "binary": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after/release/rustuml",
+        "sha256": "652871706304472161bbf8d508772820443848207ffd78458e028983a8ca539c"
+      }
+    ],
+    "broad_gates": [
+      {
+        "name": "fmt",
+        "command": [
+          "cargo",
+          "fmt",
+          "--check"
+        ],
+        "exit": 0,
+        "seconds": 1.2497589588165283,
+        "log": "gate-fmt.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "units",
+        "command": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--release",
+          "--lib",
+          "--no-fail-fast"
+        ],
+        "exit": 0,
+        "seconds": 64.82815217971802,
+        "log": "gate-units.log",
+        "sha256": "4d77410b9f714c5161d3d0087d187184b7f00e0a5da3bad6b8b9e6bff73ae945",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "cli-errors",
+        "command": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--release",
+          "--test",
+          "pipe_mode",
+          "--test",
+          "error_paths",
+          "--test",
+          "doc_claims",
+          "--no-fail-fast"
+        ],
+        "exit": 0,
+        "seconds": 5.136792182922363,
+        "log": "gate-cli-errors.log",
+        "sha256": "1457934cb5c2cecab2f1fa99aa59c93cbaad1e37d4619f90c2dbccec1cf9e43c",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "no_oracle",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "golden_no_oracle",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 3.0582258701324463,
+        "log": "gate-no_oracle.log",
+        "sha256": "afb23028b222a9847f35aaeb3031ba96c7157b4d2c20ea20d3f5ed880839dd9a",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "assisted",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "golden_pairs",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 3.1076371669769287,
+        "log": "gate-assisted.log",
+        "sha256": "296d4f13b7bc52629476fbdfc1995c17ee83cfe1535a0f91fda82b1b8aa08805",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "standing",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "parity_perturbations",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 2.995220899581909,
+        "log": "gate-standing.log",
+        "sha256": "cf915cb738d076628487dc1ce435b6e76f67ba75086542f255d319b8d8df745c",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "guards",
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "--test",
+          "harness_guards",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "seconds": 1.3848488330841064,
+        "log": "gate-guards.log",
+        "sha256": "c589c2af2ec344c411fd8ae85d40688f5777b59747d88e76b264ecc81cb01655",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      },
+      {
+        "name": "clippy",
+        "command": [
+          "cargo",
+          "clippy",
+          "--workspace",
+          "--release",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit": 101,
+        "seconds": 20.92335319519043,
+        "log": "gate-clippy.log",
+        "sha256": "3740b6d3c6c20cd13ea5e91753d354c19b230c7f1ace6e711838f0c6d5d9ab25",
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-112250ad",
+        "revision": "68ab512be964e243ae1943f7a9fefd3537091401",
+        "environment": {
+          "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/target-after",
+          "CARGO_BUILD_JOBS": "4",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+        },
+        "jvm_guard": "/Users/marcelo/Library/Caches/rustuml-review-packet8-112250ad/no-local-jvm"
+      }
+    ],
+    "all_1851_maker_status_svg_yaml_hashes_reproduced": true,
+    "final_workspace_binary": {
+      "sha256": "02a859a947acc08924eace1c3a2ba944ed220ead4ecfd7ddafcc6f9192960a22",
+      "cases": 1884,
+      "differences": [],
+      "reason": "Cargo workspace CLI tests produced a second feature-unified executable for the same exact candidate after the independent standalone CLI replay. Preserve both actual binaries and verify the final executable outputs; no build, broad gate or reference generation is repeated."
+    },
+    "fresh_java_exits": {
+      "grammar_jaws_url.puml": 0,
+      "grammar_curly_brace.puml": 0,
+      "grammar_single_null.puml": 0,
+      "grammar_tooltip_only.puml": 0,
+      "grammar_brackets_quoted.puml": 0,
+      "grammar_url_followup.puml": 0,
+      "grammar_empty_target.puml": 200,
+      "grammar_jaws_target.puml": 200,
+      "grammar_named_url.puml": 200,
+      "grammar_bad_empty_url.puml": 200,
+      "grammar_nbsp.puml": 0,
+      "cleanid_guillemets.puml": 0,
+      "cleanid_parentheses.puml": 0,
+      "cleanid_brackets.puml": 0
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_jaws_url.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_jaws_url.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "4a9393a9e521ebe84b10a38c4a77c5d9d22ada75ca73d31462c86a0a913bc581",
+      "java_svg_sha256": "c0a74c0bd4755582bf26ce109f268b416f4c87ff1be3a40081222ef4a92fda58",
+      "rust_svg_sha256": "2f2923999dd37a8ced3dfaa386ab9e39b81d251bc612785df551a42e82e86a86",
+      "evidence_capture": "replay-fresh/0008-grammar_jaws_url.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_curly_brace.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_curly_brace.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "process_error",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "2e48e8a54c73832315571c16bff145abf97d17c9d8d34ec22f2004772b31ac0a",
+      "java_svg_sha256": "c67f750faa33d355297afa34c4be80ff946b110d15b61c84956b1e4bea768d42",
+      "rust_svg_sha256": "548bb474bfb59fa51ccbb2208f0fc0473af741b7fa8f0cf2684e5259675fa413",
+      "evidence_capture": "replay-fresh/0009-grammar_curly_brace.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_single_null.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_single_null.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "process_error",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "42b5f0c625b19c226872c740cd25cb03c10539baf8d2e5d9ae82e9c701f3c225",
+      "java_svg_sha256": "6c86d6a6e37506e738acb1b58983c19b1f72fd43edc285b95ee14bb5df94c426",
+      "rust_svg_sha256": "351359edb7f5a82cf70e3323a9e0e4816094673dfcbf8c1c9ed149207733024e",
+      "evidence_capture": "replay-fresh/0010-grammar_single_null.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_tooltip_only.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_tooltip_only.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "51a3e3b5e7f8b0c65f0c6493f3997a007b34b74630aefeb2d0706233931d1699",
+      "java_svg_sha256": "730bffcccf10b75f81b6464e73006238b24c07c02fc80929c6e3b6c960e7a7e4",
+      "rust_svg_sha256": "ab93b334cd901000d0f1c11491fbcc066d7996ab9aa35b6737123b0acb5083ad",
+      "evidence_capture": "replay-fresh/0011-grammar_tooltip_only.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_brackets_quoted.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_brackets_quoted.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "733459d1754d2e4c377a55631746e4cf2d669749382e85c5385a4f16ca5592dc",
+      "java_svg_sha256": "35eb3b0df0c3eecff430aeb5396cd74b7be9da464611affa61e60618011d950f",
+      "rust_svg_sha256": "139118121edf8ed04a851469f63472cab39c56349efe727b3400fb9688da267d",
+      "evidence_capture": "replay-fresh/0012-grammar_brackets_quoted.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_url_followup.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_url_followup.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "process_error",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "81cecca569b9719d5757d2cd531ad66c6046a0a3e217dcbbfa5d2c370e38c228",
+      "java_svg_sha256": "ea6d4bd2616b7d607d995e44678f11a269e418c7e6b0ade480e7d594976527c1",
+      "rust_svg_sha256": "d172049da2eae4bbfb1c0a52900bd2ab03ca8ff5a3724c8abe866ba562d9a14a",
+      "evidence_capture": "replay-fresh/0013-grammar_url_followup.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_empty_target.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_empty_target.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "fail",
+      "whole_case_status": "invalid_reference",
+      "before_whole_case_status": "invalid_reference",
+      "expected_java_valid": false,
+      "observed_java_valid": false,
+      "java_classification": "java_error_svg",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "comparison_exit": 2,
+      "invalid_rejected": true,
+      "source_sha256": "7ee76fa1cf51f9234d3a6c0bf675b15059908458513a508c23fb16c9c2517ce4",
+      "java_svg_sha256": "9d8a92a3b01298d8a3b74854f6d328438c9cbc7dc8ba105f33f217fe539ba770",
+      "rust_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_capture": "replay-fresh/0014-grammar_empty_target.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_jaws_target.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_jaws_target.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "fail",
+      "whole_case_status": "invalid_reference",
+      "before_whole_case_status": "invalid_reference",
+      "expected_java_valid": false,
+      "observed_java_valid": false,
+      "java_classification": "java_error_svg",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "comparison_exit": 2,
+      "invalid_rejected": true,
+      "source_sha256": "8432d32085db57c1800e1b48af58315abf0bd795f9dbaf419511bca422908dab",
+      "java_svg_sha256": "dfef2a7d050dce417a970bbbe781e01ef1dcd2b1eb184dfa3ef8aee77f21ac86",
+      "rust_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_capture": "replay-fresh/0015-grammar_jaws_target.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_named_url.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_named_url.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "fail",
+      "whole_case_status": "invalid_reference",
+      "before_whole_case_status": "invalid_reference",
+      "expected_java_valid": false,
+      "observed_java_valid": false,
+      "java_classification": "java_error_svg",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "comparison_exit": 2,
+      "invalid_rejected": true,
+      "source_sha256": "a08106b909c499334b4c38dad5b6ceb739df0355ab226f42e825817d3d3afa11",
+      "java_svg_sha256": "6829e6db340db737ae21c6ed0430a95b01b0060942ae815ab647bd56160d368a",
+      "rust_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_capture": "replay-fresh/0016-grammar_named_url.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_bad_empty_url.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_bad_empty_url.svg",
+      "axes": [
+        "quote/URL alternatives",
+        "body ownership/order/scoped target"
+      ],
+      "result": "fail",
+      "whole_case_status": "invalid_reference",
+      "before_whole_case_status": "invalid_reference",
+      "expected_java_valid": false,
+      "observed_java_valid": false,
+      "java_classification": "java_error_svg",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "comparison_exit": 2,
+      "invalid_rejected": true,
+      "source_sha256": "3350f84fdb01708d5020ae7ae875ccd10ec574d4fdb9e2c748da5ef0955bdbe4",
+      "java_svg_sha256": "b22d18cd35f1c9620ab4a868b08b3784cb362b419e13ab0d77f69c864e2d2bfb",
+      "rust_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_capture": "replay-fresh/0017-grammar_bad_empty_url.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_nbsp.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/grammar_nbsp.svg",
+      "axes": [
+        "Pattern2 whitespace versus Rust Unicode whitespace",
+        "unquoted link/label"
+      ],
+      "result": "pass",
+      "whole_case_status": "pass",
+      "before_whole_case_status": "mismatch",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "invalid_rejected": false,
+      "source_sha256": "793f6c7a19739d2c62691796f9f9916d483f86bd62e60ad1111e49900781b4c3",
+      "java_svg_sha256": "670c259c88e92ce8f7a499e641b03f6fe9b4b30f2c7e9a600eb0285bee22e6d9",
+      "rust_svg_sha256": "4b88933b5bb3b6fdb9acc00b6a70fa18693ff3e3cc6bd562877b4dd21f1deb7f",
+      "evidence_capture": "replay-fresh/0018-grammar_nbsp.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/cleanid_guillemets.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/cleanid_guillemets.svg",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "result": "fail",
+      "whole_case_status": "process_error",
+      "before_whole_case_status": "process_error",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 1,
+      "comparison_exit": 1,
+      "invalid_rejected": false,
+      "source_sha256": "93fc8a398337ff29e6c9abf64fc1d865030e2ce6da5d1e0a8af9ce6514b3d3df",
+      "java_svg_sha256": "350fcf22282adff5f0bb50173eed90ea102f29297a1bc1f0b26a67dbdd2c5c83",
+      "rust_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_capture": "replay-fresh/0030-cleanid_guillemets.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/cleanid_parentheses.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/cleanid_parentheses.svg",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "result": "fail",
+      "whole_case_status": "process_error",
+      "before_whole_case_status": "process_error",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 1,
+      "comparison_exit": 1,
+      "invalid_rejected": false,
+      "source_sha256": "bee60863e840873e7886b8b453b5babf02fbb308abd4ea74b46f1b437d762768",
+      "java_svg_sha256": "8968b9332cdf8ef4e7f37fd2d693a321df65c11f0beafb3f039c37f37360cd05",
+      "rust_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_capture": "replay-fresh/0031-cleanid_parentheses.after.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/cleanid_brackets.puml",
+      "golden": "test-diagrams/perturbations/class-attached-note-consuming-url-grammar/checker-112250ad/cleanid_brackets.svg",
+      "axes": [
+        "cleanId boundary recognition distinct from Pattern2 quote tokens",
+        "bare target forms with multiline URL ownership"
+      ],
+      "result": "fail",
+      "whole_case_status": "process_error",
+      "before_whole_case_status": "process_error",
+      "expected_java_valid": true,
+      "observed_java_valid": true,
+      "java_classification": "valid_class_svg",
+      "java_exit": 0,
+      "rust_exit": 1,
+      "comparison_exit": 1,
+      "invalid_rejected": false,
+      "source_sha256": "ca084fadc86a8dd6b40af5fc10643d02c5fc6639adad55abb1ee41078e8adc74",
+      "java_svg_sha256": "f1846aae1781bbbfa291e39ef1f8e9560c8011702fe66d88ae5e1403adb31ec7",
+      "rust_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_capture": "replay-fresh/0032-cleanid_brackets.after.svg"
+    }
+  ],
+  "findings": [
+    "Bounded support: seven valid fresh whole SVGs match across strict URL alternatives, Jaws URL versus Jaws target distinction, smart/ASCII mixed delimiters, scope/body form/order, topurl, tooltip and single-line null URL. Four Java error controls exit200 and are rejected by Rust exit1, but remain non-passing references under the unchanged harness.",
+    "G1: cleanid_guillemets, cleanid_parentheses and cleanid_brackets are valid Java196x70 outputs but both Rust revisions exit1 with unknown target. NameAndCodeParser accepts these bare CODE forms; CucaDiagram.cleanId invokes the StringUtils default cleanup, which includes guillemets and parentheses/brackets/colons. Rust try_note trims only ASCII/curly boundaries.",
+    "Repair guidance: consume the owning token first, then apply the exact two-ended single-pair cleanup. Do not turn guillemets into Pattern2 %g tokens or strip Jaws delimiters. Preserve URL validation/body/owner/UID semantics.",
+    "The two incorrect account directory qualifiers were corrected only postimplementation. Originals and chronology remain immutable; correct later paths do not retrospectively make preimplementation provenance accurate."
+  ],
+  "verdict": "rejected",
+  "bounded_support_only": true,
+  "denominators": {
+    "entries": 14,
+    "unique_sources": 14,
+    "duplicate_entries": 0,
+    "counts": {
+      "before": {
+        "mismatch": 4,
+        "process_error": 6,
+        "invalid_reference": 4
+      },
+      "after": {
+        "pass": 7,
+        "invalid_reference": 4,
+        "process_error": 3
+      }
+    }
+  },
+  "evidence": "docs/parity-reviews/class-note-svek-paint-inventory/checker-112250ad",
+  "residue": [
+    "Whole-case failures reject; DOM/model/UID agreement is not a geometry waiver. All fresh pairs, including negative error SVGs, are registered under the unchanged standing harness.",
+    "Broad gates ran once on clean exact candidate before new pair/review registration. No post-registration all-suite pass is claimed; no packaging rerun.",
+    "Original59d50dbc/importc51bb768 rejection, all9254 historical blobs, earlier missing fields/draft chronology defects and three inaccurate preimplementation location qualifiers remain unchanged. Later clarification is not retroactive provenance.",
+    "Group-note305vs301, shared fonts/Q/cloud/header/native point engine, rooted CommandLinkClass multipass, TIM source_line0 and nested-quote/generic integration remain unresolved.",
+    "No historical environment equivalence claim, local Java/javac, SSH, child, blocked-native retry, native/layout/fault work, shared-metric change, shipping or acceptance-policy change."
+  ]
+}

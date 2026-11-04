@@ -1,0 +1,6 @@
+@startuml
+class Vessel
+note right of «Vessel» [[manual{tip}]]
+receipt
+end note
+@enduml
