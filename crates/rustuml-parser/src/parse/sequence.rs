@@ -27,6 +27,15 @@ fn sequence_regex(pattern: &str) -> Result<Regex, regex::Error> {
     )
 }
 
+// RegexConcat#foxRegex includes only direct RegexLeaf children. A mandatory
+// [%s]+ leaf contributes FoxSignature.MASK_SPACES; optional/nested leaves do not.
+// FoxSignature#getMask recognizes these characters anywhere in the FULL line,
+// deliberately excluding VT even though Pattern2's regex whitespace includes it.
+fn has_fox_space(line: &str) -> bool {
+    line.chars()
+        .any(|c| matches!(c, ' ' | '\t' | '\r' | '\n' | '\u{000c}' | '\u{00a0}'))
+}
+
 static INLINE_ARROW_STYLE: LazyLock<Regex> = LazyLock::new(|| {
     sequence_regex(
         r"\[((?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\]",
@@ -632,6 +641,10 @@ impl SeqParser {
     }
 
     fn try_participant_decl(&mut self, line: &str) -> bool {
+        // CommandParticipantA/A2/A3/A4#getRegexConcat: direct spaceOneOrMore leaf.
+        if !has_fox_space(line) {
+            return false;
+        }
         let (url, clean_line) = super::extract_link_url(line);
         let line = clean_line.as_str();
         // Matches these forms (label = display text, id = entity key):
@@ -931,8 +944,11 @@ impl SeqParser {
         static BARE_OVER: LazyLock<Regex> = LazyLock::new(|| {
             sequence_regex(r"^(?:h|r)?note[%s]+over[%s]*(?:#[^%s:]+)?[%s]*(?::.*)?$").unwrap()
         });
+        // Both standalone note factories contain a direct required-space leaf;
+        // OnArrow has only optional whitespace and must bypass this prefilter.
         let captures = NAMED
             .iter()
+            .filter(|_| has_fox_space(line))
             .find_map(|pattern| pattern.captures(line))
             .or_else(|| ATTACHED.captures(line));
         if let Some(caps) = captures {
@@ -1137,7 +1153,10 @@ impl SeqParser {
             self.push_autonumber(AutonumberCmd::Stop);
             return true;
         }
-        if line.starts_with("autonumber resume")
+        // CommandAutonumberResume#getRegexConcat has a direct required space;
+        // CommandAutonumber's optional argument groups do not contribute it.
+        if has_fox_space(line)
+            && line.starts_with("autonumber resume")
             && let Some(caps) = RE_RESUME.captures(line)
         {
             let step = caps.get(1).and_then(|m| m.as_str().parse().ok());
@@ -1180,6 +1199,10 @@ impl SeqParser {
     }
 
     fn try_activate_deactivate(&mut self, line: &str) -> bool {
+        // CommandActivate#getRegexConcat: direct spaceOneOrMore leaf.
+        if !has_fox_space(line) {
+            return false;
+        }
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             sequence_regex(r"^(activate|deactivate)[%s]+(\w+)(?:[%s]+(#[^%s]+))?").unwrap()
         });
@@ -1231,6 +1254,10 @@ impl SeqParser {
     }
 
     fn try_create_destroy(&mut self, line: &str) -> bool {
+        // CommandActivate and CommandParticipantA#getRegexConcat: direct spaceOneOrMore leaf.
+        if !has_fox_space(line) {
+            return false;
+        }
         static KW: LazyLock<Regex> =
             LazyLock::new(|| sequence_regex(r"^(create|destroy)[%s]+(.*)$").unwrap());
         // Identifier extraction from a participant declaration tail. Mirrors the
@@ -1311,7 +1338,12 @@ impl SeqParser {
             sequence_regex(r"^ref[%s]+over[%s]+(\w+(?:[%s]*,[%s]*\w+)*)[%s]*$").unwrap()
         });
 
-        if let Some(caps) = RE_INLINE.captures(line) {
+        // CommandReferenceOverSeveral uses RegexConcat#match. The multiline
+        // command instead passes REGEX_CONCAT.getPattern() to Pattern2 directly,
+        // so its first-line matcher must NOT run the FoxSignature prefilter.
+        if has_fox_space(line)
+            && let Some(caps) = RE_INLINE.captures(line)
+        {
             let participants: Vec<String> = caps[1]
                 .split(',')
                 .map(|s| self.ensure_participant(s.trim()))
@@ -1479,7 +1511,10 @@ impl SeqParser {
             )
             .unwrap()
         });
-        if let Some(caps) = STEREOTYPE_VISIBILITY.captures(line) {
+        // CommandHideShowByGender#getRegexConcat contributes spaceOneOrMore.
+        if has_fox_space(line)
+            && let Some(caps) = STEREOTYPE_VISIBILITY.captures(line)
+        {
             self.hide_stereotypes = caps[1].eq_ignore_ascii_case("hide");
             return true;
         }
@@ -2815,6 +2850,35 @@ Gate -> Mail: enqueue"#
             assert!(!non_whitespace.is_match(&character.to_string()));
         }
     }
+    #[test]
+    fn fox_space_prefilter_checks_the_complete_command() {
+        for gap in [' ', '\t', '\u{000c}', '\u{00a0}', '\u{000b}'] {
+            let required = gap != '\u{000b}';
+            let mut parser = SeqParser::new();
+            assert_eq!(
+                parser.try_participant_decl(&format!("participant{gap}Birch")),
+                required
+            );
+            assert!(parser.try_participant_decl(&format!("participant{gap}\"Birch Grove\"")));
+            assert_eq!(
+                parser.try_activate_deactivate(&format!("activate{gap}Birch")),
+                required
+            );
+            assert_eq!(
+                parser.try_create_destroy(&format!("destroy{gap}Birch")),
+                required
+            );
+            assert_eq!(parser.try_hide(&format!("hide{gap}stereotype")), required);
+            // CommandArrow and CommandGrouping have no direct mandatory space leaf.
+            assert!(parser.try_message(&format!("Birch{gap}->{gap}Elm")));
+            assert!(parser.try_group(&format!("group{gap}title")));
+        }
+        let mut parser = SeqParser::new();
+        parser.parse_line(1, "activate\u{000b}Birch").unwrap();
+        assert!(parser.unconsumed); // T14.17 owns the outer failure propagation.
+        assert!(parser.events.is_empty());
+    }
+
     #[test]
     fn named_note_identity_is_required_after_optional_prefix() {
         for shape in ["note", "rnote", "hnote"] {
