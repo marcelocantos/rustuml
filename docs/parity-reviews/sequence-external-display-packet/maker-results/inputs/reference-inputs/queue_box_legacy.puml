@@ -1,0 +1,7 @@
+@startuml
+box Hub
+queue "short\n<size:20>Mail</size>" as Mail <<dispatch-wide>>
+end box
+participant Cedar
+Cedar -> Mail: enqueue
+@enduml

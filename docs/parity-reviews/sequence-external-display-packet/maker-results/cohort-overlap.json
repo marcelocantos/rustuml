@@ -1,0 +1,31 @@
+{
+  "entries": 2281,
+  "unique_paths": 2281,
+  "unique_source_bytes": 2233,
+  "duplicate_entries": 48,
+  "cohorts": {
+    "frozen2169": {
+      "entries": 2169,
+      "unique_sources": 2121,
+      "overlap_prior_bytes": 0
+    },
+    "checker96": {
+      "entries": 96,
+      "unique_sources": 96,
+      "overlap_prior_bytes": 0
+    },
+    "maker16": {
+      "entries": 16,
+      "unique_sources": 16,
+      "overlap_prior_bytes": 0
+    }
+  },
+  "parent1449": {
+    "overlap_paths": 1123,
+    "parent_only_paths_not_replayed": 326,
+    "overlap_unique_bytes": 1097,
+    "parent_only_unique_bytes": 278,
+    "provenance": "Immutable prior checker parent-overlap records; historical parent overlap with the preserved cohort only. No new parent inventory or additive claim."
+  },
+  "note": "Retain all entries including duplicate bytes, invalids and separate shared handoffs."
+}

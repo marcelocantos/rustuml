@@ -1,0 +1,18 @@
+{
+  "frozen2169_svg_hash_changes": [],
+  "svg_recoveries": 20,
+  "runtime_recoveries": 8,
+  "checker_pending": {
+    "entries": 38,
+    "matches": 27,
+    "failures": [
+      "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_legacy.puml",
+      "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_teoz.puml",
+      "test-diagrams/perturbations/sequence-single-pending-create/ind78_box_scope_teoz.puml"
+    ]
+  },
+  "checker_queue": {
+    "entries": 14,
+    "matches": 14
+  }
+}
