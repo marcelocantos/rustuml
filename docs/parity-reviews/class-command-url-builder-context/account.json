@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "corrective maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "3a4453e17a51b3a57c1d4bcef8aa1792ebf220a4",
+  "java_locations": [
+    "classdiagram/command/CommandUrl#executeArg",
+    "net/atmp/CucaDiagram#quarkInContextSafe",
+    "url/UrlBuilder#getRegexp,getUrl,withTopUrl"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#try_url"
+  ],
+  "invariant": "CommandUrl passes reuseExistingChild=true, which reuses a unique named quark before falling back to current context. Its URL must consume one complete UrlBuilder strict alternative, including quoted URLs and tooltip-only links.",
+  "causal_divergence": "The first account incorrectly described true as current-context-only. Direct CucaDiagram source proves unique-name reuse. The existing generic URL extraction helper is not a strict consuming UrlBuilder grammar and loses quoted URL bytes.",
+  "planned_change": "Use existing ReuseUnique resolver and an anchored local UrlBuilder grammar in the class command; preserve old other command helpers. Store first URL and tooltip under existing quark, reject missing/forward target and malformed/inline note forms.",
+  "perturbation_axes": [
+    "unique vs ambiguous names across packages and quoted/qualified codes",
+    "quoted/plain/tooltip-only URL, optional command words and declaration order"
+  ]
+}
