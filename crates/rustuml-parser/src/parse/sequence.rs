@@ -795,6 +795,10 @@ impl SeqParser {
             .get(4)
             .map(|m| parse_activation(m.as_str()))
             .or_else(|| self.autoactivation_for(&arrow));
+        // SequenceDiagram#getLastEventWithNote sees AbstractMessage, including
+        // MessageExo. FactorySequenceNoteOnArrowCommand attaches a bare note to
+        // that event, using its normalized endpoints just like an ordinary arrow.
+        self.last_message = Some((from.clone(), to.clone()));
         self.events.push(Event::Message(Message {
             parallel: false,
             from,
@@ -2666,5 +2670,25 @@ Gate -> Mail: enqueue"#
         assert!(restored.hide_stereotypes);
         assert!(restored.participants[0].stereotype_position_bottom);
         assert_eq!(serde_yml::to_string(&restored).unwrap(), yaml);
+    }
+    #[test]
+    fn external_message_owns_bare_note_after_direction_normalization() {
+        for (arrow, from, to) in [
+            ("[-> Hub", "[", "Hub"),
+            ("[<- Hub", "Hub", "["),
+            ("Hub ->]", "Hub", "]"),
+            ("Hub <-]", "]", "Hub"),
+        ] {
+            for body in ["note right: current", "note left\ncurrent\nend note"] {
+                let d = parse(&format!("Birch -> Hub: prior\n{arrow}: external\n{body}"));
+                let Some(Event::Note(note)) = d.events.last() else {
+                    panic!("missing note: {arrow}")
+                };
+                assert!(note.on_message);
+                assert_eq!(note.participants, [from, to]);
+                assert_eq!(note.text, "current");
+                assert_eq!(d.participants.len(), 2, "border is not a participant");
+            }
+        }
     }
 }
