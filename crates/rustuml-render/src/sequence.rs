@@ -5234,19 +5234,21 @@ impl PlantUmlSvg {
         // foot figures mirror the head layout (figure on top, text below).
         let is_tail = position == "tail" && !teoz;
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        let text_y;
-        let figure_base;
-        if is_tail {
+        let (text_y, figure_base) = if is_tail {
             // Tail: text first, figure below.
-            text_y = base_y + ACTOR_TAIL_TEXT_Y_OFFSET;
-            figure_base = base_y + ACTOR_TAIL_FIGURE_Y_OFFSET;
+            (
+                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
+                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+            )
         } else {
             // Head: figure first, text below.
             // ComponentRoseActor places text below ActorStickMan's complete
             // preferred height, whose vertical dimension includes shadow.
-            text_y = base_y + ACTOR_HEAD_TEXT_Y_OFFSET + stereo_shift + shadow_delta;
-            figure_base = base_y;
-        }
+            (
+                base_y + ACTOR_HEAD_TEXT_Y_OFFSET + stereo_shift + shadow_delta,
+                base_y,
+            )
+        };
 
         // Text label
         // Stereotype line first (above the name), then the name — matching
@@ -8047,8 +8049,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .flatten(),
                 // ComponentRoseParticipant#getPreferredHeight adds shadow+1;
                 // figure components use their own existing preferred geometry.
-                preferred_height: bh
-                    + if matches!(
+                preferred_height: if p.kind == ParticipantKind::Queue {
+                    // ComponentRoseQueue#getPreferredHeight delegates to
+                    // USymbolQueue#asSmall: text plus Margin(5,15,5,5).
+                    // The mixed-kind row alignment band is not this component.
+                    participant_line_h
+                        * if st_display.is_some() && in_box {
+                            2.0
+                        } else {
+                            1.0
+                        }
+                        + 5.0
+                        + 5.0
+                } else {
+                    bh + if matches!(
                         p.kind,
                         ParticipantKind::Participant | ParticipantKind::Collections
                     ) {
@@ -8063,13 +8077,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // ActorStickMan#getPreferredHeight: geometry +2*stroke +
                         // shadow+1, followed by ComponentRoseActor's label height.
                         1.0 + actor_shadow_delta
-                    } else if p.kind == ParticipantKind::Queue {
-                        0.0
                     } else {
                         // ComponentRose{Boundary,Control,Entity,Database}: symbol
                         // plus label preferred height, one beyond the visible band.
                         1.0
-                    },
+                    }
+                },
                 box_x: 0.0,
                 center_x: 0.0,
                 lifeline_line_x: 0.0,
@@ -12459,7 +12472,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // a delta shadow. Oracle mode already carries that definition verbatim.
     let mut generated_defs = generated_gradient_defs.unwrap_or_default();
     if oracle.is_none()
-        && (participant_shadow_filter.is_some()
+        && (participants.iter().any(|p| p.shadow_filter.is_some())
             || note_shadow_filter.is_some()
             || svg.activation_shadow_filter.is_some())
     {
