@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-link-construction-order",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "48f452f0e91e411ffc49583bc681d0b3e03e4e63",
+  "java_locations": [
+    "svek/SvekResult#drawU",
+    "svek/Bibliotekon#addLine,getAllLines",
+    "command/note/CommandFactoryNoteOnEntity#executeInternal",
+    "svek/SvekEdge#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_with_positions"
+  ],
+  "invariant": "Unconsumed note links and ordinary links retain construction order in the Svek edge stream; semantic group endpoint names use the quark name for path identity.",
+  "causal_divergence": "All non-Opale attached-note connectors emit after ordinary links regardless of their source allocation. Qualified empty-group path names use full path instead of quark short name.",
+  "planned_change": "Interleave attached-note connector emission at its UID event position among ordinary relations; reuse existing endpoint-name model for empty-group quark names.",
+  "perturbation_axes": [
+    "Attached note before/after ordinary link",
+    "Named-note/empty-group peers and qualified group aliases"
+  ],
+  "verification_plan": "Preserved checker references, targeted source-guided controls, final frozen scopes and both main tiers; independent acceptance remains outstanding."
+}

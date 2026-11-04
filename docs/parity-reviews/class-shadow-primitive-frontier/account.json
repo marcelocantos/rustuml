@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-shadow-primitive-frontier",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "48f452f0e91e411ffc49583bc681d0b3e03e4e63",
+  "java_locations": [
+    "klimt/drawing/LimitFinder#drawRectangle,drawEllipse,drawUPath",
+    "skin/ActorStickMan#drawU",
+    "svek/SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_with_positions"
+  ],
+  "invariant": "Shadow changes the envelope of the painted primitive: rectangle/ellipse maximum includes two deltaShadow minus one; UPath does not, and text is independently measured. Svek margin does not depend on a global shadow flag.",
+  "causal_divergence": "The final canvas adds five pixels globally when class shadowing is enabled. A wide actor label is enlarged despite not being shadowed, while shadow belongs only to its head/path.",
+  "planned_change": "Replace global shadow canvas padding with per-native-class rectangle maxima and per-description primitive envelope, retaining the standard Svek margin. Actor label/body remain independently bounded.",
+  "perturbation_axes": [
+    "Shadowed wide actor label versus wide native class",
+    "No shadow/positive delta crossed with TB/LR and mixed leaf order"
+  ],
+  "verification_plan": "Preserved checker references, targeted source-guided controls, final frozen scopes and both main tiers; independent acceptance remains outstanding."
+}

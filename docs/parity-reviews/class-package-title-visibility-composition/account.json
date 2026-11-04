@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-title-visibility-composition",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "48f452f0e91e411ffc49583bc681d0b3e03e4e63",
+  "java_locations": [
+    "svek/ClusterHeader#getTitleBlock",
+    "decoration/symbol/USymbolRectangle#asBig",
+    "decoration/symbol/USymbolNode#asBig"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#emit_layout_symbol_cluster_title"
+  ],
+  "invariant": "Visibility icon plus top margin 4 and text form one centered mergeLR title before a selected package symbol places it.",
+  "causal_divergence": "Only the default package path paints the visibility glyph; alternate symbols measure its reserved width but emit only text.",
+  "planned_change": "Use the merged title width/height and icon/text vertical centering in alternate symbol title entrypoint, preserving each symbol outer origin.",
+  "perturbation_axes": [
+    "Rectangle/node/frame selected package style",
+    "Visibility kind and icon size crossed with stereotype and title width"
+  ],
+  "verification_plan": "Preserved checker references, targeted source-guided controls, final frozen scopes and both main tiers; independent acceptance remains outstanding."
+}

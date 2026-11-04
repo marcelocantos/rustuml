@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-ribbon-line-retention-metrics",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "48f452f0e91e411ffc49583bc681d0b3e03e4e63",
+  "java_locations": [
+    "command/CommandMultilinesHeader#executeNow",
+    "command/CommandMultilinesFooter#executeNow",
+    "klimt/creole/DisplayPositioned#createRibbon",
+    "klimt/creole/StripeSimple#getAtoms",
+    "klimt/creole/AtomText#calculateDimensionSlow"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#MetaBlock",
+    "crates/rustuml-render/src/class.rs#DecorationLayout"
+  ],
+  "invariant": "Each header/footer body line creates a stripe, including leading blank lines. Selected font family determines both line height and width; significant monospace spaces survive SVG serialization.",
+  "causal_divergence": "String emptiness is used as a line count so leading blank stripes collapse. Width uses selected family but height/advance use sans-serif.",
+  "planned_change": "Track ribbon body line presence independently of text length and use existing family-aware text metrics for block height/advance and nonbreaking spaces for monospace output. No shared font changes.",
+  "perturbation_axes": [
+    "Leading/all-blank lines crossed with header/footer",
+    "Serif/monospace/default families crossed with sizes and alignment"
+  ],
+  "verification_plan": "Preserved checker references, targeted source-guided controls, final frozen scopes and both main tiers; independent acceptance remains outstanding."
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-member-row-icon-envelope",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "48f452f0e91e411ffc49583bc681d0b3e03e4e63",
+  "java_locations": [
+    "cucadiagram/MethodsOrFieldsArea#getLayout",
+    "klimt/geom/PlacementStrategyVisibility#getPositions",
+    "skin/VisibilityModifier#getUBlock,drawSquare",
+    "klimt/drawing/svg/DriverRectangleSvg#draw"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#member_block_height,members_content_height,render_member_line"
+  ],
+  "invariant": "Every member row reserves max(text block including padding, visibility block); SVG suppresses nonpositive rectangle dimensions.",
+  "causal_divergence": "Large icons only shift their own baseline, but following rows still advance by text height. Tiny private icons emit negative rectangles and wrappers.",
+  "planned_change": "Centralize row height around the existing text content and visibility dimensions; use in preferred size and advances. Suppress nonpositive square emission including its unused group.",
+  "perturbation_axes": [
+    "Requested icon sizes below four/normal/above text height",
+    "Field/method visibility and multiple rows with explicit separators"
+  ],
+  "verification_plan": "Preserved checker references, targeted source-guided controls, final frozen scopes and both main tiers; independent acceptance remains outstanding."
+}
