@@ -1,0 +1,10 @@
+@startuml
+participant Cedar
+activate Cedar
+Cedar o/-o Cedar: live circle
+activate Cedar
+Cedar /- Cedar: nested
+deactivate Cedar
+Cedar \- Cedar: lower
+deactivate Cedar
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+!pragma teoz true
+participant Cedar
+Cedar -> Cedar: <size:25>First</size>\nsecond\n<size:9>Last</size>
+@enduml
