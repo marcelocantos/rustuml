@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+  "imported_rejection": "83469a4832cf20b8e2e57514841e5c46adf63a6e",
+  "import_commit": "6b0ca33e88127a44bad1e564544db7d746816d6d",
+  "verification": "Actual source-only CLI before/after on immutable retained1730, maker18, sprites50 and checker38 memberships, preserving duplicates, errors and panics. YAML/model diagnostics remain separate. Compact fresh controls use parent existing reference runner only. Required gates once stable. No baselines, comparator, acceptance contract or historical review edits; new independent checker required.",
+  "mechanism": "creole-present-empty-stripe",
+  "java_locations": [
+    "net.sourceforge.plantuml.klimt.creole.Display#getWithNewlines (258-353), NULL (99), isNull (605)",
+    "net.sourceforge.plantuml.klimt.creole.CreoleStripeSimpleParser#createStripes",
+    "net.sourceforge.plantuml.klimt.creole.legacy.StripeSimple#getAtoms (124)",
+    "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleSizeChange#executeAndGetRemaining",
+    "net.sourceforge.plantuml.klimt.creole.legacy.AtomText#calculateDimensionSlow/drawU",
+    "net.sourceforge.plantuml.klimt.creole.SheetBlock1#initMap/calculateDimensionSlow/drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs::emit_text/emit_text_no_mono/total_width/label_height_with_family/label_ascent_with_family/label_first_baseline_ascent_with_family/label_limit_finder_height_with_family",
+    "crates/rustuml-render/src/creole.rs::parse_segments_inner (888)",
+    "crates/rustuml-render/src/sequence.rs::rendered_line_metrics_with_family (1007), read-only actual line caller"
+  ],
+  "invariant": "An actual stripe with no atoms receives one base-configuration space atom after recursive styles restore. Its measurement and emission use the same atom including normal space advance, font height/minimum atom height and baseline. A null or absent Display creates no stripe and must not receive synthetic padding.",
+  "causal_divergence": "The previous consumed-command projection supplies a space only if it observed a sprite barrier. Ordinary blank lines and empty style spans remain zero segments: shared width is zero, emission writes empty text, and height takes a different fallback. Java getWithNewlines(null) is NULL, but getWithNewlines(\"\") creates one empty line; StripeSimple.getAtoms treats all zero-atom actual stripes alike. Rust lexical segment parsing is also used outside actual text lines, so absence must not be represented by globally padding every lexical parse.",
+  "planned_change": "Add a private actual-line segment projection in text_render, inserting a default-style space when lexical parsing returns no atoms. Route shared measurement, counts, height/ascent and emission through this projection. Keep lexical parse_segments(\"\") empty and caller guards for absent labels unchanged; audit retained CLI losses for consumers conflating absent display with a present line and hand off any family-specific omission rather than modifying model/parser/sequence. Empty styled content gets base style, not leaked nested style. Preserve public APIs.",
+  "perturbation_axes": [
+    "ordinary blank versus missing-sprite-only versus style-only empty lines",
+    "closed/EOL size and color restoration and base font sizes",
+    "line position/count in sequence messages and present WBS labels versus absent optional labels"
+  ]
+}

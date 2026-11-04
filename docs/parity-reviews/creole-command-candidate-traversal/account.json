@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+  "imported_rejection": "83469a4832cf20b8e2e57514841e5c46adf63a6e",
+  "import_commit": "6b0ca33e88127a44bad1e564544db7d746816d6d",
+  "verification": "Actual source-only CLI before/after on immutable retained1730, maker18, sprites50 and checker38 memberships, preserving duplicates, errors and panics. YAML/model diagnostics remain separate. Compact fresh controls use parent existing reference runner only. Required gates once stable. No baselines, comparator, acceptance contract or historical review edits; new independent checker required.",
+  "mechanism": "creole-command-candidate-traversal",
+  "java_locations": [
+    "net.sourceforge.plantuml.klimt.creole.legacy.StripeSimple#modifyStripe (275), searchCommand (295), addPending (288)",
+    "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleSprite#matchingSize/executeAndGetRemaining",
+    "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleEscape#executeAndGetRemaining"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::walk_segments (< arm at 1128)",
+    "crates/rustuml-render/src/creole.rs::handle_tag (1206)/is_sprite_tag"
+  ],
+  "invariant": "A command candidate consumes input only when recognized at the current position. An unrecognized prefix contributes literal characters while preserving later recognized commands, including a sprite inside unmatched angle markup. Literal characters preserve Unicode boundaries and escaping precedes command recognition.",
+  "causal_divergence": "Rust eagerly advances through the first greater-than before deciding whether a tag is recognized. An unknown outer prefix therefore absorbs an inner sprite command. Java searches its first-character command candidates against the entire remaining string, then consumes one literal UTF-16 character when none matches, reaching the later inner command. Rust can preserve the same string and command boundaries by stepping Unicode scalar values, without splitting UTF-8.",
+  "planned_change": "Make internal tag dispatch report recognition, scan a tentative cloned character iterator, and commit it only for a recognized command. Unknown/no-close angle prefixes consume just the already-read less-than as literal. Keep recognized non-sprite dispatch and escape ordering, segment barriers, public APIs and consumers unchanged. No general HTML rewrite; URL recursion and legacy to_svg_tspans remain dependencies.",
+  "perturbation_axes": [
+    "nested unknown angle prefixes and recognized sprite position/repetition",
+    "Unicode surrounding literals and sprite names versus escaped markers",
+    "recognized size/bold/color tags versus ordinary angle text"
+  ]
+}
