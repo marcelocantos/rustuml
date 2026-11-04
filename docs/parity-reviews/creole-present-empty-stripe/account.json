@@ -8,7 +8,7 @@
   "mechanism": "creole-present-empty-stripe",
   "java_locations": [
     "net.sourceforge.plantuml.klimt.creole.Display#getWithNewlines (258-353), NULL (99), isNull (605)",
-    "net.sourceforge.plantuml.klimt.creole.CreoleStripeSimpleParser#createStripes",
+    "net.sourceforge.plantuml.klimt.creole.legacy.CreoleStripeSimpleParser#createStripes",
     "net.sourceforge.plantuml.klimt.creole.legacy.StripeSimple#getAtoms (124)",
     "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleSizeChange#executeAndGetRemaining",
     "net.sourceforge.plantuml.klimt.creole.legacy.AtomText#calculateDimensionSlow/drawU",

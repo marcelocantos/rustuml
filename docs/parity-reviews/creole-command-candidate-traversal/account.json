@@ -9,7 +9,7 @@
   "java_locations": [
     "net.sourceforge.plantuml.klimt.creole.legacy.StripeSimple#modifyStripe (275), searchCommand (295), addPending (288)",
     "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleSprite#matchingSize/executeAndGetRemaining",
-    "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleEscape#executeAndGetRemaining"
+    "net.sourceforge.plantuml.klimt.creole.legacy.StripeSimple#analyzeAndAdd (150) and net.sourceforge.plantuml.utils.CharHidder#hide/unhide"
   ],
   "rust_locations": [
     "crates/rustuml-render/src/creole.rs::walk_segments (< arm at 1128)",
