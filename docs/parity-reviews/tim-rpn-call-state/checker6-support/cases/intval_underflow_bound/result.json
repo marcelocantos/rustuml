@@ -1,0 +1,165 @@
+{
+  "source": "/tmp/rustuml-checker6/new/intval_underflow_bound.puml",
+  "mechanism": "tim-intval-conversion",
+  "axes": [
+    "negative overflow",
+    "whole text"
+  ],
+  "negative": true,
+  "cwd": "/tmp/rustuml-checker6/new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "golden": "/tmp/rustuml-checker6/relay25/intval_underflow_bound/java.svg.stdout",
+  "reference_source": "/tmp/rustuml-checker6/relay25/intval_underflow_bound/java.source.stdout",
+  "java_exit": 200,
+  "java_probe_exit": 0,
+  "source_sha256": "2472ac5491f55b83c0279b56bd0d566a4b171010a047745348e9f3ef72072f73",
+  "golden_sha256": "7d36946577821ba31e1f3811997946b5e608da0cefd2fd7f50a0e67d1e65cb48",
+  "suite": "fresh25",
+  "capture_id": "0020-intval_underflow_bound",
+  "reference_valid": false,
+  "reference_xml_valid": true,
+  "phases": {
+    "before": {
+      "cli_exit": 0,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "4dc0393b027782d56b9f4995a0dcb4469c46f3a2b2783607d699b03c00bd6683",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "499dc9a8d4515a250790552d2f427d663bb2e5796967f6602de7590f61bdc401",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/intval_underflow_bound/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0020-intval_underflow_bound/before/rust.svg"
+      ],
+      "first_diagnostic": [],
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Lost\n@enduml\n"
+      },
+      "source_equal": false,
+      "reference_source_sha256": "997acbaae4cade388a9d557f05de92946b64224b3f1a12282d458329f0999983"
+    },
+    "after": {
+      "cli_exit": 1,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "cc74511f4fe9ebc9fbb8401a7e0f7f626032d2a49657d1b4cd1db9c82cc2f5b4"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "cc74511f4fe9ebc9fbb8401a7e0f7f626032d2a49657d1b4cd1db9c82cc2f5b4"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/intval_underflow_bound/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0020-intval_underflow_bound/after/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 1: Cannot convert -2147483649 to integer."
+      ],
+      "source_equal": false
+    }
+  },
+  "actual_source": "/tmp/rustuml-checker6/new/intval_underflow_bound.puml",
+  "actual_golden": "/tmp/rustuml-checker6/relay25/intval_underflow_bound/java.svg.stdout",
+  "committed_source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.puml",
+  "committed_golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.svg",
+  "committed_evidence": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound",
+  "java_svg_text": [
+    "Welcome to PlantUML!",
+    "\u00a0",
+    "You can start with a simple UML Diagram like:",
+    "\u00a0",
+    "Bob->Alice:\u00a0Hello",
+    "\u00a0",
+    "Or",
+    "\u00a0",
+    "class\u00a0Example",
+    "\u00a0",
+    "You will find more information about PlantUML syntax on",
+    "https://plantuml.com",
+    "\u00a0",
+    "(Details by typing",
+    "license",
+    "keyword)",
+    "\u00a0",
+    "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+    "[From string (line 2) ]",
+    "\u00a0",
+    "@startuml",
+    "!$a=%intval(\"-2147483649\")",
+    "Cannot convert -2147483649 to integer."
+  ]
+}

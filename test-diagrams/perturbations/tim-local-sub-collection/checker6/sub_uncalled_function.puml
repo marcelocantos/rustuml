@@ -1,0 +1,8 @@
+@startuml
+!procedure $never()
+!startsub outer
+!startsub inner
+!endsub
+!endprocedure
+class Survivor
+@enduml

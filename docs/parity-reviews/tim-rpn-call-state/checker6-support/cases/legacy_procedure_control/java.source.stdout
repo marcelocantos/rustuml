@@ -1,0 +1,6 @@
+@startuml
+note as Memo
+  cooked first lime
+second lime suffix
+end note
+@enduml

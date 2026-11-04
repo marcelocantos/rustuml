@@ -1,0 +1,3 @@
+@startuml
+class "#00FFFF/#00FFFF" as Alpha
+@enduml

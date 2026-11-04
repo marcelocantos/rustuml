@@ -1,0 +1,943 @@
+{
+  "manifest_path": "/tmp/rustuml-checker6/new-manifest.json",
+  "manifest_sha256": "5d5f22068b58b81ce39209d21990ce6fa934d1020786144d5318f5662a42bf80",
+  "case_count": 25,
+  "resources": [
+    {
+      "local_path": "/tmp/rustuml-checker6/new/hsl_bad_arity.puml",
+      "remote_relative_path": "new/hsl_bad_arity.puml",
+      "sha256": "2a65bc3d2fcf5751a3057f7fe2d33e6f182497474dd24d787bd04db8aeaf9829",
+      "bytes": 63
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/hsl_named_alpha.puml",
+      "remote_relative_path": "new/hsl_named_alpha.puml",
+      "sha256": "f16f0437a5c3c0bdfaf96fb8fc98f51ac1c9847810e1f8378c77942f866e0849",
+      "bytes": 108
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/hsl_rounding_extremes.puml",
+      "remote_relative_path": "new/hsl_rounding_extremes.puml",
+      "sha256": "7c257fc215cdab04099edb1480e463db9de205910fb2edd74b2a25c758a65327",
+      "bytes": 147
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/hsl_typed_channels.puml",
+      "remote_relative_path": "new/hsl_typed_channels.puml",
+      "sha256": "196db7d08a545982b48d6807f2191b193d2dff472da4cd3e3d139ebc05130e5a",
+      "bytes": 156
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/intval_ascii_edges.puml",
+      "remote_relative_path": "new/intval_ascii_edges.puml",
+      "sha256": "e082a3f040e09bce1b070e13e59ffb359e1880b11845e18653448be07e7aeb14",
+      "bytes": 129
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/intval_invalid_sign.puml",
+      "remote_relative_path": "new/intval_invalid_sign.puml",
+      "sha256": "1bb50b4755166180fc17b81415af2531af301c172a053b622037abaf18f5cd52",
+      "bytes": 58
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/intval_underflow_bound.puml",
+      "remote_relative_path": "new/intval_underflow_bound.puml",
+      "sha256": "2472ac5491f55b83c0279b56bd0d566a4b171010a047745348e9f3ef72072f73",
+      "bytes": 56
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/intval_unicode_digits.puml",
+      "remote_relative_path": "new/intval_unicode_digits.puml",
+      "sha256": "b3012e99b280019256d93bf0b8d08b713c157ab1abdfb488192a930b6ed9ebb6",
+      "bytes": 90
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/intval_unicode_json.puml",
+      "remote_relative_path": "new/intval_unicode_json.puml",
+      "sha256": "dbe74b8d38b161df7824e2aff8195bea5802612758bf6aa55b61f29fc0ff2091",
+      "bytes": 72
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/legacy_prefix_failure.puml",
+      "remote_relative_path": "new/legacy_prefix_failure.puml",
+      "sha256": "0c038f7599d27005813b511b0380813f3880555922f870efb303dc9a612bf6bd",
+      "bytes": 139
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/legacy_procedure_control.puml",
+      "remote_relative_path": "new/legacy_procedure_control.puml",
+      "sha256": "e890abb5f8e3e10ae2993ced2d2632988b6e77e96a8863421995379d750e588a",
+      "bytes": 135
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/legacy_repeated_raw.puml",
+      "remote_relative_path": "new/legacy_repeated_raw.puml",
+      "sha256": "314f027b785cd707b67407f7538a1f52bf258f2591a7654b384dc352834f03dc",
+      "bytes": 165
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/operand_duplicate_effects.puml",
+      "remote_relative_path": "new/operand_duplicate_effects.puml",
+      "sha256": "e84da25db9cd1e32bf0b99ea6a4ab64701a7ffbc83f4edb5d3e2a6f1142df9db",
+      "bytes": 165
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/operand_plain_exact_shortcut.puml",
+      "remote_relative_path": "new/operand_plain_exact_shortcut.puml",
+      "sha256": "8d05eade8e10aa5fb0b54515ca26768d5bc92607cd17c3c33bbd1b4fd403e577",
+      "bytes": 150
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/operand_procedure_covered.puml",
+      "remote_relative_path": "new/operand_procedure_covered.puml",
+      "sha256": "c2eef545ec5cf4f7ca77227d89cdaef69452360a512866712a6019f292763df0",
+      "bytes": 187
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/operand_procedure_missing.puml",
+      "remote_relative_path": "new/operand_procedure_missing.puml",
+      "sha256": "3503bd8f1256efacf363ee182cec8ca8ee12bb0d6076629c7d3739371c97fd82",
+      "bytes": 103
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/operand_rhs_first_error.puml",
+      "remote_relative_path": "new/operand_rhs_first_error.puml",
+      "sha256": "c9f5a99f640c6d4b308400b4bf499ef0c250fd07fd79ae1c7030a69addadc72a",
+      "bytes": 66
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/rpn_dual_parameters.puml",
+      "remote_relative_path": "new/rpn_dual_parameters.puml",
+      "sha256": "080c61a208537f52671480d57293b1bee519a745ee82eedbc5e3759f9a0684ca",
+      "bytes": 169
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/rpn_duplicate_underflow.puml",
+      "remote_relative_path": "new/rpn_duplicate_underflow.puml",
+      "sha256": "fbe220ec4f132741ceff4110c3c9b903da5f149c9576964d6e5a77df5cbc9602",
+      "bytes": 133
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/rpn_neighbor_calls.puml",
+      "remote_relative_path": "new/rpn_neighbor_calls.puml",
+      "sha256": "5b86fad037e24aaeef85e677da3d927624c0631b1355cd40258dba2379b08d57",
+      "bytes": 165
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/rpn_nested_consumption.puml",
+      "remote_relative_path": "new/rpn_nested_consumption.puml",
+      "sha256": "c1a7393ed2d47d46cafcdf89a8cc013f7162bdf2df6a842ee3606c360eece6dc",
+      "bytes": 152
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/rpn_spelling_body.puml",
+      "remote_relative_path": "new/rpn_spelling_body.puml",
+      "sha256": "eb86e511f6f22463bab1a76f7e152384e7d3b4c2ca445128722135ccc0108ed6",
+      "bytes": 249
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/sub_collect_error_precedence.puml",
+      "remote_relative_path": "new/sub_collect_error_precedence.puml",
+      "sha256": "6cc0f471bd814b1b9052063586cf9652dcff22832f4132a6412cac20e5a30787",
+      "bytes": 101
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/sub_comment_replay.puml",
+      "remote_relative_path": "new/sub_comment_replay.puml",
+      "sha256": "7bd9fab33229513e694f49b92c4deed3e625cfffff3df89b94d73d424a9136f9",
+      "bytes": 124
+    },
+    {
+      "local_path": "/tmp/rustuml-checker6/new/sub_uncalled_function.puml",
+      "remote_relative_path": "new/sub_uncalled_function.puml",
+      "sha256": "fba10347fdc0e8759d281363d686900b7638a25012d16a78d990ee939e62cebe",
+      "bytes": 107
+    },
+    {
+      "local_path": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-corrective-execution-maker/SourceProbe.java",
+      "remote_relative_path": "SourceProbe.java",
+      "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+      "bytes": 689
+    }
+  ],
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "case_contracts": [
+    {
+      "source": "/tmp/rustuml-checker6/new/rpn_spelling_body.puml",
+      "source_sha256": "eb86e511f6f22463bab1a76f7e152384e7d3b4c2ca445128722135ccc0108ed6",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/rpn_spelling_body.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/rpn_dual_parameters.puml",
+      "source_sha256": "080c61a208537f52671480d57293b1bee519a745ee82eedbc5e3759f9a0684ca",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/rpn_dual_parameters.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/rpn_nested_consumption.puml",
+      "source_sha256": "c1a7393ed2d47d46cafcdf89a8cc013f7162bdf2df6a842ee3606c360eece6dc",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/rpn_nested_consumption.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/rpn_duplicate_underflow.puml",
+      "source_sha256": "fbe220ec4f132741ceff4110c3c9b903da5f149c9576964d6e5a77df5cbc9602",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/rpn_duplicate_underflow.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/rpn_neighbor_calls.puml",
+      "source_sha256": "5b86fad037e24aaeef85e677da3d927624c0631b1355cd40258dba2379b08d57",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/rpn_neighbor_calls.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_duplicate_effects.puml",
+      "source_sha256": "e84da25db9cd1e32bf0b99ea6a4ab64701a7ffbc83f4edb5d3e2a6f1142df9db",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/operand_duplicate_effects.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_rhs_first_error.puml",
+      "source_sha256": "c9f5a99f640c6d4b308400b4bf499ef0c250fd07fd79ae1c7030a69addadc72a",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/operand_rhs_first_error.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_procedure_missing.puml",
+      "source_sha256": "3503bd8f1256efacf363ee182cec8ca8ee12bb0d6076629c7d3739371c97fd82",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/operand_procedure_missing.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_procedure_covered.puml",
+      "source_sha256": "c2eef545ec5cf4f7ca77227d89cdaef69452360a512866712a6019f292763df0",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/operand_procedure_covered.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_plain_exact_shortcut.puml",
+      "source_sha256": "8d05eade8e10aa5fb0b54515ca26768d5bc92607cd17c3c33bbd1b4fd403e577",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/operand_plain_exact_shortcut.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/legacy_repeated_raw.puml",
+      "source_sha256": "314f027b785cd707b67407f7538a1f52bf258f2591a7654b384dc352834f03dc",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/legacy_repeated_raw.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/legacy_procedure_control.puml",
+      "source_sha256": "e890abb5f8e3e10ae2993ced2d2632988b6e77e96a8863421995379d750e588a",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/legacy_procedure_control.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/legacy_prefix_failure.puml",
+      "source_sha256": "0c038f7599d27005813b511b0380813f3880555922f870efb303dc9a612bf6bd",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/legacy_prefix_failure.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/sub_collect_error_precedence.puml",
+      "source_sha256": "6cc0f471bd814b1b9052063586cf9652dcff22832f4132a6412cac20e5a30787",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/sub_collect_error_precedence.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/sub_uncalled_function.puml",
+      "source_sha256": "fba10347fdc0e8759d281363d686900b7638a25012d16a78d990ee939e62cebe",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/sub_uncalled_function.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/sub_comment_replay.puml",
+      "source_sha256": "7bd9fab33229513e694f49b92c4deed3e625cfffff3df89b94d73d424a9136f9",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/sub_comment_replay.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/intval_ascii_edges.puml",
+      "source_sha256": "e082a3f040e09bce1b070e13e59ffb359e1880b11845e18653448be07e7aeb14",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/intval_ascii_edges.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/intval_unicode_digits.puml",
+      "source_sha256": "b3012e99b280019256d93bf0b8d08b713c157ab1abdfb488192a930b6ed9ebb6",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/intval_unicode_digits.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/intval_unicode_json.puml",
+      "source_sha256": "dbe74b8d38b161df7824e2aff8195bea5802612758bf6aa55b61f29fc0ff2091",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/intval_unicode_json.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/intval_invalid_sign.puml",
+      "source_sha256": "1bb50b4755166180fc17b81415af2531af301c172a053b622037abaf18f5cd52",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/intval_invalid_sign.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/intval_underflow_bound.puml",
+      "source_sha256": "2472ac5491f55b83c0279b56bd0d566a4b171010a047745348e9f3ef72072f73",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/intval_underflow_bound.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/hsl_rounding_extremes.puml",
+      "source_sha256": "7c257fc215cdab04099edb1480e463db9de205910fb2edd74b2a25c758a65327",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/hsl_rounding_extremes.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/hsl_typed_channels.puml",
+      "source_sha256": "196db7d08a545982b48d6807f2191b193d2dff472da4cd3e3d139ebc05130e5a",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/hsl_typed_channels.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/hsl_named_alpha.puml",
+      "source_sha256": "f16f0437a5c3c0bdfaf96fb8fc98f51ac1c9847810e1f8378c77942f866e0849",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/hsl_named_alpha.puml",
+        "<worker>/new"
+      ]
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/hsl_bad_arity.puml",
+      "source_sha256": "2a65bc3d2fcf5751a3057f7fe2d33e6f182497474dd24d787bd04db8aeaf9829",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/new/hsl_bad_arity.puml",
+        "<worker>/new"
+      ]
+    }
+  ],
+  "output_contract": "Preserve exact raw stdout/stderr/status for SVG and probe; source and stream SHA256, actual argv/cwd/env and pinned headless runtime provenance. No normalization or local Java."
+}

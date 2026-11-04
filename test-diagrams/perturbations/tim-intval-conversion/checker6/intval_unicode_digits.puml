@@ -1,0 +1,5 @@
+@startuml
+!$a=%intval("+１２３")
+!$b=%intval("-٤٢")
+class "$a/$b" as Unicode
+@enduml

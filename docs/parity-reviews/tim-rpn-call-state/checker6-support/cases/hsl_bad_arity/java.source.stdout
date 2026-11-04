@@ -1,0 +1,2 @@
+@startuml
+!$a=%hsl_color(12,%intval("bad"))

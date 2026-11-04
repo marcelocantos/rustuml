@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "#033dbd4e/#fc000105/#80bf4240" as Rounding
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Rounding
+  entities:
+  - id: Rounding
+    label: '#033dbd4e/#fc000105/#80bf4240'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

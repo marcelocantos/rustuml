@@ -1,0 +1,9 @@
+@startuml
+!startsub outer
+!$x=%intval("bad")
+!if 0
+!startsub inner
+!endif
+!endsub
+class Lost
+@enduml
