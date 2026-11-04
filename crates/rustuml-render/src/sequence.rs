@@ -8023,7 +8023,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     head.kind,
                                     ParticipantKind::Participant | ParticipantKind::Collections
                                 ) {
-                                    1.0 + if sequence_shadowing {
+                                    // CommunicationTile#getPreferredHeight uses
+                                    // the same complete head component as the
+                                    // initial band, including its scoped shadow.
+                                    1.0 + if head.kind == ParticipantKind::Participant {
+                                        participant_shadow_delta
+                                    } else if sequence_shadowing {
                                         SHADOW_LIVING_WIDTH_EXTRA
                                     } else {
                                         0.0
