@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "06dedeb975ba3b0ef70bb3b161de1f22d9b991a1",
+  "verification": "Reuse immutable1559+36+20+34 cohorts; focused CLI frozen comparator, fresh parent-relay controls, model retention and invalid negatives; final main tiers/libs/CLI/guards. No local JVM, SSH, native work or checker verdict.",
+  "mechanism": "class-description-positioned-stripes",
+  "java_locations": [
+    "klimt/creole/legacy/StripeSimple#getAtoms",
+    "klimt/creole/Sea#add,doAlign,translateMinYto",
+    "klimt/creole/legacy/AtomText#calculateDimensionSlow,drawU,getStartingAltitude",
+    "klimt/drawing/LimitFinder#drawText",
+    "svek/SvekResult#calculateDimension",
+    "svek/EntityImageDegenerated#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs (additive positioned stripe API)",
+    "crates/rustuml-render/src/class.rs#description_text_size,render_description_leaf,entity_painted_extent"
+  ],
+  "invariant": "One positioned atom/run model provides preferred stripe boxes, emitted baselines and painted extrema. Empty StripeSimple owns a space atom. Sea bottom-aligns reduced-font boxes with font-position altitude and translates the minimum to the stripe top. Painted text bounds use each emitted baseline and font height; they do not equal preferred height. Degenerated images keep preferred dimensions.",
+  "causal_divergence": "Review541 P1: class preferred and emitted advances use plain X height, separate painted code skips blanks; mixed sizes/subscript baselines and final bounds disagree even with Rust emission.",
+  "planned_change": "Add opt-in positioned stripes in text_render.rs using existing Creole parser/font metrics/serializer; class description text consumes stored runs for dimensions, paint and bounds. Preserve old emit_text callers byte-for-byte in compatibility checks. No metric/font changes or SVG parsing.",
+  "perturbation_axes": [
+    "blank interior/trailing stripes and multiline labels",
+    "size/sub/sup combinations, family/style and linked/degenerate topology"
+  ]
+}
