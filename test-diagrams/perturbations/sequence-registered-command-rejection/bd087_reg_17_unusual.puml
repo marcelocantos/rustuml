@@ -1,0 +1,11 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+SKINPARAM sequence {
+ArrowColor Olive
+ParticipantBackgroundColor Wheat
+}
+Kestrel --> Juniper: receipt
+@enduml

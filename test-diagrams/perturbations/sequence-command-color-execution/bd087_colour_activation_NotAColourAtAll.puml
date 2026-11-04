@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+activate Juniper #NotAColourAtAll
+deactivate Juniper
+Kestrel --> Juniper: receipt
+@enduml

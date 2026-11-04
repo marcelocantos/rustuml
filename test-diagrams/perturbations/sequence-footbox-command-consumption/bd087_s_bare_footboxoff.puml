@@ -1,0 +1,7 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+footboxoff
+Alder -> Alder: recursion
+@enduml

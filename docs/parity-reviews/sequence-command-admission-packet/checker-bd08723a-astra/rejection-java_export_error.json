@@ -1,0 +1,590 @@
+{
+  "entries": 20,
+  "before_rejections": 0,
+  "after_rejections": 0,
+  "introduced_losses": [],
+  "after_false_accepts": [
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_teoz.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_teoz.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_teoz.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_teoz.puml"
+  ],
+  "results": [
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c936ded18611d41ed01791693d15cf033a3d0a4e07db9b831d7f116869040d46",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c936ded18611d41ed01791693d15cf033a3d0a4e07db9b831d7f116869040d46",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8d3c814732b7e89f396ed1331888a7d924f78a4e108c9dba0444a7cd21df7492",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8d3c814732b7e89f396ed1331888a7d924f78a4e108c9dba0444a7cd21df7492",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c936ded18611d41ed01791693d15cf033a3d0a4e07db9b831d7f116869040d46",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c936ded18611d41ed01791693d15cf033a3d0a4e07db9b831d7f116869040d46",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8d3c814732b7e89f396ed1331888a7d924f78a4e108c9dba0444a7cd21df7492",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8d3c814732b7e89f396ed1331888a7d924f78a4e108c9dba0444a7cd21df7492",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c936ded18611d41ed01791693d15cf033a3d0a4e07db9b831d7f116869040d46",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c936ded18611d41ed01791693d15cf033a3d0a4e07db9b831d7f116869040d46",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8d3c814732b7e89f396ed1331888a7d924f78a4e108c9dba0444a7cd21df7492",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8d3c814732b7e89f396ed1331888a7d924f78a4e108c9dba0444a7cd21df7492",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e5b4feaf39b253cd0dca2ecd731427e155ff61d3e66562230e4b9e4fa511a978",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e5b4feaf39b253cd0dca2ecd731427e155ff61d3e66562230e4b9e4fa511a978",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0c7f5ccbeaad6fbb2dcf3bce8c4ce94a0bf702a179301d869ab4d912c70c423",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0c7f5ccbeaad6fbb2dcf3bce8c4ce94a0bf702a179301d869ab4d912c70c423",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e5b4feaf39b253cd0dca2ecd731427e155ff61d3e66562230e4b9e4fa511a978",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e5b4feaf39b253cd0dca2ecd731427e155ff61d3e66562230e4b9e4fa511a978",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0c7f5ccbeaad6fbb2dcf3bce8c4ce94a0bf702a179301d869ab4d912c70c423",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0c7f5ccbeaad6fbb2dcf3bce8c4ce94a0bf702a179301d869ab4d912c70c423",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e5b4feaf39b253cd0dca2ecd731427e155ff61d3e66562230e4b9e4fa511a978",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e5b4feaf39b253cd0dca2ecd731427e155ff61d3e66562230e4b9e4fa511a978",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0c7f5ccbeaad6fbb2dcf3bce8c4ce94a0bf702a179301d869ab4d912c70c423",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-admission-checker-bd08723a/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "b0c7f5ccbeaad6fbb2dcf3bce8c4ce94a0bf702a179301d869ab4d912c70c423",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

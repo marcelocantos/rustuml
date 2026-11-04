@@ -1,0 +1,10 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+REF over Juniper,Kestrel
+Cypress
+end ref
+Kestrel --> Juniper: receipt
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+hide footbox
+hidefootbox
+Juniper -> Juniper: own tail
+Kestrel --> Juniper: receipt
+@enduml

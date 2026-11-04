@@ -1,0 +1,10 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+AUTONUMBER 6
+autonumber stop
+autonumber resume 3
+Kestrel --> Juniper: receipt
+@enduml

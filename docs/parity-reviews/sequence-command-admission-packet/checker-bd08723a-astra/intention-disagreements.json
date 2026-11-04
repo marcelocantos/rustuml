@@ -1,0 +1,443 @@
+[
+  {
+    "name": "bd087_reg_23_plain",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "1cbe1baa87622e5638723925a7d0870ad4ebfab2f7ebccf87a24eda5b0fc63d9",
+    "reason": "CommandFactorySprite compressed z body 0 is not a valid encoded deflate sprite. Supplement uses uncompressed inline data to obtain valid execution.",
+    "stderr": "net.sourceforge.plantuml.code.NoPlantumlCompressionException: java.util.zip.DataFormatException: Invalid length in uncompressed block\n\tat net.sourceforge.plantuml.code.CompressionZlib.decompress(CompressionZlib.java:85)\n\tat net.sourceforge.plantuml.klimt.sprite.SpriteGrayLevel.buildSpriteZ(SpriteGrayLevel.java:295)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite.executeInternal(CommandFactorySprite.java:140)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$2.executeArg(CommandFactorySprite.java:114)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$2.executeArg(CommandFactorySprite.java:109)\n\tat net.sourceforge.plantuml.command.SingleLineCommand2.execute(SingleLineCommand2.java:143)\n\tat net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)\n\tat net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:169)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)\n\tat net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)\n\tat net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nCaused by: java.util.zip.DataFormatException: Invalid length in uncompressed block\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.decompressUncompressedBlock(Decompressor.java:209)\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.<init>(Decompressor.java:68)\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.decompress(Decompressor.java:41)\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.decompress(Decompressor.java:26)\n\tat net.sourceforge.plantuml.code.CompressionZlib.decompress(CompressionZlib.java:83)\n\t... 15 more\nERROR\n4\nCannot decode sprite. (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_23_unusual",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "24f9db9a3c8fdfbe61a611dbd9d4f05b942347d25725cc825c8291baaba6d409",
+    "reason": "CommandFactorySprite compressed z body 0 is not a valid encoded deflate sprite. Supplement uses uncompressed inline data to obtain valid execution.",
+    "stderr": "net.sourceforge.plantuml.code.NoPlantumlCompressionException: java.util.zip.DataFormatException: Invalid length in uncompressed block\n\tat net.sourceforge.plantuml.code.CompressionZlib.decompress(CompressionZlib.java:85)\n\tat net.sourceforge.plantuml.klimt.sprite.SpriteGrayLevel.buildSpriteZ(SpriteGrayLevel.java:295)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite.executeInternal(CommandFactorySprite.java:140)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$2.executeArg(CommandFactorySprite.java:114)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$2.executeArg(CommandFactorySprite.java:109)\n\tat net.sourceforge.plantuml.command.SingleLineCommand2.execute(SingleLineCommand2.java:143)\n\tat net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)\n\tat net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:169)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)\n\tat net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)\n\tat net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nCaused by: java.util.zip.DataFormatException: Invalid length in uncompressed block\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.decompressUncompressedBlock(Decompressor.java:209)\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.<init>(Decompressor.java:68)\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.decompress(Decompressor.java:41)\n\tat net.sourceforge.plantuml.code.deflate.Decompressor.decompress(Decompressor.java:26)\n\tat net.sourceforge.plantuml.code.CompressionZlib.decompress(CompressionZlib.java:83)\n\t... 15 more\nERROR\n5\nCannot decode sprite. (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_25_plain",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "2c84e87018266023ec212f9a32868d9a9cb6ba103df42d5ec840aa3c3521c85a",
+    "reason": "CommandSpriteStdlib attempts to read the named archimate exported sprite; this resource name is unavailable. Supplement uses an existing cloudinsight export.",
+    "stderr": "ERROR\n4\nCannot read sprite java.io.FileNotFoundException: stdlib/archimate/sprite.spm (No such file or directory) (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_25_unusual",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "eaecbb5577041f3034f5e61506d2e366620cbf9b8810efe0f4f88e51d88e5a5c",
+    "reason": "CommandSpriteStdlib attempts to read the named archimate exported sprite; this resource name is unavailable. Supplement uses an existing cloudinsight export.",
+    "stderr": "ERROR\n5\nCannot read sprite java.io.FileNotFoundException: stdlib/archimate/sprite.spm (No such file or directory) (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_28_plain",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "b90a6f5ba5db671cee6ae6f39955c54a6b1c68e02bc940e0a2e17db7b9f9a2dc",
+    "reason": "CommandSpriteFile syntax is valid but the deliberately absent private file cannot be read. Supplement uses source-pinned internal jar sprites with no external assets.",
+    "stderr": "ERROR\n4\nCannot read: walnut_missing.png (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_28_unusual",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "efe29e32ca38d50f0129d005ebaa18d2ec103feade997e5fb739aadfd3be5ad7",
+    "reason": "CommandSpriteFile syntax is valid but the deliberately absent private file cannot be read. Supplement uses source-pinned internal jar sprites with no external assets.",
+    "stderr": "ERROR\n5\nCannot read: cypress_missing.png (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_30_plain",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "b933a731fcd2248ff857119e21a0e4b655659514e867872207e97056d9b6bee4",
+    "reason": "CommandStyleImport syntax is valid but the private stylesheet is absent. Supplement uses bundled plantuml.skin/rose.skin.",
+    "stderr": "ERROR\n4\nCannot read: walnut_missing.css (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_30_unusual",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "cc560908f4b57b59b5aeb795353c31887ce8452e98df3289ae5c7fe2f3198950",
+    "reason": "CommandStyleImport syntax is valid but the private stylesheet is absent. Supplement uses bundled plantuml.skin/rose.skin.",
+    "stderr": "ERROR\n5\nCannot read: cypress_missing.css (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_reg_48_near_miss",
+    "intended_valid": false,
+    "observed_valid": true,
+    "java_exit": 0,
+    "source_sha256": "426f20af607044ad832b1391c16333df0d3a41f05e30386c3d83ea91a854dc2d",
+    "reason": "CommandArrow/ExoArrowRight participant identity class [%pLN_.@]+ includes @; suffix @@ lies in unrestricted message text. It is another valid identity, not malformed command punctuation.",
+    "stderr": ""
+  },
+  {
+    "name": "bd087_reg_50_near_miss",
+    "intended_valid": false,
+    "observed_valid": true,
+    "java_exit": 0,
+    "source_sha256": "bd8469299dbad2f98ad5d5023b2109208ea362a7eb0b3920868883631ce49419",
+    "reason": "CommandArrow/ExoArrowRight participant identity class [%pLN_.@]+ includes @; suffix @@ lies in unrestricted message text. It is another valid identity, not malformed command punctuation.",
+    "stderr": ""
+  },
+  {
+    "name": "bd087_reg_64_near_miss",
+    "intended_valid": false,
+    "observed_valid": true,
+    "java_exit": 0,
+    "source_sha256": "6167ff9886b15b756d8e209b811d26f0dc6ccb92cc16753c5fbe4b682a02993a",
+    "reason": "CommandNewpage explicitly accepts optional @ and free text after colon. @@ is legal title content.",
+    "stderr": ""
+  },
+  {
+    "name": "bd087_colour_participant_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "007496bdf9f3efdd37364a62eb90c156b74d1e691b46228f7ce407b9b188e6f5",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseParticipant.drawInternalU(ComponentRoseParticipant.java:99)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.ParticipantBox.drawHeadTailU(ParticipantBox.java:136)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawHeadTailU(DrawableSet.java:379)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:311)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_arrow_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "b19b18b93880fb638dabc0c0609219c6a896dab9f91bdc21e780eed763be8813",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPolygonSvg.draw(DriverPolygonSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPolygonSvg.draw(DriverPolygonSvg.java:45)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseArrow.drawDressing2(ComponentRoseArrow.java:267)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseArrow.drawInternalU(ComponentRoseArrow.java:154)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow.drawInternalU(MessageArrow.java:156)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_exo_left_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "ee131c74aa865b08b31e392106c14c89edc27745fb7d2491a3632dd705436d82",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseActiveLine.drawInternalU(ComponentRoseActiveLine.java:87)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.SegmentColored.drawU(SegmentColored.java:106)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.LifeLine.drawU(LifeLine.java:251)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawLifeLineU(DrawableSet.java:453)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:396)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:308)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_exo_right_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "ac09e3440ac9d344592caaf71111fc4692891e9e220a319405dd472711cb50db",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseActiveLine.drawInternalU(ComponentRoseActiveLine.java:87)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.SegmentColored.drawU(SegmentColored.java:106)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.LifeLine.drawU(LifeLine.java:251)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawLifeLineU(DrawableSet.java:453)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:396)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:308)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_note_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "466742425da20ad8256bd2920ff7ae9da0ad232254fe8c50a2b3e96575a3c134",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:71)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:48)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseNote.drawInternalU(ComponentRoseNote.java:117)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.NoteBox.drawInternalU(NoteBox.java:113)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_rnote_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "7bd1451cebbd33ad11f1b7e52c64f16d1fff6e93775d1ddad054e2b0f9442598",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseNoteBox.drawInternalU(ComponentRoseNoteBox.java:100)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.NoteBox.drawInternalU(NoteBox.java:113)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.ArrowAndNoteBox.drawInternalU(ArrowAndNoteBox.java:94)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_note_multi_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "d868b8e9e53f32941bd33a55d02c7cd990a5c1ac540f4298248097dfe29f8291",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:71)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:48)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseNote.drawInternalU(ComponentRoseNote.java:117)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.NoteBox.drawInternalU(NoteBox.java:113)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_group_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "20ac90e7a516b50e31132d3ce6b55ab08d0c33ff49e38116b98ea87f82e73e02",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:71)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:48)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseGroupingHeader.drawInternalU(ComponentRoseGroupingHeader.java:140)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GroupingGraphicalElementHeader.drawInternalU(GroupingGraphicalElementHeader.java:102)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_group_secondary_NotAColourAtAll",
+    "intended_valid": false,
+    "observed_valid": true,
+    "java_exit": 0,
+    "source_sha256": "f2c5cc49834d19e9c00413b14ed3f4469f640b5104680ef060f82a509925e193",
+    "reason": "CommandGrouping accepts its first color only immediately after keyword. In alt #Wheat #NotAColourAtAll Walnut, #Wheat is the second color, and #NotAColourAtAll Walnut is COMMENT text, not another color capture.",
+    "stderr": ""
+  },
+  {
+    "name": "bd087_colour_box_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "f220f5f7bf16a3535023af630ceb97b52389ddf9da5d76891e6df9ea26daa88a",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseEnglober.drawBackgroundInternalU(ComponentRoseEnglober.java:66)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:145)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawDolls(DrawableSet.java:420)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:307)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_divider_NotAColourAtAll",
+    "intended_valid": false,
+    "observed_valid": true,
+    "java_exit": 0,
+    "source_sha256": "545918b5d1ab1140de7aafa59cf66bb57d2bc14166c0bb331d5b5e0e415e0924",
+    "reason": "CommandDivider creates Display from its label and has no command color slot. CommandCreoleColorChange catches NoSuchColorException during rendering and ignores the requested color.",
+    "stderr": ""
+  },
+  {
+    "name": "bd087_colour_ref_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "4b0051abbc936f1f6a2a9342908fd79fae9a7d6fca71afe5079d43037e4f746c",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:71)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:48)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseReference.drawInternalU(ComponentRoseReference.java:121)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalReference.drawInternalU(GraphicalReference.java:84)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_ref_multi_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "be5891e47709c56dcf442d3fb87e97559cfc1b507d183378a1bf615fc8c3b2bb",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:71)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPathSvg.draw(DriverPathSvg.java:48)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseReference.drawInternalU(ComponentRoseReference.java:121)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalReference.drawInternalU(GraphicalReference.java:84)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_ref_ignored_back_NotAColourAtAll",
+    "intended_valid": false,
+    "observed_valid": true,
+    "java_exit": 0,
+    "source_sha256": "2ce21d1a53564f86c2ef3f319ff04c2d7d42bd29f6b313d90c555c7054ac6449",
+    "reason": "CommandReferenceMultilinesOverSeveral#execute applies REF[0] only and deliberately never applies trailing BACKCOLOR.",
+    "stderr": ""
+  },
+  {
+    "name": "bd087_colour_activation_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "51478f6c3a236c9e3d4fe0d3985d6918382416fb573d990721d560dd64d507c5",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseActiveLine.drawInternalU(ComponentRoseActiveLine.java:87)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.SegmentColored.drawU(SegmentColored.java:106)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.LifeLine.drawU(LifeLine.java:251)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawLifeLineU(DrawableSet.java:453)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:396)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:308)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_activation_second_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "7388f6b782737b5450bd09fde5e6c231708d41f5f339380c6c37f4f0980b7ada",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyStrokeColor(DriverRectangleSvg.java:110)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:64)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseActiveLine.drawInternalU(ComponentRoseActiveLine.java:87)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.SegmentColored.drawU(SegmentColored.java:106)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.LifeLine.drawU(LifeLine.java:251)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawLifeLineU(DrawableSet.java:453)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:396)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:308)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_activation_short_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "630d774a687e4a269ceec6230052b3b35e13dc9e3c19b3811f4adcee17d805b6",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.draw(DriverRectangleSvg.java:49)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseActiveLine.drawInternalU(ComponentRoseActiveLine.java:87)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.SegmentColored.drawU(SegmentColored.java:106)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.LifeLine.drawU(LifeLine.java:251)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawLifeLineU(DrawableSet.java:453)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:396)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:308)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_colour_return_automatic",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 0,
+    "source_sha256": "427acd87ce2b49716c08e779b35466b4efc62023d20770ee4cb6a0c72070e493",
+    "reason": "HColorAutomagic is syntactically/execution-valid but rendering invokes unsupported HColor.toColor; Java returns an error SVG and stack trace despite exit 0. Export failure, not a positive reference.",
+    "stderr": "java.lang.UnsupportedOperationException: class net.sourceforge.plantuml.klimt.color.HColorAutomagic\n\tat net.sourceforge.plantuml.klimt.color.HColor.toColor(HColor.java:67)\n\tat net.sourceforge.plantuml.klimt.color.HColor.toSvg(HColor.java:79)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg.applyFillColor(DriverRectangleSvg.java:94)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPolygonSvg.draw(DriverPolygonSvg.java:63)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.DriverPolygonSvg.draw(DriverPolygonSvg.java:45)\n\tat net.sourceforge.plantuml.klimt.drawing.AbstractUGraphic.draw(AbstractUGraphic.java:144)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseArrow.drawDressing1(ComponentRoseArrow.java:230)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseArrow.drawInternalU(ComponentRoseArrow.java:152)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow.drawInternalU(MessageArrow.java:156)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n"
+  },
+  {
+    "name": "bd087_gradient_participant_392",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "ac0a675bc8c80e29d2ba58af3982768bf1abb5b631fe24f7cccc6aaa2d30e7f9",
+    "reason": "CommandParticipant#executeArg sends complete COLOR to HColorSet#getColor, not Colors. Composite channel/style strings are not HColor literals, even though ColorParser.exp1 admits their syntax.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_note_393",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "09778a2602235aaed68f96695c69f7b51f071ad9c6c99114e9456a1b3690d572",
+    "reason": "The final colon is immediately adjacent to the color. ColorParser PART2 negative lookahead forbids this terminator, so simple COLOR_REGEXP fallback captures #back/#shadowing/#text and HColorSet rejects it; #line.dotted has no complete simple fallback and is syntax-invalid.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_participant_398",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "222050c236280ddd7eeb0a0b51813c56b349636b7260dc3dbac902f8bbeceeb1",
+    "reason": "CommandParticipant#executeArg sends complete COLOR to HColorSet#getColor, not Colors. Composite channel/style strings are not HColor literals, even though ColorParser.exp1 admits their syntax.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_note_399",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "e592ec1dbd125854e7d5add0578ba76bd1070dfdae0a909130597e9b23f6c248",
+    "reason": "The final colon is immediately adjacent to the color. ColorParser PART2 negative lookahead forbids this terminator, so simple COLOR_REGEXP fallback captures #back/#shadowing/#text and HColorSet rejects it; #line.dotted has no complete simple fallback and is syntax-invalid.",
+    "stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_participant_401",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "603b3de191a8ebb580bc5efd8f74986912e70516c140dacfc467b6b2b98dc4f7",
+    "reason": "CommandParticipant#executeArg sends complete COLOR to HColorSet#getColor, not Colors. Composite channel/style strings are not HColor literals, even though ColorParser.exp1 admits their syntax.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_note_402",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "413978a127e6e3d6416a5016d7354ca4b8f72c93f1e91754a8eaef555e43957d",
+    "reason": "The final colon is immediately adjacent to the color. ColorParser PART2 negative lookahead forbids this terminator, so simple COLOR_REGEXP fallback captures #back/#shadowing/#text and HColorSet rejects it; #line.dotted has no complete simple fallback and is syntax-invalid.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_participant_404",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "f6bcc94af673e80381cd7e93a732919340e7ce8b1a17cf294b201346b8567b3c",
+    "reason": "CommandParticipant#executeArg sends complete COLOR to HColorSet#getColor, not Colors. Composite channel/style strings are not HColor literals, even though ColorParser.exp1 admits their syntax.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_note_405",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "0d95d3fc8b2313f01de1a1ea3017e1c94730f0abd570ca83299f555970be8161",
+    "reason": "The final colon is immediately adjacent to the color. ColorParser PART2 negative lookahead forbids this terminator, so simple COLOR_REGEXP fallback captures #back/#shadowing/#text and HColorSet rejects it; #line.dotted has no complete simple fallback and is syntax-invalid.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_participant_407",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "84a17552855a39f5dffa58434e0f3463fe938a16369f205bc15224b3f4d65bad",
+    "reason": "CommandParticipant#executeArg sends complete COLOR to HColorSet#getColor, not Colors. Composite channel/style strings are not HColor literals, even though ColorParser.exp1 admits their syntax.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_gradient_note_408",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "65b8a2fb539f4619f25af3db8c7f55b5c6afdf2141b58c9089bbaac7d265c91e",
+    "reason": "The final colon is immediately adjacent to the color. ColorParser PART2 negative lookahead forbids this terminator, so simple COLOR_REGEXP fallback captures #back/#shadowing/#text and HColorSet rejects it; #line.dotted has no complete simple fallback and is syntax-invalid.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_attribute_url_quot",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "f1eea4e94f63005c47895ebf926eb8ffa25dbda75aab6fb20fd69d8940a83d6e",
+    "reason": "UrlBuilder URL grammar excludes an unquoted interior double quote; this is source syntax, not an attribute serializer input.",
+    "stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_size_2001_ascii",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "c775e3b57e23dce51d6d055acb794f9bb5bb9008a0eed89e26e0c20b8c014b91",
+    "reason": "These sources contain participant declarations and prior messages. CommandArrow protectSize(2000) rejects the long relation; ClassDiagramFactory cannot accept the sequence-only declarations. All factories fail. Arrow-only companion sources fall through to CLASS; no contradiction after conditioning on source shape.",
+    "stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_size_2001_astral",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "8291c04bd8932124943ef2c6dc7e8ab0ec0b60443ce0cf1cc1f3c9f634bbe898",
+    "reason": "These sources contain participant declarations and prior messages. CommandArrow protectSize(2000) rejects the long relation; ClassDiagramFactory cannot accept the sequence-only declarations. All factories fail. Arrow-only companion sources fall through to CLASS; no contradiction after conditioning on source shape.",
+    "stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:174)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nCaused by: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:793)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:395)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics.createXmlInternal(SvgGraphics.java:833)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics.createXml(SvgGraphics.java:785)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:136)\n\t... 6 more\nCaused by: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.outputCharacters(ToStream.java:1523)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.characters(ToStream.java:1404)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToUnknownStream.characters(ToUnknownStream.java:723)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToUnknownStream.characters(ToUnknownStream.java:307)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:243)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:134)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:96)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(TransformerImpl.java:719)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:781)\n\t... 10 more\nCaused by: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.throwIOE(ToStream.java:1808)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.accumDefaultEscape(ToStream.java:1733)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.processDirty(ToStream.java:1644)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.outputCharacters(ToStream.java:1504)\n\t... 21 more\nERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_size_2002_ascii",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "60cc3a926ec51fe833b4a96e6fd52443e623e94964cf86da07043d0d9844f621",
+    "reason": "These sources contain participant declarations and prior messages. CommandArrow protectSize(2000) rejects the long relation; ClassDiagramFactory cannot accept the sequence-only declarations. All factories fail. Arrow-only companion sources fall through to CLASS; no contradiction after conditioning on source shape.",
+    "stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_size_2002_astral",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "7078eff291065fec6bb4cb6a1885676f1c03a2ec544459862b1c2c449b881be0",
+    "reason": "These sources contain participant declarations and prior messages. CommandArrow protectSize(2000) rejects the long relation; ClassDiagramFactory cannot accept the sequence-only declarations. All factories fail. Arrow-only companion sources fall through to CLASS; no contradiction after conditioning on source shape.",
+    "stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:174)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nCaused by: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:793)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:395)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics.createXmlInternal(SvgGraphics.java:833)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics.createXml(SvgGraphics.java:785)\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:136)\n\t... 6 more\nCaused by: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.outputCharacters(ToStream.java:1523)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.characters(ToStream.java:1404)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToUnknownStream.characters(ToUnknownStream.java:723)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToUnknownStream.characters(ToUnknownStream.java:307)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:243)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:134)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:96)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(TransformerImpl.java:719)\n\tat java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:781)\n\t... 10 more\nCaused by: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.throwIOE(ToStream.java:1808)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.accumDefaultEscape(ToStream.java:1733)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.processDirty(ToStream.java:1644)\n\tat java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.outputCharacters(ToStream.java:1504)\n\t... 21 more\nERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_s_sprite_inline_colour",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "82dc8194a6da76a88392de17fc3b18d1ce50302d58c23d9e249579e52ee7bb05",
+    "reason": "SpriteColorBuilder4096 expects palette-coded colour sprite data; arbitrary F00 is not a valid encoded colour sprite. Exact Java error retained.",
+    "stderr": "Error java.lang.NullPointerException: Cannot invoke \"net.sourceforge.plantuml.klimt.awt.XColor.getRGB()\" because \"rgb\" is null\njava.lang.NullPointerException: Cannot invoke \"net.sourceforge.plantuml.klimt.awt.XColor.getRGB()\" because \"rgb\" is null\n\tat net.sourceforge.plantuml.klimt.sprite.SpriteColorBuilder4096.buildSprite(SpriteColorBuilder4096.java:60)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite.executeInternal(CommandFactorySprite.java:146)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$2.executeArg(CommandFactorySprite.java:114)\n\tat net.sourceforge.plantuml.command.CommandFactorySprite$2.executeArg(CommandFactorySprite.java:109)\n\tat net.sourceforge.plantuml.command.SingleLineCommand2.execute(SingleLineCommand2.java:143)\n\tat net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)\n\tat net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:169)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)\n\tat net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)\n\tat net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6)\nERROR\n4\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6) java.lang.NullPointerException: Cannot invoke \"net.sourceforge.plantuml.klimt.awt.XColor.getRGB()\" because \"rgb\" is null (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_s_arrow_style_plain",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "7dc117f5587ab31dd8bed472989fe9f22bc8ff2bd0f8f7ea7c3be0f0faea6d8f",
+    "reason": "CommandArrow LINE_STYLE grammar admits plain/norank, but applyStyle recognizes only dashed/bold/dotted/hidden; all other tokens are passed to HColorSet and these names fail.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_s_arrow_style_norank",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "adfb493b09b641d9a9ae2034c720e00b25609051ccc620f53764bf96b448b29c",
+    "reason": "CommandArrow LINE_STYLE grammar admits plain/norank, but applyStyle recognizes only dashed/bold/dotted/hidden; all other tokens are passed to HColorSet and these names fail.",
+    "stderr": "ERROR\n4\nNo such color (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_s_skinparam_next_line_brace",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "722563a727c5b43277afa701b27406b4df9ce85c3bbb65b019374cc55f951b3f",
+    "reason": "CommandSkinParamMultilines extends CommandMultilinesBracket and requires { on the starting line. It does not inherit the different CommandMultilines2 syntaxWithFinalBracket transformation.",
+    "stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n"
+  },
+  {
+    "name": "bd087_s_bare_footbox",
+    "intended_valid": true,
+    "observed_valid": false,
+    "java_exit": 200,
+    "source_sha256": "35796fc9adf94929f1252a43c77f64cb53469b99dae189895cadedd1a2c870ac",
+    "reason": "First registration CommandFootbox accepts optional TYPE but executeArg calls arg.get(TYPE,0).equalsIgnoreCase(show) without null handling. Bare footbox triggers NPE and eventual error diagram; CommandFootboxOld is never selected.",
+    "stderr": "Error java.lang.NullPointerException: Cannot invoke \"String.equalsIgnoreCase(String)\" because the return value of \"net.sourceforge.plantuml.regex.RegexResult.get(String, int)\" is null\njava.lang.NullPointerException: Cannot invoke \"String.equalsIgnoreCase(String)\" because the return value of \"net.sourceforge.plantuml.regex.RegexResult.get(String, int)\" is null\n\tat net.sourceforge.plantuml.sequencediagram.command.CommandFootbox.executeArg(CommandFootbox.java:62)\n\tat net.sourceforge.plantuml.sequencediagram.command.CommandFootbox.executeArg(CommandFootbox.java:48)\n\tat net.sourceforge.plantuml.command.SingleLineCommand2.execute(SingleLineCommand2.java:143)\n\tat net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)\n\tat net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:169)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)\n\tat net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)\n\tat net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6)\nERROR\n4\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6) java.lang.NullPointerException: Cannot invoke \"String.equalsIgnoreCase(String)\" because the return value of \"net.sourceforge.plantuml.regex.RegexResult.get(String, int)\" is null (Assumed diagram type: sequence)\n"
+  }
+]

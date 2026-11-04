@@ -1,0 +1,5660 @@
+{
+  "entries": 571,
+  "unique_source_hashes": 571,
+  "duplicate_entries": 0,
+  "overlap_prior_entries": [],
+  "duplicate_groups": [],
+  "rows": [
+    {
+      "name": "bd087_reg_00_plain",
+      "source_sha256": "898c83fbd8e90888207af1d981396dc667a235497c1f194dbfed9b5247ba5091",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandTitle",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_00_unusual",
+      "source_sha256": "06a8fa449a75c004d59a9a6f6c276dfa280f0588f88b5906fced52dc6d566120",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandTitle",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_00_near_miss",
+      "source_sha256": "f8e9e349769a2fc7f6ede6ea2f62dd01bbe98d7a338794212cc5a41310f9203c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandTitle",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_01_plain",
+      "source_sha256": "823839ad793bf76ec68b067dfcc226019bc787c402e4f7cc9637ad932974dc46",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMainframe",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_01_unusual",
+      "source_sha256": "bb4a0cd7c4a8a502bceacc3c454576ab6434fca5b81059c0a8fcffceda4eb92f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMainframe",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_01_near_miss",
+      "source_sha256": "1759700acb79d25e0f0de6c86d386e887a16644c5a395f36c441017bc55486fa",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMainframe",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_02_plain",
+      "source_sha256": "c46e630c1eecb7052ed70b6ec305cdb2f5e162a885dee2212b18b9045c94df6b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandCaption",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_02_unusual",
+      "source_sha256": "f18ff1ef76ff21a1c3c2dcbfbbe90309cd4162694bb3a15824968496c90e432a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandCaption",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_02_near_miss",
+      "source_sha256": "ac41037052730f257e5963d6bea83657f63d356080344d128b882778562b59c4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandCaption",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_03_plain",
+      "source_sha256": "e7b76cffa705cfdacb12311eb10f16973c043fdee0ab005f5a988f1b3231923f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesCaption",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_03_unusual",
+      "source_sha256": "3fd791384f8ef458a5d4f4fafb267f0289831827eb92ab023cbdeb270ce29f69",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesCaption",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_03_near_miss",
+      "source_sha256": "93346bf0487d4821d142b458c484774ac7fc2d4713ed83bd3afd63e3db1660ac",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesCaption",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_04_plain",
+      "source_sha256": "5e02d4669a6eff0654c5427f6b4293c4a442c9f807b6bec3fefa787f0369a285",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesTitle",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_04_unusual",
+      "source_sha256": "1a4ad4b117ac4a32fdcf4eba59c3bb8ef3dfdeacb85d77b1089e779d39bfc68c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesTitle",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_04_near_miss",
+      "source_sha256": "85cc02981e5ba28c2e9cf558deb55f612bb04f3b1dbc29c4e965deddc22bf4c6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesTitle",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_05_plain",
+      "source_sha256": "e30a533a3c6b59de05de76a7fa6cbfafe31962147e5aa37be2431f5b80ed926e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesLegend",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_05_unusual",
+      "source_sha256": "ea4471f1f18aa1c3715fabea273591147da91992663298040ffbec7efc02d06a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesLegend",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_05_near_miss",
+      "source_sha256": "3cbca4c9a60f5c0263f644505899231f6517b25a40f90d80d7cdbcd46a3f6ee6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesLegend",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_06_plain",
+      "source_sha256": "2954560da3f93d1d1dd0a9fe875db9acfdd6f3d1fc3dcc2623546810de004e6c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandLegend",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_06_unusual",
+      "source_sha256": "c1898b8b70ac4dfcf31a76844fdaad14810606b93966b665150bf235fd8e82c7",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandLegend",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_06_near_miss",
+      "source_sha256": "3d35de696a07881f92ffa20efcb9a733fbbdadc65db85b9c7ad8c7a5ca95b370",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandLegend",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_07_plain",
+      "source_sha256": "dd3da2f477573ff57de36212a231ce94ec3ce05f594a875b8d3ff83068abe32f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFooter",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_07_unusual",
+      "source_sha256": "4d54197e1bdc740e279a0a46a5b2f7202d5a1981199c0a9a30382f2e78c31e02",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFooter",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_07_near_miss",
+      "source_sha256": "d7cb338d41d6341438db33a8b610a98f01de2afe0dfd5d9496767766af303f18",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFooter",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_08_plain",
+      "source_sha256": "63a1678676758b47427114c4e4e46b39ced7599fd760f6c7c46ad4ef040191f1",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesFooter",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_08_unusual",
+      "source_sha256": "6b23d7180f5cbace6d4dea091ea6ecb3e693d29f5ae3b26ed25d8341056e92bd",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesFooter",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_08_near_miss",
+      "source_sha256": "769092e5da1e6900bde92646500d1b0abb402f9e1614dedc0d5bd5cbeb2bb338",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesFooter",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_09_plain",
+      "source_sha256": "811b686bd1955a0ed0597194d492cc4337a519ee2a5ccd798cf9a36a6e039e09",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandHeader",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_09_unusual",
+      "source_sha256": "af758282e9b2c501f10c507b7deb372647b032a5d12b03c612eec858ca4020c0",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandHeader",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_09_near_miss",
+      "source_sha256": "723f987cc7ec71d1d4f0ced0eb6969e7651d19e51a295e736a8d99e3e5d907eb",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandHeader",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_10_plain",
+      "source_sha256": "decd94d75afe61606289737e213344508b48f6cde9aee8b424b2c1c33679e08f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesHeader",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_10_unusual",
+      "source_sha256": "0970ec4a2b7e12b214d3f4a0c2bd396c53b1b076648d212791ba85aefdbad3bf",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesHeader",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_10_near_miss",
+      "source_sha256": "0982521ce10ddd8944d4fa7c36d443cf538c2f6fd404b5319f58b08792fc2c0a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMultilinesHeader",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_11_plain",
+      "source_sha256": "fdedf85bb86766c29295fea806251dce8a1cc772e183aec4c25132705714221f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_11_unusual",
+      "source_sha256": "47aa1038937e363c9b86bd28f1fd41111881e90c8d58a84c21c7a004c074e38e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_11_near_miss",
+      "source_sha256": "a2b7419cde40078a754c57c6054416f58a19e2ed902ad409a44bc43f64db7592",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_12_plain",
+      "source_sha256": "a75e9e11dc7304b213102724fafa8dc04059b6545fc1313f646be5eabd51ea33",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandNope",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_12_unusual",
+      "source_sha256": "a3c25b93938c32aaa4d5de69ecdb47e659977d98125a3cc16fb3f5ba49cbd03c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandNope",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_12_near_miss",
+      "source_sha256": "b83ef434697e387193a68045824393888843c123eb0c95e3824cd3eb1618fdc4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandNope",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_13_plain",
+      "source_sha256": "9613e751adb4661d0929bb06abbed3abc8734eb679fd19e19f743d7993533d23",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandPragma",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_13_unusual",
+      "source_sha256": "74a80cd612633ada8ddfafc59342cd10815a29d9b0baa8b15af50e940af467b6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandPragma",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_13_near_miss",
+      "source_sha256": "22d3f8896f44842522993db879a02c2d7a9ebd03b86449ca9d6f0b5987acc8c8",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandPragma",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_14_plain",
+      "source_sha256": "43e5d68cedb01f8a1ae80066c0575b02b54ca4941370553c519743a4d79651ca",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandAssumeTransparent",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_14_unusual",
+      "source_sha256": "80bdd6e29cc82f3563d97f88fba1f203eed46ec46f571795d9113cacafd570d0",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandAssumeTransparent",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_14_near_miss",
+      "source_sha256": "a58c164784636159784293f19eeebe786383d41cc11cb722c68619d87e6cf4b6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandAssumeTransparent",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_15_plain",
+      "source_sha256": "2c358cf3a2fc36ced342c330fae0c123d35507db468fdf04ca97e7668900af34",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParam",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_15_unusual",
+      "source_sha256": "0eb5e1b612c7f1b2322e766837df909e0cefa48a5772ab8818a189e352b2d2c9",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParam",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_15_near_miss",
+      "source_sha256": "fdcaf340bed8fa979012dc28219c0f32eee8ad5feb51b0807a4f779250a493d1",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParam",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_16_plain",
+      "source_sha256": "fee31e2d59a7ef78085e0d21d5478bc1d193b783f0c6659d0e9eed7539e7d542",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParamJaws",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_16_unusual",
+      "source_sha256": "2b1a763b449f2f93cef63f7e35d0156192ddf6b75b14ac885354b148940a2d9f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParamJaws",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_16_near_miss",
+      "source_sha256": "2bafe7b39f41e45c876404178d9d846772a6df6092317787a7f67742581b5983",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParamJaws",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_17_plain",
+      "source_sha256": "8e7e002ead0e955f578731f8e9506b76c46f150d836efbc09d33dba80c8aa513",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParamMultilines",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_17_unusual",
+      "source_sha256": "b1dc7f30451bec32368558ee707c1f14fb375e3b3870a5a86233501669fdb5e8",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParamMultilines",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_17_near_miss",
+      "source_sha256": "4a17f0a759af00fbf5f3efc111eceaecdb209e38ff45384888776d4d5e6300f3",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSkinParamMultilines",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_18_plain",
+      "source_sha256": "392bc65412f3cc241fe3224953c3edd4ba7e42fd2767b6b3437aa3347dbcf66c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandSkin",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_18_unusual",
+      "source_sha256": "43c8530829bcd2649ea354cf7c7c2b1ac7ee2f454fc812cddf4c5c89555cca41",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandSkin",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_18_near_miss",
+      "source_sha256": "2e751fbdcd2219090f5e8e7a096d7730708ef43c0f3b29abe0ac22cb0884125f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandSkin",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_19_plain",
+      "source_sha256": "bc98ae6600be24a4a3fc782083a194857d598ebb2f87bb195e06911c5f22513d",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMinwidth",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_19_unusual",
+      "source_sha256": "393c84991547da089ef59b3f511bb4686f2f6332c236de8cc8912e2c9e83b3c3",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMinwidth",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_19_near_miss",
+      "source_sha256": "2282310e5a46576a8da30352c5744afb0c8dfbdf56bad2254acfda91553b8427",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandMinwidth",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_20_plain",
+      "source_sha256": "eaa85933f1f9aaeef0a2698b1fbaa1e90d5b4a0c312a26ebfa1e7fa032638cd0",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandPage",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_20_unusual",
+      "source_sha256": "2cdc8024f4b3bc6dd2faadc2a4a314f2dc9a8cc6a14c18d364cb3e5d84db31ad",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandPage",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_20_near_miss",
+      "source_sha256": "29f862737759890ed637ae5434b5a7439dfabd4f8001f9d7a44460454cc091b0",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandPage",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_21_plain",
+      "source_sha256": "d7163569529d41e00011b9a9cd2d76dd232ca47498c0f5802bce55a0b3dfc21e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandRotate",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_21_unusual",
+      "source_sha256": "d31881f998d9251c405373d96de50f63293bd670b1e688ec74f695b19fdcf34b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandRotate",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_21_near_miss",
+      "source_sha256": "c41edb68107c9b670ef9be9d474975440e2c254de8872f69417df5c4f563fecb",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandRotate",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_22_plain",
+      "source_sha256": "f170f0c1be64273a12aa20aba236684d469ee30f7d9a8af8d78e9f4411173b67",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFactorySprite$1",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_22_unusual",
+      "source_sha256": "ce2c3a58779b8daf7405d242c39887c8815625e2a85a38d10e9e7060582d3fe6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFactorySprite$1",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_22_near_miss",
+      "source_sha256": "f4414a7a1b2dd0abd8f618cfce9862e9fcf8c8be22be3de52d59604ba42f0c9d",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFactorySprite$1",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_23_plain",
+      "source_sha256": "1cbe1baa87622e5638723925a7d0870ad4ebfab2f7ebccf87a24eda5b0fc63d9",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFactorySprite$2",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_23_unusual",
+      "source_sha256": "24f9db9a3c8fdfbe61a611dbd9d4f05b942347d25725cc825c8291baaba6d409",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFactorySprite$2",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_23_near_miss",
+      "source_sha256": "0c7089ffabaab6760b2d8e43a9c1bf760923c87c8b6c087eb8a4f663ed7916a9",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandFactorySprite$2",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_24_plain",
+      "source_sha256": "90fd593e3f38abc036819edf6e11e3c70ea7214eb860b169a820843ff9a2aa19",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteSvg",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_24_unusual",
+      "source_sha256": "e2059257e2173c7e6285f5b12daf730c906c4ce7197390653b6196d6fc44852b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteSvg",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_24_near_miss",
+      "source_sha256": "1fcd0a4e24e29e754325d9843a040229c12fedcefa561d11e0b759d285291f8d",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteSvg",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_25_plain",
+      "source_sha256": "2c84e87018266023ec212f9a32868d9a9cb6ba103df42d5ec840aa3c3521c85a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteStdlib",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_25_unusual",
+      "source_sha256": "eaecbb5577041f3034f5e61506d2e366620cbf9b8810efe0f4f88e51d88e5a5c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteStdlib",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_25_near_miss",
+      "source_sha256": "796f0ee976bb2319fd2cd8ab2147faf5f9980e471533e695e46f6a6221ae0337",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteStdlib",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_26_plain",
+      "source_sha256": "8b223c94c5867018489ea630483a7a7f02482d924d7e207b4408949e56c906ef",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteStdlibSvg",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_26_unusual",
+      "source_sha256": "4f8380264abb017b57f8db410fb815aad7af4e47e1efafa5becb60caff259923",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteStdlibSvg",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_26_near_miss",
+      "source_sha256": "49f3d98b4c0050d07670187d9b90c4e8c57ea26249f201ecbc9a0f52ce6f33bf",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteStdlibSvg",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_27_plain",
+      "source_sha256": "8785094fa9474b31ca2be3e0b3d83c9d8d41f5ff1815f8a63e9d523771aa9409",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteSvgMultiline",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_27_unusual",
+      "source_sha256": "3e21f599a005efa7a66cb3758a447b4ea7d9cd8b125a1da890d1813f8990bd32",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteSvgMultiline",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_27_near_miss",
+      "source_sha256": "3ec6ec05307079c69934b307ffb586fea0991cd11c33b6ef3fbf893789003e17",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteSvgMultiline",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_28_plain",
+      "source_sha256": "b90a6f5ba5db671cee6ae6f39955c54a6b1c68e02bc940e0a2e17db7b9f9a2dc",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteFile",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_28_unusual",
+      "source_sha256": "efe29e32ca38d50f0129d005ebaa18d2ec103feade997e5fb739aadfd3be5ad7",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteFile",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_28_near_miss",
+      "source_sha256": "3d80a669da3ec8d9aa22139bde06e7f3d14d0409bd691ee0e84c4d024d49c1c3",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandSpriteFile",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_29_plain",
+      "source_sha256": "10cefcf74fa48ae119a4adf21fad4082a249ddfb390216a6c9a8853d5ad947ea",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.style.CommandStyleMultilinesCSS",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_29_unusual",
+      "source_sha256": "ffb25ff49cf70435b6af6429901a9080a617fad2eae237375681df7e83e2e27f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.style.CommandStyleMultilinesCSS",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_29_near_miss",
+      "source_sha256": "b8e9c6a2a2cd8aee203f9fc1186450cf42ec297c548e278e1bee6be5b259bf11",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.style.CommandStyleMultilinesCSS",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_30_plain",
+      "source_sha256": "b933a731fcd2248ff857119e21a0e4b655659514e867872207e97056d9b6bee4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.style.CommandStyleImport",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_30_unusual",
+      "source_sha256": "cc560908f4b57b59b5aeb795353c31887ce8452e98df3289ae5c7fe2f3198950",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.style.CommandStyleImport",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_30_near_miss",
+      "source_sha256": "8f9ee9201e0b590014ac8a0083c2e1c3f525bfa66e262cafdac4dd3b9eed324b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.style.CommandStyleImport",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_31_plain",
+      "source_sha256": "b05bd9c7476db2bf27bd08d198c9952d964525e9678c34a480cfc8d58a239f80",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScale",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_31_unusual",
+      "source_sha256": "21af29d559c20dd2dab2ff459a803c741b7c00febbe3e197561f21757e296255",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScale",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_31_near_miss",
+      "source_sha256": "7bb6f9fa4cfa0cf216e8db01893c03bb5cf592d89c1d639b1a5d10109b5da16f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScale",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_32_plain",
+      "source_sha256": "c593b2bd1cf15dc951c45145c5ca3822cab488aa3a86c3f98a4c09b877d2ad8b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleWidthAndHeight",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_32_unusual",
+      "source_sha256": "b25dba9e61f1ab855624fb5f245174aacb43273d6e7f53e9d88f3e573d1cff26",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleWidthAndHeight",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_32_near_miss",
+      "source_sha256": "bc0cdac6b60554805377d9b635629e8fdd5a31d2df441def4c68c9077f2f28fd",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleWidthAndHeight",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_33_plain",
+      "source_sha256": "375ccc93ce20ad1ced200b74f40a96d6637009d87a29b88f875e4e2bcd3bd2b5",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleWidthOrHeight",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_33_unusual",
+      "source_sha256": "79bff71175df574a1f6217576a89af51883d313be0617ad50ccba05fa9d28b3e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleWidthOrHeight",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_33_near_miss",
+      "source_sha256": "72f029b239a573c70c1cac2828c23da7832b37f59ee750b545613f7ff9581fc4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleWidthOrHeight",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_34_plain",
+      "source_sha256": "4ece00c426ba87445d93c35c3ca35344441367dc899c2d7d87fa2cad16ae0d42",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxWidth",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_34_unusual",
+      "source_sha256": "371886170f8d9b71689df43426cf4be60b6e40b43df9bd400ebe0fdf2bb19ba4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxWidth",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_34_near_miss",
+      "source_sha256": "ecfa31a1e2e828684cd8cc5489f8b9c813f591b540fc36759176d86b12c5cd13",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxWidth",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_35_plain",
+      "source_sha256": "ce9244fff8e28dfe4b4a2c2d6504aadd655295a3bec59e5059c839beb0ca092b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxHeight",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_35_unusual",
+      "source_sha256": "27ad0f62b0b8ad8be90a911344dee56d6995a2a2e3da7499f995f60baf1ca2ad",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxHeight",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_35_near_miss",
+      "source_sha256": "13399ad4ed14bc1ae4e5b9c244777ac3959c45a672e97d065dc466ddefe73d83",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxHeight",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_36_plain",
+      "source_sha256": "7395781a929ffce415a93795e4cdc4eb246053dc2a67f2eabf04d8b39b0acfb8",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxWidthAndHeight",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_36_unusual",
+      "source_sha256": "ee9e972e753e87b04df71206e383bdc6d986d47037aeb8991ae39f8610993191",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxWidthAndHeight",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_36_near_miss",
+      "source_sha256": "1513c6d65e1ea055ff9b744b62fb97c6e05867b5bdc095abd3b2565572c567ef",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.CommandScaleMaxWidthAndHeight",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_37_plain",
+      "source_sha256": "7ad934919185284551d4c497ff91ae93bbcb266492a1ec9611468de43727b8b4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.statediagram.command.CommandHideEmptyDescription",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_37_unusual",
+      "source_sha256": "c0f9c9996f6acc5bfef1f957803e8de524e86d0d854de924626a33111c0b64b8",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.statediagram.command.CommandHideEmptyDescription",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_37_near_miss",
+      "source_sha256": "cbfa55861911dd1ff0b0d6eb88c1904682324b724a118ebc2c441fb92c2af5f0",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.statediagram.command.CommandHideEmptyDescription",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_38_plain",
+      "source_sha256": "b835d21a9582c18a4f2e2509a5a3d9d8038eaa5a20735622cfb7e95285bc8113",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByVisibility",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_38_unusual",
+      "source_sha256": "efc87afabed9763dec558989b4af4e9bd23f72971d29cbe13345dd0bac03e182",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByVisibility",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_38_near_miss",
+      "source_sha256": "81d00c9aad803aab09af403fc14afbefe4d44078ab70744e8b7f8c3d8410686b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByVisibility",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_39_plain",
+      "source_sha256": "f9881228c1ae52d28cef79b05ff4b3d4d10da3445dda9e82739c25fd2cb98107",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByGender",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_39_unusual",
+      "source_sha256": "48378caa8878f616956d9d1b5ff2af9bf5545eb63859f47696a6bec183882b6c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByGender",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_39_near_miss",
+      "source_sha256": "f3ac9afa16112bf64aeeabe0570e959e0d85fa5b4b81d8f9c32815f3a6161b94",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByGender",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_40_plain",
+      "source_sha256": "5e0c75817717a46b4ed7b110071b956174d39df683680bbfbf171d31ea4cc912",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandHideUnlinked",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_40_unusual",
+      "source_sha256": "fd7279d92dc5683caf2325083003b8b3c698cacd672531e688cf570d38bcc960",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandHideUnlinked",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_40_near_miss",
+      "source_sha256": "2d1bdc44845786cb11f22187ca062a2e2056f7646e5d726f76ab101f86d1eb9b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandHideUnlinked",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_41_plain",
+      "source_sha256": "72fafd4bf96c6fbd80b6ac4dba910cce0089705d121501a381c680f1a164ed88",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandActivate",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_41_unusual",
+      "source_sha256": "939e783394ba34e279ec89ec6c95f35743cc598e3e5d418997414afa7f2a008d",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandActivate",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_41_near_miss",
+      "source_sha256": "c77617b8adecb8efdd4842f63b4c98d0f01af69905e91d4d415962826df6bbda",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandActivate",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_42_plain",
+      "source_sha256": "7393c5b6f20863d3d1c79ef369843834be818f1d9bfadb20b10c924e5170832c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDeactivateShort",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_42_unusual",
+      "source_sha256": "11ed5f04d526588a637616514961c26430f06d3a6a570c0f96d8994833f861af",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDeactivateShort",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_42_near_miss",
+      "source_sha256": "9500052079c72d02be724b86a54b8a2982d1558ed7b9d390931f6a4088d58d7e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDeactivateShort",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_43_plain",
+      "source_sha256": "accfe223af59857ab658cc1d915a979a6e5afcd6d0c73283f630f6b309d8daaf",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_43_unusual",
+      "source_sha256": "e230332629137b03b8880fb65eceb054785f2d56260f7524ed2af4388418822b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_43_near_miss",
+      "source_sha256": "edd4f839bec7e279c17143dfe58da3b0ed01c45dfd81cb625d5e8b8bb560d862",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_44_plain",
+      "source_sha256": "69a123ce619e21b3e403609221f6767e1e15e4d3bd7e9461b4013d6bd7bce469",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA2",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_44_unusual",
+      "source_sha256": "421ff43ce20b62e7c6c868f049b1d2574a475fe19aaef8a7a51e6f9676c987a9",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA2",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_44_near_miss",
+      "source_sha256": "ea2a83faa502e01ad9fa584a8d21abbc5d8577a951b350fbb7615fda8d990d22",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA2",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_45_plain",
+      "source_sha256": "3c11cbb3e531bd6064f2ea9e65e0cd19b88d367942e21954d52fdf770ddf6fec",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA3",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_45_unusual",
+      "source_sha256": "91f8253b3da98a6f45f58086de6ce54b54abda7f9749e9d3d9ed635d18f6d6ea",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA3",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_45_near_miss",
+      "source_sha256": "12f58bc32b462e83feffa354d6c17be48bbe2e95eaa9e810b1c8cb83a17c0bc6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA3",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_46_plain",
+      "source_sha256": "8a882d4a4c5a9365d56fb132e74e2ab3493a9c4726bac2e5c3d29c8590c9c6c6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA4",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_46_unusual",
+      "source_sha256": "98650bb7f758aaa78a124b64d16d88224fd42b5177b89d4d43aeb3f44a31b626",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA4",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_46_near_miss",
+      "source_sha256": "c6faa28ecfe302376ecca0ec277e1f79dba9c5080f35db15ca2e08d3ed9997bc",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA4",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_47_plain",
+      "source_sha256": "7a18bc08e4af718daf64d037318909cfe0cdd241914c56c55b10f9286e4ce6bf",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantMultilines",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_47_unusual",
+      "source_sha256": "fb8ee50ca056d01ca1c358c078e22f80f2f63e6bf02abfda339a1448d7c92192",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantMultilines",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_47_near_miss",
+      "source_sha256": "8591d097773ca53f9c1c03a8435be6f463bc1a2968925583da6afb6dd1935b4b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantMultilines",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_48_plain",
+      "source_sha256": "67e40b90ccbc5e67954d5fbc0f229f5007f372871df1db371d18d1b91c9eca31",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandArrow",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_48_unusual",
+      "source_sha256": "27b1babeb1161c36f0d30ee7338c268b7396a87d4a7aabcb464782aa95493edc",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandArrow",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_48_near_miss",
+      "source_sha256": "426f20af607044ad832b1391c16333df0d3a41f05e30386c3d83ea91a854dc2d",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandArrow",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_49_plain",
+      "source_sha256": "01205e648e84f40b1c0908ee86dc86dff7e59cb37a8c21ffdd5470dabca7f1f2",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowLeft",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_49_unusual",
+      "source_sha256": "99a9de6fa34dcd9fe21107501a257ede8b4899ee86d45a6bad3177a5cbceb693",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowLeft",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_49_near_miss",
+      "source_sha256": "e3412dda6369493f7cade78025adfb5af6d657cbccc3f4dca13a0c4b2e563eb4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowLeft",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_50_plain",
+      "source_sha256": "598258711b19f9b3ec7ee5a33b28d2b28d21fdfedc1257061a92be76d8872ac3",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowRight",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_50_unusual",
+      "source_sha256": "30cb2d981543f3e180b3392e60803a0da6bd72a5d92123f5b492a81c9b0d59e7",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowRight",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_50_near_miss",
+      "source_sha256": "bd8469299dbad2f98ad5d5023b2109208ea362a7eb0b3920868883631ce49419",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowRight",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_51_plain",
+      "source_sha256": "395d74f4adf6af51058a212ee3c958af1b6c8accb1a802ddbfc94526f0edbfed",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$2",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_51_unusual",
+      "source_sha256": "86cdd48961d45ce93771bf3aa9e9b9e2e62c8c870605ac99d914f6fccd642855",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$2",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_51_near_miss",
+      "source_sha256": "36568ebf8f3f1292fa0a95c5289da0c4e21068264b16fe27a0118cca32b613cc",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$2",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_52_plain",
+      "source_sha256": "e78ccfa4de3f6a8d0b54aa89ed4710906d20293724f6f4c093ce0707fafd90db",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$1",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_52_unusual",
+      "source_sha256": "5e4b171916302732b3478fcf75f7a2e5dabd82f8931dda3fe7d4ad4b29a79a75",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$1",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_52_near_miss",
+      "source_sha256": "89933acf7aa4cda711e0d4edcffc6ecde688fb2d001acca5846e71d39758d9e8",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$1",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_53_plain",
+      "source_sha256": "13346f9369f1b5977920021717a0832548d7687d8f2e9c33966b4b6113152a38",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$1",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_53_unusual",
+      "source_sha256": "d6db5b15b250f6186a84efc3479bbb47cf9e91b14727a18165b04b88ad6f03b6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$1",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_53_near_miss",
+      "source_sha256": "58ea918f886dc9b2c19b787c71d618d1f80e0d74fb89b59c3d5cf7cc44776e4e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$1",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_54_plain",
+      "source_sha256": "9e680a65b6c8010584bc033ad8099757e99b550fb2ccecafa2afa372cc3eca47",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandBoxStart",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_54_unusual",
+      "source_sha256": "f9ed921bd62070a2c2930ffb2f9abd38768e312458cea11ee45a501136afe9b5",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandBoxStart",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_54_near_miss",
+      "source_sha256": "8511648e331d13d744a28f1053c96c628e5f0926996cd45e278508fc1c2bdcd5",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandBoxStart",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_55_plain",
+      "source_sha256": "fc6a81fd4607510ab2a2add6495837918408290f74d7ea07ba28ab7e1fac8ee6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandBoxEnd",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_55_unusual",
+      "source_sha256": "092b665c1d1509c4496e0339c6e0ef3898f968efcc6ba48e6d1b95b1f5142754",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandBoxEnd",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_55_near_miss",
+      "source_sha256": "0d720ecff2a19df1357247d47c9cb0ce76736a3d9f06e6bc191eb033d638f49a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandBoxEnd",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_56_plain",
+      "source_sha256": "b9bb1c46f1b66f3840cb2fd64ce5000ee0dcca8e8d385e5a8eb8fa49ee4dc4b5",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandGrouping",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_56_unusual",
+      "source_sha256": "cb81fcb1d916044a83fafdf7a2aa81f2e486b8e286385e0ac2989c4143c8f048",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandGrouping",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_56_near_miss",
+      "source_sha256": "bfa7ffd86b6f2378bd192b460bf05a8401ad9222590984afa76fdcd8e9270148",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandGrouping",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_57_plain",
+      "source_sha256": "e452a5e58739658c74650acf7c4ba1334438814dea95a8a5b796b83d894ccb70",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandActivate2",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_57_unusual",
+      "source_sha256": "821634c169b3f0e228b5798dd6f635f6732e859b4416e35a4d214e6e63237ca1",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandActivate2",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_57_near_miss",
+      "source_sha256": "51f9cf01c141b89a6dd2a60caf4444e663da7ebbb3f2caac1ec975e34ea5b9a1",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandActivate2",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_58_plain",
+      "source_sha256": "4131af4897eee58026c45f34ebfe3eca9d4e6eb7abc554665fd4eae8b1cda87f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReturn",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_58_unusual",
+      "source_sha256": "581e028f10bff34586768e321a99442b67b35f18b2e1789e210b1c56d885627b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReturn",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_58_near_miss",
+      "source_sha256": "de31ed337f837ca64f620c757d48e03871288f74762dd8cfd03ba7f2d89c8061",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReturn",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_59_plain",
+      "source_sha256": "6d594f1075fc9b4c0f6cd07f41f6a37cda8ad8c2aed22e77c1b62a029d7686ea",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$1",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_59_unusual",
+      "source_sha256": "038b9f93e7520505adb0c858df024007a08070f81140b2f7a4a42c009e26135a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$1",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_59_near_miss",
+      "source_sha256": "1f3510db4d8fb3342043d3341fd929dd6568305f08a478bd1593bff927f9d315",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$1",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_60_plain",
+      "source_sha256": "2d07daf4541f7bf17e7668b896e445125ad9be3531ad802ddeb438db4f38a369",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$1",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_60_unusual",
+      "source_sha256": "332c1219aab9d457946c093367f8433544b7d68101ced801971551a8836bd64b",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$1",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_60_near_miss",
+      "source_sha256": "0a66c2af830a4f111aa2f6e8c651752cd31b296d6d93eaea4094c86039b3ae62",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$1",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_61_plain",
+      "source_sha256": "64250d692347fc96d749b88404d02ff8ea4678d4017b60fcf0a17266f74f8597",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$2",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_61_unusual",
+      "source_sha256": "7cb3e6ccf15832cccc64036468bea40dd01e41d1cbf9404ac2d3ccd7325ab6b1",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$2",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_61_near_miss",
+      "source_sha256": "613efce1f160e87bfe96ef5f7bcd836dbb088f0f78d41217f0893423afb45394",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$2",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_62_plain",
+      "source_sha256": "8a10a49a930846181058b196bdd2e7b3b73ab5da284127987ebc7412c303ae3f",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$2",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_62_unusual",
+      "source_sha256": "334ca5ce66babf0c9dc2fa77ed896eabdc1dd9cfa1557ff1061cca71670e8ab6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$2",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_62_near_miss",
+      "source_sha256": "bc4c5c5e97120cc946fa81e801d671e6bc33e6ba1f4b3e3f1a21e1fdc2056a57",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$2",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_63_plain",
+      "source_sha256": "fb86640be883c925df9e7f7bb57e33e0f8ae06e9f36546b18749b74d8a69db85",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$2",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_63_unusual",
+      "source_sha256": "d7d1745c503a15597ba86d379598985adebc12411f0887861e74a67f7333ff29",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$2",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_63_near_miss",
+      "source_sha256": "318af9b057a3f56f1e49fba15862783c8708cff0ad2706f1c246924a2b33a976",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$2",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_64_plain",
+      "source_sha256": "8f5f0d61cd1e95b1fd3b43c3e49502bf8841688e7e601f7b1b36acf37851d001",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandNewpage",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_64_unusual",
+      "source_sha256": "e59330be05c72a508bd8ee9446e22b4ea0561a118af219ed40ede01e751e2464",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandNewpage",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_64_near_miss",
+      "source_sha256": "6167ff9886b15b756d8e209b811d26f0dc6ccb92cc16753c5fbe4b682a02993a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandNewpage",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_65_plain",
+      "source_sha256": "31ae6e90cf378f6081a7bdf3dd6a1bc48f3150021d3b204b43eecabb8c75989a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandIgnoreNewpage",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_65_unusual",
+      "source_sha256": "7123c8093a84e263536e87dd12786121011cc765b6a53936a036621a11861e29",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandIgnoreNewpage",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_65_near_miss",
+      "source_sha256": "9d955f4aca7a6b07a2118ff5794b9d67a3665276b58a2c72ababfbf8a4bac7b4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandIgnoreNewpage",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_66_plain",
+      "source_sha256": "5ee8ce06cf9b9d5093d6fe70497af236d9bfe879bea60d3d45b8353579b0c7fc",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutoNewpage",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_66_unusual",
+      "source_sha256": "4275e84b36283ffd16e3efdbdcbe2feefefde93498a46818f74d3aa05b777a6e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutoNewpage",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_66_near_miss",
+      "source_sha256": "926f1dcda0a4107c30ed027c98deddac6c722823712ff49e1e43a0fce5337cb2",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutoNewpage",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_67_plain",
+      "source_sha256": "00fb7d874d50bcd42d9b3aa724862144332d795edb58071f1054f05539fd0fb1",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDivider",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_67_unusual",
+      "source_sha256": "955943eace5d98d4b748bd774064b970c9162307a820057354d364e605279bab",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDivider",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_67_near_miss",
+      "source_sha256": "b28915eeafefda5b696afcd1b703b0839be824d356e2bedd0ebf2c54b3bc65af",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDivider",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_68_plain",
+      "source_sha256": "897008e42b0ff1c6996351901c13814a17da2d7627cab017354325a6a8584bad",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandHSpace",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_68_unusual",
+      "source_sha256": "fa415a8c37d3256a7ee66acdc3132b6d924d7bfc15e2fa2446684a764223167a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandHSpace",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_68_near_miss",
+      "source_sha256": "0a15cab9529be921bbb56160a1b6a5bb5d5033af1c1782b07c6b7ccff244d9a0",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandHSpace",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_69_plain",
+      "source_sha256": "38dbc788fec02e0af61e27e6c469677350e5b0969cf0796bd9e8d8c646b92675",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceOverSeveral",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_69_unusual",
+      "source_sha256": "7082db5fccc1e99c2d7c76b82beee036e2b3dd9eca161d2430e1f294b4d23e8d",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceOverSeveral",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_69_near_miss",
+      "source_sha256": "fb9499f4edcc686ff04addde6ad70b66d5e3d6442cfda69c78bdd8ad163034dd",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceOverSeveral",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_70_plain",
+      "source_sha256": "157662aa59b82c2ba692021b9fac40f6b9067e33853b6ba2e473b63725ccc159",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceMultilinesOverSeveral",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_70_unusual",
+      "source_sha256": "5d07f28ace6af7994e3b5fbd59193f62d01b01131b161697813d74f58b88c5a8",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceMultilinesOverSeveral",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_70_near_miss",
+      "source_sha256": "7c0b861fca6df055678d7f4979484c028f339893d4d5feec02a672e5a2b23d78",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceMultilinesOverSeveral",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_71_plain",
+      "source_sha256": "8491bf2a8e68d26c640292b690c1bb6d8d04716bdfd8a5c70e92a87e2146ab36",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumber",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_71_unusual",
+      "source_sha256": "cdd6256f142f8714d19e63f0a594b9be0960aede38bb16bcaa4955c66dc77e56",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumber",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_71_near_miss",
+      "source_sha256": "49f2f4cae521ebdd380a40510efc51177c81ffa277629688024afc4d4b13800e",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumber",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_72_plain",
+      "source_sha256": "a24c1f40794f4abc9c287466436f1efe2475183f39a6d97cf5c29ddae5896942",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberStop",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_72_unusual",
+      "source_sha256": "22a48a92f6ba5b5a33e077982cf31cfa08874c91476ea5cda4440200ecaa2797",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberStop",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_72_near_miss",
+      "source_sha256": "4037a41213fc7c6110f77bc303116015b4286aac50ae466cb1501c90fdb45e5a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberStop",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_73_plain",
+      "source_sha256": "44ecc5be01b39b2998f331c8bf65fe2865fdb6c9167058613379cacb43d1de00",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_73_unusual",
+      "source_sha256": "ed2e0e0dc4a3934002baf80517e0aedcf7cffe9c239274c8fef6c3630e204ec2",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_73_near_miss",
+      "source_sha256": "9b42595ae87d206f0def79b0c5fd6a427499b63a2d51cdf743c0856b7ea1af55",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_74_plain",
+      "source_sha256": "88077b64402b42e31c97c3682b2b9accc50b138cd692b8e3c2e05afd2eb01eaf",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberIncrement",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_74_unusual",
+      "source_sha256": "dc83a46899defd6ebd98f16beb7b0c6425d091036266e22c4db1e93256dbb2c6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberIncrement",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_74_near_miss",
+      "source_sha256": "b4f7bd4d540b6bde1a6a523f7038fd7e8559990e2dc58cbc1396110950086fad",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberIncrement",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_75_plain",
+      "source_sha256": "fd60dc57992f73ae04545a0ba7a699b83f2b74a1a4a4f8722d1f7355ce476072",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutoactivate",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_75_unusual",
+      "source_sha256": "7d2b5ba33a39e12a3a79b479782c25be9e9028322a94643633d63c82944850ea",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutoactivate",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_75_near_miss",
+      "source_sha256": "76493d77d80eb8e8dde4591be3204f100557b7d9502f078440499613b2d55ee6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutoactivate",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_76_plain",
+      "source_sha256": "cce37910227ea9728bc66e9f83022ce128c520e139448309924050c400f7a8f5",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandFootbox",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_76_unusual",
+      "source_sha256": "8013f2b1d8d9f20528018cd94dce083dfb16fadf03ce1d05f55961df52a41f39",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandFootbox",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_76_near_miss",
+      "source_sha256": "95e7e2b8589ca3ff4b0621ff51f2993f3c36b69b62feed645312892c32f6c515",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandFootbox",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_77_plain",
+      "source_sha256": "c7b9ea34902d74217f813191330249de7df11401307e37d8335059d06cb4d5fc",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDelay",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_77_unusual",
+      "source_sha256": "f4d2887c033ba0d543e900e3057a7b7c80fe7824c1d40ded5c47d31837216785",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDelay",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_77_near_miss",
+      "source_sha256": "292775d30c3afa6c110c1f7817e3308fb0269425ee5854daa8a17b0be75e19ee",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandDelay",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_78_plain",
+      "source_sha256": "231c765cf2ccd505c084f9c02059477c7ab5e22063a8523f57bb6d93fb40272c",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandFootboxOld",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_78_unusual",
+      "source_sha256": "f825b11e008a767fd1a8e9357200f59af2a51af0cb61df5d39e7e8986c171e41",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandFootboxOld",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_78_near_miss",
+      "source_sha256": "efeda51610781b0d7bbfa20fc0c3e719325ca74988f3681bf9a826b6349331da",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandFootboxOld",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_79_plain",
+      "source_sha256": "7de70492dbac192d535bcc41a14d4f5c34641329100e7776a2b0542a2bc766ed",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandUrl",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_79_unusual",
+      "source_sha256": "3b7a9814e639460236b7b3ddbee5c368f88a631659c0682bf3ff303d3ca6fda4",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandUrl",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_79_near_miss",
+      "source_sha256": "623aa77d87d5de658e63f6d1611e3704981fd460a47d291a5b7f876990e50f09",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandUrl",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_reg_80_plain",
+      "source_sha256": "496c97805b886c0ea70fbb56d4f1ee1af79e097792aaafa3506bc34b53a338d6",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandLinkAnchor",
+        "canonical form",
+        "two-way sequence context"
+      ]
+    },
+    {
+      "name": "bd087_reg_80_unusual",
+      "source_sha256": "530588f238182c9b8e2df7531236f86178eb84862db0bc5f0cdce2873a352068",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandLinkAnchor",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ]
+    },
+    {
+      "name": "bd087_reg_80_near_miss",
+      "source_sha256": "00652f01e5c76c3b7459c506cc5388f8e5eea4d3620550b340c003fb1029734a",
+      "prior_overlap": [],
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandLinkAnchor",
+        "illegal prefix and suffix",
+        "valid sequence surrounding"
+      ]
+    },
+    {
+      "name": "bd087_body_group_unknown",
+      "source_sha256": "1b9e501a06db18563243e7dabdbdc65a2d4670a67862217bdbbb6513a7548391",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_group_command",
+      "source_sha256": "6270f5f70e52822a0eb5345bf0fd175ec3086ec579961ab5d2e685881c532ca3",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_alt_unknown",
+      "source_sha256": "5cee6e7bac763556fa9ccbf262ad6ee2f8d177ae5a09a067ec054837e91a810e",
+      "prior_overlap": [],
+      "axes": [
+        "alt",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_alt_command",
+      "source_sha256": "d4e5d391516a78adf2c0cccca98d5c89d33aa2472bdf5b65833beb0bd6ed5061",
+      "prior_overlap": [],
+      "axes": [
+        "alt",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_loop_unknown",
+      "source_sha256": "fe132dfa43e51ee3185b570e25ae4f13a8eb1ff7e5ba669a1e4bc8018f16c321",
+      "prior_overlap": [],
+      "axes": [
+        "loop",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_loop_command",
+      "source_sha256": "3c67b313916159b64ed7e11b66b5b995503e2feaef6014472c2d69324c83f451",
+      "prior_overlap": [],
+      "axes": [
+        "loop",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_box_unknown",
+      "source_sha256": "7f734d3687de41e7cacb2898a5db3e5e7356b263f26275214e3842c6fa292631",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_box_command",
+      "source_sha256": "be030ed1bfc3b25c0eafc0b181942dd20b679af8026ffd11ab96c208a0d3e142",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_ref_unknown",
+      "source_sha256": "412d85ec24dd7f464c3726b8ac9fb8eb424b6a1a2326ebbd1e5c7cf436d47f27",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_ref_command",
+      "source_sha256": "ac33cdf2f9b39528fc2152c3779875cbeba0df8a7c4d18f867fcc1fa80713b34",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_note_unknown",
+      "source_sha256": "295e73daaf19d1d82a66cd965fec43a3b2fcaea237e0bb6accef94b64f337a42",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_note_command",
+      "source_sha256": "c64ec977e874b0650303663bbc068c43929885f5bf821adea699f4b9beb7307c",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_legend_unknown",
+      "source_sha256": "447994cd1c0458ffd1de81d61dcf370eecfa769b5beb2dc8b9f1202840ceee2a",
+      "prior_overlap": [],
+      "axes": [
+        "legend",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_legend_command",
+      "source_sha256": "e6e5ee8f2d11f0c098d7d92f1aa82772179f93a75ae05eed424b86a0e48e31ec",
+      "prior_overlap": [],
+      "axes": [
+        "legend",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_title_unknown",
+      "source_sha256": "cbb6734e2a4edd7d26597d0651899cf0fe97aa9e2387cf8c118a87545490147e",
+      "prior_overlap": [],
+      "axes": [
+        "title",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_title_command",
+      "source_sha256": "960ea01169fae126e85e269b632f7f6af6f8bc19e0b528bc5f41a108615e5852",
+      "prior_overlap": [],
+      "axes": [
+        "title",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_header_unknown",
+      "source_sha256": "3ae255b492745b910633e81ab815c1dc052d09caf0f2314964221c35ab6ca69b",
+      "prior_overlap": [],
+      "axes": [
+        "header",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_header_command",
+      "source_sha256": "e40baa133b46818d395da4e82c6c8c8441eef18a57564b4179d14c4dc710c519",
+      "prior_overlap": [],
+      "axes": [
+        "header",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_footer_unknown",
+      "source_sha256": "0580e581021f8c99fb09e7a10ffd6c24c4bf82c3f4de7656411d53705463b6a7",
+      "prior_overlap": [],
+      "axes": [
+        "footer",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_body_footer_command",
+      "source_sha256": "e1b6478205aad825983c3256ea1baa86d3c36a332e57b849913534025c44cc22",
+      "prior_overlap": [],
+      "axes": [
+        "footer",
+        "body command versus text"
+      ]
+    },
+    {
+      "name": "bd087_macro_valid",
+      "source_sha256": "dbb2b685f30feae2397b1df61fd33277bc36944b0d2e90a5abb096fad936323b",
+      "prior_overlap": [],
+      "axes": [
+        "macro_valid",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_macro_invalid",
+      "source_sha256": "38bc5da3faf1b1859cc2cbc7b8824339dc487ce76cf00ca96f670dc5b9904e71",
+      "prior_overlap": [],
+      "axes": [
+        "macro_invalid",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_comment_blank",
+      "source_sha256": "923f301cd70a813effafd6615c3d576a1a6a9b47585353678719f78fb98e1157",
+      "prior_overlap": [],
+      "axes": [
+        "comment_blank",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_skinparam_nested",
+      "source_sha256": "6a257bcefe4b28ea832adb54efa28612d4d76955929049d6e182157c9243e09b",
+      "prior_overlap": [],
+      "axes": [
+        "skinparam_nested",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_skinparam_invalid",
+      "source_sha256": "1fe697855ed132a506c14b8bf5334301097d57c635bd28bcbc88bbd625f3af73",
+      "prior_overlap": [],
+      "axes": [
+        "skinparam_invalid",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_style_body",
+      "source_sha256": "532c7517fc77b767985a21283b6fa86896e718f3e4d5725f79ab294530f677a7",
+      "prior_overlap": [],
+      "axes": [
+        "style_body",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_legend_spaced_end",
+      "source_sha256": "f56d5174e857cd720aaa7d7ac3e9d78467f0a1f6df67f615a63e493007327f1e",
+      "prior_overlap": [],
+      "axes": [
+        "legend_spaced_end",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_ref_bare_end",
+      "source_sha256": "9cf2609e88c5ac3f7dbdef7cef370acc1feac16c4c1ede3463831a917ca50d3b",
+      "prior_overlap": [],
+      "axes": [
+        "ref_bare_end",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_note_mixed_close",
+      "source_sha256": "6ac6bebf1eac7efb98944e63724c9f61b16be954ea547d0fbcc4ca010b9d30ee",
+      "prior_overlap": [],
+      "axes": [
+        "note_mixed_close",
+        "block and preprocessing ownership"
+      ]
+    },
+    {
+      "name": "bd087_colour_participant_NotAColourAtAll",
+      "source_sha256": "772c95f283ffe4b346632753a7d2e8a75bfde27b22ae1a5be2e29baa75e8697a",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_participant_automatic",
+      "source_sha256": "007496bdf9f3efdd37364a62eb90c156b74d1e691b46228f7ce407b9b188e6f5",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_participant_background",
+      "source_sha256": "1ac6b84dd86ae58767852fed643a5b33200d86a02ca9491db76000ae04feadd9",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_participant_transparent",
+      "source_sha256": "5d049d4cadae891fb8857c3f65f5936de21b46a00ccca7dfd14b34f9c0859ad6",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_participant_aBc",
+      "source_sha256": "cbe4fe2e7418c71a01ec554611e18110d364b484abd1846bc5834bc3cffe23ad",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_participant_11223344",
+      "source_sha256": "859a7d98d818a3d968f7f226231b23dd520484575d77c13868e757fee5ce3df6",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_arrow_NotAColourAtAll",
+      "source_sha256": "57cc67f996ecc4433448bc2c0bd42244c8bb12758e8a6910066c61187ea7fe17",
+      "prior_overlap": [],
+      "axes": [
+        "arrow",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_arrow_automatic",
+      "source_sha256": "b19b18b93880fb638dabc0c0609219c6a896dab9f91bdc21e780eed763be8813",
+      "prior_overlap": [],
+      "axes": [
+        "arrow",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_arrow_background",
+      "source_sha256": "65c1b37268a7fc98d28b2b925907daf40f5f80cd89bab0326533051c550854f1",
+      "prior_overlap": [],
+      "axes": [
+        "arrow",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_arrow_transparent",
+      "source_sha256": "d315b2076f858485932e9a8a02ff43c932e729e553fcc1751d66632654dc4c5f",
+      "prior_overlap": [],
+      "axes": [
+        "arrow",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_arrow_aBc",
+      "source_sha256": "74d85506bded81ff222c177ceeca3726637d6038992c23abdf33d6bb076f2be2",
+      "prior_overlap": [],
+      "axes": [
+        "arrow",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_arrow_11223344",
+      "source_sha256": "4b96f026ee0283cbff887bcb1b6cced2e414e48d2f97f7af0e8090fd8f64273e",
+      "prior_overlap": [],
+      "axes": [
+        "arrow",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_left_NotAColourAtAll",
+      "source_sha256": "0592bc884e4463a5cc6ad7182ac4921ee9f1d12c2d655190abeb2633a5566f56",
+      "prior_overlap": [],
+      "axes": [
+        "exo_left",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_left_automatic",
+      "source_sha256": "ee131c74aa865b08b31e392106c14c89edc27745fb7d2491a3632dd705436d82",
+      "prior_overlap": [],
+      "axes": [
+        "exo_left",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_left_background",
+      "source_sha256": "7d326a0a0d45c1917de479a9ca51f8cadc0a664fb980e5d771e8f1c4908f6b6b",
+      "prior_overlap": [],
+      "axes": [
+        "exo_left",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_left_transparent",
+      "source_sha256": "8a6d894c0febc4438add31f6685a4537eadeafa875a33d231d4c6461b78b82f6",
+      "prior_overlap": [],
+      "axes": [
+        "exo_left",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_left_aBc",
+      "source_sha256": "c2ce02832572ae29df7f416db25fd7fac69d726da5d2b4826744a5a2b157eb02",
+      "prior_overlap": [],
+      "axes": [
+        "exo_left",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_left_11223344",
+      "source_sha256": "ef22337bb9ad782d82739780ebfaa82e268692884cfb5dcd1655eebaa4944e0b",
+      "prior_overlap": [],
+      "axes": [
+        "exo_left",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_right_NotAColourAtAll",
+      "source_sha256": "02a0e851ef64abe4b81cc9f96c3293e1ca3e1418303da6ff1994a59ba8ede77e",
+      "prior_overlap": [],
+      "axes": [
+        "exo_right",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_right_automatic",
+      "source_sha256": "ac09e3440ac9d344592caaf71111fc4692891e9e220a319405dd472711cb50db",
+      "prior_overlap": [],
+      "axes": [
+        "exo_right",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_right_background",
+      "source_sha256": "19506c070bea9f2ffee5830bce89ab4f27ecf008b744c95f9dcbc15a6b942eb9",
+      "prior_overlap": [],
+      "axes": [
+        "exo_right",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_right_transparent",
+      "source_sha256": "918efb7ce952e634c8bdc82da092600c401d8b8c7d582652d694ee8968307d7a",
+      "prior_overlap": [],
+      "axes": [
+        "exo_right",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_right_aBc",
+      "source_sha256": "b2337f00c9b515a8f12d9966209e9b5fb6968d2fa6242afe95fd760fccda8491",
+      "prior_overlap": [],
+      "axes": [
+        "exo_right",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_exo_right_11223344",
+      "source_sha256": "82a7c3c6f218f3da8371d8d00fba10abbf8c5f66cf96ba1194944ce9490790f3",
+      "prior_overlap": [],
+      "axes": [
+        "exo_right",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_NotAColourAtAll",
+      "source_sha256": "075ff227cb522f30c73dfc0a5d4109b47e9d37f594504c23218abe359300f5c1",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_automatic",
+      "source_sha256": "466742425da20ad8256bd2920ff7ae9da0ad232254fe8c50a2b3e96575a3c134",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_background",
+      "source_sha256": "92a462b8f89e0ead5783ff47f813c010e76c91c3544f59b10f8398adcd0e6218",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_transparent",
+      "source_sha256": "eb4f0e729c5f5e65f599456b78998fc99691a3272f8991dd4422046d1c1cef7b",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_aBc",
+      "source_sha256": "b73035995e418ef1c0f6daf10e019754dda9cc15625214ac9e3cb3bf2c62531a",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_11223344",
+      "source_sha256": "8e73836101d63d5ffda37c397ee2463ea332ce9a5e8ab27e9d78b9f5ffa28667",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_rnote_NotAColourAtAll",
+      "source_sha256": "651a7abe0feae293887ec447206a0ba8d9009ac52626ffcc80c0ab6078b219fc",
+      "prior_overlap": [],
+      "axes": [
+        "rnote",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_rnote_automatic",
+      "source_sha256": "7bd1451cebbd33ad11f1b7e52c64f16d1fff6e93775d1ddad054e2b0f9442598",
+      "prior_overlap": [],
+      "axes": [
+        "rnote",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_rnote_background",
+      "source_sha256": "ab424a845553eca88d957b5335dacc05df3bc71d5e6c91b0456c11b7232941da",
+      "prior_overlap": [],
+      "axes": [
+        "rnote",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_rnote_transparent",
+      "source_sha256": "2f5d7734b134387ae5baace130bb7c7d718e67a6d1674f6dda59636166d95f94",
+      "prior_overlap": [],
+      "axes": [
+        "rnote",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_rnote_aBc",
+      "source_sha256": "90f1d22bdf94fb821293d2f1fdfbe599a3fd9daf10dfa8728a2724b446d2cf9b",
+      "prior_overlap": [],
+      "axes": [
+        "rnote",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_rnote_11223344",
+      "source_sha256": "d41cb2c0e6b4445ba296c109c8ce82a2da4aeba04b590bc1c37c490e96a3695b",
+      "prior_overlap": [],
+      "axes": [
+        "rnote",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_multi_NotAColourAtAll",
+      "source_sha256": "d9286e8056ca45e6b5bea4f3afed81230d414d7b031f962db758714336642d99",
+      "prior_overlap": [],
+      "axes": [
+        "note_multi",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_multi_automatic",
+      "source_sha256": "d868b8e9e53f32941bd33a55d02c7cd990a5c1ac540f4298248097dfe29f8291",
+      "prior_overlap": [],
+      "axes": [
+        "note_multi",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_multi_background",
+      "source_sha256": "6ae98ca65cdc0ebac1e1f2520cb4a6010cd9b5330b54e6137cc47b75627f9298",
+      "prior_overlap": [],
+      "axes": [
+        "note_multi",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_multi_transparent",
+      "source_sha256": "c9572f378f5ae18362326b0883fe9c424c2e5e6a3674668cf2a838bce5bf7350",
+      "prior_overlap": [],
+      "axes": [
+        "note_multi",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_multi_aBc",
+      "source_sha256": "b72c56599e45b7d25530ed56c3134ea4de136ea938f7139b6fa7a42f787c5f8a",
+      "prior_overlap": [],
+      "axes": [
+        "note_multi",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_note_multi_11223344",
+      "source_sha256": "00b0e5c8fe5b0a49210d2b1fe203a40eef359bf1ce1c514c6d3689ea073c0a95",
+      "prior_overlap": [],
+      "axes": [
+        "note_multi",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_NotAColourAtAll",
+      "source_sha256": "6d120ff6c30841ed6a4228d640274d495f660cdea48439327ed469fcc498e788",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_automatic",
+      "source_sha256": "20ac90e7a516b50e31132d3ce6b55ab08d0c33ff49e38116b98ea87f82e73e02",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_background",
+      "source_sha256": "70f2fb2415042e75c5ac55d1a22c9c5a7fe9be412d5fa09cf7b08c6172d11b9a",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_transparent",
+      "source_sha256": "b693292b5dccabe3b457ac1ef16c7cbdca45af92ba363e45d91f7d9e4952b571",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_aBc",
+      "source_sha256": "f0d7081492bd9d0a00df535a38f5a9e3ae1ae815d3ab3a81797d21e7d4eb31f5",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_11223344",
+      "source_sha256": "1c838707a63ee25eb8e1f4b2e5eaf65b35a07a2f70da95b93204b1be7cc06982",
+      "prior_overlap": [],
+      "axes": [
+        "group",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_secondary_NotAColourAtAll",
+      "source_sha256": "f2c5cc49834d19e9c00413b14ed3f4469f640b5104680ef060f82a509925e193",
+      "prior_overlap": [],
+      "axes": [
+        "group_secondary",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_secondary_automatic",
+      "source_sha256": "3b36788b5d9c9d6073890cfe4c38e488fead38285d51a1b09310fa5bd658e22c",
+      "prior_overlap": [],
+      "axes": [
+        "group_secondary",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_secondary_background",
+      "source_sha256": "259b7839346873e9c1f468630e0998ae2700095c1a4ccef3ae9c75247b918e94",
+      "prior_overlap": [],
+      "axes": [
+        "group_secondary",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_secondary_transparent",
+      "source_sha256": "37d7d92e08d01f2e53989b20c346f9c6da9557fb2d7a4f47ae0a940312ca0a72",
+      "prior_overlap": [],
+      "axes": [
+        "group_secondary",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_secondary_aBc",
+      "source_sha256": "c19f25f9d9314020b6b760995b73c58ea0e393154e028a817102e8c86a32bd91",
+      "prior_overlap": [],
+      "axes": [
+        "group_secondary",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_group_secondary_11223344",
+      "source_sha256": "94b67b87b321c1919a8841bff541166f9c8d40f7a30f0c7929cf2d2d86fe25ce",
+      "prior_overlap": [],
+      "axes": [
+        "group_secondary",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_box_NotAColourAtAll",
+      "source_sha256": "5c7ea27dbe39e5d31d6ffebc3fbb4d05b7c3a992ba797bf62ee3474603bdffba",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_box_automatic",
+      "source_sha256": "f220f5f7bf16a3535023af630ceb97b52389ddf9da5d76891e6df9ea26daa88a",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_box_background",
+      "source_sha256": "0595c70e58e749f0793adb68aa3490ab7fe673dd7f3fa356b76cc7338bf4ff5d",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_box_transparent",
+      "source_sha256": "66857e129ee93de2800c82f0e230000269fa75da09758755c714d5b268e13a08",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_box_aBc",
+      "source_sha256": "94f3d732d7fe532520ae5cebe0bf30aad8ccf0412e234e7c2cd176734e9784a0",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_box_11223344",
+      "source_sha256": "42da59d7ce59bf8b9d5cb52d5d578a46a24210fbc50e83745d5bc74ed824f091",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_divider_NotAColourAtAll",
+      "source_sha256": "545918b5d1ab1140de7aafa59cf66bb57d2bc14166c0bb331d5b5e0e415e0924",
+      "prior_overlap": [],
+      "axes": [
+        "divider",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_divider_automatic",
+      "source_sha256": "7b0e98c8702a63194558513be16254dca22fd790cc99bdb17e735bd48f6fb378",
+      "prior_overlap": [],
+      "axes": [
+        "divider",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_divider_background",
+      "source_sha256": "76ae37b687d17084b75d0f5ba85324268c9447c4c36108436fe2f1853e7c9b2a",
+      "prior_overlap": [],
+      "axes": [
+        "divider",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_divider_transparent",
+      "source_sha256": "701ba561117fd7be012679b5911e7b083f6f788ae89fefed5d3d446ffc816263",
+      "prior_overlap": [],
+      "axes": [
+        "divider",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_divider_aBc",
+      "source_sha256": "da69edb0f4bc7fe95e5a33d4b681c53c703e8761befc37820d663491d7e06820",
+      "prior_overlap": [],
+      "axes": [
+        "divider",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_divider_11223344",
+      "source_sha256": "029deff97ab2092512266543e4b1396efa7a794d58b85cd08f9829ba7b7aac53",
+      "prior_overlap": [],
+      "axes": [
+        "divider",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_NotAColourAtAll",
+      "source_sha256": "28ab7107fcccdd10968c28b3282a7681aca4afba0ce4d8625dd64f27ee122b99",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_automatic",
+      "source_sha256": "4b0051abbc936f1f6a2a9342908fd79fae9a7d6fca71afe5079d43037e4f746c",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_background",
+      "source_sha256": "0ac2ac47483461a6844e9bf4368177fd4a90c29c3246e8227765d0c1b51e9e1f",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_transparent",
+      "source_sha256": "6b468675fe84c633ad484dcc5fed4518af6e1ec03ecc7ba05515e2cb31a0153a",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_aBc",
+      "source_sha256": "587d56269503c7cd9a27918a2f8bf8c820ad858e1f25adc96776eacc010f57c1",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_11223344",
+      "source_sha256": "bbf90e8a5d915f076e56538a0c4bbc46ae6285bd9c42b6c46b85c7463b076295",
+      "prior_overlap": [],
+      "axes": [
+        "ref",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_multi_NotAColourAtAll",
+      "source_sha256": "8a54fc7da670416836c215a21ca659bbf03e3c52cf4951d093d3f9bee9be8781",
+      "prior_overlap": [],
+      "axes": [
+        "ref_multi",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_multi_automatic",
+      "source_sha256": "be5891e47709c56dcf442d3fb87e97559cfc1b507d183378a1bf615fc8c3b2bb",
+      "prior_overlap": [],
+      "axes": [
+        "ref_multi",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_multi_background",
+      "source_sha256": "6b0e12b8a2727b3658eade821f4a9827829f95bdc980998b7f2e8192cb838e8b",
+      "prior_overlap": [],
+      "axes": [
+        "ref_multi",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_multi_transparent",
+      "source_sha256": "9c3539cb7b3fdc02718bcc4b40d69aa6b3b615337002ed7cc0fc9a1c34696cfd",
+      "prior_overlap": [],
+      "axes": [
+        "ref_multi",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_multi_aBc",
+      "source_sha256": "33ad92ebdf23b2777c412e0f9ab591900bb77266d6c98bdfeffacc368b177d08",
+      "prior_overlap": [],
+      "axes": [
+        "ref_multi",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_multi_11223344",
+      "source_sha256": "c3eeb2424d1455ba1222d8e5f7ae304c1df8ed1c94be45f70a49fa418ffd4869",
+      "prior_overlap": [],
+      "axes": [
+        "ref_multi",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_ignored_back_NotAColourAtAll",
+      "source_sha256": "2ce21d1a53564f86c2ef3f319ff04c2d7d42bd29f6b313d90c555c7054ac6449",
+      "prior_overlap": [],
+      "axes": [
+        "ref_ignored_back",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_ignored_back_automatic",
+      "source_sha256": "18f0cd576da4dacf9b217297ce24e37255f16e11bf7d884f8a9b08c45a89fd32",
+      "prior_overlap": [],
+      "axes": [
+        "ref_ignored_back",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_ignored_back_background",
+      "source_sha256": "0e6b23d2d3aa8e7a12e5f098247e7fb77bc766157eb5809ac8664a69a246a278",
+      "prior_overlap": [],
+      "axes": [
+        "ref_ignored_back",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_ignored_back_transparent",
+      "source_sha256": "7fbfa10aeb3d8f23d70baa3d155b9ddbca778b62a4104190c4d50c1db9acf1f0",
+      "prior_overlap": [],
+      "axes": [
+        "ref_ignored_back",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_ignored_back_aBc",
+      "source_sha256": "55759a98d63cdacb1479009d232eeb090fb067ee9f17e26c29bf47e3508b3b43",
+      "prior_overlap": [],
+      "axes": [
+        "ref_ignored_back",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_ref_ignored_back_11223344",
+      "source_sha256": "f169792dc0af088a6c33513b48889a1981e03ae729ae58c2c37014872226b952",
+      "prior_overlap": [],
+      "axes": [
+        "ref_ignored_back",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_NotAColourAtAll",
+      "source_sha256": "f024acf676eb7fc95229246a02502d4debe631ee41d39725024822c59db18e33",
+      "prior_overlap": [],
+      "axes": [
+        "activation",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_automatic",
+      "source_sha256": "51478f6c3a236c9e3d4fe0d3985d6918382416fb573d990721d560dd64d507c5",
+      "prior_overlap": [],
+      "axes": [
+        "activation",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_background",
+      "source_sha256": "b42a5bc63df620597c8fdbff684821159bc39c03d18e99eebd3b34207b7c844b",
+      "prior_overlap": [],
+      "axes": [
+        "activation",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_transparent",
+      "source_sha256": "998fb00392d1867ed193099cf3b88fca1970eabece727c8dbb2a1be6e45001c4",
+      "prior_overlap": [],
+      "axes": [
+        "activation",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_aBc",
+      "source_sha256": "132a8467aab8a37f9f383db81173febab1d713bb81eee1bf9aa19dfca53558b1",
+      "prior_overlap": [],
+      "axes": [
+        "activation",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_11223344",
+      "source_sha256": "263f999dc818a95b2820f40b94171d0d317c6eda7f9bb5956c77b6cccf65cc7e",
+      "prior_overlap": [],
+      "axes": [
+        "activation",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_second_NotAColourAtAll",
+      "source_sha256": "d7ec76752ef1c1f76271027ed3a4fcb0f6dda3dfebdcbde8a245a73d150d3ae6",
+      "prior_overlap": [],
+      "axes": [
+        "activation_second",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_second_automatic",
+      "source_sha256": "7388f6b782737b5450bd09fde5e6c231708d41f5f339380c6c37f4f0980b7ada",
+      "prior_overlap": [],
+      "axes": [
+        "activation_second",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_second_background",
+      "source_sha256": "37fc1bd01b4d218468cba976a77259bb3c0b28242b9622cc004840bc6795f8ae",
+      "prior_overlap": [],
+      "axes": [
+        "activation_second",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_second_transparent",
+      "source_sha256": "34f9021c10f1a93c19e17848a49780b4228be429c9f62f3d50a60e1ec5343689",
+      "prior_overlap": [],
+      "axes": [
+        "activation_second",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_second_aBc",
+      "source_sha256": "6216235ff65c6f6f5d1861ef8c29773a5aa62e3a144bedc8e2518e10f72a7297",
+      "prior_overlap": [],
+      "axes": [
+        "activation_second",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_second_11223344",
+      "source_sha256": "7a75ea064577994add8dc8c7e054f15d9dac15506618d680f44c4be3d3c7e301",
+      "prior_overlap": [],
+      "axes": [
+        "activation_second",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_short_NotAColourAtAll",
+      "source_sha256": "96c2bb0c51f1435d7beb5d73244d2a192509a7a99a695cffc47d2d366810eff2",
+      "prior_overlap": [],
+      "axes": [
+        "activation_short",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_short_automatic",
+      "source_sha256": "630d774a687e4a269ceec6230052b3b35e13dc9e3c19b3811f4adcee17d805b6",
+      "prior_overlap": [],
+      "axes": [
+        "activation_short",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_short_background",
+      "source_sha256": "ce84f397e7ee2400bcdecea1f87d0e00e0cf917f350c97efaec5065e22bb02fa",
+      "prior_overlap": [],
+      "axes": [
+        "activation_short",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_short_transparent",
+      "source_sha256": "868e24067d086771a823511cc0683a3cfde8f7be54a380b7b0695425303e458c",
+      "prior_overlap": [],
+      "axes": [
+        "activation_short",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_short_aBc",
+      "source_sha256": "b8e06cc17172d1042adcc9af2655ddfcce65f5a607bae49476f3b241e7d77dc3",
+      "prior_overlap": [],
+      "axes": [
+        "activation_short",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_activation_short_11223344",
+      "source_sha256": "c72b5ae19a331b2e34689586a321b004f4c8177db998306a72a6774b019f6f0c",
+      "prior_overlap": [],
+      "axes": [
+        "activation_short",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_return_NotAColourAtAll",
+      "source_sha256": "ff667a64b08d4d954d1ed100122b2072ca2e1d389b7c0bc0d3b1562a41267f4e",
+      "prior_overlap": [],
+      "axes": [
+        "return",
+        "color NotAColourAtAll",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_return_automatic",
+      "source_sha256": "427acd87ce2b49716c08e779b35466b4efc62023d20770ee4cb6a0c72070e493",
+      "prior_overlap": [],
+      "axes": [
+        "return",
+        "color automatic",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_return_background",
+      "source_sha256": "144b67f878832996ef2cfe2840c27149fbe66c828fffe02880662d7a5c6d4c15",
+      "prior_overlap": [],
+      "axes": [
+        "return",
+        "color background",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_return_transparent",
+      "source_sha256": "b66296c8affb91068265d1dbaecc62ee8fc7f4c4c3f52f5240aff7bcc942aea1",
+      "prior_overlap": [],
+      "axes": [
+        "return",
+        "color transparent",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_return_aBc",
+      "source_sha256": "22ee6bbd74c5c4e7d40232ef9f36113ce58c03a0890ab109b80db51a2ad2b814",
+      "prior_overlap": [],
+      "axes": [
+        "return",
+        "color aBc",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_colour_return_11223344",
+      "source_sha256": "6bb421964c4e6085f7ae6a779cb23fe12284f0778487b67cd8f1a302bc3e5ca4",
+      "prior_overlap": [],
+      "axes": [
+        "return",
+        "color 11223344",
+        "post-selection execution"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_380",
+      "source_sha256": "a7611a6e6d31736dfab184e45617269d55cd524bdade9d46ce9b54c70b63782f",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient Wheat/Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_381",
+      "source_sha256": "7fab16443efbd1f3580cee02535da0c09f7802dc8b7f066f62573d73b4f0d231",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient Wheat/Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_382",
+      "source_sha256": "8fd9368ed573adf2923ad940446079a83e256e1c43acbacbd3d1799a518626c8",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient Wheat/Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_383",
+      "source_sha256": "1ba3ad38b122966549394e5e62f834c8b7ff2e6fb85b520e208b63bc5849f131",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient Wheat-NotAColourAtAll"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_384",
+      "source_sha256": "04e31fa1e96fd9a55960bf8f0387c4e1ddc8904d66df42551c41330e6c3bad19",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient Wheat-NotAColourAtAll"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_385",
+      "source_sha256": "1863c22eb42ab9ee8058690c64fd312ea9ac92561f9179ec643a4461362f0744",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient Wheat-NotAColourAtAll"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_386",
+      "source_sha256": "4139031b04b17cb3c978358484509d6415a0efc9cee64da607da17a2143f2082",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient transparent|Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_387",
+      "source_sha256": "5bcf3e6bcae9ebcadbff93aa3eacd411e278d3fdd1f10779fda002f1b98f707a",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient transparent|Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_388",
+      "source_sha256": "e5e3f9ef9d3bd7f70ad05b41ba10398c70190c1293e763e3f332b1b9e32e291b",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient transparent|Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_389",
+      "source_sha256": "ab0e930c6a71e1c328ffb5380418068f1857b425d9007c56b007194f21e9850e",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient Olive\\automatic"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_390",
+      "source_sha256": "8e0be3e9d09c0cf667389711b57c9451be6307f4d45fcf4f2b28d1c3dbfc6558",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient Olive\\automatic"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_391",
+      "source_sha256": "2b435b5d8c81d6132d40762163904a05522ba0ebfd68f92fdb58a27e005718b5",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient Olive\\automatic"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_392",
+      "source_sha256": "ac0a675bc8c80e29d2ba58af3982768bf1abb5b631fe24f7cccc6aaa2d30e7f9",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient back:Wheat;line:Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_393",
+      "source_sha256": "09778a2602235aaed68f96695c69f7b51f071ad9c6c99114e9456a1b3690d572",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient back:Wheat;line:Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_394",
+      "source_sha256": "f769a5a81559e36031e0eb72fb057d094b7b91636dd6aeca139948f4e3216fd3",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient back:Wheat;line:Olive"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_395",
+      "source_sha256": "dd5ea81c46335863e3f243f774665fc2f1b127b271a140cdfe4562895693ac9e",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient back:NotAColourAtAll;line.dashed"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_396",
+      "source_sha256": "7035da264d5e5e1391b4d09ab44708ab17f0f537511b7ed9e87745de6cf71b72",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient back:NotAColourAtAll;line.dashed"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_397",
+      "source_sha256": "634e309ff893275a937511cff18f9c23ee1193810ed07c2023dfd019f109387e",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient back:NotAColourAtAll;line.dashed"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_398",
+      "source_sha256": "222050c236280ddd7eeb0a0b51813c56b349636b7260dc3dbac902f8bbeceeb1",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient line.dotted"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_399",
+      "source_sha256": "e592ec1dbd125854e7d5add0578ba76bd1070dfdae0a909130597e9b23f6c248",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient line.dotted"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_400",
+      "source_sha256": "e7a04edbed742ca1b487df7bb462396be284c1b7a606e38ab04ad1783bdb7836",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient line.dotted"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_401",
+      "source_sha256": "603b3de191a8ebb580bc5efd8f74986912e70516c140dacfc467b6b2b98dc4f7",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient shadowing:true"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_402",
+      "source_sha256": "413978a127e6e3d6416a5016d7354ca4b8f72c93f1e91754a8eaef555e43957d",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient shadowing:true"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_403",
+      "source_sha256": "3da2789760545c5cd05f352a6a4f72464921a2b659e32ab0ab4035fa0579d9e3",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient shadowing:true"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_404",
+      "source_sha256": "f6bcc94af673e80381cd7e93a732919340e7ce8b1a17cf294b201346b8567b3c",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient shadowing:NotAColourAtAll"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_405",
+      "source_sha256": "0d95d3fc8b2313f01de1a1ea3017e1c94730f0abd570ca83299f555970be8161",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient shadowing:NotAColourAtAll"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_406",
+      "source_sha256": "a7204ac50926958bb6d13837b8093b37af484202a5b1cb58fee0f8b47cadd03e",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient shadowing:NotAColourAtAll"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_407",
+      "source_sha256": "84a17552855a39f5dffa58434e0f3463fe938a16369f205bc15224b3f4d65bad",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient text:application"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_408",
+      "source_sha256": "65b8a2fb539f4619f25af3db8c7f55b5c6afdf2141b58c9089bbaac7d265c91e",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient text:application"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_409",
+      "source_sha256": "4ece173d8298d0e92028ec961c414adc71c3e91020c2aecb76935045f2c7d036",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient text:application"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_410",
+      "source_sha256": "35cf5e24bd7fdd7151443b0cf84a3aba11acbf4d528aecbc232758fcc2e0f5ee",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient Wheat/abc"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_411",
+      "source_sha256": "3f46444eb64a4a4fb40ddb3da2100adff1a4462385611cb6463fa21e410659d8",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient Wheat/abc"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_412",
+      "source_sha256": "9b5fbb423093f62f6c5b2b7c06a549615faf93f7c7f9791a52d8412d4b204630",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient Wheat/abc"
+      ]
+    },
+    {
+      "name": "bd087_gradient_participant_413",
+      "source_sha256": "e02e64a705230c1b6671de55f5b65ce630d9f03de67c55a0add50d8377fb1e58",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "composite or gradient abc|11223344"
+      ]
+    },
+    {
+      "name": "bd087_gradient_note_414",
+      "source_sha256": "58d1a6765449bfe5b127a06246fff4b3cdafac826a6ecc9ca92d77d7fee8d3bf",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "composite or gradient abc|11223344"
+      ]
+    },
+    {
+      "name": "bd087_gradient_box_415",
+      "source_sha256": "c2bb35b8c90b6300d58cb72fc3fe030854290562a233e46e927367281050962c",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "composite or gradient abc|11223344"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_zero_legacy",
+      "source_sha256": "38e4af78ec5807564291c356c3288bbab56a7e902b620c7e83acf83ba8507d8e",
+      "prior_overlap": [],
+      "axes": [
+        "zero",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_zero_teoz",
+      "source_sha256": "fafaa8bc1e9d835fb54b589160969012c3c3664b03365e26035b1ef61040214f",
+      "prior_overlap": [],
+      "axes": [
+        "zero",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_zero_legacy",
+      "source_sha256": "c2b16f9ef0e8cda83f99733cd2742fd909cd45a967a1086ad731b6459fc5673d",
+      "prior_overlap": [],
+      "axes": [
+        "zero",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_zero_teoz",
+      "source_sha256": "ea963a0eeae5fc93ad4f77272027cd3bcfc0bcb74fbe04541856712b742c031f",
+      "prior_overlap": [],
+      "axes": [
+        "zero",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_sp_legacy",
+      "source_sha256": "41af1e0c955d8c536c6ce48d80d8ba086dae7ad2646682ec5d28dd4c67981cd2",
+      "prior_overlap": [],
+      "axes": [
+        "sp",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_sp_teoz",
+      "source_sha256": "f2ac86737fa82f6bc651de1d767476fa5821924ab61ae8145c2e0bf1ddd00084",
+      "prior_overlap": [],
+      "axes": [
+        "sp",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_sp_legacy",
+      "source_sha256": "136e5e668023888e31da7e131f304d9874c6e44460a458cf42a985eaceb40e97",
+      "prior_overlap": [],
+      "axes": [
+        "sp",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_sp_teoz",
+      "source_sha256": "b45f15ffa58824cdb62a5532a719d9a8618eebc076260f2bd7b520c1de315603",
+      "prior_overlap": [],
+      "axes": [
+        "sp",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_tab_legacy",
+      "source_sha256": "6b63481da8ad2703574645a99a75f7ef3046dd7feb49643fce5cf4e23257ea53",
+      "prior_overlap": [],
+      "axes": [
+        "tab",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_tab_teoz",
+      "source_sha256": "1d55f32cc91c044ee90ec409e839996afbc9fca83dca0e2f22c38a9862791512",
+      "prior_overlap": [],
+      "axes": [
+        "tab",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_tab_legacy",
+      "source_sha256": "8019fa08bb82ec3a978291c4724cb2e782aaf47bcf9bd16e5bae48893b6bf483",
+      "prior_overlap": [],
+      "axes": [
+        "tab",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_tab_teoz",
+      "source_sha256": "f96b102ecfb6e1da7b9ca89229dcabcb4f4e0a567b702698fce14ab1814bef4a",
+      "prior_overlap": [],
+      "axes": [
+        "tab",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_vt_legacy",
+      "source_sha256": "f67bd58860a9c1ccf8897cc7bc1cbe076c0ab77e7df1be036f8a0688afcef732",
+      "prior_overlap": [],
+      "axes": [
+        "vt",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_vt_teoz",
+      "source_sha256": "b44fd048d3e764ba7e8c930a0aaa2b1b0d84b1e3f53fa0f98589bc08b8662dce",
+      "prior_overlap": [],
+      "axes": [
+        "vt",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_vt_legacy",
+      "source_sha256": "49d9fdffa691f9078a82b4313a9375d2c24168878136da75ab73db2fdb7eb0a9",
+      "prior_overlap": [],
+      "axes": [
+        "vt",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_vt_teoz",
+      "source_sha256": "260498cce4730badf3aa5ffc4159427ed7dee9575c354a8ae70e6f478a1d6cc4",
+      "prior_overlap": [],
+      "axes": [
+        "vt",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_ff_legacy",
+      "source_sha256": "55a4ddbe0fa4dd0a7151b2994239d12fb4c6a623e091ee8d9867bb00414f0ba3",
+      "prior_overlap": [],
+      "axes": [
+        "ff",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_ff_teoz",
+      "source_sha256": "01da2a78e8e2a90f5d336d91bdf107f16140b6e0bf7ff8695e9c6bc18907bff7",
+      "prior_overlap": [],
+      "axes": [
+        "ff",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_ff_legacy",
+      "source_sha256": "cad4c28c3c1ae3aa9254a408e77e96d86eb9e3c208b321dbea39017896ca2151",
+      "prior_overlap": [],
+      "axes": [
+        "ff",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_ff_teoz",
+      "source_sha256": "d590b3d0fc43ec83bf74c3e4094c9f7a939cf473c7d973d6c8d9c9c455dc39e6",
+      "prior_overlap": [],
+      "axes": [
+        "ff",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_cr_legacy",
+      "source_sha256": "e53de10eb3381793403dbca0edaaaced29accb1d00895190d7851bf4c9a03291",
+      "prior_overlap": [],
+      "axes": [
+        "cr",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_cr_teoz",
+      "source_sha256": "abe4bdc46d807d339d7b4e59abb29a58d55aa14d953266547bf6b4c532de2ea8",
+      "prior_overlap": [],
+      "axes": [
+        "cr",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_cr_legacy",
+      "source_sha256": "61bd05366d4e293a7aa439ea602d25615286d7aad6b8c1dc6737f9c0400e3086",
+      "prior_overlap": [],
+      "axes": [
+        "cr",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_cr_teoz",
+      "source_sha256": "1ab9399ab5f85b5a3e30d9d07811c71fe9ebb1e56dc107a2b4cd001dcad76d8f",
+      "prior_overlap": [],
+      "axes": [
+        "cr",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_lf_legacy",
+      "source_sha256": "9eb8d41e25783ba743e9872fef839f656b709b8aec15bb2f4e15b6adf2aecfbf",
+      "prior_overlap": [],
+      "axes": [
+        "lf",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_lf_teoz",
+      "source_sha256": "cd019452dec4da4de4b598971a495a0393250cd49ee4ed78717a0461344a0778",
+      "prior_overlap": [],
+      "axes": [
+        "lf",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_lf_legacy",
+      "source_sha256": "65413be48fdeeaa7cc25e9a25319f96a63b41175bd12cb3633b9394db51278b0",
+      "prior_overlap": [],
+      "axes": [
+        "lf",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_lf_teoz",
+      "source_sha256": "47ee5f188635927629c1423d61e14a1676f776cac4cc9a50959c06949f84ec8f",
+      "prior_overlap": [],
+      "axes": [
+        "lf",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_nbsp_legacy",
+      "source_sha256": "e1bcea2b26165f40b17466c3d28709ee919dedf88578ba80f8bfb1ff7c3a9976",
+      "prior_overlap": [],
+      "axes": [
+        "nbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_nbsp_teoz",
+      "source_sha256": "bed56b49dbb884adfa8ab3cee01f0f91bda8759478de0da0c58da802df3c4d3b",
+      "prior_overlap": [],
+      "axes": [
+        "nbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_nbsp_legacy",
+      "source_sha256": "b16e59ea9fc7d371dbb15df9491e6cca15d5fc14e60ccb6545465b9ef4faf067",
+      "prior_overlap": [],
+      "axes": [
+        "nbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_nbsp_teoz",
+      "source_sha256": "17e57d5df8bc2405d16b495a0f7b2709338118f1d5d2bc8b5ddc3f91bcacc994",
+      "prior_overlap": [],
+      "axes": [
+        "nbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_em_legacy",
+      "source_sha256": "d2e3815127256708e2bcc19b1c6b247ad3bf37bea0a37e31381a8a5ebfac6ce7",
+      "prior_overlap": [],
+      "axes": [
+        "em",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_em_teoz",
+      "source_sha256": "36516a6331b1581cf41fbdb75b48ebeb4cd22c51aff99d72d738f1d3ade83954",
+      "prior_overlap": [],
+      "axes": [
+        "em",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_em_legacy",
+      "source_sha256": "d2929b5d2f63074eef0ed2de29cb7c3f84fb7328b9d87b24a6bd8e8323682623",
+      "prior_overlap": [],
+      "axes": [
+        "em",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_em_teoz",
+      "source_sha256": "e054da6cb2c868f6cd9e7935addb53cd43b5272b82358a4e0a7820e25e7d2e25",
+      "prior_overlap": [],
+      "axes": [
+        "em",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_nnbsp_legacy",
+      "source_sha256": "84d0123370d7189da8e35243225ccc54e18f4d7f06bb428b84b30c24882cd4af",
+      "prior_overlap": [],
+      "axes": [
+        "nnbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_nnbsp_teoz",
+      "source_sha256": "2a812b0537ff84936f019e4d950af34cac737db4645ec8aac3dbad40f5e9c9ac",
+      "prior_overlap": [],
+      "axes": [
+        "nnbsp",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_nnbsp_legacy",
+      "source_sha256": "3b596634c66a9f7e114de2665c7471e796786b2a63b4bcdc61ccef28d365f826",
+      "prior_overlap": [],
+      "axes": [
+        "nnbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_nnbsp_teoz",
+      "source_sha256": "45804f98d7c6adf558e729bf061e6466b0dfc8615a79b96a8f11b6abd2e81522",
+      "prior_overlap": [],
+      "axes": [
+        "nnbsp",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_nel_legacy",
+      "source_sha256": "5e0cc4152181535d9926a24c30a1b0d69b5ab6fcc4ee7e3ff0d0a96784b74b91",
+      "prior_overlap": [],
+      "axes": [
+        "nel",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_nel_teoz",
+      "source_sha256": "82b770178633bdb6f7ef28c7f6195e85c765e3d441997f71cec11a691b944ad8",
+      "prior_overlap": [],
+      "axes": [
+        "nel",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_nel_legacy",
+      "source_sha256": "94e7b2f0534f493c8fb53698df9e4f4a52e6fc95662d12b7aeac55d27463b349",
+      "prior_overlap": [],
+      "axes": [
+        "nel",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_nel_teoz",
+      "source_sha256": "921f36205e4ffecc8c8a910700b90f97607db56fc1d0fb7d9dfed744cd6a429b",
+      "prior_overlap": [],
+      "axes": [
+        "nel",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_ls_legacy",
+      "source_sha256": "40bd354d401355da7bcf347acc5425960f0b913b6fd3033e2a471e9e0d0e51ac",
+      "prior_overlap": [],
+      "axes": [
+        "ls",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_ls_teoz",
+      "source_sha256": "6c52df324326cec3330d5d6a33865203d91650d6003c6340e9cf7aec50268dc5",
+      "prior_overlap": [],
+      "axes": [
+        "ls",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_ls_legacy",
+      "source_sha256": "77bb1f01a9612fdcdcc18543ccac0a7973ee4dd971e079d34eaea549f784614b",
+      "prior_overlap": [],
+      "axes": [
+        "ls",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_ls_teoz",
+      "source_sha256": "12a3af50d7ec883f6a59e8cc78eb7688e269d9c5ca908f4d5cca0e8ea6784bf2",
+      "prior_overlap": [],
+      "axes": [
+        "ls",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_ps_legacy",
+      "source_sha256": "5f60d270e0ec4d5d825b60c85172b80c79274c875ebba2fe850c420a165b5c7f",
+      "prior_overlap": [],
+      "axes": [
+        "ps",
+        "hide",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_hide_ps_teoz",
+      "source_sha256": "f4f70db558ece2556eee2d3ec9cce30242197a8b26dcc4b344bdfac35e279044",
+      "prior_overlap": [],
+      "axes": [
+        "ps",
+        "hide",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_ps_legacy",
+      "source_sha256": "d0158084a2bc2a9d18c21f87d2da7147e6f647a54780ff478538928bf14cf1bb",
+      "prior_overlap": [],
+      "axes": [
+        "ps",
+        "show",
+        "self-arrow and preceding hide",
+        "legacy"
+      ]
+    },
+    {
+      "name": "bd087_footbox_show_ps_teoz",
+      "source_sha256": "906dbbf86a3e8c4ab6a89fb9e29ded6922ebd148b2a0f1148651ec50d9e66d54",
+      "prior_overlap": [],
+      "axes": [
+        "ps",
+        "show",
+        "self-arrow and preceding hide",
+        "teoz"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_accent",
+      "source_sha256": "c7483af91091aa171097a5f5124f07d5e880de7c8c15da5f87fd931895b33d81",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "accent",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_accent",
+      "source_sha256": "15f2bd96fc70be3f38dd003aa70d1f915d79d1aaf16ce89997a384cb3086e4d0",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "accent",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_accent",
+      "source_sha256": "7c5018fb433a89ad54e9cd92c6a17d6c8f8297552fd60151fb7ecb4f6f701ff0",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "accent",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_nbsp",
+      "source_sha256": "b7f44f587134934d7000ad65b6d5be0eed45da9b0f0824475797bfb54d41df39",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "nbsp",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_nbsp",
+      "source_sha256": "0b020687efe004175f9553cc3776520ae42004e8b4939f62797668695289c07f",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "nbsp",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_nbsp",
+      "source_sha256": "bcb72ee88c37a5e9edcbff1fcfdb4785157d05912f4693b3905dc5b54b032cd0",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "nbsp",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_astral",
+      "source_sha256": "0ca3d1964075ab50a48b8a140a2d206923954ef5a3849976522607b7d170acc1",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "astral",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_astral",
+      "source_sha256": "341f379b103297019fa502ffe518451e224b0d1175e1c0030e550b4d46db21e6",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "astral",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_astral",
+      "source_sha256": "63712e3f603237c5bccecb030a8acb044e2487445afb98e70f7752824583cf24",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "astral",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_tab",
+      "source_sha256": "ae005e3afb25eaa421cdf1bddb2b04b53458962bf553f8b4cd27de72d9f662f3",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "tab",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_tab",
+      "source_sha256": "f00fc6e0dac14c95a40676160d225708c3d0151ea040642edddb1d1b075f4304",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "tab",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_tab",
+      "source_sha256": "c13d5b1e5121d43aa254f6b039d3218e3555dd3cc2eda53b2e0ad5290db61621",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "tab",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_cr",
+      "source_sha256": "ccc776e0a2c109795df6864703eaada6d35ba2e67d7ef844b496c4a10b426e8c",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "cr",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_cr",
+      "source_sha256": "c078b3e5151a278e46262aca1779d2437183535607f21f279c92b1e3491aa960",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "cr",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_cr",
+      "source_sha256": "9f5e51739f6b27f71cd82617b4b59baae02d90918b57ffc4c1a107d6e86ade69",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "cr",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_lf",
+      "source_sha256": "58a7b318217e4edb35222f73f41dec26d8cf040295d3f6b68f2838f181b34047",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "lf",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_lf",
+      "source_sha256": "646484fe62ad2fe3b9f32385717a8c446699461c2f9359319faed2e9e38efce6",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "lf",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_lf",
+      "source_sha256": "1a5381bbb86ca1d4302eee4f21125256958daa6da7515b448a995eaa5e9cc349",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "lf",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_amp",
+      "source_sha256": "41c718d9c113634cdb181e0b8b4b541004007b83f2f27ebcbf369d33d1916d8b",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "amp",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_amp",
+      "source_sha256": "f508f73e9b555424ecad5f25e5c313ecb9f1c40f3326589415623345da61c970",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "amp",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_amp",
+      "source_sha256": "d879fb22d992ec1d26844bdd7e30096685db9344e38a4988dee420237163f514",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "amp",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_lt",
+      "source_sha256": "371db9be46bcb23c5d602f174bc32a9ede010748b2aad6e32918a551dae44a91",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "lt",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_lt",
+      "source_sha256": "679f030b90391dcafaed1fd22c18d7d5d84d1957bf6e7fc9ebd5ec1f1d2743cc",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "lt",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_lt",
+      "source_sha256": "206c6e3d5831c1bf9b15e52208a2118114417fb6ed3c95231f36a9e6673a2deb",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "lt",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_gt",
+      "source_sha256": "cd91073987cb6354f7a6b41e1f5f3ec2e94df6b8e032ef86612d49fa81e8d0ac",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "gt",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_gt",
+      "source_sha256": "4bf2584a4c010b3c80ad542acf486ecd0c550bf190c08cf1e8862e4c65b4dd7f",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "gt",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_gt",
+      "source_sha256": "ecfbf01f7e473a4e16a9c63cf582d0d542f3e62642c11bb85b0afa4800b50d3a",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "gt",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_quot",
+      "source_sha256": "d4e82cba4c57e24b9fdd9c21b55de5ed6aa7d4fa921aa071d72cbbe4e06511ac",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "quot",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_quot",
+      "source_sha256": "f1eea4e94f63005c47895ebf926eb8ffa25dbda75aab6fb20fd69d8940a83d6e",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "quot",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_quot",
+      "source_sha256": "12528e26323ca7e65f467b8b5996756f5d58fff73920b021e608a170e12e8f87",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "quot",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_tooltip_apos",
+      "source_sha256": "d3c852023d923ecff82addc681dae08ecd9e7dc20674620c490c64b2e260484d",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "apos",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_url_apos",
+      "source_sha256": "5c5e7be7493987ef5748b9fee5670b5f84519d35b368173e8e541e7dc406a139",
+      "prior_overlap": [],
+      "axes": [
+        "url",
+        "apos",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_attribute_id_apos",
+      "source_sha256": "2747b279468c102a5601c00d541b33c0dea09d4c5ef6e22bb118b2d1ac2fca14",
+      "prior_overlap": [],
+      "axes": [
+        "id",
+        "apos",
+        "participant and message attributes"
+      ]
+    },
+    {
+      "name": "bd087_size_1999_ascii",
+      "source_sha256": "64eb00957b7857a98cf0296466f15afe680cd591b9556cce2de9f32591e0331d",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 1999",
+        "reverse dashed arrow",
+        "ASCII"
+      ]
+    },
+    {
+      "name": "bd087_size_1999_astral",
+      "source_sha256": "8618122c6ce8f9db3c4395d68153d8cd982ec29c73884db61b3d55f7d54e88c8",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 1999",
+        "reverse dashed arrow",
+        "astral"
+      ]
+    },
+    {
+      "name": "bd087_size_2000_ascii",
+      "source_sha256": "5c9d273d7ed4ba3e578127560498684e170bd32116fb1ddc5c4f85f225c90352",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 2000",
+        "reverse dashed arrow",
+        "ASCII"
+      ]
+    },
+    {
+      "name": "bd087_size_2000_astral",
+      "source_sha256": "33bb5dda14b3ae681a7e4b47c588fe67184049735cc5734211b3d824cbd9b4e1",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 2000",
+        "reverse dashed arrow",
+        "astral"
+      ]
+    },
+    {
+      "name": "bd087_size_2001_ascii",
+      "source_sha256": "c775e3b57e23dce51d6d055acb794f9bb5bb9008a0eed89e26e0c20b8c014b91",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 2001",
+        "reverse dashed arrow",
+        "ASCII"
+      ]
+    },
+    {
+      "name": "bd087_size_2001_astral",
+      "source_sha256": "8291c04bd8932124943ef2c6dc7e8ab0ec0b60443ce0cf1cc1f3c9f634bbe898",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 2001",
+        "reverse dashed arrow",
+        "astral"
+      ]
+    },
+    {
+      "name": "bd087_size_2002_ascii",
+      "source_sha256": "60cc3a926ec51fe833b4a96e6fd52443e623e94964cf86da07043d0d9844f621",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 2002",
+        "reverse dashed arrow",
+        "ASCII"
+      ]
+    },
+    {
+      "name": "bd087_size_2002_astral",
+      "source_sha256": "7078eff291065fec6bb4cb6a1885676f1c03a2ec544459862b1c2c449b881be0",
+      "prior_overlap": [],
+      "axes": [
+        "UTF16 units 2002",
+        "reverse dashed arrow",
+        "astral"
+      ]
+    },
+    {
+      "name": "bd087_s_sprite_inline",
+      "source_sha256": "fe7f8488ce64e9f84c8692620071b668ff86bd3387a11ae2dcaa20aad9e7c25a",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_sprite_inline",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_sprite_inline_colour",
+      "source_sha256": "82dc8194a6da76a88392de17fc3b18d1ce50302d58c23d9e249579e52ee7bb05",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_sprite_inline_colour",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_sprite_internal",
+      "source_sha256": "feb03c6b5002b36cda0a70d5e91a924311a2a95353590feef5eba2994b01caa2",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_sprite_internal",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_sprite_internal_other",
+      "source_sha256": "ccc4ab02b909f9395062d5b6b72462a57527ddd0acca79ee9c011733acc4e35c",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_sprite_internal_other",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_style_internal",
+      "source_sha256": "c16c4a9968d0b80d8365618fb0a19d9a8b97853d1cd2e277a44700c20b57a03c",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_style_internal",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_style_internal_quoted",
+      "source_sha256": "2c7d7f0ed84db9dd57e830e4db436ecc54be1470c3b571333296338e58cdf194",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_style_internal_quoted",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_sprite_lib",
+      "source_sha256": "b31ae2cc2028e58acf48a48b51a86c3c66b5bbd62cd827aac1ab103aac48ee83",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_sprite_lib",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_sprite_lib_svg",
+      "source_sha256": "e5e747222864b828a7b94590ba9252e4f75ec30939c09444440a0377eb737930",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_sprite_lib_svg",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_participant_dot",
+      "source_sha256": "9fe592724d293b6733486c521aa4feeba0625a3d1db826a11eec6b4b687a9dba",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_participant_dot",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_participant_at",
+      "source_sha256": "8bac848c6a49131842013fc86cfa1279011fd7e22de91f520f57c04db87300e7",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_participant_at",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_participant_negative_order",
+      "source_sha256": "6abaa0dce8b5f62f6b4a8fbc5760ca19be5cb3674d0f31e344fdb1c029d57c04",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_participant_negative_order",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_participant_compact_stereo",
+      "source_sha256": "fcfec78c3e67bfb9d8c6bf0872e6ff6e84bc92b27d305a211de4c4f24ddab763",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_participant_compact_stereo",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_participant_compact_colour",
+      "source_sha256": "37c0e120daaa38d9c3533f9fae3d67ebe12f026948328fdadba48c0f956a0111",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_participant_compact_colour",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_title_colon",
+      "source_sha256": "fc8853d950f01a998ab8f03eeab1b91b5ada940866fc12b849da5b99b880a7d9",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_title_colon",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_title_space_colon",
+      "source_sha256": "fc3c7ac4ed3c0ccd2b407ec94d479fe33f1354d789537d444bdf939e4462c3a4",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_title_space_colon",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_arrow_alias",
+      "source_sha256": "29f3dfaab28c58952b00a86e3fadc375af7cb2635e9d82c2e4031571b6b1e090",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_arrow_alias",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_arrow_extra_receivers",
+      "source_sha256": "31bbf71912ae0eb236e9e82334e6133e9fe313bfab261dee1da659117489e847",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_arrow_extra_receivers",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_arrow_style_plain",
+      "source_sha256": "7dc117f5587ab31dd8bed472989fe9f22bc8ff2bd0f8f7ea7c3be0f0faea6d8f",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_arrow_style_plain",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_arrow_style_norank",
+      "source_sha256": "adfb493b09b641d9a9ae2034c720e00b25609051ccc620f53764bf96b448b29c",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_arrow_style_norank",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_skinparam_nested_order",
+      "source_sha256": "3d85bf4ceb5599fb969482f0dd437b992ce972c503049c2559f0f2b315642be5",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_skinparam_nested_order",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_legend_embedded_title",
+      "source_sha256": "f567229a7b263642608c3b65c61a593363371f473cf97233de028ee9fbc8d812",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_legend_embedded_title",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_legend_embedded_legend",
+      "source_sha256": "883868b35a1cfc6e0bbcf11d170d64f6ff7747a12def3b1fa9431dd4f508683d",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_legend_embedded_legend",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_note_terminator",
+      "source_sha256": "5ceb8bbe8ad37e6253ae9930486424cc9e95ae3394c68e158d46a6c8fb100358",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_note_terminator",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_ref_quote_lines",
+      "source_sha256": "eccc1d40f28db7292988d917e161f847a0ba6c32ef26e4f1e66e9e84deb6edf1",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_ref_quote_lines",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_pragma_whitespace",
+      "source_sha256": "d25ae32db26dd261f26d0dc822cd12845c1eac14c02c75f6e8fdb79f5ee1dfc7",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_pragma_whitespace",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_skinparam_next_line_brace",
+      "source_sha256": "722563a727c5b43277afa701b27406b4df9ce85c3bbb65b019374cc55f951b3f",
+      "prior_overlap": [],
+      "axes": [
+        "bd087_s_skinparam_next_line_brace",
+        "source-guided alternative form"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_participant_45",
+      "source_sha256": "5cd27921ae9b48ddb3cfaa2a67c2cb20b26ea5c0486940892e7e7fd8938ccf0e",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "gradient separator -",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_participant_47",
+      "source_sha256": "c1b99555d6e94035b2d3f9bd5173394a98f622097918cfdd4e3f51c561d0764f",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "gradient separator /",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_participant_124",
+      "source_sha256": "375951e89a1b06de767150d0c594ad3177b3cae152c8226c3dc52c338959dbb4",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "gradient separator |",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_participant_92",
+      "source_sha256": "02c8428d14d26ae7930b3ae45b9bb31ad2d47e0f3c1366cad656dd6b9161307b",
+      "prior_overlap": [],
+      "axes": [
+        "participant",
+        "gradient separator \\",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_note_45",
+      "source_sha256": "21b108089cbd973e972eac5402760362d1d63aad6c0d00d793986a13bf7ad592",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "gradient separator -",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_note_47",
+      "source_sha256": "0cc3f0fbc4a668e1202ff41069878ed624a906042db0278b618ab51b111220cc",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "gradient separator /",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_note_124",
+      "source_sha256": "b69929360e0ee98f6fb8c9e6804e17318e86ef6d8ad0ef4a76871676eaf87404",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "gradient separator |",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_note_92",
+      "source_sha256": "4efa4789958c045a7b95498228174eb36a21cf1da8a1b0d253c851d4273d1968",
+      "prior_overlap": [],
+      "axes": [
+        "note",
+        "gradient separator \\",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_box_45",
+      "source_sha256": "407b9757840a2e20979b3e3552bcb719f459f3ef3b2727ef5d099ba5b8f2ce82",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "gradient separator -",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_box_47",
+      "source_sha256": "8f07b29a92f1abfe8a07de94b6062810f8673cf741a655d22e3626ac61b6ee92",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "gradient separator /",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_box_124",
+      "source_sha256": "83bf9f16f3e53c0667d89f526136a0c03abdf48cc8b2df2971b8b0787c5b6092",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "gradient separator |",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_gradient_box_92",
+      "source_sha256": "0e47cbb157f5d2367d3b9f377d1b9f4b9a1b5c912f0bbcd9215fd389bf4f0770",
+      "prior_overlap": [],
+      "axes": [
+        "box",
+        "gradient separator \\",
+        "warning observability"
+      ]
+    },
+    {
+      "name": "bd087_s_bare_footbox",
+      "source_sha256": "35796fc9adf94929f1252a43c77f64cb53469b99dae189895cadedd1a2c870ac",
+      "prior_overlap": [],
+      "axes": [
+        "footbox",
+        "self and internal topology"
+      ]
+    },
+    {
+      "name": "bd087_s_bare_footboxon",
+      "source_sha256": "ed133d4e6f76eb478517440b9551690cb059d39f18a05488963198f235fb1d4a",
+      "prior_overlap": [],
+      "axes": [
+        "footboxon",
+        "self and internal topology"
+      ]
+    },
+    {
+      "name": "bd087_s_bare_footboxoff",
+      "source_sha256": "1df61af9156d54483cca78a167863f98ec4bfaf8d833b8575bd57095e25c2bbe",
+      "prior_overlap": [],
+      "axes": [
+        "footboxoff",
+        "self and internal topology"
+      ]
+    },
+    {
+      "name": "bd087_s_bare_hidefootbox",
+      "source_sha256": "6f1aaae744002a67a2b1b1272489e8e2977e557f2b01cc16b1c06b3fbff046d0",
+      "prior_overlap": [],
+      "axes": [
+        "hidefootbox",
+        "self and internal topology"
+      ]
+    },
+    {
+      "name": "bd087_s_bare_showfootbox",
+      "source_sha256": "9e3e086f3bc18384d21fc5e3eb171465c861fb988d62731deae8413dd119fda4",
+      "prior_overlap": [],
+      "axes": [
+        "showfootbox",
+        "self and internal topology"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_identifier_43",
+      "source_sha256": "eb2ce4a4a9946529cde57e630ed2473f76934cc1b4cc4abfb642baeecd99b8a2",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_identifier",
+        "escaped content \\n"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_url_44",
+      "source_sha256": "a7003a1606f6bf46bc38e599d162769d9cfcd5f7bf325cd3f77c032a83635ecb",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_url",
+        "escaped content \\n"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_tooltip_45",
+      "source_sha256": "3f9b46b5816e12c8b25cd4687e64a4562fce9cbfd706c3071ef0acfeddc4e377",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "escaped content \\n"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_identifier_46",
+      "source_sha256": "a0b25947dcecd03c332a508da62244185f4a6a274321bbb7cd3f5bb34b1e0c21",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_identifier",
+        "escaped content \\t"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_url_47",
+      "source_sha256": "e0bb7e4fd68cbe218fa29c8e8c238dc45dff137bc88b7b70f51429eefa0ea8bb",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_url",
+        "escaped content \\t"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_tooltip_48",
+      "source_sha256": "228756ed979168a736901a8db22ff918fb5de857b6d59140c81ed7be2a289dde",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "escaped content \\t"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_identifier_49",
+      "source_sha256": "8696a8768c21be0cb5cd821e2c6a4efabf1747f8f8bd454fc4fecac3a4a1d8c6",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_identifier",
+        "escaped content &#10;"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_url_50",
+      "source_sha256": "ab9435e2b5718c7745af08e8bcffd2c56809b4f165676f83ab0473cb05cf0343",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_url",
+        "escaped content &#10;"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_tooltip_51",
+      "source_sha256": "d63a00271c56051f34c52793e691a9dbcda592bc51f2b65dc1e2248620bdb542",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "escaped content &#10;"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_identifier_52",
+      "source_sha256": "c7efb1c4a46e779770bcc364574fca71878fd26ab2d9e98b92115b522b45b447",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_identifier",
+        "escaped content \u00e9\ud83e\udd89"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_url_53",
+      "source_sha256": "c66e8943affbe262048c05bbde8e0ba51c3e1d1496b595023fa80ae6c245e5f4",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_url",
+        "escaped content \u00e9\ud83e\udd89"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_tooltip_54",
+      "source_sha256": "1ca6284c769ddc3efe05a636a134672635792e76215b613205e1aaf7cd0ef250",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "escaped content \u00e9\ud83e\udd89"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_identifier_55",
+      "source_sha256": "bacba5a8a8dee976907ac510255956601b4e3e4b7c95c6473a21d0fbd8e9e80d",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_identifier",
+        "escaped content '&<>"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_quoted_url_56",
+      "source_sha256": "4b6316da03bdbe7b8b1a2121efb47a1648d1063f1743b74602111aa6ce2e6ac1",
+      "prior_overlap": [],
+      "axes": [
+        "quoted_url",
+        "escaped content '&<>"
+      ]
+    },
+    {
+      "name": "bd087_s_attribute_tooltip_57",
+      "source_sha256": "d21b8cbd0d2dc6392d7ef9769afff0136b13d94d6703e6addd1efa27f2f42be5",
+      "prior_overlap": [],
+      "axes": [
+        "tooltip",
+        "escaped content '&<>"
+      ]
+    },
+    {
+      "name": "bd087_s_size_arrow_only_2000_False",
+      "source_sha256": "20184b58026e78ec8dc731e10f89e555207c8fc826c00aedf2cdee44193e4f9f",
+      "prior_overlap": [],
+      "axes": [
+        "2000 UTF16",
+        "arrow-only factory fallthrough",
+        "ASCII"
+      ]
+    },
+    {
+      "name": "bd087_s_size_arrow_only_2000_True",
+      "source_sha256": "7575c78aa62c15db0181b4da89d8d01ada6df4918436bdad940195afab86a5f4",
+      "prior_overlap": [],
+      "axes": [
+        "2000 UTF16",
+        "arrow-only factory fallthrough",
+        "astral"
+      ]
+    },
+    {
+      "name": "bd087_s_size_arrow_only_2001_False",
+      "source_sha256": "03b635acb927210d586dffa8171e30618c40b015fc02a93edba727d596ded03b",
+      "prior_overlap": [],
+      "axes": [
+        "2001 UTF16",
+        "arrow-only factory fallthrough",
+        "ASCII"
+      ]
+    },
+    {
+      "name": "bd087_s_size_arrow_only_2001_True",
+      "source_sha256": "382ac695daa52269c4460acf6d651882b4530768bf5959ae796e880559bacd11",
+      "prior_overlap": [],
+      "axes": [
+        "2001 UTF16",
+        "arrow-only factory fallthrough",
+        "astral"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+SCALE max 180 height
+Kestrel --> Juniper: receipt
+@enduml

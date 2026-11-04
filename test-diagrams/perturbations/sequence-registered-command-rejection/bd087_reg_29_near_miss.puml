@@ -1,0 +1,11 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+@<style>@@
+sequenceDiagram {
+ArrowColor Olive
+}
+</style>
+Kestrel --> Juniper: receipt
+@enduml

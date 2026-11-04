@@ -1,0 +1,32 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-resume-citation-correction/bd087_reg_73_plain.puml",
+    "original_source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_73_plain.puml",
+    "reason": "Same frozen fresh input explicitly referenced by its second mechanism review; not a new independent case."
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-resume-citation-correction/bd087_reg_73_unusual.puml",
+    "original_source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_73_unusual.puml",
+    "reason": "Same frozen fresh input explicitly referenced by its second mechanism review; not a new independent case."
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2000_False.puml",
+    "original_source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2000_False.puml",
+    "reason": "Same frozen fresh input explicitly referenced by its second mechanism review; not a new independent case."
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2000_True.puml",
+    "original_source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2000_True.puml",
+    "reason": "Same frozen fresh input explicitly referenced by its second mechanism review; not a new independent case."
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2001_False.puml",
+    "original_source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2001_False.puml",
+    "reason": "Same frozen fresh input explicitly referenced by its second mechanism review; not a new independent case."
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2001_True.puml",
+    "original_source": "test-diagrams/perturbations/sequence-command-size-dispatch-correction/bd087_s_size_arrow_only_2001_True.puml",
+    "reason": "Same frozen fresh input explicitly referenced by its second mechanism review; not a new independent case."
+  }
+]

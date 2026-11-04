@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+participant "BirchHarbor"
+"BirchHarbor" -> Juniper: identity
+Kestrel --> Juniper: receipt
+@enduml

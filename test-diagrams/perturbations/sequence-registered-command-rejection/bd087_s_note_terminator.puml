@@ -1,0 +1,8 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+rnote over Alder
+opaque
+end hnote
+@enduml

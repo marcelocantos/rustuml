@@ -1,0 +1,8 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+!pragma teoz true
+Kestrel --> Juniper: receipt
+@enduml

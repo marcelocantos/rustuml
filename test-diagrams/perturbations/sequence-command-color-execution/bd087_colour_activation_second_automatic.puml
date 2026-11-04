@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+activate Juniper #Wheat #automatic
+deactivate Juniper
+Kestrel --> Juniper: receipt
+@enduml

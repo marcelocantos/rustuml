@@ -1,0 +1,6 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+participant Cedar [[https://example.org/{Fern'&<>House}]]
+@enduml

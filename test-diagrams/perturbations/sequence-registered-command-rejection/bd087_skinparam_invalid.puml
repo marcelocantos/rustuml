@@ -1,0 +1,9 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+skinparam sequence {
+walnut
+}
+Kestrel --> Juniper: receipt
+@enduml

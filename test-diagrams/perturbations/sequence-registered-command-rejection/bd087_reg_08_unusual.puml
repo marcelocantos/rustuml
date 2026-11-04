@@ -1,0 +1,11 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+LEFT footer
+Cypress
+observatory
+end footer
+Kestrel --> Juniper: receipt
+@enduml

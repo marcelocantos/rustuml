@@ -1,0 +1,9 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+group willow
+Juniper -> Kestrel: inside
+end
+Kestrel --> Juniper: receipt
+@enduml

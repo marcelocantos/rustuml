@@ -1,0 +1,10 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+!procedure $emit()
+walnut impossible command
+!endprocedure
+$emit()
+Kestrel --> Juniper: receipt
+@enduml
