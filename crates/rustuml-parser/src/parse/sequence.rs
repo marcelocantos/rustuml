@@ -897,44 +897,72 @@ impl SeqParser {
             return Ok(true);
         }
 
-        // Allow optional color (#xxx) after participant list.
-        // Capture shape prefix (h/r/note), position, participants, color, inline text.
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            sequence_regex(r"^(h|r)?note[%s]+(left|right|over)[%s]*(?:of[%s]+)?(\w+(?:[%s]*,[%s]*\w+)*)?[%s]*(#[^%s]+)?[%s]*(?::[%s]*(.*))?$").unwrap()
+        // FactorySequenceNoteCommand requires its PARTICIPANT after the optional
+        // prefix. Keep it required, so `of` can itself be the identity. Single-line
+        // prefix uses [%s] once; multiline uses [%s]+. OverSeveral has exactly two
+        // required identities and no prefix. OnArrow is a separate, unnamed form.
+        static NAMED: LazyLock<Vec<Regex>> = LazyLock::new(|| {
+            let identity = r#"[\p{L}\p{N}_.@]+|"[^"]+""#;
+            let mut patterns = Vec::new();
+            for inline in [true, false] {
+                let suffix = if inline {
+                    r"[%s]*:[%s]*(?P<text>.*)$"
+                } else {
+                    "$"
+                };
+                let color = r"[%s]*(?P<color>#[^%s:]+)?[%s]*";
+                let prefix = if inline {
+                    r"(?:of[%s])?"
+                } else {
+                    r"(?:of[%s]+)?"
+                };
+                patterns.push(sequence_regex(&format!(
+                    r"^(?P<shape>h|r)?note[%s]+(?P<position>left|right|over)[%s]+{prefix}(?P<p1>{identity}){color}{suffix}"
+                )).unwrap());
+                patterns.push(sequence_regex(&format!(
+                    r"^(?P<shape>h|r)?note[%s]+(?P<position>over)[%s]+(?P<p1>{identity})[%s]*,[%s]*(?P<p2>{identity}){color}{suffix}"
+                )).unwrap());
+            }
+            patterns
         });
-
-        if let Some(caps) = RE.captures(line) {
-            let shape = match caps.get(1).map(|m| m.as_str()) {
+        static ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(?P<shape>h|r)?note[%s]+(?P<position>left|right)[%s]*(?P<color>#[^%s:]+)?[%s]*(?::[%s]*(?P<text>.*))?$").unwrap()
+        });
+        static BARE_OVER: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(?:h|r)?note[%s]+over[%s]*(?:#[^%s:]+)?[%s]*(?::.*)?$").unwrap()
+        });
+        let captures = NAMED
+            .iter()
+            .find_map(|pattern| pattern.captures(line))
+            .or_else(|| ATTACHED.captures(line));
+        if let Some(caps) = captures {
+            let shape = match caps.name("shape").map(|m| m.as_str()) {
                 Some("h") => NoteShape::Hexagonal,
                 Some("r") => NoteShape::Rectangular,
                 _ => NoteShape::Note,
             };
-            let position = match &caps[2] {
+            let position = match caps.name("position").unwrap().as_str() {
                 "left" => NotePosition::Left,
                 "right" => NotePosition::Right,
                 "over" => NotePosition::Over,
-                _ => NotePosition::Right,
+                _ => unreachable!(),
             };
-            // FactorySequenceNoteOnArrowCommand has only left/right; the
-            // standalone over factories require a participant capture.
-            if position == NotePosition::Over && caps.get(3).is_none() {
-                return Err(ParseError {
-                    line: self.current_line,
-                    message: "A note over command requires a participant".into(),
-                });
-            }
-            let inline_text = caps.get(5);
+            let inline_text = caps.name("text");
             let participant_source_line = if inline_text.is_some() {
                 self.current_line
             } else {
                 self.current_line + 1
             };
-            let mut participants: Vec<String> = caps.get(3).map_or(Vec::new(), |m| {
-                m.as_str()
-                    .split(',')
-                    .map(|s| self.ensure_participant_at(s.trim(), participant_source_line))
-                    .collect()
-            });
+            let mut participants: Vec<String> = ["p1", "p2"]
+                .iter()
+                .filter_map(|name| caps.name(name))
+                .map(|m| {
+                    self.ensure_participant_at(
+                        m.as_str().trim_matches('"'),
+                        participant_source_line,
+                    )
+                })
+                .collect();
             // Bare "note left" / "note right" (no participant) attaches to the
             // last message and straddles its arrow band (on_message). PlantUML
             // anchors such notes to the message's leftmost/rightmost endpoint by
@@ -949,7 +977,7 @@ impl SeqParser {
                 participants = vec![from.clone(), to.clone()];
                 on_message = true;
             }
-            let color = caps.get(4).map(|m| m.as_str().to_string());
+            let color = caps.name("color").map(|m| m.as_str().to_string());
 
             if let Some(text_match) = inline_text {
                 if participants.is_empty() && position != NotePosition::Over && !on_message {
@@ -979,6 +1007,13 @@ impl SeqParser {
                 });
             }
             Ok(true)
+        } else if BARE_OVER.is_match(line) {
+            // Neither standalone factory accepts a missing participant; the
+            // OnArrow factory does not include `over` in POSITION.
+            Err(ParseError {
+                line: self.current_line,
+                message: "A note over command requires a participant".into(),
+            })
         } else {
             Ok(false)
         }
@@ -2780,6 +2815,35 @@ Gate -> Mail: enqueue"#
             assert!(!non_whitespace.is_match(&character.to_string()));
         }
     }
+    #[test]
+    fn named_note_identity_is_required_after_optional_prefix() {
+        for shape in ["note", "rnote", "hnote"] {
+            for (command, identities) in [
+                (format!("{shape} over of : body"), vec!["of"]),
+                (format!("{shape} over of #pink: body"), vec!["of"]),
+                (format!("{shape} over of of : body"), vec!["of"]),
+                (format!("{shape} over of, South: body"), vec!["of", "South"]),
+                (
+                    format!("{shape} left of \"North Pier\": body"),
+                    vec!["North Pier"],
+                ),
+                (format!("{shape} over of\nbody\nend note"), vec!["of"]),
+                (
+                    format!("{shape} over of  North\nbody\nend note"),
+                    vec!["North"],
+                ),
+            ] {
+                let diagram = parse(&command);
+                let Event::Note(note) = &diagram.events[0] else {
+                    panic!("missing note: {command}")
+                };
+                assert_eq!(note.participants, identities, "{command}");
+                assert!(!note.on_message);
+                assert_eq!(note.text, "body");
+            }
+        }
+    }
+
     #[test]
     fn note_over_requires_a_named_participant() {
         for text in [
