@@ -1,0 +1,10 @@
+test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_archimate.puml:2: trailing whitespace.
++skinparam defaultFontName   Quill'"Reed"'  
+test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_class.puml:2: trailing whitespace.
++skinparam defaultFontName   Quill'"Reed"'  
+test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_component.puml:2: trailing whitespace.
++skinparam defaultFontName   Quill'"Reed"'  
+test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml:2: trailing whitespace.
++skinparam defaultFontName   Quill'"Reed"'  
+test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_mindmap.puml:2: trailing whitespace.
++skinparam defaultFontName   Quill'"Reed"'  

@@ -1,0 +1,5 @@
+@startuml
+usecase "L<back:transparent>Mist</back>R" as Goal
+actor Visitor
+Visitor --> Goal
+@enduml

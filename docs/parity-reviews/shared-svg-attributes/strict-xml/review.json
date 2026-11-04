@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A02b1a747-7512-424a-bf7a-dd53d71bb634",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker with no implementation involvement. No child agents, worktrees or production edits. Native review branch prepared by T3."
+  },
+  "account_commit": "d48ed1e7033e5539568a59b63c3d3229d07972db",
+  "implementation_commit": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+  "evidence_revision": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "base_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "OpenJDK 21.0.5 Homebrew",
+  "commands": [
+    "CARGO_TARGET_DIR=<private>/target-before CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml (base revision)",
+    "CARGO_TARGET_DIR=<private>/target-after CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml -p rustuml-oracle (evidence tip, identical production sources)",
+    "uv run --no-project python replay.py (12550 goldens plus 2104 membership-preserved retained/maker observations; actual CLI SVG and YAML both phases)",
+    "uv run --no-project python fresh_measure.py (87 held-out actual CLI before/after; immutable Java relay)",
+    "uv run --no-project python gates.py (eight broad gates once, frozen candidate before registering checker cases)",
+    "reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.L9dFp3l5/new --timezone GMT+11:00 -- -pipe -tsvg (parent existing runner only; Java argv derived, not process-traced)"
+  ],
+  "support": "docs/parity-reviews/shared-svg-attributes/checker-support/",
+  "verdict": "rejected",
+  "policy": "Whole-output failures reject; bounded helper/attribute evidence is not acceptance. No combined correctness claim with concurrent sequence work.",
+  "mechanism": "strict-xml-oracle",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.svg",
+      "axes": [
+        "activity",
+        "URL c0"
+      ],
+      "result": "fail",
+      "java_classification": "SAXException crash SVG",
+      "source_sha256": "f8e49aa31c65047de872fe145933815200748337bf7a7a155bfe218a49288d68",
+      "golden_sha256": "d0250977a943c0767be957bb48549dbef9460b9cccf349cde984691c126df75d",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": "not well-formed (invalid token): line 1, column 583",
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/comment_double_hyphen.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/comment_double_hyphen.svg",
+      "axes": [
+        "class",
+        "comment delimiter inside entity name"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "bcdb3d62f0d90a27a11a444e5df2d77c6aa56cc96b83794e7feffc0fa1ca7acb",
+      "golden_sha256": "57fabe953715d3d78be2db0b336f9083f2aec3d352f65fe2487bfbce912f0b77",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": "not well-formed (invalid token): line 1, column 354",
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.svg",
+      "axes": [
+        "activity",
+        "raw control tooltip zero"
+      ],
+      "result": "fail",
+      "java_classification": "SAXException crash SVG",
+      "source_sha256": "9db5169301ad8914aef80e6e181f446f978432ede32353a9ac004269ff93c462",
+      "golden_sha256": "8f3f4baa8c8e4dc890094d1cd83b681dc7774d2f5bb6e2e1b9f38de4a51e61c5",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": "not well-formed (invalid token): line 1, column 614",
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.svg",
+      "axes": [
+        "activity",
+        "raw control tooltip escape"
+      ],
+      "result": "fail",
+      "java_classification": "SAXException crash SVG",
+      "source_sha256": "0ad00c5109c7a76ed425ba4f2a545c34818c5020657c6165d130eb9a4a04e35c",
+      "golden_sha256": "da9c9df7722af678e173f6f85bcf3af9935eecaa7aed4faf133ab3d8afadfb36",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": "not well-formed (invalid token): line 1, column 614",
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.svg",
+      "axes": [
+        "activity",
+        "raw control tooltip one"
+      ],
+      "result": "fail",
+      "java_classification": "SAXException crash SVG",
+      "source_sha256": "e563876518e6b3ad61d820de64242456ee01aa8c9d2f53f1ab14570b91b180b0",
+      "golden_sha256": "5aedcd5ecf955a0652d8b691d3d646c0957a28aa3c7bf1ad14e916d5d9246141",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": "not well-formed (invalid token): line 1, column 614",
+      "process_exit": 0,
+      "panic": false
+    }
+  ],
+  "findings": [
+    "Frozen candidate actual-CLI gate passes16/16: golden12550 inputs,12470 emitted,0 malformed,80 errors,0 panics; perturbation1966 inputs,1857 emitted,3 expected malformed,109 errors,32 panics. Exact 26 standard DOT DOCTYPE count passes. Source-hash exception list is exactly the approved three attr_link_c0 names owned by T14.20.",
+    "Compiling the unchanged test source against a private scratch corpus proves both ratchet directions: an unlisted actual malformed class-comment output fails; replacing a listed C0 source with a valid class fails both source hash and stale expected-malformed checks. Control passes and mutations are discarded.",
+    "Independent stdout fault injection disproves the strict allow-DTD policy: prefix an XML comment containing the exact approved declaration, then an actual internal-entity DOCTYPE. svg.find(\"<!DOCTYPE\") accepts the comment decoy and allow_dtd:true parses the unapproved DTD. Both the control and injected unchanged test exit0 with count26. This is an oracle acceptance bug, not an observed shipping attack path or a product parity count.",
+    "roxmltree0.20 tokenizer parse_external_id discards identifiers and external parse_entity_def returns None; no network/filesystem resolver exists. No external DTD/entity was fetched or resolved. The demonstrated internal entity expands in-memory only.",
+    "Fresh87 actual CLI exposes five unlisted malformed outputs (four C0, one valid comment case), all pre-existing; two empty-output process errors and zero panics. Registering these cases does not authorize extending the expected-failure list."
+  ],
+  "measurements": {
+    "inputs": 5,
+    "valid": 1,
+    "before_pass": 0,
+    "after_pass": 0
+  }
+}

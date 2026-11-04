@@ -1,0 +1,30 @@
+{
+  "unchanged_test_source": true,
+  "test_source_sha256": "d5f18f2f44e78d4b9eaf49b2fef78ddbb745bd7999d81bc4a1b18d1986ec4bad",
+  "kind": "oracle stdout fault injection, not a product rendering result",
+  "results": [
+    {
+      "name": "control",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/dtd-oracle-mutation",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "log_sha256": "682e012fd2ff66aeabd16bf264088af9e5ce9343120c3cbe89f56399fda5683d"
+    },
+    {
+      "name": "comment-decoy-internal-dtd",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/dtd-oracle-mutation",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "log_sha256": "d12a71cd580cc3044ee7be70f358d604a18e2e0fe38a6dc08e4ec84b954ba697"
+    }
+  ],
+  "unapproved_dtd_accepted": true,
+  "injected_svg": "<!--<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">--><!DOCTYPE svg [<!ENTITY checker \"unapproved-internal-entity\">]><svg xmlns=\"http://www.w3.org/2000/svg\"><text>&checker;</text></svg>",
+  "mutations_discarded": true
+}

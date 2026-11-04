@@ -1,0 +1,7 @@
+@startuml
+robust "L<color:#3579bd00><back:#e73>Veil</back></color>R" as Track
+@0
+Track is low
+@30
+Track is high
+@enduml

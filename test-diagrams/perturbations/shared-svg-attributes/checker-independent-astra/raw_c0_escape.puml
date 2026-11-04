@@ -1,0 +1,5 @@
+@startuml
+start
+:[[https://example.invalid/p{GlowDusk}Link]];
+stop
+@enduml
