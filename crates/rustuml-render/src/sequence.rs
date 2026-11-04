@@ -5112,7 +5112,19 @@ impl PlantUmlSvg {
         stroke_color: &str,
     ) {
         let mut y = text_y;
+        let mut previous_ascent = None;
         for line in text_content.split("\\n") {
+            // SheetBlock1#initMap translates each Sea to the cumulative stripe
+            // top. Its baseline is that origin plus this stripe's ascent.
+            let metrics = rendered_line_metrics_with_family(
+                line,
+                self.message_font_size as f64,
+                &self.message_font_family,
+            );
+            if let Some(ascent) = previous_ascent {
+                y += metrics.ascent - ascent;
+            }
+            previous_ascent = Some(metrics.ascent);
             if let Some(latex) = latex_label_content(line) {
                 let image = crate::math::raw_latex_image(latex);
                 write!(
@@ -5761,8 +5773,9 @@ impl PlantUmlSvg {
         // rectangles grow by one line and the name baseline shifts down (the
         // stereotype takes the `text_y` slot the name would otherwise use).
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        // ComponentRoseCollections surrounds its complete Display with the
-        // same marginY7 as ComponentRoseParticipant; the second rect is offset.
+        // Rose#createComponentParticipant selects ComponentRoseParticipant
+        // with collections=true: marginY7 and getDeltaCollection=4. This is
+        // a later citation correction; the original account remains unchanged.
         let rect_h = ParticipantTextBlock::new(
             text_content,
             self.participant_font_size as f64,
@@ -5869,7 +5882,7 @@ impl PlantUmlSvg {
         base_y: f64,
         box_w: f64,
         text_x: f64,
-        text_y: f64,
+        text_top: f64,
         text_content: &str,
         text_len: f64,
         fill_color: &str,
@@ -5957,24 +5970,24 @@ impl PlantUmlSvg {
             &format!("stroke:{border_color};stroke-width:0.5;"),
         );
 
-        // Text. With a stereotype, draw it on the `text_y` line and push the
-        // name down one line; both are centred in the pill's text region
-        // [box_x + pad, box_x + box_w - pad].
+        // USymbolQueue#asSmall translates mergeTB(stereotype,label) by its
+        // margin. Each child contributes its own first-stripe ascent.
+        let text_y = text_top + stereo_shift + label.lines[0].2.ascent;
         if let Some((st_text, st_width)) = stereo {
             let inner_w = box_w - QUEUE_TEXT_H_PAD;
             let st_display = format!("\u{ab}{st_text}\u{bb}");
             let st_x = box_x + QUEUE_TEXT_X_PAD + (inner_w - st_width) / 2.0;
-            ParticipantTextBlock::new(
+            let stereotype = ParticipantTextBlock::new(
                 &st_display,
                 self.participant_font_size as f64,
                 &self.participant_font_family,
                 false,
-            )
-            .draw(
+            );
+            stereotype.draw(
                 &mut self.buf,
                 &TextBase {
                     x: st_x,
-                    y: text_y,
+                    y: text_top + stereotype.lines[0].2.ascent,
                     font_size: self.participant_font_size,
                     font_family: &self.participant_font_family,
                     fill: "#000000",
@@ -5985,7 +5998,7 @@ impl PlantUmlSvg {
                 },
             );
             let name_x = box_x + QUEUE_TEXT_X_PAD + (inner_w - text_len) / 2.0;
-            self.participant_text(name_x, text_y + stereo_shift, text_content, text_len);
+            self.participant_text(name_x, text_y, text_content, text_len);
         } else {
             self.participant_text(text_x, text_y, text_content, text_len);
         }
@@ -7091,12 +7104,7 @@ fn render_participant_shape(
                 base_y + queue_head_offset
             };
             // USymbolQueue draws its text block at marginY1=5.
-            let text_y = pill_top
-                + 5.0
-                + ascent_with_family(
-                    svg.participant_font_size as f64,
-                    &svg.participant_font_family,
-                );
+            let text_top = pill_top + 5.0;
             svg.queue_shape(
                 part_uid,
                 qualified_name,
@@ -7106,7 +7114,7 @@ fn render_participant_shape(
                 base_y,
                 p.box_width,
                 text_x,
-                text_y,
+                text_top,
                 &p.label,
                 p.text_width,
                 fill_color,
@@ -14098,7 +14106,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             )
                             .unwrap();
                         } else {
-                            // Filled triangle: wing base, tip, wing tip.
+                            // ComponentRoseSelfArrow#getPolygon: TOP visits
+                            // wing-top, tip, wing-base; BOTTOM visits base first.
                             // ComponentRoseSelfArrow#getPolygon offsets every
                             // filled half-head point by -1 before drawRightSide
                             // translates the polygon by the component's x2.
@@ -14108,11 +14117,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let arrow_pts = format!(
                                 "{},{},{},{},{},{}",
                                 fmt_coord(tip_x + head_direction * ARROW_SIZE),
-                                fmt_coord(loop_bottom),
+                                fmt_coord(if top { wing_y } else { loop_bottom }),
                                 fmt_coord(tip_x),
                                 fmt_coord(loop_bottom),
                                 fmt_coord(tip_x + head_direction * ARROW_SIZE),
-                                fmt_coord(wing_y),
+                                fmt_coord(if top { loop_bottom } else { wing_y }),
                             );
                             write!(
                                 svg.buf,
@@ -16553,6 +16562,75 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn text_baseline(svg: &str, label: &str) -> f64 {
+        let tag = svg
+            .split("<text ")
+            .find(|tag| tag.contains(&format!(">{label}</text>")))
+            .unwrap();
+        tag.split(" y=\"")
+            .nth(1)
+            .unwrap()
+            .split('"')
+            .next()
+            .unwrap()
+            .parse()
+            .unwrap()
+    }
+
+    #[test]
+    fn message_stripes_use_current_ascent_after_prior_height() {
+        for pragma in ["", "!pragma teoz true\n"] {
+            let input = format!(
+                "@startuml\n{pragma}Ash -> Birch: one\\n<size:23>two</size>\\nthree\n@enduml"
+            );
+            let svg = crate::render_svg(&rustuml_parser::parse::parse(&input).unwrap());
+            let small = rendered_line_metrics_with_family("one", 13.0, "sans-serif");
+            let large =
+                rendered_line_metrics_with_family("<size:23>two</size>", 13.0, "sans-serif");
+            let first = text_baseline(&svg, "one");
+            let second = text_baseline(&svg, "two");
+            let third = text_baseline(&svg, "three");
+            assert!(
+                (second - first - (small.height + large.ascent - small.ascent)).abs() < 0.001,
+                "{svg}"
+            );
+            assert!(
+                (third - second - (large.height + small.ascent - large.ascent)).abs() < 0.001,
+                "{svg}"
+            );
+        }
+    }
+
+    #[test]
+    fn queue_label_starts_at_component_margin_with_own_ascent() {
+        for size in [9, 23] {
+            let input = format!(
+                "@startuml\nqueue \"<size:{size}>Tall</size>\\nend\" as Mail\nMail -> Mail: loop\n@enduml"
+            );
+            let svg = crate::render_svg(&rustuml_parser::parse::parse(&input).unwrap());
+            let path = svg.split("d=\"M").nth(1).unwrap();
+            let top: f64 = path
+                .split(',')
+                .nth(1)
+                .unwrap()
+                .split(' ')
+                .next()
+                .unwrap()
+                .parse()
+                .unwrap();
+            let ascent = rendered_line_metrics_with_family(
+                &format!("<size:{size}>Tall</size>"),
+                14.0,
+                "sans-serif",
+            )
+            .ascent;
+            assert!(
+                (text_baseline(&svg, "Tall") - top - 5.0 - ascent).abs() < 0.001,
+                "{svg}"
+            );
+        }
+    }
 
     #[test]
     fn repeated_creation_keeps_each_message_owner() {
