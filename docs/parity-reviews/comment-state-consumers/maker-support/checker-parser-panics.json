@@ -1,0 +1,30 @@
+[
+  {
+    "id": "checker54/dash_01",
+    "svg_exit": 101,
+    "yaml_exit": 101,
+    "svg_stderr": "\nthread 'main' (30194176) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "yaml_stderr": "\nthread 'main' (30194213) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "id": "checker54/dash_03",
+    "svg_exit": 101,
+    "yaml_exit": 101,
+    "svg_stderr": "\nthread 'main' (30194163) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "yaml_stderr": "\nthread 'main' (30194191) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "id": "checker54/dash_06",
+    "svg_exit": 101,
+    "yaml_exit": 101,
+    "svg_stderr": "\nthread 'main' (30194263) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "yaml_stderr": "\nthread 'main' (30194294) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "id": "checker54/dash_07",
+    "svg_exit": 101,
+    "yaml_exit": 101,
+    "svg_stderr": "\nthread 'main' (30194278) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "yaml_stderr": "\nthread 'main' (30194313) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0 but the index is 0\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  }
+]

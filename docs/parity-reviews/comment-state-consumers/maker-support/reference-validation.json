@@ -1,0 +1,54 @@
+{
+  "all_checks_passed": true,
+  "resources": 16,
+  "calls": 16,
+  "valid": 16,
+  "request_sha256": "272cdfd693263b07cdb5d5326d2d1d20e206ec1665871d4d9840ec5be3413d82",
+  "return_sha256": "3e5fc276a9a854fbb7a24a3720b5906e72e839e556202a2f90f3a5bd27b86219",
+  "java_argv_provenance": "Derived from pinned wrapper construction, not process-traced",
+  "environment": {
+    "batch": "comment-state-consumers16",
+    "request_sha256": "272cdfd693263b07cdb5d5326d2d1d20e206ec1665871d4d9840ec5be3413d82",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.C1mYwnev",
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.C1mYwnev",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "timezone": "per result argv",
+    "locale": "en_AU",
+    "encoding": "UTF-8",
+    "headless": true,
+    "timeout_seconds_per_call": 60,
+    "input_compressed_sha256": "779f907e0797cdd713a716f37b7a362d686ebf45767415f257e2c979067e0196",
+    "manifest_sha256": "bc0dcbcf68cf7fa9cc46c28f68886c88adaf811d45a6edee9d96c1761713422c",
+    "ambient_jvm_variables_removed": [
+      "JAVA_TOOL_OPTIONS",
+      "_JAVA_OPTIONS",
+      "JDK_JAVA_OPTIONS",
+      "CLASSPATH"
+    ],
+    "classification_performed": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "svg_only": true,
+    "original_input_bundle_sha256": "158d613686a1fec4b0ea3ae154669695b0a827fc5a0e350dd60fe3a1d3db1a83",
+    "transport_mapping_provenance": {
+      "declared_by": "parent",
+      "mapping": "Original files[].base64 metadata and bytes losslessly mapped to resources[].data; exact original request/manifest bytes embedded",
+      "original_envelope_hash_verification": "Parent-declared original hash retained; current uploaded envelope and embedded original bytes verified locally"
+    },
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.NUxgUk4J/input-bundle.json.gz",
+    "env_overrides": {},
+    "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  }
+}

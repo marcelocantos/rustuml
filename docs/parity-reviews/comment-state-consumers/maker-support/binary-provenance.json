@@ -1,0 +1,33 @@
+{
+  "before_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "before_production": "346f6b3f680895d3eb457041ed88ae224c583d95",
+  "after_source_hashes": "production-source-hashes.json",
+  "binaries": [
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/before-rustuml",
+      "sha256": "6a647baaba72c975b8b41a4f965e06c4f66d2a1e4d75a46d2bef4afea24cabfd",
+      "bytes": 24727984
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/after-rustuml",
+      "sha256": "46a1def6bc6dff5c88de38b69084828f154119ff0c740f930a42e5b5ceec6f83",
+      "bytes": 24744768
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/probe",
+      "sha256": "ff7b3a8656b6565734d11e4aaa3f7fecc27ebe9aa9d10faa5ae36a61af578f21",
+      "bytes": 3266072
+    }
+  ],
+  "comparator_source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "build_jobs": 4,
+  "no_shipping": true,
+  "after_production_revision": "523a2d89226d764b818b7af2472593d2690e9c4b",
+  "intermediate_binary": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/intermediate/after-rustuml",
+    "sha256": "94ebbd7925635704201f012c4561a9f9483c93a5aa6e10009de44586d2ad6cad",
+    "bytes": 24744768,
+    "source": "intermediate/production.diff applied to27bb1c3ff, intermediate/source-hashes.json",
+    "not_final": true
+  }
+}

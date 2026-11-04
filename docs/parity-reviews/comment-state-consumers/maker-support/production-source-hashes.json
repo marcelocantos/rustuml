@@ -1,0 +1,32 @@
+[
+  {
+    "path": "crates/rustuml-render/src/activity.rs",
+    "before_sha256": "b655fea0005fe7c053892c410058bee5e31bdc341a22cb3ccc868ad9b51dea0b",
+    "after_sha256": "cde49233d28ae519e96b651e9685a97f25508585a73ae1504282c834ea945f00"
+  },
+  {
+    "path": "crates/rustuml-render/src/class.rs",
+    "before_sha256": "81007d3253d670b1927045ce9452d8bea5dc00aea6f039a1ed44ac7414d2218c",
+    "after_sha256": "28dbebaa4a0f4bb4b5f77347b4e4ef633c2cb0de322d03a60172283deb16fcfd"
+  },
+  {
+    "path": "crates/rustuml-render/src/creole.rs",
+    "before_sha256": "5cb57bc371181264c667382007559e0728484217231427e8334f644bd9e0ee25",
+    "after_sha256": "88bb3c5da7bb9b7858168920e0b36dd080ab51da4f17c716fb3f1fdcd66303c7"
+  },
+  {
+    "path": "crates/rustuml-render/src/deployment.rs",
+    "before_sha256": "2cce18ea2abd2b662579e62b6539d99b35e4a934593deb59e6e268acfeb6efc2",
+    "after_sha256": "01d9b59a7b867a67541a7896441ba34a25599a45a80a931a896212012481749d"
+  },
+  {
+    "path": "crates/rustuml-render/src/state.rs",
+    "before_sha256": "ce5811ca01e92fc4ce8d7647f542171516445bc0a2e811b0037b23a26a6b8633",
+    "after_sha256": "64e8d39887168be8aa13c7d0505733c346e1f0210da366834e86c10baa2285da"
+  },
+  {
+    "path": "crates/rustuml/tests/pipe_mode.rs",
+    "before_sha256": "3c8df23c9e295f2e30c330164bd3cff74ea1ca4cffc963fcddd0b73a54a911bd",
+    "after_sha256": "19209273cc88a88e002a0a8862f859891b0f134d0371e0d630877a342240b6fe"
+  }
+]
