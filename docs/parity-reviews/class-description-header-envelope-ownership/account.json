@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "12b72619e304cbb5bb0259aefd243676094fb904",
+  "java_locations": [
+    "svek/image/EntityImageDescription#drawU,calculateDimension",
+    "svek/image/EntityImageClassHeader#drawU",
+    "svek/SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_plantuml_svg generic_right/generic_top"
+  ],
+  "invariant": "Only an EntityImageClassHeader image can contribute HeaderLayout generic overhang; a description USymbol paints its Creole label without a class generic badge.",
+  "causal_divergence": "Preserved actor_sized AST carries generic metadata from label markup. Description drawing ignores that native-class metadata, but generic_right unconditionally unions dims.width+4, yielding115px canvas despite exact111px drawing envelope. v2 trace confirms painted label max90.305664 vs returned right94.305664 after generic union. Removing Graphviz preferred union alone did not fix this counterexample; earlier hypothesis is retained as evidence.",
+  "planned_change": "Guard native generic extrema by image ownership (no description style), for body, canvas and header-top union. Preserve parser AST; no parser markup changes, per-fixture correction or constant subtraction.",
+  "perturbation_axes": [
+    "styled size/sub/sup labels across actor/boundary and component",
+    "native generic headers and description topology/chrome contrasts"
+  ]
+}
