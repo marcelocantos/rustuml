@@ -1255,6 +1255,116 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
     flush_buf!();
 }
 
+/// Candidate recognition runs on CharHidder's stream, before consuming a body.
+/// Splitter supplies the size/color/family/image/icon grammars; the combined
+/// font command and BACKCOLOR use their own patterns (not Splitter.fontPattern).
+enum ParameterCommand<'a> {
+    Size(&'a str),
+    Color(&'a str),
+    Font {
+        size: Option<&'a str>,
+        color: Option<&'a str>,
+    },
+    Family(&'a str),
+    Background(&'a str),
+    Image(&'a str),
+    Icon,
+}
+
+fn parameter_command(tag: &str) -> Option<ParameterCommand<'_>> {
+    static PATTERNS: std::sync::LazyLock<[regex::Regex; 8]> = std::sync::LazyLock::new(|| {
+        // Pattern2 uses ASCII CASE_INSENSITIVE, \d and \w. Its [%s] also
+        // includes NBSP; [%g] includes curly quotes and Jaws' invisible quote.
+        let space = r"[\t\n\x0B\x0C\r \u{00A0}]";
+        let separator = r"[\t\n\x0B\x0C\r :]";
+        let quote = r#"["“”\u{E121}]"#;
+        let attribute = format!(
+            r"{space}+(?:(?i-u:size){space}*={space}*{quote}?([0-9]+){quote}?|(?i-u:color){space}*={space}*{quote}?(#[0-9a-fA-F]{{6}}|[A-Za-z0-9_]+){quote}?)"
+        );
+        [
+            format!(r"\A(?i-u:size){separator}+([0-9]+){space}*\z"),
+            format!(r"\A(?i-u:color){separator}+(#[0-9a-fA-F]{{1,6}}|#?[A-Za-z0-9_]+){space}*\z"),
+            format!(r"\A(?i-u:font)(?:{attribute})+{space}*\z"),
+            attribute,
+            format!(r"\A(?i-u:font){separator}+([^>]+)/?\z"),
+            // FontStyle.getUbrexActivationPattern + CharClassRaw.WORD.
+            r"\A(?i-u:back):((?:#[0-9a-fA-F]{6}|[A-Za-z0-9_]+)(?:[-\\|/](?:[0-9a-fA-F]{6}|[A-Za-z0-9_]+))?)\z".into(),
+            format!(r"\A(?i-u:img){separator}+([^>{{}}]+)(?:\{{(?i-u:scale)=[0-9.]+\}})?\z"),
+            r"\A(?:#[A-Za-z0-9_]+)?&[-A-Za-z0-9_]+(?:[\{,]?(?:(?:(?i-u:scale=)|\*)[0-9.]+)?(?:,?(?i-u:color)[= :](?:#[0-9a-fA-F]{1,8}|[A-Za-z0-9_]+))?\}?)?\z".into(),
+        ].map(|pattern| regex::Regex::new(&pattern).expect("Java parameter candidate grammar"))
+    });
+    let [
+        size,
+        color,
+        font,
+        attribute,
+        family,
+        background,
+        image,
+        icon,
+    ] = &*PATTERNS;
+    if let Some(capture) = size.captures(tag) {
+        return Some(ParameterCommand::Size(capture.get(1).unwrap().as_str()));
+    }
+    if let Some(capture) = color.captures(tag) {
+        return Some(ParameterCommand::Color(capture.get(1).unwrap().as_str()));
+    }
+    // CommandCreoleBuilder registers combined attributes before the broader
+    // font-family candidate. Java retains the last capture for each attribute.
+    if font.is_match(tag) {
+        let (mut size, mut color) = (None, None);
+        for capture in attribute.captures_iter(tag) {
+            if let Some(value) = capture.get(1) {
+                size = Some(value.as_str());
+            }
+            if let Some(value) = capture.get(2) {
+                color = Some(value.as_str());
+            }
+        }
+        return Some(ParameterCommand::Font { size, color });
+    }
+    if let Some(capture) = family.captures(tag) {
+        return Some(ParameterCommand::Family(capture.get(1).unwrap().as_str()));
+    }
+    if let Some(capture) = background.captures(tag) {
+        return Some(ParameterCommand::Background(
+            capture.get(1).unwrap().as_str(),
+        ));
+    }
+    if let Some(capture) = image.captures(tag) {
+        return Some(ParameterCommand::Image(capture.get(1).unwrap().as_str()));
+    }
+    icon.is_match(tag).then_some(ParameterCommand::Icon)
+}
+
+fn walk_parameter_body(
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    close: &str,
+    style: &Style,
+    nested: &Style,
+    skip_underline: bool,
+    out: &mut Vec<Segment>,
+) {
+    // Parameter commands select the first case-insensitive bounded capture,
+    // otherwise their EOL alternative. Hidden closing candidates stay inert.
+    let remaining: String = chars.clone().collect();
+    let end = remaining.to_ascii_lowercase().find(close);
+    let content_end = end.unwrap_or(remaining.len());
+    let consumed = end.map_or(remaining.len(), |offset| offset + close.len());
+    for _ in remaining[..consumed].chars() {
+        chars.next();
+    }
+    out.push(Segment {
+        text: String::new(),
+        style: style.clone(),
+    });
+    walk_segments(&remaining[..content_end], nested, skip_underline, out);
+    out.push(Segment {
+        text: String::new(),
+        style: style.clone(),
+    });
+}
+
 fn handle_tag(
     tag: &str,
     chars: &mut std::iter::Peekable<std::str::Chars>,
@@ -1262,6 +1372,89 @@ fn handle_tag(
     skip_underline: bool,
     out: &mut Vec<Segment>,
 ) -> bool {
+    if let Some(command) = parameter_command(tag) {
+        let mut nested = style.clone();
+        let close = match command {
+            ParameterCommand::Size(size) => {
+                // Lexical eligibility is distinct from Java's parseInt failure
+                // for oversized values. Keep the existing nonpanicking contract.
+                if let Ok(size) = size.parse::<u32>() {
+                    nested.size = Some(size);
+                }
+                Some("</size>")
+            }
+            ParameterCommand::Color(color) => {
+                nested.fill = Some(color.to_string());
+                Some("</color>")
+            }
+            ParameterCommand::Font { size, color } => {
+                if let Some(size) = size.and_then(|value| value.parse::<u32>().ok()) {
+                    nested.size = Some(size);
+                }
+                if let Some(color) = color {
+                    nested.fill = Some(color.to_string());
+                }
+                Some("</font>")
+            }
+            ParameterCommand::Family(family) => {
+                // CommandCreoleFontFamilyChange changes only the selected family,
+                // not the font face and not an unconditional monospace mode.
+                nested.font_family = Some(family.to_string());
+                nested.monospace = false;
+                Some("</font>")
+            }
+            ParameterCommand::Background(color) => {
+                return walk_style_tag(
+                    chars,
+                    &["back"],
+                    style,
+                    |s| s.background = Some(color.to_string()),
+                    skip_underline,
+                    out,
+                );
+            }
+            ParameterCommand::Image(src) => {
+                // CommandCreoleImg removes src= and paired double quotes only
+                // after the complete image candidate grammar has matched.
+                let src = if src.get(..4).is_some_and(|s| s.eq_ignore_ascii_case("src=")) {
+                    &src[4..]
+                } else {
+                    src
+                };
+                let src = src
+                    .strip_prefix('"')
+                    .and_then(|s| s.strip_suffix('"'))
+                    .unwrap_or(src);
+                let fallback = if src.starts_with("https://") || src.starts_with("http://") {
+                    format!("(Cannot\u{00a0}decode:\u{00a0}{})", escape_creole_text(src))
+                } else {
+                    "(Cannot\u{00a0}decode)".to_string()
+                };
+                nested.monospace = true;
+                nested.size = Some(14);
+                out.push(Segment {
+                    text: String::new(),
+                    style: style.clone(),
+                });
+                push_segment(out, &fallback, &nested);
+                None
+            }
+            ParameterCommand::Icon => {
+                // Keep the existing lexical handoff to text_with_icons. This
+                // parser validates the candidate; the consumer resolves its atom.
+                return true;
+            }
+        };
+        if let Some(close) = close {
+            walk_parameter_body(chars, close, style, &nested, skip_underline, out);
+        } else {
+            out.push(Segment {
+                text: String::new(),
+                style: style.clone(),
+            });
+        }
+        return true;
+    }
     match tag {
         _ if is_sprite_tag(tag) => {
             // CommandCreoleSprite.executeAndGetRemaining consumes the entire
@@ -1367,106 +1560,6 @@ fn handle_tag(
             skip_underline,
             out,
         ),
-        _ if tag.starts_with("color:") || tag.starts_with("COLOR:") => {
-            let color = tag
-                .split_once(':')
-                .map(|(_, c)| c.to_string())
-                .unwrap_or_default();
-            let content = collect_until_tag(chars, "</color>");
-            let mut nested = style.clone();
-            nested.fill = Some(color);
-            // StripeSimple.modifyStripe flushes every selected command,
-            // including parameter commands with an atomless recursive body.
-            out.push(Segment {
-                text: String::new(),
-                style: style.clone(),
-            });
-            walk_segments(&content, &nested, skip_underline, out);
-            out.push(Segment {
-                text: String::new(),
-                style: style.clone(),
-            });
-        }
-        _ if tag.starts_with("size:") => {
-            let size = tag["size:".len()..].parse::<u32>().ok();
-            let content = collect_until_tag(chars, "</size>");
-            let mut nested = style.clone();
-            if let Some(s) = size {
-                nested.size = Some(s);
-            }
-            // StripeSimple.modifyStripe flushes every selected command,
-            // including parameter commands with an atomless recursive body.
-            out.push(Segment {
-                text: String::new(),
-                style: style.clone(),
-            });
-            walk_segments(&content, &nested, skip_underline, out);
-            out.push(Segment {
-                text: String::new(),
-                style: style.clone(),
-            });
-        }
-        _ if tag.starts_with("font:") || tag.starts_with("FONT:") => {
-            let font_name = tag
-                .split_once(':')
-                .map(|(_, n)| n.to_string())
-                .unwrap_or_default();
-            let content = collect_until_tag(chars, "</font>");
-            let mut nested = style.clone();
-            nested.font_family = Some(font_name);
-            // <font:Name> behaves like monospace for spacing per existing impl.
-            nested.monospace = true;
-            walk_segments(&content, &nested, skip_underline, out);
-        }
-        _ if tag.starts_with("font ") && (tag.contains('\'') || tag.contains('"')) => {
-            let content = collect_until_tag(chars, "</font>");
-            let mut nested = style.clone();
-            nested.font_family = Some(tag["font ".len()..].to_string());
-            walk_segments(&content, &nested, skip_underline, out);
-        }
-        _ if tag.starts_with("font color=") || tag.starts_with("FONT COLOR=") => {
-            let content = collect_until_tag(chars, "</font>");
-            let mut nested = style.clone();
-            let color = tag["font color=".len()..].to_string();
-            if !color.is_empty() {
-                nested.fill = Some(color);
-            }
-            walk_segments(&content, &nested, skip_underline, out);
-        }
-        _ if tag.starts_with("font") => {
-            let content = collect_until_tag(chars, "</font>");
-            walk_segments(&content, style, skip_underline, out);
-        }
-        _ if tag.starts_with("back:") || tag.starts_with("BACK:") => {
-            let color = tag
-                .split_once(':')
-                .map(|(_, c)| c.to_string())
-                .unwrap_or_default();
-            return walk_style_tag(
-                chars,
-                &["back"],
-                style,
-                |s| s.background = Some(color),
-                skip_underline,
-                out,
-            );
-        }
-        _ if tag.starts_with("img:") => {
-            let raw_src = &tag["img:".len()..];
-            let src = raw_src.find('{').map(|i| &raw_src[..i]).unwrap_or(raw_src);
-            let fallback = if src.starts_with("https://") || src.starts_with("http://") {
-                format!("(Cannot\u{00a0}decode:\u{00a0}{})", escape_creole_text(src))
-            } else {
-                "(Cannot\u{00a0}decode)".to_string()
-            };
-            let mut nested = style.clone();
-            nested.monospace = true;
-            nested.size = Some(14);
-            push_segment(out, &fallback, &nested);
-        }
-        _ if tag.starts_with("&amp;") || tag.starts_with('&') => {
-            // OpenIconic icon — handled at the SVG builder level via text_with_icons.
-        }
         _ => return false,
     }
     true
@@ -1633,6 +1726,98 @@ mod tests {
             vec![seg(" ", Style::default())]
         );
         assert!(parse_segments("").is_empty());
+    }
+
+    #[test]
+    fn parameter_candidates_reject_hidden_and_malformed_values() {
+        for (tag, close) in [
+            ("size:~13", "size"),
+            (r"size:1\~3", "size"),
+            ("size:13~", "size"),
+            ("color:~#123456", "color"),
+            (r"color:bl\~ue", "color"),
+            ("back:~#123456", "back"),
+            ("back:#12", "back"),
+            ("font:", "font"),
+            ("fontish:red", "font"),
+        ] {
+            let source = format!("X<{tag}>fir</{close}>Y");
+            let segments = parse_segments(&source);
+            assert_eq!(segments.len(), 1, "{source}");
+            assert_eq!(segments[0].style, Style::default(), "{source}");
+            assert_eq!(
+                stripped_text(&source),
+                restore_hidden_characters(&hide_characters(&source))
+            );
+        }
+        for tag in [
+            "img:",
+            "img:absent{scale=bad}",
+            "&",
+            "&home{scale=bad}",
+            "&home{color=\u{E023}123456}",
+        ] {
+            assert!(parameter_command(tag).is_none(), "{tag}");
+        }
+        assert!(matches!(
+            parameter_command("&home"),
+            Some(ParameterCommand::Icon)
+        ));
+        assert!(matches!(
+            parameter_command("img:absent{scale=2}"),
+            Some(ParameterCommand::Image("absent"))
+        ));
+        assert!(matches!(
+            parameter_command(r"back:red\blue"),
+            Some(ParameterCommand::Background(_))
+        ));
+    }
+
+    #[test]
+    fn parameter_grammar_preserves_priority_case_and_capture_boundaries() {
+        let segments = parse_segments("X<SiZe :13 >fir</SIZE>Y");
+        assert_eq!(
+            segments.iter().map(|s| s.text.as_str()).collect::<Vec<_>>(),
+            ["X", "fir", "Y"]
+        );
+        assert_eq!(segments[1].style.size, Some(13));
+        assert!(parameter_command("size\u{a0}13").is_none());
+        assert!(matches!(
+            parameter_command("size:13\u{a0}"),
+            Some(ParameterCommand::Size("13"))
+        ));
+        assert!(matches!(
+            parameter_command("font size=13 color=red size=12 color=blue"),
+            Some(ParameterCommand::Font {
+                size: Some("12"),
+                color: Some("blue")
+            })
+        ));
+        assert!(matches!(
+            parameter_command("font color='red'"),
+            Some(ParameterCommand::Family("color='red'"))
+        ));
+        // Unlike color values, Java's broad family grammar permits hidden chars.
+        assert!(matches!(
+            parameter_command("font color=\u{E023}123456"),
+            Some(ParameterCommand::Family(_))
+        ));
+        let segments = parse_segments("X<font size=13 color=blue></FONT>Y");
+        assert_eq!(
+            segments,
+            [seg("X", Style::default()), seg("Y", Style::default())]
+        );
+    }
+
+    #[test]
+    fn failed_parameter_candidate_leaves_inner_commands_reachable() {
+        let segments = parse_segments("X<size:~13<color:red>fir</color>Y");
+        assert_eq!(
+            segments.iter().map(|s| s.text.as_str()).collect::<Vec<_>>(),
+            ["X&lt;size:~13", "fir", "Y"]
+        );
+        assert_eq!(segments[1].style.fill.as_deref(), Some("red"));
+        assert_eq!(stripped_text("X<color:~#<$twig>>firY"), "X<color:#>firY");
     }
 
     #[test]
