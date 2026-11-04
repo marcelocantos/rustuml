@@ -59,6 +59,14 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
         parser.parse_line(source_line, text)?;
     }
 
+    // PSystemCommandFactory#getCandidate requires a completed multiline
+    // note command; an open buffer is not a successfully consumed command.
+    if let Some(note) = &parser.note_buffer {
+        return Err(ParseError {
+            line: note.source_line,
+            message: "Unclosed sequence note".to_string(),
+        });
+    }
     validate_return_destinations(&parser.events)?;
     Ok(parser.finish())
 }
@@ -1595,6 +1603,20 @@ fn note_text_from_lines(lines: &[String]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn unfinished_note_is_not_a_consumed_command() {
+        for open in ["note right", "note over Birch, Elm"] {
+            let lines = ["Birch -> Elm: go", open, "body"].map(str::to_string);
+            let error = parse_sequence(&lines).unwrap_err();
+            assert_eq!(error.line, 2);
+            let mut closed = lines.to_vec();
+            closed.push("end note".to_string());
+            assert!(parse_sequence(&closed).is_ok());
+        }
+        // These have different Java grammar/finalization contracts.
+        assert!(parse_sequence(&["group open".to_string(), "Birch -> Elm".to_string()]).is_ok());
+    }
 
     #[test]
     fn endpoint_heads_are_independent_and_old_models_default() {
