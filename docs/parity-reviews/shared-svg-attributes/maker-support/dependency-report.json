@@ -1,0 +1,27 @@
+{
+  "command": [
+    "cargo",
+    "tree",
+    "-p",
+    "rustuml",
+    "-e",
+    "normal"
+  ],
+  "normal_graph_identical": true,
+  "normal_graph_sha256": "a33bb41353e3cb02b5df69697ba42cc4440452b8cc453597d49398d1b6b9e619",
+  "new_nodes": [
+    "block-buffer 0.10.4",
+    "cpufeatures 0.2.17",
+    "crypto-common 0.1.7",
+    "digest 0.10.7",
+    "generic-array 0.14.7",
+    "sha2 0.10.9",
+    "typenum 1.20.1"
+  ],
+  "new_dev_edges": [
+    "rustuml \u2192 roxmltree 0.20.0 (already locked)",
+    "rustuml \u2192 sha2 0.10.9"
+  ],
+  "lock_diff_sha256": "e060adf492c0a02b89cbebcec3b70f884d31923375c98f13e7a9ffb41aa200ad",
+  "other_lock_changes": false
+}

@@ -1,0 +1,197 @@
+[
+  {
+    "cohort": "retained",
+    "entries": 1730,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "maker18",
+    "entries": 18,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "sprites50",
+    "entries": 50,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "checker38",
+    "entries": 38,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "fresh15",
+    "entries": 15,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "fresh26",
+    "entries": 26,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "new15",
+    "entries": 15,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "delimiters4",
+    "entries": 4,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "focused2",
+    "entries": 2,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "checker30",
+    "entries": 30,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "supplement8",
+    "entries": 8,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "fresh12",
+    "entries": 12,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "checker28",
+    "entries": 28,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "fresh16",
+    "entries": 16,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "golden-regressions",
+    "entries": 6,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "checker36",
+    "entries": 36,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "fallback16",
+    "entries": 16,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "checker32",
+    "entries": 32,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "shared22",
+    "entries": 22,
+    "byte_changes": 0,
+    "semantic_changes": 0,
+    "changes": []
+  },
+  {
+    "cohort": "full-golden",
+    "entries": 12550,
+    "byte_changes": 9,
+    "semantic_changes": 0,
+    "changes": [
+      {
+        "id": "full-golden/dot/dot_edge_labels",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A -> B [label=\"forward\"]\n        B -> A [label=\"backward\", style=dashed]\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n  - id: B\n  edges:\n  - from: A\n    to: B\n    attrs:\n      label: forward\n  - from: B\n    to: A\n    attrs:\n      label: backward\n      style: dashed\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A -> B [label=\"forward\"]\n        B -> A [label=\"backward\", style=dashed]\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n  - id: B\n  edges:\n  - from: A\n    to: B\n    attrs:\n      label: forward\n  - from: B\n    to: A\n    attrs:\n      style: dashed\n      label: backward\n"
+      },
+      {
+        "id": "full-golden/dot/dot_graph_attributes",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        graph [label=\"My Graph\", fontsize=20, bgcolor=lightyellow]\n        node  [shape=circle, style=filled, fillcolor=white]\n        edge  [color=gray]\n        A -> B -> C\n        A -> C\n      }\n      @enddot\n  directed: true\n  name: G\n  attrs:\n    fontsize: '20'\n    label: My Graph\n    bgcolor: lightyellow\n  node_defaults:\n    shape: circle\n    style: filled\n    fillcolor: white\n  edge_defaults:\n    color: gray\n  nodes:\n  - id: A\n  - id: B\n  - id: C\n  edges:\n  - from: A\n    to: B\n  - from: B\n    to: C\n  - from: A\n    to: C\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        graph [label=\"My Graph\", fontsize=20, bgcolor=lightyellow]\n        node  [shape=circle, style=filled, fillcolor=white]\n        edge  [color=gray]\n        A -> B -> C\n        A -> C\n      }\n      @enddot\n  directed: true\n  name: G\n  attrs:\n    fontsize: '20'\n    label: My Graph\n    bgcolor: lightyellow\n  node_defaults:\n    fillcolor: white\n    shape: circle\n    style: filled\n  edge_defaults:\n    color: gray\n  nodes:\n  - id: A\n  - id: B\n  - id: C\n  edges:\n  - from: A\n    to: B\n  - from: B\n    to: C\n  - from: A\n    to: C\n"
+      },
+      {
+        "id": "full-golden/dot/dot_multi_edge",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A -> B [label=\"call\"]\n        A -> B [label=\"return\", style=dashed, dir=back]\n        B -> C\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n  - id: B\n  - id: C\n  edges:\n  - from: A\n    to: B\n    attrs:\n      label: call\n  - from: A\n    to: B\n    attrs:\n      label: return\n      dir: back\n      style: dashed\n  - from: B\n    to: C\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A -> B [label=\"call\"]\n        A -> B [label=\"return\", style=dashed, dir=back]\n        B -> C\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n  - id: B\n  - id: C\n  edges:\n  - from: A\n    to: B\n    attrs:\n      label: call\n  - from: A\n    to: B\n    attrs:\n      style: dashed\n      label: return\n      dir: back\n  - from: B\n    to: C\n"
+      },
+      {
+        "id": "full-golden/dot/dot_node_colors",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A [style=filled, fillcolor=lightblue]\n        B [style=filled, fillcolor=lightyellow]\n        C [style=filled, fillcolor=lightgreen]\n        A -> B -> C\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n    attrs:\n      style: filled\n      fillcolor: lightblue\n  - id: B\n    attrs:\n      style: filled\n      fillcolor: lightyellow\n  - id: C\n    attrs:\n      style: filled\n      fillcolor: lightgreen\n  edges:\n  - from: A\n    to: B\n  - from: B\n    to: C\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A [style=filled, fillcolor=lightblue]\n        B [style=filled, fillcolor=lightyellow]\n        C [style=filled, fillcolor=lightgreen]\n        A -> B -> C\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n    attrs:\n      fillcolor: lightblue\n      style: filled\n  - id: B\n    attrs:\n      fillcolor: lightyellow\n      style: filled\n  - id: C\n    attrs:\n      style: filled\n      fillcolor: lightgreen\n  edges:\n  - from: A\n    to: B\n  - from: B\n    to: C\n"
+      },
+      {
+        "id": "full-golden/dot/dot_node_url",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A [URL=\"http://example.com\", label=\"Click me\"]\n        B [tooltip=\"Hover text\"]\n        A -> B\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n    attrs:\n      label: Click me\n      URL: http://example.com\n  - id: B\n    attrs:\n      tooltip: Hover text\n  edges:\n  - from: A\n    to: B\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A [URL=\"http://example.com\", label=\"Click me\"]\n        B [tooltip=\"Hover text\"]\n        A -> B\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n    attrs:\n      URL: http://example.com\n      label: Click me\n  - id: B\n    attrs:\n      tooltip: Hover text\n  edges:\n  - from: A\n    to: B\n"
+      },
+      {
+        "id": "full-golden/dot/dot_record_ports",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        struct1 [shape=record, label=\"<f0> left|<f1> middle|<f2> right\"]\n        struct2 [shape=record, label=\"one|two\"]\n        struct1:f2 -> struct2\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: struct1\n    attrs:\n      label: <f0> left|<f1> middle|<f2> right\n      shape: record\n  - id: struct2\n    attrs:\n      shape: record\n      label: one|two\n  - id: f2\n  edges:\n  - from: f2\n    to: struct2\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        struct1 [shape=record, label=\"<f0> left|<f1> middle|<f2> right\"]\n        struct2 [shape=record, label=\"one|two\"]\n        struct1:f2 -> struct2\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: struct1\n    attrs:\n      label: <f0> left|<f1> middle|<f2> right\n      shape: record\n  - id: struct2\n    attrs:\n      label: one|two\n      shape: record\n  - id: f2\n  edges:\n  - from: f2\n    to: struct2\n"
+      },
+      {
+        "id": "full-golden/dot/dot_record_simple",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A [shape=record, label=\"{name|age|email}\"]\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n    attrs:\n      shape: record\n      label: '{name|age|email}'\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A [shape=record, label=\"{name|age|email}\"]\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n    attrs:\n      label: '{name|age|email}'\n      shape: record\n"
+      },
+      {
+        "id": "full-golden/dot/dot_weighted_edges",
+        "semantic_equal": true,
+        "before_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A -> B [weight=5, label=\"5\"]\n        A -> C [weight=1, label=\"1\"]\n        A -> D [weight=10, label=\"10\"]\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n  - id: B\n  - id: C\n  - id: D\n  edges:\n  - from: A\n    to: B\n    attrs:\n      label: '5'\n      weight: '5'\n  - from: A\n    to: C\n    attrs:\n      weight: '1'\n      label: '1'\n  - from: A\n    to: D\n    attrs:\n      label: '10'\n      weight: '10'\n",
+        "after_bytes": "type: Dot\ndiagram:\n  meta:\n    source: |\n      @startdot\n      digraph G {\n        A -> B [weight=5, label=\"5\"]\n        A -> C [weight=1, label=\"1\"]\n        A -> D [weight=10, label=\"10\"]\n      }\n      @enddot\n  directed: true\n  name: G\n  nodes:\n  - id: A\n  - id: B\n  - id: C\n  - id: D\n  edges:\n  - from: A\n    to: B\n    attrs:\n      label: '5'\n      weight: '5'\n  - from: A\n    to: C\n    attrs:\n      label: '1'\n      weight: '1'\n  - from: A\n    to: D\n    attrs:\n      label: '10'\n      weight: '10'\n"
+      },
+      {
+        "id": "full-golden/sprites/sprite_multiple",
+        "semantic_equal": true,
+        "before_bytes": "type: Deployment\ndiagram:\n  meta:\n    sprites:\n      server:\n        width: 8\n        height: 8\n        rows:\n        - '11111111'\n        - '11111111'\n        - '10000001'\n        - '10111101'\n        - '10111101'\n        - '10000001'\n        - '11111111'\n        - '11111111'\n      user:\n        width: 8\n        height: 8\n        rows:\n        - '00011000'\n        - '00111100'\n        - '00111100'\n        - '00011000'\n        - '01111110'\n        - '11111111'\n        - '11111111'\n        - '01111110'\n    source: |\n      @startuml\n      sprite $user [8x8/16] {\n      00011000\n      00111100\n      00111100\n      00011000\n      01111110\n      11111111\n      11111111\n      01111110\n      }\n\n      sprite $server [8x8/16] {\n      11111111\n      11111111\n      10000001\n      10111101\n      10111101\n      10000001\n      11111111\n      11111111\n      }\n\n      actor \"<$user> User\" as user\n      node \"<$server> Server\" as server\n\n      user -> server : request\n      server -> user : response\n      @enduml\n  direction: TopToBottom\n  nodes:\n  - id: user\n    label: <$user> User\n    kind: Actor\n    stereotype: null\n    declared_container: false\n    children: []\n    source_line: 23\n  - id: server\n    label: <$server> Server\n    kind: Node\n    stereotype: null\n    declared_container: false\n    children: []\n    source_line: 24\n  connections:\n  - from: user\n    to: server\n    label: request\n    arrow_at_end: true\n    length: 1\n    source_line: 26\n  - from: server\n    to: user\n    label: response\n    arrow_at_end: true\n    length: 1\n    source_line: 27\n",
+        "after_bytes": "type: Deployment\ndiagram:\n  meta:\n    sprites:\n      user:\n        width: 8\n        height: 8\n        rows:\n        - '00011000'\n        - '00111100'\n        - '00111100'\n        - '00011000'\n        - '01111110'\n        - '11111111'\n        - '11111111'\n        - '01111110'\n      server:\n        width: 8\n        height: 8\n        rows:\n        - '11111111'\n        - '11111111'\n        - '10000001'\n        - '10111101'\n        - '10111101'\n        - '10000001'\n        - '11111111'\n        - '11111111'\n    source: |\n      @startuml\n      sprite $user [8x8/16] {\n      00011000\n      00111100\n      00111100\n      00011000\n      01111110\n      11111111\n      11111111\n      01111110\n      }\n\n      sprite $server [8x8/16] {\n      11111111\n      11111111\n      10000001\n      10111101\n      10111101\n      10000001\n      11111111\n      11111111\n      }\n\n      actor \"<$user> User\" as user\n      node \"<$server> Server\" as server\n\n      user -> server : request\n      server -> user : response\n      @enduml\n  direction: TopToBottom\n  nodes:\n  - id: user\n    label: <$user> User\n    kind: Actor\n    stereotype: null\n    declared_container: false\n    children: []\n    source_line: 23\n  - id: server\n    label: <$server> Server\n    kind: Node\n    stereotype: null\n    declared_container: false\n    children: []\n    source_line: 24\n  connections:\n  - from: user\n    to: server\n    label: request\n    arrow_at_end: true\n    length: 1\n    source_line: 26\n  - from: server\n    to: user\n    label: response\n    arrow_at_end: true\n    length: 1\n    source_line: 27\n"
+      }
+    ]
+  }
+]
