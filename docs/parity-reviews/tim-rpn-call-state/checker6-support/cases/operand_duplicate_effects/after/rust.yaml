@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "MOSS/12" as Effects
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Effects
+  entities:
+  - id: Effects
+    label: MOSS/12
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

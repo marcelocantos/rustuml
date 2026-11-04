@@ -1,0 +1,8 @@
+@startuml
+note as Memo
+  $p first oak
+second oak
+%upper("raw") first elm
+second elm
+end note
+@enduml

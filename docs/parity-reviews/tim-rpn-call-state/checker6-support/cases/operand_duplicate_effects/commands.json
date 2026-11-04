@@ -1,0 +1,73 @@
+{
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.1314189580007223,
+  "stdout_sha256": "a42bdfe6d37b53aaa6dd8c05575e6a1e3974559777fca122b8669da371e71694",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "id": "operand_duplicate_effects",
+  "timezone": "GMT+11:00",
+  "source": "/tmp/rustuml-checker6/new/operand_duplicate_effects.puml",
+  "source_sha256": "e84da25db9cd1e32bf0b99ea6a4ab64701a7ffbc83f4edb5d3e2a6f1142df9db",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/operand_duplicate_effects.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/operand_duplicate_effects.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/operand_duplicate_effects.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.5425030829937896,
+    "stdout_sha256": "0e0f5d3718e77e0e7ef7d727c68b1503ab880a78ccef5b5267b1f235c3ce58cc",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}

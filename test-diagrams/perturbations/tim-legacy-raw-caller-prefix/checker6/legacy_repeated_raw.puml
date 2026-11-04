@@ -1,0 +1,11 @@
+@startuml
+!$p="cooked"
+!definelong STRIP(x)
+first x
+second x
+!enddefinelong
+note as Memo
+  $p STRIP("oak") suffix
+%upper("raw") STRIP("elm") suffix
+end note
+@enduml

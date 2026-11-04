@@ -1,0 +1,73 @@
+{
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.1478097080107545,
+  "stdout_sha256": "70591db68de2dcc1f3ee948c4f7afc9bef61594250e0cc7cca83e9d29e03cdd3",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "id": "rpn_nested_consumption",
+  "timezone": "GMT+11:00",
+  "source": "/tmp/rustuml-checker6/new/rpn_nested_consumption.puml",
+  "source_sha256": "c1a7393ed2d47d46cafcdf89a8cc013f7162bdf2df6a842ee3606c360eece6dc",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/rpn_nested_consumption.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/rpn_nested_consumption.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/rpn_nested_consumption.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.5357683340116637,
+    "stdout_sha256": "aae909c76b637566094efc3f6e6294849002ccb34310cc399531c34e0fbef9da",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}

@@ -1,0 +1,555 @@
+diff --git a/crates/rustuml-parser/src/preprocess/mod.rs b/crates/rustuml-parser/src/preprocess/mod.rs
+index 995bde97..cf62f629 100644
+--- a/crates/rustuml-parser/src/preprocess/mod.rs
++++ b/crates/rustuml-parser/src/preprocess/mod.rs
+@@ -522,6 +522,52 @@ fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
+     format!("#{r:02X}{g:02X}{b:02X}")
+ }
+ 
++// HslColor.executeReturnFunction -> HSLColor.toRGB/HueToRGB ->
++// XColor.fromFloat -> HColorSimple.asString (Java 71806a2378).
++// All channel constants and f32 operations below are those source equations;
++// this builtin does not share the existing f64 lighten/darken approximation.
++fn tim_hsl_color(values: &[Value]) -> String {
++    let h = (values[0].java_int() as f32 % 360.0) / 360.0;
++    let s = (values[1].java_int() as f32).clamp(0.0, 100.0) / 100.0;
++    let l = (values[2].java_int() as f32).clamp(0.0, 100.0) / 100.0;
++    // HslColor divides alpha as double before casting to float.
++    let alpha = values
++        .get(3)
++        .map_or(1.0, |v| (f64::from(v.java_int()) / 100.0) as f32)
++        .clamp(0.0, 1.0);
++    let q = if l < 0.5 {
++        l * (1.0 + s)
++    } else {
++        (l + s) - (s * l)
++    };
++    let p = 2.0 * l - q;
++    let channel = |mut hue: f32| {
++        if hue < 0.0 {
++            hue += 1.0;
++        }
++        if hue > 1.0 {
++            hue -= 1.0;
++        }
++        let value = if 6.0 * hue < 1.0 {
++            p + ((q - p) * 6.0 * hue)
++        } else if 2.0 * hue < 1.0 {
++            q
++        } else if 3.0 * hue < 2.0 {
++            p + ((q - p) * 6.0 * ((2.0 / 3.0) - hue))
++        } else {
++            p
++        };
++        (value.clamp(0.0, 1.0) * 255.0).round() as u8
++    };
++    let (r, g, b) = (channel(h + 1.0 / 3.0), channel(h), channel(h - 1.0 / 3.0));
++    let a = (alpha * 255.0).round() as u8;
++    match a {
++        0 => "transparent".into(),
++        255 => format!("#{r:02X}{g:02X}{b:02X}"),
++        _ => format!("#{a:02x}{r:02x}{g:02x}{b:02x}"),
++    }
++}
++
+ // ---------------------------------------------------------------------------
+ // Core context
+ // ---------------------------------------------------------------------------
+@@ -552,7 +598,7 @@ struct PreprocessContext {
+     collecting_function: Option<String>,
+     collecting_definelong: Option<String>,
+     subs: HashMap<String, Vec<BufferedLine>>,
+-    collecting_sub: Option<String>,
++    collecting_sub: Option<(String, usize)>,
+     collecting_sub_lines: Vec<BufferedLine>,
+     /// Local variable scopes for function calls (stack of saved scopes).
+     local_vars: Vec<LocalMemory>,
+@@ -943,9 +989,15 @@ impl PreprocessContext {
+         // CodeIteratorSub buffers then replays the body at its definition,
+         // before the conditional/function iterators. Capture origins as well
+         // as text; no special theme-only subblock execution path exists.
+-        if let Some(name) = self.collecting_sub.clone() {
++        if let Some((name, origin)) = self.collecting_sub.clone() {
+             self.push_directive_placeholder(output);
+-            if directive_argument(trimmed, "!endsub").is_some() {
++            // CodeIteratorSub.peek rejects nesting at the outer declaration,
++            // before replay can execute effects or consume following model lines.
++            if directive_argument(trimmed, "!startsub").is_some() {
++                let previous = self.source_line_override.replace(origin);
++                self.fail("Cannot nest sub".into());
++                self.source_line_override = previous;
++            } else if directive_argument(trimmed, "!endsub").is_some() {
+                 self.collecting_sub = None;
+                 let body = std::mem::take(&mut self.collecting_sub_lines);
+                 self.subs.insert(name, body.clone());
+@@ -997,7 +1049,7 @@ impl PreprocessContext {
+                 self.fail("Bad sub name".into());
+                 return;
+             }
+-            self.collecting_sub = Some(name.to_string());
++            self.collecting_sub = Some((name.to_string(), self.current_diagram_source_line()));
+             self.collecting_sub_lines.clear();
+             self.push_directive_placeholder(output);
+             return;
+@@ -1408,7 +1460,7 @@ impl PreprocessContext {
+                             (name, Some(self.eval_expr_to_value(expression)))
+                         });
+                 FuncParam {
+-                    name: name.trim().trim_start_matches('$').to_string(),
++                    name: name.trim().to_string(),
+                     default,
+                 }
+             })
+@@ -1434,7 +1486,7 @@ impl PreprocessContext {
+             }
+             if let Some((key, expr)) = named_argument(arg) {
+                 let value = self.eval_expr_to_value(expr);
+-                named.insert(key.trim_start_matches('$').to_string(), value);
++                named.insert(key.to_string(), value);
+             } else {
+                 positional.push(self.eval_expr_to_value(arg));
+             }
+@@ -1476,7 +1528,12 @@ impl PreprocessContext {
+         if (expression_call || !exact_signature)
+             && (positional.len() > func.params.len() || positional.len() < needed || unknown_name)
+         {
+-            self.fail(format!("Bad number of arguments for {name}"));
++            self.fail(format!("Unknown built-in function ${name}"));
++            return (None, Vec::new());
++        }
++        // TFunctionImpl.executeReturnFunction checks kind after signature lookup.
++        if expression_call && func.kind == FunctionKind::Procedure {
++            self.fail("Illegal call here. Is there a return directive in your function?".into());
+             return (None, Vec::new());
+         }
+         let mut positional = positional.into_iter();
+@@ -1487,7 +1544,16 @@ impl PreprocessContext {
+                 .or_else(|| positional.next())
+                 .or_else(|| param.default.clone())
+                 .unwrap_or_else(|| Value::Str(String::new()));
+-            scope.overrides.insert(param.name.clone(), value);
++            // Exact Java key matching occurs above. Only the Rust memory index
++            // omits the leading dollar, as do get_var and assignment storage.
++            scope.overrides.insert(
++                param
++                    .name
++                    .strip_prefix('$')
++                    .unwrap_or(&param.name)
++                    .to_string(),
++                value,
++            );
+         }
+         let outer_kind = std::mem::replace(&mut self.execution_kind, func.kind);
+         self.local_vars.push(scope);
+@@ -2230,65 +2296,118 @@ impl PreprocessContext {
+     }
+ 
+     fn execute_expression(&mut self, expression: &Expression) -> Value {
++        // ReversePolishInterpretor owns ONE stack/map for a whole prepared
++        // expression. A called function's body evaluates its own expressions.
++        // Account: tim-rpn-call-state (precommitted c91103f9).
++        let mut stack = Vec::new();
++        let mut named = HashMap::new();
++        self.execute_expression_into(expression, &mut stack, &mut named);
++        stack.pop().unwrap_or_else(|| Value::Str(String::new()))
++    }
++
++    fn expression_pop(&mut self, stack: &mut Vec<Value>) -> Value {
++        // Java ArrayDeque.removeFirst throws on malformed RPN stack state.
++        // Preserve fatality through the existing preprocessing error channel.
++        stack.pop().unwrap_or_else(|| {
++            self.fail("Expression operand stack underflow".into());
++            Value::Str(String::new())
++        })
++    }
++
++    fn execute_expression_into(
++        &mut self,
++        expression: &Expression,
++        stack: &mut Vec<Value>,
++        named: &mut HashMap<String, Value>,
++    ) {
+         if self.error.is_some() {
+-            return Value::Str(String::new());
++            return;
+         }
+         match expression {
+-            Expression::Value(value) => value.clone(),
++            Expression::Value(value) => stack.push(value.clone()),
+             Expression::Number(text) => match text.parse::<i32>() {
+-                Ok(number) => Value::Int(number),
+-                Err(_) => {
+-                    self.fail("Integer literal outside signed 32-bit range".into());
+-                    Value::Str(String::new())
+-                }
++                Ok(number) => stack.push(Value::Int(number)),
++                Err(_) => self.fail("Integer literal outside signed 32-bit range".into()),
+             },
+             Expression::Not(inner) => {
+-                Value::Int(i32::from(!self.execute_expression(inner).truth()))
++                self.execute_expression_into(inner, stack, named);
++                if self.error.is_none() {
++                    let value = self.expression_pop(stack);
++                    stack.push(Value::Int(i32::from(!value.truth())));
++                }
+             }
+             Expression::Binary(left, op, right) => {
+-                let left = self.execute_expression(left);
+-                let right = self.execute_expression(right);
+-                if self.error.is_some() {
+-                    return Value::Str(String::new());
++                self.execute_expression_into(left, stack, named);
++                self.execute_expression_into(right, stack, named);
++                if self.error.is_none() {
++                    let right = self.expression_pop(stack);
++                    let left = self.expression_pop(stack);
++                    if self.error.is_none() {
++                        stack.push(self.apply_operator(left, right, op));
++                    }
+                 }
+-                self.apply_operator(left, right, op)
+             }
+             Expression::Call(name, args) => {
+-                let mut positional = Vec::new();
+-                let mut named = HashMap::new();
+                 for (key, expression) in args {
+-                    let key = key
+-                        .as_ref()
+-                        .map(|key| self.execute_expression(key).to_display());
+-                    let value = self.execute_expression(expression);
++                    if let Some(key) = key {
++                        self.execute_expression_into(key, stack, named);
++                    }
++                    self.execute_expression_into(expression, stack, named);
+                     if self.error.is_some() {
+-                        return Value::Str(String::new());
++                        return;
+                     }
+-                    if let Some(key) = key {
+-                        named.insert(key.trim_start_matches('$').to_string(), value);
++                    if key.is_some() {
++                        let value = self.expression_pop(stack);
++                        let key = self.expression_pop(stack).to_display();
++                        if self.error.is_some() {
++                            return;
++                        }
++                        named.insert(key, value);
++                    }
++                }
++                // RPN OPEN_PAREN_FUNC subtracts the current DISTINCT named keys,
++                // including those assigned before a nested call in this expression.
++                let count = args.len().checked_sub(named.len());
++                let function_name = name.strip_prefix('$').unwrap_or(name);
++                let covered = count.is_some_and(|count| {
++                    if let Some(builtin) = name.strip_prefix('%') {
++                        // Unknown arity retains existing Rust extensions; their
++                        // body dispatcher still rejects unimplemented names.
++                        builtin_arity(builtin).is_none_or(|arity| arity.contains(&count))
+                     } else {
+-                        positional.push(value);
++                        self.functions.get(function_name).is_some_and(|function| {
++                            count <= function.params.len()
++                                && count
++                                    >= function
++                                        .params
++                                        .iter()
++                                        .filter(|p| p.default.is_none())
++                                        .count()
++                        })
+                     }
++                });
++                if !covered {
++                    self.fail(format!("Unknown built-in function {name}"));
++                    return;
+                 }
+-                if let Some(builtin) = name.strip_prefix('%') {
+-                    return self.eval_builtin_values(builtin, &positional);
++                let count = count.unwrap(); // Successful coverage above requires a count.
++                if count > stack.len() {
++                    self.fail("Expression operand stack underflow".into());
++                    return;
+                 }
+-                let name = name.trim_start_matches('$');
+-                // TFunctionImpl.executeReturnFunction rejects procedures before
+-                // entering their body; argument effects have already executed.
+-                if self
+-                    .functions
+-                    .get(name)
+-                    .is_some_and(|f| f.kind == FunctionKind::Procedure)
+-                {
+-                    self.fail(
+-                        "Illegal call here. Is there a return directive in your function?".into(),
+-                    );
+-                    return Value::Str(String::new());
++                let positional = stack.split_off(stack.len() - count);
++                let value = if let Some(builtin) = name.strip_prefix('%') {
++                    self.eval_builtin_values(builtin, &positional)
++                } else {
++                    let (ret, events) =
++                        self.call_function_values(function_name, positional, named.clone(), true);
++                    self.expression_events.extend(events);
++                    ret.unwrap_or_else(|| Value::Str(String::new()))
++                };
++                named.clear();
++                if self.error.is_none() {
++                    stack.push(value);
+                 }
+-                let (ret, events) = self.call_function_values(name, positional, named, true);
+-                self.expression_events.extend(events);
+-                ret.unwrap_or_else(|| Value::Str(String::new()))
+             }
+         }
+     }
+@@ -2504,12 +2623,15 @@ impl PreprocessContext {
+                     }
+                     let (expanded, multiline) = self.expand_definelong(name, &args);
+                     if multiline {
++                        // TContext LEGACY_DEFINELONG pendingAdd uses the RAW
++                        // caller prefix; PROCEDURE uses the evaluated result.
++                        let raw_prefix = &line[..offset];
+                         self.mark_source_lines = true;
+                         for (index, line) in expanded.split('\n').enumerate() {
+                             let (origin, text) = split_source_line_marker(line)
+                                 .map_or((None, line), |(n, t)| (Some(n), t));
+                             let text = if index == 0 {
+-                                format!("{result}{text}")
++                                format!("{raw_prefix}{text}")
+                             } else {
+                                 text.to_string()
+                             };
+@@ -2691,12 +2813,25 @@ impl PreprocessContext {
+         let mut values = Vec::new();
+         if !args_raw.trim().is_empty() {
+             for part in split_builtin_args(args_raw) {
+-                values.push(self.eval_expr_to_value(part));
++                // EaterFunctionCall separates named operands before constructing
++                // the positional signature. Builtins ignore the named map, but
++                // each RHS still executes, including effects and errors.
++                if let Some((_, expression)) = named_argument(part) {
++                    self.eval_expr_to_value(expression);
++                } else {
++                    values.push(self.eval_expr_to_value(part));
++                }
+                 if self.error.is_some() {
+                     return Value::Str(String::new());
+                 }
+             }
+         }
++        // TContext.applyFunctionsAndVariables reports failed plain-call lookup
++        // differently from ReversePolishInterpretor's expression lookup.
++        if builtin_arity(func).is_some_and(|arity| !arity.contains(&values.len())) {
++            self.fail(format!("Function not found %{func}"));
++            return Value::Str(String::new());
++        }
+         self.eval_builtin_values(func, &values)
+     }
+ 
+@@ -2711,6 +2846,21 @@ impl PreprocessContext {
+             return Value::Str(String::new());
+         }
+         match func {
++            "intval" => {
++                // IntVal.executeReturnFunction uses Integer.parseInt on TValue's
++                // complete display, not numeric coercion or floating truncation.
++                let text = values[0].to_display();
++                return match text.parse::<i32>() {
++                    Ok(value) => Value::Int(value),
++                    Err(_) => {
++                        self.fail(format!("Cannot convert {text} to integer."));
++                        Value::Str(String::new())
++                    }
++                };
++            }
++            "hsl_color" => {
++                return Value::Str(tim_hsl_color(values));
++            }
+             "upper" | "lower" => {
+                 // Upper/Lower call Java String case conversion, which preserves
+                 // unmatched UTF-16 units. Convert valid spans, not lossy display.
+@@ -2888,7 +3038,7 @@ impl PreprocessContext {
+         let text = self.eval_one_builtin_args(func, &refs);
+         match func {
+             // Each corresponding tim/builtin implementation returns fromInt/fromBoolean.
+-            "strlen" | "strpos" | "true" | "false" | "intval" | "hex2dec" | "variable_exists" => {
++            "strlen" | "strpos" | "true" | "false" | "hex2dec" | "variable_exists" => {
+                 Value::Int(text.parse().unwrap_or(0))
+             }
+             "is_dark" | "is_light" | "is_defined" | "function_exists" | "file_exists"
+@@ -2952,10 +3102,6 @@ impl PreprocessContext {
+                 }
+             }
+             "string" => args.first().map_or(String::new(), |s| s.to_string()),
+-            "intval" => args
+-                .first()
+-                .and_then(|s| s.parse::<f64>().ok())
+-                .map_or("0".to_string(), |n| format!("{}", n as i64)),
+             "darken" => {
+                 // PlantUML `%darken(color, ratio)` decreases luminance by a
+                 // *relative* fraction: `L -= L * (ratio / 100)`. Match Java's
+@@ -2986,13 +3132,6 @@ impl PreprocessContext {
+                     color_str.to_string()
+                 }
+             }
+-            "hsl_color" => {
+-                let h: f64 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0.0);
+-                let s: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(100.0);
+-                let l: f64 = args.get(2).and_then(|s| s.parse().ok()).unwrap_or(50.0);
+-                let (r, g, b) = hsl_to_rgb(h, s, l);
+-                rgb_to_hex(r, g, b)
+-            }
+             "is_dark" => {
+                 let color_str = args.first().copied().unwrap_or("");
+                 if let Some((r, g, b)) = parse_color(color_str) {
+@@ -3570,6 +3709,125 @@ mod tests {
+             .collect()
+     }
+ 
++    #[test]
++    fn rpn_named_keys_keep_exact_spelling_and_expression_stack_lifetime() {
++        let mut ctx = PreprocessContext::new(None, false);
++        ctx.process("@startuml\n!$key=\"b\"\n!function $pair($a=\"first\",$b=\"last\")\n!return $a+\"/\"+$b\n!endfunction");
++        assert_eq!(
++            ctx.eval_expr_to_value(r#"$pair($key="violet")"#)
++                .to_display(),
++            "first/last"
++        );
++        assert_eq!(ctx.substitute_vars(r#"$pair($b="blue")"#), "first/blue");
++        // Duplicate assignment leaves one key, hence RPN consumes one operand
++        // from the surrounding expression. The later binary op then underflows.
++        ctx.eval_expr_to_value(r#""prefix"+$pair($a="blue",$a="red")"#);
++        assert_eq!(
++            ctx.error.unwrap().message,
++            "Expression operand stack underflow"
++        );
++    }
++
++    #[test]
++    fn nested_calls_share_named_state_but_body_expressions_are_independent() {
++        let mut ctx = PreprocessContext::new(None, false);
++        ctx.process("@startuml\n!function $inner($v=\"leaf\")\n!return $v\n!endfunction\n!function $pair($a=\"first\",$b=\"last\")\n!return $a+\"/\"+$b\n!endfunction");
++        ctx.eval_expr_to_value(r#"$pair($a="blue",$b=$inner())"#);
++        assert_eq!(
++            ctx.error.unwrap().message,
++            "Unknown built-in function $inner"
++        );
++    }
++
++    #[test]
++    fn plain_builtin_named_rhs_executes_without_becoming_positional() {
++        let mut ctx = PreprocessContext::new(None, false);
++        ctx.process(
++            "@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return \"cedar\"\n!endfunction",
++        );
++        assert_eq!(
++            ctx.substitute_vars(r#"%strlen("oak",$ignored=$tick())"#),
++            "3"
++        );
++        assert!(matches!(ctx.get_var("n"), Some(Value::Int(1))));
++        ctx.substitute_vars(r#"%strlen($ignored=$tick())"#);
++        assert!(matches!(ctx.get_var("n"), Some(Value::Int(2))));
++        assert_eq!(ctx.error.unwrap().message, "Function not found %strlen");
++    }
++
++    #[test]
++    fn procedure_expression_resolves_coverage_before_kind() {
++        for (call, message) in [
++            ("$emit()", "Unknown built-in function $emit"),
++            (
++                "$emit(1)",
++                "Illegal call here. Is there a return directive in your function?",
++            ),
++        ] {
++            let mut ctx = PreprocessContext::new(None, false);
++            ctx.process("@startuml\n!procedure $emit($a)\nclass Phantom\n!endprocedure");
++            ctx.eval_expr_to_value(call);
++            assert_eq!(ctx.error.unwrap().message, message);
++            assert!(ctx.expression_events.is_empty());
++        }
++    }
++
++    #[test]
++    fn multiline_legacy_prefix_is_raw_even_after_effectful_substitution() {
++        let source = "@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return \"expanded\"\n!endfunction\n!definelong ROWS()\none\ntwo\n!enddefinelong\nnote as N\n$tick() ROWS() discarded\nend note\nclass \"$n\" as Count\n@enduml";
++        let output = preprocess_full(source, None);
++        assert!(output.error.is_none());
++        assert!(output.uml_source.contains("$tick() one\ntwo"));
++        assert!(output.uml_source.contains("class \"1\" as Count"));
++        assert!(!output.uml_source.contains("discarded"));
++    }
++
++    #[test]
++    fn nested_sub_collection_rejects_before_effects_and_reports_outer_origin() {
++        let mut ctx = PreprocessContext::new(None, false);
++        ctx.process("@startuml\n!$n=0\n!startsub outer\n!$n=8\n!if 0\n!startsub inner\n!endif\n!endsub\nclass Lost\n@enduml");
++        assert!(matches!(ctx.get_var("n"), Some(Value::Int(0))));
++        let error = ctx.error.unwrap();
++        assert_eq!(error.message, "Cannot nest sub");
++        assert_eq!(error.line, 2);
++    }
++
++    #[test]
++    fn intval_parses_complete_signed_display_and_preserves_first_error() {
++        for (expression, expected) in [
++            (r#"%intval("+007")+2"#, 9),
++            (r#"%intval("-2147483648")"#, i32::MIN),
++            (r#"%intval(%str2json("42"))"#, 42),
++        ] {
++            let mut ctx = PreprocessContext::new(None, false);
++            assert!(matches!(ctx.eval_expr_to_value(expression), Value::Int(n) if n == expected));
++            assert!(ctx.error.is_none());
++        }
++        for text in ["12.5", " 7", "2147483648", "", "-2147483649"] {
++            let mut ctx = PreprocessContext::new(None, false);
++            ctx.eval_expr_to_value(&format!("%intval(\"{text}\")+%strlen()"));
++            assert_eq!(
++                ctx.error.unwrap().message,
++                format!("Cannot convert {text} to integer.")
++            );
++        }
++    }
++
++    #[test]
++    fn hsl_uses_typed_integer_channels_and_argb_alpha_serialization() {
++        let mut ctx = PreprocessContext::new(None, false);
++        for (expression, expected) in [
++            ("%hsl_color(0,100,50)", "#FF0000"),
++            ("%hsl_color(0,100,50,50)", "#80ff0000"),
++            (r#"%hsl_color("240",100,50)"#, "#FF0000"),
++            (r#"%hsl_color(240,100,50,"50")"#, "transparent"),
++            ("%hsl_color(240,100,50,100)", "#0000FF"),
++        ] {
++            assert_eq!(ctx.eval_expr_to_value(expression).to_display(), expected);
++            assert!(ctx.error.is_none());
++        }
++    }
++
+     #[test]
+     fn builtin_registration_distinguishes_text_and_expression() {
+         let mut ctx = PreprocessContext::new(None, false);
+@@ -3665,7 +3923,7 @@ mod tests {
+                 .error
+                 .unwrap()
+                 .message
+-                .contains("Bad number of arguments")
++                .contains("Unknown built-in function $only")
+         );
+         assert!(!output.uml_source.contains("class"));
+     }
+@@ -3673,10 +3931,15 @@ mod tests {
+     #[test]
+     fn named_keys_are_expression_operands_but_plain_call_literals() {
+         let source = "@startuml\n!$a=\"$b\"\n!function $pair($a=\"seed\",$b=\"leaf\")\n!return $a+\"/\"+$b\n!endfunction\n!$r=$pair($a=\"oak\",$b=4)\nclass \"$r / $pair($a=\"elm\",$b=5)\" as Keys\n@enduml";
++        // The original source is preserved: its prepared $a and $b keys
++        // are both "$b", so Java's distinct-key count requires a missing
++        // positional operand. The earlier success assertion encoded our bug.
++        let output = preprocess_full(source, None);
+         assert_eq!(
+-            preprocess_full(source, None).uml_source,
+-            "@startuml\nclass \"seed/4 / elm/5\" as Keys\n@enduml\n"
++            output.error.unwrap().message,
++            "Expression operand stack underflow"
+         );
++        assert!(!output.uml_source.contains("class"));
+     }
+ 
+     #[test]

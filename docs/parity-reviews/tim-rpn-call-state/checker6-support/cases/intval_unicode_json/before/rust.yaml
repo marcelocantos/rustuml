@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "0" as Mixed
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Mixed
+  entities:
+  - id: Mixed
+    label: '0'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

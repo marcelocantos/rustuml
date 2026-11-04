@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "maple/ignored/maple/spruce/caller" as Rpn
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Rpn
+  entities:
+  - id: Rpn
+    label: maple/ignored/maple/spruce/caller
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 10
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,46 @@
+[
+  {
+    "phase": "before",
+    "revision": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+    "argv": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "/tmp/rustuml-checker6/before-src/Cargo.toml",
+      "-p",
+      "rustuml",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/tmp/rustuml-checker6/target-before",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "module_sha256": "70876ee52b4c1705a928b7d3b42f411b96c1ff46d6dc3b12893edbad4ef3c317",
+    "binary_path": "/tmp/rustuml-checker6/before-rustuml",
+    "binary_sha256": "97be1c5eea770f5cb613df5baaca97572c9301664202ebcaa120ba66042b5f41",
+    "log": "logs/build-before.log"
+  },
+  {
+    "phase": "after",
+    "revision": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+    "argv": [
+      "cargo",
+      "build",
+      "-p",
+      "rustuml",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/tmp/rustuml-checker6/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "module_sha256": "f727fbe9a61b3fb9df68cbd5d33bf462d89bc1ffc867aa07a86fcd7ff5c45c03",
+    "binary_path": "/tmp/rustuml-checker6/after-rustuml",
+    "binary_sha256": "8f2ae378b625379fb7922049bcc02d360b197d79b8b68b82da5be5e7b09f72de",
+    "log": "logs/build-after.log"
+  }
+]

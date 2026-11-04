@@ -1,0 +1,465 @@
+commit 4a288dd47fe925a792f7cb672ca294f6ef6fdcf3
+Author:     Marcelo Cantos <marcelo.cantos@gmail.com>
+AuthorDate: Wed Nov 4 20:28:06 2026 +1100
+Commit:     Marcelo Cantos <marcelo.cantos@gmail.com>
+CommitDate: Wed Nov 4 20:28:06 2026 +1100
+
+    docs: preserve TIM checker5 corrective maker evidence and remote controls
+    
+    Records exact-source and shipped CLI replay of restored 1516, prior31, checker5 29, prior maker15/17 and new remote18. Preserves failed iterations, all raw references/statuses, XML classifications, model retention, final gates and explicit residual dependencies. Acceptance remains pending a new independent checker.
+
+ .../tim-rpn-call-state/maker-support/README.md     |  195 ++
+ .../maker-support/SourceProbe.java                 |   15 +
+ .../tim-rpn-call-state/maker-support/analysis.json |  413 ++++
+ .../tim-rpn-call-state/maker-support/analyze.py    |   44 +
+ .../tim-rpn-call-state/maker-support/controls.json |  134 ++
+ .../tim-rpn-call-state/maker-support/controls.py   |   16 +
+ .../tim-rpn-call-state/maker-support/files.json    | 2112 ++++++++++++++++++++
+ .../maker-support/final-collateral-summary.json    |   21 +
+ .../maker-support/final-collateral.json.gz         |  Bin 0 -> 512708 bytes
+ .../maker-support/final-fresh29-summary.json       |   30 +
+ .../maker-support/final-fresh29.json.gz            |  Bin 0 -> 11722 bytes
+ .../maker-support/final-maker15-summary.json       |   21 +
+ .../maker-support/final-maker15.json.gz            |  Bin 0 -> 5494 bytes
+ .../maker-support/final-maker17-summary.json       |   21 +
+ .../maker-support/final-maker17.json.gz            |  Bin 0 -> 6348 bytes
+ .../maker-support/final-prior31-summary.json       |   21 +
+ .../maker-support/final-prior31.json.gz            |  Bin 0 -> 12442 bytes
+ .../maker-support/final-staged-diff-check.txt      |    5 +
+ .../tim-rpn-call-state/maker-support/gates.json    |  212 ++
+ .../tim-rpn-call-state/maker-support/gates.py      |   15 +
+ .../maker-support/inputs/hsl_bounds.puml           |    6 +
+ .../maker-support/inputs/hsl_bounds.svg            |    1 +
+ .../maker-support/inputs/hsl_types.puml            |    6 +
+ .../maker-support/inputs/hsl_types.svg             |    1 +
+ .../maker-support/inputs/intval_decimal.puml       |    5 +
+ .../maker-support/inputs/intval_decimal.svg        |    1 +
+ .../maker-support/inputs/intval_overflow.puml      |    4 +
+ .../maker-support/inputs/intval_overflow.svg       |    1 +
+ .../maker-support/inputs/intval_space.puml         |    4 +
+ .../maker-support/inputs/intval_space.svg          |    1 +
+ .../maker-support/inputs/intval_values.puml        |    6 +
+ .../maker-support/inputs/intval_values.svg         |    1 +
+ .../maker-support/inputs/keys_duplicate.puml       |    7 +
+ .../maker-support/inputs/keys_duplicate.svg        |    0
+ .../maker-support/inputs/keys_nested.puml          |    7 +
+ .../maker-support/inputs/keys_nested.svg           |    1 +
+ .../maker-support/inputs/keys_spelling.puml        |   10 +
+ .../maker-support/inputs/keys_spelling.svg         |    1 +
+ .../maker-support/inputs/keys_stack.puml           |    7 +
+ .../maker-support/inputs/keys_stack.svg            |    0
+ .../maker-support/inputs/macro_effect.puml         |   15 +
+ .../maker-support/inputs/macro_effect.svg          |    1 +
+ .../maker-support/inputs/macro_raw.puml            |   10 +
+ .../maker-support/inputs/macro_raw.svg             |    1 +
+ .../maker-support/inputs/plain_named.puml          |    8 +
+ .../maker-support/inputs/plain_named.svg           |    1 +
+ .../maker-support/inputs/plain_named_error.puml    |    3 +
+ .../maker-support/inputs/plain_named_error.svg     |    1 +
+ .../maker-support/inputs/procedure_arity.puml      |    7 +
+ .../maker-support/inputs/procedure_arity.svg       |    1 +
+ .../maker-support/inputs/procedure_kind.puml       |    7 +
+ .../maker-support/inputs/procedure_kind.svg        |    1 +
+ .../maker-support/inputs/sub_comments.puml         |   11 +
+ .../maker-support/inputs/sub_comments.svg          |    1 +
+ .../maker-support/inputs/sub_nested_inactive.puml  |    8 +
+ .../maker-support/inputs/sub_nested_inactive.svg   |    1 +
+ .../maker-support/integrity.json                   |   31 +
+ .../tim-rpn-call-state/maker-support/integrity.py  |   17 +
+ .../iteration1-collateral-summary.json             |   21 +
+ .../maker-support/iteration1-fresh29-summary.json  |   30 +
+ .../maker-support/iteration1-maker15-summary.json  |   21 +
+ .../maker-support/iteration1-maker17-summary.json  |   21 +
+ .../maker-support/iteration1-prior31-summary.json  |   21 +
+ .../maker-support/java-source-provenance.json      |   77 +
+ .../maker-support/measurements.tar.gz              |  Bin 0 -> 12584034 bytes
+ .../maker-support/negative-statuses.json           |  730 +++++++
+ .../maker-support/new-manifest.json                |  164 ++
+ .../tim-rpn-call-state/maker-support/package.py    |   30 +
+ .../tim-rpn-call-state/maker-support/prepare.py    |   38 +
+ .../maker-support/relay18/environment.json         |   32 +
+ .../relay18/hsl_bounds/before/comparison.stderr    |    0
+ .../relay18/hsl_bounds/before/comparison.stdout    |   20 +
+ .../relay18/hsl_bounds/before/rust.source          |    3 +
+ .../relay18/hsl_bounds/before/rust.svg             |    1 +
+ .../relay18/hsl_bounds/before/rust.yaml            |   22 +
+ .../relay18/hsl_bounds/before/svg.stderr           |    0
+ .../relay18/hsl_bounds/before/yaml.stderr          |    0
+ .../maker-support/relay18/hsl_bounds/commands.json |   73 +
+ .../relay18/hsl_bounds/final/comparison.stderr     |    0
+ .../relay18/hsl_bounds/final/comparison.stdout     |    1 +
+ .../relay18/hsl_bounds/final/rust.source           |    3 +
+ .../relay18/hsl_bounds/final/rust.svg              |    1 +
+ .../relay18/hsl_bounds/final/rust.yaml             |   22 +
+ .../relay18/hsl_bounds/final/svg.stderr            |    0
+ .../relay18/hsl_bounds/final/yaml.stderr           |    0
+ .../relay18/hsl_bounds/java.source.stderr          |    0
+ .../relay18/hsl_bounds/java.source.stdout          |    3 +
+ .../relay18/hsl_bounds/java.svg.stderr             |    0
+ .../relay18/hsl_bounds/java.svg.stdout             |    1 +
+ .../maker-support/relay18/hsl_bounds/result.json   |  110 +
+ .../relay18/hsl_types/before/comparison.stderr     |    0
+ .../relay18/hsl_types/before/comparison.stdout     |   20 +
+ .../relay18/hsl_types/before/rust.source           |    3 +
+ .../relay18/hsl_types/before/rust.svg              |    1 +
+ .../relay18/hsl_types/before/rust.yaml             |   22 +
+ .../relay18/hsl_types/before/svg.stderr            |    0
+ .../relay18/hsl_types/before/yaml.stderr           |    0
+ .../maker-support/relay18/hsl_types/commands.json  |   73 +
+ .../relay18/hsl_types/final/comparison.stderr      |    0
+ .../relay18/hsl_types/final/comparison.stdout      |    1 +
+ .../relay18/hsl_types/final/rust.source            |    3 +
+ .../maker-support/relay18/hsl_types/final/rust.svg |    1 +
+ .../relay18/hsl_types/final/rust.yaml              |   22 +
+ .../relay18/hsl_types/final/svg.stderr             |    0
+ .../relay18/hsl_types/final/yaml.stderr            |    0
+ .../relay18/hsl_types/java.source.stderr           |    0
+ .../relay18/hsl_types/java.source.stdout           |    3 +
+ .../relay18/hsl_types/java.svg.stderr              |    0
+ .../relay18/hsl_types/java.svg.stdout              |    1 +
+ .../maker-support/relay18/hsl_types/result.json    |  110 +
+ .../intval_decimal/before/comparison.stderr        |    1 +
+ .../intval_decimal/before/comparison.stdout        |    0
+ .../relay18/intval_decimal/before/rust.svg         |    0
+ .../relay18/intval_decimal/before/rust.yaml        |    0
+ .../relay18/intval_decimal/before/svg.stderr       |    1 +
+ .../relay18/intval_decimal/before/yaml.stderr      |    1 +
+ .../relay18/intval_decimal/commands.json           |   73 +
+ .../relay18/intval_decimal/final/comparison.stderr |    1 +
+ .../relay18/intval_decimal/final/comparison.stdout |    0
+ .../relay18/intval_decimal/final/rust.svg          |    0
+ .../relay18/intval_decimal/final/rust.yaml         |    0
+ .../relay18/intval_decimal/final/svg.stderr        |    1 +
+ .../relay18/intval_decimal/final/yaml.stderr       |    1 +
+ .../relay18/intval_decimal/java.source.stderr      |    0
+ .../relay18/intval_decimal/java.source.stdout      |    2 +
+ .../relay18/intval_decimal/java.svg.stderr         |    3 +
+ .../relay18/intval_decimal/java.svg.stdout         |    1 +
+ .../relay18/intval_decimal/result.json             |  110 +
+ .../intval_overflow/before/comparison.stderr       |    1 +
+ .../intval_overflow/before/comparison.stdout       |    0
+ .../relay18/intval_overflow/before/rust.source     |    3 +
+ .../relay18/intval_overflow/before/rust.svg        |    1 +
+ .../relay18/intval_overflow/before/rust.yaml       |   22 +
+ .../relay18/intval_overflow/before/svg.stderr      |    0
+ .../relay18/intval_overflow/before/yaml.stderr     |    0
+ .../relay18/intval_overflow/commands.json          |   73 +
+ .../intval_overflow/final/comparison.stderr        |    1 +
+ .../intval_overflow/final/comparison.stdout        |    0
+ .../relay18/intval_overflow/final/rust.svg         |    0
+ .../relay18/intval_overflow/final/rust.yaml        |    0
+ .../relay18/intval_overflow/final/svg.stderr       |    1 +
+ .../relay18/intval_overflow/final/yaml.stderr      |    1 +
+ .../relay18/intval_overflow/java.source.stderr     |    0
+ .../relay18/intval_overflow/java.source.stdout     |    2 +
+ .../relay18/intval_overflow/java.svg.stderr        |    3 +
+ .../relay18/intval_overflow/java.svg.stdout        |    1 +
+ .../relay18/intval_overflow/result.json            |  110 +
+ .../relay18/intval_space/before/comparison.stderr  |    1 +
+ .../relay18/intval_space/before/comparison.stdout  |    0
+ .../relay18/intval_space/before/rust.source        |    3 +
+ .../relay18/intval_space/before/rust.svg           |    1 +
+ .../relay18/intval_space/before/rust.yaml          |   22 +
+ .../relay18/intval_space/before/svg.stderr         |    0
+ .../relay18/intval_space/before/yaml.stderr        |    0
+ .../relay18/intval_space/commands.json             |   73 +
+ .../relay18/intval_space/final/comparison.stderr   |    1 +
+ .../relay18/intval_space/final/comparison.stdout   |    0
+ .../relay18/intval_space/final/rust.svg            |    0
+ .../relay18/intval_space/final/rust.yaml           |    0
+ .../relay18/intval_space/final/svg.stderr          |    1 +
+ .../relay18/intval_space/final/yaml.stderr         |    1 +
+ .../relay18/intval_space/java.source.stderr        |    0
+ .../relay18/intval_space/java.source.stdout        |    2 +
+ .../relay18/intval_space/java.svg.stderr           |    3 +
+ .../relay18/intval_space/java.svg.stdout           |    1 +
+ .../maker-support/relay18/intval_space/result.json |  110 +
+ .../relay18/intval_values/before/comparison.stderr |    0
+ .../relay18/intval_values/before/comparison.stdout |    1 +
+ .../relay18/intval_values/before/rust.source       |    3 +
+ .../relay18/intval_values/before/rust.svg          |    1 +
+ .../relay18/intval_values/before/rust.yaml         |   22 +
+ .../relay18/intval_values/before/svg.stderr        |    0
+ .../relay18/intval_values/before/yaml.stderr       |    0
+ .../relay18/intval_values/commands.json            |   73 +
+ .../relay18/intval_values/final/comparison.stderr  |    0
+ .../relay18/intval_values/final/comparison.stdout  |    1 +
+ .../relay18/intval_values/final/rust.source        |    3 +
+ .../relay18/intval_values/final/rust.svg           |    1 +
+ .../relay18/intval_values/final/rust.yaml          |   22 +
+ .../relay18/intval_values/final/svg.stderr         |    0
+ .../relay18/intval_values/final/yaml.stderr        |    0
+ .../relay18/intval_values/java.source.stderr       |    0
+ .../relay18/intval_values/java.source.stdout       |    3 +
+ .../relay18/intval_values/java.svg.stderr          |    0
+ .../relay18/intval_values/java.svg.stdout          |    1 +
+ .../relay18/intval_values/result.json              |  110 +
+ .../keys_duplicate/before/comparison.stderr        |    1 +
+ .../keys_duplicate/before/comparison.stdout        |    0
+ .../relay18/keys_duplicate/before/rust.source      |    3 +
+ .../relay18/keys_duplicate/before/rust.svg         |    1 +
+ .../relay18/keys_duplicate/before/rust.yaml        |   22 +
+ .../relay18/keys_duplicate/before/svg.stderr       |    0
+ .../relay18/keys_duplicate/before/yaml.stderr      |    0
+ .../relay18/keys_duplicate/commands.json           |   73 +
+ .../relay18/keys_duplicate/final/comparison.stderr |    1 +
+ .../relay18/keys_duplicate/final/comparison.stdout |    0
+ .../relay18/keys_duplicate/final/rust.svg          |    0
+ .../relay18/keys_duplicate/final/rust.yaml         |    0
+ .../relay18/keys_duplicate/final/svg.stderr        |    1 +
+ .../relay18/keys_duplicate/final/yaml.stderr       |    1 +
+ .../relay18/keys_duplicate/java.source.stderr      |   16 +
+ .../relay18/keys_duplicate/java.source.stdout      |    0
+ .../relay18/keys_duplicate/java.svg.stderr         |   16 +
+ .../relay18/keys_duplicate/java.svg.stdout         |    0
+ .../relay18/keys_duplicate/result.json             |  110 +
+ .../relay18/keys_nested/before/comparison.stderr   |    1 +
+ .../relay18/keys_nested/before/comparison.stdout   |    0
+ .../relay18/keys_nested/before/rust.source         |    3 +
+ .../relay18/keys_nested/before/rust.svg            |    1 +
+ .../relay18/keys_nested/before/rust.yaml           |   22 +
+ .../relay18/keys_nested/before/svg.stderr          |    0
+ .../relay18/keys_nested/before/yaml.stderr         |    0
+ .../relay18/keys_nested/commands.json              |   73 +
+ .../relay18/keys_nested/final/comparison.stderr    |    1 +
+ .../relay18/keys_nested/final/comparison.stdout    |    0
+ .../relay18/keys_nested/final/rust.svg             |    0
+ .../relay18/keys_nested/final/rust.yaml            |    0
+ .../relay18/keys_nested/final/svg.stderr           |    1 +
+ .../relay18/keys_nested/final/yaml.stderr          |    1 +
+ .../relay18/keys_nested/java.source.stderr         |    0
+ .../relay18/keys_nested/java.source.stdout         |    2 +
+ .../relay18/keys_nested/java.svg.stderr            |    3 +
+ .../relay18/keys_nested/java.svg.stdout            |    1 +
+ .../maker-support/relay18/keys_nested/result.json  |  110 +
+ .../relay18/keys_spelling/before/comparison.stderr |    0
+ .../relay18/keys_spelling/before/comparison.stdout |   20 +
+ .../relay18/keys_spelling/before/rust.source       |    3 +
+ .../relay18/keys_spelling/before/rust.svg          |    1 +
+ .../relay18/keys_spelling/before/rust.yaml         |   22 +
+ .../relay18/keys_spelling/before/svg.stderr        |    0
+ .../relay18/keys_spelling/before/yaml.stderr       |    0
+ .../relay18/keys_spelling/commands.json            |   73 +
+ .../relay18/keys_spelling/final/comparison.stderr  |    0
+ .../relay18/keys_spelling/final/comparison.stdout  |    1 +
+ .../relay18/keys_spelling/final/rust.source        |    3 +
+ .../relay18/keys_spelling/final/rust.svg           |    1 +
+ .../relay18/keys_spelling/final/rust.yaml          |   22 +
+ .../relay18/keys_spelling/final/svg.stderr         |    0
+ .../relay18/keys_spelling/final/yaml.stderr        |    0
+ .../relay18/keys_spelling/java.source.stderr       |    0
+ .../relay18/keys_spelling/java.source.stdout       |    3 +
+ .../relay18/keys_spelling/java.svg.stderr          |    0
+ .../relay18/keys_spelling/java.svg.stdout          |    1 +
+ .../relay18/keys_spelling/result.json              |  110 +
+ .../relay18/keys_stack/before/comparison.stderr    |    1 +
+ .../relay18/keys_stack/before/comparison.stdout    |    0
+ .../relay18/keys_stack/before/rust.source          |    3 +
+ .../relay18/keys_stack/before/rust.svg             |    1 +
+ .../relay18/keys_stack/before/rust.yaml            |   22 +
+ .../relay18/keys_stack/before/svg.stderr           |    0
+ .../relay18/keys_stack/before/yaml.stderr          |    0
+ .../maker-support/relay18/keys_stack/commands.json |   73 +
+ .../relay18/keys_stack/final/comparison.stderr     |    1 +
+ .../relay18/keys_stack/final/comparison.stdout     |    0
+ .../relay18/keys_stack/final/rust.svg              |    0
+ .../relay18/keys_stack/final/rust.yaml             |    0
+ .../relay18/keys_stack/final/svg.stderr            |    1 +
+ .../relay18/keys_stack/final/yaml.stderr           |    1 +
+ .../relay18/keys_stack/java.source.stderr          |   16 +
+ .../relay18/keys_stack/java.source.stdout          |    0
+ .../relay18/keys_stack/java.svg.stderr             |   16 +
+ .../relay18/keys_stack/java.svg.stdout             |    0
+ .../maker-support/relay18/keys_stack/result.json   |  110 +
+ .../relay18/macro_effect/before/comparison.stderr  |    0
+ .../relay18/macro_effect/before/comparison.stdout  |   35 +
+ .../relay18/macro_effect/before/rust.source        |    7 +
+ .../relay18/macro_effect/before/rust.svg           |    1 +
+ .../relay18/macro_effect/before/rust.yaml          |   34 +
+ .../relay18/macro_effect/before/svg.stderr         |    0
+ .../relay18/macro_effect/before/yaml.stderr        |    0
+ .../relay18/macro_effect/commands.json             |   73 +
+ .../relay18/macro_effect/final/comparison.stderr   |    0
+ .../relay18/macro_effect/final/comparison.stdout   |    1 +
+ .../relay18/macro_effect/final/rust.source         |    7 +
+ .../relay18/macro_effect/final/rust.svg            |    1 +
+ .../relay18/macro_effect/final/rust.yaml           |   34 +
+ .../relay18/macro_effect/final/svg.stderr          |    0
+ .../relay18/macro_effect/final/yaml.stderr         |    0
+ .../relay18/macro_effect/java.source.stderr        |    0
+ .../relay18/macro_effect/java.source.stdout        |    7 +
+ .../relay18/macro_effect/java.svg.stderr           |    0
+ .../relay18/macro_effect/java.svg.stdout           |    1 +
+ .../maker-support/relay18/macro_effect/result.json |  110 +
+ .../relay18/macro_raw/before/comparison.stderr     |    0
+ .../relay18/macro_raw/before/comparison.stdout     |   17 +
+ .../relay18/macro_raw/before/rust.source           |    6 +
+ .../relay18/macro_raw/before/rust.svg              |    1 +
+ .../relay18/macro_raw/before/rust.yaml             |   25 +
+ .../relay18/macro_raw/before/svg.stderr            |    0
+ .../relay18/macro_raw/before/yaml.stderr           |    0
+ .../maker-support/relay18/macro_raw/commands.json  |   73 +
+ .../relay18/macro_raw/final/comparison.stderr      |    0
+ .../relay18/macro_raw/final/comparison.stdout      |    1 +
+ .../relay18/macro_raw/final/rust.source            |    6 +
+ .../maker-support/relay18/macro_raw/final/rust.svg |    1 +
+ .../relay18/macro_raw/final/rust.yaml              |   25 +
+ .../relay18/macro_raw/final/svg.stderr             |    0
+ .../relay18/macro_raw/final/yaml.stderr            |    0
+ .../relay18/macro_raw/java.source.stderr           |    0
+ .../relay18/macro_raw/java.source.stdout           |    6 +
+ .../relay18/macro_raw/java.svg.stderr              |    0
+ .../relay18/macro_raw/java.svg.stdout              |    1 +
+ .../maker-support/relay18/macro_raw/result.json    |  110 +
+ .../relay18/plain_named/before/comparison.stderr   |    1 +
+ .../relay18/plain_named/before/comparison.stdout   |    0
+ .../relay18/plain_named/before/rust.svg            |    0
+ .../relay18/plain_named/before/rust.yaml           |    0
+ .../relay18/plain_named/before/svg.stderr          |    1 +
+ .../relay18/plain_named/before/yaml.stderr         |    1 +
+ .../relay18/plain_named/commands.json              |   73 +
+ .../relay18/plain_named/final/comparison.stderr    |    0
+ .../relay18/plain_named/final/comparison.stdout    |    1 +
+ .../relay18/plain_named/final/rust.source          |    3 +
+ .../relay18/plain_named/final/rust.svg             |    1 +
+ .../relay18/plain_named/final/rust.yaml            |   22 +
+ .../relay18/plain_named/final/svg.stderr           |    0
+ .../relay18/plain_named/final/yaml.stderr          |    0
+ .../relay18/plain_named/java.source.stderr         |    0
+ .../relay18/plain_named/java.source.stdout         |    3 +
+ .../relay18/plain_named/java.svg.stderr            |    0
+ .../relay18/plain_named/java.svg.stdout            |    1 +
+ .../maker-support/relay18/plain_named/result.json  |  110 +
+ .../plain_named_error/before/comparison.stderr     |    1 +
+ .../plain_named_error/before/comparison.stdout     |    0
+ .../relay18/plain_named_error/before/rust.source   |    3 +
+ .../relay18/plain_named_error/before/rust.svg      |    1 +
+ .../relay18/plain_named_error/before/rust.yaml     |   22 +
+ .../relay18/plain_named_error/before/svg.stderr    |    0
+ .../relay18/plain_named_error/before/yaml.stderr   |    0
+ .../relay18/plain_named_error/commands.json        |   73 +
+ .../plain_named_error/final/comparison.stderr      |    1 +
+ .../plain_named_error/final/comparison.stdout      |    0
+ .../relay18/plain_named_error/final/rust.svg       |    0
+ .../relay18/plain_named_error/final/rust.yaml      |    0
+ .../relay18/plain_named_error/final/svg.stderr     |    1 +
+ .../relay18/plain_named_error/final/yaml.stderr    |    1 +
+ .../relay18/plain_named_error/java.source.stderr   |    0
+ .../relay18/plain_named_error/java.source.stdout   |    2 +
+ .../relay18/plain_named_error/java.svg.stderr      |    3 +
+ .../relay18/plain_named_error/java.svg.stdout      |    1 +
+ .../relay18/plain_named_error/result.json          |  110 +
+ .../procedure_arity/before/comparison.stderr       |    1 +
+ .../procedure_arity/before/comparison.stdout       |    0
+ .../relay18/procedure_arity/before/rust.svg        |    0
+ .../relay18/procedure_arity/before/rust.yaml       |    0
+ .../relay18/procedure_arity/before/svg.stderr      |    1 +
+ .../relay18/procedure_arity/before/yaml.stderr     |    1 +
+ .../relay18/procedure_arity/commands.json          |   73 +
+ .../procedure_arity/final/comparison.stderr        |    1 +
+ .../procedure_arity/final/comparison.stdout        |    0
+ .../relay18/procedure_arity/final/rust.svg         |    0
+ .../relay18/procedure_arity/final/rust.yaml        |    0
+ .../relay18/procedure_arity/final/svg.stderr       |    1 +
+ .../relay18/procedure_arity/final/yaml.stderr      |    1 +
+ .../relay18/procedure_arity/java.source.stderr     |    0
+ .../relay18/procedure_arity/java.source.stdout     |    2 +
+ .../relay18/procedure_arity/java.svg.stderr        |    3 +
+ .../relay18/procedure_arity/java.svg.stdout        |    1 +
+ .../relay18/procedure_arity/result.json            |  110 +
+ .../procedure_kind/before/comparison.stderr        |    1 +
+ .../procedure_kind/before/comparison.stdout        |    0
+ .../relay18/procedure_kind/before/rust.svg         |    0
+ .../relay18/procedure_kind/before/rust.yaml        |    0
+ .../relay18/procedure_kind/before/svg.stderr       |    1 +
+ .../relay18/procedure_kind/before/yaml.stderr      |    1 +
+ .../relay18/procedure_kind/commands.json           |   73 +
+ .../relay18/procedure_kind/final/comparison.stderr |    1 +
+ .../relay18/procedure_kind/final/comparison.stdout |    0
+ .../relay18/procedure_kind/final/rust.svg          |    0
+ .../relay18/procedure_kind/final/rust.yaml         |    0
+ .../relay18/procedure_kind/final/svg.stderr        |    1 +
+ .../relay18/procedure_kind/final/yaml.stderr       |    1 +
+ .../relay18/procedure_kind/java.source.stderr      |    0
+ .../relay18/procedure_kind/java.source.stdout      |    2 +
+ .../relay18/procedure_kind/java.svg.stderr         |    3 +
+ .../relay18/procedure_kind/java.svg.stdout         |    1 +
+ .../relay18/procedure_kind/result.json             |  110 +
+ .../maker-support/relay18/results.json             | 1982 ++++++++++++++++++
+ .../relay18/sub_comments/before/comparison.stderr  |    0
+ .../relay18/sub_comments/before/comparison.stdout  |    1 +
+ .../relay18/sub_comments/before/rust.source        |    3 +
+ .../relay18/sub_comments/before/rust.svg           |    1 +
+ .../relay18/sub_comments/before/rust.yaml          |   22 +
+ .../relay18/sub_comments/before/svg.stderr         |    0
+ .../relay18/sub_comments/before/yaml.stderr        |    0
+ .../relay18/sub_comments/commands.json             |   73 +
+ .../relay18/sub_comments/final/comparison.stderr   |    0
+ .../relay18/sub_comments/final/comparison.stdout   |    1 +
+ .../relay18/sub_comments/final/rust.source         |    3 +
+ .../relay18/sub_comments/final/rust.svg            |    1 +
+ .../relay18/sub_comments/final/rust.yaml           |   22 +
+ .../relay18/sub_comments/final/svg.stderr          |    0
+ .../relay18/sub_comments/final/yaml.stderr         |    0
+ .../relay18/sub_comments/java.source.stderr        |    0
+ .../relay18/sub_comments/java.source.stdout        |    3 +
+ .../relay18/sub_comments/java.svg.stderr           |    0
+ .../relay18/sub_comments/java.svg.stdout           |    1 +
+ .../maker-support/relay18/sub_comments/result.json |  110 +
+ .../sub_nested_inactive/before/comparison.stderr   |    1 +
+ .../sub_nested_inactive/before/comparison.stdout   |    0
+ .../relay18/sub_nested_inactive/before/rust.source |    2 +
+ .../relay18/sub_nested_inactive/before/rust.svg    |    1 +
+ .../relay18/sub_nested_inactive/before/rust.yaml   |   11 +
+ .../relay18/sub_nested_inactive/before/svg.stderr  |    0
+ .../relay18/sub_nested_inactive/before/yaml.stderr |    0
+ .../relay18/sub_nested_inactive/commands.json      |   73 +
+ .../sub_nested_inactive/final/comparison.stderr    |    1 +
+ .../sub_nested_inactive/final/comparison.stdout    |    0
+ .../relay18/sub_nested_inactive/final/rust.svg     |    0
+ .../relay18/sub_nested_inactive/final/rust.yaml    |    0
+ .../relay18/sub_nested_inactive/final/svg.stderr   |    1 +
+ .../relay18/sub_nested_inactive/final/yaml.stderr  |    1 +
+ .../relay18/sub_nested_inactive/java.source.stderr |    0
+ .../relay18/sub_nested_inactive/java.source.stdout |    2 +
+ .../relay18/sub_nested_inactive/java.svg.stderr    |    3 +
+ .../relay18/sub_nested_inactive/java.svg.stdout    |    1 +
+ .../relay18/sub_nested_inactive/result.json        |  110 +
+ .../maker-support/relay18/summary.json             |   17 +
+ .../maker-support/relay18/tim18-results.json.gz    |  Bin 0 -> 90292 bytes
+ .../maker-support/relay18/tim18-transport.json     |    1 +
+ .../tim-rpn-call-state/maker-support/relay_eval.py |   54 +
+ .../maker-support/remote-request.json              |  684 +++++++
+ .../tim-rpn-call-state/maker-support/replay.py     |   50 +
+ 423 files changed, 11663 insertions(+)
+
+commit f663c083df56b736b7d8fef693a9b9a3c106c7a5
+Author:     Marcelo Cantos <marcelo.cantos@gmail.com>
+AuthorDate: Wed Nov 4 20:17:57 2026 +1100
+Commit:     Marcelo Cantos <marcelo.cantos@gmail.com>
+CommitDate: Wed Nov 4 20:17:57 2026 +1100
+
+    fix: preserve TIM expression call state and bounded conversion contracts
+    
+    Implements precommitted causal accounts c91103f9: tim-rpn-call-state, tim-call-operand-resolution, tim-legacy-raw-caller-prefix, tim-local-sub-collection, tim-intval-conversion and tim-hsl-typed-alpha. Preserve exact named keys and expression-wide RPN operand state, plain-call named arity, raw legacy prefixes, eager sub collection validation and typed IntVal/HslColor behavior.
+    
+    Retains the original duplicate-key unit input as a fatal underflow assertion: its previous successful result encoded the rejected per-call stack model. No review, baseline or fixture rewrite.
+
+ crates/rustuml-parser/src/preprocess/mod.rs | 393 +++++++++++++++++++++++-----
+ 1 file changed, 328 insertions(+), 65 deletions(-)
+
+commit c91103f92e9f7e4e79fd1d1c735a68af0359934a
+Author:     Marcelo Cantos <marcelo.cantos@gmail.com>
+AuthorDate: Wed Nov 4 20:09:36 2026 +1100
+Commit:     Marcelo Cantos <marcelo.cantos@gmail.com>
+CommitDate: Wed Nov 4 20:09:36 2026 +1100
+
+    docs: account for TIM exact call state and bounded builtin corrections
+
+ .../tim-call-operand-resolution/account.json       | 28 +++++++++++++++++++++
+ .../tim-hsl-typed-alpha/account.json               | 29 ++++++++++++++++++++++
+ .../tim-intval-conversion/account.json             | 26 +++++++++++++++++++
+ .../tim-legacy-raw-caller-prefix/account.json      | 25 +++++++++++++++++++
+ .../tim-local-sub-collection/account.json          | 26 +++++++++++++++++++
+ .../parity-reviews/tim-rpn-call-state/account.json | 28 +++++++++++++++++++++
+ 6 files changed, 162 insertions(+)

@@ -1,0 +1,7 @@
+@startuml
+!function $mix(b="plain",$b="dollar")
+!return b+"/"+$b
+!endfunction
+!$x=$mix()
+class "$x" as Read
+@enduml

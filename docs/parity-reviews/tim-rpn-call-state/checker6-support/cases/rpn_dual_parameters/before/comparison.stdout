@@ -1,0 +1,20 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "68px"), ("preserveAspectRatio", "none"), ("style", "width:225px;height:68px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 225 68"), ("width", "225px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "68px"), ("preserveAspectRatio", "none"), ("style", "width:160px;height:68px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 160 68"), ("width", "160px"), ("zoomAndPan", "magnify")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "205.7832"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "140.8145"), ("x", "7"), ("y", "7")]
+  [7] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "173.7832"), ("x", "36"), ("y", "28.291")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "108.8145"), ("x", "36"), ("y", "28.291")]
+  [7] <text> text mismatch:
+    expected: Some("plain/dollar / cedar/larch")
+    actual:   Some("/dollar / /dollar")
+  [8] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "211.7832"), ("y1", "39"), ("y2", "39")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "146.8145"), ("y1", "39"), ("y2", "39")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "211.7832"), ("y1", "47"), ("y2", "47")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "146.8145"), ("y1", "47"), ("y2", "47")]
+

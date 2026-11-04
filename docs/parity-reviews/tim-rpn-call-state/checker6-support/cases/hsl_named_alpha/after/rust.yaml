@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "#00FFFF/transparent" as Alpha
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Alpha
+  entities:
+  - id: Alpha
+    label: '#00FFFF/transparent'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

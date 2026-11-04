@@ -1,0 +1,192 @@
+{
+  "reviews_checked": 6,
+  "fresh_pairs_checked": 29,
+  "old_files_unchanged": [
+    {
+      "revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+      "count": 7866
+    },
+    {
+      "revision": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+      "count": 8295
+    }
+  ],
+  "stored_perturbations_after_evidence": 1605,
+  "broad_gate_reruns": 0,
+  "pairs": [
+    {
+      "source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_spelling_body.puml",
+      "golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_spelling_body.svg",
+      "source_sha256": "eb86e511f6f22463bab1a76f7e152384e7d3b4c2ca445128722135ccc0108ed6",
+      "golden_sha256": "164c18f45c52c051183b16761c98f1a9169098104e5d2f1e68a76656c9240438"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_dual_parameters.puml",
+      "golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_dual_parameters.svg",
+      "source_sha256": "080c61a208537f52671480d57293b1bee519a745ee82eedbc5e3759f9a0684ca",
+      "golden_sha256": "20df02fa80c5105e915723fe5b1269f1ca4fe52b7ad44be0d27d89a6ace93c2b"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_nested_consumption.puml",
+      "golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_nested_consumption.svg",
+      "source_sha256": "c1a7393ed2d47d46cafcdf89a8cc013f7162bdf2df6a842ee3606c360eece6dc",
+      "golden_sha256": "70591db68de2dcc1f3ee948c4f7afc9bef61594250e0cc7cca83e9d29e03cdd3"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.puml",
+      "golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.svg",
+      "source_sha256": "fbe220ec4f132741ceff4110c3c9b903da5f149c9576964d6e5a77df5cbc9602",
+      "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_neighbor_calls.puml",
+      "golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_neighbor_calls.svg",
+      "source_sha256": "5b86fad037e24aaeef85e677da3d927624c0631b1355cd40258dba2379b08d57",
+      "golden_sha256": "5fda216628aa5b8be032ee2501a43618e7356d1a69454a156dd1883bbd226609"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_duplicate_effects.puml",
+      "golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_duplicate_effects.svg",
+      "source_sha256": "e84da25db9cd1e32bf0b99ea6a4ab64701a7ffbc83f4edb5d3e2a6f1142df9db",
+      "golden_sha256": "a42bdfe6d37b53aaa6dd8c05575e6a1e3974559777fca122b8669da371e71694"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_rhs_first_error.puml",
+      "golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_rhs_first_error.svg",
+      "source_sha256": "c9f5a99f640c6d4b308400b4bf499ef0c250fd07fd79ae1c7030a69addadc72a",
+      "golden_sha256": "8c01a8113b5d96ece99c09e0bead121bd2b7c2bef28c0eadb1ef3896be477152"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.puml",
+      "golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.svg",
+      "source_sha256": "3503bd8f1256efacf363ee182cec8ca8ee12bb0d6076629c7d3739371c97fd82",
+      "golden_sha256": "5d8cf286d9ece55f30decfa99208fe1040bf669e8a5cdcacd126fb588df05537"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_covered.puml",
+      "golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_covered.svg",
+      "source_sha256": "c2eef545ec5cf4f7ca77227d89cdaef69452360a512866712a6019f292763df0",
+      "golden_sha256": "326fc978c7d8c4136ce1b0cbaa7e6deb2b734ede8392d779531bb1c1b1d3d57d"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_plain_exact_shortcut.puml",
+      "golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_plain_exact_shortcut.svg",
+      "source_sha256": "8d05eade8e10aa5fb0b54515ca26768d5bc92607cd17c3c33bbd1b4fd403e577",
+      "golden_sha256": "582ae5a2e26aa8581336510e5b8c51280430cc473d9c18c3bf38c83eef5d41e0"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_repeated_raw.puml",
+      "golden": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_repeated_raw.svg",
+      "source_sha256": "314f027b785cd707b67407f7538a1f52bf258f2591a7654b384dc352834f03dc",
+      "golden_sha256": "bdb33a77cb8d02c5c34a4010c2c9a5959b8e03b48b024b7d8f2228e599dbd029"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_procedure_control.puml",
+      "golden": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_procedure_control.svg",
+      "source_sha256": "e890abb5f8e3e10ae2993ced2d2632988b6e77e96a8863421995379d750e588a",
+      "golden_sha256": "89a8d82440a5bcc9d88bbfac8c6f8a65a6200aa6f483f2c551b2f0d44f713359"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_prefix_failure.puml",
+      "golden": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_prefix_failure.svg",
+      "source_sha256": "0c038f7599d27005813b511b0380813f3880555922f870efb303dc9a612bf6bd",
+      "golden_sha256": "ac951d3f753f8de367c047e11a1b958f4e46db476facf7605159f0a543f9dc53"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_collect_error_precedence.puml",
+      "golden": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_collect_error_precedence.svg",
+      "source_sha256": "6cc0f471bd814b1b9052063586cf9652dcff22832f4132a6412cac20e5a30787",
+      "golden_sha256": "e485e307ffd70f17662b4bae284c5a1f3cd94d2819264a2eb5fd6d0d2072c654"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.puml",
+      "golden": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.svg",
+      "source_sha256": "fba10347fdc0e8759d281363d686900b7638a25012d16a78d990ee939e62cebe",
+      "golden_sha256": "2bc152a18b1db25757870b0c0ec69555a5fd7ae5169ddd8e3c8ef0ffc4b6a414"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_comment_replay.puml",
+      "golden": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_comment_replay.svg",
+      "source_sha256": "7bd9fab33229513e694f49b92c4deed3e625cfffff3df89b94d73d424a9136f9",
+      "golden_sha256": "12357ef1981ad9a0f8653c80417a7e6f6af85002b87db8bf3c116646ba9e39e2"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_ascii_edges.puml",
+      "golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_ascii_edges.svg",
+      "source_sha256": "e082a3f040e09bce1b070e13e59ffb359e1880b11845e18653448be07e7aeb14",
+      "golden_sha256": "51c483930a8f2326e47b4156050deee983942a330a1d55f88fa223e9bac888af"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+      "golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.svg",
+      "source_sha256": "b3012e99b280019256d93bf0b8d08b713c157ab1abdfb488192a930b6ed9ebb6",
+      "golden_sha256": "9cd101cf1854814a273a18e9a206b595c88e5232958b6d35e849708e27219277"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml",
+      "golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.svg",
+      "source_sha256": "dbe74b8d38b161df7824e2aff8195bea5802612758bf6aa55b61f29fc0ff2091",
+      "golden_sha256": "53142b52f80abafb34770a2783d384db61230879f0da6f5983973fe468e55e23"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.puml",
+      "golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.svg",
+      "source_sha256": "1bb50b4755166180fc17b81415af2531af301c172a053b622037abaf18f5cd52",
+      "golden_sha256": "4979aec1775b3849fbc12a57a334e04c79d32ccaca2dbc5c767a9815ef437c9f"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.puml",
+      "golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.svg",
+      "source_sha256": "2472ac5491f55b83c0279b56bd0d566a4b171010a047745348e9f3ef72072f73",
+      "golden_sha256": "7d36946577821ba31e1f3811997946b5e608da0cefd2fd7f50a0e67d1e65cb48"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_rounding_extremes.puml",
+      "golden": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_rounding_extremes.svg",
+      "source_sha256": "7c257fc215cdab04099edb1480e463db9de205910fb2edd74b2a25c758a65327",
+      "golden_sha256": "be5e7847010960e4d1d657470d999f4aa4a453a1952b78fbb1c75fd61e54b387"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_typed_channels.puml",
+      "golden": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_typed_channels.svg",
+      "source_sha256": "196db7d08a545982b48d6807f2191b193d2dff472da4cd3e3d139ebc05130e5a",
+      "golden_sha256": "3698ac4a556b8881eb8fbec3d4e6661fb6177e834dbbd4ac33958db99d4798ea"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_named_alpha.puml",
+      "golden": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_named_alpha.svg",
+      "source_sha256": "f16f0437a5c3c0bdfaf96fb8fc98f51ac1c9847810e1f8378c77942f866e0849",
+      "golden_sha256": "f8eafd74e6bc9a35b92ac0e86b35739752d4d184096ec99643fee1ce18fe4990"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_bad_arity.puml",
+      "golden": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_bad_arity.svg",
+      "source_sha256": "2a65bc3d2fcf5751a3057f7fe2d33e6f182497474dd24d787bd04db8aeaf9829",
+      "golden_sha256": "997d52b7126931521c8c1a5709413d5a157256e1b39d4da04a2df5d4191db9ae"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_defined_in_uncalled.puml",
+      "golden": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_defined_in_uncalled.svg",
+      "source_sha256": "9cff639c1732156436385100a6e5d9718b3762ee7ca21003d39a5ac5b4bf876c",
+      "golden_sha256": "7d411aa44d207c1dfc0572002beb1b95d5e3c84e45cb4fb80bb609c3facdf578"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_return.puml",
+      "golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_return.svg",
+      "source_sha256": "406094124e7624a57b9fc8a87c5a7e22aa8cc337154550c2ea54318da9f4dfe2",
+      "golden_sha256": "121eefe123581e5add2fa8146377a50b6a6e9b31a2b22b49fb9d6133df299cb3"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_procedure.puml",
+      "golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_procedure.svg",
+      "source_sha256": "7775b8153dac63432076731be90d0dd3c91335e9ac2d32d912d44a06f6ae57b7",
+      "golden_sha256": "cba1157181b23676edfe99ff57b10167bad7d9c8f647e5772dc3bbeea0bb5402"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_bare_read.puml",
+      "golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_bare_read.svg",
+      "source_sha256": "3dbc8f32c30bd5bccf19db5a4c64fc92960234934d52864988fc65a330c53575",
+      "golden_sha256": "0269762d29d45cfa46d5e8aae4780663728ad42b5041045a7574c8ec22946061"
+    }
+  ]
+}

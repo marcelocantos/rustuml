@@ -1,0 +1,7 @@
+@startuml
+!function $mix(b="plain",$b="dollar")
+!return %get_variable_value("b")+"/"+$b
+!endfunction
+!$x=$mix()
+class "$x / $mix(b="cedar",$b="larch")" as Exact
+@enduml

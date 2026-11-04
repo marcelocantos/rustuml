@@ -1,0 +1,30 @@
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/comparison.stdout:23: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/chronology.log:8: trailing whitespace.
++    
+docs/parity-reviews/tim-rpn-call-state/checker6-support/chronology.log:443: trailing whitespace.
++    
+docs/parity-reviews/tim-rpn-call-state/checker6-support/chronology.log:445: trailing whitespace.
++    
+docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/cli.log:32: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/parser.log:633: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/checker6-support/production.diff:8: trailing whitespace.
++ 
+docs/parity-reviews/tim-rpn-call-state/checker6-support/production.diff:146: trailing whitespace.
++ 
+docs/parity-reviews/tim-rpn-call-state/checker6-support/production.diff:346: trailing whitespace.
++ 
+docs/parity-reviews/tim-rpn-call-state/checker6-support/production.diff:406: trailing whitespace.
++ 
+docs/parity-reviews/tim-rpn-call-state/checker6-support/production.diff:554: trailing whitespace.
++ 

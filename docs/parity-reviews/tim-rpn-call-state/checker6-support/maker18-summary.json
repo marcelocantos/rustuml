@@ -1,0 +1,12 @@
+{
+  "total": 18,
+  "valid": 8,
+  "before": 2,
+  "after": 8,
+  "source_matches": 8,
+  "negative_rejected": 10,
+  "panics": 0,
+  "losses": [],
+  "new_valid_errors": [],
+  "valid_model_drops": []
+}

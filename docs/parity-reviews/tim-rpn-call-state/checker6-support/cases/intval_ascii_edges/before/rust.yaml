@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "0/2147483647/-2147483648" as Edges
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Edges
+  entities:
+  - id: Edges
+    label: '0/2147483647/-2147483648'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

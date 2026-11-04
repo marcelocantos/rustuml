@@ -1,0 +1,4 @@
+@startuml
+!$a=%intval("+-3")+%strlen()
+class Lost
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!function $braid($a="maple",$b="spruce")
+!return $a+"/"+$b
+!endfunction
+class "$braid("fir","yew",unrelated="ignored")" as Shortcut
+@enduml

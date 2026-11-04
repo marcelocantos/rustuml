@@ -1,0 +1,73 @@
+{
+  "exit_code": 200,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.073230333000538,
+  "stdout_sha256": "2bc152a18b1db25757870b0c0ec69555a5fd7ae5169ddd8e3c8ef0ffc4b6a414",
+  "stderr_sha256": "4187e0eba2dcb2b117938396df4d0f50269f20c426834f96948ee2aa1fda0594",
+  "id": "sub_uncalled_function",
+  "timezone": "GMT+11:00",
+  "source": "/tmp/rustuml-checker6/new/sub_uncalled_function.puml",
+  "source_sha256": "fba10347fdc0e8759d281363d686900b7638a25012d16a78d990ee939e62cebe",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/sub_uncalled_function.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/sub_uncalled_function.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new/sub_uncalled_function.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.7rcNROfx/new",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.4405159169982653,
+    "stdout_sha256": "519aa2f53157af97338a26dd8a9feb49662fdfe329f92a8b8ec516a0780355a1",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}

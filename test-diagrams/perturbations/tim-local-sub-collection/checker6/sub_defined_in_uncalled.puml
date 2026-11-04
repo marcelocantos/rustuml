@@ -1,0 +1,8 @@
+@startuml
+!procedure $never()
+!startsub stored
+class Kept
+!endsub
+!endprocedure
+!includesub stored
+@enduml

@@ -1,0 +1,147 @@
+{
+  "source": "/tmp/rustuml-checker6/new/rpn_neighbor_calls.puml",
+  "mechanism": "tim-rpn-call-state",
+  "axes": [
+    "neighbor calls",
+    "computed key"
+  ],
+  "negative": false,
+  "cwd": "/tmp/rustuml-checker6/new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "golden": "/tmp/rustuml-checker6/relay25/rpn_neighbor_calls/java.svg.stdout",
+  "reference_source": "/tmp/rustuml-checker6/relay25/rpn_neighbor_calls/java.source.stdout",
+  "java_exit": 0,
+  "java_probe_exit": 0,
+  "source_sha256": "5b86fad037e24aaeef85e677da3d927624c0631b1355cd40258dba2379b08d57",
+  "golden_sha256": "5fda216628aa5b8be032ee2501a43618e7356d1a69454a156dd1883bbd226609",
+  "suite": "fresh25",
+  "capture_id": "0004-rpn_neighbor_calls",
+  "reference_valid": true,
+  "reference_xml_valid": true,
+  "phases": {
+    "before": {
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "811ce52d6aa235daedea2c3228cee943ff5d9728bd0c96348197992fa787df0b",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "4656e122e743a50d6fa9aff79f7e3b556d939d864ba770b7ed78b9c38444ebf3",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/rpn_neighbor_calls/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0004-rpn_neighbor_calls/before/rust.svg"
+      ],
+      "first_diagnostic": [],
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"maple/elm|ash/spruce\" as Neighbor\n@enduml\n"
+      },
+      "source_equal": true,
+      "reference_source_sha256": "a0a134b8d3498d2cf09372514ab4ef6b6956371ec4e269177a12f220c3689882"
+    },
+    "after": {
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "811ce52d6aa235daedea2c3228cee943ff5d9728bd0c96348197992fa787df0b",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 0,
+          "stdout_sha256": "4656e122e743a50d6fa9aff79f7e3b556d939d864ba770b7ed78b9c38444ebf3",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/rpn_neighbor_calls/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0004-rpn_neighbor_calls/after/rust.svg"
+      ],
+      "first_diagnostic": [],
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"maple/elm|ash/spruce\" as Neighbor\n@enduml\n"
+      },
+      "source_equal": true,
+      "reference_source_sha256": "a0a134b8d3498d2cf09372514ab4ef6b6956371ec4e269177a12f220c3689882"
+    }
+  },
+  "actual_source": "/tmp/rustuml-checker6/new/rpn_neighbor_calls.puml",
+  "actual_golden": "/tmp/rustuml-checker6/relay25/rpn_neighbor_calls/java.svg.stdout",
+  "committed_source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_neighbor_calls.puml",
+  "committed_golden": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_neighbor_calls.svg",
+  "committed_evidence": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls",
+  "java_svg_text": [
+    "maple/elm|ash/spruce"
+  ]
+}

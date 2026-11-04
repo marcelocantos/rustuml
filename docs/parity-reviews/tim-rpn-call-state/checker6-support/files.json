@@ -1,0 +1,3457 @@
+[
+  {
+    "path": "docs/parity-reviews/tim-call-operand-resolution/review.json",
+    "bytes": 13515,
+    "sha256": "ad17105a5ba72cda8c01e78212471fedfb31e1495efbe4bdb5b0248b4bdbf6a9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-hsl-typed-alpha/review.json",
+    "bytes": 9654,
+    "sha256": "1920cca114f78a02f3cf9b7847292bdb06643a5319d6ddb19e19eb5719e9c8e2"
+  },
+  {
+    "path": "docs/parity-reviews/tim-intval-conversion/review.json",
+    "bytes": 11103,
+    "sha256": "92c7b01889e9e1d97c50a201f1e79cf0798932987b2ee79a4a000ca8faa9d22e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-legacy-raw-caller-prefix/review.json",
+    "bytes": 8600,
+    "sha256": "a850f9907db148f1798799db51af4a5daa98ed894e5bd4fe6af1458252c48248"
+  },
+  {
+    "path": "docs/parity-reviews/tim-local-sub-collection/review.json",
+    "bytes": 10407,
+    "sha256": "ab678b0e0e26798352a775a5e7a805909a3377114935d067ef663ab35d66223e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/README.md",
+    "bytes": 10734,
+    "sha256": "bace75d7667a7ae6b73a5c0f18bc4e1487341c787a22753b2ef2f9bd85b181a1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/analysis.json",
+    "bytes": 21476,
+    "sha256": "59757ca396c9750aaf049669f163b39704ea3139c48935064cb5a70868f95344"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/analyze.py",
+    "bytes": 3757,
+    "sha256": "5d1c5c678cc1d4001348b07a2aada5651d139658823365ca83068265aba46266"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/archive.json",
+    "bytes": 394,
+    "sha256": "9aea2b76f4d249f1fb7c0f5f72fb0294660de780fbe324dda1dd4a6ee3c0c867"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/audit.json",
+    "bytes": 1015,
+    "sha256": "f8a92b73524b6d076e79bf775599e47786fb002b30f20887a2a65ce0415889e1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/audit.py",
+    "bytes": 3441,
+    "sha256": "c880144be001e9a024b2c8fd91f1ff45ee095e4d720c901b835bd3d3372e1fbe"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/builds.json",
+    "bytes": 1407,
+    "sha256": "bf16d1fd5117c51e486f7881c342382242e100bd7ef34fd0653f77a6acc5b388"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/after/svg.stderr",
+    "bytes": 52,
+    "sha256": "ab67e49051a1a93f2928498096db02471694cec6812d98b8b796c3c6616a3a06"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/after/yaml.stderr",
+    "bytes": 52,
+    "sha256": "ab67e49051a1a93f2928498096db02471694cec6812d98b8b796c3c6616a3a06"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/before/svg.stderr",
+    "bytes": 58,
+    "sha256": "291be34e6d4464e14faec59dab6b2f572dc54b6901043bc080d9da3390a05049"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/before/yaml.stderr",
+    "bytes": 58,
+    "sha256": "291be34e6d4464e14faec59dab6b2f572dc54b6901043bc080d9da3390a05049"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/commands.json",
+    "bytes": 2843,
+    "sha256": "4fbd6b7eb6a0d91202f48b25437357e141e1c98221410221c5892aca27253fc4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/java.source.stdout",
+    "bytes": 44,
+    "sha256": "8c106031c72b4b1d1b713058c438aa7857375c57fa0d3f9bc91a3edf0c909c9b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/java.svg.stderr",
+    "bytes": 39,
+    "sha256": "961bf2135d08bad74a6e30640fd6491e8391c5a6f51c823ae79321dc11a46c2b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/java.svg.stdout",
+    "bytes": 7571,
+    "sha256": "997d52b7126931521c8c1a5709413d5a157256e1b39d4da04a2df5d4191db9ae"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_bad_arity/result.json",
+    "bytes": 5704,
+    "sha256": "496c23b5a6a9c7ce72ff87ca6d90a49a3da470fe055303c81e0e4b6516eb8c5f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/after/rust.source",
+    "bytes": 55,
+    "sha256": "cc493c356e72b6176cf336bba9afc9577843fb680d6a44cafbc0983313c01959"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/after/rust.svg",
+    "bytes": 1587,
+    "sha256": "17f8ff118eab27060df2f7f9ced644e381c28749dbd42fc0346423ac2d0e6b26"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/after/rust.yaml",
+    "bytes": 391,
+    "sha256": "fcdcdc88ee322af511bca11a6e7332165536f7dba36974f36ca231de62c708ff"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/comparison.stdout",
+    "bytes": 2046,
+    "sha256": "41b6bef3e88348d92dfa9b31523771e934b35477de0c4d0931ef15d702c4f1b2"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/rust.source",
+    "bytes": 51,
+    "sha256": "f57b56e25be2ab21f52890606887f03633f23729bbafc4a4604b78b489e64e41"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/rust.svg",
+    "bytes": 1579,
+    "sha256": "3a0d4b1ea26be51fc26ab2c37e67e51239ddb09e1f28d7beaa0cc79af7335e11"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/rust.yaml",
+    "bytes": 383,
+    "sha256": "376e2958e4e4315a746ec2ac92adbbd8e5511de3c0b58fc6a9fb073486d3ffc6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/commands.json",
+    "bytes": 2850,
+    "sha256": "213e198e8b8a138a66c64b7de1377a8f3ea1fd8840a1d9f4ad4cdcb26957e816"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/java.source.stdout",
+    "bytes": 55,
+    "sha256": "cc493c356e72b6176cf336bba9afc9577843fb680d6a44cafbc0983313c01959"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/java.svg.stdout",
+    "bytes": 1686,
+    "sha256": "f8eafd74e6bc9a35b92ac0e86b35739752d4d184096ec99643fee1ce18fe4990"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_named_alpha/result.json",
+    "bytes": 5510,
+    "sha256": "a258a93dc61d0e544da1933e40285fd5eba92593ecd6e14545f3137e6370f9ee"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/after/rust.source",
+    "bytes": 68,
+    "sha256": "4c8362d82017a516c872fd6773c3d5422d49c3f694374f27ff16bd030ac7cb79"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/after/rust.svg",
+    "bytes": 1610,
+    "sha256": "3fdc023b21d7cbc493893ffcadde266932860687c1c44b270efb940c3e25f7a6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/after/rust.yaml",
+    "bytes": 420,
+    "sha256": "376c86ccce83cac4ba92a674e7bd49e4ef006767937771c614cc116f8d650f78"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/comparison.stdout",
+    "bytes": 2064,
+    "sha256": "608ed45d9e5676866e4680b03b783b4e3c77d42090be935b3b39874587b75ba8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/rust.source",
+    "bytes": 62,
+    "sha256": "2a72fdee0f18309d04da83900710839d2dde3c6ed0e69a1c2ac9de990c1c167f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/rust.svg",
+    "bytes": 1598,
+    "sha256": "622dc72d9cd2bc940f7bea44e769397679ce371225ec3bc328668dd0ab768cbf"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/rust.yaml",
+    "bytes": 408,
+    "sha256": "5bdd12dd3efe20a1beb207ca9140941d84364206d39ff7cd2576b8d7ad3209cd"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/commands.json",
+    "bytes": 2881,
+    "sha256": "b5f9a8326996a0464bbd79e797b5c3b849a6f31f95e45cfc445ef0282083ad28"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/java.source.stdout",
+    "bytes": 68,
+    "sha256": "4c8362d82017a516c872fd6773c3d5422d49c3f694374f27ff16bd030ac7cb79"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/java.svg.stdout",
+    "bytes": 1734,
+    "sha256": "be5e7847010960e4d1d657470d999f4aa4a453a1952b78fbb1c75fd61e54b387"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_rounding_extremes/result.json",
+    "bytes": 5626,
+    "sha256": "5bc08b1ff1830a59ee9df2f2c6e4807f8a171e828c55bd3c553e54ffb1ac1eb4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/after/rust.source",
+    "bytes": 62,
+    "sha256": "20798d8c28aca90685a3d5f6319b874a68c0f87e9e83e59cca36cbbeded2fcff"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/after/rust.svg",
+    "bytes": 1598,
+    "sha256": "4f378cd07fc3ef3ce798c7cb261d5fb80343565d9fd31540f15378fd84859dbb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/after/rust.yaml",
+    "bytes": 408,
+    "sha256": "d12b8ee1739b59e735dddf008c7ed05d290c868a2f4b66100621f4dc907bb675"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/comparison.stdout",
+    "bytes": 2058,
+    "sha256": "d5c77f089595415dafdddef7c48c7ece24f09dcfe87126e99e7683d0b1e04386"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/rust.source",
+    "bytes": 62,
+    "sha256": "b0d699a8c97eb86768fac09063627ea625c9f11794a1846c4b919aef7abca4b4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/rust.svg",
+    "bytes": 1598,
+    "sha256": "dc223686096ecdfe956a80478a9418b83a580304ad2f6b8c3bdfd055f298ea33"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/rust.yaml",
+    "bytes": 408,
+    "sha256": "4102d8ade8ca69c2908d8e06cc2e581016c528ee7bf10343819262debba8ae98"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/commands.json",
+    "bytes": 2865,
+    "sha256": "421d6c3ca8fe978e159b6252ae160d5da8dea7d52e41f2dea87b8ef258e9893d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/java.source.stdout",
+    "bytes": 62,
+    "sha256": "20798d8c28aca90685a3d5f6319b874a68c0f87e9e83e59cca36cbbeded2fcff"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/java.svg.stdout",
+    "bytes": 1740,
+    "sha256": "3698ac4a556b8881eb8fbec3d4e6661fb6177e834dbbd4ac33958db99d4798ea"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/hsl_typed_channels/result.json",
+    "bytes": 5558,
+    "sha256": "2027ea421c613430b8aff5f09c34121826a07827a27a22cedb7bc36ce0e0f782"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/after/rust.source",
+    "bytes": 60,
+    "sha256": "29d8f7f8bea21b2823b13ccbed9e03a0a29afe1dbe2c770ea5ff45f758e1aadb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/after/rust.svg",
+    "bytes": 1597,
+    "sha256": "9e248923e59e86e453a40a3a93f2f29b118371a6a66c00fad675e1000908200c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/after/rust.yaml",
+    "bytes": 401,
+    "sha256": "9a5ef4cd45d0b3cb832ef0bf29eb1561fcc662bdccba80e2953f9a262ca250b2"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/before/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/before/rust.source",
+    "bytes": 60,
+    "sha256": "29d8f7f8bea21b2823b13ccbed9e03a0a29afe1dbe2c770ea5ff45f758e1aadb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/before/rust.svg",
+    "bytes": 1597,
+    "sha256": "9e248923e59e86e453a40a3a93f2f29b118371a6a66c00fad675e1000908200c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/before/rust.yaml",
+    "bytes": 401,
+    "sha256": "9a5ef4cd45d0b3cb832ef0bf29eb1561fcc662bdccba80e2953f9a262ca250b2"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/commands.json",
+    "bytes": 2866,
+    "sha256": "25bdc0e57ebf9f863888a6c4b37ab10e4972fae14fea22f25b3f0a250a9d6850"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/java.source.stdout",
+    "bytes": 60,
+    "sha256": "29d8f7f8bea21b2823b13ccbed9e03a0a29afe1dbe2c770ea5ff45f758e1aadb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/java.svg.stdout",
+    "bytes": 1711,
+    "sha256": "51c483930a8f2326e47b4156050deee983942a330a1d55f88fa223e9bac888af"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_ascii_edges/result.json",
+    "bytes": 5570,
+    "sha256": "c283e4a8bb53677e7c3b2b363b38ccdc84ee5ead864592c7c85637e380fd7c79"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/after/svg.stderr",
+    "bytes": 52,
+    "sha256": "8ae80d60e3252bb95b64865567b663f6a49593980ea0a8218fb65845f81775e5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/after/yaml.stderr",
+    "bytes": 52,
+    "sha256": "8ae80d60e3252bb95b64865567b663f6a49593980ea0a8218fb65845f81775e5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/before/svg.stderr",
+    "bytes": 55,
+    "sha256": "43c9a20569a4358ca1ac19fce4a5b5776853a1bce60e06e5cf8387d527650595"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/before/yaml.stderr",
+    "bytes": 55,
+    "sha256": "43c9a20569a4358ca1ac19fce4a5b5776853a1bce60e06e5cf8387d527650595"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/commands.json",
+    "bytes": 2874,
+    "sha256": "82edcc84fa44ff580ff62464880adc653d814099143e807a95b70b64c4cc1ef1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/java.source.stdout",
+    "bytes": 39,
+    "sha256": "0ba2253fda8df9aeaf6e9f87013d75d771c3d5692d6cf7af3083d74974bea42d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/java.svg.stderr",
+    "bytes": 39,
+    "sha256": "ffa1969d4f7aa9a9a4a7a21d5af0d300cecd99d9f6d6fcff3aa2a4e325eca522"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/java.svg.stdout",
+    "bytes": 7560,
+    "sha256": "4979aec1775b3849fbc12a57a334e04c79d32ccaca2dbc5c767a9815ef437c9f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign/result.json",
+    "bytes": 5776,
+    "sha256": "b73e51e4c55e344423cbf7d2ed5dbe0fc30d5d0c6a244df2310d18353c7d071d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/after/svg.stderr",
+    "bytes": 60,
+    "sha256": "cc74511f4fe9ebc9fbb8401a7e0f7f626032d2a49657d1b4cd1db9c82cc2f5b4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/after/yaml.stderr",
+    "bytes": 60,
+    "sha256": "cc74511f4fe9ebc9fbb8401a7e0f7f626032d2a49657d1b4cd1db9c82cc2f5b4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/before/rust.source",
+    "bytes": 29,
+    "sha256": "39eaf0dc794833546a4cf42d0a5c45393ab3da4f2ec9b97622faa83394cb6bd0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/before/rust.svg",
+    "bytes": 1549,
+    "sha256": "4dc0393b027782d56b9f4995a0dcb4469c46f3a2b2783607d699b03c00bd6683"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/before/rust.yaml",
+    "bytes": 347,
+    "sha256": "499dc9a8d4515a250790552d2f427d663bb2e5796967f6602de7590f61bdc401"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/commands.json",
+    "bytes": 2889,
+    "sha256": "071578ad79d90fe851471c52233cbd31ab755a8b29a6237627d881199fab91a0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/java.source.stdout",
+    "bytes": 37,
+    "sha256": "997acbaae4cade388a9d557f05de92946b64224b3f1a12282d458329f0999983"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/java.svg.stderr",
+    "bytes": 47,
+    "sha256": "eebdad9bbb6477baf84a27ee1f0dd17fb894996640d8489fde65634a0db5de7f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/java.svg.stdout",
+    "bytes": 7566,
+    "sha256": "7d36946577821ba31e1f3811997946b5e608da0cefd2fd7f50a0e67d1e65cb48"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_underflow_bound/result.json",
+    "bytes": 5989,
+    "sha256": "0ffc5a5626b42df7dacdfdf44b7ff24808e13b6a0a33b9904dad364b104a0954"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/after/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/after/svg.stderr",
+    "bytes": 59,
+    "sha256": "c4e990ec823c03c1d3aa6b63e4551315dba377591408c2ef2b4249b765ca2d45"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/after/yaml.stderr",
+    "bytes": 59,
+    "sha256": "c4e990ec823c03c1d3aa6b63e4551315dba377591408c2ef2b4249b765ca2d45"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/comparison.stdout",
+    "bytes": 2011,
+    "sha256": "97c53bf03918013f7acbe7aad19d4f79f549e94b9a2a123590222ad36a539dc6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/rust.source",
+    "bytes": 41,
+    "sha256": "fda70ac20e9a3f68e93206fe7c618706f3e18cd8715c5cd3cdf3253805035aa9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/rust.svg",
+    "bytes": 1550,
+    "sha256": "1fa13fa9fb3bf6ad05b40b89eeafe516d54832ad9f88e253250a99f7820e8fc7"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/rust.yaml",
+    "bytes": 365,
+    "sha256": "007f53ba0e94370f33c02699638f2f93e72fb5f19e21c16e4363881c95b42275"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/commands.json",
+    "bytes": 2880,
+    "sha256": "958b2ccc73b9c2b337ef6826f82e23b19963cd4dc2fb5cc70162f83e346b6a1f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/java.source.stdout",
+    "bytes": 45,
+    "sha256": "8d5c5432ebecb9fe4c00dbb22099564dd3f4799496308a6e6bfedf37d8ede410"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/java.svg.stdout",
+    "bytes": 1666,
+    "sha256": "9cd101cf1854814a273a18e9a206b595c88e5232958b6d35e849708e27219277"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_digits/result.json",
+    "bytes": 5397,
+    "sha256": "a914379e36a68cf63791d83f186a9ab5bf713fc45fa5002c8dddb30a8f45d751"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/after/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/after/svg.stderr",
+    "bytes": 54,
+    "sha256": "63089ee8695f1240a7dd9b0b9d1bbc279c30a494235d311cbb9d31718ad23413"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/after/yaml.stderr",
+    "bytes": 54,
+    "sha256": "63089ee8695f1240a7dd9b0b9d1bbc279c30a494235d311cbb9d31718ad23413"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/comparison.stdout",
+    "bytes": 2001,
+    "sha256": "71b888cc47e443b1fcb63ab89071d7a08c06475b51e07445807a2058f6fba796"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/rust.source",
+    "bytes": 37,
+    "sha256": "bf89d074b02c3044d5e388502e548cfad5d808fa23cd181d70b6bff48913cd38"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/rust.svg",
+    "bytes": 1543,
+    "sha256": "30562b8e66465c3e8b858ec0283f61c8955e9396bf1e568dba1acd3ea95fc9db"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/rust.yaml",
+    "bytes": 355,
+    "sha256": "745c20ff3a610bf7a5562139c4d9a34383a89537518ab42d02ff0b228d1f9d92"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/commands.json",
+    "bytes": 2871,
+    "sha256": "66076a215f1813fc7d014037e6a3493be96409857be9a49bc7798177d0d11ef4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/java.source.stdout",
+    "bytes": 39,
+    "sha256": "d4bb6a1ef41db06252e9dfc30b987efb3509edaf84a9c374dd9e986f7a2d6f8f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/java.svg.stdout",
+    "bytes": 1643,
+    "sha256": "53142b52f80abafb34770a2783d384db61230879f0da6f5983973fe468e55e23"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_unicode_json/result.json",
+    "bytes": 5367,
+    "sha256": "7606df6b247bd1d2c6ab7d4b6095a1f2ad7085aceeff9f5cfdd4294399f96b0a"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/after/svg.stderr",
+    "bytes": 50,
+    "sha256": "0ce17457e8c57d9fa411e555ef35c25391adaddbca23c523696d458ec4037b5d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/after/yaml.stderr",
+    "bytes": 50,
+    "sha256": "0ce17457e8c57d9fa411e555ef35c25391adaddbca23c523696d458ec4037b5d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/before/rust.source",
+    "bytes": 63,
+    "sha256": "89469bd28f9f2e272eabc82c3c6e69fcd6f8c18f42d645b464118d7844e9fcfe"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/before/rust.svg",
+    "bytes": 938,
+    "sha256": "63531df16234daf3902241bc3407e62472725d77829e144776ca6a02ebac5bf9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/before/rust.yaml",
+    "bytes": 387,
+    "sha256": "48b8fa85ead3e7783ae89b150242d6419d2f4b2533f2fa1a051b3dbfc39c576d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/commands.json",
+    "bytes": 2884,
+    "sha256": "f9b87ae03a3c971dca3f966c50ede079672763083590e12d9dd6a97232ecf421"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/java.source.stdout",
+    "bytes": 56,
+    "sha256": "7a531d740f4e298a114fadbebe33aef1856249262f9e57eca6539fa154cb5c86"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/java.svg.stderr",
+    "bytes": 37,
+    "sha256": "a5492d31ab2dbab808b842ae51ab65038b829829395f7f67b9f8a07bec0b97be"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/java.svg.stdout",
+    "bytes": 8551,
+    "sha256": "ac951d3f753f8de367c047e11a1b958f4e46db476facf7605159f0a543f9dc53"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_prefix_failure/result.json",
+    "bytes": 6148,
+    "sha256": "710566037fdd33c90dba4c4188dd0c6939e453b8c52c2b7bd68047e69cd4309a"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/after/rust.source",
+    "bytes": 79,
+    "sha256": "ad72b8c34b8022b2e24a44ef498505b71fefb2e62fbc415db1448a2fb6b87926"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/after/rust.svg",
+    "bytes": 966,
+    "sha256": "d22d75e1ec08a477313bc4aade1ada7613f1f7e857ce557e982a33143bed8dbd"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/after/rust.yaml",
+    "bytes": 419,
+    "sha256": "ce6b5267b0ec2a93e0fbf2d55eecfbf836e4524e4ddb7cc87ee2a6574d5f09ec"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/before/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/before/rust.source",
+    "bytes": 79,
+    "sha256": "ad72b8c34b8022b2e24a44ef498505b71fefb2e62fbc415db1448a2fb6b87926"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/before/rust.svg",
+    "bytes": 966,
+    "sha256": "d22d75e1ec08a477313bc4aade1ada7613f1f7e857ce557e982a33143bed8dbd"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/before/rust.yaml",
+    "bytes": 419,
+    "sha256": "ce6b5267b0ec2a93e0fbf2d55eecfbf836e4524e4ddb7cc87ee2a6574d5f09ec"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/commands.json",
+    "bytes": 2896,
+    "sha256": "098310eb914d7d6631f30b16e44caf5afffe69529892a79882eaedce75d014f3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/java.source.stdout",
+    "bytes": 79,
+    "sha256": "ad72b8c34b8022b2e24a44ef498505b71fefb2e62fbc415db1448a2fb6b87926"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/java.svg.stdout",
+    "bytes": 1120,
+    "sha256": "89a8d82440a5bcc9d88bbfac8c6f8a65a6200aa6f483f2c551b2f0d44f713359"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_procedure_control/result.json",
+    "bytes": 5735,
+    "sha256": "bc90ad1fa80d0c2a27b3cf0c4049d3c9e56b2d8be83c7bb4e8c0a0613d4d2678"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/after/rust.source",
+    "bytes": 101,
+    "sha256": "6ecc45f3ab3adeb2bee0eeffd88fae985af92f89aa13dbb2da6ae33096423201"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/after/rust.svg",
+    "bytes": 1254,
+    "sha256": "6a4d70d8288b3caac076ec52d348459d72a1e2c939347ce06f4c4a31e85a8ec0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/after/rust.yaml",
+    "bytes": 489,
+    "sha256": "b5b77f398da1a83f1211d78cdb8b521b85fc99f17b3cce6a91af33014d5cc52d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/comparison.stdout",
+    "bytes": 2262,
+    "sha256": "c0f5fbbbd8ba0a1876af63e878d8831f1afbadcd483e8ced1041eab16437b50b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/rust.source",
+    "bytes": 95,
+    "sha256": "edeb84568160bd2aecfeddb1794010b34b1aa51d756340286a8b15e7296785dc"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/rust.svg",
+    "bytes": 1238,
+    "sha256": "f81d67089af8d236b30823f572cf44b20676ceb9f303d47d8dd65f307080ea97"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/rust.yaml",
+    "bytes": 475,
+    "sha256": "8702df8a3bdb6043fd931b4059ca01aebec1a7259da9b5d31fbcdaab75c5d444"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/commands.json",
+    "bytes": 2870,
+    "sha256": "7a3f29ac43ee0ba1fa26b0d9771386b521a0a127564ea3dba48b3bee441cb961"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/java.source.stdout",
+    "bytes": 101,
+    "sha256": "6ecc45f3ab3adeb2bee0eeffd88fae985af92f89aa13dbb2da6ae33096423201"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/java.svg.stdout",
+    "bytes": 1426,
+    "sha256": "bdb33a77cb8d02c5c34a4010c2c9a5959b8e03b48b024b7d8f2228e599dbd029"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/legacy_repeated_raw/result.json",
+    "bytes": 5750,
+    "sha256": "740894ca4835f795eb1fefb172019a5badfca9b0c616f01a043f50a39b75faa7"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/after/rust.source",
+    "bytes": 45,
+    "sha256": "0e0f5d3718e77e0e7ef7d727c68b1503ab880a78ccef5b5267b1f235c3ce58cc"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/after/rust.svg",
+    "bytes": 1563,
+    "sha256": "bf9b082b2cbedfb4747f524d6a920e01bed5a3313e9f21827be31fcb0438c5b9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/after/rust.yaml",
+    "bytes": 371,
+    "sha256": "734b22b68bbe12d8d0fda37a1822965c1fb7a2edc33c9855a2015b302f642f76"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/before/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/before/svg.stderr",
+    "bytes": 60,
+    "sha256": "d77a0e83884354bdbbd1a8eeec790bcb4080b55de1e7ab3b328439bcb75e0384"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/before/yaml.stderr",
+    "bytes": 60,
+    "sha256": "d77a0e83884354bdbbd1a8eeec790bcb4080b55de1e7ab3b328439bcb75e0384"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/commands.json",
+    "bytes": 2901,
+    "sha256": "d2f845d3e67847463265f9bc416b0aee3deeda4f1114fef942d57c872191fe0b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/java.source.stdout",
+    "bytes": 45,
+    "sha256": "0e0f5d3718e77e0e7ef7d727c68b1503ab880a78ccef5b5267b1f235c3ce58cc"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/java.svg.stdout",
+    "bytes": 1732,
+    "sha256": "a42bdfe6d37b53aaa6dd8c05575e6a1e3974559777fca122b8669da371e71694"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_duplicate_effects/result.json",
+    "bytes": 5472,
+    "sha256": "bce49a135095147d500123771ff83617480803009d2df88d773ce5be5fe2397d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/after/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/after/svg.stderr",
+    "bytes": 53,
+    "sha256": "223f75f9c7c835845182b625d78a7ad79d21622270ec8fdd591482628f2f496f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/after/yaml.stderr",
+    "bytes": 53,
+    "sha256": "223f75f9c7c835845182b625d78a7ad79d21622270ec8fdd591482628f2f496f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/before/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/before/svg.stderr",
+    "bytes": 54,
+    "sha256": "03dcbd3005acd9ff51f655d19022b01b316437279aec08fca946f2a1dc910bb1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/before/yaml.stderr",
+    "bytes": 54,
+    "sha256": "03dcbd3005acd9ff51f655d19022b01b316437279aec08fca946f2a1dc910bb1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/commands.json",
+    "bytes": 2976,
+    "sha256": "f2ebfa51743dbcdfaf45d16d042abe86bf7e5cc2e924af34d8ba967dbfb5c120"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/java.source.stdout",
+    "bytes": 46,
+    "sha256": "810d22e440abc5098890e0da68262b594aedf42ab41be84fa9c8e957ae240866"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/java.svg.stdout",
+    "bytes": 1711,
+    "sha256": "cba1157181b23676edfe99ff57b10167bad7d9c8f647e5772dc3bbeea0bb5402"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_procedure/result.json",
+    "bytes": 5346,
+    "sha256": "166901997359fad421939310271ae269f9bfd22e7d4177d6b0218626bae6e8ae"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/after/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/after/svg.stderr",
+    "bytes": 53,
+    "sha256": "223f75f9c7c835845182b625d78a7ad79d21622270ec8fdd591482628f2f496f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/after/yaml.stderr",
+    "bytes": 53,
+    "sha256": "223f75f9c7c835845182b625d78a7ad79d21622270ec8fdd591482628f2f496f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/before/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/before/svg.stderr",
+    "bytes": 86,
+    "sha256": "90ec3a4a2b3a441dcddfb72b2e6c09845a731ba572b76da00782008d7a69c930"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/before/yaml.stderr",
+    "bytes": 86,
+    "sha256": "90ec3a4a2b3a441dcddfb72b2e6c09845a731ba572b76da00782008d7a69c930"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/commands.json",
+    "bytes": 2961,
+    "sha256": "28779a1e80da0d1888c93193d38536e2b332c4de5c89789bc64816ff269d4266"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/java.source.stdout",
+    "bytes": 46,
+    "sha256": "d6d7ffebf90c190256c51634e20e23ff92ce0d3a0a6935f8c0403f1de6381c57"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/java.svg.stdout",
+    "bytes": 1720,
+    "sha256": "121eefe123581e5add2fa8146377a50b6a6e9b31a2b22b49fb9d6133df299cb3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_overload_return/result.json",
+    "bytes": 5344,
+    "sha256": "ffe324f29b4bf07b3c1c1f2262a90f0b3452666b29a7dc10fa2c8ac0d86ffd11"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/after/rust.source",
+    "bytes": 46,
+    "sha256": "734aaff5d9d4d1d429281a51f373d607213fde190e0ba20ada4394755d7136fa"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/after/rust.svg",
+    "bytes": 1558,
+    "sha256": "5da00913b11419dbcf7844bc829bbb12a92f0eefc737462b393408cff0d544c5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/after/rust.yaml",
+    "bytes": 374,
+    "sha256": "506c47627a1e33279ea87d6566f58353a98dbde59c76c7033b9abe4d5739714c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/before/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/before/rust.source",
+    "bytes": 46,
+    "sha256": "734aaff5d9d4d1d429281a51f373d607213fde190e0ba20ada4394755d7136fa"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/before/rust.svg",
+    "bytes": 1558,
+    "sha256": "5da00913b11419dbcf7844bc829bbb12a92f0eefc737462b393408cff0d544c5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/before/rust.yaml",
+    "bytes": 374,
+    "sha256": "506c47627a1e33279ea87d6566f58353a98dbde59c76c7033b9abe4d5739714c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/commands.json",
+    "bytes": 2916,
+    "sha256": "ec53401756d331aa970c88f91f5a93e3caf82222c4cb8d4adce13305bdad5736"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/java.source.stdout",
+    "bytes": 46,
+    "sha256": "734aaff5d9d4d1d429281a51f373d607213fde190e0ba20ada4394755d7136fa"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/java.svg.stdout",
+    "bytes": 1720,
+    "sha256": "582ae5a2e26aa8581336510e5b8c51280430cc473d9c18c3bf38c83eef5d41e0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_plain_exact_shortcut/result.json",
+    "bytes": 5677,
+    "sha256": "9ffb427d7708e39deb3f21b0e2b72683daf438d22a433c9f114ffb76b0b4d2d0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/after/svg.stderr",
+    "bytes": 86,
+    "sha256": "af330c1a071e8557757b0b34e15c5269d9a1ea09f5eddf924d0ae1949047d2f0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/after/yaml.stderr",
+    "bytes": 86,
+    "sha256": "af330c1a071e8557757b0b34e15c5269d9a1ea09f5eddf924d0ae1949047d2f0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/before/svg.stderr",
+    "bytes": 86,
+    "sha256": "af330c1a071e8557757b0b34e15c5269d9a1ea09f5eddf924d0ae1949047d2f0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/before/yaml.stderr",
+    "bytes": 86,
+    "sha256": "af330c1a071e8557757b0b34e15c5269d9a1ea09f5eddf924d0ae1949047d2f0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/commands.json",
+    "bytes": 2903,
+    "sha256": "5c81343012b28a737d32310543e2423616558cbd7092a8efa695b8b8e9205d3e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/java.source.stdout",
+    "bytes": 30,
+    "sha256": "b56cd66bcba9037dc3a9a6e734914feb4a324c459043416fcad38d1a1175da67"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/java.svg.stderr",
+    "bytes": 73,
+    "sha256": "596cfab2f5621f9d1a155f6e900917fb07fa888e1f769671e4af0f6c8e4fa86d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/java.svg.stdout",
+    "bytes": 9227,
+    "sha256": "326fc978c7d8c4136ce1b0cbaa7e6deb2b734ede8392d779531bb1c1b1d3d57d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_covered/result.json",
+    "bytes": 6205,
+    "sha256": "cbbe86384da7855a34d435664e0885ead6ef8185c5273efec7ce04e9831ca534"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/after/svg.stderr",
+    "bytes": 53,
+    "sha256": "fded0ff2ae17d531376ffb6b52d2ad7859a89a110712294c3c48ce5dc509a9ec"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/after/yaml.stderr",
+    "bytes": 53,
+    "sha256": "fded0ff2ae17d531376ffb6b52d2ad7859a89a110712294c3c48ce5dc509a9ec"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/before/svg.stderr",
+    "bytes": 86,
+    "sha256": "dfdb99ee2b8e65558a16ae01e7cc5b1a7e403b4c64a0a9b11f4c12a74296eaa6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/before/yaml.stderr",
+    "bytes": 86,
+    "sha256": "dfdb99ee2b8e65558a16ae01e7cc5b1a7e403b4c64a0a9b11f4c12a74296eaa6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/commands.json",
+    "bytes": 2904,
+    "sha256": "55086e4a870239578efae687fd2e03c0cf2da13c7e650fa08d18e402568503b3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/java.source.stdout",
+    "bytes": 22,
+    "sha256": "82b159e45f3b6cbbfe2c58dc8a40c89b2467e43e1a9500350c51db4b4046008f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/java.svg.stderr",
+    "bytes": 40,
+    "sha256": "e467404ca9abd9fcaf7af4ca9a44803bdd7c8f0d972d2804eb43ddcfb53ee646"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/java.svg.stdout",
+    "bytes": 8031,
+    "sha256": "5d8cf286d9ece55f30decfa99208fe1040bf669e8a5cdcacd126fb588df05537"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing/result.json",
+    "bytes": 5972,
+    "sha256": "bdbaa04709213a4c3e5d581898181d7a09127f23fa200e00af5c5efc790e2c35"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/after/svg.stderr",
+    "bytes": 52,
+    "sha256": "227afb993ac78a2c079369b609340d81847e4224299a13f693e80fc8c0dd60d3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/after/yaml.stderr",
+    "bytes": 52,
+    "sha256": "227afb993ac78a2c079369b609340d81847e4224299a13f693e80fc8c0dd60d3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/before/svg.stderr",
+    "bytes": 62,
+    "sha256": "953039d554ac548a1babe5ab430df70e0d90cb9ea2d48b9921bca0a73dd7a0ba"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/before/yaml.stderr",
+    "bytes": 62,
+    "sha256": "953039d554ac548a1babe5ab430df70e0d90cb9ea2d48b9921bca0a73dd7a0ba"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/commands.json",
+    "bytes": 2893,
+    "sha256": "3d687450fac6f2915b63a8fcd4eef8dfb28070cb092e644585dbae7c744dcc2b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/java.source.stdout",
+    "bytes": 51,
+    "sha256": "9f6ea75ef6594601f8ed4584348cc41e6c320bc4d8a934816adb49e90a5636f2"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/java.svg.stderr",
+    "bytes": 39,
+    "sha256": "81e4f86c4e852b04d93522e597d4267df8d06634e20c4cd3f26d82c6e1372873"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/java.svg.stdout",
+    "bytes": 7595,
+    "sha256": "8c01a8113b5d96ece99c09e0bead121bd2b7c2bef28c0eadb1ef3896be477152"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_rhs_first_error/result.json",
+    "bytes": 5883,
+    "sha256": "aa53251bcee974eded709feddd82682f449b35f13fa6ae995a7f342acbf01ad6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/comparison.stdout",
+    "bytes": 2027,
+    "sha256": "f0b9de9e3308f90bb0e78e2a720d8771fe73e671aa29f281b2419d7c6702b5df"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/rust.source",
+    "bytes": 43,
+    "sha256": "ebd68d4260c69d7b2ff208dc5312999101fd929949fc6d17e034a0653a50862c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/rust.svg",
+    "bytes": 1560,
+    "sha256": "05704fd46c02906899f14f1c38c3c7779cdeed6035ffed23fdbee0f138aef39e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/rust.yaml",
+    "bytes": 364,
+    "sha256": "7510a861dab96cad135aa823fc5d2545bf2d6922dcfa09a0d2bb292c3074c3f6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/comparison.stdout",
+    "bytes": 2027,
+    "sha256": "f0b9de9e3308f90bb0e78e2a720d8771fe73e671aa29f281b2419d7c6702b5df"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/rust.source",
+    "bytes": 43,
+    "sha256": "ebd68d4260c69d7b2ff208dc5312999101fd929949fc6d17e034a0653a50862c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/rust.svg",
+    "bytes": 1560,
+    "sha256": "05704fd46c02906899f14f1c38c3c7779cdeed6035ffed23fdbee0f138aef39e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/rust.yaml",
+    "bytes": 364,
+    "sha256": "7510a861dab96cad135aa823fc5d2545bf2d6922dcfa09a0d2bb292c3074c3f6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/commands.json",
+    "bytes": 2910,
+    "sha256": "b3e13cfd7406bfe1b58dadb9fd8a3a839cb5625230c24bd2181a3998976bfeb4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/java.source.stdout",
+    "bytes": 47,
+    "sha256": "6c6d36b057f6328e6a57636280179e3496b3de16034e126d58ac7dbeae60b51e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/java.svg.stdout",
+    "bytes": 1696,
+    "sha256": "0269762d29d45cfa46d5e8aae4780663728ad42b5041045a7574c8ec22946061"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_bare_read/result.json",
+    "bytes": 5509,
+    "sha256": "93d3a35965470848c79cd26558adf96a9bc55ba9fe576a1e16d122b760d5d539"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/comparison.stdout",
+    "bytes": 2054,
+    "sha256": "6ba6142d203ce1365f936c9b720dd0bf4ce248ed832cb88bca3fe520027acdf7"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/rust.source",
+    "bytes": 52,
+    "sha256": "8f7dd5f236dd8b8ea0fee1b85ae065870aa0f4d5d5009b066f8d8083195ea73d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/rust.svg",
+    "bytes": 1581,
+    "sha256": "26f92b6c941d4895c29660871658350a4eb3d737e903142687ff120978138858"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/rust.yaml",
+    "bytes": 383,
+    "sha256": "291f47269b6f4951021294c0e097d72dbe2c0885b8a4a25a3cf830c5a6c14b7c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/comparison.stdout",
+    "bytes": 2055,
+    "sha256": "59e5f79671fe1a9c9c6422a9474fc54f16c18b2ec3b24be0a792d92c4b7c15a5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/rust.source",
+    "bytes": 53,
+    "sha256": "6a17d3e60522fbd6642befd4392fafa49c14e8899f6b62d18354dd7696381976"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/rust.svg",
+    "bytes": 1583,
+    "sha256": "de19aa70398d74cadd601e945d46f7b532b44a2d24dfde90fba34a617f7abcb6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/rust.yaml",
+    "bytes": 385,
+    "sha256": "01f2d92c36575608f5e33565038240631831afd778c4d9268fc787fa8887ab95"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/commands.json",
+    "bytes": 2871,
+    "sha256": "d922cdddd4dfc39115b0638148209a70eabcc00c1660df1c206b61b327b30348"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/java.source.stdout",
+    "bytes": 62,
+    "sha256": "94c556b9479cfd9877acff794e77c7fbd68cb0a057d54c6054dc1a7b2887ecbf"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/java.svg.stdout",
+    "bytes": 1757,
+    "sha256": "20df02fa80c5105e915723fe5b1269f1ca4fe52b7ad44be0d27d89a6ace93c2b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_dual_parameters/result.json",
+    "bytes": 5585,
+    "sha256": "1c073e8af26d32bc5069f82ed43278bbc24902de081e49cccb863de80e9fe81a"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/after/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/after/svg.stderr",
+    "bytes": 56,
+    "sha256": "172c902ae282710876f4c95853f7712324abc28298c1be27eabc08e007af0ee9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/after/yaml.stderr",
+    "bytes": 56,
+    "sha256": "172c902ae282710876f4c95853f7712324abc28298c1be27eabc08e007af0ee9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/before/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/before/rust.source",
+    "bytes": 29,
+    "sha256": "39eaf0dc794833546a4cf42d0a5c45393ab3da4f2ec9b97622faa83394cb6bd0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/before/rust.svg",
+    "bytes": 1549,
+    "sha256": "cb44f0dcb724eb84c95da907e37ecf1b000afda639283efa2645553902216f98"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/before/rust.yaml",
+    "bytes": 347,
+    "sha256": "086af446fdddd6f416881450664298287469a82641e6fbbcae8e995872d1f1bf"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/commands.json",
+    "bytes": 2892,
+    "sha256": "12515721f6ee80bf9689963fec3f42a211ab55dc6048efa6044c4c791b88e764"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/java.source.stderr",
+    "bytes": 1303,
+    "sha256": "f7bf056664ac93f3d1a22f3a5ec64c60ea4f45bde3ad3637fa7850b08b591d66"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/java.source.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/java.svg.stderr",
+    "bytes": 1289,
+    "sha256": "e90ba18822e79328196e836dd313060f0fd92adb59fa8ad5f383cba6ae05c5a8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/java.svg.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_duplicate_underflow/result.json",
+    "bytes": 5382,
+    "sha256": "04c9dfa0cff765f70a8f430f676ca02b09f1ae5d44c45aaabda1967f39ad083d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/after/rust.source",
+    "bytes": 59,
+    "sha256": "a0a134b8d3498d2cf09372514ab4ef6b6956371ec4e269177a12f220c3689882"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/after/rust.svg",
+    "bytes": 1592,
+    "sha256": "811ce52d6aa235daedea2c3228cee943ff5d9728bd0c96348197992fa787df0b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/after/rust.yaml",
+    "bytes": 400,
+    "sha256": "4656e122e743a50d6fa9aff79f7e3b556d939d864ba770b7ed78b9c38444ebf3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/before/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/before/rust.source",
+    "bytes": 59,
+    "sha256": "a0a134b8d3498d2cf09372514ab4ef6b6956371ec4e269177a12f220c3689882"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/before/rust.svg",
+    "bytes": 1592,
+    "sha256": "811ce52d6aa235daedea2c3228cee943ff5d9728bd0c96348197992fa787df0b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/before/rust.yaml",
+    "bytes": 400,
+    "sha256": "4656e122e743a50d6fa9aff79f7e3b556d939d864ba770b7ed78b9c38444ebf3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/commands.json",
+    "bytes": 2865,
+    "sha256": "37dbdcd2a2bbf668ed268090de676fe0d72fd0510a5747eb7d174e212d50acb8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/java.source.stdout",
+    "bytes": 59,
+    "sha256": "a0a134b8d3498d2cf09372514ab4ef6b6956371ec4e269177a12f220c3689882"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/java.svg.stdout",
+    "bytes": 1753,
+    "sha256": "5fda216628aa5b8be032ee2501a43618e7356d1a69454a156dd1883bbd226609"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_neighbor_calls/result.json",
+    "bytes": 5553,
+    "sha256": "5c22e66521766ed1cfcae278a56da5530558b5a22b35ea06f009185d4791b1a4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/after/rust.source",
+    "bytes": 46,
+    "sha256": "aae909c76b637566094efc3f6e6294849002ccb34310cc399531c34e0fbef9da"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/after/rust.svg",
+    "bytes": 1567,
+    "sha256": "013fbd685c4fa270a4dfdf5821db5b94918be17221bf2b747a93ceae3094e047"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/after/rust.yaml",
+    "bytes": 372,
+    "sha256": "1a2610f5a6618906dfb67faf8c7a92f5ab21c3ea1fdc402f46c41ce25bdc5e9d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/comparison.stdout",
+    "bytes": 2037,
+    "sha256": "b310ce2a1f16b480b481b312f541f589381da81f6d328f6320b70b6cf246852b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/rust.source",
+    "bytes": 54,
+    "sha256": "3e6b4431c9ec15d8f155ff7bc9e599c3957fef683915c6046ddf4329f1d060f1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/rust.svg",
+    "bytes": 1584,
+    "sha256": "1461d462047bcd0cd6008f3c5993db27a4d8557493d368f16fd48467dd647c7d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/rust.yaml",
+    "bytes": 388,
+    "sha256": "ad7a6befd341991bce4cfbe971a687151fb80addc6174f216dc727fe80e7431a"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/commands.json",
+    "bytes": 2886,
+    "sha256": "3fb9638d1dbc66854925ee885770574f79b4777e1839b4a51dd1002561b7fe34"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/java.source.stdout",
+    "bytes": 46,
+    "sha256": "aae909c76b637566094efc3f6e6294849002ccb34310cc399531c34e0fbef9da"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/java.svg.stdout",
+    "bytes": 1721,
+    "sha256": "70591db68de2dcc1f3ee948c4f7afc9bef61594250e0cc7cca83e9d29e03cdd3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_nested_consumption/result.json",
+    "bytes": 5575,
+    "sha256": "af6be1e7b82f789fed303e7e4ea1efde1b38e04315fa70062ca65c2007b62394"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/after/rust.source",
+    "bytes": 66,
+    "sha256": "ec3c8104625ffc124f426cfdbd7b222a698c5b96c168635f4279fcbaccd57db0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/after/rust.svg",
+    "bytes": 1612,
+    "sha256": "ff0bce3073b2ac98c817098248685ee3a33fb2ea7b8f64fe07fb81037af38be3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/after/rust.yaml",
+    "bytes": 410,
+    "sha256": "4770d08b6aba4459ec0ca2c802a0f9502f443b7b3bfade1ae5966a6b470d43ac"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/comparison.stdout",
+    "bytes": 2077,
+    "sha256": "96f6c5aa67df5a9e651a0b398bcb2ac8bdc6ebbe80fd32db9da3c9f519535509"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/rust.source",
+    "bytes": 67,
+    "sha256": "b21a2f1806483c86e52af5e7aeeed72cfe568a1128188ec030d48e0c39f5db47"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/rust.svg",
+    "bytes": 1614,
+    "sha256": "ba93ccba4bb6695e9f3b99e7b6def881b880cf64f0d1492fc5844626a8c2b90e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/rust.yaml",
+    "bytes": 412,
+    "sha256": "6c764209f264b46cb2070fa778342fa5994d9aec0cad188b6f8c39fe95a8ffd4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/commands.json",
+    "bytes": 2860,
+    "sha256": "3085adcd5172272db3f3bee6fafbc14861b0fe321a76750dd61202eb89a395aa"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/java.source.stdout",
+    "bytes": 66,
+    "sha256": "ec3c8104625ffc124f426cfdbd7b222a698c5b96c168635f4279fcbaccd57db0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/java.svg.stdout",
+    "bytes": 1788,
+    "sha256": "164c18f45c52c051183b16761c98f1a9169098104e5d2f1e68a76656c9240438"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/rpn_spelling_body/result.json",
+    "bytes": 5567,
+    "sha256": "504e723c311fbc7e3df8613ad27c538bc4ecd6eaeefddb7c02dc641bff18def6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/after/svg.stderr",
+    "bytes": 37,
+    "sha256": "01981fa3c2e52f044987a23b6c012c2dc3e05364efe13c74a309af01f2cbeeca"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/after/yaml.stderr",
+    "bytes": 37,
+    "sha256": "01981fa3c2e52f044987a23b6c012c2dc3e05364efe13c74a309af01f2cbeeca"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/before/rust.source",
+    "bytes": 18,
+    "sha256": "1a659415258ffab728a7e2caf6c78b78fb13a9540a990635172152b0420c2e3d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/before/rust.svg",
+    "bytes": 4554,
+    "sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/before/rust.yaml",
+    "bytes": 163,
+    "sha256": "f36966a1e9349563cc25031bae07721162cfab0f7f2a9fb7af7e55696b7d06da"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/commands.json",
+    "bytes": 2917,
+    "sha256": "da7d54478b9e9f63c3b921c67695add751567e5d5547f5bdddb850609df86cfa"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/java.source.stdout",
+    "bytes": 26,
+    "sha256": "519aa2f53157af97338a26dd8a9feb49662fdfe329f92a8b8ec516a0780355a1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/java.svg.stderr",
+    "bytes": 24,
+    "sha256": "199a0ab3fa188543f997b5f2e5e7757abf96af519f2aefaaa3e582229f9abb5d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/java.svg.stdout",
+    "bytes": 7351,
+    "sha256": "e485e307ffd70f17662b4bae284c5a1f3cd94d2819264a2eb5fd6d0d2072c654"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_collect_error_precedence/result.json",
+    "bytes": 5997,
+    "sha256": "c91bd87e772b78c056a2c64ba7d4bac15fc1b9fa1368db313a519f09629c7afa"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/after/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/after/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/after/rust.source",
+    "bytes": 44,
+    "sha256": "691099da69682dd9436661de63c15acc901b5a807d032bd6f9ab566e0b4e444b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/after/rust.svg",
+    "bytes": 1560,
+    "sha256": "a21aef4348509233f852b0399057f044e561a500285dbe1a3c41cb5d8911080c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/after/rust.yaml",
+    "bytes": 368,
+    "sha256": "dde979e6aa7c82ab41c72493e297b6fcf4dff7dfd33874e672ad1699eee0d6e6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/before/comparison.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/before/comparison.stdout",
+    "bytes": 33,
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/before/rust.source",
+    "bytes": 44,
+    "sha256": "691099da69682dd9436661de63c15acc901b5a807d032bd6f9ab566e0b4e444b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/before/rust.svg",
+    "bytes": 1560,
+    "sha256": "a21aef4348509233f852b0399057f044e561a500285dbe1a3c41cb5d8911080c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/before/rust.yaml",
+    "bytes": 368,
+    "sha256": "dde979e6aa7c82ab41c72493e297b6fcf4dff7dfd33874e672ad1699eee0d6e6"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/commands.json",
+    "bytes": 2865,
+    "sha256": "367d4696687794ed4da3476e790fedf0f5f64cccde4509d92c8cd1e66bc3c920"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/java.source.stdout",
+    "bytes": 44,
+    "sha256": "691099da69682dd9436661de63c15acc901b5a807d032bd6f9ab566e0b4e444b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/java.svg.stdout",
+    "bytes": 1692,
+    "sha256": "12357ef1981ad9a0f8653c80417a7e6f6af85002b87db8bf3c116646ba9e39e2"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_comment_replay/result.json",
+    "bytes": 5529,
+    "sha256": "1188f7fb81e9ec7914b88a990f4a015e2f77e95df9cc9a259601e2f8449ec6bb"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/after/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/after/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/after/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/after/svg.stderr",
+    "bytes": 43,
+    "sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/after/yaml.stderr",
+    "bytes": 43,
+    "sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/before/comparison.stderr",
+    "bytes": 60,
+    "sha256": "499b84d4f5b51e9ac64430c6fe8e73a12720161efcac54653a00526c10f7210e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/before/rust.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/before/rust.yaml",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/before/svg.stderr",
+    "bytes": 43,
+    "sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/before/yaml.stderr",
+    "bytes": 43,
+    "sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/commands.json",
+    "bytes": 2961,
+    "sha256": "25b26f96a1bd19c5ebd5fc446774dd5869b926f7a36cfea42de6efab2fea9c21"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/java.source.stdout",
+    "bytes": 29,
+    "sha256": "5b7cd5415dc3f25391e1b079bec9824354b64bbe64fb487c81cfb13e03e26b6c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/java.svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/java.svg.stdout",
+    "bytes": 1662,
+    "sha256": "7d411aa44d207c1dfc0572002beb1b95d5e3c84e45cb4fb80bb609c3facdf578"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled/result.json",
+    "bytes": 5279,
+    "sha256": "9ee5d15cf2ef1388598b37ce070fba43a6ddae0ec6b2609682adc3f79ff3bac7"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/after/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/after/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/after/rust.source",
+    "bytes": 33,
+    "sha256": "3962516aeaa2de80582250cfa3715b4deb2dc4a33cb05ee9cfbc460a9ed7c939"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/after/rust.svg",
+    "bytes": 1564,
+    "sha256": "99fe62aad5ca774c4313eb03d6d6eebb22e5b1e2bc2a64a9ecc45757a63f621c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/after/rust.yaml",
+    "bytes": 363,
+    "sha256": "dbe82500d579a04998e153a6ffa113ae139dc851a5194dc04a7e872b65f8e224"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/after/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/after/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/before/comparison.stderr",
+    "bytes": 23,
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/before/comparison.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/before/rust.source",
+    "bytes": 33,
+    "sha256": "3962516aeaa2de80582250cfa3715b4deb2dc4a33cb05ee9cfbc460a9ed7c939"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/before/rust.svg",
+    "bytes": 1564,
+    "sha256": "99fe62aad5ca774c4313eb03d6d6eebb22e5b1e2bc2a64a9ecc45757a63f621c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/before/rust.yaml",
+    "bytes": 363,
+    "sha256": "dbe82500d579a04998e153a6ffa113ae139dc851a5194dc04a7e872b65f8e224"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/before/svg.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/before/yaml.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/commands.json",
+    "bytes": 2882,
+    "sha256": "a8664d1ebcbca705b6c795fea3bea4ec613bce46447441a1107fa86eb31d72d7"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/java.source.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/java.source.stdout",
+    "bytes": 26,
+    "sha256": "519aa2f53157af97338a26dd8a9feb49662fdfe329f92a8b8ec516a0780355a1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/java.svg.stderr",
+    "bytes": 24,
+    "sha256": "4187e0eba2dcb2b117938396df4d0f50269f20c426834f96948ee2aa1fda0594"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/java.svg.stdout",
+    "bytes": 7520,
+    "sha256": "2bc152a18b1db25757870b0c0ec69555a5fd7ae5169ddd8e3c8ef0ffc4b6a414"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_uncalled_function/result.json",
+    "bytes": 6117,
+    "sha256": "ba132499b1eec7fc17e0c6b3e96c879c4a5de543eb7932e615cfe29cfd794ce9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/chronology.log",
+    "bytes": 28240,
+    "sha256": "034bc7a5e62003700e8b2f67cdf3521e01042c81ddbea92b136d523da0324e97"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/collateral-summary.json",
+    "bytes": 206,
+    "sha256": "502a0f92bf7dcab0993fb64461c99ac93bb87a7efc41c4013db9f48209d82a12"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/controls.json",
+    "bytes": 88204,
+    "sha256": "4dc3db81ca55b158ffac186515fa969825278e461e86d831976cda9ecd042f05"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/controls.py",
+    "bytes": 1585,
+    "sha256": "b1aa4ca497600522b99b6a5684a9f77dda2ecb36ff47d4707d203f5ee58ce88c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/evidence-validation.json",
+    "bytes": 12148,
+    "sha256": "b9459149557e4e910334ef3b188d8ee36557cab9cc6d97bb5e1ec8916ef64c11"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/final-staged-diff-check.json",
+    "bytes": 171,
+    "sha256": "359a48cf34f55d19973d591b22834b476f9fc7ce281e6896191939fd2a4601ab"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/final-staged-diff-check.txt",
+    "bytes": 2600,
+    "sha256": "07b5d4356221564c751597ed2003cb79c480509aedaabe5efbd7fef90f46a2b3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/finalize.py",
+    "bytes": 4591,
+    "sha256": "ef77477ff3e57a228d693f5e646af0c005eb6f159809d68f02475bfa386841f5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/fresh-results.json",
+    "bytes": 172932,
+    "sha256": "13b0679ec443f1d0a4b9c2e7e076dce2ae482c4aaf6fc6c62cb35542c4aba357"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/fresh-summary.json",
+    "bytes": 1189,
+    "sha256": "6a1d7a239172d15c6a7e062be295cb85c2a0eec5d8b568078e22a704cd2a0f4f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/fresh29-summary.json",
+    "bytes": 199,
+    "sha256": "9340d17f6a94c7011f17969d25312267504714281269e36c79b51d62ac9709fc"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/gates.json",
+    "bytes": 5687,
+    "sha256": "7819063349070057c858b2cff682cbe5b24a4cd5f6354c5d0b8d2d54698c7513"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/gates.py",
+    "bytes": 1944,
+    "sha256": "b9000a4cea929b5ce4c8cebe11cd614f81fe4bcfb6dd3e2c80182a7c1f27f985"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/generate.py",
+    "bytes": 6574,
+    "sha256": "e51fd956d41fd331c4b89c958ae0be412f5a52931dde2e7b9761c4c7d342b1a3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/java-source-provenance.json",
+    "bytes": 4782,
+    "sha256": "37c00112ab1801f7eb2fe940e013d6f8dbf8764d6c9a0fa92564989a9e781ab5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/analysis.log",
+    "bytes": 2471,
+    "sha256": "a651b5075474d1bedf09811b5a7814a6b76cd4524340a617b38acfdd30bffee9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/build-after.log",
+    "bytes": 5126,
+    "sha256": "9e6195fa4a91b33079f16248c23d712167000116700e8e66a1c19c025d24441c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/build-before.log",
+    "bytes": 5046,
+    "sha256": "f45293029b9cf84f060df7700524f8c36ded38545458fcf309410e238ec1123f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/checker5-import-diff.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/cli.log",
+    "bytes": 1403,
+    "sha256": "555cbe9a50f38eb287e686de045c5544b1a6d42c46aa61848190a48fb6589ca8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/clippy.log",
+    "bytes": 1325,
+    "sha256": "1d7112e6c1c684c71240058bdd8860f31d7d9b9f221946fa70723fa6520d3952"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/diff.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/format.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/gates-driver.log",
+    "bytes": 101,
+    "sha256": "5b161069754d099e9016fe2aa380f72f8c80e458bc3603b1835cdf2ef76fc452"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/guards.log",
+    "bytes": 143225,
+    "sha256": "65bfe345d2e52a3b060c25072fe41055706b8927e6067db4c055cd85f987c28a"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/main-assisted.log",
+    "bytes": 1606,
+    "sha256": "5bd3af83b938d4f60bcdae7865cc0debc4b613c83658ec3dd3695ea5733b9ab3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/main-product.log",
+    "bytes": 6783,
+    "sha256": "5c0ed520c45b4c7e661386c45b426b761c746ae0c13b47acf736e1541cc324f3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/parser.log",
+    "bytes": 41722,
+    "sha256": "f54738c0aaed364a283fde897298f79b5d9fb74a58b93ebb3ae57c5129e27a81"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/relay-driver.log",
+    "bytes": 2789,
+    "sha256": "a3ad935cb81471a31aa6dd78d5052acf297684e66223062bd4891ea8b1c52332"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/relay4-driver.log",
+    "bytes": 643,
+    "sha256": "c419f369990376904d748986e49b2405f4a4c229133f39dff6032ebaa968a853"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/replay-driver.log",
+    "bytes": 1109,
+    "sha256": "f9a6a0914e40dd7bb49349f0a6688a549b69b56f840af1f54dc2934485887d48"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/standing.log",
+    "bytes": 5343196,
+    "sha256": "2c45a1e97f15e67342a2a6209242933f3f827adb86df9d4f09ae5c0b08227a30"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/logs/submodule.log",
+    "bytes": 188,
+    "sha256": "3551881233098050ab014ec2dac1476a97660c17ce181055ca682c044c275448"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/maker15-summary.json",
+    "bytes": 194,
+    "sha256": "d98fca8702e8e683debd634511e4ef027faed611eecf5a748040626c8ed85972"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/maker17-summary.json",
+    "bytes": 198,
+    "sha256": "fc5ebd5249cfadc1689a7b2f67fd8f56311aa9464be2ce6cd565fbfb4b82c7d9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/maker18-summary.json",
+    "bytes": 195,
+    "sha256": "a48de5a2d419ee2c157f591d42725ed3004d995f8855562fcb5d481d91b48bc5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/measurements.tar.gz",
+    "bytes": 9829565,
+    "sha256": "e3d2b31d991184d6755cac5c2c534ebc7413bf68590ac95f3556281174442d4c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/negative-statuses.json",
+    "bytes": 34098,
+    "sha256": "c8fce993a7c344e5525fd7b4a623a5eae8f79649318f0c1cc28da8cd8f5551ab"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/new-manifest.json",
+    "bytes": 7991,
+    "sha256": "5d5f22068b58b81ce39209d21990ce6fa934d1020786144d5318f5662a42bf80"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/old-evidence-integrity.json",
+    "bytes": 4988307,
+    "sha256": "b8f4d9c6bf510b3ec997e2e676585ce4c59bdd858d9875110144f9e5820204b7"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/package.py",
+    "bytes": 3015,
+    "sha256": "ce7c5c6a7d90d12802f4f9385950d43bb49545d0680d0697321a934877c410e8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/persistent-cache.json",
+    "bytes": 444,
+    "sha256": "5781d62e4fff31d41587dbb320e344f60446282d9c67eb1e43e0c8aa6643f3b4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/prior31-summary.json",
+    "bytes": 198,
+    "sha256": "037a9a04284e60e5d2b33c05879647f9b35d6973fea6a08b9d20a8391de46810"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/production.diff",
+    "bytes": 26287,
+    "sha256": "3c76ba8792b26c2053a3e30ca9535bb6de3841e6ade9c6a2397ca0d6b875b664"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay.py",
+    "bytes": 3626,
+    "sha256": "f47fc5cde7a95685a929344aba6cdf7592f63812589a20792bac6bdfa3b5117a"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay25/environment.json",
+    "bytes": 2746,
+    "sha256": "fcbd0446e00bb284ce764499d24d72321b26d3468435e302efbd27ce3087ae61"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay25/tim25-results.json",
+    "bytes": 205854,
+    "sha256": "8c37f5ce6b6284151ba29a93cc0a15958e5ffea1dd8535b016fd757671528b8e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay25/tim25-results.json.gz",
+    "bytes": 27550,
+    "sha256": "4526badf765755ebfef45aaa59f6eabf7f647500c694ba9c8a0c9e2c06e8f29e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay25/tim25-transport.json",
+    "bytes": 36824,
+    "sha256": "9e2bed957b629574b119fbab377298f44d77c18fa8038a1cd45cd5525069c292"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay25/verification.json",
+    "bytes": 421,
+    "sha256": "8c0b907dccf9570a5b579ff981f64a75d37443721192eebe3f77a0de1ad399b0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay4/environment.json",
+    "bytes": 2745,
+    "sha256": "a87a480801cfcd3ab5f327878238ab206b20bfbbb7afa5fec9d29febf0d52232"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay4/tim4-checker6-results.json",
+    "bytes": 23680,
+    "sha256": "976817d839a31393468b3b47c62f054fd547384ac601c862e61e4f67f944f029"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay4/tim4-checker6-results.json.gz",
+    "bytes": 6115,
+    "sha256": "2828c26d2923df37f0e59f329be7cbaa69ba6f7141e63b53b5ef557a0e1f3f6c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay4/tim4-checker6-transport.json",
+    "bytes": 8244,
+    "sha256": "270d8d7743c1fec4183d87fb1f5230684542ed0ccd2327e9f219ab2298f310ec"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay4/verification.json",
+    "bytes": 419,
+    "sha256": "382dc5d2f32c203a2e0f02fdee224353b0980d82a334e0991d2ce71677f1d66b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/relay4.py",
+    "bytes": 3681,
+    "sha256": "26f94636652730598db785b7dd8f36fc755f3c6b4b5e836cf89a1b3405005878"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/remote-request.json",
+    "bytes": 26407,
+    "sha256": "414e7b6d4ec350e33f2d9211c5ac8fbaed7d41c0e85b628ac55d1b10989a57a4"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/replay.py",
+    "bytes": 5741,
+    "sha256": "6062288afefb20fddccd8a1221293e008d15bf7cb18afa479915b82f252b8f00"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/reviews.py",
+    "bytes": 15350,
+    "sha256": "5588ce4443b247a282cd93c753ec695a5d879fbb8671624886111e4c3d0dd49f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/setup-failure.json",
+    "bytes": 506,
+    "sha256": "bb9796c3abd7b034c1853c17916465acc4a2de504a8fb728d071b4b5e5b14a56"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/supplement-manifest.json",
+    "bytes": 1381,
+    "sha256": "6c7ac32d7268ebb3898dd66504c286f8b9231f0a112f2e7bbf098eae3a05f46e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/supplement-request.json",
+    "bytes": 5197,
+    "sha256": "746656ea7c641ff2de1073fd9caace504d045666a3a3c821076538bcc724f9f9"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/supplement.py",
+    "bytes": 2621,
+    "sha256": "bc4969f8d5f1d1784e9f707ac401344827cb8c1c0fa6f4d44d004e6be4b5ee6f"
+  },
+  {
+    "path": "docs/parity-reviews/tim-rpn-call-state/review.json",
+    "bytes": 11883,
+    "sha256": "64906d9e4d8f232f265c62fa18dccea5d8339e5933fc998819e7b6a5c89bdeb1"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_duplicate_effects.puml",
+    "bytes": 165,
+    "sha256": "e84da25db9cd1e32bf0b99ea6a4ab64701a7ffbc83f4edb5d3e2a6f1142df9db"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_duplicate_effects.svg",
+    "bytes": 1732,
+    "sha256": "a42bdfe6d37b53aaa6dd8c05575e6a1e3974559777fca122b8669da371e71694"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_procedure.puml",
+    "bytes": 154,
+    "sha256": "7775b8153dac63432076731be90d0dd3c91335e9ac2d32d912d44a06f6ae57b7"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_procedure.svg",
+    "bytes": 1711,
+    "sha256": "cba1157181b23676edfe99ff57b10167bad7d9c8f647e5772dc3bbeea0bb5402"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_return.puml",
+    "bytes": 159,
+    "sha256": "406094124e7624a57b9fc8a87c5a7e22aa8cc337154550c2ea54318da9f4dfe2"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_return.svg",
+    "bytes": 1720,
+    "sha256": "121eefe123581e5add2fa8146377a50b6a6e9b31a2b22b49fb9d6133df299cb3"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_plain_exact_shortcut.puml",
+    "bytes": 150,
+    "sha256": "8d05eade8e10aa5fb0b54515ca26768d5bc92607cd17c3c33bbd1b4fd403e577"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_plain_exact_shortcut.svg",
+    "bytes": 1720,
+    "sha256": "582ae5a2e26aa8581336510e5b8c51280430cc473d9c18c3bf38c83eef5d41e0"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_covered.puml",
+    "bytes": 187,
+    "sha256": "c2eef545ec5cf4f7ca77227d89cdaef69452360a512866712a6019f292763df0"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_covered.svg",
+    "bytes": 9227,
+    "sha256": "326fc978c7d8c4136ce1b0cbaa7e6deb2b734ede8392d779531bb1c1b1d3d57d"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.puml",
+    "bytes": 103,
+    "sha256": "3503bd8f1256efacf363ee182cec8ca8ee12bb0d6076629c7d3739371c97fd82"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.svg",
+    "bytes": 8031,
+    "sha256": "5d8cf286d9ece55f30decfa99208fe1040bf669e8a5cdcacd126fb588df05537"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_rhs_first_error.puml",
+    "bytes": 66,
+    "sha256": "c9f5a99f640c6d4b308400b4bf499ef0c250fd07fd79ae1c7030a69addadc72a"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_rhs_first_error.svg",
+    "bytes": 7595,
+    "sha256": "8c01a8113b5d96ece99c09e0bead121bd2b7c2bef28c0eadb1ef3896be477152"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_bad_arity.puml",
+    "bytes": 63,
+    "sha256": "2a65bc3d2fcf5751a3057f7fe2d33e6f182497474dd24d787bd04db8aeaf9829"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_bad_arity.svg",
+    "bytes": 7571,
+    "sha256": "997d52b7126931521c8c1a5709413d5a157256e1b39d4da04a2df5d4191db9ae"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_named_alpha.puml",
+    "bytes": 108,
+    "sha256": "f16f0437a5c3c0bdfaf96fb8fc98f51ac1c9847810e1f8378c77942f866e0849"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_named_alpha.svg",
+    "bytes": 1686,
+    "sha256": "f8eafd74e6bc9a35b92ac0e86b35739752d4d184096ec99643fee1ce18fe4990"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_rounding_extremes.puml",
+    "bytes": 147,
+    "sha256": "7c257fc215cdab04099edb1480e463db9de205910fb2edd74b2a25c758a65327"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_rounding_extremes.svg",
+    "bytes": 1734,
+    "sha256": "be5e7847010960e4d1d657470d999f4aa4a453a1952b78fbb1c75fd61e54b387"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_typed_channels.puml",
+    "bytes": 156,
+    "sha256": "196db7d08a545982b48d6807f2191b193d2dff472da4cd3e3d139ebc05130e5a"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_typed_channels.svg",
+    "bytes": 1740,
+    "sha256": "3698ac4a556b8881eb8fbec3d4e6661fb6177e834dbbd4ac33958db99d4798ea"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_ascii_edges.puml",
+    "bytes": 129,
+    "sha256": "e082a3f040e09bce1b070e13e59ffb359e1880b11845e18653448be07e7aeb14"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_ascii_edges.svg",
+    "bytes": 1711,
+    "sha256": "51c483930a8f2326e47b4156050deee983942a330a1d55f88fa223e9bac888af"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.puml",
+    "bytes": 58,
+    "sha256": "1bb50b4755166180fc17b81415af2531af301c172a053b622037abaf18f5cd52"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.svg",
+    "bytes": 7560,
+    "sha256": "4979aec1775b3849fbc12a57a334e04c79d32ccaca2dbc5c767a9815ef437c9f"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.puml",
+    "bytes": 56,
+    "sha256": "2472ac5491f55b83c0279b56bd0d566a4b171010a047745348e9f3ef72072f73"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.svg",
+    "bytes": 7566,
+    "sha256": "7d36946577821ba31e1f3811997946b5e608da0cefd2fd7f50a0e67d1e65cb48"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+    "bytes": 90,
+    "sha256": "b3012e99b280019256d93bf0b8d08b713c157ab1abdfb488192a930b6ed9ebb6"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.svg",
+    "bytes": 1666,
+    "sha256": "9cd101cf1854814a273a18e9a206b595c88e5232958b6d35e849708e27219277"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml",
+    "bytes": 72,
+    "sha256": "dbe74b8d38b161df7824e2aff8195bea5802612758bf6aa55b61f29fc0ff2091"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.svg",
+    "bytes": 1643,
+    "sha256": "53142b52f80abafb34770a2783d384db61230879f0da6f5983973fe468e55e23"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_prefix_failure.puml",
+    "bytes": 139,
+    "sha256": "0c038f7599d27005813b511b0380813f3880555922f870efb303dc9a612bf6bd"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_prefix_failure.svg",
+    "bytes": 8551,
+    "sha256": "ac951d3f753f8de367c047e11a1b958f4e46db476facf7605159f0a543f9dc53"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_procedure_control.puml",
+    "bytes": 135,
+    "sha256": "e890abb5f8e3e10ae2993ced2d2632988b6e77e96a8863421995379d750e588a"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_procedure_control.svg",
+    "bytes": 1120,
+    "sha256": "89a8d82440a5bcc9d88bbfac8c6f8a65a6200aa6f483f2c551b2f0d44f713359"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_repeated_raw.puml",
+    "bytes": 165,
+    "sha256": "314f027b785cd707b67407f7538a1f52bf258f2591a7654b384dc352834f03dc"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_repeated_raw.svg",
+    "bytes": 1426,
+    "sha256": "bdb33a77cb8d02c5c34a4010c2c9a5959b8e03b48b024b7d8f2228e599dbd029"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_collect_error_precedence.puml",
+    "bytes": 101,
+    "sha256": "6cc0f471bd814b1b9052063586cf9652dcff22832f4132a6412cac20e5a30787"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_collect_error_precedence.svg",
+    "bytes": 7351,
+    "sha256": "e485e307ffd70f17662b4bae284c5a1f3cd94d2819264a2eb5fd6d0d2072c654"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_comment_replay.puml",
+    "bytes": 124,
+    "sha256": "7bd9fab33229513e694f49b92c4deed3e625cfffff3df89b94d73d424a9136f9"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_comment_replay.svg",
+    "bytes": 1692,
+    "sha256": "12357ef1981ad9a0f8653c80417a7e6f6af85002b87db8bf3c116646ba9e39e2"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_defined_in_uncalled.puml",
+    "bytes": 107,
+    "sha256": "9cff639c1732156436385100a6e5d9718b3762ee7ca21003d39a5ac5b4bf876c"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_defined_in_uncalled.svg",
+    "bytes": 1662,
+    "sha256": "7d411aa44d207c1dfc0572002beb1b95d5e3c84e45cb4fb80bb609c3facdf578"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.puml",
+    "bytes": 107,
+    "sha256": "fba10347fdc0e8759d281363d686900b7638a25012d16a78d990ee939e62cebe"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.svg",
+    "bytes": 7520,
+    "sha256": "2bc152a18b1db25757870b0c0ec69555a5fd7ae5169ddd8e3c8ef0ffc4b6a414"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_bare_read.puml",
+    "bytes": 116,
+    "sha256": "3dbc8f32c30bd5bccf19db5a4c64fc92960234934d52864988fc65a330c53575"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_bare_read.svg",
+    "bytes": 1696,
+    "sha256": "0269762d29d45cfa46d5e8aae4780663728ad42b5041045a7574c8ec22946061"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_dual_parameters.puml",
+    "bytes": 169,
+    "sha256": "080c61a208537f52671480d57293b1bee519a745ee82eedbc5e3759f9a0684ca"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_dual_parameters.svg",
+    "bytes": 1757,
+    "sha256": "20df02fa80c5105e915723fe5b1269f1ca4fe52b7ad44be0d27d89a6ace93c2b"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.puml",
+    "bytes": 133,
+    "sha256": "fbe220ec4f132741ceff4110c3c9b903da5f149c9576964d6e5a77df5cbc9602"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.svg",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_neighbor_calls.puml",
+    "bytes": 165,
+    "sha256": "5b86fad037e24aaeef85e677da3d927624c0631b1355cd40258dba2379b08d57"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_neighbor_calls.svg",
+    "bytes": 1753,
+    "sha256": "5fda216628aa5b8be032ee2501a43618e7356d1a69454a156dd1883bbd226609"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_nested_consumption.puml",
+    "bytes": 152,
+    "sha256": "c1a7393ed2d47d46cafcdf89a8cc013f7162bdf2df6a842ee3606c360eece6dc"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_nested_consumption.svg",
+    "bytes": 1721,
+    "sha256": "70591db68de2dcc1f3ee948c4f7afc9bef61594250e0cc7cca83e9d29e03cdd3"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_spelling_body.puml",
+    "bytes": 249,
+    "sha256": "eb86e511f6f22463bab1a76f7e152384e7d3b4c2ca445128722135ccc0108ed6"
+  },
+  {
+    "path": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_spelling_body.svg",
+    "bytes": 1788,
+    "sha256": "164c18f45c52c051183b16761c98f1a9169098104e5d2f1e68a76656c9240438"
+  }
+]

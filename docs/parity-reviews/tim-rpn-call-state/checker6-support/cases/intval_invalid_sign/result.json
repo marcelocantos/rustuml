@@ -1,0 +1,161 @@
+{
+  "source": "/tmp/rustuml-checker6/new/intval_invalid_sign.puml",
+  "mechanism": "tim-intval-conversion",
+  "axes": [
+    "sign grammar",
+    "later error"
+  ],
+  "negative": true,
+  "cwd": "/tmp/rustuml-checker6/new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "golden": "/tmp/rustuml-checker6/relay25/intval_invalid_sign/java.svg.stdout",
+  "reference_source": "/tmp/rustuml-checker6/relay25/intval_invalid_sign/java.source.stdout",
+  "java_exit": 200,
+  "java_probe_exit": 0,
+  "source_sha256": "1bb50b4755166180fc17b81415af2531af301c172a053b622037abaf18f5cd52",
+  "golden_sha256": "4979aec1775b3849fbc12a57a334e04c79d32ccaca2dbc5c767a9815ef437c9f",
+  "suite": "fresh25",
+  "capture_id": "0019-intval_invalid_sign",
+  "reference_valid": false,
+  "reference_xml_valid": true,
+  "phases": {
+    "before": {
+      "cli_exit": 1,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "43c9a20569a4358ca1ac19fce4a5b5776853a1bce60e06e5cf8387d527650595"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "43c9a20569a4358ca1ac19fce4a5b5776853a1bce60e06e5cf8387d527650595"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/intval_invalid_sign/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0019-intval_invalid_sign/before/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 1: Unknown built-in function %strlen"
+      ],
+      "source_equal": false
+    },
+    "after": {
+      "cli_exit": 1,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8ae80d60e3252bb95b64865567b663f6a49593980ea0a8218fb65845f81775e5"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8ae80d60e3252bb95b64865567b663f6a49593980ea0a8218fb65845f81775e5"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/intval_invalid_sign/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0019-intval_invalid_sign/after/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 1: Cannot convert +-3 to integer."
+      ],
+      "source_equal": false
+    }
+  },
+  "actual_source": "/tmp/rustuml-checker6/new/intval_invalid_sign.puml",
+  "actual_golden": "/tmp/rustuml-checker6/relay25/intval_invalid_sign/java.svg.stdout",
+  "committed_source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.puml",
+  "committed_golden": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.svg",
+  "committed_evidence": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/intval_invalid_sign",
+  "java_svg_text": [
+    "Welcome to PlantUML!",
+    "\u00a0",
+    "You can start with a simple UML Diagram like:",
+    "\u00a0",
+    "Bob->Alice:\u00a0Hello",
+    "\u00a0",
+    "Or",
+    "\u00a0",
+    "class\u00a0Example",
+    "\u00a0",
+    "You will find more information about PlantUML syntax on",
+    "https://plantuml.com",
+    "\u00a0",
+    "(Details by typing",
+    "license",
+    "keyword)",
+    "\u00a0",
+    "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+    "[From string (line 2) ]",
+    "\u00a0",
+    "@startuml",
+    "!$a=%intval(\"+-3\")+%strlen()",
+    "Cannot convert +-3 to integer."
+  ]
+}

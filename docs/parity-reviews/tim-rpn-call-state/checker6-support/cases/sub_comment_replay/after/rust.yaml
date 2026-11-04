@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "value 9" as Replay
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Replay
+  entities:
+  - id: Replay
+    label: value 9
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 7
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,73 @@
+{
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.1367261249979492,
+  "stdout_sha256": "cba1157181b23676edfe99ff57b10167bad7d9c8f647e5772dc3bbeea0bb5402",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "id": "operand_overload_procedure",
+  "timezone": "GMT+11:00",
+  "source": "/tmp/rustuml-checker6/supplement/operand_overload_procedure.puml",
+  "source_sha256": "7775b8153dac63432076731be90d0dd3c91335e9ac2d32d912d44a06f6ae57b7",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement/operand_overload_procedure.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement/operand_overload_procedure.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement/operand_overload_procedure.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.5322192920139059,
+    "stdout_sha256": "810d22e440abc5098890e0da68262b594aedf42ab41be84fa9c8e957ae240866",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}
