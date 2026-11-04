@@ -1,0 +1,9 @@
+@startuml
+participant Quartz
+Quartz -> Quartz ++ : acquire
+Quartz -> Quartz ++ : nested
+Quartz -//o Quartz : open half
+Quartz o\-- Quartz : reverse half
+deactivate Quartz
+deactivate Quartz
+@enduml

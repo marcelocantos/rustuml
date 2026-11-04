@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 191,
+    "name": "child_small_teoz",
+    "remote_name": "child_small_teoz.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_teoz.puml",
+    "source_sha256": "d6e5794214d980da68347f55e8d6abc36a615858bdfeafab9e004c7a29e1409a",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1342354579974199,
+    "stdout_sha256": "f332badeb74b27088ecae1778e9ba9ec4f9385648477220bf2abe2abe0860667",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_small_teoz.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/child_small_teoz.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_teoz.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_small_teoz.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/child_small_teoz.puml"
+    }
+  },
+  "request": {
+    "name": "child_small_teoz",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_teoz.puml",
+    "remote_name": "child_small_teoz.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_small_teoz.puml",
+    "source_sha256": "d6e5794214d980da68347f55e8d6abc36a615858bdfeafab9e004c7a29e1409a",
+    "bytes": 191,
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "teoz"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandNoteOnArrow; graphic.ArrowAndNoteBox constructor; Rose#createComponentNote"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "child_small_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 191,
+    "stdout_bytes": 3480,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.puml",
+  "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_teoz",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d6e5794214d980da68347f55e8d6abc36a615858bdfeafab9e004c7a29e1409a",
+    "golden_sha256": "f332badeb74b27088ecae1778e9ba9ec4f9385648477220bf2abe2abe0860667",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "d7f45e06013cce9971f797e0113d7d1bbbea2ff977ce31c6120988ea5dbe0ee3",
+      "svg": "bcf82286dfc96c5a7c53.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_teoz",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d6e5794214d980da68347f55e8d6abc36a615858bdfeafab9e004c7a29e1409a",
+    "golden_sha256": "f332badeb74b27088ecae1778e9ba9ec4f9385648477220bf2abe2abe0860667",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "d7f45e06013cce9971f797e0113d7d1bbbea2ff977ce31c6120988ea5dbe0ee3",
+      "svg": "bcf82286dfc96c5a7c53.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

@@ -1,0 +1,312 @@
+[
+  {
+    "name": "ordinary_live_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 147,
+    "stdout_bytes": 4413,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "bidir_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 91,
+    "stdout_bytes": 3641,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "self_half_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 197,
+    "stdout_bytes": 5249,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "exo_source_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 109,
+    "stdout_bytes": 3136,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "exo_target_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 136,
+    "stdout_bytes": 3802,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "both_dispatch_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 79,
+    "stdout_bytes": 4065,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "child_small_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 173,
+    "stdout_bytes": 4533,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "child_multi_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 205,
+    "stdout_bytes": 4966,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "rule_alone_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 164,
+    "stdout_bytes": 4467,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "rule_body_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 181,
+    "stdout_bytes": 4632,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "underline_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 153,
+    "stdout_bytes": 4685,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "style_lines_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 213,
+    "stdout_bytes": 4604,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "style_shadow_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 224,
+    "stdout_bytes": 5075,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "style_create_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 176,
+    "stdout_bytes": 4189,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "ordinary_live_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 165,
+    "stdout_bytes": 3309,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "bidir_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 109,
+    "stdout_bytes": 2786,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "self_half_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 215,
+    "stdout_bytes": 4163,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "exo_source_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 127,
+    "stdout_bytes": 2419,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "exo_target_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 154,
+    "stdout_bytes": 2999,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "both_dispatch_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 97,
+    "stdout_bytes": 3116,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "child_small_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 191,
+    "stdout_bytes": 3480,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "child_multi_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 223,
+    "stdout_bytes": 4073,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "rule_alone_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 182,
+    "stdout_bytes": 3568,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "rule_body_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 199,
+    "stdout_bytes": 3734,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "underline_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 171,
+    "stdout_bytes": 3636,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "style_lines_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 231,
+    "stdout_bytes": 3508,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "style_shadow_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 242,
+    "stdout_bytes": 3996,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "style_create_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 194,
+    "stdout_bytes": 3361,
+    "stderr_bytes": 0
+  },
+  {
+    "name": "invalid_inner",
+    "exit": 200,
+    "xml": true,
+    "diagram_type": null,
+    "classification": "java_error",
+    "source_bytes": 47,
+    "stdout_bytes": 7558,
+    "stderr_bytes": 55
+  },
+  {
+    "name": "invalid_exo",
+    "exit": 200,
+    "xml": true,
+    "diagram_type": null,
+    "classification": "java_error",
+    "source_bytes": 42,
+    "stdout_bytes": 7549,
+    "stderr_bytes": 55
+  },
+  {
+    "name": "empty",
+    "exit": 50,
+    "xml": false,
+    "diagram_type": null,
+    "classification": "empty_output",
+    "source_bytes": 0,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0
+  }
+]

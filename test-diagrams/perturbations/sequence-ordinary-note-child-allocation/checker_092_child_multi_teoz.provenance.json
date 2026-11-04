@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 223,
+    "name": "child_multi_teoz",
+    "remote_name": "child_multi_teoz.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_multi_teoz.puml",
+    "source_sha256": "9dd0ba901c015ac29b87fad0cbc4f3305d21e6806b12964fc503b0bb0f51417f",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1401414580031997,
+    "stdout_sha256": "1a90f117807f1754f76b27d4c9c664681e17fc3f24eaa3155bf383f50ef36b34",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_multi_teoz.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/child_multi_teoz.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_multi_teoz.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_multi_teoz.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/child_multi_teoz.puml"
+    }
+  },
+  "request": {
+    "name": "child_multi_teoz",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_multi_teoz.puml",
+    "remote_name": "child_multi_teoz.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_multi_teoz.puml",
+    "source_sha256": "9dd0ba901c015ac29b87fad0cbc4f3305d21e6806b12964fc503b0bb0f51417f",
+    "bytes": 223,
+    "axes": [
+      "unequal child heights",
+      "reverse/multiple children/padding",
+      "teoz"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandNoteOnArrow; graphic.ArrowAndNoteBox constructor; Rose#createComponentNote"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "child_multi_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 223,
+    "stdout_bytes": 4073,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.puml",
+  "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_multi_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_multi_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_multi_teoz",
+    "axes": [
+      "unequal child heights",
+      "reverse/multiple children/padding",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "9dd0ba901c015ac29b87fad0cbc4f3305d21e6806b12964fc503b0bb0f51417f",
+    "golden_sha256": "1a90f117807f1754f76b27d4c9c664681e17fc3f24eaa3155bf383f50ef36b34",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "6e394c4e12ed1f2fc3651a8a3fac4ca44e27e8a1509f0f970580aaed36a27956",
+      "svg": "f250dd4b98cb1cc5015e.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [17] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"116.5371,78.7988,106.5371,82.7988,116.5371,86.7988,112.5371,82.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"116.5371,81.7988,106.5371,85.7988,116.5371,89.7988,112.5371,85.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"110.5371\"), (\"x2\", \"189.2476\"), (\"y1\", \"82.7988\"), (\"y2\", \"82.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"110.5371\"), (\"x2\", \"189.2476\"), (\"y1\", \"85.7988\"), (\"y2\", \"85.7988\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"49.0229\"), (\"x\", \"125.5371\"), (\"y\", \"75.0566\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"49.0229\"), (\"x\", \"125.5371\"), (\"y\", \"78.0566\")]\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [17] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"116.5371,78.7988,106.5371,82.7988,116.5371,86.7988,112.5371,82.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"116.5371,81.7988,106.5371,85.7988,116.5371,89.7988,112.5371,85.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"110.5371\"), (\"x2\", \"189.2476\"), (\"y1\", \"82.7988\"), (\"y2\", \"82.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"110.5371\"), (\"x2\", \"189.2476\"), (\"y1\", \"85.7988\"), (\"y2\", \"85.7988\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"49.0229\"), (\"x\", \"125.5371\"), (\"y\", \"75.0566\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"49.0229\"), (\"x\", \"125.5371\"), (\"y\", \"78.0566\")]\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [17] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"116.5371,78.7988,106.5371,82.7988,116.5371,86.7988,112.5371,82.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"116.5371,81.7988,106.5371,85.7988,116.5371,89.7988,112.5371,85.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"110.5371\"), (\"x2\", \"189.2476\"), (\"y1\", \"82.7988\"), (\"y2\", \"82.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"110.5371\"), (\"x2\", \"189.2476\"), (\"y1\", \"85.7988\"), (\"y2\", \"85.7988\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"49.0229\"), (\"x\", \"125.5371\"), (\"y\", \"75.0566\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"49.0229\"), (\"x\", \"125.5371\"), (\"y\", \"78.0566\")]\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_multi_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_multi_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_multi_teoz",
+    "axes": [
+      "unequal child heights",
+      "reverse/multiple children/padding",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "9dd0ba901c015ac29b87fad0cbc4f3305d21e6806b12964fc503b0bb0f51417f",
+    "golden_sha256": "1a90f117807f1754f76b27d4c9c664681e17fc3f24eaa3155bf383f50ef36b34",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "22e722974ab864a980ee46591d302a5aa6512c384e629a711156b21dd4c86626",
+      "svg": "f250dd4b98cb1cc5015e.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

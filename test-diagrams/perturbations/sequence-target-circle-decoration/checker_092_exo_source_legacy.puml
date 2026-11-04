@@ -1,0 +1,6 @@
+@startuml
+participant Finch
+[o-> Finch ++ : outer source
+Finch <--o] : right source
+deactivate Finch
+@enduml

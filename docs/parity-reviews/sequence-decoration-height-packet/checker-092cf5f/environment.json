@@ -1,0 +1,79 @@
+{
+  "java_source_root": "/Users/marcelo/work/github.com/plantuml/plantuml",
+  "java_source_hashes": {
+    "src/main/java/net/sourceforge/plantuml/skin/ArrowConfiguration.java": "08139b5d7fc69fa7ef9febcd01217607ea27c6edf6e5050872a8bbeddc58b3d1",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowAny.java": "cf14c784bf7f00e5a07ba5f8390904ce7c79bddf5bf6a7c5e53b0995b244d4be",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowLeft.java": "97c0f744c0fa01bce1f1cb61ecd19296d41bca857dac2f7f7c14d64f301e548b",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowRight.java": "ed229434c93f7226764e8228bd3bb57d66576b8020a1c2c346d26e5057f62c95",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ArrowAndNoteBox.java": "843b8beb1b76bed07576f2c46e1564c28f0094263cab0ca42555ef69e4ea3668",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseArrow.java": "5c7592a11e5e1164362daf44ea8acfc1014e8f9895296b740c3eda2c10578060",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseSelfArrow.java": "ee42d78cfe425c46e76fb57f5040f16cd92513c058d016bb15d462cce616c7b0",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseParticipant.java": "92d7d7d85bd53c2516064c42c9046dc8e3cff5ab0d34e8ea9e395a05fd2d80bc",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseActiveLine.java": "7dcf50c70858075d3f2c0c7eb570eb28e6bab57378b466fe0cb0452c6b2991b9",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java": "78f64269ceccf430d3e31a6298acc35f2a563f5d699e5db1c86ab8239edf7d49",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/AbstractComponentRoseArrow.java": "9a0207b14fff40521c3944d644e392239821859d9f25152e066fd14c04efcbe1",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/Rose.java": "be607bf6195086d7a1764d7a5e6d08d8d067dbcd73fc67de404e62531aac694f",
+    "src/main/java/net/sourceforge/plantuml/skin/ComponentType.java": "720d996169242266d2fc8ad0544f00228d273ed3d126788b6be308d96ae1cfe6",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTile.java": "4078e44762bff6f2959a0870ecb0501cb17f6a3e57faa272d82baf1c601f0274",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationExoTile.java": "00ef2282efada9f1a69f46c0b457a3c97a4f43d623ae8f8b56fb73cd6101d44e",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/MessageExoArrow.java": "a6b8a0a867c42411a780d65de68c009ce620d3341150ef5dae0372cbef93e7c9",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyEnhanced2.java": "de686f1c360b7b04087ee9ee4fa906e1598422e0dec311c886d89c1ecd195222",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyEnhancedAbstract.java": "a1cd80997518b6c749ed1b88ca917eed709bb2a2bce7951ca79303c31f487d72",
+    "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockLineBefore.java": "28c9079d8503657a3ece94cf16eea4cc85900454da8198e9994d68147139bcf1",
+    "src/main/java/net/sourceforge/plantuml/klimt/shape/UHorizontalLine.java": "dbd91d771f90d6b4d18984f5bd67b08e7120939fec965945e7b9fa45c08063e7",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java": "90e62fb331a47aab282ba79c672c65e9386ac31024049d00f93ddcd8df3b9642"
+  },
+  "tools": [
+    {
+      "command": [
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "stdout": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.3\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "--version"
+      ],
+      "stdout": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)\n"
+    },
+    {
+      "command": [
+        "uname",
+        "-a"
+      ],
+      "stdout": "Darwin colossus.lan 27.2.0 Darwin Kernel Version 27.2.0: Wed Oct 14 23:44:56 PDT 2026; root:xnu-13432.41.4~25/RELEASE_ARM64_T6041 arm64\n"
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/marcelo/work/github.com/plantuml/plantuml",
+        "rev-parse",
+        "HEAD"
+      ],
+      "stdout": "71806a23780b04a5ccde2f8ceb5121edad5eb711\n"
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/marcelo/work/github.com/plantuml/plantuml",
+        "status",
+        "--porcelain"
+      ],
+      "stdout": ""
+    }
+  ],
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A3e06ca94-2269-474d-820c-d3eae66e6612",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness in T3 Code",
+    "children": 0
+  },
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+  "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+}

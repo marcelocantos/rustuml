@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+skinparam noteFontSize 16
+skinparam sequenceMessageFontSize 11
+Quartz -> Finch : __ribbon__
+note right
+__title__
+end note
+Finch -> Quartz : plain
+@enduml

@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-target-circle-decoration",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A3e06ca94-2269-474d-820c-d3eae66e6612",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness in T3 Code",
+    "children": 0
+  },
+  "account_commit": "0b3295821b0aeef0d5fc8b190cd57aadba8ca0e0",
+  "implementation_commit": "350e776a2cd376dd2171dc79b61010da8f01fc2e",
+  "tested_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "before_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_commits": [
+    "350e776a2cd376dd2171dc79b61010da8f01fc2e",
+    "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c",
+    "71b465a98aa5c511588d87ee080088e8614d975e"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT REPO_CWD",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_legacy.svg",
+      "axes": [
+        "head/open/filled",
+        "direction/activation/alpha",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.svg",
+      "axes": [
+        "both endpoints",
+        "bidirectional/declaration order",
+        "legacy"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_legacy.svg",
+      "axes": [
+        "self/open half",
+        "reverse/live depth",
+        "legacy"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.svg",
+      "axes": [
+        "external source decoration",
+        "border/direction/activation",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.svg",
+      "axes": [
+        "external target decoration",
+        "border/open head/live depth",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.svg",
+      "axes": [
+        "both circle dispatch",
+        "open dotted head/labels",
+        "legacy"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.svg",
+      "axes": [
+        "head/open/filled",
+        "direction/activation/alpha",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_teoz.svg",
+      "axes": [
+        "both endpoints",
+        "bidirectional/declaration order",
+        "teoz"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_teoz.svg",
+      "axes": [
+        "self/open half",
+        "reverse/live depth",
+        "teoz"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_teoz.svg",
+      "axes": [
+        "external source decoration",
+        "border/direction/activation",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_teoz.svg",
+      "axes": [
+        "external target decoration",
+        "border/open head/live depth",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.svg",
+      "axes": [
+        "both circle dispatch",
+        "open dotted head/labels",
+        "teoz"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.svg",
+      "axes": [
+        "interior decoration",
+        "ordinary/external"
+      ],
+      "result": "fail",
+      "reference_classification": "java_error"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.svg",
+      "axes": [
+        "interior decoration",
+        "ordinary/external"
+      ],
+      "result": "fail",
+      "reference_classification": "java_error"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.svg",
+      "axes": [
+        "zero bytes",
+        "pipe front end"
+      ],
+      "result": "fail",
+      "reference_classification": "empty_output"
+    }
+  ],
+  "findings": [
+    "Fresh valid ordinary/live and both-border external circle controls match in both engines. Serde retains true target_circle on round-trip, omits false, defaults missing to false; direct model retains head independently. This direct diagnostic provides no factory-bypassing parity credit.",
+    "bidir_legacy/teoz are Java-valid Sequence sources but fail primitive ordering and source-head/stroke placement. CommandArrow reverseDefine=false for both dressings is correctly retained after the parser change. ComponentRoseArrow.drawInternalU/drawDressing1/2 emit each decoration before its own head and shift head/stroke by diamCircle/2+thinCircle. Rust sequence.rs:13662/13992 source heads and message_filled_arrow ordering do not consistently apply that model; the measured source stroke error is5.5, derived from8/2+1.5, not a proposed offset.",
+    "self_half_legacy/teoz fail the final o\\-- filled-half wing. parse_arrow computes direction from stripped dressing at1364 but still tests raw s.starts_with at1430 when flipping the half. The model reports Top whereas CommandArrow maps a left backslash dressing to BOTTOM_PART. Teoz also has a one-unit endpoint discrepancy; follow ComponentRoseSelfArrow.drawLeftSide full/half/async transitions, not a compensating constant.",
+    "Both fresh both_dispatch sources select Class despite Java Sequence; unlike the two older maker sources (blank Class), these draw Class entities from the following message. parse/mod.rs:642 class aggregation scoring is unchanged. Both are whole CLI failures.",
+    "Exactly2 added target_circle:false constructor fields are the entire ascii.rs diff. Nevertheless two o<->o ASCII outputs change direction because the parser now preserves P1->P2 instead of incorrectly reversing semantic endpoints. Java CommandArrow reverseDefine=false supports the new model. The unchanged ASCII renderer paints only one endpoint and does not express both heads. No claim of unchanged ASCII product behavior is made.",
+    "Two interior-circle grammar negatives return Java200 and Rust1; empty pipe returns Java50/no streams versus Rust0/empty. Invalid/empty comparisons are not matches. diff_one panics on empty golden data; the real CLI does not.",
+    "Exact candidate is rejected as a combination. No old bounded acceptance transfers. Every source, including invalid and zero-byte sources, remains executable; no comparator, baseline, skip, target, policy or production edit.",
+    "Independent frozen CLI replay: 1350 matches, 569 valid mismatches, 47 invalid references among1966 entries/1918 unique byte strings;31 recoveries and0 losses. Every maker status and actual CLI SVG hash reproduces.",
+    "Exact candidate library tiers11181/11251 and10497/11251, sequence1411/1411; parser570, renderer790, CLI13 pass. Standing perturbations686/1279; guards4/6. Owned formatting passes; workspace formatting and Clippy remain red."
+  ],
+  "verdict": "rejected",
+  "assessment": "rejected by fresh valid counterexamples",
+  "causal_repair_guidance": "Materialize both endpoint dressing/decoration transforms and paint order together; use normalized dressing consistently for direction and half selection. Resolve factory score ownership separately without fixture labels. Keep the corrected semantic ownership; assess ASCII bidirectional rendering explicitly rather than reverting that model.",
+  "evidence": "docs/parity-reviews/sequence-decoration-height-packet/checker-092cf5f/README.md"
+}

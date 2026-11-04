@@ -1,0 +1,14 @@
+{
+  "scope": "artifact integrity only; no broad product gate rerun",
+  "candidate": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "existing_tracked_files_unchanged": true,
+  "fresh_pairs": 31,
+  "review_records": 5,
+  "frozen_cli_captures": 3932,
+  "frozen_entries": 1966,
+  "frozen_unique_source_strings": 1918,
+  "fresh_unique_source_strings": 31,
+  "fresh_overlap_with_frozen": 0,
+  "exact_manifest_setup_mapping_and_reference_bundle_preserved": true,
+  "all_packaged_json_gzip_and_tar_readable": true
+}
