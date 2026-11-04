@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Maple
+Cedar -o> Maple: invalid
+@enduml

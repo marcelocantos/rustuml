@@ -1,0 +1,17 @@
+@startuml
+!pragma teoz true
+<style>
+sequenceDiagram {
+ actor {
+ Shadowing 7
+ }
+ participant {
+ Shadowing 2
+ }
+}
+</style>
+actor Cedar
+participant Maple
+Cedar -> Maple: first
+Maple -> Cedar: second
+@enduml

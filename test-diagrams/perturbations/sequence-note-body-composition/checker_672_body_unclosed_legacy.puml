@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+Cedar -> Cedar: before
+note right
+__ Heading __
+content
+@enduml

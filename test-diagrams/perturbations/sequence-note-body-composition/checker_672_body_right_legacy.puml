@@ -1,0 +1,13 @@
+@startuml
+skinparam noteTextAlignment right
+skinparam noteFontSize 17
+participant Cedar
+note over Cedar
+-- Long cap --
+x
+body with width
+== Z ==
+small
+end note
+Cedar -> Cedar: tail
+@enduml

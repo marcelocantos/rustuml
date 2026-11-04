@@ -1,0 +1,13 @@
+@startuml
+skinparam noteTextAlignment center
+participant Cedar
+participant Maple
+note over Cedar, Maple
+intro
+__ Cap __
+small
+a longer body
+.. End ..
+end note
+Cedar -> Maple: tail
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+actor Cedar
+participant Maple
+loop outer
+alt branch
+create Cedar
+Maple -> Cedar: create
+Cedar -> Maple: reply
+else other
+Maple -> Maple: self
+end
+end
+@enduml

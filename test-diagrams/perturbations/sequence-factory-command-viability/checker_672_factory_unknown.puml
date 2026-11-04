@@ -1,0 +1,6 @@
+@startuml
+participant Cedar
+participant Maple
+Cedar o-->>o Maple: first
+this command is not real
+@enduml

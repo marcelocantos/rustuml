@@ -1,0 +1,6 @@
+@startuml
+Cedar o-->>o Maple: before declarations
+participant Maple
+participant Cedar
+Maple o<<--o Cedar: answer
+@enduml
