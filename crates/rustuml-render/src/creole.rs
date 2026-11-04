@@ -940,13 +940,60 @@ fn push_literal(out: &mut Vec<Segment>, text: &str, style: &Style) {
     if text.is_empty() {
         return;
     }
-    let escaped = escape_creole_text(text);
+    let escaped = escape_creole_text(&restore_hidden_characters(text));
     let final_text = if style.monospace {
         escaped.replace(' ', "\u{00a0}")
     } else {
         escaped
     };
     push_segment(out, &final_text, style);
+}
+
+// CharHidder.hideChar/unhideChar reserve E000..E0FF for hidden syntax.
+// Keep that source-defined representation through matching and recursion;
+// AtomText restores it only when constructing a literal text atom.
+const HIDDEN_CHARACTER_BASE: u32 = 0xE000;
+
+fn hide_characters(text: &str) -> String {
+    let mut result = String::with_capacity(text.len());
+    let mut chars = text.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == '\\' && chars.peek() == Some(&'~') {
+            chars.next();
+            result.push(char::from_u32(HIDDEN_CHARACTER_BASE + '~' as u32).unwrap());
+        } else if c == '~'
+            && let Some(next) = chars.next()
+        {
+            // CharHidder.isToBeHidden: consume exactly one following character,
+            // even when it is the first half of an overlapping delimiter.
+            if matches!(
+                next,
+                '_' | '-' | '"' | '#' | ']' | '[' | '*' | '.' | '/' | '<'
+            ) {
+                result.push(char::from_u32(HIDDEN_CHARACTER_BASE + next as u32).unwrap());
+            } else {
+                result.push(c);
+                result.push(next);
+            }
+        } else {
+            result.push(c);
+        }
+    }
+    result
+}
+
+fn restore_hidden_characters(text: &str) -> String {
+    text.chars()
+        .map(|c| {
+            if (HIDDEN_CHARACTER_BASE..=HIDDEN_CHARACTER_BASE + u8::MAX as u32)
+                .contains(&(c as u32))
+            {
+                char::from_u32(c as u32 - HIDDEN_CHARACTER_BASE).unwrap()
+            } else {
+                c
+            }
+        })
+        .collect()
 }
 
 /// CommandCreoleStyle.createCreole requires at least one captured character
@@ -959,14 +1006,7 @@ fn take_style_delimiter(
     // The first opener character was read by walk_segments; the second is
     // still pending. Delimiters are existing two-character ASCII commands.
     let remaining: String = chars.clone().skip(1).collect();
-    let mut scan = remaining.char_indices().peekable();
-    while let Some((offset, c)) = scan.next() {
-        if c == '~' && delimiter != "~~"
-            || (c == '\\' && scan.peek().is_some_and(|(_, c)| *c == '~'))
-        {
-            scan.next();
-            continue;
-        }
+    for (offset, _) in remaining.char_indices() {
         if offset > 0 && remaining[offset..].starts_with(delimiter) {
             chars.next();
             for _ in remaining[..offset + delimiter.len()].chars() {
@@ -979,7 +1019,10 @@ fn take_style_delimiter(
 }
 
 fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<Segment>) {
-    let mut chars = text.chars().peekable();
+    // StripeSimple.analyzeAndAdd applies the same hide operation on every
+    // recursive entry. Hidden candidates remain inert until literal emission.
+    let hidden = hide_characters(text);
+    let mut chars = hidden.chars().peekable();
     let mut buf = String::new();
     let mut last_char: Option<char> = None;
 
@@ -1009,40 +1052,6 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                         style: style.clone(),
                     });
                     last_char = content.chars().last();
-                } else {
-                    buf.push('~');
-                    last_char = Some('~');
-                }
-            }
-            '~' => {
-                let mut peeked = chars.clone().take(2);
-                let c1 = peeked.next();
-                let c2 = peeked.next();
-                let is_two_char_delim = matches!(
-                    (c1, c2),
-                    (Some('/'), Some('/'))
-                        | (Some('*'), Some('*'))
-                        | (Some('-'), Some('-'))
-                        | (Some('_'), Some('_'))
-                        | (Some('"'), Some('"'))
-                );
-                if is_two_char_delim {
-                    let ch1 = chars.next().unwrap();
-                    let ch2 = chars.next().unwrap();
-                    buf.push(ch1);
-                    buf.push(ch2);
-                    last_char = Some(ch2);
-                } else if let Some(next_ch) = c1 {
-                    let is_markup_char =
-                        matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '<' | '`');
-                    if is_markup_char {
-                        chars.next();
-                        buf.push(next_ch);
-                        last_char = Some(next_ch);
-                    } else {
-                        buf.push('~');
-                        last_char = Some('~');
-                    }
                 } else {
                     buf.push('~');
                     last_char = Some('~');
@@ -1366,7 +1375,17 @@ fn handle_tag(
             let content = collect_until_tag(chars, "</color>");
             let mut nested = style.clone();
             nested.fill = Some(color);
+            // StripeSimple.modifyStripe flushes every selected command,
+            // including parameter commands with an atomless recursive body.
+            out.push(Segment {
+                text: String::new(),
+                style: style.clone(),
+            });
             walk_segments(&content, &nested, skip_underline, out);
+            out.push(Segment {
+                text: String::new(),
+                style: style.clone(),
+            });
         }
         _ if tag.starts_with("size:") => {
             let size = tag["size:".len()..].parse::<u32>().ok();
@@ -1375,7 +1394,17 @@ fn handle_tag(
             if let Some(s) = size {
                 nested.size = Some(s);
             }
+            // StripeSimple.modifyStripe flushes every selected command,
+            // including parameter commands with an atomless recursive body.
+            out.push(Segment {
+                text: String::new(),
+                style: style.clone(),
+            });
             walk_segments(&content, &nested, skip_underline, out);
+            out.push(Segment {
+                text: String::new(),
+                style: style.clone(),
+            });
         }
         _ if tag.starts_with("font:") || tag.starts_with("FONT:") => {
             let font_name = tag
@@ -1456,14 +1485,7 @@ fn walk_style_tag(
 ) -> bool {
     let remaining: String = chars.clone().collect();
     let mut closed = None;
-    let mut scan = remaining.char_indices().peekable();
-    while let Some((offset, c)) = scan.next() {
-        // StripeSimple.analyzeAndAdd applies CharHidder before matching. A
-        // tilde pair hides its second character; escaped tildes hide only ~.
-        if c == '~' || (c == '\\' && scan.peek().is_some_and(|(_, c)| *c == '~')) {
-            scan.next();
-            continue;
-        }
+    for (offset, c) in remaining.char_indices() {
         if c == '<'
             && let Some(rest) = remaining[offset..].strip_prefix("</")
             && let Some(end) = rest.find('>')
@@ -1564,6 +1586,56 @@ mod tests {
     }
 
     #[test]
+    fn hidden_characters_share_candidate_and_recursive_text_semantics() {
+        assert_eq!(
+            parse_segments(r"q<b>a\~</b>r"),
+            vec![
+                seg("q", Style::default()),
+                seg("a~", bold_style()),
+                seg("r", Style::default()),
+            ]
+        );
+        assert_eq!(
+            parse_segments("q~***x**r"),
+            vec![
+                seg("q*", Style::default()),
+                seg("x", bold_style()),
+                seg("r", Style::default()),
+            ]
+        );
+        assert_eq!(parse_segments(r"q<b><i>a\~</i></b>r")[1].text, "a~");
+        assert_eq!(stripped_text(r"~#~.~[~]~<~a~Ω\~"), "#.[]<~a~Ω~");
+        assert_eq!(stripped_text(r"q**a\~\~b**r"), "qa~~br");
+    }
+
+    #[test]
+    fn parameter_commands_flush_empty_and_same_style_bodies() {
+        for markup in [
+            "q<size:13></size>r",
+            "q<color:black></color>r",
+            "q<size:13><$twig></size>r",
+            "q<color:black><$twig></color>r",
+        ] {
+            assert_eq!(
+                parse_segments(markup),
+                vec![seg("q", Style::default()), seg("r", Style::default())],
+                "{markup}"
+            );
+        }
+        let segments = parse_segments("<size:13>q<size:13>x");
+        assert_eq!(
+            segments.iter().map(|s| s.text.as_str()).collect::<Vec<_>>(),
+            ["q", "x"]
+        );
+        assert!(segments.iter().all(|s| s.style.size == Some(13)));
+        assert_eq!(
+            parse_segments("<size:25></size><color:red></color>"),
+            vec![seg(" ", Style::default())]
+        );
+        assert!(parse_segments("").is_empty());
+    }
+
+    #[test]
     fn segments_plain_text() {
         assert_eq!(
             parse_segments("hello world"),
@@ -1608,8 +1680,14 @@ mod tests {
             assert_ne!(segments[0].style, Style::default(), "{markup}");
         }
         assert_eq!(stripped_text("<b>"), "<b>");
-        assert_eq!(parse_segments("<size:25></size>"), Vec::<Segment>::new());
-        assert_eq!(parse_segments("<color:red></color>"), Vec::<Segment>::new());
+        assert_eq!(
+            parse_segments("<size:25></size>"),
+            vec![seg(" ", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<color:red></color>"),
+            vec![seg(" ", Style::default())]
+        );
         assert_eq!(
             parse_segments("<b><$bud></b>"),
             vec![seg(" ", Style::default())]
