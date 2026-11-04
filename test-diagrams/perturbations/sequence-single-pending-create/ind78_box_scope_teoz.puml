@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Vega
+box Domain
+actor Lyra
+queue Draco
+end box
+create Lyra
+create Draco
+Vega -> Draco: hatch
+@enduml

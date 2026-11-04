@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-collections-source-clarification",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A432882cd-4556-4e95-862f-31b54103f709",
+    "model": "gpt-6-astra",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker; no maker involvement; no children; production unchanged",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "branch": "review/sequence-pending-stripe-independent-20261105"
+  },
+  "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+  "implementation_commit": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "tested_production": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "evidence_tip": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "before_production": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/build_gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py docs/parity-reviews/sequence-pending-stripe-packet/maker-results/all-inputs.json replay2169",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/fresh86.json fresh86",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/followup10.json followup10",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing relay; exact substituted argv retained per result)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_sibling_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_sibling_legacy.svg",
+      "axes": [
+        "plain versus collections",
+        "multiline sizes",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "06f160185dd186c3e774fe6be6b26f94a1c3fc945ce68d3559fc01811681f95f",
+      "reference_sha256": "718034fb175d8985b7b5a1b338d325fbbf912eb85904f0ae7cf9853114d711fe",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 82
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_sibling_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_sibling_teoz.svg",
+      "axes": [
+        "plain versus collections",
+        "multiline sizes",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "5635e6b71f869e36f841539d84dcee6e828866f84624d5750440e45c5bb2317a",
+      "reference_sha256": "e91671b386630b4433d632a4f70873b2262655c73ba1b6d2c0093dd1e8dbda4f",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 83
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_font_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_font_legacy.svg",
+      "axes": [
+        "font size",
+        "order",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "311a45a1e7d6c45d24b9d91463b13cd628e2e64987a0d7ab1fe197eddc67ee83",
+      "reference_sha256": "635d3212eced003f41712897f1d299434cc03b0e2b8bbfe4a06dbe8c2e1afd64",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 84
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_font_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-collections-source-clarification/ind78_collection_font_teoz.svg",
+      "axes": [
+        "font size",
+        "order",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "6c8fb599fe2ab0497185302584bd513cdda23bd84463f0a2e9d5098dc7511548",
+      "reference_sha256": "8497e562292263f93d2bfdf74761a62beeb637f4e80396603fc8aeb0a3f5ca6a",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 85
+    }
+  ],
+  "findings": [
+    "Rose.createComponentParticipant selects ComponentRoseParticipant(collections=true) for COLLECTIONS_HEAD and COLLECTIONS_TAIL. Its constructor supplies marginY7 and getDeltaCollection returns4. The new citation names the correct pinned classes.",
+    "The collections_shape function is byte-identical before/after after removing comment-only lines; no numeric behavior changed. Four fresh plain/collection sibling, multiline size, font and declaration-order controls match whole output in both revisions and both engines.",
+    "This accepts a present-day citation clarification only. It is not retroactive provenance for an earlier constant introduction, account rewrite, or transfer of any historical acceptance."
+  ],
+  "verdict": "accepted",
+  "next_obligations": [
+    "Keep original accounts and prior rejections immutable; evaluate other collection/style behavior under its own exact-revision evidence."
+  ],
+  "evidence_directory": "docs/parity-reviews/sequence-pending-stripe-packet/checker-ae1e0de4-astra",
+  "counts": {
+    "entries": 4,
+    "valid": 4,
+    "before": {
+      "0": 4
+    },
+    "after": {
+      "0": 4
+    },
+    "verdict": "accepted"
+  },
+  "limitations": [
+    "Whole failure rejects; bounded support never waives any failed counterexample or imports historical acceptance.",
+    "Stable broad gates ran once per exact revision before evidence registration; no repeated broad run for evidence-only files. Existing gates remain red.",
+    "Java argv derived from pinned wrapper, not process traced. Remote OpenJDK21.0.5/Graphviz12.2 historical font/Graphviz equivalence is unproved.",
+    "No combined correctness with concurrent creole/text_render/WBS packet."
+  ]
+}

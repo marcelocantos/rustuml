@@ -1,0 +1,583 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-half-polygon-order",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A432882cd-4556-4e95-862f-31b54103f709",
+    "model": "gpt-6-astra",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker; no maker involvement; no children; production unchanged",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "branch": "review/sequence-pending-stripe-independent-20261105"
+  },
+  "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+  "implementation_commit": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "tested_production": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "evidence_tip": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "before_production": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/build_gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py docs/parity-reviews/sequence-pending-stripe-packet/maker-results/all-inputs.json replay2169",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/fresh86.json fresh86",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/followup10.json followup10",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing relay; exact substituted argv retained per result)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_top_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_top_legacy.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "top",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "ec4ec69070f21f2625fa336508fdb004383375aff04d92423ddc588fb1397339",
+      "reference_sha256": "1cd240002a50e3c5567b419864bdf74adc570e5809787be8580e48bb18ec49f2",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 68
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_top_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_top_teoz.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "top",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "5bdfdd74545d30d852cdeedce37fcccce3f0bd91e3333bf128d7c9e7206a41c9",
+      "reference_sha256": "bc97274b8a395f2114f2a7c94a4748d4195acb949016e86b8609db3b97b7b0f4",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 69
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_bottom_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_bottom_legacy.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "bottom",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "581ed1c0482d9bb2bedb2ce60a42a851feabd6300d001c2ff45a9890908e0778",
+      "reference_sha256": "1e7346cffbeb530b592123e589c18c051a5153751b7995cc11d957d8d533e743",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 70
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_bottom_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_bottom_teoz.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "bottom",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "83ef40fbb773d4137c63e6a399869b3f85a65744467b23628e822a7043d8d7bb",
+      "reference_sha256": "7fec73922cb01d7e904eef5a924fa8c543fe826c8f4b514840e6588760f53d1d",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 71
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_top_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_top_legacy.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "reverse_top",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "0f83e1ea0ffa09408e115c9f9bbdd1df0625a965a352d2e25dd0c22a8f1f78fb",
+      "reference_sha256": "6ea917650e1359a71011a86610f2a0eef747dfa7d69af13ad500df215506dcb8",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 72
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_top_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_top_teoz.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "reverse_top",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "ef7f2b59984591b564967457d8d40a537ae50d5485ef813270b4612af8a55454",
+      "reference_sha256": "a1d2383ad8ec38db836cdce43f52af71a9089934ece8b66088ae02baeacf57f6",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 73
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_bottom_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_bottom_legacy.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "reverse_bottom",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "945e6214af79f995beb8758d1bed3e5b6510b91729e85f4fde2dc9f96ee2a15e",
+      "reference_sha256": "89b5bd70a0e03ccfc59b35900233750c231d47daafb6e559888239c2ebdc85dc",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 74
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_bottom_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_reverse_bottom_teoz.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "reverse_bottom",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "d1e5e2024909080c83a05fb000fd3c21440ff1d6f042ae3e1951fea079584b18",
+      "reference_sha256": "19be8a60eeeb33ee6607df3ef2b966d915fa5774b31ab8cb717df09f2be86dab",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 75
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_open_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_open_legacy.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "open",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "fc926fb5bec0f3c4a00713998594d8780b7ac8473a7cf3215b6c24a7260ad4e1",
+      "reference_sha256": "6937cc49f623b28d850a47702a11478fbc7e4b4f0b61527dc093ca0a0b43f293",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 76
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_open_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_open_teoz.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "open",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "48634a63bb277eb6ec5d98106a95eee7895d76c6c54cb76b211af58b9da83c2d",
+      "reference_sha256": "b40c8d3469f456bfcdd5e2bd2fc3a35c59169ba86582c61a5686e7eb990ea96d",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 77
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_circle_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_circle_legacy.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "circle",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "884a6795b2948b0cbe52709d05c77eb5539863d29f7981681dd57763a52adeeb",
+      "reference_sha256": "f8a89d401ef1b7f1a80bdaa8ac87879ec0929486b8e1c7fff5653afa03f6e5a5",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 78
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_circle_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_circle_teoz.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "circle",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "373e8ccddd01071a3a65623a2b070472a7346d131e60ff612e764f4f3bdbac1a",
+      "reference_sha256": "13894956949ac5368b54573def92cab5438e0fa2196bd545be645b5abab5eb35",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 79
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_full_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_full_legacy.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "full",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "7380cb52c8c4092d3bde30c1f022fd2a87477103b23de60f3afc93062c6bf1dd",
+      "reference_sha256": "a0e12e3a76b4ba6619027eac4c07695166cf08e61eee0a5ea738d712806542f8",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 80
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_full_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_full_teoz.svg",
+      "axes": [
+        "first and last participant",
+        "nested activation",
+        "full",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "c77a1cf286875dd88f390dc680ec85f7b40e65e320666b315f193cb870d8b00a",
+      "reference_sha256": "2338f6ea554d694216ff8cbcd5468007d06618078a1105ec06299c1a6a03a4d1",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 81
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_full_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_full_legacy.svg",
+      "axes": [
+        "reverse reverse_full",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "8e1f846684931c971654d4b801c0dee52494eb193dfd43ce40c54988acb3d977",
+      "reference_sha256": "9a530e2e6470605e51a2e1dc21669d597b0c2629f5a839acb2298d148bbb7afa",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_full_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_full_teoz.svg",
+      "axes": [
+        "reverse reverse_full",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "2ca01eaf0a389374c53c45e3e151369c89efdba0959c85f727bbb7229a7dffb1",
+      "reference_sha256": "3f9bdbf419163e8ee89f9bbb25cfaa2ac5c56b59ea8b10c31942813a9b2f9abd",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_top_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_top_legacy.svg",
+      "axes": [
+        "reverse reverse_open_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "029aab2e2d271f167270528efda42bfdcba72f808dd4eaf5389775697add05a2",
+      "reference_sha256": "bcc92f1efc7662c622fc5ed26d14f98e5df35972573fb017f271715470eb77f2",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_top_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_top_teoz.svg",
+      "axes": [
+        "reverse reverse_open_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "dde2f1c0d53edfac212b7dda2b92d14a64e4f3f97e650ffee5d8f1485633deaf",
+      "reference_sha256": "e3c3f58b78a5d58b0d83b43aaba844a587a9c3a1ef3d491823122cfb280c56f4",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 3
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_bottom_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_bottom_legacy.svg",
+      "axes": [
+        "reverse reverse_open_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "d34b575f376355ceb37505b0e1dbcd5edd877e9ed0f42b7095cd671fc489e797",
+      "reference_sha256": "906011f02581f7463126ca459d4227ce6b744fa7c8c75ba2eb2a7abfc850c328",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 4
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_bottom_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_open_bottom_teoz.svg",
+      "axes": [
+        "reverse reverse_open_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "d9f4fb88604051bb46f7f1934c8aba3666384d1e4d924fd0bbe12fcb7d277398",
+      "reference_sha256": "d6d833f8fd9cdb1a0bc43341769d71b02bb1e31c6d7347df0c34e2aca7622d63",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 5
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_top_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_top_legacy.svg",
+      "axes": [
+        "reverse reverse_circle_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "9be9c1742abca7f107fd611272d29d33fbc8203c7ae1be013e5af3a85d31a288",
+      "reference_sha256": "8bc96440d20774b277f24c5f3032ca3c1ce0ce172607c39a5e2759017cd6b6f4",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 6
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_top_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_top_teoz.svg",
+      "axes": [
+        "reverse reverse_circle_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "a6589b1d2e36720493d33a1cc68ff7898c405c65146ad596386f0ac9a51286ce",
+      "reference_sha256": "3a03a7582e7c5fe637a5406d8e52362a08b3a2cfe275d8a865ca87e15f0a63c2",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 7
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_bottom_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_bottom_legacy.svg",
+      "axes": [
+        "reverse reverse_circle_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "16c0ef20d0f82b5d92ddb2f38aadfd49f24534554bf883741eddff530d1dbaaf",
+      "reference_sha256": "11fd7ee6f27e10aefb09efbcd7a5c0d57152ab65a32805b68380726d4fb77c02",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 8
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_bottom_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-half-polygon-order/ind78_self_extra_reverse_circle_bottom_teoz.svg",
+      "axes": [
+        "reverse reverse_circle_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "7afa6c6debcd2bd6e3856eea235c9d711f85246bfef7bf5fce268e2a289a789c",
+      "reference_sha256": "4733ea3cf4a4673916f6bd1cf418c915634322c15fda493af455463ad70ef8f2",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "followup10",
+      "capture_index": 9
+    }
+  ],
+  "findings": [
+    "Pinned ComponentRoseSelfArrow.getPolygon emits TOP outer-upper, inner-tip, outer-baseline and BOTTOM outer-baseline, inner-tip, outer-lower, with direction affecting x. The production diff changes only the TOP vertex serialization order in this consumer, preserving the existing numeric vertices. It introduces no coordinate constant or fixture lookup.",
+    "Acceptance is bounded to the fresh whole-output self-consumer matrix: full/half, forward/reverse, circle/open heads, first/last participant and nested activation on both engines. Exact polygons and whole CLI SVG comparisons are retained; prior rejected ordinary dressing, geometry, activation and box claims remain rejected at their own revisions."
+  ],
+  "verdict": "accepted",
+  "next_obligations": [
+    "Preserve the bounded matrix as an executable regression net; this record does not accept the pending-CREATE packet or inherited self/box geometry obligations."
+  ],
+  "evidence_directory": "docs/parity-reviews/sequence-pending-stripe-packet/checker-ae1e0de4-astra",
+  "counts": {
+    "entries": 24,
+    "valid": 24,
+    "before": {
+      "0": 18,
+      "1": 6
+    },
+    "after": {
+      "0": 24
+    },
+    "verdict": "accepted"
+  },
+  "limitations": [
+    "Whole failure rejects; bounded support never waives any failed counterexample or imports historical acceptance.",
+    "Stable broad gates ran once per exact revision before evidence registration; no repeated broad run for evidence-only files. Existing gates remain red.",
+    "Java argv derived from pinned wrapper, not process traced. Remote OpenJDK21.0.5/Graphviz12.2 historical font/Graphviz equivalence is unproved.",
+    "No combined correctness with concurrent creole/text_render/WBS packet."
+  ]
+}

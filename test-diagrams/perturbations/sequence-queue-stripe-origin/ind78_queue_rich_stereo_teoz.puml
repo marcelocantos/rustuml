@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+queue "<size:25>Orion</size>\n<size:9>dust</size>\n<size:19>tail</size>" as Orion <<dispatch>>
+participant Cygnus
+Orion -> Cygnus: relay
+@enduml

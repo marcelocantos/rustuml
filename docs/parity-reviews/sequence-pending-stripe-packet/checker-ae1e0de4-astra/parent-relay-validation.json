@@ -1,0 +1,39 @@
+{
+  "validated": true,
+  "cases": 86,
+  "calls": 86,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.YD4ftmgc",
+  "hashes": {
+    "reference-results.json.gz": "0d2e0e2fa86862a346cb0d1dc61fefd63069b9d11cf2554986d2d40c325ce595",
+    "reference-transport.json": "0198469560dd91417296b3af0808a7a4ad1f00e4dc4f3620eca2647d2ecea327"
+  },
+  "exit_statuses": {
+    "0": 78,
+    "200": 8
+  },
+  "intended_invalid": [
+    "ind78_invalid_neither_legacy",
+    "ind78_invalid_neither_teoz",
+    "ind78_invalid_self_legacy",
+    "ind78_invalid_self_teoz",
+    "ind78_invalid_source_legacy",
+    "ind78_invalid_source_teoz",
+    "ind78_return_invalid_legacy",
+    "ind78_return_invalid_teoz"
+  ],
+  "intended_invalid_exit0": [],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "ind78_invalid_neither_legacy",
+    "ind78_invalid_neither_teoz",
+    "ind78_invalid_self_legacy",
+    "ind78_invalid_self_teoz",
+    "ind78_invalid_source_legacy",
+    "ind78_invalid_source_teoz",
+    "ind78_return_invalid_legacy",
+    "ind78_return_invalid_teoz"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

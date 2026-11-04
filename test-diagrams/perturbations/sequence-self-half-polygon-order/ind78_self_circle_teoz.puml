@@ -1,0 +1,12 @@
+@startuml
+!pragma teoz true
+participant Pavo
+participant Tucana
+participant Vela
+Pavo o-/o Pavo: first
+activate Vela
+activate Vela
+Vela o-/o Vela: last
+deactivate Vela
+deactivate Vela
+@enduml

@@ -1,0 +1,102 @@
+[
+  {
+    "name": "ind78_self_extra_reverse_full_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "9a530e2e6470605e51a2e1dc21669d597b0c2629f5a839acb2298d148bbb7afa"
+  },
+  {
+    "name": "ind78_self_extra_reverse_full_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "3f9bdbf419163e8ee89f9bbb25cfaa2ac5c56b59ea8b10c31942813a9b2f9abd"
+  },
+  {
+    "name": "ind78_self_extra_reverse_open_top_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "bcc92f1efc7662c622fc5ed26d14f98e5df35972573fb017f271715470eb77f2"
+  },
+  {
+    "name": "ind78_self_extra_reverse_open_top_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "e3c3f58b78a5d58b0d83b43aaba844a587a9c3a1ef3d491823122cfb280c56f4"
+  },
+  {
+    "name": "ind78_self_extra_reverse_open_bottom_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "906011f02581f7463126ca459d4227ce6b744fa7c8c75ba2eb2a7abfc850c328"
+  },
+  {
+    "name": "ind78_self_extra_reverse_open_bottom_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "d6d833f8fd9cdb1a0bc43341769d71b02bb1e31c6d7347df0c34e2aca7622d63"
+  },
+  {
+    "name": "ind78_self_extra_reverse_circle_top_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "8bc96440d20774b277f24c5f3032ca3c1ce0ce172607c39a5e2759017cd6b6f4"
+  },
+  {
+    "name": "ind78_self_extra_reverse_circle_top_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "3a03a7582e7c5fe637a5406d8e52362a08b3a2cfe275d8a865ca87e15f0a63c2"
+  },
+  {
+    "name": "ind78_self_extra_reverse_circle_bottom_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "11fd7ee6f27e10aefb09efbcd7a5c0d57152ab65a32805b68380726d4fb77c02"
+  },
+  {
+    "name": "ind78_self_extra_reverse_circle_bottom_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_diagnostic": false,
+    "exit": 0,
+    "comparator_self_exit": 0,
+    "reference_sha256": "4733ea3cf4a4673916f6bd1cf418c915634322c15fda493af455463ad70ef8f2"
+  }
+]
