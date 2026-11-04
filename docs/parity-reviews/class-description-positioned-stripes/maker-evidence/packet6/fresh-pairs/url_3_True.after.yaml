@@ -1,0 +1,74 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: topurl
+      value: https://example.org/
+    - key: svglinktarget
+      value: _parent
+    source: |
+      @startuml
+      skinparam topurl https://example.org/
+      skinparam svgLinkTarget _parent
+      package Port {
+      class Berth
+      note as Memo
+      Tidal chart
+      end note
+      }
+      url of "Port.Memo" [[chart{Open chart}]]
+      Port.Memo .. Port.Berth
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Port
+  - !Entity Port.Berth
+  - !Note 0
+  - !Relationship 0
+  entities:
+  - id: Port.Berth
+    label: Berth
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships:
+  - from: Port.Memo
+    to: Port.Berth
+    kind: Association
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: None
+    dashed: true
+    length: 2
+    source_line: 10
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Port
+    kind: Package
+    color: null
+    entities:
+    - Port.Berth
+    source_line: 3
+    stereotypes: []
+  notes:
+  - lines:
+    - Tidal chart
+    target: null
+    position: null
+    alias: Port.Memo
+    url: https://example.org/chart
+    url_tooltip: Open chart
+    source_line: 6
+    owner_package: Port
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

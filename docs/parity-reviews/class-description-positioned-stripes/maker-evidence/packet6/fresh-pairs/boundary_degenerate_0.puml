@@ -1,0 +1,10 @@
+@startuml
+allowmixing
+<style>
+boundary {
+Shadowing 0
+FontSize 16
+}
+</style>
+boundary "Willow\nBank" as Dock
+@enduml

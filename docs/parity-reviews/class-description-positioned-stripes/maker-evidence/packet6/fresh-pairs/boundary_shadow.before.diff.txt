@@ -1,0 +1,25 @@
+SVG structural differences:
+  element count: expected 24, got 19
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "113px"), ("preserveAspectRatio", "none"), ("style", "width:210px;height:113px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 210 113"), ("width", "210px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "113px"), ("preserveAspectRatio", "none"), ("style", "width:223px;height:113px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 223 113"), ("width", "223px"), ("zoomAndPan", "magnify")]
+  [2] tag mismatch: expected <filter>, got <g>
+  [3] tag mismatch: expected <feGaussianBlur>, got <g>
+  [4] tag mismatch: expected <feColorMatrix>, got <rect>
+  [5] tag mismatch: expected <feOffset>, got <ellipse>
+  [6] tag mismatch: expected <feBlend>, got <path>
+  [7] tag mismatch: expected <g>, got <text>
+  [8] tag mismatch: expected <g>, got <line>
+  [9] tag mismatch: expected <rect>, got <line>
+  [10] tag mismatch: expected <ellipse>, got <g>
+  [11] <path> attr mismatch:
+    expected: [("d", "M24.4731,52.259 Q23.8921,52.5578 23.2529,52.7072 Q22.6138,52.8567 21.9082,52.8567 Q19.4014,52.8567 18.0815,51.2048 Q16.7617,49.5529 16.7617,46.4319 Q16.7617,43.3025 18.0815,41.6506 Q19.4014,39.9988 21.9082,39.9988 Q22.6138,39.9988 23.2612,40.1482 Q23.9087,40.2976 24.4731,40.5964 L24.4731,43.3191 Q23.8423,42.738 23.2488,42.4682 Q22.6553,42.1985 22.0244,42.1985 Q20.6797,42.1985 19.9949,43.2651 Q19.3101,44.3318 19.3101,46.4319 Q19.3101,48.5237 19.9949,49.5903 Q20.6797,50.657 22.0244,50.657 Q22.6553,50.657 23.2488,50.3872 Q23.8423,50.1174 24.4731,49.5363 Z "), ("fill", "#000000")]
+    actual:   [("d", "M146.341,32.1074 L146.341,56.1074 M146.341,44.1074 L163.341,44.1074"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:2;")]
+  [12] tag mismatch: expected <text>, got <ellipse>
+  [13] tag mismatch: expected <line>, got <text>
+  [14] tag mismatch: expected <line>, got <text>
+  [15] tag mismatch: expected <g>, got <text>
+  [16] tag mismatch: expected <path>, got <g>
+  [17] tag mismatch: expected <ellipse>, got <path>
+  [18] tag mismatch: expected <text>, got <polygon>
+

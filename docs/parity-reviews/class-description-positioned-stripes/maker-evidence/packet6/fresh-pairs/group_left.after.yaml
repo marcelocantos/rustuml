@@ -1,0 +1,75 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Inlet {
+      class Leaf
+      class Peer
+      Leaf --> Peer
+      }
+      note left of Inlet [[https://example.org/map]] : Tide\nTable
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Inlet
+  - !Entity Inlet.Leaf
+  - !Entity Inlet.Peer
+  - !Relationship 0
+  - !Note 0
+  entities:
+  - id: Inlet.Leaf
+    label: Leaf
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  - id: Inlet.Peer
+    label: Peer
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships:
+  - from: Inlet.Leaf
+    to: Inlet.Peer
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 4
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Inlet
+    kind: Package
+    color: null
+    entities:
+    - Inlet.Leaf
+    - Inlet.Peer
+    source_line: 1
+    stereotypes: []
+  notes:
+  - lines:
+    - Tide
+    - Table
+    target: Inlet
+    position: Left
+    alias: null
+    url: https://example.org/map
+    source_line: 6
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

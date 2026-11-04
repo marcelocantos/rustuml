@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+actor {
+FontSize 12
+FontName SansSerif
+
+}
+</style>
+class Wharf
+actor "<size:7>Rill</size><size:24>Atlas</size>\n<sub>low</sub><sup>high</sup>" as Sailor <<pilot>>
+Wharf --> Sailor
+@enduml

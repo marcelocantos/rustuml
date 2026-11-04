@@ -1,0 +1,8 @@
+@startuml
+package Inlet {
+class Leaf
+class Peer
+Leaf --> Peer
+}
+note top of Inlet [[https://example.org/map]] : Tide\nTable
+@enduml

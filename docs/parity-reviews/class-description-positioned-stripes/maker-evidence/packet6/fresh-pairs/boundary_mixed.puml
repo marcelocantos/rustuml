@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+boundary {
+FontSize 15
+FontName SansSerif
+
+}
+</style>
+class Wharf
+boundary "<size:28>Birch</size><sub>2</sub>\n<sup>3</sup>Stream" as Sailor <<pilot>>
+Wharf --> Sailor
+@enduml

@@ -1,0 +1,53 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - boundary
+        property: shadowing
+        value: '0'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: fontsize
+        value: '16'
+        source_line: 2
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      <style>
+      boundary {
+      Shadowing 0
+      FontSize 16
+      }
+      </style>
+      boundary "Willow\nBank" as Dock
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Dock
+  entities:
+  - id: Dock
+    label: Willow\nBank
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

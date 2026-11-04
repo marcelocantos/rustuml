@@ -1,0 +1,215 @@
+{
+  "original810": {
+    "entries": 810,
+    "before": {
+      "mismatch": 250,
+      "pass": 553,
+      "invalid_reference": 7
+    },
+    "after": {
+      "mismatch": 250,
+      "pass": 553,
+      "invalid_reference": 7
+    }
+  },
+  "current955": {
+    "entries": 955,
+    "before": {
+      "mismatch": 329,
+      "pass": 610,
+      "invalid_reference": 9,
+      "process_error": 7
+    },
+    "after": {
+      "mismatch": 329,
+      "pass": 610,
+      "invalid_reference": 9,
+      "process_error": 7
+    }
+  },
+  "class23": {
+    "entries": 23,
+    "before": {
+      "pass": 23
+    },
+    "after": {
+      "pass": 23
+    }
+  },
+  "maker62": {
+    "entries": 62,
+    "before": {
+      "pass": 62
+    },
+    "after": {
+      "pass": 62
+    }
+  },
+  "checker139": {
+    "entries": 139,
+    "before": {
+      "pass": 124,
+      "invalid_reference": 4,
+      "mismatch": 11
+    },
+    "after": {
+      "pass": 124,
+      "invalid_reference": 4,
+      "mismatch": 11
+    }
+  },
+  "frozen1192": {
+    "entries": 1192,
+    "before": {
+      "mismatch": 341,
+      "pass": 821,
+      "invalid_reference": 13,
+      "process_error": 17
+    },
+    "after": {
+      "mismatch": 341,
+      "pass": 821,
+      "invalid_reference": 13,
+      "process_error": 17
+    }
+  },
+  "combined1449": {
+    "entries": 1449,
+    "before": {
+      "mismatch": 518,
+      "pass": 838,
+      "invalid_reference": 33,
+      "process_error": 60
+    },
+    "after": {
+      "mismatch": 518,
+      "pass": 838,
+      "invalid_reference": 33,
+      "process_error": 60
+    }
+  },
+  "checker62": {
+    "entries": 62,
+    "before": {
+      "pass": 47,
+      "mismatch": 13,
+      "invalid_reference": 2
+    },
+    "after": {
+      "pass": 47,
+      "mismatch": 13,
+      "invalid_reference": 2
+    }
+  },
+  "maker48": {
+    "entries": 48,
+    "before": {
+      "pass": 45,
+      "mismatch": 3
+    },
+    "after": {
+      "pass": 45,
+      "mismatch": 3
+    }
+  },
+  "combined1559": {
+    "entries": 1559,
+    "before": {
+      "mismatch": 534,
+      "pass": 930,
+      "invalid_reference": 35,
+      "process_error": 60
+    },
+    "after": {
+      "mismatch": 534,
+      "pass": 930,
+      "invalid_reference": 35,
+      "process_error": 60
+    }
+  },
+  "maker36": {
+    "entries": 36,
+    "before": {
+      "pass": 32,
+      "mismatch": 4
+    },
+    "after": {
+      "pass": 32,
+      "mismatch": 4
+    }
+  },
+  "maker20": {
+    "entries": 20,
+    "before": {
+      "pass": 16,
+      "mismatch": 4
+    },
+    "after": {
+      "pass": 16,
+      "mismatch": 4
+    }
+  },
+  "checker34": {
+    "entries": 34,
+    "before": {
+      "mismatch": 16,
+      "invalid_reference": 4,
+      "pass": 12,
+      "process_error": 2
+    },
+    "after": {
+      "pass": 26,
+      "invalid_reference": 4,
+      "mismatch": 4
+    }
+  },
+  "all1649": {
+    "entries": 1649,
+    "before": {
+      "mismatch": 558,
+      "pass": 990,
+      "invalid_reference": 39,
+      "process_error": 62
+    },
+    "after": {
+      "mismatch": 546,
+      "pass": 1004,
+      "invalid_reference": 39,
+      "process_error": 60
+    }
+  },
+  "fresh26": {
+    "entries": 26,
+    "before": {
+      "mismatch": 16,
+      "pass": 2,
+      "process_error": 8
+    },
+    "after": {
+      "mismatch": 6,
+      "pass": 20
+    }
+  },
+  "overlaps": {
+    "unique_hashes": {
+      "preserved1559": 1485,
+      "maker36": 36,
+      "maker20": 20,
+      "checker34": 34,
+      "fresh26": 26
+    },
+    "pairwise_shared": {
+      "preserved1559/maker36": 0,
+      "preserved1559/maker20": 0,
+      "preserved1559/checker34": 0,
+      "preserved1559/fresh26": 0,
+      "maker36/maker20": 0,
+      "maker36/checker34": 0,
+      "maker36/fresh26": 0,
+      "maker20/checker34": 0,
+      "maker20/fresh26": 0,
+      "checker34/fresh26": 0
+    },
+    "all1675_unique_source_hashes": 1601
+  }
+}

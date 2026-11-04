@@ -1,0 +1,8 @@
+@startuml
+skinparam topurl https://example.org/
+skinparam svgLinkTarget _parent
+class Berth
+note "Tidal chart" as Memo
+url Memo is [[chart{Open chart}]]
+Memo .. Berth
+@enduml

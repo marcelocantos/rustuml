@@ -1,0 +1,19 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+actor {
+FontSize 19
+FontName Serif
+FontStyle bold
+stereotype {
+FontStyle italic
+FontSize 13
+FontColor DarkGreen
+}
+}
+</style>
+class Wharf
+actor "Tall alder\nBank" as Sailor <<pilot>>
+Wharf --> Sailor
+@enduml

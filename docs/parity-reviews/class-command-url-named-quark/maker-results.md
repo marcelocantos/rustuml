@@ -1,0 +1,1 @@
+Maker evidence, not acceptance. The complete source-model packet, exact commits, controls, failures and final gates are in [packet6](../class-description-positioned-stripes/maker-evidence/packet6/README.md). All original review verdicts remain unchanged. Fresh independent review is required.

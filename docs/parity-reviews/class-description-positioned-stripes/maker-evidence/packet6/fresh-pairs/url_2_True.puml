@@ -1,0 +1,12 @@
+@startuml
+skinparam topurl https://example.org/
+skinparam svgLinkTarget _parent
+package Port {
+class Berth
+note as Memo
+Tidal chart
+end note
+url for Memo is [[chart{Open chart}]]
+Memo .. Berth
+}
+@enduml

@@ -1,0 +1,6110 @@
+{
+  "cases": [
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_blanktail.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_blanktail.puml"
+        ],
+        "sha256": "f3f0baf56f02a3aeb79e177c810b5b1daa8bb48aa7081fa855c86ac47c325493",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory\\n",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_blanktail.puml"
+        ],
+        "sha256": "f3f0baf56f02a3aeb79e177c810b5b1daa8bb48aa7081fa855c86ac47c325493",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory\\n",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_False.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_False.puml"
+        ],
+        "sha256": "4abe8fa7f0e055fb08eb2d03fd6ab3c496585df1a1208c3afcaa0d14c72e011c",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Horizon\\n",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_False.puml"
+        ],
+        "sha256": "4abe8fa7f0e055fb08eb2d03fd6ab3c496585df1a1208c3afcaa0d14c72e011c",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Horizon\\n",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_True.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_True.puml"
+        ],
+        "sha256": "7f4f3bd93683564af727d98e6b66ce147b263fb6961ebb38e7802f84ee19796b",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Tide<sub>low",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_True.puml"
+        ],
+        "sha256": "7f4f3bd93683564af727d98e6b66ce147b263fb6961ebb38e7802f84ee19796b",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Tide<sub>low",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_degenerate.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_degenerate.puml"
+        ],
+        "sha256": "787712610e2dd12cccef00888f8dc03f87c08b61541931a90ae3b0dccef0fc0f",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Beacon",
+            "label": "Signal\\nPier",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 9
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Beacon"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_degenerate.puml"
+        ],
+        "sha256": "787712610e2dd12cccef00888f8dc03f87c08b61541931a90ae3b0dccef0fc0f",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Beacon",
+            "label": "Signal\\nPier",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 9
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Beacon"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_empty.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_empty.puml"
+        ],
+        "sha256": "101cd71a7eb60c9682543d97e333e99d8ae0277bada5140a16f97ab218d2aceb",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_empty.puml"
+        ],
+        "sha256": "101cd71a7eb60c9682543d97e333e99d8ae0277bada5140a16f97ab218d2aceb",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_multiline.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_multiline.puml"
+        ],
+        "sha256": "597482caf0e084015897ccb16b0ebea1d8ca6073e928ee4a2fbb894896837105",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "North pier\\nSignal mast\\nTerminal",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_multiline.puml"
+        ],
+        "sha256": "597482caf0e084015897ccb16b0ebea1d8ca6073e928ee4a2fbb894896837105",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "North pier\\nSignal mast\\nTerminal",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_plain.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_plain.puml"
+        ],
+        "sha256": "4fcc1e0127d1a81c6b601e0800fc404abff22731eb766cdb2f9357877cc67142",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_plain.puml"
+        ],
+        "sha256": "4fcc1e0127d1a81c6b601e0800fc404abff22731eb766cdb2f9357877cc67142",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_shadow.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_shadow.puml"
+        ],
+        "sha256": "7a5eacf1a0e5ff28a62c93b748de89df0009b02db310240967f4e1122408878a",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "i",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_shadow.puml"
+        ],
+        "sha256": "7a5eacf1a0e5ff28a62c93b748de89df0009b02db310240967f4e1122408878a",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "i",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_sized.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_sized.puml"
+        ],
+        "sha256": "b3e3edbd14a3c4e302a4680e7cfe1b3cd9d42fa72f2032346eb39523af3709b7",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "<size:31>Signal</size>\\n<sub>tide",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_sized.puml"
+        ],
+        "sha256": "b3e3edbd14a3c4e302a4680e7cfe1b3cd9d42fa72f2032346eb39523af3709b7",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "<size:31>Signal</size>\\n<sub>tide",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_subgroup.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_subgroup.puml"
+        ],
+        "sha256": "68076d5f5e734761e42858606e6a3f37192427de0d315a39fbe68ae867172f8d",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 2,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Harbor.Channel.Beacon",
+            "label": "Tide\\nClock",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          },
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 14
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Package": "Harbor.Channel"
+          },
+          {
+            "!Entity": "Harbor.Channel.Beacon"
+          },
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_subgroup.puml"
+        ],
+        "sha256": "68076d5f5e734761e42858606e6a3f37192427de0d315a39fbe68ae867172f8d",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 2,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Harbor.Channel.Beacon",
+            "label": "Tide\\nClock",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          },
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 14
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Package": "Harbor.Channel"
+          },
+          {
+            "!Entity": "Harbor.Channel.Beacon"
+          },
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_blanktail.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_blanktail.puml"
+        ],
+        "sha256": "271513e4323f42c8651c81dea24a837451a14faede31f8b694da60de5947dd69",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory\\n",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_blanktail.puml"
+        ],
+        "sha256": "271513e4323f42c8651c81dea24a837451a14faede31f8b694da60de5947dd69",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory\\n",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_False.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_False.puml"
+        ],
+        "sha256": "fd27f4693004ecfe50983a37acca610594b50581d990b4e279edc2b12a2ff5e4",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Horizon\\n",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_False.puml"
+        ],
+        "sha256": "fd27f4693004ecfe50983a37acca610594b50581d990b4e279edc2b12a2ff5e4",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Horizon\\n",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_True.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_True.puml"
+        ],
+        "sha256": "4ef05102bcdb21817ac3ec84546270340b4ec32889a99ca1e9b24f0cfb0fba59",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Tide<sub>low",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_True.puml"
+        ],
+        "sha256": "4ef05102bcdb21817ac3ec84546270340b4ec32889a99ca1e9b24f0cfb0fba59",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "Tide<sub>low",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_degenerate.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_degenerate.puml"
+        ],
+        "sha256": "f4db1f763342710930eed0f31d6455a805111ad161163f7046b4cea2d59a6a54",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Beacon",
+            "label": "Signal\\nPier",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 9
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Beacon"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_degenerate.puml"
+        ],
+        "sha256": "f4db1f763342710930eed0f31d6455a805111ad161163f7046b4cea2d59a6a54",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Beacon",
+            "label": "Signal\\nPier",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 9
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Beacon"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_empty.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_empty.puml"
+        ],
+        "sha256": "694ecd5571116a9210bbaa5a4756fd20a9caaab6dda4ba76e149769ef867ba98",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_empty.puml"
+        ],
+        "sha256": "694ecd5571116a9210bbaa5a4756fd20a9caaab6dda4ba76e149769ef867ba98",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_multiline.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_multiline.puml"
+        ],
+        "sha256": "e7635db028ef601aea73769cb69562fb4d40b2a69335a1616d0254f1aba1f4e1",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "North pier\\nSignal mast\\nTerminal",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_multiline.puml"
+        ],
+        "sha256": "e7635db028ef601aea73769cb69562fb4d40b2a69335a1616d0254f1aba1f4e1",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "North pier\\nSignal mast\\nTerminal",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_plain.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_plain.puml"
+        ],
+        "sha256": "5fc08fd33b46250df7fb9f6525de79a0498d687808f19ae14ff6f8edf2fc37a7",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_plain.puml"
+        ],
+        "sha256": "5fc08fd33b46250df7fb9f6525de79a0498d687808f19ae14ff6f8edf2fc37a7",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "Observatory",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_shadow.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_shadow.puml"
+        ],
+        "sha256": "dc76bedb62968e9e9808641a3048cbf738ba1dc7c1f9fefcaa46e294bf9576e7",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "i",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_shadow.puml"
+        ],
+        "sha256": "dc76bedb62968e9e9808641a3048cbf738ba1dc7c1f9fefcaa46e294bf9576e7",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Beacon",
+            "label": "i",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_sized.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_sized.puml"
+        ],
+        "sha256": "4c857cde70856e6c769d9de4210b9a2691590659f1d884e377304f5f3a1d00fd",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "<size:31>Signal</size>\\n<sub>tide",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_sized.puml"
+        ],
+        "sha256": "4c857cde70856e6c769d9de4210b9a2691590659f1d884e377304f5f3a1d00fd",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 9
+          },
+          {
+            "id": "Beacon",
+            "label": "<size:31>Signal</size>\\n<sub>tide",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "generic": "/sub",
+            "source_line": 10
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Entity": "Beacon"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_subgroup.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_subgroup.puml"
+        ],
+        "sha256": "742f296e87256b24d4176e6a1b2423e06efa6e6687f43419e9bb00d321832ce2",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 2,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Harbor.Channel.Beacon",
+            "label": "Tide\\nClock",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          },
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 14
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Package": "Harbor.Channel"
+          },
+          {
+            "!Entity": "Harbor.Channel.Beacon"
+          },
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_subgroup.puml"
+        ],
+        "sha256": "742f296e87256b24d4176e6a1b2423e06efa6e6687f43419e9bb00d321832ce2",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 2,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Harbor.Channel.Beacon",
+            "label": "Tide\\nClock",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "watch"
+            ],
+            "source_line": 11
+          },
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 14
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Package": "Harbor.Channel"
+          },
+          {
+            "!Entity": "Harbor.Channel.Beacon"
+          },
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_bottom.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_bottom.puml"
+        ],
+        "sha256": "b2c7b7fe3e7467b14e0f56594b3ea8d4d81c7401329fe7a794e040934e5a048c",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation bottom",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Bottom",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect bottom",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_bottom.puml"
+        ],
+        "sha256": "b2c7b7fe3e7467b14e0f56594b3ea8d4d81c7401329fe7a794e040934e5a048c",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation bottom",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Bottom",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect bottom",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_left.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_left.puml"
+        ],
+        "sha256": "d3ef6ba318e3616248a5d24a1f5b33a71c0992ad1858c2bec9783c349bd96a3d",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation left",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Left",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect left",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_left.puml"
+        ],
+        "sha256": "d3ef6ba318e3616248a5d24a1f5b33a71c0992ad1858c2bec9783c349bd96a3d",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation left",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Left",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect left",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_right.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_right.puml"
+        ],
+        "sha256": "330ed437d6796c81442b1097ed55eaf213cce5f803035383741681b45230ef62",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation right",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Right",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect right",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_right.puml"
+        ],
+        "sha256": "330ed437d6796c81442b1097ed55eaf213cce5f803035383741681b45230ef62",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation right",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Right",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect right",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_top.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_top.puml"
+        ],
+        "sha256": "90ac31338a1db550d68c86ec1179b19ec9d8f50be178ff4b27039acb88025d03",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation top",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Top",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect top",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_group_top.puml"
+        ],
+        "sha256": "90ac31338a1db550d68c86ec1179b19ec9d8f50be178ff4b27039acb88025d03",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Harbor.Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation top",
+              "class is prose"
+            ],
+            "target": "Harbor",
+            "position": "Top",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect top",
+            "color": "#LightYellow",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_bottom.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_bottom.puml"
+        ],
+        "sha256": "71ea4345ffed9d8accd13c25398f32d98e5f18c2814db576ce7d5707fcb6e9ab",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation bottom",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Bottom",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect bottom",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_bottom.puml"
+        ],
+        "sha256": "71ea4345ffed9d8accd13c25398f32d98e5f18c2814db576ce7d5707fcb6e9ab",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation bottom",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Bottom",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect bottom",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_left.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_left.puml"
+        ],
+        "sha256": "f0c4549ba208d1874fce1c645c623651736ff5430ae71ea78b9e7480a29272e7",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation left",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Left",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect left",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_left.puml"
+        ],
+        "sha256": "f0c4549ba208d1874fce1c645c623651736ff5430ae71ea78b9e7480a29272e7",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation left",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Left",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect left",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_right.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_right.puml"
+        ],
+        "sha256": "85583c52ba3121e021df43ea5030fb957b511d88e51653baf3e8f60f139f2b30",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation right",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Right",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect right",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_right.puml"
+        ],
+        "sha256": "85583c52ba3121e021df43ea5030fb957b511d88e51653baf3e8f60f139f2b30",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation right",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Right",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect right",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_top.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_top.puml"
+        ],
+        "sha256": "c854e18904dc2cbc0a42dcba4a5c819f048987c767a126ccb0792565e917a5de",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation top",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Top",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect top",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_top.puml"
+        ],
+        "sha256": "c854e18904dc2cbc0a42dcba4a5c819f048987c767a126ccb0792565e917a5de",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Observation top",
+              "class is prose"
+            ],
+            "target": "Station",
+            "position": "Top",
+            "alias": null,
+            "stereotypes": [
+              "memo"
+            ],
+            "tags": [
+              "watch"
+            ],
+            "url": "https://example.org/tide?port=7&day=2",
+            "url_tooltip": "Inspect top",
+            "color": "#LightYellow",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_False.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_False.puml"
+        ],
+        "sha256": "63c4ae5e6360278efadf6eea2743748aff0f2fdb292dd1fa040c180d684f99f9",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Detached memorandum"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "source_line": 3
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_False.puml"
+        ],
+        "sha256": "63c4ae5e6360278efadf6eea2743748aff0f2fdb292dd1fa040c180d684f99f9",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Detached memorandum"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "source_line": 3
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_True.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_False.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_False.puml"
+        ],
+        "sha256": "c76f26249b587caec51bfa99b5ac0dbe61bfd9120a836d88b93f5426f544476b",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Detached memorandum"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "source_line": 3
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_False.puml"
+        ],
+        "sha256": "c76f26249b587caec51bfa99b5ac0dbe61bfd9120a836d88b93f5426f544476b",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Station",
+            "label": "Station",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Detached memorandum"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "source_line": 3
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Station"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_True.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_False.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_False.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_False.puml"
+        ],
+        "sha256": "152bd2392aaca6e0d525c71ea12d0f4f26c91481d792cf579fa0bf2579041b93",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Detached chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "url": "https://example.org/chart?x=2&y=5",
+            "url_tooltip": "Inspect chart",
+            "source_line": 3
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_True.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_True.puml"
+        ],
+        "sha256": "7cef3bd79c7bf6bc554cb40fcba9ecb672d577f60c88865aa589e2976944cc6d",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Mooring",
+            "label": "Mooring",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Detached chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "url": "https://example.org/chart?x=2&y=5",
+            "url_tooltip": "Inspect chart",
+            "source_line": 3
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Mooring"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_blank.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_blank.puml"
+        ],
+        "sha256": "28920813a7fa67385e108e45fb9cdb22452e7b6da0819543d484534a8ca28ba2",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "Cedar\\n\\nLanding\\n",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_blank.puml"
+        ],
+        "sha256": "28920813a7fa67385e108e45fb9cdb22452e7b6da0819543d484534a8ca28ba2",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "Cedar\\n\\nLanding\\n",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_bold.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_bold.puml"
+        ],
+        "sha256": "d888e21587ed024a5894dfe5b2cd1edfb507f1ebf7e1072f17469cc4dcfc53b5",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "River\\nLanding",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_bold.puml"
+        ],
+        "sha256": "d888e21587ed024a5894dfe5b2cd1edfb507f1ebf7e1072f17469cc4dcfc53b5",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "River\\nLanding",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_degenerate_0.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_degenerate_0.puml"
+        ],
+        "sha256": "61c445d96ad7e3d945feddc6fcb4b58d8995737a003b760978a2f173b63f4d09",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_degenerate_0.puml"
+        ],
+        "sha256": "61c445d96ad7e3d945feddc6fcb4b58d8995737a003b760978a2f173b63f4d09",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_degenerate_9.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_degenerate_9.puml"
+        ],
+        "sha256": "0159b4035fe5c915f638f6c2108b4f13641126ac25b3edd813c7da4f1a31b259",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_degenerate_9.puml"
+        ],
+        "sha256": "0159b4035fe5c915f638f6c2108b4f13641126ac25b3edd813c7da4f1a31b259",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_mixed.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_mixed.puml"
+        ],
+        "sha256": "7fe4a29d7dc8fcd9b89d85a5cd3b75e50991570a790a8f6a9fa4087de8587fd0",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:28>Birch</size><sub>2</sub>\\n<sup>3</sup>Stream",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_mixed.puml"
+        ],
+        "sha256": "7fe4a29d7dc8fcd9b89d85a5cd3b75e50991570a790a8f6a9fa4087de8587fd0",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:28>Birch</size><sub>2</sub>\\n<sup>3</sup>Stream",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_shadow.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_shadow.puml"
+        ],
+        "sha256": "3847539f900d7efcd0ef4e815fc7ffd3a27b032c3fbf682c925e75e991a29c39",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          },
+          {
+            "id": "Sailor",
+            "label": "Harbor\\nMast",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 12
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_shadow.puml"
+        ],
+        "sha256": "3847539f900d7efcd0ef4e815fc7ffd3a27b032c3fbf682c925e75e991a29c39",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          },
+          {
+            "id": "Sailor",
+            "label": "Harbor\\nMast",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 12
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_small.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_small.puml"
+        ],
+        "sha256": "e99fc54eb13e51d8db1a08b054210ed754a5d69675366b7bc40ca8afc4dfba28",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:7>Rill</size><size:24>Atlas</size>\\n<sub>low</sub><sup>high",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "generic": "/sup",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_small.puml"
+        ],
+        "sha256": "e99fc54eb13e51d8db1a08b054210ed754a5d69675366b7bc40ca8afc4dfba28",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:7>Rill</size><size:24>Atlas</size>\\n<sub>low</sub><sup>high",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "generic": "/sup",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_stereo.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_stereo.puml"
+        ],
+        "sha256": "535fa84f9aafdc297684b4084c4c5d68dcfdbc267c61a0955128b126fde09a1c",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 15
+          },
+          {
+            "id": "Sailor",
+            "label": "Tall alder\\nBank",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 16
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/actor_stereo.puml"
+        ],
+        "sha256": "535fa84f9aafdc297684b4084c4c5d68dcfdbc267c61a0955128b126fde09a1c",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 15
+          },
+          {
+            "id": "Sailor",
+            "label": "Tall alder\\nBank",
+            "explicit_alias": true,
+            "kind": "Actor",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 16
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_blank.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_blank.puml"
+        ],
+        "sha256": "69572b51574dbdf5155d916f1d4324a23b12ccbd4632897be10cf729576796df",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "Cedar\\n\\nLanding\\n",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_blank.puml"
+        ],
+        "sha256": "69572b51574dbdf5155d916f1d4324a23b12ccbd4632897be10cf729576796df",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "Cedar\\n\\nLanding\\n",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_bold.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_bold.puml"
+        ],
+        "sha256": "f706bea4e071fd626dff97a0b8bb25a5e2de933be14122aa4a2d8acd4e5dab38",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "River\\nLanding",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_bold.puml"
+        ],
+        "sha256": "f706bea4e071fd626dff97a0b8bb25a5e2de933be14122aa4a2d8acd4e5dab38",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "River\\nLanding",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_degenerate_0.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_degenerate_0.puml"
+        ],
+        "sha256": "64f64f42e2bed9b5edc620f7dcf78d0a5e017c9da984bf694f68720e2c75d17d",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_degenerate_0.puml"
+        ],
+        "sha256": "64f64f42e2bed9b5edc620f7dcf78d0a5e017c9da984bf694f68720e2c75d17d",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_degenerate_9.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_degenerate_9.puml"
+        ],
+        "sha256": "733d660a568aca86a071fd9cfff7ea92c08ba332ac951c823cd6e86a3b648c5d",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_degenerate_9.puml"
+        ],
+        "sha256": "733d660a568aca86a071fd9cfff7ea92c08ba332ac951c823cd6e86a3b648c5d",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 1
+        },
+        "entities": [
+          {
+            "id": "Dock",
+            "label": "Willow\\nBank",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 8
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_mixed.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_mixed.puml"
+        ],
+        "sha256": "044fd4b00cd711b7020df08ed6de89fed66e5ecc4c2f8dc9e7240e4453f6c1ee",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:28>Birch</size><sub>2</sub>\\n<sup>3</sup>Stream",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_mixed.puml"
+        ],
+        "sha256": "044fd4b00cd711b7020df08ed6de89fed66e5ecc4c2f8dc9e7240e4453f6c1ee",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:28>Birch</size><sub>2</sub>\\n<sup>3</sup>Stream",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_shadow.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_shadow.puml"
+        ],
+        "sha256": "4623e805e1891fabce453d4d3f22cefc9d62d02baacca8b8b42c6e36554fa42f",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          },
+          {
+            "id": "Sailor",
+            "label": "Harbor\\nMast",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 12
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_shadow.puml"
+        ],
+        "sha256": "4623e805e1891fabce453d4d3f22cefc9d62d02baacca8b8b42c6e36554fa42f",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 11
+          },
+          {
+            "id": "Sailor",
+            "label": "Harbor\\nMast",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 12
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_small.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_small.puml"
+        ],
+        "sha256": "dfafb3206f3c28141740abccd20a84aacab8ef9eed90536452a234935c8e131c",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:7>Rill</size><size:24>Atlas</size>\\n<sub>low</sub><sup>high",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "generic": "/sup",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_small.puml"
+        ],
+        "sha256": "dfafb3206f3c28141740abccd20a84aacab8ef9eed90536452a234935c8e131c",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 10
+          },
+          {
+            "id": "Sailor",
+            "label": "<size:7>Rill</size><size:24>Atlas</size>\\n<sub>low</sub><sup>high",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "generic": "/sup",
+            "source_line": 11
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_stereo.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_stereo.puml"
+        ],
+        "sha256": "af74de69c6412236d1ae85823b3345377ba88307474d98cdf17ba073735b42b1",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 15
+          },
+          {
+            "id": "Sailor",
+            "label": "Tall alder\\nBank",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 16
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/boundary_stereo.puml"
+        ],
+        "sha256": "af74de69c6412236d1ae85823b3345377ba88307474d98cdf17ba073735b42b1",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 0,
+          "notes": 0,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Wharf",
+            "label": "Wharf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 15
+          },
+          {
+            "id": "Sailor",
+            "label": "Tall alder\\nBank",
+            "explicit_alias": true,
+            "kind": "Boundary",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [
+              "pilot"
+            ],
+            "source_line": 16
+          }
+        ],
+        "notes": [],
+        "uid_events": [
+          {
+            "!Entity": "Wharf"
+          },
+          {
+            "!Entity": "Sailor"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_left.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_left.puml"
+        ],
+        "sha256": "5dac220231633f3689f200eefb8bb10f9e41699ff60b4f88d5d8f5c364458d92",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Inlet.Leaf",
+            "label": "Leaf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          },
+          {
+            "id": "Inlet.Peer",
+            "label": "Peer",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tide",
+              "Table"
+            ],
+            "target": "Inlet",
+            "position": "Left",
+            "alias": null,
+            "url": "https://example.org/map",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_left.puml"
+        ],
+        "sha256": "5dac220231633f3689f200eefb8bb10f9e41699ff60b4f88d5d8f5c364458d92",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Inlet.Leaf",
+            "label": "Leaf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          },
+          {
+            "id": "Inlet.Peer",
+            "label": "Peer",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tide",
+              "Table"
+            ],
+            "target": "Inlet",
+            "position": "Left",
+            "alias": null,
+            "url": "https://example.org/map",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_top.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_top.puml"
+        ],
+        "sha256": "45c8e8fca9e87de2c2af6395cabc133c24281dc809abcebc31fa25a7e9fc1ea0",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Inlet.Leaf",
+            "label": "Leaf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          },
+          {
+            "id": "Inlet.Peer",
+            "label": "Peer",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tide",
+              "Table"
+            ],
+            "target": "Inlet",
+            "position": "Top",
+            "alias": null,
+            "url": "https://example.org/map",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_top.puml"
+        ],
+        "sha256": "45c8e8fca9e87de2c2af6395cabc133c24281dc809abcebc31fa25a7e9fc1ea0",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "entities": [
+          {
+            "id": "Inlet.Leaf",
+            "label": "Leaf",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 2
+          },
+          {
+            "id": "Inlet.Peer",
+            "label": "Peer",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tide",
+              "Table"
+            ],
+            "target": "Inlet",
+            "position": "Top",
+            "alias": null,
+            "url": "https://example.org/map",
+            "source_line": 6
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_False.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_False.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_False.puml"
+        ],
+        "sha256": "af1cb9d9653964c7a473cb916fc1c407a48a8a9b406dda6245900e619a9e5b8f",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_True.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_True.puml"
+        ],
+        "sha256": "edb49a4c80db29695815a54814037d04830f5fe07b45b302a593f58a10a100ec",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 5
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_False.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_False.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_False.puml"
+        ],
+        "sha256": "14fc1cad695b7b41dcc1e8f75c729497bce5be85e499ddeee5a5fc4a859f5b0a",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 4
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_True.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_True.puml"
+        ],
+        "sha256": "6d769a068e210cf329689bc99b5691d420ad9b4e65ded6317ea9aab9333205eb",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 3
+        },
+        "entities": [
+          {
+            "id": "Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 3
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 5
+          }
+        ],
+        "uid_events": [
+          {
+            "!Entity": "Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_False.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_False.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_False.puml"
+        ],
+        "sha256": "85d8594e18904dd8f674e9b06d81ae4548b1f82b9c492f8eb4cf6904e2a4bf88",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 4
+        },
+        "entities": [
+          {
+            "id": "Port.Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 4
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Port.Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 5,
+            "owner_package": "Port"
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Port"
+          },
+          {
+            "!Entity": "Port.Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_True.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_True.puml"
+        ],
+        "sha256": "904419324a6fd1062828525da1bf0f6f2a97dcf0cc4349b4e864446b1c8cfac6",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 4
+        },
+        "entities": [
+          {
+            "id": "Port.Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 4
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Port.Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 6,
+            "owner_package": "Port"
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Port"
+          },
+          {
+            "!Entity": "Port.Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_False.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_False.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_False.puml"
+        ],
+        "sha256": "c12a76fe3577f88aad8dc20b89b6be0036c853699079f714f2d24235688be3eb",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 4
+        },
+        "entities": [
+          {
+            "id": "Port.Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 4
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Port.Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 5,
+            "owner_package": "Port"
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Port"
+          },
+          {
+            "!Entity": "Port.Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_True.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_True.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_True.puml"
+        ],
+        "sha256": "79d20c8fba8f9d65d9cbee14e1a74dc015231bd31544c573fe50344c848003c1",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 4
+        },
+        "entities": [
+          {
+            "id": "Port.Berth",
+            "label": "Berth",
+            "explicit_alias": false,
+            "kind": "Class",
+            "is_static": false,
+            "visibility": "Default",
+            "members": [],
+            "stereotypes": [],
+            "source_line": 4
+          }
+        ],
+        "notes": [
+          {
+            "lines": [
+              "Tidal chart"
+            ],
+            "target": null,
+            "position": null,
+            "alias": "Port.Memo",
+            "url": "https://example.org/chart",
+            "url_tooltip": "Open chart",
+            "source_line": 6,
+            "owner_package": "Port"
+          }
+        ],
+        "uid_events": [
+          {
+            "!Package": "Port"
+          },
+          {
+            "!Entity": "Port.Berth"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    }
+  ],
+  "unchanged": 50,
+  "recovered": [
+    "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_False.puml",
+    "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_True.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_False.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_0_True.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_False.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_1_True.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_False.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_2_True.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_False.puml",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/url_3_True.puml"
+  ]
+}

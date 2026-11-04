@@ -1,0 +1,80 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - actor
+        property: fontsize
+        value: '15'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        property: fontname
+        value: SansSerif
+        source_line: 3
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      left to right direction
+      <style>
+      actor {
+      FontSize 15
+      FontName SansSerif
+
+      }
+      </style>
+      class Wharf
+      actor "<size:28>Birch</size><sub>2</sub>\n<sup>3</sup>Stream" as Sailor <<pilot>>
+      Wharf --> Sailor
+      @enduml
+  direction: LeftToRight
+  uid_events:
+  - !Entity Wharf
+  - !Entity Sailor
+  - !Relationship 0
+  entities:
+  - id: Wharf
+    label: Wharf
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 10
+  - id: Sailor
+    label: <size:28>Birch</size><sub>2</sub>\n<sup>3</sup>Stream
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - pilot
+    source_line: 11
+  relationships:
+  - from: Wharf
+    to: Sailor
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 12
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

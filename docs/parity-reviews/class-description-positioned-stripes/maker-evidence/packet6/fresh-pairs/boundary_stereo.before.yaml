@@ -1,0 +1,124 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - boundary
+        property: fontsize
+        value: '19'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: fontname
+        value: Serif
+        source_line: 3
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: fontstyle
+        value: bold
+        source_line: 3
+        epoch: 2
+        priority: 2
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        - stereotype
+        property: fontstyle
+        value: italic
+        source_line: 3
+        epoch: 3
+        priority: 3
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        - stereotype
+        property: fontsize
+        value: '13'
+        source_line: 3
+        epoch: 4
+        priority: 4
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        - stereotype
+        property: fontcolor
+        value: DarkGreen
+        source_line: 3
+        epoch: 5
+        priority: 5
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      left to right direction
+      <style>
+      boundary {
+      FontSize 19
+      FontName Serif
+      FontStyle bold
+      stereotype {
+      FontStyle italic
+      FontSize 13
+      FontColor DarkGreen
+      }
+      }
+      </style>
+      class Wharf
+      boundary "Tall alder\nBank" as Sailor <<pilot>>
+      Wharf --> Sailor
+      @enduml
+  direction: LeftToRight
+  uid_events:
+  - !Entity Wharf
+  - !Entity Sailor
+  - !Relationship 0
+  entities:
+  - id: Wharf
+    label: Wharf
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 15
+  - id: Sailor
+    label: Tall alder\nBank
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - pilot
+    source_line: 16
+  relationships:
+  - from: Wharf
+    to: Sailor
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 17
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

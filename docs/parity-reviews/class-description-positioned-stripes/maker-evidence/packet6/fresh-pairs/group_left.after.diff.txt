@@ -1,0 +1,27 @@
+SVG structural differences:
+  element count: expected 31, got 32
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "303px"), ("preserveAspectRatio", "none"), ("style", "width:231px;height:303px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 231 303"), ("width", "231px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "303px"), ("preserveAspectRatio", "none"), ("style", "width:227px;height:303px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 227 303"), ("width", "227px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M88.29,65.06 L121.5556,65.06 A3.75,3.75 0 0 1 124.0556,67.56 L131.0556,87.5483 L214.29,87.5483 A2.5,2.5 0 0 1 216.79,90.0483 L216.79,285.56 A2.5,2.5 0 0 1 214.29,288.06 L88.29,288.06 A2.5,2.5 0 0 1 85.79,285.56 L85.79,67.56 A2.5,2.5 0 0 1 88.29,65.06"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M88.291,65.06 L121.5567,65.06 A3.75,3.75 0 0 1 124.0567,67.56 L131.0567,87.5483 L210.291,87.5483 A2.5,2.5 0 0 1 212.791,90.0483 L212.791,285.56 A2.5,2.5 0 0 1 210.291,288.06 L88.291,288.06 A2.5,2.5 0 0 1 85.791,285.56 L85.791,67.56 A2.5,2.5 0 0 1 88.291,65.06"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [22] tag mismatch: expected <path>, got <a>
+  [23] <path> depth mismatch: expected 4, got 5
+  [23] <path> attr mismatch:
+    expected: [("d", "M51.582,111.75 L51.582,121.75 L61.582,121.75 L51.582,111.75"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M6,111.75 L6,152.3711 L61.5821,152.3711 L61.5821,121.75 L51.5821,111.75 L6,111.75"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [24] tag mismatch: expected <text>, got <path>
+  [25] <text> depth mismatch: expected 4, got 5
+  [25] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "34.582"), ("x", "12"), ("y", "144.6289")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "27.4028"), ("x", "12"), ("y", "129.3184")]
+  [25] <text> text mismatch:
+    expected: Some("Table")
+    actual:   Some("Tide")
+  [26] tag mismatch: expected <g>, got <text>
+  [27] tag mismatch: expected <path>, got <g>
+  [28] tag mismatch: expected <polygon>, got <path>
+  [29] tag mismatch: expected <g>, got <polygon>
+  [30] tag mismatch: expected <path>, got <g>
+

@@ -1,0 +1,9 @@
+SVG structural differences:
+  element count: expected 13, got 8
+  [2] tag mismatch: expected <filter>, got <g>
+  [3] tag mismatch: expected <feGaussianBlur>, got <g>
+  [4] tag mismatch: expected <feColorMatrix>, got <path>
+  [5] tag mismatch: expected <feOffset>, got <ellipse>
+  [6] tag mismatch: expected <feBlend>, got <text>
+  [7] tag mismatch: expected <g>, got <text>
+
