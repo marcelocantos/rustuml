@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "06dedeb975ba3b0ef70bb3b161de1f22d9b991a1",
+  "verification": "Reuse immutable1559+36+20+34 cohorts; focused CLI frozen comparator, fresh parent-relay controls, model retention and invalid negatives; final main tiers/libs/CLI/guards. No local JVM, SSH, native work or checker verdict.",
+  "mechanism": "class-boundary-fashion-shadow",
+  "java_locations": [
+    "decoration/symbol/USymbolBoundary#getDrawing",
+    "svek/Boundary#drawU",
+    "klimt/drawing/LimitFinder#drawEllipse,drawUPath"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#ClassFontOverrides::from_diagram_for_entity,render_description_leaf,entity_painted_extent"
+  ],
+  "invariant": "Boundary factory maps nonzero Fashion shadow to4; both path and ellipse carry the shadow. Actor retains its own raw shadow contract.",
+  "causal_divergence": "Review541 boundary_shadow: Rust uses raw18 and omits both filters; painted bounds expand the wrong Fashion.",
+  "planned_change": "Normalize Boundary Fashion at model construction and use it for both primitive shadow attributes and extent measurement. Leave actor policy intact.",
+  "perturbation_axes": [
+    "zero/nonzero/numeric shadow with actor contrast",
+    "stroke width, label size and linked/degenerate topology"
+  ]
+}
