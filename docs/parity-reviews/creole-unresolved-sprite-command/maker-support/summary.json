@@ -1,0 +1,494 @@
+{
+  "retained_entries": 1730,
+  "retained_distinct_pairs": 1651,
+  "retained_duplicates": 79,
+  "cohorts": {
+    "collateral": {
+      "entries": 1516,
+      "before": {
+        "valid": 1459,
+        "svg": 567,
+        "panics": 32,
+        "cli_errors": 70,
+        "available_source": 62,
+        "exact_source": 59
+      },
+      "after": {
+        "valid": 1459,
+        "svg": 567,
+        "panics": 32,
+        "cli_errors": 70,
+        "available_source": 62,
+        "exact_source": 59
+      }
+    },
+    "prior31": {
+      "entries": 31,
+      "before": {
+        "valid": 21,
+        "svg": 21,
+        "panics": 0,
+        "cli_errors": 8,
+        "available_source": 23,
+        "exact_source": 21
+      },
+      "after": {
+        "valid": 21,
+        "svg": 21,
+        "panics": 0,
+        "cli_errors": 8,
+        "available_source": 23,
+        "exact_source": 21
+      }
+    },
+    "fresh29": {
+      "entries": 29,
+      "before": {
+        "valid": 14,
+        "svg": 14,
+        "panics": 0,
+        "cli_errors": 12,
+        "available_source": 17,
+        "exact_source": 15
+      },
+      "after": {
+        "valid": 14,
+        "svg": 14,
+        "panics": 0,
+        "cli_errors": 12,
+        "available_source": 17,
+        "exact_source": 15
+      }
+    },
+    "maker15": {
+      "entries": 15,
+      "before": {
+        "valid": 9,
+        "svg": 9,
+        "panics": 0,
+        "cli_errors": 6,
+        "available_source": 9,
+        "exact_source": 9
+      },
+      "after": {
+        "valid": 9,
+        "svg": 9,
+        "panics": 0,
+        "cli_errors": 6,
+        "available_source": 9,
+        "exact_source": 9
+      }
+    },
+    "maker17": {
+      "entries": 17,
+      "before": {
+        "valid": 14,
+        "svg": 14,
+        "panics": 0,
+        "cli_errors": 3,
+        "available_source": 14,
+        "exact_source": 14
+      },
+      "after": {
+        "valid": 14,
+        "svg": 14,
+        "panics": 0,
+        "cli_errors": 3,
+        "available_source": 14,
+        "exact_source": 14
+      }
+    },
+    "maker18": {
+      "entries": 18,
+      "before": {
+        "valid": 8,
+        "svg": 8,
+        "panics": 0,
+        "cli_errors": 10,
+        "available_source": 8,
+        "exact_source": 8
+      },
+      "after": {
+        "valid": 8,
+        "svg": 8,
+        "panics": 0,
+        "cli_errors": 10,
+        "available_source": 8,
+        "exact_source": 8
+      }
+    },
+    "fresh6": {
+      "entries": 29,
+      "before": {
+        "valid": 19,
+        "svg": 17,
+        "panics": 0,
+        "cli_errors": 12,
+        "available_source": 17,
+        "exact_source": 17
+      },
+      "after": {
+        "valid": 19,
+        "svg": 17,
+        "panics": 0,
+        "cli_errors": 12,
+        "available_source": 17,
+        "exact_source": 17
+      }
+    },
+    "newmaker15": {
+      "entries": 15,
+      "before": {
+        "valid": 14,
+        "svg": 14,
+        "panics": 0,
+        "cli_errors": 1,
+        "available_source": 14,
+        "exact_source": 14
+      },
+      "after": {
+        "valid": 14,
+        "svg": 14,
+        "panics": 0,
+        "cli_errors": 1,
+        "available_source": 14,
+        "exact_source": 14
+      }
+    },
+    "supplement2": {
+      "entries": 2,
+      "before": {
+        "valid": 2,
+        "svg": 1,
+        "panics": 0,
+        "cli_errors": 0,
+        "available_source": 2,
+        "exact_source": 2
+      },
+      "after": {
+        "valid": 2,
+        "svg": 1,
+        "panics": 0,
+        "cli_errors": 0,
+        "available_source": 2,
+        "exact_source": 2
+      }
+    },
+    "fresh23": {
+      "entries": 23,
+      "before": {
+        "valid": 19,
+        "svg": 17,
+        "panics": 0,
+        "cli_errors": 2,
+        "available_source": 21,
+        "exact_source": 21
+      },
+      "after": {
+        "valid": 19,
+        "svg": 17,
+        "panics": 0,
+        "cli_errors": 2,
+        "available_source": 21,
+        "exact_source": 21
+      }
+    },
+    "maker13": {
+      "entries": 13,
+      "before": {
+        "valid": 11,
+        "svg": 10,
+        "panics": 0,
+        "cli_errors": 0,
+        "available_source": 13,
+        "exact_source": 13
+      },
+      "after": {
+        "valid": 11,
+        "svg": 10,
+        "panics": 0,
+        "cli_errors": 0,
+        "available_source": 13,
+        "exact_source": 13
+      }
+    },
+    "maker2": {
+      "entries": 2,
+      "before": {
+        "valid": 2,
+        "svg": 1,
+        "panics": 0,
+        "cli_errors": 0,
+        "available_source": 2,
+        "exact_source": 2
+      },
+      "after": {
+        "valid": 2,
+        "svg": 1,
+        "panics": 0,
+        "cli_errors": 0,
+        "available_source": 2,
+        "exact_source": 2
+      }
+    },
+    "checker8": {
+      "entries": 20,
+      "before": {
+        "valid": 17,
+        "svg": 16,
+        "panics": 0,
+        "cli_errors": 1,
+        "available_source": 19,
+        "exact_source": 19
+      },
+      "after": {
+        "valid": 17,
+        "svg": 16,
+        "panics": 0,
+        "cli_errors": 1,
+        "available_source": 19,
+        "exact_source": 19
+      }
+    }
+  },
+  "losses": [],
+  "gains": [],
+  "model_changes": [],
+  "retained": {
+    "before": {
+      "valid": 1609,
+      "svg": 709,
+      "panics": 32
+    },
+    "after": {
+      "valid": 1609,
+      "svg": 709,
+      "panics": 32
+    }
+  },
+  "fresh": [
+    {
+      "name": "missing_lead",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "missing_mid",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "missing_runs",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "missing_styled",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "missing_size",
+      "classification": "positive_reference",
+      "before": false,
+      "after": false,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "missing_lines",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "missing_note",
+      "classification": "positive_reference",
+      "before": true,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "missing_seq",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "empty_seq",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "empty_styled",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "empty_open_style",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "grammar_valid",
+      "classification": "positive_reference",
+      "before": false,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "grammar_invalid",
+      "classification": "positive_reference",
+      "before": true,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "escape_url",
+      "classification": "positive_reference",
+      "before": false,
+      "after": false,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "defined_note",
+      "classification": "positive_reference",
+      "before": true,
+      "after": true,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "defined_scale_color",
+      "classification": "positive_reference",
+      "before": false,
+      "after": false,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "defined_class",
+      "classification": "positive_reference",
+      "before": false,
+      "after": false,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 0,
+      "rust_svg_exit": 0
+    },
+    {
+      "name": "invalid_source",
+      "classification": "syntax_negative",
+      "before": false,
+      "after": false,
+      "source_equal": true,
+      "cli_source_equal": true,
+      "java_svg_exit": 200,
+      "rust_svg_exit": 0
+    }
+  ],
+  "standing": {
+    "entries": 1648,
+    "harness_pass": 622,
+    "cli_pass": 652,
+    "differences": [
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_nested.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_return_include.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_selected.puml",
+      "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml"
+    ]
+  },
+  "main_tiers": {
+    "kind": "library diagnostics, not actual CLI headline metrics",
+    "product": "11179/11251",
+    "assisted": "10497/11251",
+    "exit": 101
+  }
+}

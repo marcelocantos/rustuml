@@ -1,0 +1,254 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_lead.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "missing name",
+      "leading command"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_mid.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "missing name",
+      "adjacent runs"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_runs.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "multiple names",
+      "surrounding spaces"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_styled.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "bold",
+      "nested command"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_size.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "size",
+      "command boundary"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_lines.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "multiple lines",
+      "empty stripe"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_note.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "note consumer",
+      "adjacent runs"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/missing_seq.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "sequence consumer",
+      "adjacent runs"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/empty_seq.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "sequence consumer",
+      "empty stripe"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/empty_styled.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "empty stripe",
+      "closed size"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/empty_open_style.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "empty stripe",
+      "open size"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/grammar_valid.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "name grammar",
+      "scale color syntax"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/grammar_invalid.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "invalid tokens",
+      "literal text"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/escape_url.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "escaping and URL",
+      "plain angle text"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/defined_note.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "defined sprite",
+      "note consumer"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/defined_scale_color.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "defined sprite",
+      "scale color"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/defined_class.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "defined sprite",
+      "class consumer"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/new/invalid_source.puml",
+    "mechanism": "creole-unresolved-sprite-command",
+    "axes": [
+      "syntax negative",
+      "source validity"
+    ],
+    "negative": true,
+    "intended_validity": "intended_syntax_negative",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

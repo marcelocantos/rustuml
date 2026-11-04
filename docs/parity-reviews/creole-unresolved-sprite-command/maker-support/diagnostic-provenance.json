@@ -1,0 +1,15 @@
+{
+  "comparator": {
+    "binary_sha256": "fff122d79ced423770039a9f9bd0061af5bd796b2eee4214ca6748de7d6bf1b9",
+    "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "copied_from": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/probe",
+    "prior_build_record": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/comparator-build.json"
+  },
+  "source_probe": {
+    "binary_sha256": "5948bbb152fabb0b52bd27b6a2716847ec08ab22a7fe5d4aa0b6965f2ed0a0fc",
+    "source_sha256": "3f10c70dc881bbfe6474d2d63ee4153da07af5f3dee670eac4c241f0349b4ae9",
+    "copied_from": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/source-probe",
+    "prior_build_record": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/source-probe-build.json"
+  },
+  "scope": "Unchanged comparator and preprocessing diagnostics. Actual product measurements use separately built source-only CLI executables."
+}

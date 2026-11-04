@@ -1,0 +1,2708 @@
+[
+  {
+    "name": "missing_lead",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_lead/java.svg.stdout",
+      "width": "96px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "40.4297",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_lead/svg.stdout",
+      "width": "172px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<$absent> Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "120.7021",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_lead/svg.stdout",
+      "width": "96px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "40.4297",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "missing_mid",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_mid/java.svg.stdout",
+      "width": "131px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.4912",
+            "x": "75.7578",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_mid/svg.stdout",
+      "width": "207px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar<$absent>Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "155.7637",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_mid/svg.stdout",
+      "width": "131px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.4912",
+            "x": "75.7578",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "missing_runs",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_runs/java.svg.stdout",
+      "width": "174px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.4912",
+            "x": "84.6172",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "132.9678",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_runs/svg.stdout",
+      "width": "317px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar <$absent> Grove <$other> end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "265.9453",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_runs/svg.stdout",
+      "width": "174px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.4912",
+            "x": "84.6172",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "132.9678",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "missing_styled",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_styled/java.svg.stdout",
+      "width": "175px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "42.0479",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "42.2529",
+            "x": "87.2764",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "133.959",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_styled/svg.stdout",
+      "width": "255px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar <$absent> Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "173.5303",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "213.96",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_styled/svg.stdout",
+      "width": "175px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "42.0479",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "42.2529",
+            "x": "87.2764",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "133.959",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "missing_size",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_size/java.svg.stdout",
+      "width": "207px",
+      "height": "69px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "20",
+            "lengthAdjust": "spacing",
+            "textLength": "56.7969",
+            "x": "36",
+            "y": "31.3359"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "20",
+            "lengthAdjust": "spacing",
+            "textLength": "56.416",
+            "x": "105.4531",
+            "y": "31.3359"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "166.2988",
+            "y": "32.6016"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_size/svg.stdout",
+      "width": "316px",
+      "height": "69px",
+      "texts": [
+        {
+          "text": "Cedar <$absent> Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "20",
+            "lengthAdjust": "spacing",
+            "textLength": "235.1758",
+            "x": "36",
+            "y": "29.0684"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "275.6055",
+            "y": "30.3359"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_size/svg.stdout",
+      "width": "207px",
+      "height": "69px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "20",
+            "lengthAdjust": "spacing",
+            "textLength": "56.7969",
+            "x": "36",
+            "y": "29.0684"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "20",
+            "lengthAdjust": "spacing",
+            "textLength": "56.416",
+            "x": "105.4531",
+            "y": "29.0684"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "166.2988",
+            "y": "30.3359"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "missing_lines",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_lines/java.svg.stdout",
+      "width": "91px",
+      "height": "95px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "36",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "4.4297",
+            "x": "53.6641",
+            "y": "42.0234"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.4912",
+            "x": "36.1333",
+            "y": "58.5117"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_lines/svg.stdout",
+      "width": "128px",
+      "height": "95px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "54.3784",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "<$absent>",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "76.5146",
+            "x": "36",
+            "y": "42.0234"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.4912",
+            "x": "54.5117",
+            "y": "58.5117"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_lines/svg.stdout",
+      "width": "91px",
+      "height": "95px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "36",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "4.4297",
+            "x": "53.6641",
+            "y": "42.0234"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.4912",
+            "x": "36.1333",
+            "y": "58.5117"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "missing_note",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_note/java.svg.stdout",
+      "width": "232px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "128.97",
+            "y": "35.9084"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.6704",
+            "x": "165.888",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_note/svg.stdout",
+      "width": "232px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "128.97",
+            "y": "35.9084"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.6704",
+            "x": "165.888",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_note/svg.stdout",
+      "width": "232px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "128.97",
+            "y": "35.9084"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.6704",
+            "x": "165.888",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "missing_seq",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/missing_seq/java.svg.stdout",
+      "width": "156px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "113.2183",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "113.2183",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.6704",
+            "x": "72.2798",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/missing_seq/svg.stdout",
+      "width": "227px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "184.2676",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "184.2676",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Cedar<$absent>Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "144.6377",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/missing_seq/svg.stdout",
+      "width": "156px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "113.2183",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "113.2183",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        },
+        {
+          "text": "Grove",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.6704",
+            "x": "72.2798",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "empty_seq",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/empty_seq/java.svg.stdout",
+      "width": "112px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "4.1133",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/empty_seq/svg.stdout",
+      "width": "154px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "110.6792",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "110.6792",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "<$absent>",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "71.0493",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/empty_seq/svg.stdout",
+      "width": "112px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "4.1133",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "empty_styled",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/empty_styled/java.svg.stdout",
+      "width": "112px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "4.1133",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/empty_styled/svg.stdout",
+      "width": "192px",
+      "height": "131px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "113.5781"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "148.9365",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "148.9365",
+            "y": "113.5781"
+          }
+        },
+        {
+          "text": "<$absent>",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "20",
+            "lengthAdjust": "spacing",
+            "textLength": "109.3066",
+            "x": "35.3618",
+            "y": "69.8242"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/empty_styled/svg.stdout",
+      "width": "112px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "4.1133",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "empty_open_style",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/empty_open_style/java.svg.stdout",
+      "width": "112px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "4.1133",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/empty_open_style/svg.stdout",
+      "width": "192px",
+      "height": "131px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "113.5781"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "148.9365",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "148.9365",
+            "y": "113.5781"
+          }
+        },
+        {
+          "text": "<$absent>",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "20",
+            "lengthAdjust": "spacing",
+            "textLength": "109.3066",
+            "x": "35.3618",
+            "y": "69.8242"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/empty_open_style/svg.stdout",
+      "width": "112px",
+      "height": "123px",
+      "texts": [
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Alice",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "32.7236",
+            "x": "12",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "25.5352"
+          }
+        },
+        {
+          "text": "Bob",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.4639",
+            "x": "68.7236",
+            "y": "105.334"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "4.1133",
+            "x": "35.3618",
+            "y": "63.0566"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "grammar_valid",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/grammar_valid/java.svg.stdout",
+      "width": "127px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "a",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "7.7314",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "b",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "8.8115",
+            "x": "52.5908",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "c",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "7.1709",
+            "x": "70.2617",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "86.292",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/grammar_valid/svg.stdout",
+      "width": "609px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "a <$oak/leaf-2> b <#red$ghost{scale=2,color=blue}> c <$ghost,color:red> end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "557.7988",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/grammar_valid/svg.stdout",
+      "width": "127px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "a",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "7.7314",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "b",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "8.8115",
+            "x": "52.5908",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "c",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "7.1709",
+            "x": "70.2617",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "25.2998",
+            "x": "86.292",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "grammar_invalid",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/grammar_invalid/java.svg.stdout",
+      "width": "474px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "a <$bad.name> b <$bad name> c <$> d <$ghost*bad> end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "422.3447",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/grammar_invalid/svg.stdout",
+      "width": "474px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "a <$bad.name> b <$bad name> c <$> d <$ghost*bad> end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "422.3447",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/grammar_invalid/svg.stdout",
+      "width": "474px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "a <$bad.name> b <$bad name> c <$> d <$ghost*bad> end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "422.3447",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "escape_url",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/escape_url/java.svg.stdout",
+      "width": "611px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<$ghost> / <space key> / http:",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "222.9404",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "example.test/a / [[https:",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-style": "italic",
+            "lengthAdjust": "spacing",
+            "textLength": "167.6035",
+            "x": "258.9404",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "example.test/ path]] end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "168.7588",
+            "x": "426.5439",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/escape_url/svg.stdout",
+      "width": "433px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<$ghost> / <space key> / http://example.test/a / end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "381.8828",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/escape_url/svg.stdout",
+      "width": "433px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<$ghost> / <space key> / http://example.test/a / end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "381.8828",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "defined_note",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/defined_note/java.svg.stdout",
+      "width": "201px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "134.3633",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 1
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/defined_note/svg.stdout",
+      "width": "201px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "134.3633",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 1
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/defined_note/svg.stdout",
+      "width": "201px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "134.3633",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 1
+    }
+  },
+  {
+    "name": "defined_scale_color",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/defined_scale_color/java.svg.stdout",
+      "width": "237px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "136.5033",
+            "y": "35.9084"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "23.4927",
+            "x": "183.6478",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 2
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/defined_scale_color/svg.stdout",
+      "width": "375px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "<#red$gem{scale=2}> Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "184.8438",
+            "x": "128.49",
+            "y": "35.9084"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "23.4927",
+            "x": "321.5603",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/defined_scale_color/svg.stdout",
+      "width": "231px",
+      "height": "70px",
+      "texts": [
+        {
+          "text": "Anchor",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "48.5352",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "36.918",
+            "x": "132.5033",
+            "y": "35.9084"
+          }
+        },
+        {
+          "text": "end",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "13",
+            "lengthAdjust": "spacing",
+            "textLength": "23.4927",
+            "x": "177.6478",
+            "y": "35.9084"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "defined_class",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/defined_class/java.svg.stdout",
+      "width": "98px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "42.5835",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 1
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/defined_class/svg.stdout",
+      "width": "156px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<$gem> Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "104.8975",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/defined_class/svg.stdout",
+      "width": "96px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "Cedar",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "39.7578",
+            "x": "40.4297",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    }
+  },
+  {
+    "name": "invalid_source",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/fresh-reference/invalid_source/java.svg.stdout",
+      "width": "585px",
+      "height": "328px",
+      "texts": [
+        {
+          "text": "Welcome to PlantUML!",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "136.4648",
+            "x": "5",
+            "y": "16.6016"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "3.7969",
+            "x": "5",
+            "y": "30.7344"
+          }
+        },
+        {
+          "text": "You can start with a simple UML Diagram like:",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "268.084",
+            "x": "5",
+            "y": "44.8672"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "3.7969",
+            "x": "5",
+            "y": "59"
+          }
+        },
+        {
+          "text": "Bob->Alice:\u00a0Hello",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "monospace",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "122.8184",
+            "x": "5",
+            "y": "72.6699"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "3.7969",
+            "x": "5",
+            "y": "87.1016"
+          }
+        },
+        {
+          "text": "Or",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "14.2324",
+            "x": "5",
+            "y": "101.2344"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "3.7969",
+            "x": "5",
+            "y": "115.3672"
+          }
+        },
+        {
+          "text": "class\u00a0Example",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "monospace",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "93.9199",
+            "x": "5",
+            "y": "129.0371"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "3.7969",
+            "x": "5",
+            "y": "143.4688"
+          }
+        },
+        {
+          "text": "You will find more information about PlantUML syntax on",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "333.9141",
+            "x": "5",
+            "y": "157.6016"
+          }
+        },
+        {
+          "text": "https://plantuml.com",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "text-decoration": "underline",
+            "textLength": "126.6973",
+            "x": "342.7109",
+            "y": "157.6016"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "3.7969",
+            "x": "5",
+            "y": "171.7344"
+          }
+        },
+        {
+          "text": "(Details by typing",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "101.8711",
+            "x": "5",
+            "y": "185.8672"
+          }
+        },
+        {
+          "text": "license",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "monospace",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "50.5723",
+            "x": "110.668",
+            "y": "185.5684"
+          }
+        },
+        {
+          "text": "keyword)",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "52.9512",
+            "x": "165.0371",
+            "y": "185.8672"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "lengthAdjust": "spacing",
+            "textLength": "3.7969",
+            "x": "5",
+            "y": "200"
+          }
+        },
+        {
+          "text": "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+          "attributes": {
+            "fill": "#33FF02",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "font-style": "italic",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "447.5098",
+            "x": "5",
+            "y": "224.5313"
+          }
+        },
+        {
+          "text": "[From string (line 2) ]",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "154.8066",
+            "x": "6",
+            "y": "249.6641"
+          }
+        },
+        {
+          "text": "\u00a0",
+          "attributes": {
+            "fill": "#33FF02",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "4.6143",
+            "x": "5",
+            "y": "270.1523"
+          }
+        },
+        {
+          "text": "@startuml",
+          "attributes": {
+            "fill": "#33FF02",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "73.1992",
+            "x": "5",
+            "y": "286.6406"
+          }
+        },
+        {
+          "text": "class \"unterminated",
+          "attributes": {
+            "fill": "#33FF02",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "text-decoration": "wavy underline",
+            "textLength": "144.3408",
+            "x": "5",
+            "y": "303.1289"
+          }
+        },
+        {
+          "text": "Syntax Error? (Assumed diagram type: sequence)",
+          "attributes": {
+            "fill": "#FF0000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "font-weight": "700",
+            "lengthAdjust": "spacing",
+            "textLength": "352.6523",
+            "x": "9.6143",
+            "y": "319.6172"
+          }
+        }
+      ],
+      "images": 1
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/fresh18/invalid_source/svg.stdout",
+      "width": "100",
+      "height": "50",
+      "texts": [],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/fresh18/invalid_source/svg.stdout",
+      "width": "100",
+      "height": "50",
+      "texts": [],
+      "images": 0
+    }
+  },
+  {
+    "name": "markup_scan",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/inputs/maker2/0001-markup_scan/java.svg",
+      "width": "229px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "/ <space key> /",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "112.1777",
+            "x": "40.4297",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "$missing",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "font-style": "italic",
+            "lengthAdjust": "spacing",
+            "textLength": "52.8926",
+            "x": "166.0371",
+            "y": "16.6016"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/maker2/0001-markup_scan/svg.stdout",
+      "width": "320px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<$label> / <space key> / <$missing>",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "268.5498",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/maker2/0001-markup_scan/svg.stdout",
+      "width": "173px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "/ <space key> /",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "112.1777",
+            "x": "40.4297",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "scope": "Shared text effects only; whole-output failure remains. No class generic synthesis or combined candidate claim."
+  },
+  {
+    "name": "markup_literal",
+    "java": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/markup_literal/java.svg.stdout",
+      "width": "204px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<label> /",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "66.4658",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "/",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "7.3418",
+            "x": "111.3252",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "$unknown",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "12",
+            "font-style": "italic",
+            "lengthAdjust": "spacing",
+            "textLength": "61.0078",
+            "x": "132.0967",
+            "y": "16.6016"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "before": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/before/checker8/markup_literal/svg.stdout",
+      "width": "285px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<label> / <$tag> / <$unknown>",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "233.3379",
+            "x": "36",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "after": {
+      "path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/replay/after/checker8/markup_literal/svg.stdout",
+      "width": "139px",
+      "height": "68px",
+      "texts": [
+        {
+          "text": "<label> /",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "66.4658",
+            "x": "36",
+            "y": "28.291"
+          }
+        },
+        {
+          "text": "/",
+          "attributes": {
+            "fill": "#000000",
+            "font-family": "sans-serif",
+            "font-size": "14",
+            "lengthAdjust": "spacing",
+            "textLength": "7.3418",
+            "x": "111.3252",
+            "y": "28.291"
+          }
+        }
+      ],
+      "images": 0
+    },
+    "scope": "Shared text effects only; whole-output failure remains. No class generic synthesis or combined candidate claim."
+  }
+]

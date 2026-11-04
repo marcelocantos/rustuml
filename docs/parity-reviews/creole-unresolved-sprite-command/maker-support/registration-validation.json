@@ -1,0 +1,15 @@
+{
+  "kind": "mechanical maker packet verification, not mechanism attestation",
+  "account_schema": true,
+  "account_before_production": true,
+  "historical_files_unchanged": 9731,
+  "production_paths_within_ownership": true,
+  "source_binary_hashes_verified": true,
+  "registered_fresh_pairs": 18,
+  "all_reference_bytes_exact": true,
+  "archive_files_verified": 32516,
+  "no_checker_record_authored": true,
+  "base": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+  "account_commit": "b160f41e2076b98805d4e3c9262a46030394e67c",
+  "implementation_commit": "78f06098b74a81d24efcc922b3116d03ad496132"
+}
