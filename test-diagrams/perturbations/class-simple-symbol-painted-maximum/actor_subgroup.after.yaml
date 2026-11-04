@@ -1,0 +1,109 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - actor
+        property: fontsize
+        value: '21'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        property: linethickness
+        value: '3'
+        source_line: 3
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      left to right direction
+      <style>
+      actor {
+      FontSize 21
+      LineThickness 3
+      }
+      </style>
+      package Harbor {
+      package Channel {
+      actor "Tide\nClock" as Beacon <<watch>>
+      }
+      }
+      class Station
+      Station --> Beacon
+      @enduml
+  direction: LeftToRight
+  uid_events:
+  - !Package Harbor
+  - !Package Harbor.Channel
+  - !Entity Harbor.Channel.Beacon
+  - !Entity Station
+  - !Relationship 0
+  entities:
+  - id: Harbor.Channel.Beacon
+    label: Tide\nClock
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - watch
+    source_line: 11
+  - id: Station
+    label: Station
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 14
+  relationships:
+  - from: Station
+    to: Harbor.Channel.Beacon
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 15
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Channel.Beacon
+    source_line: 9
+    stereotypes: []
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor.Channel
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Channel.Beacon
+    parent: 0
+    source_line: 10
+    stereotypes: []
+    display_name: Channel
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

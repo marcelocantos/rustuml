@@ -1,0 +1,10 @@
+@startuml
+skinparam svgLinkTarget _blank
+package "Harbor office" as Harbor {
+class Station
+}
+note bottom of Harbor $watch <<memo>> #LightYellow [[https://example.org/tide?port=7&day=2{Inspect bottom}]]
+Observation bottom
+class is prose
+end note
+@enduml

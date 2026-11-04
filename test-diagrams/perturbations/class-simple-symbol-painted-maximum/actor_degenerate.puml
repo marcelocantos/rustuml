@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+
+<style>
+actor {
+FontSize 17
+
+}
+</style>
+actor "Signal\nPier" as Beacon <<watch>>
+@enduml

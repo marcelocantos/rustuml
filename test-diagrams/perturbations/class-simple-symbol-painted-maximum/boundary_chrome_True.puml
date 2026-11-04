@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+title Beacon register
+caption Harbor caption
+footer Coast footer
+<style>
+boundary {
+FontSize 19
+}
+</style>
+class Mooring
+boundary "Tide<sub>low</sub>" as Beacon
+Mooring --> Beacon
+@enduml

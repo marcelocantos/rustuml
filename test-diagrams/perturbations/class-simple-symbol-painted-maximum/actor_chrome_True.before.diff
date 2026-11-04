@@ -1,0 +1,20 @@
+SVG structural differences:
+  [15] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "19"), ("lengthAdjust", "spacing"), ("textLength", "40.0503"), ("x", "32.0673"), ("y", "230.8574")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "19"), ("lengthAdjust", "spacing"), ("textLength", "40.0503"), ("x", "32.0673"), ("y", "233.8574")]
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "26.7813"), ("x", "72.1176"), ("y", "234.4902")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "26.7813"), ("x", "72.1176"), ("y", "237.4922")]
+  [18] <path> attr mismatch:
+    expected: [("codeLine", "12"), ("d", "M65.4873,92.9483 C65.4873,109.5883 65.4873,126.3983 65.4873,146.1583"), ("fill", "none"), ("id", "Mooring-to-Beacon"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "12"), ("d", "M65.48,92.95 C65.48,109.7 65.48,126.66 65.48,146.33"), ("fill", "none"), ("id", "Mooring-to-Beacon"), ("style", "stroke:#181818;stroke-width:1;")]
+  [19] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "65.4873,152.1583,69.4873,143.1583,65.4873,147.1583,61.4873,143.1583,65.4873,152.1583"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "65.48,152.33,69.48,143.33,65.48,147.33,61.48,143.33,65.48,152.33"), ("style", "stroke:#181818;stroke-width:1;")]
+  [21] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "101.6025"), ("x", "15.1816"), ("y", "259.5254")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "101.6025"), ("x", "15.1816"), ("y", "258.4004")]
+  [23] <text> attr mismatch:
+    expected: [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "59.9512"), ("x", "36.0073"), ("y", "274.1465")]
+    actual:   [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "59.9512"), ("x", "36.0073"), ("y", "273.0215")]
+

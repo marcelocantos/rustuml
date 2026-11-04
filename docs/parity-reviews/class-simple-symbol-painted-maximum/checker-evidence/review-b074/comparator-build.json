@@ -1,0 +1,15 @@
+{
+  "command": [
+    "rustc",
+    "--edition=2024",
+    "docs/parity-reviews/class-command-grammar-closure/checker-support/scripts/check_svg.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-review-b074/target-before/release/deps",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-review-b074/target-before/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-review-b074/check_svg"
+  ],
+  "exit": 0,
+  "source_sha256": "523e1750b056f05293b101b59ae9bb4a2aac8ffbe670eabf7cc6a13bbfaba033"
+}

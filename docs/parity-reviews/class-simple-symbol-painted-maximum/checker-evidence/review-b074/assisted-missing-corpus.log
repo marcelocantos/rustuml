@@ -1,0 +1,19 @@
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c/crates/rustuml-oracle)
+    Finished `release` profile [optimized] target(s) in 0.80s
+     Running tests/golden_pairs.rs (/Users/marcelo/Library/Caches/rustuml-review-b074/target-after/release/deps/golden_pairs-88a993b69eca84e7)
+
+running 1 test
+
+thread 'golden_pairs' (14456193) panicked at crates/rustuml-oracle/src/harness.rs:106:5:
+required golden corpus /Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c/test-diagrams/golden contains no pairs; run: git submodule update --init test-diagrams/golden
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test golden_pairs ... FAILED
+
+failures:
+
+failures:
+    golden_pairs
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test golden_pairs`

@@ -1,0 +1,11 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "170px"), ("preserveAspectRatio", "none"), ("style", "width:106px;height:170px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 106 170"), ("width", "106px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "193px"), ("preserveAspectRatio", "none"), ("style", "width:117px;height:193px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 117 193"), ("width", "117px"), ("zoomAndPan", "magnify")]
+  [16] <path> attr mismatch:
+    expected: [("d", "M26.04,119 L26.04,143 M26.04,131 L43.04,131"), ("fill", "none"), ("filter", "url(#f17xenrvpo43lg)"), ("style", "stroke:#181818;stroke-width:5;")]
+    actual:   [("d", "M26.04,119 L26.04,143 M26.04,131 L43.04,131"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:5;")]
+  [17] <ellipse> attr mismatch:
+    expected: [("cx", "55.04"), ("cy", "131"), ("fill", "#F1F1F1"), ("filter", "url(#f17xenrvpo43lg)"), ("rx", "12"), ("ry", "12"), ("style", "stroke:#181818;stroke-width:5;")]
+    actual:   [("cx", "55.04"), ("cy", "131"), ("fill", "#F1F1F1"), ("rx", "12"), ("ry", "12"), ("style", "stroke:#181818;stroke-width:5;")]
+

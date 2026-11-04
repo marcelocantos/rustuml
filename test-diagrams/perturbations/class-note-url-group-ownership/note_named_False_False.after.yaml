@@ -1,0 +1,38 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: svglinktarget
+      value: _parent
+    source: |
+      @startuml
+      skinparam svgLinkTarget _parent
+      class Station
+      note "Detached memorandum" as Memo
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Station
+  - !Note 0
+  entities:
+  - id: Station
+    label: Station
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - Detached memorandum
+    target: null
+    position: null
+    alias: Memo
+    source_line: 3
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

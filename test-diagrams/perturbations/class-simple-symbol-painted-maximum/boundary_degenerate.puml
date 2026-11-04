@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+
+<style>
+boundary {
+FontSize 17
+
+}
+</style>
+boundary "Signal\nPier" as Beacon <<watch>>
+@enduml

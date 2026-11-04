@@ -1,0 +1,8 @@
+@startuml
+skinparam svgLinkTarget _self
+class Station
+note right of Station $watch <<memo>> #LightYellow [[https://example.org/tide?port=7&day=2{Inspect right}]] {
+Observation right
+class is prose
+}
+@enduml

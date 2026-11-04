@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-simple-symbol-painted-maximum",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ae24aafaa-fd3c-47ac-9ae8-6789e5b18fd0",
+    "model": "gpt-6-astra high / Codex harness in T3 Code",
+    "role": "independent checker; did not implement candidate; worked alone"
+  },
+  "account_commit": "3790f114c79f2d19fdf91e46b84f1f79d85f6677",
+  "implementation_commit": "96a4bde220eddbc3faf135cad6d13f338b7d7ed5",
+  "candidate_revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "before_revision": "c1a38ada817d820ca8f57b1e8db0d9048e9657eb",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-before cargo build --release -p rustuml -p rustuml-oracle --examples",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-before cargo build --release -p rustuml --bin rustuml",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-after cargo build --release -p rustuml --bin rustuml",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/replay.py before",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/replay.py after",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent relay only; exact expanded argv in raw payloads)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/fresh_supplement.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/gates_corpus.py",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-after RAYON_NUM_THREADS=4 RUST_TEST_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --test parity_perturbations -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_plain.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_plain.svg",
+      "axes": [
+        "symbol",
+        "plain",
+        "font size",
+        "topology"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "mismatch",
+      "source_sha256": "08493b8d3feb2548fad63d7c46a07d4e462aee22aed9176167faddf30ea48c08",
+      "golden_sha256": "d18b6ea96d1c2497ea63d8f6fdd73db5802b856714357513050f9ef9f77fa2bd",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_multiline.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_multiline.svg",
+      "axes": [
+        "symbol",
+        "multiline",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "1a3faf656e5c7b3f04faf809fc1e02aa81dc5a320d627f964a3ddd42948f47a0",
+      "golden_sha256": "c3454a596d6ecacbb463854a97955d5226454b40711aab890cb121dc43708de8",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_sized.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_sized.svg",
+      "axes": [
+        "symbol",
+        "sized",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "9813431dee89f6040fabffdc2aa7935408af8d51bee94125ca6ceab80d8f9b81",
+      "golden_sha256": "eec86fc7717c0c158866c2477346812528fdb956898ff591825399f113bdedf6",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_blanktail.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_blanktail.svg",
+      "axes": [
+        "symbol",
+        "blanktail",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "91fd316879dcc02efce61a02108ce03fc2ac4ebd729f6aad583ae5b647039ae0",
+      "golden_sha256": "e72357265c8f944ee6ef3477b87010f8f7355af541a9528841138fb536b80ad2",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_empty.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_empty.svg",
+      "axes": [
+        "symbol",
+        "empty",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "before_classification": "invalid_reference",
+      "source_sha256": "e05c768f958f1a4071ab3919a4ddcd6fffd6a15cce84fff6656e920c4dd11574",
+      "golden_sha256": "0abe640115e273898f2ce353545f145c849650f87b08cc0a109c9facd2bba4c3",
+      "java_exit": 200
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_shadow.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_shadow.svg",
+      "axes": [
+        "symbol",
+        "shadow",
+        "font size",
+        "topology"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "mismatch",
+      "source_sha256": "c39813430c6a5ffcc48547daa6e0c8084ecd70864c097a35eefff471ef3fac93",
+      "golden_sha256": "2b6a73a9bd68a2a14945f88e74cfaa588f3a624aead50f8752c5832794186589",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_subgroup.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_subgroup.svg",
+      "axes": [
+        "symbol",
+        "subgroup",
+        "font size",
+        "topology"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "pass",
+      "source_sha256": "a09412beb3b5e5cc845247850490bcebbdc8c58e3c7c0bc3a21df51c3db99ded",
+      "golden_sha256": "c6b061332709dda4b885aeb58cef0c99516d09d5c27fcc513cb914974c2a32a9",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_degenerate.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_degenerate.svg",
+      "axes": [
+        "symbol",
+        "degenerate",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "c5e9799e7521921f965dd818a352548fcc6b8389b246c547a070fd5bb2b738b0",
+      "golden_sha256": "289a0966a588e1de1c2ef09f2decffca7e1d7209c2dcb38414c0bac47a0c1ff6",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_plain.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_plain.svg",
+      "axes": [
+        "symbol",
+        "plain",
+        "font size",
+        "topology"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "mismatch",
+      "source_sha256": "1dfc008ea7b32e981a6476795ba4d1676586deb56159877998950dc2e4074376",
+      "golden_sha256": "dbae45b831a3f14274cd2fd6d8d4c732f5045c1ab4138daf90083b3bb03f591f",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_multiline.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_multiline.svg",
+      "axes": [
+        "symbol",
+        "multiline",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "2d6cd817dd2572281512d4b1a84d7c6a77583f65dd05e751126413bf7542197e",
+      "golden_sha256": "b40e59104df44e958ed09ad62d30d7538f952a55f0ca5f2112a19f1d033df70e",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_sized.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_sized.svg",
+      "axes": [
+        "symbol",
+        "sized",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "09d49187d7b1eb999f99172d74f4489616e2b62a0d4751ff98b98f6bf5cb47e8",
+      "golden_sha256": "f2cc6fd622a00bd30220a038b7231fb0564ba754db405cc30e9902b29208a0b3",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_blanktail.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_blanktail.svg",
+      "axes": [
+        "symbol",
+        "blanktail",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "2261d0df20d9ca4e1e60cfb29a2e2ee270325a1811cd33ab99f9ed82151172ac",
+      "golden_sha256": "be037f1d4ef087ff1ebe1547c2188b3ca22f8d0ff0a469b466b726b3416fc6fb",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_empty.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_empty.svg",
+      "axes": [
+        "symbol",
+        "empty",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "before_classification": "invalid_reference",
+      "source_sha256": "b765712c0fc94cd4d386fcd623e102aa65495dc1c79c95fdaaa8aae2d804e9fd",
+      "golden_sha256": "3502dd850ee97bb06c2ea829046fb0d4064bc71e5f8c691b380b002db8645210",
+      "java_exit": 200
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_shadow.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_shadow.svg",
+      "axes": [
+        "symbol",
+        "shadow",
+        "font size",
+        "topology"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "4d400358e5c2532b0424e71510e5bb1128b1808de200653c80d0aa3ee630e4ae",
+      "golden_sha256": "d8e5e12d86e052acf3206949ca276a75699b74ce7cd019f074bc897a151c8dff",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_subgroup.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_subgroup.svg",
+      "axes": [
+        "symbol",
+        "subgroup",
+        "font size",
+        "topology"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "pass",
+      "source_sha256": "8e58c485ba988a26a835f65f9e2a62af47bbf6c6437135f33c687d66d803e928",
+      "golden_sha256": "0bf9ff2a69bf428abd8b7bff7abd57fc186b18f6e834b02d719796d0e668782b",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_degenerate.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_degenerate.svg",
+      "axes": [
+        "symbol",
+        "degenerate",
+        "font size",
+        "topology"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "pass",
+      "source_sha256": "4bce5716f2512c9531d554a126ddb6880cb6d0f0861644b6b95ed78195c8af83",
+      "golden_sha256": "9464fbc23d7ae85d7c8a2adecfc2068d4be657d75e0b0e674c9ecbb2cae6450b",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_False.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_False.svg",
+      "axes": [
+        "inline baseline or blank tail",
+        "body/chrome/canvas",
+        "symbol"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "36b0dc1dd5b4718e571d53ab35eb0262fcb1b650266d8b6242460f643230d776",
+      "golden_sha256": "503151a99f9329a055a37b7aa3b48a71625d1331439eed468d89ab453566594e",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_True.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/actor_chrome_True.svg",
+      "axes": [
+        "inline baseline or blank tail",
+        "body/chrome/canvas",
+        "symbol"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "86b30599b7e67aa4a525bd8d6529c828f9d341e48027e0bce00cd1e2149e385d",
+      "golden_sha256": "3098d6083af0ae18f4d403de84deed058490dbf61af989fda5f44167c62484eb",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_False.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_False.svg",
+      "axes": [
+        "inline baseline or blank tail",
+        "body/chrome/canvas",
+        "symbol"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "a2ebccfa196aefadf4c680f968f059ecde0e609532a5b139fb13cba35fafd559",
+      "golden_sha256": "27e1d49bef41885794f18d25cc0c2d0bda5ec801b4dbb5db9476400c1b8edf22",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_True.puml",
+      "golden": "test-diagrams/perturbations/class-simple-symbol-painted-maximum/boundary_chrome_True.svg",
+      "axes": [
+        "inline baseline or blank tail",
+        "body/chrome/canvas",
+        "symbol"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "a43d2206bfdff87c28169885254fc8eb3aaa7aab135086128006789f51b3f1d9",
+      "golden_sha256": "6b99621884d6e425ccc774ec13badee6db2411d725310531f8cf644c732bfaef",
+      "java_exit": 0
+    }
+  ],
+  "findings": [
+    "P1-empty-stripe: The new empty-line branch discards a Java space atom while Rust still emits an empty text element. Last baseline remains unchanged but canvas is shortened. Actor Java232/before234/after227; boundary Java204/before206/after199. Next repair: Port StripeSimple empty-stripe atom behavior and include every emitted UText baseline in the painted union. Do not subtract a font-specific correction.",
+    "P1-boundary-shadow-input: USymbolBoundary.getDrawing converts nonzero Fashion shadow to4; Rust helper consumes raw18 and its existing boundary emitter omits both shadow filters. Java106x170, before106x172, after117x193. The actor raw-shadow control passes, proving the policies differ by symbol. Next repair: Apply the Boundary symbol factory shadow policy before measurement/drawing, propagate that same Fashion to path/ellipse emission, then measure their distinct LimitFinder extrema.",
+    "P1-emitted-text-max: The estimator uses a fixed plain-font line advance and one anchor ascent. emit_text emits shifted subscript runs; Java Sea/AtomText uses actual per-stripe dimensions/positions. actor_sized emitted Rust final baseline209.5117 gives max211.0117, but after canvas222 fails even its own expected envelope226; Java final baseline221.1777/canvas237. Both preferred-height and painted-run dependencies remain. Next repair: Keep preferred dimensions and painted bounds as separate results of a common positioned text/symbol model. Union actual run baselines after markup offsets; route prerequisite shared text/model repairs separately, without doing them in this review.",
+    "P2-stereotype-style: Java inherits bold FontStyle for stereotype; Rust retains italic and narrower measurement. Only the stereotype node differs in these controls. Next repair: Resolve/measure/emit the actual stereotype style from EntityImageDescription styleStereo; preserve label styling independently.",
+    "P2-degenerate-residue: Actor preferred-size degenerate control has an existing position/stereotype residual; before/after bytes are identical. Boundary degenerate passes. This is outside the new non-degenerated-max computation and is retained without claiming a fix. Next repair: Investigate the degenerate actor/stereotype model separately; do not alter the preserved exception to disguise this residual."
+  ],
+  "verdict": "rejected",
+  "bounded_verdict": "Painted-max mechanism rejected by fresh valid blank-stripe, markup baseline and Boundary shadow counterexamples. Supported preferred-layout separation does not cure the incomplete primitive model.",
+  "evidence_directory": "docs/parity-reviews/class-simple-symbol-painted-maximum/checker-evidence/review-b074",
+  "gates": {
+    "library_passes": 1439,
+    "cli_passes": 13,
+    "error_path_passes": 19,
+    "doc_passes": 2,
+    "product_matches": 11188,
+    "assisted_matches": 10523,
+    "eligible": 11251,
+    "total": 12550,
+    "guards_passed": 4,
+    "guards_total": 6,
+    "format_exit": 0
+  },
+  "fresh_counts": {
+    "before": {
+      "mismatch": 15,
+      "invalid_reference": 2,
+      "pass": 3
+    },
+    "after": {
+      "pass": 6,
+      "mismatch": 12,
+      "invalid_reference": 2
+    }
+  },
+  "chronology": [
+    "Read schema/accounts/maker packet and pinned Java; checked candidate into unique review branch.",
+    "Built exact before in private target; returned to exact candidate and built independent target.",
+    "Sent frozen28 bundle; ran before/after preserved1559/prior36/maker20 replays.",
+    "Validated raw relay archive/member/source/stream/argv/hash provenance; ran real CLI/frozen comparator and YAML retention on all28.",
+    "Ran exact-candidate format/libs/CLI/two tiers/guards/Clippy. Initial main/census attempt lacked submodule; hydrated exact local gitlink and reran only affected checks.",
+    "Sent immutable supplemental6 after first findings; validated returned provenance and preserved all six CLI/reference comparisons.",
+    "Copied evidence into requested new mechanism paths; no original account, review, baseline, skip rule or production file changed.",
+    "Executed the standing parity_perturbations suite after installing every new pair: 1 passed/1 failed, exit101; rejection retained.",
+    "Audited and manifested only new evidence/review paths for a single evidence-only commit; parent/maker files and all production remain immutable."
+  ],
+  "limitations": [
+    "No whole-class acceptance. Every fresh relevant valid mismatch remains rejecting evidence. DOM ownership is a separately supported diagnostic, not a scope waiver.",
+    "Historical GET corpus is unchanged at its gitlink; new Java SVGs use raw -pipe -tsvg wrapper policy and explicit GMT+11:00. Fonts, host environment, Graphviz12.2.0 vs vendored layout global equivalence remain unproven.",
+    "Native cleanup/fault-injection work explicitly excluded and not resumed. Native/layout, shared text metrics/glyph, class parser and other old failures remain unaccepted dependencies.",
+    "Cargo test rebuilt the CLI binary without any source change. Exact hashes and consumers are recorded; no claim of binary identity across build invocations.",
+    "No new target or policy/skip/comparator/baseline edit; recommendations are causal next repairs only."
+  ],
+  "perturbation_gate": {
+    "command": "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-after RAYON_NUM_THREADS=4 RUST_TEST_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --test parity_perturbations -- --nocapture",
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "exit": 101,
+    "passed": 1,
+    "failed": 1,
+    "explanation": "Missing/empty corpus guard passes; whole held-out parity test fails with historical and all new counterexamples preserved, including four Java-negative fixtures. Rejected reviews do not claim a green perturbation gate.",
+    "log": "docs/parity-reviews/class-simple-symbol-painted-maximum/checker-evidence/review-b074/perturbations.log"
+  }
+}

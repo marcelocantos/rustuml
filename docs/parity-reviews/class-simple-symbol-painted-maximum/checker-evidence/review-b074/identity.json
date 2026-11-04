@@ -1,0 +1,77 @@
+{
+  "before": "c1a38ada817d820ca8f57b1e8db0d9048e9657eb",
+  "candidate": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "production": "96a4bde220eddbc3faf135cad6d13f338b7d7ed5",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "build_jobs": 4,
+  "binaries": {
+    "before": "4443078078c617bdb7e262f55a4e3309258bc6ffce34d1e31ccd6c5e07e03290",
+    "after": "a5e3b4babfdbd619d0e586c306b591b86c8fcec166e35e12156200d5f06ac946"
+  },
+  "comparator_binary_sha256": "3253d400cf1e8fd6f42d6e15c31f1219fe02ac0fbb8acc5826e65a113836c769",
+  "toolchain": {
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)"
+  },
+  "source_hashes": {
+    "crates/rustuml-render/src/class.rs": {
+      "c1a38ada817d820ca8f57b1e8db0d9048e9657eb": "cc3f30df3564c741eb00297d5d4952c58c254e5409e874a9ba1c916fc7d649f7",
+      "96a4bde220eddbc3faf135cad6d13f338b7d7ed5": "8a66398678ea27457ed107600386502cfb933abebe67c91d7d421dc7cabec36f",
+      "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e": "8a66398678ea27457ed107600386502cfb933abebe67c91d7d421dc7cabec36f"
+    },
+    "crates/rustuml-oracle/src/compare.rs": {
+      "c1a38ada817d820ca8f57b1e8db0d9048e9657eb": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5",
+      "96a4bde220eddbc3faf135cad6d13f338b7d7ed5": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5",
+      "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5"
+    },
+    "crates/rustuml-oracle/src/harness.rs": {
+      "c1a38ada817d820ca8f57b1e8db0d9048e9657eb": "0542e56ff01abb53d7e977228c49d9610fab4940061973da2924f82d8619770d",
+      "96a4bde220eddbc3faf135cad6d13f338b7d7ed5": "0542e56ff01abb53d7e977228c49d9610fab4940061973da2924f82d8619770d",
+      "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e": "0542e56ff01abb53d7e977228c49d9610fab4940061973da2924f82d8619770d"
+    },
+    "crates/rustuml-render/src/text_render.rs": {
+      "c1a38ada817d820ca8f57b1e8db0d9048e9657eb": "adc9b4a75be2b66b326834ff5b81143f52638f0f6d37ba2e7ba0051578b821b3",
+      "96a4bde220eddbc3faf135cad6d13f338b7d7ed5": "adc9b4a75be2b66b326834ff5b81143f52638f0f6d37ba2e7ba0051578b821b3",
+      "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e": "adc9b4a75be2b66b326834ff5b81143f52638f0f6d37ba2e7ba0051578b821b3"
+    },
+    "Cargo.lock": {
+      "c1a38ada817d820ca8f57b1e8db0d9048e9657eb": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd",
+      "96a4bde220eddbc3faf135cad6d13f338b7d7ed5": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd",
+      "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd"
+    }
+  },
+  "production_changed_files": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "account_ancestry": {
+    "3790f114c79f2d19fdf91e46b84f1f79d85f6677": true,
+    "41d9a803623d00f1263eaaaa08ac56ab51a5eac0": true
+  },
+  "cli_binary_chronology": [
+    {
+      "build": "cargo build --release -p rustuml --bin rustuml",
+      "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+      "sha256": "92d2701bb37adcc769d330b0c121171271bd005e0f69d1bcdf80c14071c54f25",
+      "artifact": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after/release/deps/rustuml-4174fc7f4edc50f2",
+      "used_for": [
+        "1559 after",
+        "36 after",
+        "maker20 after",
+        "fresh28 after"
+      ]
+    },
+    {
+      "build": "cargo test --workspace --release --test pipe_mode --test error_paths --test doc_claims --no-fail-fast (Cargo rebuilt the CLI with test dependency graph)",
+      "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+      "sha256": "a5e3b4babfdbd619d0e586c306b591b86c8fcec166e35e12156200d5f06ac946",
+      "artifact": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after/release/deps/rustuml-b238026e79235178",
+      "used_for": [
+        "CLI integration gates",
+        "supplement6 after"
+      ]
+    }
+  ],
+  "binary_note": "Both after binaries were independently compiled from exactly b074d208; no source or cfg(test) edit occurred between them. Cargo relinked the CLI during integration tests. Hashes differ; byte identity is not claimed. Original executable remains in deps and both hashes were verified after all gates. Broad replays were not duplicated for unchanged production."
+}

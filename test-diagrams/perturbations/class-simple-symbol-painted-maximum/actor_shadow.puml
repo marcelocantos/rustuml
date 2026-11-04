@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+skinparam shadowing true
+<style>
+actor {
+FontSize 7
+Shadowing 18
+LineThickness 5
+}
+</style>
+class Station
+actor "i" as Beacon
+Station --> Beacon
+@enduml

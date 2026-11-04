@@ -1,0 +1,5 @@
+@startuml
+skinparam svgLinkTarget _parent
+class Station
+note "Detached memorandum" as Memo [[https://example.org/memo{Read memorandum}]]
+@enduml

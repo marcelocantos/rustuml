@@ -1,0 +1,8 @@
+{
+  "tracked_file_changes_before_staging": [],
+  "golden_commit": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "golden_clean": true,
+  "rust_head": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "rust_branch": "review/renderer-b074d208-astra-20261104",
+  "no_production_or_historical_evidence_edits": true
+}

@@ -1,0 +1,13 @@
+@startuml
+allowmixing
+
+<style>
+boundary {
+FontSize 17
+
+}
+</style>
+class Station
+boundary "Observatory" as Beacon
+Station --> Beacon
+@enduml

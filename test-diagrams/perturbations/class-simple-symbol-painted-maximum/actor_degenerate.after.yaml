@@ -1,0 +1,46 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - actor
+        property: fontsize
+        value: '17'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+
+      <style>
+      actor {
+      FontSize 17
+
+      }
+      </style>
+      actor "Signal\nPier" as Beacon <<watch>>
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Beacon
+  entities:
+  - id: Beacon
+    label: Signal\nPier
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - watch
+    source_line: 9
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

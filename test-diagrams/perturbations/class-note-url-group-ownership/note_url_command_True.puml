@@ -1,0 +1,7 @@
+@startuml
+skinparam svgLinkTarget _parent
+class Mooring
+note "Detached chart" as Memo
+url of Memo is [[https://example.org/chart?x=2&y=5{Inspect chart}]]
+Memo .. Mooring
+@enduml

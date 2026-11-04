@@ -1,0 +1,9 @@
+{
+  "command": "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-after RAYON_NUM_THREADS=4 RUST_TEST_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --test parity_perturbations -- --nocapture",
+  "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "exit": 101,
+  "passed": 1,
+  "failed": 1,
+  "explanation": "Missing/empty corpus guard passes; whole held-out parity test fails with historical and all new counterexamples preserved, including four Java-negative fixtures. Rejected reviews do not claim a green perturbation gate.",
+  "log": "docs/parity-reviews/class-simple-symbol-painted-maximum/checker-evidence/review-b074/perturbations.log"
+}

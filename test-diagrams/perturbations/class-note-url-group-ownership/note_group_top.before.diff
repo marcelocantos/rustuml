@@ -1,0 +1,22 @@
+SVG structural differences:
+  [4] <path> attr mismatch:
+    expected: [("d", "M8.5,70.62 L104.9707,70.62 A3.75,3.75 0 0 1 107.4707,73.12 L114.4707,93.1083 L153.5,93.1083 A2.5,2.5 0 0 1 156,95.6083 L156,183.12 A2.5,2.5 0 0 1 153.5,185.62 L8.5,185.62 A2.5,2.5 0 0 1 6,183.12 L6,73.12 A2.5,2.5 0 0 1 8.5,70.62"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,70.6211 L104.9707,70.6211 A3.75,3.75 0 0 1 107.4707,73.1211 L114.4707,93.1094 L150.5,93.1094 A2.5,2.5 0 0 1 153,95.6094 L153,183.1211 A2.5,2.5 0 0 1 150.5,185.6211 L8.5,185.6211 A2.5,2.5 0 0 1 6,183.1211 L6,73.1211 A2.5,2.5 0 0 1 8.5,70.6211"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [14] tag mismatch: expected <g>, got <a>
+  [15] tag mismatch: expected <a>, got <g>
+  [16] <path> attr mismatch:
+    expected: [("d", "M84.9,6 L84.9,46.6211 L207.0943,46.6211 L207.0943,16 L197.0943,6 L84.9,6"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M83.9,6 L83.9,46.6211 L206.0944,46.6211 L206.0944,16 L196.0944,6 L83.9,6"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [17] <path> attr mismatch:
+    expected: [("d", "M197.0943,6 L197.0943,16 L207.0943,16 L197.0943,6"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M196.0944,6 L196.0944,16 L206.0944,16 L196.0944,6"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:1;")]
+  [18] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "101.1943"), ("x", "90.9"), ("y", "23.5684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "101.1943"), ("x", "89.9"), ("y", "23.5684")]
+  [19] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "84.8174"), ("x", "90.9"), ("y", "38.8789")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "84.8174"), ("x", "89.9"), ("y", "38.8789")]
+  [21] <path> attr mismatch:
+    expected: [("d", "M146,47.1 C146,50.73 146,54.7122 146,58.9172 C146,61.0197 146,63.1779 146,65.3756 C146,66.4745 146,67.5832 146,68.6999 C146,69.2582 146,92.3067 146,92.8687"), ("fill", "none"), ("id", "GMN4-Harbor"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+    actual:   [("d", "M145,47.11 C145,50.9237 145,55.1264 145,59.5679 C145,61.7886 145,64.069 145,66.3903 C145,67.551 145,68.7219 145,69.9007 C145,70.0481 145,92.6838 145,92.8314"), ("fill", "none"), ("id", "GMN4-Harbor"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+

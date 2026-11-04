@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-url-group-ownership",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ae24aafaa-fd3c-47ac-9ae8-6789e5b18fd0",
+    "model": "gpt-6-astra high / Codex harness in T3 Code",
+    "role": "independent checker; did not implement candidate; worked alone"
+  },
+  "account_commit": "41d9a803623d00f1263eaaaa08ac56ab51a5eac0",
+  "implementation_commit": "96a4bde220eddbc3faf135cad6d13f338b7d7ed5",
+  "candidate_revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "before_revision": "c1a38ada817d820ca8f57b1e8db0d9048e9657eb",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-before cargo build --release -p rustuml -p rustuml-oracle --examples",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-before cargo build --release -p rustuml --bin rustuml",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-after cargo build --release -p rustuml --bin rustuml",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/replay.py before",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/replay.py after",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent relay only; exact expanded argv in raw payloads)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/fresh_supplement.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-b074/gates_corpus.py",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-after RAYON_NUM_THREADS=4 RUST_TEST_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --test parity_perturbations -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_left.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_left.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "mismatch",
+      "source_sha256": "0909761140c36cb42f019967b6ff9f85fb0b09a1b1f897798036db541fc6090b",
+      "golden_sha256": "51f6d9968b5f797072456c37b044f518df9e9f3962871e685240c5c905a92af1",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_top.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_top.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "mismatch",
+      "source_sha256": "83d6d82599582d1ed97bebdb2e657620d082fba8aa971839cbb57c774d3915a7",
+      "golden_sha256": "db5ebf9d219eefffb9abbc56c2343f2c966935ae069cb3fc7d12125b27c48239",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_right.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_right.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "mismatch",
+      "source_sha256": "cac33beb6fe66b906831795330f692d5a41358d5f9f5f609f8b432e9fe2b84ad",
+      "golden_sha256": "7ec097e2d48f5faad465f8d1eef41a7ef1d9d5f712d44c4f8089e3c6d4ad3d12",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_bottom.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_leaf_bottom.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "mismatch",
+      "source_sha256": "b80f8b27705992ea78d4cc41b76584814e4b9ac23779d228fa18e9a564614d11",
+      "golden_sha256": "efb730016766c7bd6bf851fedc7229d6e5aae8407157aace0dc16e60691b5f51",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_left.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_left.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "6ca81576ef51e6fc66f380a56ef5c1bb455b56ff5058347aa36f872eced8aa88",
+      "golden_sha256": "34137f7d6d3324b2dbc3e8cdc1d231f4ea66fc317caccb316cca301882fea50c",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_top.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_top.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "367d04781f71fe2256191f7d4bebb7662f5b0af254623e69b2bb2906ea95282c",
+      "golden_sha256": "d23e78745f51126e6fb5cdae0b1c62bdc863db8b5177bdcc76c8068fb2f72541",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_right.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_right.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "938bcd37bca2ec1910ad5348884c4b062ed4b33e28ae43c686a9b599559b9d34",
+      "golden_sha256": "5b869b67b2e8aebf1ba333dae300a2ef32d7badeea715d71e18d653c12bdd92e",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_bottom.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_group_bottom.svg",
+      "axes": [
+        "target kind",
+        "position",
+        "delimiter",
+        "URL target/tooltip"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "before_classification": "mismatch",
+      "source_sha256": "5884aac3582d79185235e42f7877d829acea8e990a35126c8303d97ddffeb7e9",
+      "golden_sha256": "26d82764a201de50cf867376666dd7b9cf9b852a15b39980600737e3b185f116",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_False.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_False.svg",
+      "axes": [
+        "named floating note",
+        "link topology",
+        "URL present/absent"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "pass",
+      "source_sha256": "41729a24274e0a175a138d74931fc9a069832637d31899b303a7ce95b38934e0",
+      "golden_sha256": "cd994bedd85c325ad2936c591a3ffe4cf3cdc12c3755dfbfb31f18e4faeba610",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_True.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_False_True.svg",
+      "axes": [
+        "named floating note",
+        "link topology",
+        "URL present/absent"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "before_classification": "invalid_reference",
+      "source_sha256": "0ff7ee9397d7826f12c815efc71c65174fdb3bff3a5829c95518be0f1eb0f4c0",
+      "golden_sha256": "9a49ac94b9681ddf057b0b3da20b83df810a6f263948870bdff14780eac290ae",
+      "java_exit": 200
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_False.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_False.svg",
+      "axes": [
+        "named floating note",
+        "link topology",
+        "URL present/absent"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "before_classification": "pass",
+      "source_sha256": "f12fef957e2a9a2ff1eb0bb5590d4204583aaf9be7efa39b2220cacac8460aa5",
+      "golden_sha256": "04c2b85ffe7128cbf400ee84263669508d3e26c6f3b38bab2b2b10de36e4ed11",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_True.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_named_True_True.svg",
+      "axes": [
+        "named floating note",
+        "link topology",
+        "URL present/absent"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "before_classification": "invalid_reference",
+      "source_sha256": "1ed9e03b338afa7b56cff72c7c28fd15ec9f31f6f39f7ecbf946125ec42fc168",
+      "golden_sha256": "389501d8ec353c1517c2a21c72471e0b71316d007e08f901c81e50e412ec1a2d",
+      "java_exit": 200
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_False.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_False.svg",
+      "axes": [
+        "named note",
+        "URL command",
+        "linked/unlinked"
+      ],
+      "result": "fail",
+      "classification": "process_error",
+      "before_classification": "process_error",
+      "source_sha256": "dbf6add0e8c1e89b631988da3936c4dcb5acc050c32a7d19b7eeb3a939e1e030",
+      "golden_sha256": "230bddc94226a0f52fc0b4959f45211883905dc1115df49bd8d76852bd43a699",
+      "java_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_True.puml",
+      "golden": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_True.svg",
+      "axes": [
+        "named note",
+        "URL command",
+        "linked/unlinked"
+      ],
+      "result": "fail",
+      "classification": "process_error",
+      "before_classification": "process_error",
+      "source_sha256": "f08005f775d2d0eec19b9f49be8012a027399d8fb227979fedce7d1e31bc2a5b",
+      "golden_sha256": "59df9078da874e597b563916568baca8f0570c91033ece5cf422c6e3f96ceec6",
+      "java_exit": 0
+    }
+  ],
+  "findings": [
+    "N1-group-geometry: Eight URL anchors match Java parentage and attributes exactly after the change. All non-g/a XML nodes are unchanged before/after. Four fresh group targets still have outline/edge/note geometry differences: right case Java group right156 vsRust153, note x182.36 vs180.36, canvas328 vs326. Correct nesting does not establish visual correctness. Next repair: Trace group cluster preferred border/envelope and note-edge handoff through the Java Svek cluster/Opale pipeline; resolve the existing layout/environment dependency with a separate account and calibrated evidence, not coordinate nudges or this ownership-only change.",
+    "N2-named-url-dependency: Both references are valid Java CommandUrl outputs; both Rust revisions reject the url of Memo command at parse time. Unsupported inline named-note URL attempts remain invalid-Java negatives. This parser dependency prevents this named-note ownership journey, but is not attributed to the changed renderer. Next repair: A separately authorized parser/model change must retain note entity URLs assigned through CommandUrl; do not attempt it in this renderer-only review."
+  ],
+  "verdict": "rejected",
+  "bounded_verdict": "DOM group/anchor ordering is supported in both changed paths, but fresh group-target visual failures reject acceptance of the scoped note mechanism; named-note CommandUrl remains a separate parser dependency. No whole-packet acceptance or geometry waiver.",
+  "evidence_directory": "docs/parity-reviews/class-simple-symbol-painted-maximum/checker-evidence/review-b074",
+  "gates": {
+    "library_passes": 1439,
+    "cli_passes": 13,
+    "error_path_passes": 19,
+    "doc_passes": 2,
+    "product_matches": 11188,
+    "assisted_matches": 10523,
+    "eligible": 11251,
+    "total": 12550,
+    "guards_passed": 4,
+    "guards_total": 6,
+    "format_exit": 0
+  },
+  "fresh_counts": {
+    "before": {
+      "mismatch": 8,
+      "pass": 2,
+      "invalid_reference": 2,
+      "process_error": 2
+    },
+    "after": {
+      "pass": 6,
+      "mismatch": 4,
+      "invalid_reference": 2,
+      "process_error": 2
+    }
+  },
+  "chronology": [
+    "Read schema/accounts/maker packet and pinned Java; checked candidate into unique review branch.",
+    "Built exact before in private target; returned to exact candidate and built independent target.",
+    "Sent frozen28 bundle; ran before/after preserved1559/prior36/maker20 replays.",
+    "Validated raw relay archive/member/source/stream/argv/hash provenance; ran real CLI/frozen comparator and YAML retention on all28.",
+    "Ran exact-candidate format/libs/CLI/two tiers/guards/Clippy. Initial main/census attempt lacked submodule; hydrated exact local gitlink and reran only affected checks.",
+    "Sent immutable supplemental6 after first findings; validated returned provenance and preserved all six CLI/reference comparisons.",
+    "Copied evidence into requested new mechanism paths; no original account, review, baseline, skip rule or production file changed.",
+    "Executed the standing parity_perturbations suite after installing every new pair: 1 passed/1 failed, exit101; rejection retained.",
+    "Audited and manifested only new evidence/review paths for a single evidence-only commit; parent/maker files and all production remain immutable."
+  ],
+  "limitations": [
+    "No whole-class acceptance. Every fresh relevant valid mismatch remains rejecting evidence. DOM ownership is a separately supported diagnostic, not a scope waiver.",
+    "Historical GET corpus is unchanged at its gitlink; new Java SVGs use raw -pipe -tsvg wrapper policy and explicit GMT+11:00. Fonts, host environment, Graphviz12.2.0 vs vendored layout global equivalence remain unproven.",
+    "Native cleanup/fault-injection work explicitly excluded and not resumed. Native/layout, shared text metrics/glyph, class parser and other old failures remain unaccepted dependencies.",
+    "Cargo test rebuilt the CLI binary without any source change. Exact hashes and consumers are recorded; no claim of binary identity across build invocations.",
+    "No new target or policy/skip/comparator/baseline edit; recommendations are causal next repairs only."
+  ],
+  "perturbation_gate": {
+    "command": "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-b074/target-after RAYON_NUM_THREADS=4 RUST_TEST_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --test parity_perturbations -- --nocapture",
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "exit": 101,
+    "passed": 1,
+    "failed": 1,
+    "explanation": "Missing/empty corpus guard passes; whole held-out parity test fails with historical and all new counterexamples preserved, including four Java-negative fixtures. Rejected reviews do not claim a green perturbation gate.",
+    "log": "docs/parity-reviews/class-simple-symbol-painted-maximum/checker-evidence/review-b074/perturbations.log"
+  }
+}
