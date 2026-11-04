@@ -1,0 +1,7 @@
+@startsalt
+skinparam defaultFontName "Quill & Reed"
+{
+Beacon
+[Confirm]
+}
+@endsalt

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName "Quill & Reed"
+start
+:Beacon;
+stop
+@enduml

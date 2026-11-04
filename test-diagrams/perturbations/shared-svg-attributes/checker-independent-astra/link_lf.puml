@@ -1,0 +1,5 @@
+@startuml
+object Vault {
+slot = [[https://example.invalid/p?x=2&y=3{Glow<U+000A>Dusk}Link]]
+}
+@enduml

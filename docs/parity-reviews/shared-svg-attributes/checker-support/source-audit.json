@@ -1,0 +1,136 @@
+{
+  "historical_files": 11031,
+  "historical_blob_identity": true,
+  "rejection_files": 111,
+  "rejection_blob_identity": true,
+  "sequence_changed": false,
+  "production_changed": [
+    "crates/rustuml-render/src/activity.rs",
+    "crates/rustuml-render/src/archimate.rs",
+    "crates/rustuml-render/src/class.rs",
+    "crates/rustuml-render/src/component.rs",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/deployment.rs",
+    "crates/rustuml-render/src/ditaa.rs",
+    "crates/rustuml-render/src/dot_diagram.rs",
+    "crates/rustuml-render/src/ebnf.rs",
+    "crates/rustuml-render/src/filter_registry.rs",
+    "crates/rustuml-render/src/gantt.rs",
+    "crates/rustuml-render/src/json_diagram.rs",
+    "crates/rustuml-render/src/layout_oracle.rs",
+    "crates/rustuml-render/src/mindmap.rs",
+    "crates/rustuml-render/src/nwdiag.rs",
+    "crates/rustuml-render/src/object.rs",
+    "crates/rustuml-render/src/regex_diagram.rs",
+    "crates/rustuml-render/src/salt.rs",
+    "crates/rustuml-render/src/state.rs",
+    "crates/rustuml-render/src/svg.rs",
+    "crates/rustuml-render/src/text_render.rs",
+    "crates/rustuml-render/src/timing.rs",
+    "crates/rustuml-render/src/usecase.rs",
+    "crates/rustuml-render/src/wbs.rs",
+    "crates/rustuml/Cargo.toml",
+    "crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "lock_added": [
+    [
+      "block-buffer",
+      "0.10.4"
+    ],
+    [
+      "cpufeatures",
+      "0.2.17"
+    ],
+    [
+      "crypto-common",
+      "0.1.7"
+    ],
+    [
+      "digest",
+      "0.10.7"
+    ],
+    [
+      "generic-array",
+      "0.14.7"
+    ],
+    [
+      "sha2",
+      "0.10.9"
+    ],
+    [
+      "typenum",
+      "1.20.1"
+    ]
+  ],
+  "lock_existing_changed": [
+    [
+      "rustuml",
+      "0.7.0"
+    ]
+  ],
+  "routing_sites": 901,
+  "routing_files": 24,
+  "routing_attributes": {
+    "stop-color": 6,
+    "fill": 263,
+    "points": 11,
+    "style": 329,
+    "id": 87,
+    "data-qualified-name": 58,
+    "class": 3,
+    "data-source-line": 4,
+    "data-entity-1": 20,
+    "data-entity-2": 20,
+    "data-link-type": 16,
+    "d": 15,
+    "href": 5,
+    "title": 5,
+    "xlink:href": 12,
+    "xlink:title": 5,
+    "font-family": 6,
+    "textLength": 3,
+    "stroke": 10,
+    "flood-color": 1,
+    "filter": 4,
+    "rx": 2,
+    "ry": 2,
+    "target": 1,
+    "xlink:actuate": 1,
+    "xlink:show": 1,
+    "xlink:type": 1,
+    "font-size": 2,
+    "font-style": 2,
+    "font-weight": 2,
+    "lengthAdjust": 2,
+    "text-decoration": 2
+  },
+  "routing_sha256": "1fa76a52dad7312a0745155341f1a964808ee5593c6c55ea72dbf6c3b990ac08",
+  "jdk_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToStream.java",
+      "sha256": "5579427642883c4f0666e96eb66197c66bbe9ec109eb870ba9b4f02597262ca2",
+      "bytes": 124531
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToXMLStream.java",
+      "sha256": "06e8db7295be573a20c27ec21a5c0d3a8832c745ece706880238ed62307f2323",
+      "bytes": 22190
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/CharInfo.java",
+      "sha256": "8743d68a994e3c10beb75c08a8a861cb04f1e16fddd18d2fc997a3412354e868",
+      "bytes": 25870
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/Encodings.java",
+      "sha256": "3d219f0fe726939f26b5ad4a4c7fd24d22b257946065a462244f163d48c0dfa1",
+      "bytes": 22832
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/XMLEntities.properties",
+      "sha256": "5c210d775b6f68feae7b3c83b2de1e33ce55c2af02b729111a56d2b59735e105",
+      "bytes": 1279
+    }
+  ],
+  "comment_user_sites": 45
+}

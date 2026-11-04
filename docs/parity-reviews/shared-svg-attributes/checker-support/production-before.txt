@@ -1,0 +1,270 @@
+rustuml v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70/crates/rustuml)
+├── rustuml-parser v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70/crates/rustuml-parser)
+│   ├── libc v0.2.183
+│   ├── regex v1.12.3
+│   │   ├── aho-corasick v1.1.4
+│   │   │   └── memchr v2.8.0
+│   │   ├── memchr v2.8.0
+│   │   ├── regex-automata v0.4.14
+│   │   │   ├── aho-corasick v1.1.4 (*)
+│   │   │   ├── memchr v2.8.0
+│   │   │   └── regex-syntax v0.8.10
+│   │   └── regex-syntax v0.8.10
+│   ├── serde v1.0.228
+│   │   ├── serde_core v1.0.228
+│   │   └── serde_derive v1.0.228 (proc-macro)
+│   │       ├── proc-macro2 v1.0.106
+│   │       │   └── unicode-ident v1.0.24
+│   │       ├── quote v1.0.45
+│   │       │   └── proc-macro2 v1.0.106 (*)
+│   │       └── syn v2.0.117
+│   │           ├── proc-macro2 v1.0.106 (*)
+│   │           ├── quote v1.0.45 (*)
+│   │           └── unicode-ident v1.0.24
+│   ├── serde_json v1.0.149
+│   │   ├── indexmap v2.13.0
+│   │   │   ├── equivalent v1.0.2
+│   │   │   └── hashbrown v0.16.1
+│   │   ├── itoa v1.0.18
+│   │   ├── memchr v2.8.0
+│   │   ├── serde_core v1.0.228
+│   │   └── zmij v1.0.21
+│   └── serde_yml v0.0.12
+│       ├── indexmap v2.13.0 (*)
+│       ├── itoa v1.0.18
+│       ├── libyml v0.0.5
+│       │   └── anyhow v1.0.102
+│       ├── memchr v2.8.0
+│       ├── ryu v1.0.23
+│       └── serde v1.0.228 (*)
+├── rustuml-render v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70/crates/rustuml-render)
+│   ├── ab_glyph v0.2.32
+│   │   ├── ab_glyph_rasterizer v0.1.10
+│   │   └── owned_ttf_parser v0.25.1
+│   │       └── ttf-parser v0.25.1
+│   │           └── core_maths v0.1.1
+│   │               └── libm v0.2.16
+│   ├── flate2 v1.1.9
+│   │   ├── crc32fast v1.5.0
+│   │   │   └── cfg-if v1.0.4
+│   │   ├── libz-sys v1.1.29
+│   │   └── miniz_oxide v0.8.9
+│   │       ├── adler2 v2.0.1
+│   │       └── simd-adler32 v0.3.8
+│   ├── libz-sys v1.1.29
+│   ├── png v0.18.1
+│   │   ├── bitflags v2.11.0
+│   │   ├── crc32fast v1.5.0 (*)
+│   │   ├── fdeflate v0.3.7
+│   │   │   └── simd-adler32 v0.3.8
+│   │   ├── flate2 v1.1.9 (*)
+│   │   └── miniz_oxide v0.8.9 (*)
+│   ├── regex v1.12.3 (*)
+│   ├── resvg v0.47.0
+│   │   ├── gif v0.14.1
+│   │   │   ├── color_quant v1.1.0
+│   │   │   └── weezl v0.1.12
+│   │   ├── image-webp v0.2.4
+│   │   │   ├── byteorder-lite v0.1.0
+│   │   │   └── quick-error v2.0.1
+│   │   ├── log v0.4.29
+│   │   ├── pico-args v0.5.0
+│   │   ├── rgb v0.8.53
+│   │   │   └── bytemuck v1.25.0
+│   │   │       └── bytemuck_derive v1.10.2 (proc-macro)
+│   │   │           ├── proc-macro2 v1.0.106 (*)
+│   │   │           ├── quote v1.0.45 (*)
+│   │   │           └── syn v2.0.117 (*)
+│   │   ├── svgtypes v0.16.1
+│   │   │   ├── kurbo v0.13.0
+│   │   │   │   ├── arrayvec v0.7.6
+│   │   │   │   └── smallvec v1.15.1
+│   │   │   └── siphasher v1.0.2
+│   │   ├── tiny-skia v0.12.0
+│   │   │   ├── arrayref v0.3.9
+│   │   │   ├── arrayvec v0.7.6
+│   │   │   ├── bytemuck v1.25.0 (*)
+│   │   │   ├── cfg-if v1.0.4
+│   │   │   ├── log v0.4.29
+│   │   │   ├── png v0.18.1 (*)
+│   │   │   └── tiny-skia-path v0.12.0
+│   │   │       ├── arrayref v0.3.9
+│   │   │       ├── bytemuck v1.25.0 (*)
+│   │   │       └── strict-num v0.1.1
+│   │   │           └── float-cmp v0.9.0
+│   │   ├── usvg v0.47.0
+│   │   │   ├── base64 v0.22.1
+│   │   │   ├── data-url v0.3.2
+│   │   │   ├── flate2 v1.1.9 (*)
+│   │   │   ├── fontdb v0.23.0
+│   │   │   │   ├── log v0.4.29
+│   │   │   │   ├── memmap2 v0.9.10
+│   │   │   │   │   └── libc v0.2.183
+│   │   │   │   ├── slotmap v1.1.1
+│   │   │   │   ├── tinyvec v1.11.0
+│   │   │   │   │   └── tinyvec_macros v0.1.1
+│   │   │   │   └── ttf-parser v0.25.1 (*)
+│   │   │   ├── imagesize v0.14.0
+│   │   │   ├── kurbo v0.13.0 (*)
+│   │   │   ├── log v0.4.29
+│   │   │   ├── pico-args v0.5.0
+│   │   │   ├── roxmltree v0.21.1
+│   │   │   │   └── memchr v2.8.0
+│   │   │   ├── rustybuzz v0.20.1
+│   │   │   │   ├── bitflags v2.11.0
+│   │   │   │   ├── bytemuck v1.25.0 (*)
+│   │   │   │   ├── core_maths v0.1.1 (*)
+│   │   │   │   ├── log v0.4.29
+│   │   │   │   ├── smallvec v1.15.1
+│   │   │   │   ├── ttf-parser v0.25.1 (*)
+│   │   │   │   ├── unicode-bidi-mirroring v0.4.0
+│   │   │   │   ├── unicode-ccc v0.4.0
+│   │   │   │   ├── unicode-properties v0.1.4
+│   │   │   │   └── unicode-script v0.5.8
+│   │   │   ├── simplecss v0.2.2
+│   │   │   │   └── log v0.4.29
+│   │   │   ├── siphasher v1.0.2
+│   │   │   ├── strict-num v0.1.1 (*)
+│   │   │   ├── svgtypes v0.16.1 (*)
+│   │   │   ├── tiny-skia-path v0.12.0 (*)
+│   │   │   ├── ttf-parser v0.25.1 (*)
+│   │   │   ├── unicode-bidi v0.3.18
+│   │   │   ├── unicode-script v0.5.8
+│   │   │   ├── unicode-vo v0.1.0
+│   │   │   └── xmlwriter v0.1.0
+│   │   └── zune-jpeg v0.5.14
+│   │       └── zune-core v0.5.1
+│   ├── rustuml-layout v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70/crates/rustuml-layout)
+│   ├── rustuml-math v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70/crates/rustuml-math)
+│   │   └── katex v0.4.6
+│   │       ├── cfg-if v1.0.4
+│   │       ├── derive_builder v0.12.0
+│   │       │   └── derive_builder_macro v0.12.0 (proc-macro)
+│   │       │       ├── derive_builder_core v0.12.0
+│   │       │       │   ├── darling v0.14.4
+│   │       │       │   │   ├── darling_core v0.14.4
+│   │       │       │   │   │   ├── fnv v1.0.7
+│   │       │       │   │   │   ├── ident_case v1.0.1
+│   │       │       │   │   │   ├── proc-macro2 v1.0.106 (*)
+│   │       │       │   │   │   ├── quote v1.0.45 (*)
+│   │       │       │   │   │   ├── strsim v0.10.0
+│   │       │       │   │   │   └── syn v1.0.109
+│   │       │       │   │   │       ├── proc-macro2 v1.0.106 (*)
+│   │       │       │   │   │       ├── quote v1.0.45 (*)
+│   │       │       │   │   │       └── unicode-ident v1.0.24
+│   │       │       │   │   └── darling_macro v0.14.4 (proc-macro)
+│   │       │       │   │       ├── darling_core v0.14.4 (*)
+│   │       │       │   │       ├── quote v1.0.45 (*)
+│   │       │       │   │       └── syn v1.0.109 (*)
+│   │       │       │   ├── proc-macro2 v1.0.106 (*)
+│   │       │       │   ├── quote v1.0.45 (*)
+│   │       │       │   └── syn v1.0.109 (*)
+│   │       │       └── syn v1.0.109 (*)
+│   │       ├── itertools v0.10.5
+│   │       │   └── either v1.15.0
+│   │       ├── quick-js v0.4.1
+│   │       │   ├── libquickjs-sys v0.9.0
+│   │       │   └── once_cell v1.21.4
+│   │       └── thiserror v1.0.69
+│   │           └── thiserror-impl v1.0.69 (proc-macro)
+│   │               ├── proc-macro2 v1.0.106 (*)
+│   │               ├── quote v1.0.45 (*)
+│   │               └── syn v2.0.117 (*)
+│   ├── rustuml-parser v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-1ab6ad70/crates/rustuml-parser) (*)
+│   ├── serde v1.0.228 (*)
+│   ├── serde_yml v0.0.12 (*)
+│   └── svg2pdf v0.13.0
+│       ├── fontdb v0.23.0 (*)
+│       ├── image v0.25.10
+│       │   ├── bytemuck v1.25.0 (*)
+│       │   ├── byteorder-lite v0.1.0
+│       │   ├── color_quant v1.1.0
+│       │   ├── gif v0.14.1 (*)
+│       │   ├── moxcms v0.8.1
+│       │   │   ├── num-traits v0.2.19
+│       │   │   └── pxfm v0.1.28
+│       │   ├── num-traits v0.2.19
+│       │   ├── png v0.18.1 (*)
+│       │   ├── zune-core v0.5.1
+│       │   └── zune-jpeg v0.5.14 (*)
+│       ├── log v0.4.29
+│       ├── miniz_oxide v0.8.9 (*)
+│       ├── once_cell v1.21.4
+│       ├── pdf-writer v0.12.1
+│       │   ├── bitflags v2.11.0
+│       │   ├── itoa v1.0.18
+│       │   ├── memchr v2.8.0
+│       │   └── ryu v1.0.23
+│       ├── resvg v0.45.1
+│       │   ├── gif v0.13.3
+│       │   │   ├── color_quant v1.1.0
+│       │   │   └── weezl v0.1.12
+│       │   ├── image-webp v0.2.4 (*)
+│       │   ├── log v0.4.29
+│       │   ├── pico-args v0.5.0
+│       │   ├── rgb v0.8.53 (*)
+│       │   ├── svgtypes v0.15.3
+│       │   │   ├── kurbo v0.11.3
+│       │   │   │   ├── arrayvec v0.7.6
+│       │   │   │   └── smallvec v1.15.1
+│       │   │   └── siphasher v1.0.2
+│       │   ├── tiny-skia v0.11.4
+│       │   │   ├── arrayref v0.3.9
+│       │   │   ├── arrayvec v0.7.6
+│       │   │   ├── bytemuck v1.25.0 (*)
+│       │   │   ├── cfg-if v1.0.4
+│       │   │   ├── log v0.4.29
+│       │   │   ├── png v0.17.16
+│       │   │   │   ├── bitflags v1.3.2
+│       │   │   │   ├── crc32fast v1.5.0 (*)
+│       │   │   │   ├── fdeflate v0.3.7 (*)
+│       │   │   │   ├── flate2 v1.1.9 (*)
+│       │   │   │   └── miniz_oxide v0.8.9 (*)
+│       │   │   └── tiny-skia-path v0.11.4
+│       │   │       ├── arrayref v0.3.9
+│       │   │       ├── bytemuck v1.25.0 (*)
+│       │   │       └── strict-num v0.1.1 (*)
+│       │   ├── usvg v0.45.1
+│       │   │   ├── base64 v0.22.1
+│       │   │   ├── data-url v0.3.2
+│       │   │   ├── flate2 v1.1.9 (*)
+│       │   │   ├── fontdb v0.23.0 (*)
+│       │   │   ├── imagesize v0.13.0
+│       │   │   ├── kurbo v0.11.3 (*)
+│       │   │   ├── log v0.4.29
+│       │   │   ├── pico-args v0.5.0
+│       │   │   ├── roxmltree v0.20.0
+│       │   │   ├── rustybuzz v0.20.1 (*)
+│       │   │   ├── simplecss v0.2.2 (*)
+│       │   │   ├── siphasher v1.0.2
+│       │   │   ├── strict-num v0.1.1 (*)
+│       │   │   ├── svgtypes v0.15.3 (*)
+│       │   │   ├── tiny-skia-path v0.11.4 (*)
+│       │   │   ├── unicode-bidi v0.3.18
+│       │   │   ├── unicode-script v0.5.8
+│       │   │   ├── unicode-vo v0.1.0
+│       │   │   └── xmlwriter v0.1.0
+│       │   └── zune-jpeg v0.4.21
+│       │       └── zune-core v0.4.12
+│       ├── siphasher v1.0.2
+│       ├── subsetter v0.2.3
+│       │   ├── kurbo v0.12.0
+│       │   │   ├── arrayvec v0.7.6
+│       │   │   └── smallvec v1.15.1
+│       │   ├── rustc-hash v2.1.1
+│       │   ├── skrifa v0.37.0
+│       │   │   ├── bytemuck v1.25.0 (*)
+│       │   │   └── read-fonts v0.35.0
+│       │   │       ├── bytemuck v1.25.0 (*)
+│       │   │       └── font-types v0.10.1
+│       │   │           └── bytemuck v1.25.0 (*)
+│       │   └── write-fonts v0.43.0
+│       │       ├── font-types v0.10.1 (*)
+│       │       ├── indexmap v2.13.0 (*)
+│       │       ├── kurbo v0.12.0 (*)
+│       │       ├── log v0.4.29
+│       │       └── read-fonts v0.35.0 (*)
+│       ├── tiny-skia v0.11.4 (*)
+│       ├── ttf-parser v0.25.1 (*)
+│       └── usvg v0.45.1 (*)
+└── serde_yml v0.0.12 (*)

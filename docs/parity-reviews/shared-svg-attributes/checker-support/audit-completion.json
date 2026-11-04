@@ -1,0 +1,156 @@
+{
+  "java_source_proof": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+      "sha256": "cdd4b8ae6aaf39eebafb1107bab16184e671e639aafdc77fd925bc1b66597be1",
+      "claims": [
+        "75-155 parseColor/parseSimpleColor: strip optional #; transparent/background; short, full and RRGGBBAA"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java",
+      "sha256": "5d5f6ed904384a6706c22a60073b279d030b5892b07a2bb6f08cdd2d27e6880f",
+      "claims": [
+        "named CSS and seven Archimate palette entries"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColor.java",
+      "sha256": "ea062d9b341cbb6b9bff169c145127c6435ba90457b38a1cf999947aacc15c85",
+      "claims": [
+        "70-80 toRGB/toSvg alpha role split"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSimple.java",
+      "sha256": "9335000cfa0b1525c1c44d10d184acef6c2d96030009e4470f5ab6e652dee34e",
+      "claims": [
+        "132-150 transparency; 211-214 opposite"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/awt/XColor.java",
+      "sha256": "bbcd35904390788fde0670cd9647512690d96dd08091bd9577cfb39e0a84b0f2",
+      "claims": [
+        "105-117 uppercase RGB/RGBA; zero alpha black sentinel"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "sha256": "4c7e91766b084ca734321706cac46ca28891109cb5a77297be8daea717894593",
+      "claims": [
+        "514-539 fixColor; 657-734 text DOM attributes; 751-785 filter and US-ASCII transformer; 891-898 fillMe alpha/255 five decimals; 1164-1166 createComment"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverTextSvg.java",
+      "sha256": "211dd48989ef39db905b400fccd88b6ec06db89fdecfa90331559b04e49eed91",
+      "claims": [
+        "89-97 early return transparent before background; 162-180 BACKCOLOR RGB and foreground toSvg"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
+      "sha256": "ed642f88666938454eb8f4da33cbdc50a2f6840a59f00240763dfa17f129e00a",
+      "claims": [
+        "104-123 full definition quote substitution; additional SansSerif mapping explicitly deferred"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java",
+      "sha256": "90e62fb331a47aab282ba79c672c65e9386ac31024049d00f93ddcd8df3b9642",
+      "claims": [
+        "measurement and draw advance; 123-130 background-adjusted color"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/FontConfiguration.java",
+      "sha256": "f9befb054f8592aa8f60c8454860ff9d7fd90534440ba86716539a471dea6a95",
+      "claims": [
+        "349-355 automatic color resolution"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorAutomagic.java",
+      "sha256": "12fa03d25061a7a50c07f1ea4b7e25e098aff8d8440e4ca9f6341137e4976c35",
+      "claims": [
+        "40-41 background-dependent color"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/xml/XmlFactories.java",
+      "sha256": "4a6f142ebd80c1bda5537bb24bb539848d10f664ed6988d0ae378ec1eb7f079f",
+      "claims": [
+        "25-34 default TransformerFactory"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/UGraphicSvg.java",
+      "sha256": "1d4c628aed8a1d30abcc0e5a88f9509cad40ff67e44e242953dc2d162a36289f",
+      "claims": [
+        "writeToStream wraps TransformerException as IOException"
+      ]
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/UgDiagram.java",
+      "sha256": "569b8add5ca8ffee1c790e9200d2cea9f09263e54b6b1ebcd46519a5e4eb88bb",
+      "claims": [
+        "75-104 exporter catches Throwable and emits crash diagram"
+      ]
+    }
+  ],
+  "standing": {
+    "inputs": 1966,
+    "passed": 851,
+    "failed": 1115
+  },
+  "fresh_independence": {
+    "cases": 87,
+    "all_sources_absent_from_prior_corpora": true
+  },
+  "fresh_summary": {
+    "valid": 83,
+    "nonpositive": 4,
+    "before_pass": 2,
+    "after_pass": 34,
+    "losses": [],
+    "new_errors": [],
+    "new_panics": [],
+    "malformed": [
+      "href_c0",
+      "comment_double_hyphen",
+      "raw_c0_zero",
+      "raw_c0_escape",
+      "raw_c0_one"
+    ],
+    "errors": [
+      "family_salt",
+      "family_json"
+    ],
+    "panics": []
+  },
+  "raw_attribute_residue": [],
+  "binaries": [
+    {
+      "phase": "before",
+      "production_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+      "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/target-before/release/rustuml",
+      "sha256": "0de6741a742c7972170bc579cb8ed33ba13bc3358a6ddc70433dde2a7a5ebb6f",
+      "bytes": 24678480,
+      "jobs": 4
+    },
+    {
+      "phase": "after",
+      "production_revision": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+      "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/target-after/release/rustuml",
+      "sha256": "dc1574305bc5930a685080c43f52c0fa84db4b15c8e239a993230816eed70797",
+      "bytes": 24729232,
+      "jobs": 4
+    }
+  ],
+  "production_code_identical_at_evidence_tip": true,
+  "model": "gpt-6-astra",
+  "effort": "high",
+  "tool": "T3 Code / Codex harness",
+  "review_branch": "review/shared-svg-independent-astra-20261105"
+}

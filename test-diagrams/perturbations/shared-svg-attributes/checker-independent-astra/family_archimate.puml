@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName   Quill'"Reed"'  
+archimate #Business "Beacon" as Ledger
+@enduml

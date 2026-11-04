@@ -1,0 +1,5 @@
+@startuml
+node "L<back:transparent>Mist</back>R" as Hub
+artifact Store
+Hub --> Store
+@enduml
