@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "baseline": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "checker_evidence": "fdf1154eb3a17ebb041fffb0c18710a38210f56b",
+  "mechanism": "sequence-ordinary-note-child-allocation",
+  "java_locations": [
+    "sequencediagram.graphic.ArrowAndNoteBox#ArrowAndNoteBox/#getPreferredHeight",
+    "sequencediagram.graphic.Step1Message#prepareMessage",
+    "skin.rose.ComponentRoseArrow#getPreferredHeight/#getYPoint",
+    "skin.rose.ComponentRoseNote#getPreferredHeight",
+    "skin.AbstractTextualComponent#getTextHeight"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render msg_note_extra and note_top",
+    "crates/rustuml-render/src/sequence.rs::note_msg_extra_base/#note_msg_text_tail"
+  ],
+  "invariant": "The legacy ordinary message/note composite reserves the maximum complete child height and centers each child using its own complete height, including differing first-line fonts, padding and shadow.",
+  "causal_divergence": "Only self/Teoz folded-note allocation compares complete heights. Ordinary legacy uses fixed3 plus later-line tails and assumes equal first-line note/message heights. Painter precision alone cannot repair that layout.",
+  "planned_change": "Use complete note/arrow preferred heights for ordinary folded-note reservation and child origins, shared with existing complete-height path. Remove reliance on nominal-font y compensation for that path; preserve independent nonfolded shape and Teoz tile semantics.",
+  "perturbation_axes": [
+    "note font below/above message font and styled multi-line content",
+    "arrow direction/activation and padding/shadow",
+    "one/two attached notes and engine controls"
+  ]
+}
