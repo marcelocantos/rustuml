@@ -168,15 +168,17 @@ static int rustuml_make_empty_grid_label(textlabel_t *label) {
                 goto unsupported;
             cursor += 3;
             htmlcell_t *cell = calloc(1, sizeof(*cell));
+            /* htmltable.free_html_tbl traverses a NULL-terminated array even
+             * during failure cleanup. Do not grow/publish it without a cell. */
+            if (!cell) goto unsupported;
             htmlcell_t **cells = realloc(table->cells, (count + 2) * sizeof(*cells));
-            if (!cell || !cells) {
+            if (!cells) {
                 free(cell);
-                if (cells) table->cells = cells;
                 goto unsupported;
             }
+            cells[count++] = cell;
+            cells[count] = NULL;
             table->cells = cells;
-            table->cells[count++] = cell;
-            table->cells[count] = NULL;
             cell->parent = table;
             cell->row = (uint16_t)table->row_count;
             cell->col = (uint16_t)col++;
@@ -192,10 +194,11 @@ static int rustuml_make_empty_grid_label(textlabel_t *label) {
                 if ((keylen == 5 && !strncmp(cursor, "WIDTH", 5)) ||
                     (keylen == 6 && !strncmp(cursor, "HEIGHT", 6))) {
                     char *parsed_end;
-                    errno = 0;
-                    double number = strtod(value, &parsed_end);
-                    if (errno || parsed_end != end || !isfinite(number) ||
-                        number < 0 || number > USHRT_MAX) goto unsupported;
+                    /* htmllex.doInt uses the decimal integer prefix, then
+                     * bounds it: 1e2 -> 1; 65535.9 -> 65535; no digits fails. */
+                    long number = strtol(value, &parsed_end, 10);
+                    if (parsed_end == value || number < 0 || number > USHRT_MAX)
+                        goto unsupported;
                     if (keylen == 5) cell->data.width = (unsigned short)number;
                     else cell->data.height = (unsigned short)number;
                 } else if (keylen == 9 && !strncmp(cursor, "FIXEDSIZE", 9)) {

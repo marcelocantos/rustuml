@@ -1,0 +1,2422 @@
+[
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "1",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "2",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "3",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":3,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "4",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "5",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "6",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":7,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "7",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":7,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "8",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/single.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":31,\"width\":20,\"height\":28}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "1",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "2",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "3",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":3,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "4",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "5",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "6",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":6,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "7",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":7,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "8",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":8,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "9",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":9,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "10",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":10,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "11",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":11,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "12",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":12,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "13",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":13,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "14",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":14,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "15",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":15,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "16",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":16,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "17",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":17,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "18",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":18,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "19",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":19,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "20",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":20,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "21",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":21,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "22",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":22,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "23",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":23,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "24",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":24,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "25",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":25,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "26",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":26,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "27",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":27,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "28",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":28,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "29",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":29,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "30",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":31,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "31",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":31,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "32",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/grid.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":31,\"width\":20,\"height\":28}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":11,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "1",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "2",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "3",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":3,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "4",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "5",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "6",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":6,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "7",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":7,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "8",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":8,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "9",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":9,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "10",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":10,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "11",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":11,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "12",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":11,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":8,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "1",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "2",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "3",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":3,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "4",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "5",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "6",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":6,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "7",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":7,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "8",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":8,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "9",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/partial.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":8,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/duplicate_port.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/empty.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/exponent.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":1,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/fraction.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/inf.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/max.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":65535,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/nan.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/nearmax.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":65535,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/negative.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/overflow.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/oversize_row.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":131072,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/ragged.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":8,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_000.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_001.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_002.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_003.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_004.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_005.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_006.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_007.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_008.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_009.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_010.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_011.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_012.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_013.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_014.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_015.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_016.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_017.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_018.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_019.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_020.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_021.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_022.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_023.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_024.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_025.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_026.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_027.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_028.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_029.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_030.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_031.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_032.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_033.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_034.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_035.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_036.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_037.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_038.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_039.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_040.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_041.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_042.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_043.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_044.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_045.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_046.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_047.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_048.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_049.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_050.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_051.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_052.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_053.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_054.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_055.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_056.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_057.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_058.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_059.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_060.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_061.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_062.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_063.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_064.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":0,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_065.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_066.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_067.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_068.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_069.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_070.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_071.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":2,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_072.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_073.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_074.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_075.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_076.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_077.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_078.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_079.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_080.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_081.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_082.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_083.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_084.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_085.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_086.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_087.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_088.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_089.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_090.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_091.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_092.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_093.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_094.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_095.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_096.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_097.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_098.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_099.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_100.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_101.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_102.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_103.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_104.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_105.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_106.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_107.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_108.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_109.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_110.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_111.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_112.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_113.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_114.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_115.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_116.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_117.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_118.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_119.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_120.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_121.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_122.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_123.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_124.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_125.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_126.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_127.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_128.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_129.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_130.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_131.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_132.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_133.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_134.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_135.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_136.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_137.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_138.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/truncated_139.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":5,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/native/zero.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":0,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_0.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":1,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_1.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":65535,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_2.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_3.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_4.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_5.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":0,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_6.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_7.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_8.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":17,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_9.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_10.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":0,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/width_11.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_0.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":1}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_1.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":65535}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_2.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_3.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_4.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":18}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_5.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_6.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_7.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_8.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":17}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_9.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_10.html"
+    ],
+    "exit": 0,
+    "stdout": "{\"supported\":1,\"allocations\":7,\"width\":18,\"height\":0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/native-inputs/height_11.html"
+    ],
+    "exit": 10,
+    "stdout": "{\"supported\":0,\"allocations\":4,\"width\":0,\"height\":0}\n",
+    "stderr": ""
+  }
+]
