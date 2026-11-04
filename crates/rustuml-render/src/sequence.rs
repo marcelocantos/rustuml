@@ -432,10 +432,25 @@ fn single_note_visible_raw_width(
     max_text_w + raw_margin + 2.0 * note_global_padding
 }
 
-fn folded_note_component_width(max_text_w: f64, note_global_padding: f64, shadow: f64) -> f64 {
-    // ComponentRoseNote#getPreferredWidth includes Fashion.deltaShadow;
-    // drawInternalU keeps the visible polygon at getTextWidth.
-    max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding + shadow
+fn folded_note_component_width(
+    max_text_w: f64,
+    note_global_padding: f64,
+    shadow: f64,
+    alignment: MessageAlign,
+) -> f64 {
+    // ComponentRoseNote constructor: marginX1 is 15 for CENTER, otherwise 6.
+    // getPreferredWidth adds its complete padded text width and deltaShadow.
+    let left_margin = if alignment == MessageAlign::Center {
+        ROSE_NOTE_MARGIN_X2
+    } else {
+        NOTE_TEXT_X_PAD
+    };
+    max_text_w
+        + left_margin
+        + ROSE_NOTE_MARGIN_X2
+        + 2.0 * ROSE_NOTE_PADDING_X
+        + 2.0 * note_global_padding
+        + shadow
 }
 
 fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
@@ -726,6 +741,8 @@ fn aligned_note_text_x(
 }
 const ACTIVATION_WIDTH: f64 = 10.0;
 const ACTIVATION_HALF_W: f64 = 5.0;
+// plantuml.skin: activationBox inherits root LineColor, independently of lifeLine.
+const DEFAULT_ACTIVATION_BORDER: &str = "#181818";
 /// Gap between autonumber bold text and message label text.
 const AUTONUMBER_LABEL_GAP: f64 = 4.0;
 const LIFELINE_RECT_WIDTH: f64 = 8.0;
@@ -1250,7 +1267,6 @@ struct NoteTextMetrics {
     line_heights: Vec<f64>,
     first_height: f64,
     total_height: f64,
-    body_height_extra: f64,
 }
 
 struct NoteTableLayout {
@@ -1324,13 +1340,9 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
             line_heights: table.row_heights,
             first_height,
             total_height: text_height + NOTE_TABLE_BODY_EXTRA,
-            body_height_extra: NOTE_TABLE_BODY_EXTRA,
         };
     }
 
-    let mut text_seen_before_list = false;
-    let mut list_after_text = false;
-    let mut smaller_size_after_first = false;
     let mut compact_hline_before_list_count = 0_usize;
     let visual_lines = note_visual_lines(text);
     let line_heights = visual_lines
@@ -1339,13 +1351,6 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
         .map(|(idx, line)| {
             if line.kind == NoteLineKind::Normal {
                 let trimmed = line.text.trim();
-                match creole::parse_line(trimmed) {
-                    CreoleLine::Text(_) if !trimmed.is_empty() => text_seen_before_list = true,
-                    CreoleLine::Bullet { .. } | CreoleLine::Numbered { .. } => {
-                        list_after_text |= text_seen_before_list;
-                    }
-                    _ => {}
-                }
                 if is_single_hline(trimmed)
                     && visual_lines
                         .iter()
@@ -1359,11 +1364,6 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
                     compact_hline_before_list_count += 1;
                     return NOTE_HLINE_COMPACT_HEIGHT;
                 }
-                if idx > 0 {
-                    smaller_size_after_first |= creole::parse_segments(trimmed)
-                        .iter()
-                        .any(|seg| seg.style.size.is_some_and(|size| (size as f64) < font_size));
-                }
             }
             note_visual_line_metrics_with_family(*line, font_size, font_family).height
         })
@@ -1373,26 +1373,15 @@ fn note_text_metrics_with_family(text: &str, font_size: f64, font_family: &str) 
             line_heights,
             first_height: 0.0,
             total_height: 0.0,
-            body_height_extra: 0.0,
         };
     }
     let first_height = line_heights[0];
     let total_height = line_heights.iter().sum::<f64>()
         + compact_hline_before_list_count as f64 * NOTE_HLINE_AFTER_LIST_Y_EXTRA;
-    // PlantUML's folded-note body extends one pixel below the text-flow
-    // reservation for these multiline rich-text cases. Event spacing keeps
-    // using `total_height`; only the drawn note body gets this correction.
-    let body_height_extra = if list_after_text || smaller_size_after_first {
-        1.0
-    } else {
-        0.0
-    } + compact_hline_before_list_count as f64
-        * (NOTE_HLINE_HEIGHT - NOTE_HLINE_COMPACT_HEIGHT);
     NoteTextMetrics {
         line_heights,
         first_height,
         total_height,
-        body_height_extra,
     }
 }
 
@@ -1743,6 +1732,12 @@ fn note_base_height(shape: NoteShape, first_line_height: f64) -> f64 {
 }
 
 fn note_rendered_height(shape: NoteShape, metrics: &NoteTextMetrics) -> f64 {
+    if shape == NoteShape::Note {
+        // ComponentRoseNote#drawInternalU casts getTextHeight (whole block plus
+        // marginY*2), not individual lines. Account 2dab3648.
+        return (metrics.total_height + 2.0 * ROSE_NOTE_PADDING_Y).floor();
+    }
+
     note_base_height(shape, metrics.first_height)
         + metrics
             .line_heights
@@ -1750,11 +1745,6 @@ fn note_rendered_height(shape: NoteShape, metrics: &NoteTextMetrics) -> f64 {
             .skip(1)
             .map(|height| height.floor())
             .sum::<f64>()
-        + if shape == NoteShape::Note {
-            metrics.body_height_extra
-        } else {
-            0.0
-        }
 }
 
 /// Vertical offset from a message-attached note's top edge to the message arrow
@@ -4225,6 +4215,7 @@ struct PlantUmlSvg {
     /// Defaults to "1" (PlantUML's historical line weight) but can be raised
     /// by `skinparam arrowThickness N`.
     arrow_thickness: String,
+    activation_border: String,
     /// Participant head/tail box border colour (default `#181818`). Driven
     /// by `skinparam participantBorderColor`.
     participant_border: String,
@@ -4302,6 +4293,7 @@ impl PlantUmlSvg {
             handwritten: false,
             teoz: false,
             arrow_thickness: "1".into(),
+            activation_border: DEFAULT_ACTIVATION_BORDER.into(),
             participant_border: "#181818".into(),
             participant_border_thickness: "0.5".into(),
             participant_font_color: "#000000".into(),
@@ -5610,6 +5602,7 @@ impl PlantUmlSvg {
         close_up: bool,
         close_down: bool,
     ) {
+        let border = &self.activation_border;
         let shadow = self
             .component_shadow_filter
             .as_ref()
@@ -5619,7 +5612,7 @@ impl PlantUmlSvg {
             // Plain stroked rect: identical to the uncut activation bar.
             write!(
                 self.buf,
-                r##"<rect fill="{}"{shadow} height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+                r##"<rect fill="{}"{shadow} height="{}" style="stroke:{border};stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
                 color,
                 fmt_coord(h),
                 ACTIVATION_WIDTH as u32,
@@ -5649,7 +5642,7 @@ impl PlantUmlSvg {
         // Left vertical, right vertical (always).
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{border};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(x_left),
             fmt_coord(x_left),
             fmt_coord(y_top),
@@ -5658,7 +5651,7 @@ impl PlantUmlSvg {
         .unwrap();
         write!(
             self.buf,
-            r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{border};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             fmt_coord(x_right),
             fmt_coord(x_right),
             fmt_coord(y_top),
@@ -5669,7 +5662,7 @@ impl PlantUmlSvg {
         if close_up {
             write!(
                 self.buf,
-                r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                r##"<line style="stroke:{border};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                 fmt_coord(x_left),
                 fmt_coord(x_right),
                 fmt_coord(y_top),
@@ -5680,7 +5673,7 @@ impl PlantUmlSvg {
         if close_down {
             write!(
                 self.buf,
-                r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                r##"<line style="stroke:{border};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                 fmt_coord(x_left),
                 fmt_coord(x_right),
                 fmt_coord(y_bot),
@@ -6698,6 +6691,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `skinparam SequenceMessageAlign` accepts left (default) | center | right.
     let mut message_align = MessageAlign::Left;
     let mut note_text_align = MessageAlign::Left;
+    let mut explicit_note_alignment = None;
     // Participant head/tail box corner radius. `skinparam RoundCorner N` sets
     // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
     let mut head_box_rx = HEAD_BOX_RX;
@@ -6812,6 +6806,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let style = val.to_ascii_lowercase();
                 message_font_bold = style.contains("bold");
                 message_font_italic = style.contains("italic");
+            }
+            "notetextalignment" | "sequencenotetextalignment" => {
+                explicit_note_alignment = Some(match val.to_ascii_lowercase().as_str() {
+                    "center" => MessageAlign::Center,
+                    "right" => MessageAlign::Right,
+                    _ => MessageAlign::Left,
+                });
             }
             "defaulttextalignment" => {
                 let align = match val.to_ascii_lowercase().as_str() {
@@ -7007,6 +7008,50 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             _ => {}
         }
     }
+    // Rose#createComponentNote obtains text alignment from ISkinParam,
+    // not Style.HorizontalAlignment. The note-specific key wins over default.
+    if let Some(alignment) = explicit_note_alignment {
+        note_text_align = alignment;
+    }
+    let cascade = crate::style_cascade::StyleCascade::new(&diagram.meta.style_program);
+    let note_signature = crate::style_cascade::StyleSignature::from_selectors([
+        "root",
+        "element",
+        "sequenceDiagram",
+        "note",
+    ]);
+    let activation_signature = crate::style_cascade::StyleSignature::from_selectors([
+        "root",
+        "element",
+        "sequenceDiagram",
+        "activationBox",
+    ]);
+    let note_style = cascade.resolve(
+        &note_signature,
+        rustuml_parser::diagram::style::StyleScheme::Regular,
+    );
+    let activation_style = cascade.resolve(
+        &activation_signature,
+        rustuml_parser::diagram::style::StyleScheme::Regular,
+    );
+    // Display/SheetBlock's alignment may come from Style even though Rose's
+    // component margin/position comes from ISkinParam (2dab3648).
+    let note_block_align = note_style
+        .property("horizontalAlignment")
+        .map(|value| match value.to_ascii_lowercase().as_str() {
+            "center" => MessageAlign::Center,
+            "right" => MessageAlign::Right,
+            _ => MessageAlign::Left,
+        })
+        .unwrap_or(note_text_align);
+    // LifeLine#drawU merges the activationBox signature, then applies per-life
+    // colors. ComponentRoseActiveLine applies ForeColor; its stroke stays 1.
+    let activation_border = activation_style
+        .property("lineColor")
+        .map(resolve_color)
+        // plantuml.skin's lifeLine and activationBox are sibling signatures.
+        // A lifeLine-specific skinparam cannot supply activationBox's fallback.
+        .unwrap_or_else(|| DEFAULT_ACTIVATION_BORDER.to_string());
     // `skinparam monochrome true` desaturates the palette. The only colour the
     // sequence renderer normally emits beyond the already-monochrome #181818
     // stroke is the participant/shape background, which becomes #E3E3E3.
@@ -7128,10 +7173,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // ComponentRoseNote preferred dimensions include its own shadow style,
     // independently of participant shadowing. ArrowAndNoteBox centers the note.
     // FromSkinparamToStyle#getShadowingValue maps boolean true to 3.
-    let note_shadow_delta = if note_shadow_filter.is_some() {
-        SHADOW_VERTICAL_PAD
+    let note_shadow_delta = note_style
+        .property("shadowing")
+        .and_then(|value| value.parse::<f64>().ok())
+        .filter(|value| value.is_finite())
+        .unwrap_or(if note_shadow_filter.is_some() {
+            SHADOW_VERTICAL_PAD
+        } else {
+            0.0
+        })
+        .max(0.0);
+    // Fashion.deltaShadow affects preferred dimensions and whether the shape
+    // requests SvgGraphics' shared shadow filter. The filter itself is fixed.
+    note_shadow_filter = if note_shadow_delta > 0.0 {
+        filter_id.clone()
     } else {
-        0.0
+        None
     };
     let shadow_note_extra = note_shadow_delta / 2.0;
     let note_global_padding = if theme_loaded && !sequence_shadowing {
@@ -9237,8 +9294,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note_across_missing_space(centre, pw)
                     }
                 } else if note.shape == NoteShape::Note {
-                    let component_pref_w =
-                        folded_note_component_width(max_tw, note_global_padding, note_shadow_delta);
+                    let component_pref_w = folded_note_component_width(
+                        max_tw,
+                        note_global_padding,
+                        note_shadow_delta,
+                        note_text_align,
+                    );
                     let content_visible_w =
                         note_content_width_padded(max_tw, note.shape, note_text_align);
                     let note_left = over_several_note_geometry(
@@ -9513,6 +9574,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family),
             note_global_padding,
             note_shadow_delta,
+            note_text_align,
         );
         let history = teoz_history.as_ref().unwrap();
         let owner = note_owner.get(&event_index).copied();
@@ -9697,6 +9759,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         max_text_w,
                         note_global_padding,
                         note_shadow_delta,
+                        note_text_align,
                     );
                     let left = match note.position {
                         NotePosition::Left => {
@@ -9844,6 +9907,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         max_text_w,
                                         note_global_padding,
                                         note_shadow_delta,
+                                        note_text_align,
                                     )
                                 } else {
                                     note_content_width_raw_padded(
@@ -10439,6 +10503,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                                 max_text_w,
                                                 note_global_padding,
                                                 note_shadow_delta,
+                                                note_text_align,
                                             )
                                         } else {
                                             note_content_width_raw_padded(
@@ -10701,8 +10766,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note_font_size_f,
                     &note_font_family,
                 );
-                let mut width =
-                    folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta);
+                let mut width = folded_note_component_width(
+                    max_text_w,
+                    note_global_padding,
+                    note_shadow_delta,
+                    note_text_align,
+                );
                 let origin = if note.position == NotePosition::Right {
                     (participants[lo].center_x
                         + note_right_live_shift_by_event
@@ -10770,7 +10839,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         );
         let note_left = if note.shape == NoteShape::Note && !diagram.teoz {
             let component_left = (ll_x
-                - folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta))
+                - folded_note_component_width(
+                    max_text_w,
+                    note_global_padding,
+                    note_shadow_delta,
+                    note_text_align,
+                ))
             .trunc()
                 + legacy_left_note_delta(event_index);
             left_missing_space = left_missing_space.max(-component_left);
@@ -10970,14 +11044,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             max_line_width,
                             note_global_padding,
                             note_shadow_delta,
-                        ) + if note_text_align == MessageAlign::Center {
-                            // ComponentRoseNote's constructor selects marginX1=15
-                            // for CENTER instead of 6; AbstractTextualComponent
-                            // includes it in getTextWidth (account 76972e36).
-                            ROSE_NOTE_MARGIN_X2 - NOTE_TEXT_X_PAD
-                        } else {
-                            0.0
-                        };
+                            note_text_align,
+                        );
                         let note_start = (participants[right].center_x
                             + note_right_live_shift_by_event
                                 .get(&event_idx)
@@ -11020,6 +11088,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 max_line_width,
                                 note_global_padding,
                                 note_shadow_delta,
+                                note_text_align,
                             )
                             + depth as f64 * ACTIVATION_HALF_W
                             + NOTE_LIFELINE_GAP;
@@ -11865,6 +11934,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.note_font_family = note_font_family.clone();
     svg.note_font_size = note_font_size;
     svg.note_shadow_filter = note_shadow_filter.clone();
+    svg.activation_border = activation_border;
     // ComponentRoseActiveLine and GroupingHeader background set deltaShadow;
     // their preferred dimensions do not include that paint-only extent.
     svg.component_shadow_filter = if sequence_shadowing {
@@ -14260,6 +14330,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         max_text_w,
                         note_global_padding,
                         note_shadow_delta,
+                        note_text_align,
                     );
                     // ComponentRoseNote#drawInternalU truncates only the polygon
                     // width. AbstractComponent adds paddingX to the Real origin.
@@ -14326,6 +14397,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         max_text_w,
                                         note_global_padding,
                                         note_shadow_delta,
+                                        note_text_align,
                                     ) + ROSE_NOTE_PADDING_X;
                                 (left, left + note_content_w)
                             } else if note.shape == NoteShape::Note && !diagram.teoz {
@@ -14333,6 +14405,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     max_text_w,
                                     note_global_padding,
                                     note_shadow_delta,
+                                    note_text_align,
                                 );
                                 let component_left = body_trunc(ll_x - component_width)
                                     + legacy_left_note_delta(ev_idx);
@@ -14456,6 +14529,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                             max_text_w,
                                             note_global_padding,
                                             note_shadow_delta,
+                                            note_text_align,
                                         )
                                     } else {
                                         note_content_width_raw_padded(
@@ -14734,6 +14808,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         max_text_w,
                         note_global_padding,
                         note_shadow_delta,
+                        note_text_align,
                     );
                     Some(
                         note_left
@@ -14797,6 +14872,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         max_text_w,
                         note_global_padding,
                         note_shadow_delta,
+                        note_text_align,
                     );
                     let diff_x = (area_w - pref_w).max(0.0);
                     // ComponentRoseNote centers the padded TextBlock in its
@@ -14877,14 +14953,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             &note_font_family,
                             &mut note_width_number_counters,
                         );
-                        let line_x = aligned_note_text_x(
-                            note_text_align,
-                            text_x,
-                            note_left,
-                            note_right,
-                            note.shape,
-                            line_width,
-                        );
+                        let line_x = if note.shape == NoteShape::Note {
+                            // ComponentRoseNote translates its text block, then
+                            // SheetBlock1 aligns each line without rounding x.
+                            let component_shift = match note_text_align {
+                                MessageAlign::Left => 0.0,
+                                MessageAlign::Center => ROSE_NOTE_MARGIN_X2 - NOTE_TEXT_X_PAD,
+                                MessageAlign::Right => {
+                                    2.0 * ROSE_NOTE_PADDING_X + note_shadow_delta - NOTE_TEXT_X_PAD
+                                }
+                            };
+                            let line_shift = match note_block_align {
+                                MessageAlign::Left => 0.0,
+                                MessageAlign::Center => (max_text_w - line_width) / 2.0,
+                                MessageAlign::Right => max_text_w - line_width,
+                            };
+                            text_x + component_shift + line_shift
+                        } else {
+                            aligned_note_text_x(
+                                note_text_align,
+                                text_x,
+                                note_left,
+                                note_right,
+                                note.shape,
+                                line_width,
+                            )
+                        };
                         if is_single_hline(line.text) {
                             note_number_counters.clear();
                             note_width_number_counters.clear();
@@ -15471,6 +15565,92 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn arrow_color_materialization_retains_no_paint_and_alpha() {
+        for color in ["transparent", "#TRANSPARENT", "#10203000", "#00000000"] {
+            assert_eq!(sequence_arrow_color(color), "none");
+        }
+        for (input, expected) in [
+            ("#a", "#AAAAAA"),
+            ("#c3f", "#CC33FF"),
+            ("#39abefFF", "#39ABEF"),
+            ("#39abef80", "#39ABEF80"),
+            ("application", "#C2F0FF"),
+        ] {
+            assert_eq!(sequence_arrow_color(input), expected);
+        }
+        assert_eq!(
+            sequence_fill_attributes(&sequence_arrow_color("#39abef80")),
+            r##"fill="#39ABEF" fill-opacity="0.50196""##
+        );
+        assert_eq!(
+            sequence_fill_attributes(&sequence_arrow_color("#39abef00")),
+            r#"fill="none""#
+        );
+    }
+
+    #[test]
+    fn activation_border_does_not_inherit_its_sibling_lifeline_skinparam() {
+        for engine in ["", "!pragma teoz true\n"] {
+            for color in ["blue", "black"] {
+                let diagram = rustuml_parser::parse::parse(&format!(
+                    "@startuml\n{engine}skinparam sequenceLifeLineBorderColor {color}\nA -> B ++ : enter\nreturn complete\n@enduml\n"
+                )).unwrap();
+                let svg = crate::render_svg(&diagram);
+                let bars = svg
+                    .split("<rect ")
+                    .skip(1)
+                    .filter_map(|element| {
+                        let tag = element.split("/>").next().unwrap();
+                        tag.contains(r#"width="10""#).then_some(tag)
+                    })
+                    .collect::<Vec<_>>();
+                assert!(!bars.is_empty());
+                assert!(
+                    bars.iter().all(|tag| tag.contains("stroke:#181818;")),
+                    "{svg}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn teoz_destroy_is_painted_with_its_level_before_the_next_bar() {
+        for declarations in [
+            "participant A\nparticipant B",
+            "participant B\nparticipant A",
+        ] {
+            let lines = format!(
+                "{declarations}\nA -> B ++ : enter\nB -> B ++ : recurse\nB --> B -- : inner\nB --> A : exit\ndestroy B"
+            )
+            .lines()
+            .map(str::to_owned)
+            .collect::<Vec<_>>();
+            let diagram = rustuml_parser::parse::sequence::parse_sequence(&lines).unwrap();
+            let layout = sequence_lifecycle_layout(&diagram.events, diagram.events.len());
+            let history = TeozHistory::new(&diagram.events, &layout.attachment_owner);
+            let ordinates = (0..diagram.events.len())
+                .map(|i| (i + 1) as f64 * MSG_BASE_STEP)
+                .collect::<Vec<_>>();
+            let painting = history.segments(
+                &diagram.events,
+                "B",
+                &layout.message_states,
+                &ordinates,
+                &ordinates,
+                (0.0, (diagram.events.len() + 1) as f64 * MSG_BASE_STEP),
+            );
+            assert!(matches!(
+                painting.order.as_slice(),
+                [
+                    TeozLifePaintOperation::Bar(0),
+                    TeozLifePaintOperation::Destroy { depth: 0, .. },
+                    TeozLifePaintOperation::Bar(1)
+                ]
+            ));
+        }
+    }
 
     #[test]
     fn teoz_history_modes_preserve_source_order_and_message_ownership() {
