@@ -2007,28 +2007,16 @@ fn emit_note_table(
     }
 }
 
-fn note_base_height(shape: NoteShape, first_line_height: f64) -> f64 {
-    let base = (first_line_height + 10.0).floor();
-    match shape {
-        NoteShape::Note => base,
-        NoteShape::Hexagonal | NoteShape::Rectangular => base - 2.0,
-    }
-}
-
 fn note_rendered_height(shape: NoteShape, metrics: &NoteTextMetrics) -> f64 {
-    if shape == NoteShape::Note {
-        // ComponentRoseNote#drawInternalU casts getTextHeight (whole block plus
-        // marginY*2), not individual lines. Account 2dab3648.
-        return (metrics.total_height + 2.0 * ROSE_NOTE_PADDING_Y).floor();
-    }
-
-    note_base_height(shape, metrics.first_height)
-        + metrics
-            .line_heights
-            .iter()
-            .skip(1)
-            .map(|height| height.floor())
-            .sum::<f64>()
+    // AbstractTextualComponent#getTextHeight sums the entire block and marginY*2;
+    // ComponentRoseNote{,Box,Hexagonal}#drawInternalU then casts that total once.
+    // Their constructors use marginY5 for folded notes and marginY4 for box/hex.
+    // Folded aggregation is retained from account 2dab3648; box/hex account ca2aae93f.
+    let margin_y = match shape {
+        NoteShape::Note => ROSE_NOTE_PADDING_Y,
+        NoteShape::Rectangular | NoteShape::Hexagonal => 4.0,
+    };
+    (metrics.total_height + 2.0 * margin_y).floor()
 }
 
 /// Vertical offset from a message-attached note's top edge to the message arrow
@@ -17234,6 +17222,31 @@ mod tests {
     fn legacy_plantuml_palette_preserves_non_css_values() {
         assert_eq!(resolve_color("MediumPurple"), "#9370D8");
         assert_eq!(resolve_color("PaleVioletRed"), "#D87093");
+    }
+
+    #[test]
+    fn note_paint_height_casts_complete_text_block() {
+        for text in [
+            "one\ntwo\nthree\nfour",
+            "<size:17>one</size>\ntwo\nthree\nfour\nfive",
+        ] {
+            let metrics = note_text_metrics_with_family(text, 13.0, "sans-serif");
+            for (shape, margin) in [
+                (NoteShape::Note, 5.0),
+                (NoteShape::Rectangular, 4.0),
+                (NoteShape::Hexagonal, 4.0),
+            ] {
+                let whole = (metrics.total_height + 2.0 * margin).floor();
+                let per_line = metrics
+                    .line_heights
+                    .iter()
+                    .map(|height| height.floor())
+                    .sum::<f64>()
+                    + 2.0 * margin;
+                assert!(whole > per_line);
+                assert_eq!(note_rendered_height(shape, &metrics), whole);
+            }
+        }
     }
 
     fn simple_diagram() -> SequenceDiagram {
