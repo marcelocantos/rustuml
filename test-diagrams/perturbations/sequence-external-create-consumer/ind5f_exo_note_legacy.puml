@@ -1,0 +1,8 @@
+@startuml
+participant Lyra
+actor Finch
+create Finch
+Finch ->]: hatch
+note right: outbound annotation
+Lyra -> Finch: follow
+@enduml

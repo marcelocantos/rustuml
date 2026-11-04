@@ -1,0 +1,8 @@
+@startuml
+database Cedar
+participant Lyra
+autonumber 7 3
+create Cedar
+[-> Cedar: initialize
+Cedar -> Lyra: ready
+@enduml

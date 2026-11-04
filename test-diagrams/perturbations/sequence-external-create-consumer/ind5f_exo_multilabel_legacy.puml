@@ -1,0 +1,8 @@
+@startuml
+participant Lyra
+queue Reed
+create Reed
+Reed <-]: first\nsecond
+note over Reed: inventory
+Reed -> Lyra: done
+@enduml

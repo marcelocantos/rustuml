@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+hide stereotype
+participant Sender
+queue "Long Storage Inbox" as Inbox <<x>>
+Sender -> Inbox: deliver
+@enduml

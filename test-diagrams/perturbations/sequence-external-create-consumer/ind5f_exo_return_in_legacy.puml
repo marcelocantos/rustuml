@@ -1,0 +1,8 @@
+@startuml
+participant Lyra
+actor Robin
+create Robin
+[-> Robin: enter
+activate Robin
+return acknowledge
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+participant Kite
+queue Q <<**priority**>>
+Kite -> Q: deliver
+@enduml

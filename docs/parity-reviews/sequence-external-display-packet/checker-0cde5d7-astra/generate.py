@@ -1,0 +1,47 @@
+# Copyright 2026 Marcelo Cantos
+# SPDX-License-Identifier: Apache-2.0
+import base64,gzip,hashlib,json
+from pathlib import Path
+C=Path(__file__).resolve().parent; D=C/'reference-inputs'; D.mkdir(exist_ok=False)
+cases=[]
+def add(kind,name,body,axes,valid=True):
+ for engine in ['legacy','teoz']:
+  n='ind5f_'+name+'_'+engine;s='@startuml\n'+('!pragma teoz true\n' if engine=='teoz' else '')+body+'\n@enduml\n';p=D/(n+'.puml');p.write_text(s)
+  cases.append(dict(name=n,source=str(p),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),cwd='PRIVATE_CWD',timezone='GMT+11:00',invocation=['/Users/marcelo/rustuml-reference/bin/reference','--cwd','PRIVATE_CWD','--timezone','GMT+11:00','--','-pipe','-tsvg'],axes=[*axes,engine],intended_valid=valid,mechanism=kind))
+E='sequence-external-create-consumer';Q='sequence-queue-complete-stereotype-display'
+add(E,'exo_note','participant Lyra\nactor Finch\ncreate Finch\nFinch ->]: hatch\nnote right: outbound annotation\nLyra -> Finch: follow', ['outgoing right','note on arrow','actor'])
+add(E,'exo_number','database Cedar\nparticipant Lyra\nautonumber 7 3\ncreate Cedar\n[-> Cedar: initialize\nCedar -> Lyra: ready', ['incoming left','autonumber increment','database first'])
+add(E,'exo_activate','collections Ibis\nparticipant Lyra\ncreate Ibis\nIbis <-]: awaken\nactivate Ibis\nIbis -> Lyra: notify\ndeactivate Ibis', ['incoming right','activation/deactivation','collections'])
+add(E,'exo_group','participant Lyra\ncontrol Kestrel\ngroup enclosing\ncreate Kestrel\n[<- Kestrel: outside\nKestrel -> Lyra: inside\nend', ['outgoing left','group','control'])
+add(E,'exo_alt','actor Heron\nparticipant Lyra\nalt green\ncreate Heron\nHeron ->]: signal\nelse amber\nLyra -> Heron: retry\nend', ['outgoing right','alt branches','actor first'])
+add(E,'exo_box','box Habitat\nqueue Crane\nparticipant Lyra\nend box\ncreate Crane\n[-> Crane: enlist\nCrane -> Lyra: receive', ['incoming left','box','queue'])
+add(E,'exo_repeat','participant Lyra\nentity Swift\ncreate Swift\nSwift ->]: first\ncreate Swift\n[-> Swift: second\ncreate Swift\nSwift <-]: third\nSwift -> Lyra: fourth', ['three attached creates','directions','entity'])
+add(E,'exo_then_other','actor Wren\nparticipant Lyra\ndatabase Juniper\ncreate Wren\n[<- Wren: depart\ncreate Juniper\nLyra -> Juniper: allocate\nWren -> Juniper: connect', ['external then ordinary different receiver','three participants','declaration order'])
+add(E,'exo_short_in','boundary Osprey\nparticipant Lyra\ncreate Osprey\n?-> Osprey: near\nOsprey -> Lyra: far', ['short incoming question border','boundary'])
+add(E,'exo_short_out','participant Lyra\ncollections Osprey\ncreate Osprey\nOsprey ->?: near\nLyra -> Osprey: next', ['short outgoing question border','collections'])
+add(E,'exo_return_in','participant Lyra\nactor Robin\ncreate Robin\n[-> Robin: enter\nactivate Robin\nreturn acknowledge', ['external incoming return','activation','actor'])
+add(E,'exo_return_out','participant Lyra\nentity Robin\ncreate Robin\nRobin ->]: leave\nreturn reply', ['external outgoing return','entity'])
+add(E,'exo_destroy','actor Lark\nparticipant Lyra\ncreate Lark\nLark ->]: send\nLyra -> Lark: close\ndestroy Lark', ['outgoing destroy','actor first'])
+add(E,'exo_nested','participant Lyra\ndatabase Alder\ngroup enclosing\nalt permitted\ncreate Alder\n[-> Alder: open\nelse denied\nLyra -> Alder: wait\nend\nend', ['nested group alt','incoming','database'])
+add(E,'ordinary_control','participant Lyra\nactor Pipit\ndatabase Hazel\ncreate Pipit\nLyra -> Pipit: first ordinary\ncreate Hazel\nPipit -> Hazel: second ordinary\ndestroy Hazel', ['ordinary control','two created kinds','destroy'])
+add(E,'exo_multilabel','participant Lyra\nqueue Reed\ncreate Reed\nReed <-]: first\\nsecond\nnote over Reed: inventory\nReed -> Lyra: done', ['incoming right','multiline message','separate note'])
+add(Q,'queue_multiple','participant Kite\nqueue Q <<urgent>><<durable>>\nKite -> Q: deliver', ['multiple stereotypes','bare queue'])
+add(Q,'queue_multistereo','queue Q <<cold\\nwarm>>\nparticipant Kite\nKite -> Q: deliver', ['multiline stereotype','queue first'])
+add(Q,'queue_spotted','participant Kite\nqueue Q <<(S,#99CCFF)storage>>\nKite -> Q: deliver', ['spotted stereotype','bare queue'])
+add(Q,'queue_styled','participant Kite\nqueue Q <<**priority**>>\nKite -> Q: deliver', ['styled stereotype','bold'])
+add(Q,'queue_wide','queue Q <<a considerably wider dispatch category>>\nparticipant Kite\nKite -> Q: deliver', ['stereotype wider than name','order'])
+add(Q,'queue_nested_boxes','box Outer\nactor Kite <<pilot>>\nbox Inner\nqueue Q <<long delivery category>>\ndatabase Store <<archive>>\nend box\ncollections Pages <<batch>>\nend box\nKite -> Q: enqueue\nQ -> Store: persist\nStore -> Pages: publish', ['nested boxes','actor database collections neighbours','four kinds'])
+add(Q,'queue_mixed_box','box Habitat\ncollections Pages <<batch>>\nqueue Q <<dispatch>>\nactor Kite <<pilot>>\ndatabase Store <<archive>>\nend box\nKite -> Q: enqueue\nQ -> Store: persist\nStore -> Pages: publish', ['single box','boxed figure surcharge','reverse kind order'])
+add(Q,'queue_create_destroy','participant Kite\ncreate queue Q <<volatile>>\nKite -> Q: create\nQ -> Kite: ready\ndestroy Q', ['created queue','destroy'])
+add(Q,'queue_fontsize','skinparam sequenceStereotypeFontSize 19\nparticipant Kite\nqueue Q <<dispatch>>\nKite -> Q: deliver', ['stereotype font size','bare queue'])
+add(Q,'queue_fontcolor','skinparam sequenceStereotypeFontColor #BB2255\nskinparam sequenceStereotypeFontStyle italic\nparticipant Kite\nqueue Q <<dispatch>>\nKite -> Q: deliver', ['stereotype font color/style','bare queue'])
+add(Q,'queue_hide','hide stereotype\nparticipant Kite\nqueue Q <<concealed>>\nKite -> Q: deliver', ['hidden stereotype','bare queue'])
+add(Q,'queue_below','skinparam stereotypePosition bottom\nparticipant Kite\nqueue Q <<underneath>>\nKite -> Q: deliver', ['stereotype bottom position','bare queue'])
+add(Q,'queue_two','queue Q <<first\\nsecond>>\nactor Kite\nqueue R <<wide dispatch category>>\nKite -> Q: enqueue\nQ -> R: relay', ['two queue counts','different stereotype widths/stripes'])
+add(Q,'other_kinds_control','box Habitat\nactor Kite <<pilot>>\ndatabase Store <<archive>>\ncollections Pages <<batch>>\nend box\nKite -> Store: persist\nStore -> Pages: publish', ['no queue control','boxed figure surcharge'])
+m=dict(schema_version=1,purpose='Independent external CREATE and complete queue Display adversarial probes',cases=cases)
+b=(json.dumps(m,indent=2)+'\n').encode();(C/'reference-manifest.json').write_bytes(b)
+bundle=dict(manifest=m,manifest_sha256=hashlib.sha256(b).hexdigest(),files=[dict(path=x['name']+'.puml',sha256=x['source_sha256'],base64=base64.b64encode(Path(x['source']).read_bytes()).decode()) for x in cases],resources=[])
+(C/'reference-input-bundle.json.gz').write_bytes(gzip.compress((json.dumps(bundle,indent=2)+'\n').encode(),mtime=0))
+for p in [C/'reference-manifest.json',C/'reference-input-bundle.json.gz']:print(p,hashlib.sha256(p.read_bytes()).hexdigest())
+print('cases',len(cases))
