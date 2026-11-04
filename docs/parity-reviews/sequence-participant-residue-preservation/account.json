@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-participant-residue-preservation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.command.CommandParticipant#getOrderRegex / executeArg",
+    "sequencediagram.SequenceDiagram#createNewParticipant / addWithOrder"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_participant_decl_in_command"
+  ],
+  "invariant": "Explicit unsupported-command reporting must not erase already-supported identity/label/declaration information. A signed-order limitation must remain visible without claiming a faithful ordering model.",
+  "causal_divergence": "Candidate1 (patch and binary bound in private cache candidate1-binding.json) rejected negative order at handler entry, removing the participant declaration. Fresh participant_negative_legacy lost a prior whole match because an implicitly recreated participant appears later. Java creates the participant with a signed order; the current usize model cannot represent it.",
+  "planned_change": "Keep the full anchored declaration and its supported fields, retain existing fallback ordering when negative order is unrepresentable, and emit a precise unsupported signed-order diagnostic. This is explicit partial execution, not complete negative-order support. Do not widen model/ASCII ownership or change global ordering defaults in this packet.",
+  "perturbation_axes": [
+    "negative order with explicit and implicit peer declarations",
+    "legacy/Teoz and participant identity/label retention"
+  ],
+  "preimplementation_account": "589b3d5",
+  "intermediate_evidence": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/candidate1-maker30/results.json",
+  "status": "preimplementation corrective hypothesis; no acceptance",
+  "residue": "Signed order and Java default-zero stable insertion remain incomplete; all whole-output failures retained."
+}
