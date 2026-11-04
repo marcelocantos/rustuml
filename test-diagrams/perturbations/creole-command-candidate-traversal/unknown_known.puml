@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Willow : A<alien<b>Bold</b>>B<bogus<color:red>Red</color>>C
+@enduml

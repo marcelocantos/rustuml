@@ -1,0 +1,8 @@
+@startwbs
+* <size:22>Grove</size>
+** <b>East</b>
+*** <size:17>Twig<$seed></size>
+**** Leaf
+-- <size:8>West</size>
+--- Bud
+@endwbs
