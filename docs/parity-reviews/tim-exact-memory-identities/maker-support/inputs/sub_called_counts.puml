@@ -1,0 +1,12 @@
+@startuml
+!$n=0
+!procedure $tick()
+!startsub saved
+!$n=$n+1
+!endsub
+!endprocedure
+!includesub saved
+$tick()
+!includesub saved
+class "$n" as Count
+@enduml

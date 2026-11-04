@@ -1,0 +1,92 @@
+{
+  "manifest_path": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement-manifest.json",
+  "manifest_sha256": "808048bb8bc1f1e043f8f159a2e1dc6861d1b8423cc888c1d476fbc3d88c6d56",
+  "case_count": 2,
+  "resources": [
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement/define_condition.puml",
+      "remote_relative_path": "supplement/define_condition.puml",
+      "sha256": "78d1cbb85a052bda4e3300142ef6a9a87b461a16099eb8995ed913f4df7c8b12",
+      "bytes": 158
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement/define_spelling.puml",
+      "remote_relative_path": "supplement/define_spelling.puml",
+      "sha256": "f9b10653e924b895c0054a8fd4d33122c18db138d17ca6468fce61ca4dfca7fe",
+      "bytes": 118
+    },
+    {
+      "local_path": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-corrective-execution-maker/SourceProbe.java",
+      "remote_relative_path": "SourceProbe.java",
+      "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+      "bytes": 689
+    }
+  ],
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "case_contracts": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement/define_spelling.puml",
+      "source_sha256": "f9b10653e924b895c0054a8fd4d33122c18db138d17ca6468fce61ca4dfca7fe",
+      "cwd": "<worker>/supplement",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/supplement/define_spelling.puml",
+        "<worker>/supplement"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement/define_condition.puml",
+      "source_sha256": "78d1cbb85a052bda4e3300142ef6a9a87b461a16099eb8995ed913f4df7c8b12",
+      "cwd": "<worker>/supplement",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/supplement/define_condition.puml",
+        "<worker>/supplement"
+      ]
+    }
+  ],
+  "output_contract": "Preserve exact raw stdout/stderr/status for SVG and probe; source and stream SHA256, actual argv/cwd/env and pinned headless runtime provenance. No normalization or local Java."
+}

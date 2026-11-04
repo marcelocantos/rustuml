@@ -1,0 +1,10 @@
+@startuml
+!function $pick($a="seed")
+!return $a
+!endfunction
+!function $pick($a=$pick())
+!return "new "+$a
+!endfunction
+!$v=$pick()
+class "$v" as Captured
+@enduml

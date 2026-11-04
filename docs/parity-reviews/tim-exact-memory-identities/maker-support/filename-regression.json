@@ -1,0 +1,114 @@
+{
+  "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/golden/preprocessing/preproc_builtin_filename.puml",
+  "source_sha256": "81b8c602658077d923288a632e4b7cc40347bb4a128685e13dcd4b39c8969617",
+  "reference_sha256": "9942020197da17621d8c26db94f0fe741a2d6e3235b02c663fadf048d520c40d",
+  "env_overrides": {
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+    "TZ": "GMT+11:00",
+    "RAYON_NUM_THREADS": "4"
+  },
+  "results": [
+    {
+      "phase": "before",
+      "calls": [
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim7-maker/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+          "exit": 0,
+          "stdout_sha256": "f1586cf19ef7e03de2359b266b38b9c00484bd64cba59f817c111f9ec9b244ea",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim7-maker/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+          "exit": 0,
+          "stdout_sha256": "a9c991dd45aafce63a8ba672101654a28124af6047c39fe4b0b28499083a706e",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim7-maker/probe",
+        "compare",
+        "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/golden/preprocessing/preproc_builtin_filename.svg",
+        "/Users/marcelo/Library/Caches/rustuml-tim7-maker/filename-regression/before/rust.svg"
+      ],
+      "comparison_exit": 0,
+      "svg_match": true
+    },
+    {
+      "phase": "final",
+      "calls": [
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim7-maker/final-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "96c6ab1c18729730165e3cbfd5dde0a8d6114832f2f345ff915efcbe37dfc7f4"
+        },
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim7-maker/final-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "96c6ab1c18729730165e3cbfd5dde0a8d6114832f2f345ff915efcbe37dfc7f4"
+        }
+      ],
+      "comparison_argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim7-maker/probe",
+        "compare",
+        "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/golden/preprocessing/preproc_builtin_filename.svg",
+        "/Users/marcelo/Library/Caches/rustuml-tim7-maker/filename-regression/final/rust.svg"
+      ],
+      "comparison_exit": 3,
+      "svg_match": false
+    },
+    {
+      "phase": "final2",
+      "calls": [
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim7-maker/final2-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+          "exit": 0,
+          "stdout_sha256": "f1586cf19ef7e03de2359b266b38b9c00484bd64cba59f817c111f9ec9b244ea",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim7-maker/final2-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+          "exit": 0,
+          "stdout_sha256": "a9c991dd45aafce63a8ba672101654a28124af6047c39fe4b0b28499083a706e",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "comparison_argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim7-maker/probe",
+        "compare",
+        "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/golden/preprocessing/preproc_builtin_filename.svg",
+        "/Users/marcelo/Library/Caches/rustuml-tim7-maker/filename-regression/final2/rust.svg"
+      ],
+      "comparison_exit": 0,
+      "svg_match": true
+    }
+  ]
+}

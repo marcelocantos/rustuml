@@ -1,0 +1,5 @@
+@startuml
+note as N
+Alice / $Alice / hello / $hello
+end note
+@enduml

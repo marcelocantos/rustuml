@@ -1,0 +1,10 @@
+@startuml
+!function read($a)
+!return "bare "+$a
+!endfunction
+!function $read($a)
+!return "dollar "+$a
+!endfunction
+!$v=read("oak")+"/"+$read("ash")
+class "$v/%function_exists("read")/%function_exists("$read")" as Names
+@enduml

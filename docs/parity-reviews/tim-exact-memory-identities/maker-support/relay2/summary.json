@@ -1,0 +1,19 @@
+{
+  "total": 2,
+  "valid": 2,
+  "negative": 0,
+  "before_matches": 0,
+  "current_matches": 1,
+  "current_source_matches": 2,
+  "negative_rejected": 0,
+  "lost_passes": [],
+  "valid_failures": [
+    "/Users/marcelo/Library/Caches/rustuml-tim7-maker/supplement/define_condition.puml"
+  ],
+  "new_valid_errors": [],
+  "input_compressed_sha256": "3b0cfee22510fbec3186e31cc9a43b175f9157bcc241ee3f916a75654ebcd7d0",
+  "output_compressed_sha256": "47ef58c2c974f58f6a89032a7d05fe076af2e4a5fba752b8fd0957d3a78b9d0c",
+  "output_json_sha256": "731c14c158fab033a1b8d39e5a6404c5aea8b0b2025a24f5d2d8d7dc30ba933f",
+  "resources_verified": 3,
+  "calls_verified": 4
+}
