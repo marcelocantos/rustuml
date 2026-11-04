@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean
+class "Early declaration" as Earlier
+!theme minty
+class "Late" as Later
+Earlier --> Later
+@enduml

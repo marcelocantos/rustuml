@@ -1,0 +1,7 @@
+@startuml
+package H {
+class Peer
+}
+note "Direct root" as H.N
+H.N .. H.Peer
+@enduml

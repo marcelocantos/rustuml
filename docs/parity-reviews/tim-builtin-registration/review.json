@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-registration",
+  "reviewer": {
+    "task_id": "t3-cb14b5f3-fresh-independent-TIM-checker4",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no implementation/no children"
+  },
+  "account_commit": "56a954287757fd23000d756b2fb483d43d7dcda2",
+  "implementation_commit": "6c550246b458eb5f37539713510dc7d919843421",
+  "tested_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "baseline_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd <private-worker>/<row.cwd> --timezone GMT+11:00 -- -pipe -tsvg (exact raw source on stdin; actual argv/env captured per row)",
+    "Pinned remote wrapper --probe <private-worker>/SourceProbe.java --classpath <private-worker> -- <source> <cwd> (supplemental; no local Java)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate.py candidate",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate_supplement.py candidate",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle",
+    "cargo test -p rustuml-oracle --release --test golden_pairs",
+    "cargo test -p rustuml-oracle --release --test parity_perturbations",
+    "cargo test -p rustuml-oracle --release --test harness_guards"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_text.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_text.svg",
+      "axes": [
+        "unknown plain calls",
+        "inner variable substitution"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.svg",
+      "axes": [
+        "unknown expression calls",
+        "first failure priority"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 1,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.svg",
+      "axes": [
+        "allowed versus denied names",
+        "preserve numeric-looking text"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.svg",
+      "axes": [
+        "UNSECURE profile",
+        "security prefix still denied"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_registered_unimplemented.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_registered_unimplemented.svg",
+      "axes": [
+        "registered name",
+        "plain text dispatch implementation"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 1,
+      "source_equal": false
+    }
+  ],
+  "java_locations": [
+    "tim/TContext.java:addStandardFunctions,getFunctionNameAt",
+    "tim/expression/ReversePolishInterpretor.java",
+    "tim/builtin/Getenv.java:executeReturnFunction,getenv",
+    "security/SecurityProfile.java:init,canWeReadThisEnvironmentVariable"
+  ],
+  "findings": [
+    "REJECT: checker4_registry_registered_unimplemented is valid Java (class 0) but candidate exits 1 with Unknown built-in function %boolval. The registered_builtin list names BoolVal while eval_builtin_values/eval_one_builtin_args do not implement it. Baseline exits 0 with wrong empty output, so this is a new valid-input CLI error, not a lost SVG pass. Source provenance confirms registration; it does not establish execution support.",
+    "Supported: unknown plain call text remains literal while its inner variable expands; unknown expression call fails before the later date error. Synthetic LEGACY and UNSECURE environment controls preserve allowed exact text and continue denying plantuml.security.*. All three valid controls match source/SVG under identical per-case environment overrides.",
+    "General JVM property precedence/configuration remains explicitly unproved and outside these synthetic environment controls. No ambient secret was requested or captured. The table of registered names must be reconciled with executable typed contracts; do not restore silent-empty fallback."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/README.md",
+  "scope": "This record does not overwrite or re-attest older reviews. Invalid/error reference outputs remain failing pairs in the unchanged standing oracle. Narrow supported observations are separate from packet acceptance."
+}

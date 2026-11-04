@@ -1,0 +1,245 @@
+{
+  "manifest_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/fresh-manifest.json",
+  "manifest_sha256": "c71c2f7e3314ba186f0fab87676333f1c45158496ce3425a366a058f23c18eba",
+  "case_count": 29,
+  "resources": [
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/SourceProbe.java",
+      "remote_relative_path": "SourceProbe.java",
+      "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+      "bytes": 689
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "sha256": "08118d8d4a8b790739d200e620d7e0a2efb476f01b45bfdf9e40ddac091f7c29",
+      "bytes": 165
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-registration/checker4_registry_registered_unimplemented.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_registered_unimplemented.puml",
+      "sha256": "bb49c4a81797ba6e884d3be99f58ca242a0697de22da3be40d842538520da4ad",
+      "bytes": 52
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml",
+      "sha256": "743baa5de3488a8a4321c7a7726be498cefd9cee33b83025e60da18e86396a19",
+      "bytes": 78
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_text.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_text.puml",
+      "sha256": "cfc220004445d3ed10e145c05f6c9db0c2fe156a8140061e77f90e01400da47f",
+      "bytes": 83
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "sha256": "249dfab87624b289f5872f6e9f9591236c463be48cd206877dea38e2484c2066",
+      "bytes": 125
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_chr_typed_numeric.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_chr_typed_numeric.puml",
+      "sha256": "997b5eb9bcff4c030e15e58aab067dca2b03097c494fd4dedb42be3d1391ae8d",
+      "bytes": 114
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml",
+      "sha256": "984207386508308a7fb9079a0bb394bdeece5c6ea8ef550b955a302e01978da3",
+      "bytes": 72
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+      "sha256": "a70d22e75ef5017da8eb2703313aced6ea7b2e09f1245fffc4b4c104fd4557b5",
+      "bytes": 179
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+      "sha256": "72cdaca4ceddd16d348c6c6796373d89e23f4c89f1fa02d69a3741b064b0252b",
+      "bytes": 84
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_typed_default_window.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_typed_default_window.puml",
+      "sha256": "8c44678d687275af9a2bbb60ee9682d3e3ce97e59752ed586d1086774ca99157",
+      "bytes": 232
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml",
+      "sha256": "fd266cc042363f3232382fe666c69a8cef19cf2f4d7559484421bb1b14cde451",
+      "bytes": 93
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_scalar_types.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_scalar_types.puml",
+      "sha256": "a3be86175a53ebc0b5e02854988405eeacefe04d8109d547deeba9183be66dde",
+      "bytes": 173
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_call_context.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_call_context.puml",
+      "sha256": "53318449889d42760f92ade3aca8b7615b662e10a9ffb86d5b12d79a4a3f85fa",
+      "bytes": 216
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_condition.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_condition.puml",
+      "sha256": "429b150e0190b192c68815e0bc091e74c6746a513d6fd5a84ef4d438c9972708",
+      "bytes": 285
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_index_effect.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_index_effect.puml",
+      "sha256": "c34ac3d69694cf7ca4b8be66a365ca4cbfc1d93976c251858db0df018c12a995",
+      "bytes": 207
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_nested_same_name.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_nested_same_name.puml",
+      "sha256": "ba1d4f3ebabbf7a0b516f86ea192c1529ea00873d9f70abdcd922efb8a818164",
+      "bytes": 214
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_object_rebind.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_object_rebind.puml",
+      "sha256": "4d0e9b1599e6f8f27a2ce24af98318b78675c3318e64ec623c7c62c933346200",
+      "bytes": 167
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml",
+      "sha256": "6f69c0ac531954ff21365f4b5ee236270c88b544c0879dbd4c9e6214f09f7fa0",
+      "bytes": 83
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_shadow_sibling.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_shadow_sibling.puml",
+      "sha256": "37f64e5b5d31341f7ae88e6d1703de3cbc38a79d924f70e043fb947526664ad5",
+      "bytes": 253
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_define_effects.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_define_effects.puml",
+      "sha256": "cabf7a797d07b06c448e3f77a155c60093fca9b9f2b52f61497897a2440498f8",
+      "bytes": 172
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_definelong.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_definelong.puml",
+      "sha256": "051db29b72151f086a2acd01138ec230036bc18035e77b57eb0c39f767ff9f35",
+      "bytes": 150
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_newline_boundary.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_newline_boundary.puml",
+      "sha256": "5b9dcc95961e2460438a2fb480801afb70bbbc055597e7efec29f1407c0466ee",
+      "bytes": 88
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml",
+      "sha256": "ece1ac7093a8fa4dbc4ebeff60f9b2e8170b4424bf514060aefb44f1da9363a4",
+      "bytes": 130
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-return-unwind/checker4_return_condition_effect.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-return-unwind/checker4_return_condition_effect.puml",
+      "sha256": "c3717c1b6e912c5fd030e1d67b50185436117362d28d194104d760c95605ebec",
+      "bytes": 223
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-return-unwind/checker4_return_sibling_nested.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-return-unwind/checker4_return_sibling_nested.puml",
+      "sha256": "a178c168af0875c4d11ae700a6bfdcae90e93f944e69b5bdbc34b2c0102e2879",
+      "bytes": 269
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/bad_tail.inc",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/bad_tail.inc",
+      "sha256": "c89b9c8e67b531b0a0511bae1dfa2132654774496d9ddc68d37e2ceef996bbc0",
+      "bytes": 64
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/blocks.inc",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/blocks.inc",
+      "sha256": "de3a5f5d238b60ee2d3b4f8ea193bf816dea829e79ca6a45c2be7bbade8686a6",
+      "bytes": 97
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/child.inc",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/child.inc",
+      "sha256": "4c3909d6f6740b9654d23cb062bd24c9b9babd9ef91b733ec11eda0ffb7b3205",
+      "bytes": 9
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/comment.inc",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4-resources/comment.inc",
+      "sha256": "a7e1a5eded5664fa13b2e2e09455982c475d0b143deca139dd7163d02b0aae3b",
+      "bytes": 59
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml",
+      "sha256": "1ea36377dd3386183deec1785bdee574bf01f23779211db30252192a17f281a3",
+      "bytes": 98
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "sha256": "78d65fd85f2a8cf44b36a59cbeec54240aea324621e2c2680cbf4455a01e102e",
+      "bytes": 151
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml",
+      "sha256": "efdda720da7d10ef0b83272ab7b8821fcc5bc9ac97d77b71f0d60265264fdb0f",
+      "bytes": 108
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/stage/test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_local_end_marker.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_local_end_marker.puml",
+      "sha256": "b2e25e983c288d46f62773d6f8c2e65636809fc940d6cb1930a782730da001e9",
+      "bytes": 132
+    }
+  ],
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "source_mode": "Exact stdin bytes; no trimming; -pipe -tsvg",
+  "svg_argv": [
+    "reference",
+    "--cwd",
+    "<remote>/<row.cwd>",
+    "--timezone",
+    "<row.zone>",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "probe_argv": [
+    "reference",
+    "--cwd",
+    "<remote>/<row.cwd>",
+    "--timezone",
+    "<row.zone>",
+    "--probe",
+    "<remote>/SourceProbe.java",
+    "--classpath",
+    "<remote>",
+    "--",
+    "<remote>/<row.source>",
+    "<remote>/<row.cwd>"
+  ],
+  "environment": "Per-case row.env overrides are benign synthetic controls; otherwise pinned runner environment. Do not expose ambient environment.",
+  "result_requirements": [
+    "raw stdout/stderr base64 and status per SVG/probe command",
+    "actual argv/cwd/env overrides, input SHA256",
+    "whole bundle and resource checksum validation"
+  ]
+}

@@ -1,0 +1,9 @@
+@startuml
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+Q ->> Q ++ : i.f
+Q ->> Q ++ : nested
+Q -->> Q -- : close
+return outer
+@enduml

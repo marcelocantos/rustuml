@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-literal-substitution-boundary",
+  "reviewer": {
+    "task_id": "t3-cb14b5f3-fresh-independent-TIM-checker4",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no implementation/no children"
+  },
+  "account_commit": "8765ccc2ea4c2574fe90d25c2ba9921ad520682e",
+  "implementation_commit": "6c550246b458eb5f37539713510dc7d919843421",
+  "tested_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "baseline_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd <private-worker>/<row.cwd> --timezone GMT+11:00 -- -pipe -tsvg (exact raw source on stdin; actual argv/env captured per row)",
+    "Pinned remote wrapper --probe <private-worker>/SourceProbe.java --classpath <private-worker> -- <source> <cwd> (supplemental; no local Java)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate.py candidate",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate_supplement.py candidate",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle",
+    "cargo test -p rustuml-oracle --release --test golden_pairs",
+    "cargo test -p rustuml-oracle --release --test parity_perturbations",
+    "cargo test -p rustuml-oracle --release --test harness_guards"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_definelong.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_definelong.svg",
+      "axes": [
+        "returned versus variable literal",
+        "legacy multiline-function registration"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_newline_boundary.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_newline_boundary.svg",
+      "axes": [
+        "backslash-n word boundary",
+        "direct versus substituted token"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_define_effects.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_define_effects.svg",
+      "axes": [
+        "declaration-time effect",
+        "late definition and literal"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    }
+  ],
+  "java_locations": [
+    "tim/TContext.java:applyFunctionsAndVariables",
+    "tim/VariableManager.java:replaceVariables",
+    "tim/EaterAffectationDefine.java:analyze"
+  ],
+  "findings": [
+    "REJECT: checker4_literal_definelong yields Java TOKEN / TOKEN but Rust changed / changed. substitute_vars itself avoids rescanning appended values, then execute_one_line passes its completed output through try_expand_definelong. This later full-output macro scan still reinterprets returned/assigned literals. Java TContext.applyFunctionsAndVariables scans original source once, including its legacy-function dispatch.",
+    "checker4_literal_newline_boundary yields Java north\\namber / TOKEN but Rust north\\nTOKEN / TOKEN. VariableManager.getVarnameAt explicitly exempts justAfterBackslashN from the preceding-letter boundary. Rust bare-token scanning treats the n as an ordinary preceding letter.",
+    "Supported: checker4_literal_define_effects expands the define once at declaration, preserves the later token as literal, and retains exactly one side effect; source and SVG agree. Fixes should unify original-source scanning without restoring whole-output fixed-point expansion."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/README.md",
+  "scope": "This record does not overwrite or re-attest older reviews. Invalid/error reference outputs remain failing pairs in the unchanged standing oracle. Narrow supported observations are separate from packet acceptance."
+}

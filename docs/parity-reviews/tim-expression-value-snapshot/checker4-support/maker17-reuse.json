@@ -1,0 +1,148 @@
+{
+  "status": "Verified captured reference/source bytes and compared archived Rust outputs with current unchanged comparator; no fresh CLI or Java rerun claimed",
+  "candidate_production_unchanged": true,
+  "resources_verified": [
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/builtin_negative_length.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/builtin_surrogate_roundtrip.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/builtin_window.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/foreach_json_global.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/foreach_object_order.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/lib/bad.inc",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/lib/blocks.inc",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/literal_define_capture.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/literal_define_order.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/procedure_value_error.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/registry_environment.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/registry_literal.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/return_nested.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/return_while_nested.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/snapshot_json.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/snapshot_nested.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/sub_bad_unselected.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/sub_dynamic_twice.puml",
+    "docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/sub_local_selector.puml",
+    "docs/parity-reviews/tim-corrective-execution-maker/SourceProbe.java"
+  ],
+  "compressed_sha256": "cd50f6bf14cd85993a8e584280d4db3c45133ced6a74ca6682c0d3da0704f7ae",
+  "results": [
+    {
+      "id": "builtin_window",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "builtin_surrogate_roundtrip",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "builtin_negative_length",
+      "java_exit": 1,
+      "comparison_exit": 3,
+      "svg_match": false,
+      "source_equal": false
+    },
+    {
+      "id": "snapshot_nested",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "snapshot_json",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "literal_define_order",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "literal_define_capture",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "return_nested",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "return_while_nested",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "procedure_value_error",
+      "java_exit": 200,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "source_equal": false
+    },
+    {
+      "id": "foreach_json_global",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "foreach_object_order",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "sub_dynamic_twice",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "sub_bad_unselected",
+      "java_exit": 200,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "source_equal": false
+    },
+    {
+      "id": "sub_local_selector",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "registry_literal",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    },
+    {
+      "id": "registry_environment",
+      "java_exit": 0,
+      "comparison_exit": 0,
+      "svg_match": true,
+      "source_equal": true
+    }
+  ]
+}

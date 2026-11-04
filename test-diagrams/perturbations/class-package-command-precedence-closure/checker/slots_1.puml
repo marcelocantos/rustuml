@@ -1,0 +1,7 @@
+@startuml
+frame Outer {
+node "Harbor" <<first>> as Hub <<last>> {
+class Payload
+}
+}
+@enduml

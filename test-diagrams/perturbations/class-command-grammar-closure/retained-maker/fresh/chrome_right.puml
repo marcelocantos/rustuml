@@ -1,0 +1,17 @@
+@startuml
+right header
+component page text
+short
+endheader
+title
+Instrument register
+Summary
+endtitle
+node "Control Bay" {
+class Gauge
+}
+right footer
+Footer details
+tiny
+endfooter
+@enduml

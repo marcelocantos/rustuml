@@ -1,0 +1,15 @@
+@startuml
+title Long and wide decorated graph title
+left header
+Header
+second line
+end header
+left footer Footer
+caption Caption
+legend left
+Key
+end legend
+node Box {
+class Payload
+}
+@enduml

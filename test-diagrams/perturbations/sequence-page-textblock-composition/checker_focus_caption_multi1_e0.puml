@@ -1,0 +1,10 @@
+@startuml
+title A wide title WWWWWWWWWWWWWWWWWWWWWWW
+legend left
+key
+endlegend
+caption first\nsecond
+participant "Mica.i" as M
+participant "Long heron" as H
+M -> H : probe
+@enduml

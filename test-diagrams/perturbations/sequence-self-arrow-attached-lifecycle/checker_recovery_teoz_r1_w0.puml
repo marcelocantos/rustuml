@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+T -> E ++ : initial
+E ->> E : i.f
+activate E
+note left of E : attachment gap
+deactivate E
+E -> T : subsequent
+deactivate E
+@enduml

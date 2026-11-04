@@ -1,0 +1,7 @@
+@startuml
+cloud "Isobar region" {
+class AtmosphericPressureRegister
+class X
+AtmosphericPressureRegister --> X
+}
+@enduml

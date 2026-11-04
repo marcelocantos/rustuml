@@ -1,0 +1,7 @@
+@startuml
+frame Outer {
+package Hub as "Harbor" <<one>> <<two>> {
+class Payload
+}
+}
+@enduml

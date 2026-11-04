@@ -1,0 +1,8 @@
+@startuml
+package "Identity scope" {
+class "unit as record"
+class Peer
+"unit as record" --> Peer
+note right of "unit as record" : audit
+}
+@enduml

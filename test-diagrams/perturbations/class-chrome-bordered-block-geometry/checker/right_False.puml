@@ -1,0 +1,15 @@
+@startuml
+title T
+right header
+Header
+second line
+end header
+right footer Footer
+caption Caption
+legend right
+Key
+end legend
+node Box {
+class Payload
+}
+@enduml

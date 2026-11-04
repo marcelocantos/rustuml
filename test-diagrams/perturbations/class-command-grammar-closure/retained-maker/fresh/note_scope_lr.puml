@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+node Bay {
+class Register
+note "Read carefully" as Memo
+Register .. Memo
+}
+@enduml

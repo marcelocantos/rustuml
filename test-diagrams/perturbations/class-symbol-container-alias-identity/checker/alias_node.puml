@@ -1,0 +1,9 @@
+@startuml
+node "Windward Harbor" as Port {
+class Inside
+}
+node Port {
+class Next
+Inside --> Next
+}
+@enduml

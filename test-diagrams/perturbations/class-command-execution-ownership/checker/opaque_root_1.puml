@@ -1,0 +1,5 @@
+@startuml
+record "[network] as database" as Ledger
+class Peer
+Ledger --> Peer
+@enduml

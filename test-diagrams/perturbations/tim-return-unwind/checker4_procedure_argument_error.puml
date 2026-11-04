@@ -1,0 +1,8 @@
+@startuml
+!procedure $emit($x)
+class Unexpected
+!endprocedure
+!$v=$emit(%substr("x",-1))
+!$later=%date("Q",0)
+class After
+@enduml

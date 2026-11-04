@@ -1,0 +1,7 @@
+@startuml
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+Q -> Q ++ : call
+return #purple colored reply
+@enduml

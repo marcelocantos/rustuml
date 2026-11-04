@@ -1,0 +1,9 @@
+@startuml
+participant "Mica.i" as M
+participant "Long heron" as H
+M <<- M : same row
+activate M
+deactivate M
+M -> H : after
+
+@enduml
