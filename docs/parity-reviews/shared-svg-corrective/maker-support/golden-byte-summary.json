@@ -1,0 +1,52 @@
+{
+  "corpus": 12550,
+  "changed": 39,
+  "categories": {
+    "comment serialization": 39
+  },
+  "newly_passing": [],
+  "newly_failing": [],
+  "changed_still_failing": [
+    "full-golden/edge-cases/edge_unicode_hindi_class_diagram",
+    "full-golden/edge-cases/edge_unicode_thai_class_diagram"
+  ],
+  "changed_still_passing": [
+    "full-golden/class/class_edge_unicode_names",
+    "full-golden/component/comp_unicode_stereotypes",
+    "full-golden/creole/creole_in_stereotype_boundary",
+    "full-golden/creole/creole_in_stereotype_controller",
+    "full-golden/creole/creole_in_stereotype_entity",
+    "full-golden/creole/creole_in_stereotype_repository",
+    "full-golden/creole/creole_in_stereotype_service",
+    "full-golden/creole/creole_in_stereotype_value",
+    "full-golden/deployment/deploy_unicode",
+    "full-golden/edge-cases/edge_meta_unicode_title",
+    "full-golden/edge-cases/edge_unicode_accented_class",
+    "full-golden/edge-cases/edge_unicode_arabic_class_diagram",
+    "full-golden/edge-cases/edge_unicode_arabic_title",
+    "full-golden/edge-cases/edge_unicode_chinese_class",
+    "full-golden/edge-cases/edge_unicode_chinese_class_diagram",
+    "full-golden/edge-cases/edge_unicode_chinese_title",
+    "full-golden/edge-cases/edge_unicode_combining_chars",
+    "full-golden/edge-cases/edge_unicode_emoji_class",
+    "full-golden/edge-cases/edge_unicode_greek_class_diagram",
+    "full-golden/edge-cases/edge_unicode_greek_title",
+    "full-golden/edge-cases/edge_unicode_hebrew_class_diagram",
+    "full-golden/edge-cases/edge_unicode_hebrew_title",
+    "full-golden/edge-cases/edge_unicode_hindi_title",
+    "full-golden/edge-cases/edge_unicode_japanese_class",
+    "full-golden/edge-cases/edge_unicode_japanese_class_diagram",
+    "full-golden/edge-cases/edge_unicode_japanese_title",
+    "full-golden/edge-cases/edge_unicode_korean_class",
+    "full-golden/edge-cases/edge_unicode_korean_class_diagram",
+    "full-golden/edge-cases/edge_unicode_korean_title",
+    "full-golden/edge-cases/edge_unicode_math_symbols",
+    "full-golden/edge-cases/edge_unicode_mixed_scripts",
+    "full-golden/edge-cases/edge_unicode_russian_class_diagram",
+    "full-golden/edge-cases/edge_unicode_russian_title",
+    "full-golden/edge-cases/edge_unicode_surrogate_pairs",
+    "full-golden/edge-cases/edge_unicode_thai_title",
+    "full-golden/edge-cases/edge_unicode_zero_width",
+    "full-golden/rendering/text/text_unicode_class_names"
+  ]
+}

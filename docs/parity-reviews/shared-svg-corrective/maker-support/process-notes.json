@@ -1,0 +1,21 @@
+{
+  "evidence_only_initial_errors": [
+    {
+      "step": "DTD oracle scratch compilation",
+      "cause": "include_str baseline relative path missing in scratch test layout",
+      "resolution": "Copied exact baseline into matching scratch crates/test-diagrams layout; retained initial failure log; then executed before/after decoy and26realDOT controls."
+    },
+    {
+      "step": "scope audit",
+      "cause": "Identical comment-only macros appear twice in object.rs; initial uniqueness assertion was too strict",
+      "resolution": "Count matching macro occurrences against precommitted inventory multiplicity;45/45 pass, no production change."
+    },
+    {
+      "step": "state fill draft guard",
+      "cause": "Unqualified fill_color occurrence count was4 including circle/diamond sites",
+      "resolution": "Assertion stopped before writing state.rs; narrowed exact rectangle named-argument suffix to2approved sites, other shapes untouched."
+    }
+  ],
+  "no_removed_failures": true,
+  "no_extra_broad_runs": true
+}
