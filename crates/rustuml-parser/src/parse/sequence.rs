@@ -502,6 +502,26 @@ impl SeqParser {
         if self.try_pragma(line) {
             return Ok(());
         }
+        let message_line = line.strip_prefix('&').unwrap_or(line).trim_start();
+        if let Some(caps) = MESSAGE_RE
+            .captures(message_line)
+            .or_else(|| EXTERNAL_MESSAGE_IN_RE.captures(message_line))
+            .or_else(|| EXTERNAL_MESSAGE_OUT_RE.captures(message_line))
+        {
+            let (_, arrow) = strip_arrow_style_annotation(&caps[2]);
+            // CommandArrow ARROW_DRESSING1/2 and CommandExoArrowLeft/Right:
+            // circles surround the head; `->o` is valid, `-o>` is not.
+            if let (Some(first), Some(last)) = (arrow.find('-'), arrow.rfind('-')) {
+                let left = arrow[..first].trim_start_matches(['o', 'x']);
+                let right = arrow[last + 1..].trim_end_matches(['o', 'x']);
+                if left.contains('o') || right.contains('o') {
+                    return Err(ParseError {
+                        line: line_num,
+                        message: "Illegal sequence arrow decoration".into(),
+                    });
+                }
+            }
+        }
         if self.try_message(line) {
             return Ok(());
         }
@@ -1339,9 +1359,12 @@ fn parse_arrow(s: &str) -> Arrow {
         LineStyle::Solid
     };
 
-    let direction = if s.starts_with('<') && s.ends_with('>') {
+    // CommandArrow#executeArg determines reverseDefine from head dressings,
+    // independently of the optional outer circle/cross decorations.
+    let dressing = s.trim_matches(['o', 'x']);
+    let direction = if dressing.starts_with('<') && dressing.ends_with('>') {
         ArrowDirection::Bidirectional
-    } else if s.starts_with('/') || s.starts_with('\\') {
+    } else if dressing.starts_with('/') || dressing.starts_with('\\') {
         // Java `CommandArrow` treats a left half-head dressing as
         // reverseDefine before it swaps the semantic participants.
         ArrowDirection::RightToLeft
@@ -1384,8 +1407,6 @@ fn parse_arrow(s: &str) -> Arrow {
     };
     let head = if target_cross {
         ArrowHead::Cross
-    } else if target_circle {
-        ArrowHead::Circle
     } else if target_open {
         ArrowHead::Open
     } else {
@@ -1422,6 +1443,7 @@ fn parse_arrow(s: &str) -> Arrow {
         thin_head,
         source_cross,
         source_circle,
+        target_circle,
     }
 }
 
@@ -1525,6 +1547,66 @@ fn note_text_from_lines(lines: &[String]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn circle_decoration_retains_head_direction_and_serialization_default() {
+        for (token, direction, head, source, target) in [
+            (
+                "->o",
+                ArrowDirection::LeftToRight,
+                ArrowHead::Filled,
+                false,
+                true,
+            ),
+            (
+                "o<--",
+                ArrowDirection::RightToLeft,
+                ArrowHead::Filled,
+                false,
+                true,
+            ),
+            (
+                "o-->>o",
+                ArrowDirection::LeftToRight,
+                ArrowHead::Open,
+                true,
+                true,
+            ),
+            (
+                "o<->o",
+                ArrowDirection::Bidirectional,
+                ArrowHead::Filled,
+                true,
+                true,
+            ),
+            (
+                "-/o",
+                ArrowDirection::LeftToRight,
+                ArrowHead::Filled,
+                false,
+                true,
+            ),
+        ] {
+            let arrow = parse_arrow(token);
+            assert_eq!(arrow.direction, direction, "{token}");
+            assert_eq!(arrow.head, head, "{token}");
+            assert_eq!((arrow.source_circle, arrow.target_circle), (source, target));
+            let mut value = serde_json::to_value(&arrow).unwrap();
+            value.as_object_mut().unwrap().remove("target_circle");
+            let legacy: Arrow = serde_json::from_value(value).unwrap();
+            assert!(!legacy.target_circle);
+        }
+    }
+
+    #[test]
+    fn circle_grammar_retains_valid_heads_and_rejects_interior_decoration() {
+        for source in ["A -[#a]>o B", "A o<-- B", "[->o A", "A ->o]", "A o-->>o A"] {
+            assert!(parse_sequence(&[source.into()]).is_ok(), "{source}");
+        }
+        for source in ["A -[#a]o> B", "[--o> A", "A --o>]", "A <o-- B"] {
+            assert!(parse_sequence(&[source.into()]).is_err(), "{source}");
+        }
+    }
 
     #[test]
     fn inline_note_display_normalizes_before_model_storage() {

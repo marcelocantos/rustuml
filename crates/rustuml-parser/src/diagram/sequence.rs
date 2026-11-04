@@ -156,6 +156,9 @@ pub struct Arrow {
     /// source side while keeping the normal target arrowhead.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub source_circle: bool,
+    /// ArrowConfiguration keeps decoration2 independent of its head dressing.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub target_circle: bool,
 }
 
 /// Which half of the arrowhead is drawn when a `/` or `\` modifier is present.

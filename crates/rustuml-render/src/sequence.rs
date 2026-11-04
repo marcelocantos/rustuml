@@ -453,6 +453,19 @@ fn folded_note_component_width(
         + shadow
 }
 
+// MessageExoArrow#getPreferredWidth reserves the full external decoration
+// diameter. CommunicationExoTile keeps component width and adjusts paint only.
+fn legacy_external_circle_width(message: &Message, teoz: bool) -> f64 {
+    if !teoz
+        && ((message.arrow.source_circle && matches!(message.from.as_str(), "[" | "]"))
+            || (message.arrow.target_circle && matches!(message.to.as_str(), "[" | "]")))
+    {
+        2.0 * SOURCE_CIRCLE_RADIUS
+    } else {
+        0.0
+    }
+}
+
 fn sequence_note_shadow_value(value: &str) -> f64 {
     // Style#getShadowing delegates a present property to
     // ValueImpl#asDoubleDefaultTo(1.5), which uses extractDigitsAndDot.
@@ -558,7 +571,6 @@ const OPEN_ACTIVATION_TAIL_CLEARANCE: f64 = 8.0;
 const SHADOW_LIVING_WIDTH_EXTRA: f64 = 3.0;
 const SHADOW_VERTICAL_PAD: f64 = 3.0;
 const SHADOW_CANVAS_RIGHT_PAD: f64 = 3.0;
-const SHADOW_CANVAS_BOTTOM_PAD: f64 = 3.0;
 
 /// Vertical space a `newpage` separator reserves in the page-1 flow. Java
 /// `ComponentRoseNewpage.getPreferredHeight` returns 1; `prepareNewpage`
@@ -860,10 +872,6 @@ const QUEUE_TEXT_X_PAD: f64 = 5.0;
 const NOTE_GAP_AFTER_MSG: f64 = 13.0;
 /// Gap between lifeline top and note top (first event).
 const NOTE_GAP_FIRST: f64 = 15.0;
-/// When several bare side notes attach to the same message arrow, PlantUML
-/// keeps the note boxes in the ordinary first-line band but lowers the arrow
-/// and label by this amount for each extra side note.
-const MULTI_SIDE_NOTE_ARROW_Y_ADJUST: f64 = 3.0;
 const NOTE_LIST_ITEM_TEXT_X: f64 = 12.0;
 const NOTE_LIST_BULLET_CX: f64 = 5.5;
 const NOTE_LIST_BULLET_BASELINE_DROP: f64 = 4.7578;
@@ -4269,6 +4277,7 @@ struct PlantUmlSvg {
     /// `skinparam noteShadowing true`.
     note_shadow_filter: Option<String>,
     component_shadow_filter: Option<String>,
+    activation_shadow_filter: Option<String>,
     /// Drop-shadow filter id for participant head/tail boxes. Driven by
     /// global `skinparam shadowing true`.
     participant_shadow_filter: Option<String>,
@@ -4321,6 +4330,7 @@ impl PlantUmlSvg {
             note_font_family: "sans-serif".into(),
             note_shadow_filter: None,
             component_shadow_filter: None,
+            activation_shadow_filter: None,
             participant_shadow_filter: None,
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
@@ -4332,7 +4342,7 @@ impl PlantUmlSvg {
         }
     }
 
-    fn write_source_circle(&mut self, center: Option<(f64, f64)>, color: &str) {
+    fn write_arrow_circle(&mut self, center: Option<(f64, f64)>, color: &str) {
         let Some((cx, cy)) = center else {
             return;
         };
@@ -5615,7 +5625,7 @@ impl PlantUmlSvg {
     ) {
         let border = &self.activation_border;
         let shadow = self
-            .component_shadow_filter
+            .activation_shadow_filter
             .as_ref()
             .map(|id| format!(r#" filter="url(#{id})""#))
             .unwrap_or_default();
@@ -5708,6 +5718,7 @@ impl PlantUmlSvg {
         msg_y: f64,
         is_right: bool,
         leading_circle_center: Option<(f64, f64)>,
+        target_circle_center: Option<(f64, f64)>,
         line_x1: f64,
         line_x2: f64,
         line_style: &str,
@@ -5730,8 +5741,10 @@ impl PlantUmlSvg {
         );
         self.message_group_open(entity1, entity2, source_line, msg_id);
         if is_right {
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
+
+        self.write_arrow_circle(target_circle_center, color);
 
         // X mark: spans 10x10 with right edge at tip_x (right-going) or left
         // edge at tip_x (left-going). The arrow line meets the X at its centre.
@@ -5763,7 +5776,7 @@ impl PlantUmlSvg {
         )
         .unwrap();
         if !is_right {
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
 
         let thickness = self.arrow_thickness.clone();
@@ -5800,6 +5813,7 @@ impl PlantUmlSvg {
         msg_id: u32,
         leading_cross_center: Option<f64>,
         leading_circle_center: Option<(f64, f64)>,
+        target_circle_center: Option<(f64, f64)>,
         leading_arrow_points: Option<&str>,
         arrow_points: &str,
         line_x1: f64,
@@ -5827,7 +5841,7 @@ impl PlantUmlSvg {
         self.message_group_open(entity1, entity2, source_line, msg_id);
 
         if is_right {
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
 
         if let Some(cx) = leading_cross_center {
@@ -5855,6 +5869,8 @@ impl PlantUmlSvg {
             self.write_polygon(color, points, &format!("stroke:{color};stroke-width:1;"));
         }
 
+        self.write_arrow_circle(target_circle_center, color);
+
         // Arrow head polygon keeps stroke-width:1 even when the line is
         // thickened — PlantUML scales the line only.
         self.write_polygon(
@@ -5863,7 +5879,7 @@ impl PlantUmlSvg {
             &format!("stroke:{color};stroke-width:1;"),
         );
         if !is_right {
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
 
         let thickness = self.arrow_thickness.clone();
@@ -5912,6 +5928,7 @@ impl PlantUmlSvg {
         thin: bool,
         leading_cross_center: Option<f64>,
         leading_circle_center: Option<(f64, f64)>,
+        target_circle_center: Option<(f64, f64)>,
         line_style: &str,
         text_x: f64,
         text_y: f64,
@@ -5933,7 +5950,7 @@ impl PlantUmlSvg {
         );
         self.message_group_open(entity1, entity2, source_line, msg_id);
         if is_right {
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
         let write_source_cross = |buf: &mut String, center: Option<f64>| {
             if let Some(cx) = center {
@@ -5955,6 +5972,8 @@ impl PlantUmlSvg {
         if is_right {
             write_source_cross(&mut self.buf, leading_cross_center);
         }
+
+        self.write_arrow_circle(target_circle_center, color);
 
         let wing_y = if top {
             line_y - ARROW_HALF_H
@@ -6000,7 +6019,7 @@ impl PlantUmlSvg {
         }
         if !is_right {
             write_source_cross(&mut self.buf, leading_cross_center);
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
 
         let thickness = self.arrow_thickness.clone();
@@ -6041,6 +6060,7 @@ impl PlantUmlSvg {
         is_right: bool,
         leading_tip_x: Option<f64>,
         leading_circle_center: Option<(f64, f64)>,
+        target_circle_center: Option<(f64, f64)>,
         line_x1: f64,
         line_x2: f64,
         line_y: f64,
@@ -6066,7 +6086,7 @@ impl PlantUmlSvg {
 
         let thickness = self.arrow_thickness.clone();
         if is_right {
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
         let main_back_x = if is_right {
             tip_x - ARROW_SIZE
@@ -6089,6 +6109,8 @@ impl PlantUmlSvg {
         if !is_right && let Some(head) = leading_head {
             heads.push(head);
         }
+        self.write_arrow_circle(target_circle_center, color);
+
         for (head_tip_x, back_x) in heads {
             write!(
                 self.buf,
@@ -6110,7 +6132,7 @@ impl PlantUmlSvg {
             .unwrap();
         }
         if !is_right {
-            self.write_source_circle(leading_circle_center, color);
+            self.write_arrow_circle(leading_circle_center, color);
         }
 
         write!(
@@ -6676,7 +6698,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut note_border_thickness = "0.5".to_string();
     let mut page_font_family = "sans-serif".to_string();
     let mut note_shadow_filter: Option<String> = None;
-    let mut participant_shadow_filter: Option<String> = None;
     let mut sequence_shadowing = false;
     // Whether `ParticipantBackgroundColor` / `ParticipantBorderColor` were set
     // explicitly. These only affect the plain `participant` rectangle, so other
@@ -6967,11 +6988,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             "shadowing" | "sequenceshadowing" => {
                 if val.eq_ignore_ascii_case("true") {
                     sequence_shadowing = true;
-                    participant_shadow_filter = filter_id.clone();
                     note_shadow_filter = filter_id.clone();
                 } else if val.eq_ignore_ascii_case("false") {
                     sequence_shadowing = false;
-                    participant_shadow_filter = None;
                     note_shadow_filter = None;
                 }
             }
@@ -7045,6 +7064,49 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         &activation_signature,
         rustuml_parser::diagram::style::StyleScheme::Regular,
     );
+    // ComponentType#getStyleSignature and AbstractMessage#getStyleSignature:
+    // these components inherit root but not one another's sibling declarations.
+    // Resolve at the consumer, leaving the shared sparse cascade unchanged.
+    // Preimplementation account 0b329582.
+    let component_style = |component: &str| {
+        cascade.resolve(
+            &crate::style_cascade::StyleSignature::from_selectors([
+                "root",
+                "element",
+                "sequenceDiagram",
+                component,
+            ]),
+            rustuml_parser::diagram::style::StyleScheme::Regular,
+        )
+    };
+    let participant_style = component_style("participant");
+    let lifeline_style = component_style("lifeLine");
+    let arrow_style = component_style("arrow");
+    if let Some(color) = note_style.property("lineColor") {
+        note_border_override = Some(resolve_color(color));
+    }
+    if let Some(color) = participant_style.property("lineColor") {
+        participant_border = resolve_color(color);
+    }
+    if let Some(color) = lifeline_style.property("lineColor") {
+        lifeline_border = resolve_color(color);
+    }
+    if let Some(color) = arrow_style.property("lineColor") {
+        default_arrow_color = sequence_arrow_color(color);
+    }
+    // ComponentRoseParticipant preferred width/height include Fashion's
+    // deltaShadow; the painted rectangle retains its unshadowed dimensions.
+    let participant_shadow_delta = participant_style
+        .property("shadowing")
+        .map(sequence_note_shadow_value)
+        .unwrap_or(if sequence_shadowing {
+            SHADOW_LIVING_WIDTH_EXTRA
+        } else {
+            0.0
+        });
+    let participant_shadow_filter = (participant_shadow_delta > 0.0)
+        .then(|| filter_id.clone())
+        .flatten();
     // Display/SheetBlock's alignment may come from Style even though Rose's
     // component margin/position comes from ISkinParam (2dab3648).
     let note_block_align = note_style
@@ -7567,7 +7629,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 stereotype_width: st_w,
                 box_width: bw,
                 preferred_width: bw
-                    + if sequence_shadowing {
+                    + if p.kind == ParticipantKind::Participant {
+                        participant_shadow_delta
+                    } else if sequence_shadowing {
                         SHADOW_LIVING_WIDTH_EXTRA
                     } else {
                         0.0
@@ -7732,11 +7796,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .iter()
         .map(|p| p.box_height)
         .fold(0.0_f64, f64::max);
-    let shadow_vertical_pad = if sequence_shadowing {
-        SHADOW_VERTICAL_PAD
-    } else {
-        0.0
-    };
+    // ParticipantBox/PlayingSpaceWithParticipants reserve the tallest complete
+    // head, not a global shadow boolean. Non-rectangular Rose components retain
+    // their existing kind-specific geometry pending its separate audit.
+    let shadow_vertical_pad = participants
+        .iter()
+        .map(|p| {
+            p.box_height
+                + if p.kind == ParticipantKind::Participant {
+                    participant_shadow_delta
+                } else if sequence_shadowing {
+                    SHADOW_VERTICAL_PAD
+                } else {
+                    0.0
+                }
+        })
+        .fold(0.0_f64, f64::max)
+        - max_box_h;
     let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET + shadow_vertical_pad;
 
     let event_message_text_height = |event: &Event| -> (bool, f64) {
@@ -7806,12 +7882,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note_font_size_f,
                             &note_font_family,
                         );
-                        let legacy_self_note = !diagram.teoz
-                            && note.shape == NoteShape::Note
-                            && matches!(
-                                diagram.events.get(owner),
-                                Some(Event::Message(msg)) if msg.from == msg.to
-                            );
                         let (owner_has_text, owner_text_height) =
                             event_message_text_height(&diagram.events[owner]);
                         let y_adjust = if arrow_font_size_set
@@ -7822,9 +7892,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             0.0
                         };
-                        let extra = if legacy_self_note
-                            || (diagram.teoz && note.shape == NoteShape::Note)
-                        {
+                        let extra = if note.shape == NoteShape::Note {
                             // ArrowAndNoteBox centers the arrow within max(Ha,Hn).
                             // Rose self: text + marginY*2 + deltaY + loop + paddingY*2.
                             let arrow_height = owner_text_height
@@ -8120,12 +8188,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Position note_top so the arrow sits at
                         // note_top + NOTE_MSG_ARROW_OFFSET + (lines-1)*MSG_TEXT_HEIGHT/2.
                         let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
-                        let legacy_self_note = !diagram.teoz
-                            && note.shape == NoteShape::Note
-                            && matches!(
-                                diagram.events.get(owner),
-                                Some(Event::Message(msg)) if msg.from == msg.to
-                            );
                         let note_top = if diagram.teoz {
                             // CommunicationTileSelfNoteLeft/Right and
                             // CommunicationTileNoteLeft/Right draw both children
@@ -8134,13 +8196,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 event_message_text_height(&diagram.events[owner]);
                             arrow_y - (text_height + 2.0 + ARROW_HALF_H + 2.0 * global_padding)
                                 + ROSE_NOTE_PADDING_Y
-                        } else if legacy_self_note {
+                        } else if note.shape == NoteShape::Note {
                             let (_, text_height) =
                                 event_message_text_height(&diagram.events[owner]);
                             let arrow_height = text_height
                                 + 2.0
                                 + ARROW_HALF_H
-                                + SELF_MSG_DROP
+                                + if matches!(&diagram.events[owner], Event::Message(msg) if msg.from == msg.to)
+                                {
+                                    SELF_MSG_DROP
+                                } else {
+                                    0.0
+                                }
                                 + 2.0 * ARROW_HALF_H
                                 + 2.0 * global_padding;
                             let note_height = metrics.total_height
@@ -8729,7 +8796,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         + 2.0 * MSG_TEXT_LEFT_PAD
                         + ARROW_SIZE
                         + 2.0 * constraint_global_padding;
-                    left_border_constraints.push((participant_idx, arrow_only_w));
+                    left_border_constraints.push((
+                        participant_idx,
+                        arrow_only_w + legacy_external_circle_width(msg, diagram.teoz),
+                    ));
                 }
 
                 // Advance autonumber during spacing phase
@@ -9015,7 +9085,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     + if diagram.teoz {
                         HEAD_BOX_Y + 2.0 * constraint_global_padding
                     } else {
-                        group_pad
+                        group_pad + legacy_external_circle_width(msg, diagram.teoz)
                     },
             );
         }
@@ -11331,7 +11401,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     && let Some(&fi) = id_to_idx.get(msg.from.as_str())
                 {
                     let live_origin_shift = source_live_depth as f64 * ACTIVATION_HALF_W;
-                    let preferred_extent = live_origin_shift + numbered_label_w;
+                    let preferred_extent = live_origin_shift
+                        + numbered_label_w
+                        + legacy_external_circle_width(msg, diagram.teoz);
                     lost_preferred_extent_by_from
                         .entry(msg.from.as_str())
                         .and_modify(|extent| *extent = (*extent).max(preferred_extent))
@@ -11339,9 +11411,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Canvas edge = live-segment origin + arrow line end
                     // (label_w+18) + 1px stroke; the arrowhead tip extends into
                     // the shared RIGHT_MARGIN.
-                    max_lost_right = max_lost_right.max(
-                        participants[fi].center_x + live_origin_shift + numbered_label_w + 19.0,
-                    );
+                    max_lost_right =
+                        max_lost_right.max(participants[fi].center_x + preferred_extent + 19.0);
                 }
                 if msg.from == "]"
                     && let Some(&ti) = id_to_idx.get(msg.to.as_str())
@@ -11351,6 +11422,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         participants[ti].center_x
                             + target_live_depth as f64 * ACTIVATION_HALF_W
                             + numbered_label_w
+                            + legacy_external_circle_width(msg, diagram.teoz)
                             + 19.0,
                     );
                 }
@@ -11433,17 +11505,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // DrawableSetInitializer#prepareMissingSpace compares every graphical
     // element's preferred extent. ArrowAndNoteBox remains a note-bearing event
     // envelope when it wins this comparison (source refinement 09eec925).
-    let canvas_shadow_pad = if sequence_shadowing {
-        SHADOW_CANVAS_RIGHT_PAD
-    } else {
-        0.0
-    };
+    let canvas_shadow_pad = participants.last().map_or(0.0, |p| {
+        if p.kind == ParticipantKind::Participant {
+            participant_shadow_delta
+        } else if sequence_shadowing {
+            SHADOW_CANVAS_RIGHT_PAD
+        } else {
+            0.0
+        }
+    });
     let note_envelope_dominates = note_envelope_right
         .max(max_arrow_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
         .max(max_message_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
         > participant_envelope_right;
     let effective_right = participant_envelope_right
-        .max(note_envelope_right)
+        // PlayingSpace takes each tile's complete maxX. The Teoz note Real
+        // already includes its own shadow; translate to the legacy pre-shadow
+        // domain here before the shared canvas_shadow_pad addition below.
+        .max(note_envelope_right - if diagram.teoz { canvas_shadow_pad } else { 0.0 })
         .max(max_self_msg_right)
         .max(max_arrow_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
         // ComponentRoseNote#getPreferredWidth already includes deltaShadow.
@@ -11504,11 +11583,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             + BOTTOM_MARGIN
             + footer_band_h
             + theme_top_padding
-            + if sequence_shadowing {
-                SHADOW_CANVAS_BOTTOM_PAD
-            } else {
-                0.0
-            }
+            + shadow_vertical_pad
     };
     if diagram.teoz && !diagram.hide_footbox {
         pre_caption_height += 4.0;
@@ -11951,6 +12026,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         None
     };
+    // ComponentRoseActiveLine sets paint-only deltaShadow=1 when Fashion
+    // is shadowed. Its preferred height remains zero and width ten.
+    svg.activation_shadow_filter = if activation_style
+        .property("shadowing")
+        .map(sequence_note_shadow_value)
+        .unwrap_or(if sequence_shadowing {
+            SHADOW_LIVING_WIDTH_EXTRA
+        } else {
+            0.0
+        })
+        > 0.0
+    {
+        filter_id.clone()
+    } else {
+        None
+    };
     svg.participant_shadow_filter = participant_shadow_filter.clone();
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
@@ -11964,7 +12055,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // emits its fixed blur/matrix/offset/blend pipeline when any shape requests
     // a delta shadow. Oracle mode already carries that definition verbatim.
     let mut generated_defs = generated_gradient_defs.unwrap_or_default();
-    if oracle.is_none() && (participant_shadow_filter.is_some() || note_shadow_filter.is_some()) {
+    if oracle.is_none()
+        && (participant_shadow_filter.is_some()
+            || note_shadow_filter.is_some()
+            || svg.activation_shadow_filter.is_some())
+    {
         generated_defs.push_str(&crate::filter_registry::shadow_filter_def(
             filter_id
                 .as_deref()
@@ -12685,7 +12780,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .copied()
             .unwrap_or(0)
             .saturating_sub(1) as f64
-            * MULTI_SIDE_NOTE_ARROW_Y_ADJUST;
+            // ArrowAndNoteBox's constructor pushes the arrow once per child,
+            // each by (max child height - arrow height)/2. Account 0b329582.
+            * if diagram.teoz { 0.0 } else {
+                msg_note_extra.get(&ev_idx).copied().unwrap_or(0.0)
+            };
         let teoz_message_y_offset = if diagram.teoz
             && matches!(
                 event,
@@ -12885,6 +12984,46 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     None
                 };
+                // MessageExoArrow#getLeftStartInternal/#getRightEndInternal
+                // reserves a full circle diameter at the external edge. Teoz's
+                // CommunicationExoTile#drawU uses radius+2 instead, after Reals.
+                let border_circle_inset = if diagram.teoz {
+                    SOURCE_CIRCLE_RADIUS + 2.0
+                } else {
+                    2.0 * SOURCE_CIRCLE_RADIUS
+                };
+                let boundary_circle = (msg.arrow.source_circle
+                    && matches!(msg.from.as_str(), "[" | "]"))
+                    || (msg.arrow.target_circle && matches!(msg.to.as_str(), "[" | "]"));
+                let left_boundary = msg.from == "[" || msg.to == "[";
+                let internal_endpoints = internal_endpoints.map(|mut endpoints| {
+                    if boundary_circle {
+                        if left_boundary {
+                            endpoints.left += border_circle_inset;
+                        } else {
+                            endpoints.right -= border_circle_inset;
+                        }
+                    }
+                    endpoints
+                });
+                let from_x = if boundary_circle && internal_endpoints.is_none() {
+                    match msg.from.as_str() {
+                        "[" => from_x + border_circle_inset,
+                        "]" => from_x - border_circle_inset,
+                        _ => from_x,
+                    }
+                } else {
+                    from_x
+                };
+                let to_x = if boundary_circle && internal_endpoints.is_none() {
+                    match msg.to.as_str() {
+                        "[" => to_x + border_circle_inset,
+                        "]" => to_x - border_circle_inset,
+                        _ => to_x,
+                    }
+                } else {
+                    to_x
+                };
                 let internal_from_x = internal_endpoints.map(|endpoints| {
                     if is_right {
                         endpoints.left
@@ -12906,6 +13045,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let is_bidirectional = msg.arrow.direction == ArrowDirection::Bidirectional;
                 let has_source_cross = msg.arrow.source_cross;
                 let has_source_circle = msg.arrow.source_circle;
+                let has_target_circle = msg.arrow.target_circle;
                 // Half-arrowhead modifiers (`/`, `\`, `//`, `\\`).
                 let head_half = msg.arrow.head_half;
                 let thin_head = msg.arrow.thin_head;
@@ -13023,6 +13163,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let mut reverse_return_stroke = None;
                     let mut reverse_cross_left = None;
                     let mut source_cross_left = active_anchor + SELF_CROSS_SPACE;
+                    let mut source_circle_center = None;
+                    let mut target_circle_center = None;
                     if reverse {
                         // ComponentRoseSelfArrow#drawLeftSide, account a519af2d.
                         // Its prefTextWidth is the component width, not the
@@ -13050,6 +13192,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             x1 -= indent - ACTIVATION_HALF_W;
                             x2 -= indent - ACTIVATION_HALF_W;
                         }
+                        // ComponentRoseSelfArrow#drawLeftSide applies circle
+                        // decorations to the live-adjusted endpoints before heads.
+                        if has_source_circle {
+                            source_circle_center = Some((
+                                active_anchor + pref - x1 + 1.0 - SOURCE_CIRCLE_STROKE,
+                                draw_y + SOURCE_CIRCLE_Y_OFFSET,
+                            ));
+                            x1 += SOURCE_CIRCLE_RADIUS
+                                - if is_bidirectional {
+                                    SOURCE_CIRCLE_STROKE
+                                } else {
+                                    0.0
+                                };
+                        }
+                        if has_target_circle {
+                            target_circle_center = Some((
+                                active_anchor + pref - x2 + 2.0 - SOURCE_CIRCLE_STROKE,
+                                draw_y + SELF_MSG_DROP + SOURCE_CIRCLE_Y_OFFSET,
+                            ));
+                            x2 += SOURCE_CIRCLE_RADIUS + SOURCE_CIRCLE_STROKE;
+                        }
                         // ComponentRoseSelfArrow#drawLeftSide applies CROSSX
                         // endpoint shifts after the live-depth adjustment.
                         let cross_shift =
@@ -13073,7 +13236,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             active_anchor + pref - (x1 + 1.0) - SELF_CROSS_SPACE / 2.0;
                         reverse_cross_left =
                             Some(active_anchor + pref - x2 - SELF_CROSS_SPACE / 2.0);
-                    } else if has_source_cross {
+                    } else {
+                        // ComponentRoseSelfArrow#drawRightSide: decorations are
+                        // emitted before the body and adjust x1/x2 independently.
+                        if has_source_circle {
+                            source_circle_center = Some((
+                                start_x + 1.0 - SOURCE_CIRCLE_STROKE,
+                                draw_y + SOURCE_CIRCLE_Y_OFFSET,
+                            ));
+                            start_x += SOURCE_CIRCLE_RADIUS
+                                + if is_bidirectional {
+                                    SOURCE_CIRCLE_STROKE + 1.0
+                                } else {
+                                    0.0
+                                };
+                        }
+                        if has_target_circle {
+                            target_circle_center = Some((
+                                special_return_tip.unwrap() - SOURCE_CIRCLE_STROKE,
+                                draw_y + SELF_MSG_DROP + SOURCE_CIRCLE_Y_OFFSET,
+                            ));
+                            special_return_tip = special_return_tip
+                                .map(|x| x + SOURCE_CIRCLE_RADIUS + SOURCE_CIRCLE_STROKE);
+                        }
+                    }
+                    if !reverse && has_source_cross {
                         // drawRightSide shifts x1 by twice spaceCrossX; painted
                         // diagonals stay at spaceCrossX, independent of live delta.
                         start_x += 2.0 * SELF_CROSS_SPACE;
@@ -13090,6 +13277,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         - global_padding;
 
                     svg.message_group_open(&from_uid, &to_uid, src_line, msg_id);
+                    svg.write_arrow_circle(source_circle_center, &arrow_color);
+                    svg.write_arrow_circle(target_circle_center, &arrow_color);
 
                     // The self-message loopback strokes carry the configured
                     // arrow thickness (skinparam sequenceArrowThickness), just
@@ -13448,6 +13637,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                     if is_right {
                         let tip_x = to_x - target_shift - ARROW_TIP_GAP;
+                        // ComponentRoseArrow#drawDressing2: ellipse at pos2+thin,
+                        // then translate the head back by radius+thin (account 0b329582).
+                        let target_circle_center = has_target_circle.then_some((
+                            tip_x + SOURCE_CIRCLE_STROKE,
+                            msg_y + SOURCE_CIRCLE_Y_OFFSET,
+                        ));
+                        let tip_x = tip_x
+                            - if has_target_circle {
+                                SOURCE_CIRCLE_RADIUS + SOURCE_CIRCLE_STROKE
+                            } else {
+                                0.0
+                            };
                         if matches!(msg.activation, Some(ActivationChange::Destroy)) {
                             destroy_cross_center = Some(tip_x + ARROW_TIP_GAP);
                         }
@@ -13489,6 +13690,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 if has_source_circle {
                                     from_x_shifted + SOURCE_CIRCLE_LINE_INSET
                                 } else {
@@ -13523,6 +13725,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 line_x1,
                                 tip_x + 1.0,
                                 msg_y,
@@ -13555,6 +13758,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 line_style,
                                 text_x,
                                 text_y_pos,
@@ -13605,6 +13809,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 leading_arrow_pts.as_deref(),
                                 &arrow_pts,
                                 line_x1,
@@ -13624,6 +13829,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         // Left-pointing arrow: tip offset accounts for target activation
                         let tip_x = to_x + target_shift + 1.0;
+                        // ComponentRoseArrow#drawDressing1 has the complementary
+                        // circle translation: radius+thin after the ellipse.
+                        let target_circle_center = has_target_circle.then_some((
+                            tip_x - SOURCE_CIRCLE_STROKE,
+                            msg_y + SOURCE_CIRCLE_Y_OFFSET,
+                        ));
+                        let tip_x = tip_x
+                            + if has_target_circle {
+                                SOURCE_CIRCLE_RADIUS + SOURCE_CIRCLE_STROKE
+                            } else {
+                                0.0
+                            };
                         if matches!(msg.activation, Some(ActivationChange::Destroy)) {
                             destroy_cross_center = Some(tip_x - ARROW_TIP_GAP);
                         }
@@ -13693,6 +13910,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 cross_left + 5.0,
                                 line_x2_end,
                                 line_style,
@@ -13723,6 +13941,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 tip_x - 1.0,
                                 line_x2_end,
                                 msg_y,
@@ -13756,6 +13975,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 line_style,
                                 text_x,
                                 text_y_pos,
@@ -13814,6 +14034,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
+                                target_circle_center,
                                 first_arrow_pts,
                                 second_arrow_pts,
                                 line_x1,
@@ -13943,6 +14164,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             true,
                             None,
                             None,
+                            None,
                             from_x,
                             tip_x + 1.0,
                             msg_y,
@@ -13973,6 +14195,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             &to_uid,
                             src_line,
                             msg_id,
+                            None,
                             None,
                             None,
                             None,
@@ -14010,6 +14233,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             false,
                             None,
                             None,
+                            None,
                             tip_x - 1.0,
                             line_x2_end,
                             msg_y,
@@ -14040,6 +14264,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             &to_uid,
                             src_line,
                             msg_id,
+                            None,
                             None,
                             None,
                             None,
@@ -14267,7 +14492,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             Event::Note(note) => {
                 // A message-attached note occupies an arrow-id slot in PlantUML's
                 // global tile counter, so the following message's id skips ahead.
-                if note.on_message {
+                // ArrowAndNoteBox allocates one wrapper id for the whole
+                // attached-note list, not one id per NoteBox child.
+                if note.on_message
+                    && !matches!(ev_idx.checked_sub(1).and_then(|i| events.get(i)), Some(Event::Note(previous)) if previous.on_message)
+                {
                     msg_id += 1;
                 }
                 // Compute note dimensions and position.
@@ -15576,6 +15805,45 @@ mod tests {
     use super::*;
 
     #[test]
+    fn circle_paint_preserves_heads_for_ordinary_and_recursive_messages() {
+        for pragma in ["", "!pragma teoz true\n"] {
+            for target in ["Lark", "Wren"] {
+                for token in ["->o", "-->>o", "o<--", "-/o"] {
+                    let input = format!(
+                        "@startuml\n{pragma}participant Wren\nparticipant Lark\nWren {token} {target} : decorated\n@enduml"
+                    );
+                    let diagram = rustuml_parser::parse::parse(&input).unwrap();
+                    let svg = crate::render_svg(&diagram);
+                    assert_eq!(svg.matches("<ellipse ").count(), 1, "{input}\n{svg}");
+                    if token != "-->>o" {
+                        assert!(svg.contains("<polygon "), "{input}\n{svg}");
+                    }
+                    let circle = svg.find("<ellipse ").unwrap();
+                    let body = svg[circle..].find("<line ");
+                    assert!(body.is_some(), "{input}\n{svg}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn root_and_sibling_styles_reach_distinct_component_consumers() {
+        for pragma in ["", "!pragma teoz true\n"] {
+            let input = format!(
+                "@startuml\n{pragma}<style>\nroot {{\nLineColor #7854ab\n}}\nsequenceDiagram {{\nlifeLine {{\nLineColor #b23456\n}}\nactivationBox {{\nLineColor #3467b2\n}}\n}}\n</style>\nWren -> Lark ++ : enter\nnote right: note\nreturn done\n@enduml"
+            );
+            let svg = crate::render_svg(&rustuml_parser::parse::parse(&input).unwrap());
+            assert!(
+                svg.contains("stroke:#B23456;stroke-width:0.5;stroke-dasharray:5,5;"),
+                "{svg}"
+            );
+            assert!(svg.contains("stroke:#3467B2;stroke-width:1;"), "{svg}");
+            assert!(svg.contains("stroke:#7854AB;stroke-width:0.5;"), "{svg}");
+            assert!(svg.contains("stroke:#7854AB;stroke-width:1;"), "{svg}");
+        }
+    }
+
+    #[test]
     fn scoped_note_shadow_uses_style_value_numeric_extraction() {
         for (value, expected) in [
             ("0", 0.0),
@@ -16020,6 +16288,7 @@ mod tests {
                     thin_head: false,
                     source_cross: false,
                     source_circle: false,
+                    target_circle: false,
                 },
                 activation: None,
                 activation_color: None,
