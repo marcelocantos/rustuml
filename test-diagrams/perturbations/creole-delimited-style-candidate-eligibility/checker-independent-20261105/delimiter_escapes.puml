@@ -1,0 +1,3 @@
+@startuml
+Kestrel -> Otter : q**a~**b**c\nq//a~//b//c\nq__a~__b__c\nq--a~--b--c\nq~~a\~~b~~c
+@enduml

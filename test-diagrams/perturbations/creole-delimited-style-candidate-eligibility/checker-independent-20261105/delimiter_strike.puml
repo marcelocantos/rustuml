@@ -1,0 +1,3 @@
+@startuml
+Kestrel -> Otter : q----r--a<$cedar>b<color:teal>c</color>--s\nq--λ--t--u<$cedar>v
+@enduml

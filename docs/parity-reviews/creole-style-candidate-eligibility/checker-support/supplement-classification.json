@@ -1,0 +1,145 @@
+[
+  {
+    "name": "s_display_commands",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Twig",
+      "Bud",
+      "Birch",
+      "q",
+      "r",
+      "Crown",
+      "q",
+      "r",
+      "\u00a0"
+    ]
+  },
+  {
+    "name": "s_display_escapes",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Ash",
+      "j~",
+      "k",
+      "\u00a0",
+      "Canopy",
+      "a~",
+      "c</b>d"
+    ]
+  },
+  {
+    "name": "s_leaf_commands",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "q",
+      "r",
+      "q",
+      "r",
+      "i",
+      "Crown"
+    ]
+  },
+  {
+    "name": "s_leaf_escapes",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "j~",
+      "a~",
+      "i",
+      "Ash"
+    ]
+  },
+  {
+    "name": "s_shape_color_literals",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "_ Fir",
+      "_ Birch",
+      "Elm",
+      "Crown"
+    ]
+  },
+  {
+    "name": "s_delimiter_escape_overlap",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q*",
+      "x",
+      "r",
+      "q_",
+      "y",
+      "r",
+      "q-",
+      "z",
+      "r"
+    ]
+  },
+  {
+    "name": "s_html_bold_backslash",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "a~",
+      "r",
+      "q",
+      "a~",
+      "r"
+    ]
+  },
+  {
+    "name": "s_display_latex_valid",
+    "intended_validity": "intended_valid",
+    "observed": "reference_dependency_failure",
+    "reference_valid": false,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "formula=\\nu\nLatex=\\nu\njava.lang.ClassNotFoundException: org.apache.batik.dom.GenericDOMImplementation\n\tat java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)\n\tat java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)\n\tat java.base/java.lang.Class.forName0(Native Method)\n\tat java.base/java.lang.Class.forName(Class.java:421)\n\tat java.base/java.lang.Class.forName(Class.java:412)\n\tat net.sourceforge.plantuml.math.ConverterSvg.getSvg(ConverterSvg.java:88)\n\tat net.sourceforge.plantuml.math.LatexBuilder.getSvg(LatexBuilder.java:77)\n\tat net.sourceforge.plantuml.math.ScientificEquationSafe.getSvg(ScientificEquationSafe.java:96)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomMath.drawU(AtomMath.java:91)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileBoxOld.drawU(FtileBoxOld.java:204)\n\tat net.sourceforge.plantuml.wbs.ITFLeaf.drawU(ITFLeaf.java:84)\n\tat net.sourceforge.plantuml.wbs.Fork.drawU(Fork.java:91)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram.drawMe(WBSDiagram.java:108)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram$1.drawU(WBSDiagram.java:93)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nformula=\\nabla x\nLatex=\\nabla x\njava.lang.ClassNotFoundException: org.apache.batik.dom.GenericDOMImplementation\n\tat java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)\n\tat java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)\n\tat java.base/java.lang.Class.forName0(Native Method)\n\tat java.base/java.lang.Class.forName(Class.java:421)\n\tat java.base/java.lang.Class.forName(Class.java:412)\n\tat net.sourceforge.plantuml.math.ConverterSvg.getSvg(ConverterSvg.java:88)\n\tat net.sourceforge.plantuml.math.LatexBuilder.getSvg(LatexBuilder.java:77)\n\tat net.sourceforge.plantuml.math.ScientificEquationSafe.getSvg(ScientificEquationSafe.java:96)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomMath.drawU(AtomMath.java:91)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileBoxOld.drawU(FtileBoxOld.java:204)\n\tat net.sourceforge.plantuml.wbs.Fork.drawU(Fork.java:105)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram.drawMe(WBSDiagram.java:108)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram$1.drawU(WBSDiagram.java:93)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+    "text": [
+      "Twig",
+      "Crown"
+    ]
+  }
+]

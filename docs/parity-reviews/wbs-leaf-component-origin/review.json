@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "mechanism": "wbs-leaf-component-origin",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3Ac2ac4971-4f46-4299-a5b4-2629a816be59",
+    "model": "gpt-6-astra / high / Codex harness in T3 Code",
+    "independence": "New checker; no prior maker involvement; no children; evidence-only isolated checkout"
+  },
+  "account_commit": "52203dbe7a0dec3d24472c698758d7657a266f58",
+  "implementation_commit": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+  "evidence_tip": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git archive a84856637adcd8e8d4e78fd2ee00658c9c612feb and 8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6 into private source snapshots; cargo build -p rustuml --release -j 4 with distinct private targets (after additionally builds rustuml-oracle)",
+    "uv run --no-project --with pyyaml python replay_check.py before|after (all immutable cohorts; actual CLI -pipe and --yaml -pipe; unchanged compare_svg_strict)",
+    "Parent existing Monkey Man runner: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact request/manifest/streams retained",
+    "uv run --no-project --with pyyaml python fresh_check.py and supplement_check.py; adjudicate.py classifies embedded math failures without rerunning CLI",
+    "cargo test --workspace --lib --release; cargo test -p rustuml --test pipe_mode --release",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle -- --nocapture; golden_pairs, parity_perturbations and harness_guards once each",
+    "cargo clippy --workspace --all-targets -- -D warnings; cargo fmt --all -- --check; rustfmt --edition 2024 --check --config skip_children=true on four touched files"
+  ],
+  "command_records": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support/gates.json",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/leaf_tiny_many.puml",
+      "golden": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/leaf_tiny_many.svg",
+      "axes": [
+        "branch count",
+        "tiny widths/both sides"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "660a2fe1c173622d8f4ea2c7ed50de9c8519fbb022ff9a3a63adace433f7d558",
+      "golden_sha256": "fb3f85b63f0d0e643f9315f9856b194b6c50beeaaf6a870b403eb968ff64de46",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/leaf_tiny_many",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/leaf_deep.puml",
+      "golden": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/leaf_deep.svg",
+      "axes": [
+        "depth five",
+        "composed versus leaf"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "662bddbd7ab9685fe92eba0b2bddedf2ae677e69d2d5b467df86c81bde9deeac",
+      "golden_sha256": "99cd236d8cf049f3b6cda9469b8b137d74598e8a7adb0269679b794d4e2e2b82",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/leaf_deep",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/leaf_sizes.puml",
+      "golden": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/leaf_sizes.svg",
+      "axes": [
+        "font sizes",
+        "tiny/deep sides"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "e13d93d69f2e515d7a89bb7df62d6e957eb76b24ac9f459e495a1553ad305ad9",
+      "golden_sha256": "2eb874142ef21900b260e8883f3c0605fa81e2b638b9be0a9c36561f2080e2b3",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/leaf_sizes",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/s_leaf_commands.puml",
+      "golden": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/s_leaf_commands.svg",
+      "axes": [
+        "unboxed short leaf/internal",
+        "empty parameter flush"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "ecb9eb8bfd4d887fade531a1b6bf4004504e85e9a020b6b1086dbf3d3095564f",
+      "golden_sha256": "41a2abf0df98b88587989746756cb935354c1464e2a4c1bf2d23d24b8cac4f93",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_leaf_commands",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/s_leaf_escapes.puml",
+      "golden": "test-diagrams/perturbations/wbs-leaf-component-origin/checker-independent-20261105/s_leaf_escapes.svg",
+      "axes": [
+        "short/deep/sided leaf",
+        "escaped styles"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "2fd4cb02c0570996356feacd4b9f24c8ec6e853cd72e615f2db2c6b5466dcd5f",
+      "golden_sha256": "39cd3b5c9e53589aadecc1142e48dee68540e4d8e400f829714801a14f7b6d5f",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_leaf_escapes",
+      "verdict_excluded": false
+    }
+  ],
+  "findings": [
+    "Bounded causal support is strong: Java ITFLeaf.drawU calls box.drawU at the supplied origin; ITFComposed alone uses getw1. Rust main_w/2 cancels its center subtraction for leaves and retains node.w1 for composed nodes. No spacing/topology algorithm or numeric compensation changed.",
+    "Fresh leaf_tiny_many (six siblings on both sides), leaf_deep (depth five), and leaf_sizes (sizes6/29/9 with bold) all pass whole output after failing before. The source-defined unboxed margins and the leaf origin generalize beyond the original tiny empty control.",
+    "Whole-output acceptance is nevertheless rejected: s_leaf_commands is 103x144 in both renderers with matching positions, but empty size/color commands merge q/r into qr. s_leaf_escapes retains backslashes before tildes and widens components. These fail before and after and are shared-text dependencies; no new defect in the leaf-origin arithmetic was demonstrated. A supported local invariant is not a waiver of the requested whole-output gate."
+  ],
+  "causal_locations": {
+    "java": [
+      "wbs/ITFLeaf#drawU (79-85) draws box at supplied local origin; getF1/getF2/getT1 derive leaf dimension",
+      "wbs/ITFComposed#getw1 (91), drawU (135-147) applies trunk/collection offset only to composed nodes"
+    ],
+    "rust": [
+      "crates/rustuml-render/src/wbs.rs::draw_itf currently uses node.w1 for both leaf/composed",
+      "crates/rustuml-render/src/wbs.rs::Itf::w1/f1_x/f2_x/t1_x"
+    ]
+  },
+  "verdict": "rejected",
+  "reason": "Fresh clean-positive whole-output failures remain executable. Bounded mechanism support is recorded separately; no failures are waived and no pre-existing failure is called a maker regression.",
+  "fresh_counts": {
+    "entries": 5,
+    "clean_positive": 5,
+    "verdict_eligible": 5,
+    "before_pass": 0,
+    "after_pass": 3
+  },
+  "evidence": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support",
+  "reference_limitations": [
+    "Historical font/Graphviz environment equivalence unproved.",
+    "Java argv derived from pinned wrapper, not independently process-traced.",
+    "Pinned runner lacks Batik; math/latex fallback outputs are nonpositive reference-environment evidence, not PlantUML semantics.",
+    "No combined correctness with class candidate 68ab512be964e243ae1943f7a9fefd3537091401 or concurrent sequence work."
+  ],
+  "reviewed_at": "2026-11-04T14:22:12.468374+00:00"
+}

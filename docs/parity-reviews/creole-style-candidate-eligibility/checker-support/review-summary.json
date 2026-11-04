@@ -1,0 +1,47 @@
+{
+  "immutable_cohorts": {
+    "entries": 1898,
+    "valid": 1769,
+    "before_pass": 832,
+    "after_pass": 848,
+    "losses": [],
+    "panics_before": 32,
+    "panics_after": 32
+  },
+  "fresh": {
+    "entries": 38,
+    "valid": 33,
+    "before_pass": 2,
+    "after_pass": 21,
+    "losses": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "forced_alignment_exception": {
+      "entries": 1,
+      "result": "fail",
+      "counted_against_maker": false
+    },
+    "nonpositive": {
+      "syntax_error": 2,
+      "reference_environment_math": 3
+    },
+    "verdict_eligible": 32,
+    "eligible_after_pass": 21
+  },
+  "all_new_cli_nonzero_exits": [],
+  "model_effects": {
+    "changed_historical_models": 5,
+    "shape_none_additions": 12,
+    "color_changes": 1,
+    "other_semantic_changes": [],
+    "serialization_only_byte_changes_observed": 0,
+    "maker_single_sprite_order_change": "Verified archived maker model observations describe one map-order-only difference; independent replay produced identical map order for that case. No semantic discrepancy."
+  },
+  "historical_preservation": {
+    "old": 9731,
+    "earlier_rejected": 118,
+    "newly_imported": 96,
+    "all_exact": true,
+    "additional_base_artifacts_compared_by_git_blob": 10172
+  }
+}

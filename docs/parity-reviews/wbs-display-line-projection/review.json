@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "mechanism": "wbs-display-line-projection",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3Ac2ac4971-4f46-4299-a5b4-2629a816be59",
+    "model": "gpt-6-astra / high / Codex harness in T3 Code",
+    "independence": "New checker; no prior maker involvement; no children; evidence-only isolated checkout"
+  },
+  "account_commit": "829154e5bdd2c0a919410bbff46c2c3168a6991e",
+  "implementation_commit": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+  "evidence_tip": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git archive a84856637adcd8e8d4e78fd2ee00658c9c612feb and 8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6 into private source snapshots; cargo build -p rustuml --release -j 4 with distinct private targets (after additionally builds rustuml-oracle)",
+    "uv run --no-project --with pyyaml python replay_check.py before|after (all immutable cohorts; actual CLI -pipe and --yaml -pipe; unchanged compare_svg_strict)",
+    "Parent existing Monkey Man runner: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact request/manifest/streams retained",
+    "uv run --no-project --with pyyaml python fresh_check.py and supplement_check.py; adjudicate.py classifies embedded math failures without rerunning CLI",
+    "cargo test --workspace --lib --release; cargo test -p rustuml --test pipe_mode --release",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle -- --nocapture; golden_pairs, parity_perturbations and harness_guards once each",
+    "cargo clippy --workspace --all-targets -- -D warnings; cargo fmt --all -- --check; rustfmt --edition 2024 --check --config skip_children=true on four touched files"
+  ],
+  "command_records": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support/gates.json",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_blank_mix.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_blank_mix.svg",
+      "axes": [
+        "blank placement",
+        "sizes/depth/sides"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "7d87ddfd169fe5083d59d1db79bc552a90d1040f96ad08bbb7e609f8ee400a8f",
+      "golden_sha256": "78a21b1fbf848fbb8b2929df4d74b96267909e795c5ce5332d7ea9b2a5bd4d8b",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/display_blank_mix",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_escape_depth.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_escape_depth.svg",
+      "axes": [
+        "backslash parity",
+        "depth/sides"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "dbe9e5a6470a237546288671b2329ec3ba11fd0734496b5882975874d069851d",
+      "golden_sha256": "8bf1d0964c685e20a383780bf0be903a1dbb49f347c4c66f4b9ec5d6c59fd549",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/display_escape_depth",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_raw_url.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_raw_url.svg",
+      "axes": [
+        "raw URL",
+        "root/child projection"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "1ffa36b12ad99c208947a02922555769ba088cdfa22382fc08d267df4c60ac2b",
+      "golden_sha256": "5982ed6f2767e62b9a4be0619e614778626f624074b3f70f245affa964cf9ec0",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/display_raw_url",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_raw_math.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_raw_math.svg",
+      "axes": [
+        "raw math/latex",
+        "root/child projection"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": false,
+      "intended_validity": "intended_valid",
+      "observed_classification": "formula_and_reference_dependency_failure",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "ff049230b8f679b8d867ef6b365b0faac0d544ab1df5b928a073f402e3097cda",
+      "golden_sha256": "d71be4f27b9ed8bd8d64ff0f2fd7fd74310cac91a4b3207960a5d8fd8ee45276",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/display_raw_math",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_forced_alignment.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/display_forced_alignment.svg",
+      "axes": [
+        "excluded forced alignment",
+        "root/child"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "7f48e1c66e11a690d53552b5a7e4b7151aad4c7c59cf13520023fa38b8732962",
+      "golden_sha256": "fd98dbfe2f990a0b8776c724009456df55849390f6bc0d0996a93ae5adc3fa5a",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/display_forced_alignment",
+      "verdict_excluded": true
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/s_display_commands.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/s_display_commands.svg",
+      "axes": [
+        "multiline blank positions",
+        "empty parameter flush"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "5b2296520ab4983ce98e881671e03f3561e46c44618051b963be10bbca57e250",
+      "golden_sha256": "da9155b1d3f77a36ad64c2d9119bac94663ca5a0bbb28ec6c0718609cca3035e",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_display_commands",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/s_display_escapes.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/s_display_escapes.svg",
+      "axes": [
+        "multiline root/child",
+        "escaped tilde style boundary"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "53f8a74bbe81aa1b91cf5f1144fc611c9c38d9a7a6c8272be6595b96412f0bd1",
+      "golden_sha256": "383d81594ce80644877b951b410eeff369dc7d649451ed3205a81a604941539c",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_display_escapes",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/s_display_latex_valid.puml",
+      "golden": "test-diagrams/perturbations/wbs-display-line-projection/checker-independent-20261105/s_display_latex_valid.svg",
+      "axes": [
+        "valid raw latex backslash-n prefix",
+        "root/child"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": false,
+      "intended_validity": "intended_valid",
+      "observed_classification": "reference_dependency_failure",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "55715b5199f2d55a842ccb8ccf60d42eb4deb83d9a985623b8da32d5485a5506",
+      "golden_sha256": "e4f6c941a419e47b741d24d70b35e8c8ea635f6215b7b2f519ca5c6aed2f0cc9",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_display_latex_valid",
+      "verdict_excluded": false
+    }
+  ],
+  "findings": [
+    "Bounded support: fresh leading/interior/trailing blanks, mixed size23/8/17 lines, root versus children, deeper left/right nodes, escaped-backslash parity and raw URL content all pass. WBSDiagram.addIdea calls Display.getWithNewlines; Rust caches one content/height/baseline projection and uses it for measure and emit_box. The raw model labels retain their escapes.",
+    "Whole-output counterexample s_display_commands has identical 140x191 canvas and line coordinates, but Java emits q and r as separate atoms around empty size/color commands while Rust emits qr. s_display_escapes also fails due to the retained backslash before tilde. The Display line split is supported; acceptance is rejected because the integrated text component still fails valid held-outs. These are shared-text dependencies, not evidence that the new line projection itself is wrong.",
+    "display_forced_alignment is excluded from the verdict exactly as instructed: Java splits Crown/East/West and Branch/Needle using r/l and aligns them, Rust preserves literal backslash-r/backslash-l. Both before and after fail; this is recorded without counting it against the maker.",
+    "display_raw_math includes a malformed latex command and the runner lacks Batik. Even syntactically valid s_display_latex_valid (nabla/nu) hits the missing Batik fallback. These three math-related reference outputs across the review are preserved as nonpositive environment residue. Historical golden environment equivalence is unproved."
+  ],
+  "causal_locations": {
+    "java": [
+      "wbs/WBSDiagram#addIdea (125-134): Display.getWithNewlines before WElement creation",
+      "klimt/creole/Display#getWithNewlines (258-353): raw regions, escape and line controls, trailing empty line",
+      "klimt/creole/legacy/CreoleParser#createSheetSlow",
+      "klimt/creole/SheetBlock1#initMap: stripe maximum width and accumulated heights, alignment",
+      "wbs/WBSTextBlock#buildMain and activitydiagram3/ftile/vertical/FtileBoxOld#constructor/calculateDimensionFtile/drawU"
+    ],
+    "rust": [
+      "crates/rustuml-render/src/wbs.rs::Itf/measure/emit_box",
+      "crates/rustuml-render/src/text_render.rs::measure/label_height/label_first_baseline_ascent_with_family/emit_text",
+      "crates/rustuml-parser/src/diagram/wbs.rs::WbsNode.label (raw content retained)"
+    ]
+  },
+  "verdict": "rejected",
+  "reason": "Fresh clean-positive whole-output failures remain executable. Bounded mechanism support is recorded separately; no failures are waived and no pre-existing failure is called a maker regression.",
+  "fresh_counts": {
+    "entries": 8,
+    "clean_positive": 6,
+    "verdict_eligible": 5,
+    "before_pass": 0,
+    "after_pass": 3
+  },
+  "evidence": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support",
+  "reference_limitations": [
+    "Historical font/Graphviz environment equivalence unproved.",
+    "Java argv derived from pinned wrapper, not independently process-traced.",
+    "Pinned runner lacks Batik; math/latex fallback outputs are nonpositive reference-environment evidence, not PlantUML semantics.",
+    "No combined correctness with class candidate 68ab512be964e243ae1943f7a9fefd3537091401 or concurrent sequence work."
+  ],
+  "reviewed_at": "2026-11-04T14:22:12.467823+00:00"
+}

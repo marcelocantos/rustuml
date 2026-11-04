@@ -1,0 +1,264 @@
+{
+  "commits": [
+    {
+      "commit": "829154e5bdd2c0a919410bbff46c2c3168a6991e",
+      "metadata": "829154e5bdd2c0a919410bbff46c2c3168a6991e\n2026-11-05T00:30:11+11:00\n2026-11-05T00:30:11+11:00\nAccount for style eligibility and WBS display and shape components\n\n",
+      "paths": [
+        "docs/parity-reviews/creole-style-candidate-eligibility/account.json",
+        "docs/parity-reviews/wbs-display-line-projection/account.json",
+        "docs/parity-reviews/wbs-idea-shape-block-selection/account.json"
+      ],
+      "ancestor_of_production": true
+    },
+    {
+      "commit": "52203dbe7a0dec3d24472c698758d7657a266f58",
+      "metadata": "52203dbe7a0dec3d24472c698758d7657a266f58\n2026-11-05T00:39:44+11:00\n2026-11-05T00:39:44+11:00\nAccount for unboxed WBS leaf component origin before correction\n\n",
+      "paths": [
+        "docs/parity-reviews/wbs-leaf-component-origin/account.json"
+      ],
+      "ancestor_of_production": true
+    },
+    {
+      "commit": "3da7456655edffc1f3fc1e4236d832c490c4432e",
+      "metadata": "3da7456655edffc1f3fc1e4236d832c490c4432e\n2026-11-05T00:42:00+11:00\n2026-11-05T00:42:00+11:00\nAccount for existing delimited style candidate eligibility before correction\n\n",
+      "paths": [
+        "docs/parity-reviews/creole-delimited-style-candidate-eligibility/account.json"
+      ],
+      "ancestor_of_production": true
+    },
+    {
+      "commit": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+      "metadata": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6\n2026-11-05T00:54:43+11:00\n2026-11-05T00:54:43+11:00\nCorrect style candidate eligibility and WBS display and shape semantics\n\nSource accounts precommitted in 829154e5b, 52203dbe7 and 3da745665. Preserve command candidate eligibility and escape ordering; project WBS display lines consistently for measurement and paint; model IdeaShape at the parser boundary and select the source-defined text component. Existing unrelated whole-output failures remain in the maker evidence. This implementation requires new independent review.\n\n",
+      "paths": [
+        "crates/rustuml-parser/src/diagram/wbs.rs",
+        "crates/rustuml-parser/src/parse/wbs.rs",
+        "crates/rustuml-render/src/creole.rs",
+        "crates/rustuml-render/src/wbs.rs"
+      ],
+      "ancestor_of_production": true
+    }
+  ],
+  "archived_file_mtimes": [
+    {
+      "path": "accounts.py",
+      "mtime": 1793799011.2383943
+    },
+    {
+      "path": "add_tests.py",
+      "mtime": 1793799344.3096776
+    },
+    {
+      "path": "delimiters/validate_fresh.py",
+      "mtime": 1793800006.7455995
+    },
+    {
+      "path": "delimiters-focus/validate_fresh.py",
+      "mtime": 1793800451.495218
+    },
+    {
+      "path": "edit.py",
+      "mtime": 1793799157.2488542
+    },
+    {
+      "path": "edit_delimiters.py",
+      "mtime": 1793799804.0703042
+    },
+    {
+      "path": "edit_wbs.py",
+      "mtime": 1793799217.3007896
+    },
+    {
+      "path": "evidence.py",
+      "mtime": 1793800646.8048358
+    },
+    {
+      "path": "focus_delimiters.py",
+      "mtime": 1793800135.4378765
+    },
+    {
+      "path": "gates.py",
+      "mtime": 1793800482.4182568
+    },
+    {
+      "path": "logs/build-after-delimiters-resumed.log",
+      "mtime": 1793800036.8912623
+    },
+    {
+      "path": "logs/build-after-delimiters.log",
+      "mtime": 1793799893.2564929
+    },
+    {
+      "path": "logs/build-after-final.log",
+      "mtime": 1793799657.3845289
+    },
+    {
+      "path": "logs/build-after.log",
+      "mtime": 1793799438.0056605
+    },
+    {
+      "path": "logs/build-before.log",
+      "mtime": 1793798948.6553967
+    },
+    {
+      "path": "logs/cli.log",
+      "mtime": 1793800529.0583832
+    },
+    {
+      "path": "logs/clippy.log",
+      "mtime": 1793800545.7213042
+    },
+    {
+      "path": "logs/diff.log",
+      "mtime": 1793800546.9041977
+    },
+    {
+      "path": "logs/focused-creole-delimiters.log",
+      "mtime": 1793799827.6982367
+    },
+    {
+      "path": "logs/focused-creole-initial.log",
+      "mtime": 1793799245.839385
+    },
+    {
+      "path": "logs/focused-creole-second.log",
+      "mtime": 1793799290.7274728
+    },
+    {
+      "path": "logs/focused-delimiter-new-test.log",
+      "mtime": 1793799893.0691938
+    },
+    {
+      "path": "logs/focused-parser.log",
+      "mtime": 1793799371.189511
+    },
+    {
+      "path": "logs/focused-style.log",
+      "mtime": 1793799414.9820704
+    },
+    {
+      "path": "logs/focused-wbs-final.log",
+      "mtime": 1793799634.975482
+    },
+    {
+      "path": "logs/focused-wbs.log",
+      "mtime": 1793799415.1750863
+    },
+    {
+      "path": "logs/format.log",
+      "mtime": 1793800546.3960288
+    },
+    {
+      "path": "logs/gates-driver.log",
+      "mtime": 1793800546.9345002
+    },
+    {
+      "path": "logs/guards.log",
+      "mtime": 1793800540.6764774
+    },
+    {
+      "path": "logs/library.log",
+      "mtime": 1793800527.8779545
+    },
+    {
+      "path": "logs/main-assisted.log",
+      "mtime": 1793800536.4467258
+    },
+    {
+      "path": "logs/main-product.log",
+      "mtime": 1793800533.8639498
+    },
+    {
+      "path": "logs/models-final.log",
+      "mtime": 1793800524.31655
+    },
+    {
+      "path": "logs/models.log",
+      "mtime": 1793799698.675644
+    },
+    {
+      "path": "logs/observations.log",
+      "mtime": 1793800542.2882614
+    },
+    {
+      "path": "logs/replay-after-final.log",
+      "mtime": 1793799681.2074742
+    },
+    {
+      "path": "logs/replay-after.log",
+      "mtime": 1793799462.2629704
+    },
+    {
+      "path": "logs/replay-before.log",
+      "mtime": 1793799087.0205913
+    },
+    {
+      "path": "logs/replay-final.log",
+      "mtime": 1793800060.8994284
+    },
+    {
+      "path": "logs/standing.log",
+      "mtime": 1793800539.2833257
+    },
+    {
+      "path": "logs/summary-final.log",
+      "mtime": 1793800502.5082636
+    },
+    {
+      "path": "logs/summary.log",
+      "mtime": 1793799698.8490784
+    },
+    {
+      "path": "logs/touched-format.log",
+      "mtime": 1793800546.8707602
+    },
+    {
+      "path": "models.py",
+      "mtime": 1793800482.4086568
+    },
+    {
+      "path": "observations.py",
+      "mtime": 1793800525.0394738
+    },
+    {
+      "path": "package.py",
+      "mtime": 1793800886.3146775
+    },
+    {
+      "path": "prepare.py",
+      "mtime": 1793799061.6764524
+    },
+    {
+      "path": "provenance.py",
+      "mtime": 1793800560.9636734
+    },
+    {
+      "path": "replay.py",
+      "mtime": 1793795326.782851
+    },
+    {
+      "path": "run_replay.py",
+      "mtime": 1793799061.7218158
+    },
+    {
+      "path": "standing_mapping.py",
+      "mtime": 1793800656.3217785
+    },
+    {
+      "path": "summarize.py",
+      "mtime": 1793800482.4084034
+    },
+    {
+      "path": "supplement.py",
+      "mtime": 1793799745.2705493
+    },
+    {
+      "path": "unit-controls.py",
+      "mtime": 1793800525.0390122
+    },
+    {
+      "path": "validate_fresh.py",
+      "mtime": 1793799283.4006546
+    }
+  ],
+  "limitation": "Git ancestry proves accounts precede committed implementation. Archive mtimes and logs corroborate draft ordering but are maker-controlled, not independently timestamped draft snapshots."
+}

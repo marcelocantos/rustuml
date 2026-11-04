@@ -1,0 +1,5 @@
+@startuml
+state Finch
+state Robin
+Finch --> Robin : q<b></B>r<DEL>s</strike>t
+@enduml

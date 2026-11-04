@@ -1,0 +1,807 @@
+[
+  {
+    "cohort": "retained",
+    "entries": 1730,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "maker18",
+    "entries": 18,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "sprites50",
+    "entries": 50,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "checker38",
+    "entries": 38,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh15",
+    "entries": 15,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh26",
+    "entries": 26,
+    "semantic_changes": [
+      {
+        "id": "fresh26/wbs_boxless",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/maker/frozen/fresh26/wbs_boxless/wbs_boxless.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ East<$seed>End",
+            "after": "East<$seed>End"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ West",
+            "after": "West"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      }
+    ],
+    "raw_byte_changes": [
+      "fresh26/wbs_boxless"
+    ]
+  },
+  {
+    "cohort": "new15",
+    "entries": 15,
+    "semantic_changes": [
+      {
+        "id": "new15/wbs_boxless_tree",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/maker/new/wbs_boxless_tree.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ Leaf\\nNext",
+            "after": "Leaf\\nNext"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ West",
+            "after": "West"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/label/$value",
+            "before": "_ Root<$twig>End",
+            "after": "Root<$twig>End"
+          },
+          {
+            "path": "/diagram/nodes/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "new15/wbs_shape_color",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/maker/new/wbs_shape_color.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ Leaf",
+            "after": "Leaf"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/color/$tag",
+            "before": "tag:yaml.org,2002:null",
+            "after": "tag:yaml.org,2002:str"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/color/$value",
+            "before": "null",
+            "after": "#pink"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_[#pink] East",
+            "after": "East"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ West",
+            "after": "West"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "new15/wbs_literal_underscore",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/maker/new/wbs_literal_underscore.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ Text",
+            "after": "Text"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "new15/wbs_boxless_empty",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/maker/new/wbs_boxless_empty.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ <size:20><$bud></size>",
+            "after": "<size:20><$bud></size>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ <$twig>",
+            "after": "<$twig>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ <b></b>",
+            "after": "<b></b>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      }
+    ],
+    "raw_byte_changes": [
+      "new15/wbs_boxless_tree",
+      "new15/wbs_shape_color",
+      "new15/wbs_literal_underscore",
+      "new15/wbs_boxless_empty"
+    ]
+  },
+  {
+    "cohort": "delimiters4",
+    "entries": 4,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "focused2",
+    "entries": 2,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "checker30",
+    "entries": 30,
+    "semantic_changes": [
+      {
+        "id": "checker30/shape_colors_new",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/new/shape_colors_new.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/color/$tag",
+            "before": "tag:yaml.org,2002:null",
+            "after": "tag:yaml.org,2002:str"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/color/$value",
+            "before": "null",
+            "after": "#gold"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_[#gold] Elm",
+            "after": "Elm"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/color/$tag",
+            "before": "tag:yaml.org,2002:null",
+            "after": "tag:yaml.org,2002:str"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/color/$value",
+            "before": "null",
+            "after": "#cyan"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_[#cyan] Birch",
+            "after": "Birch"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/children/0/label/$value",
+            "before": "_ Fir",
+            "after": "Fir"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/color/$tag",
+            "before": "tag:yaml.org,2002:null",
+            "after": "tag:yaml.org,2002:str"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/color/$value",
+            "before": "null",
+            "after": "#pink"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_[#pink] Ash",
+            "after": "Ash"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/label/$value",
+            "before": "_ Crown",
+            "after": "Crown"
+          },
+          {
+            "path": "/diagram/nodes/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "checker30/shape_colors_old",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/new/shape_colors_old.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ Elm",
+            "after": "Elm"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ Birch",
+            "after": "Birch"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ Ash",
+            "after": "Ash"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/label/$value",
+            "before": "_ Crown",
+            "after": "Crown"
+          },
+          {
+            "path": "/diagram/nodes/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "checker30/shape_direction_new",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/new/shape_direction_new.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/label/$value",
+            "before": "_ Crown",
+            "after": "Crown"
+          },
+          {
+            "path": "/diagram/nodes/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "checker30/shape_direction_old",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/new/shape_direction_old.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_> Elm",
+            "after": "> Elm"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "checker30/leaf_tiny_many",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/new/leaf_tiny_many.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ i",
+            "after": "i"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ j",
+            "after": "j"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/2/label/$value",
+            "before": "_ .",
+            "after": "."
+          },
+          {
+            "path": "/diagram/nodes/0/children/2/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/3/label/$value",
+            "before": "_ W",
+            "after": "W"
+          },
+          {
+            "path": "/diagram/nodes/0/children/3/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/4/label/$value",
+            "before": "_ l",
+            "after": "l"
+          },
+          {
+            "path": "/diagram/nodes/0/children/4/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/5/label/$value",
+            "before": "_ t",
+            "after": "t"
+          },
+          {
+            "path": "/diagram/nodes/0/children/5/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "checker30/leaf_deep",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/new/leaf_deep.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/children/0/children/0/label/$value",
+            "before": "_ l",
+            "after": "l"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/children/0/label/$value",
+            "before": "_ k",
+            "after": "k"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ j",
+            "after": "j"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ i",
+            "after": "i"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/children/0/label/$value",
+            "before": "_ n",
+            "after": "n"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ m",
+            "after": "m"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/label/$value",
+            "before": "_ Cedar",
+            "after": "Cedar"
+          },
+          {
+            "path": "/diagram/nodes/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "checker30/leaf_sizes",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/new/leaf_sizes.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ <size:6>i</size>",
+            "after": "<size:6>i</size>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ <size:29>W</size>",
+            "after": "<size:29>W</size>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/2/children/0/label/$value",
+            "before": "_ <size:9>k</size>",
+            "after": "<size:9>k</size>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/2/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/2/label/$value",
+            "before": "_ <b>j</b>",
+            "after": "<b>j</b>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/2/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/label/$value",
+            "before": "_ Cedar",
+            "after": "Cedar"
+          },
+          {
+            "path": "/diagram/nodes/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      }
+    ],
+    "raw_byte_changes": [
+      "checker30/shape_colors_new",
+      "checker30/shape_colors_old",
+      "checker30/shape_direction_new",
+      "checker30/shape_direction_old",
+      "checker30/leaf_tiny_many",
+      "checker30/leaf_deep",
+      "checker30/leaf_sizes"
+    ]
+  }
+]

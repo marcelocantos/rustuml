@@ -1,0 +1,601 @@
+[
+  {
+    "name": "html_nested",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "</i>",
+      "r",
+      "t",
+      "u",
+      "v",
+      "w</B>x"
+    ]
+  },
+  {
+    "name": "html_restore",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "</b>v"
+    ]
+  },
+  {
+    "name": "html_unicode",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "\u00e9",
+      "\u03bb</B>\u03bc",
+      "\u7d42",
+      "</I>z"
+    ]
+  },
+  {
+    "name": "html_parameters",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "r",
+      "s",
+      "</B>t",
+      "</I>"
+    ]
+  },
+  {
+    "name": "html_escape_pairs",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "a~~",
+      "c</b>d",
+      "q<i></i>r",
+      "q",
+      "a~",
+      "c</b>d"
+    ]
+  },
+  {
+    "name": "html_activity",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "unused",
+      "Birch",
+      "</B> Cedar",
+      "Elm"
+    ]
+  },
+  {
+    "name": "html_state",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Finch",
+      "Robin",
+      "q",
+      "</B>r",
+      "s",
+      "t"
+    ]
+  },
+  {
+    "name": "html_note",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Finch",
+      "Finch",
+      "q",
+      "</B>r",
+      "spruce",
+      "s"
+    ]
+  },
+  {
+    "name": "html_extended",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "</u>r",
+      "x",
+      "s",
+      "y",
+      "z"
+    ]
+  },
+  {
+    "name": "html_url_math",
+    "intended_validity": "intended_valid",
+    "observed": "reference_dependency_failure",
+    "reference_valid": false,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "formula=x^2\nLatex={x}^{{2}}\njava.lang.ClassNotFoundException: org.apache.batik.dom.GenericDOMImplementation\n\tat java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)\n\tat java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)\n\tat java.base/java.lang.Class.forName0(Native Method)\n\tat java.base/java.lang.Class.forName(Class.java:421)\n\tat java.base/java.lang.Class.forName(Class.java:412)\n\tat net.sourceforge.plantuml.math.ConverterSvg.getSvg(ConverterSvg.java:88)\n\tat net.sourceforge.plantuml.math.LatexBuilder.getSvg(LatexBuilder.java:77)\n\tat net.sourceforge.plantuml.math.AsciiMath.getSvg(AsciiMath.java:66)\n\tat net.sourceforge.plantuml.math.ScientificEquationSafe.getSvg(ScientificEquationSafe.java:96)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomMath.drawU(AtomMath.java:91)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseArrow.drawInternalU(ComponentRoseArrow.java:179)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow.drawInternalU(MessageArrow.java:156)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "<i></i>",
+      "r",
+      "q",
+      "s"
+    ],
+    "classification_reason": "Embedded Java math fallback images and stderr expose missing org.apache.batik.dom.GenericDOMImplementation; not a clean positive reference.",
+    "embedded_svg_images": [
+      "<svg height=\"27\" width=\"36\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\" ><?plantuml 1.2026.3beta6?><defs/><g><rect fill=\"#FFFFFF\" style=\"width:36px;height:27px;background:#FFFFFF;\" width=\"36\" height=\"27\"/> <text fill=\"#000000\" font-family=\"monospace\" font-size=\"14\" lengthAdjust=\"spacing\" textLength=\"25.2861\" x=\"5\" y=\"17.9951\">x^2</text></g></svg>"
+    ]
+  },
+  {
+    "name": "delimiter_bold",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "**r",
+      "a",
+      "b",
+      "c",
+      "**s",
+      "q",
+      "\u03bb",
+      "t**u",
+      "v"
+    ]
+  },
+  {
+    "name": "delimiter_italic",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "//r",
+      "a",
+      "b",
+      "c",
+      "//s",
+      "q",
+      "\u03bb",
+      "t//u",
+      "v"
+    ]
+  },
+  {
+    "name": "delimiter_underline",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "__r",
+      "a",
+      "b",
+      "c",
+      "__s",
+      "q",
+      "\u03bb",
+      "t__u",
+      "v"
+    ]
+  },
+  {
+    "name": "delimiter_strike",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "--r",
+      "a",
+      "b",
+      "c",
+      "--s",
+      "q",
+      "\u03bb",
+      "t--u",
+      "v"
+    ]
+  },
+  {
+    "name": "delimiter_wave",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "~~r",
+      "a",
+      "b",
+      "c",
+      "~~s",
+      "q",
+      "\u03bb",
+      "t~~u",
+      "v"
+    ]
+  },
+  {
+    "name": "delimiter_escapes",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Kestrel",
+      "Kestrel",
+      "Otter",
+      "Otter",
+      "q",
+      "a**b",
+      "c",
+      "q",
+      "a//b",
+      "c",
+      "q",
+      "a__b",
+      "c",
+      "q",
+      "a--b",
+      "c",
+      "q",
+      "a~~b",
+      "c"
+    ]
+  },
+  {
+    "name": "delimiter_activity",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "q",
+      "**r",
+      "s",
+      "t**u"
+    ]
+  },
+  {
+    "name": "display_blank_mix",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "\u00a0",
+      "Fir",
+      "\u00a0",
+      "Ash",
+      "Bud",
+      "\u00a0",
+      "Elm",
+      "\u00a0",
+      "\u00a0",
+      "Canopy",
+      "\u00a0",
+      "\u00a0"
+    ]
+  },
+  {
+    "name": "display_escape_depth",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "West",
+      "\u00a0",
+      "\u00a0",
+      "Limb\\",
+      "Bud",
+      "Tip\\nNeedle",
+      "Trunk\\nLiteral",
+      "Crown"
+    ]
+  },
+  {
+    "name": "display_raw_url",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Branch",
+      "Leaf",
+      "Canopy",
+      "Tail"
+    ]
+  },
+  {
+    "name": "display_raw_math",
+    "intended_validity": "intended_valid",
+    "observed": "formula_and_reference_dependency_failure",
+    "reference_valid": false,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "formula=z\\nt\nLatex=z\\nt\njava.lang.reflect.InvocationTargetException\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:74)\n\tat java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)\n\tat java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)\n\tat net.sourceforge.plantuml.math.TeXIconBuilder.<init>(TeXIconBuilder.java:58)\n\tat net.sourceforge.plantuml.math.LatexBuilder.buildIcon(LatexBuilder.java:69)\n\tat net.sourceforge.plantuml.math.LatexBuilder.getImage(LatexBuilder.java:85)\n\tat net.sourceforge.plantuml.math.ScientificEquationSafe.getImage(ScientificEquationSafe.java:115)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomMath.calculateDimensionSlow(AtomMath.java:69)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockMemoized.calculateDimension(TextBlockMemoized.java:59)\n\tat net.sourceforge.plantuml.klimt.creole.Sea.add(Sea.java:61)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.initMap(SheetBlock1.java:136)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.calculateDimensionSlow(SheetBlock1.java:197)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockMemoized.calculateDimension(TextBlockMemoized.java:59)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.calculateDimension(SheetBlock2.java:93)\n\tat net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileBoxOld.calculateDimensionFtile(FtileBoxOld.java:226)\n\tat net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile.calculateDimension(AbstractFtile.java:116)\n\tat net.sourceforge.plantuml.activitydiagram3.ftile.AbstractFtile.calculateDimension(AbstractFtile.java:51)\n\tat net.sourceforge.plantuml.wbs.ITFLeaf.calculateDimension(ITFLeaf.java:76)\n\tat net.sourceforge.plantuml.wbs.Fork.calculateDimensionSlow(Fork.java:115)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockMemoized.calculateDimension(TextBlockMemoized.java:59)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram$1.calculateDimension(WBSDiagram.java:97)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.calculateDimension(TextBlockUtils.java:171)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.calculateFinalDimension(TextBlockExporter12026.java:195)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:158)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nCaused by: org.scilab.forge.jlatexmath.ParseException: Unknown symbol or command or predefined TeXFormula: 'nt'\n\tat org.scilab.forge.jlatexmath.TeXParser.processEscape(TeXParser.java:1243)\n\tat org.scilab.forge.jlatexmath.TeXParser.parse(TeXParser.java:705)\n\tat org.scilab.forge.jlatexmath.TeXFormula.<init>(TeXFormula.java:261)\n\tat org.scilab.forge.jlatexmath.TeXFormula.<init>(TeXFormula.java:245)\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)\n\t... 28 more\nformula=z\\nt\nLatex=z\\nt\njava.lang.reflect.InvocationTargetException\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:74)\n\tat java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)\n\tat java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)\n\tat net.sourceforge.plantuml.math.TeXIconBuilder.<init>(TeXIconBuilder.java:58)\n\tat net.sourceforge.plantuml.math.LatexBuilder.buildIcon(LatexBuilder.java:69)\n\tat net.sourceforge.plantuml.math.LatexBuilder.getSvg(LatexBuilder.java:75)\n\tat net.sourceforge.plantuml.math.ScientificEquationSafe.getSvg(ScientificEquationSafe.java:96)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomMath.drawU(AtomMath.java:91)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileBoxOld.drawU(FtileBoxOld.java:204)\n\tat net.sourceforge.plantuml.wbs.ITFLeaf.drawU(ITFLeaf.java:84)\n\tat net.sourceforge.plantuml.wbs.Fork.drawU(Fork.java:91)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram.drawMe(WBSDiagram.java:108)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram$1.drawU(WBSDiagram.java:93)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nCaused by: org.scilab.forge.jlatexmath.ParseException: Unknown symbol or command or predefined TeXFormula: 'nt'\n\tat org.scilab.forge.jlatexmath.TeXParser.processEscape(TeXParser.java:1243)\n\tat org.scilab.forge.jlatexmath.TeXParser.parse(TeXParser.java:705)\n\tat org.scilab.forge.jlatexmath.TeXFormula.<init>(TeXFormula.java:261)\n\tat org.scilab.forge.jlatexmath.TeXFormula.<init>(TeXFormula.java:245)\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)\n\t... 21 more\nformula=x\\ny\nLatex={x}{n}{y}\njava.lang.ClassNotFoundException: org.apache.batik.dom.GenericDOMImplementation\n\tat java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)\n\tat java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)\n\tat java.base/java.lang.Class.forName0(Native Method)\n\tat java.base/java.lang.Class.forName(Class.java:421)\n\tat java.base/java.lang.Class.forName(Class.java:412)\n\tat net.sourceforge.plantuml.math.ConverterSvg.getSvg(ConverterSvg.java:88)\n\tat net.sourceforge.plantuml.math.LatexBuilder.getSvg(LatexBuilder.java:77)\n\tat net.sourceforge.plantuml.math.AsciiMath.getSvg(AsciiMath.java:66)\n\tat net.sourceforge.plantuml.math.ScientificEquationSafe.getSvg(ScientificEquationSafe.java:96)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomMath.drawU(AtomMath.java:91)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileBoxOld.drawU(FtileBoxOld.java:204)\n\tat net.sourceforge.plantuml.wbs.Fork.drawU(Fork.java:105)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram.drawMe(WBSDiagram.java:108)\n\tat net.sourceforge.plantuml.wbs.WBSDiagram$1.drawU(WBSDiagram.java:93)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+    "text": [
+      "Twig",
+      "Crown"
+    ],
+    "classification_reason": "Embedded Java math fallback images and stderr expose missing org.apache.batik.dom.GenericDOMImplementation; not a clean positive reference. Also invalid latex command nt.",
+    "embedded_svg_images": [
+      "<svg height=\"27\" width=\"44\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\" ><?plantuml 1.2026.3beta6?><defs/><g><rect fill=\"#FFFFFF\" style=\"width:44px;height:27px;background:#FFFFFF;\" width=\"44\" height=\"27\"/> <text fill=\"#000000\" font-family=\"monospace\" font-size=\"14\" lengthAdjust=\"spacing\" textLength=\"33.7148\" x=\"5\" y=\"17.9951\">z\\nt</text></g></svg>",
+      "<svg height=\"27\" width=\"44\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\" ><?plantuml 1.2026.3beta6?><defs/><g><rect fill=\"#FFFFFF\" style=\"width:44px;height:27px;background:#FFFFFF;\" width=\"44\" height=\"27\"/> <text fill=\"#000000\" font-family=\"monospace\" font-size=\"14\" lengthAdjust=\"spacing\" textLength=\"33.7148\" x=\"5\" y=\"17.9951\">x\\ny</text></g></svg>"
+    ]
+  },
+  {
+    "name": "display_forced_alignment",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Branch",
+      "Needle",
+      "Crown",
+      "East",
+      "West"
+    ],
+    "verdict_excluded": true,
+    "classification_reason": "Explicit user exception: alignment effects recorded, never counted against maker."
+  },
+  {
+    "name": "shape_colors_new",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Ash",
+      "Fir",
+      "Birch",
+      "Elm",
+      "_Literal_",
+      "Crown"
+    ]
+  },
+  {
+    "name": "shape_colors_old",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "Please\u00a0define\u00a0Direction/Shape\u00a0before\u00a0Color/Id.",
+      "Ash",
+      "Birch",
+      "Elm",
+      "Crown"
+    ]
+  },
+  {
+    "name": "shape_direction_new",
+    "intended_validity": "intended_valid",
+    "observed": "error_svg",
+    "reference_valid": false,
+    "java_exit": 200,
+    "helper_self_compare_exit": 2,
+    "stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: wbs)\n",
+    "text": [
+      "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+      "[From string (line 5) ]",
+      "\u00a0",
+      "@startwbs",
+      "*_ Crown",
+      "**_<[#cyan] Birch",
+      "***_> Elm",
+      "**>_[#gold] Fir",
+      "Syntax Error? (Assumed diagram type: wbs)"
+    ]
+  },
+  {
+    "name": "shape_direction_old",
+    "intended_validity": "intended_valid",
+    "observed": "error_svg",
+    "reference_valid": false,
+    "java_exit": 200,
+    "helper_self_compare_exit": 2,
+    "stderr": "ERROR\n2\nSyntax Error? (Assumed diagram type: wbs)\n",
+    "text": [
+      "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+      "[From string (line 3) ]",
+      "\u00a0",
+      "@startwbs",
+      "* Crown",
+      "**[#cyan]<_ Birch",
+      "Syntax Error? (Assumed diagram type: wbs)"
+    ]
+  },
+  {
+    "name": "shape_literal",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "_ Fir",
+      "_ Birch",
+      "_ Elm",
+      "_ Crown"
+    ]
+  },
+  {
+    "name": "leaf_tiny_many",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "t",
+      "l",
+      "i",
+      "j",
+      ".",
+      "W",
+      "Canopy"
+    ]
+  },
+  {
+    "name": "leaf_deep",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "m",
+      "n",
+      "i",
+      "j",
+      "k",
+      "l",
+      "Cedar"
+    ]
+  },
+  {
+    "name": "leaf_sizes",
+    "intended_validity": "intended_valid",
+    "observed": "valid_diagram",
+    "reference_valid": true,
+    "java_exit": 0,
+    "helper_self_compare_exit": 0,
+    "stderr": "",
+    "text": [
+      "j",
+      "k",
+      "i",
+      "W",
+      "Cedar"
+    ]
+  }
+]

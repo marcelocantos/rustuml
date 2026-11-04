@@ -1,0 +1,6 @@
+@startuml
+participant Finch
+note right of Finch
+q<b></B>r<i>spruce</I>s
+end note
+@enduml
