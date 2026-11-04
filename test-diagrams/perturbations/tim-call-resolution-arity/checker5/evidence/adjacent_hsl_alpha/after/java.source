@@ -1,0 +1,3 @@
+@startuml
+class "#FF0000/#80ff0000/#FF0000" as Color
+@enduml

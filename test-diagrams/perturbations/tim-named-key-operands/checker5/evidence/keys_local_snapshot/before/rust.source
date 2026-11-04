@@ -1,0 +1,3 @@
+@startuml
+class "first/last/$a" as Snapshot
+@enduml

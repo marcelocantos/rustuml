@@ -1,0 +1,13 @@
+Exception in thread "main" java.lang.IllegalArgumentException
+	at net.sourceforge.plantuml.tim.EaterForeach.size(EaterForeach.java:77)
+	at net.sourceforge.plantuml.tim.EaterForeach.isSkip(EaterForeach.java:69)
+	at net.sourceforge.plantuml.tim.iterator.CodeIteratorForeach.executeForeach(CodeIteratorForeach.java:115)
+	at net.sourceforge.plantuml.tim.iterator.CodeIteratorForeach.peek(CodeIteratorForeach.java:87)
+	at net.sourceforge.plantuml.tim.iterator.CodeIteratorAffectation.peek(CodeIteratorAffectation.java:63)
+	at net.sourceforge.plantuml.tim.TContext.executeLines(TContext.java:350)
+	at net.sourceforge.plantuml.tim.TimLoader.load(TimLoader.java:74)
+	at net.sourceforge.plantuml.BlockUml.<init>(BlockUml.java:150)
+	at net.sourceforge.plantuml.BlockUmlBuilder.<init>(BlockUmlBuilder.java:130)
+	at net.sourceforge.plantuml.SourceStringReader.<init>(SourceStringReader.java:103)
+	at net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:91)
+	at net.sourceforge.plantuml.Run.main(Run.java:183)

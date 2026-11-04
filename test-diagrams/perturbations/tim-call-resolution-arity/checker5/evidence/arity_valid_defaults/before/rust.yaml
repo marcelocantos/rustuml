@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "fir/end/ar/ash/end" as Valid
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Valid
+  entities:
+  - id: Valid
+    label: fir/end/ar/ash/end
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

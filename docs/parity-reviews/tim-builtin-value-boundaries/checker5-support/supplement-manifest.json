@@ -1,0 +1,67 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/sub_suffix_valid.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": false,
+    "axes": [
+      "local punctuation suffix",
+      "two block names and replay"
+    ],
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/macro_original_prefix.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": false,
+    "axes": [
+      "variable before multiline call",
+      "raw caller prefix versus evaluated prefix"
+    ],
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/keys_nested_call.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": false,
+    "axes": [
+      "nested call inside named argument",
+      "RPN named map lifetime"
+    ],
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/adjacent_hsl_alpha.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": false,
+    "axes": [
+      "three versus four argument dispatch",
+      "typed string versus integer"
+    ],
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/json_empty_object.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": false,
+    "axes": [
+      "empty object versus array",
+      "terminal missing dot versus JSON typed string"
+    ],
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

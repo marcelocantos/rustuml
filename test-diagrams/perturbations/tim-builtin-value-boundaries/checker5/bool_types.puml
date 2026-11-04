@@ -1,0 +1,6 @@
+@startuml
+!$a=%boolval("FaLsE")+9
+!$b=%boolval(%str2json("true"))+8
+!$c=%boolval(0)+%boolval("1")
+class "$a/$b/$c" as Truth
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+!$a=%strlen(1/0,"extra")
+!$b=%boolval("bad")
+class Lost
+@enduml

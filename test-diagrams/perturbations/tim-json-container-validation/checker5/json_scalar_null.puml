@@ -1,0 +1,6 @@
+@startuml
+!foreach $x in %str2json("null")
+class Phantom
+!endfor
+class Lost
+@enduml

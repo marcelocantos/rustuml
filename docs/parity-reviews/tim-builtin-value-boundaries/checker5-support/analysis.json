@@ -1,0 +1,425 @@
+{
+  "frozen1449": {
+    "total": 1449,
+    "matches": 520
+  },
+  "standing": {
+    "total": 1547,
+    "passed": 562,
+    "failed": 985,
+    "exit": 101
+  },
+  "matching_env_cli": 588,
+  "standing_cli_differences": [
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "GMT-03:30",
+      "debug": "date=1774210426000,tz=-0330",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Australia/Melbourne",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 1: cannot include test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_body.inc!useful",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/tabs.inc!chosen",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/nested.inc!chosen",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Europe/London",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Europe/London",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Australia/Lord_Howe",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Europe/Dublin",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Asia/Kathmandu",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "GMT-03:30",
+      "debug": "date=1774210426000,tz=FIX-0330",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+      "zone": "Asia/Tokyo",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+      "zone": "America/New_York",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+      "zone": "UTC",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Africa/Casablanca",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "Africa/Casablanca",
+      "debug": "date=1774210426000",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 5: cannot include checker4-resources/blocks.inc!chosen",
+      "cwd": "test-diagrams/perturbations/tim-sub-directive-selection",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {}
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {
+        "PLANTUML_CHECKER4": "007,oak",
+        "CHECKER4_PRIVATE": "benign-control",
+        "plantuml.security.checker4": "benign-hidden",
+        "PLANTUML_SECURITY_PROFILE": "LEGACY"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": ".",
+      "zone": "GMT+11:00",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "env": {
+        "CHECKER4_PRIVATE": "visible-control",
+        "plantuml.security.checker4": "benign-hidden",
+        "PLANTUML_SECURITY_PROFILE": "UNSECURE"
+      }
+    }
+  ],
+  "entity_drops": [],
+  "panic_groups": {
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615": [
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml"
+    ],
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml"
+    ]
+  },
+  "other_valid_errors": [
+    "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_ownership.puml"
+  ],
+  "panic_groups_by_source_sha256": {
+    "aeff6e48900776f40418573bec35843265f3929b77dfe3ddd428af47faf2b152": [
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml"
+    ],
+    "2a432be9f6284b3f320c9cb8a74e58cd4378c4f1e7f4fe223c055548a797e0d5": [
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml"
+    ],
+    "8a64e14ceab02a04d923dd4eb8775297dc4be76cbfe3e18f3686f59110584a34": [
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml"
+    ],
+    "0e7553fac10ca057a794140186be5506e22aae2f2529cdc800059abc55859249": [
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml"
+    ],
+    "f5ee3e9f3f8d694f58f9b804df5ceb3f97ebb65d65d5b14a9b90b3ffed030eaf": [
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml"
+    ],
+    "437e7854b8a5934a8553ca43962ae58d7f6ca36b09503d14f968dc6065fa3c21": [
+      "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml"
+    ],
+    "eac705a19ee2b617769a60f30250243ded6475ba3075fba9759640744376f48d": [
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml"
+    ],
+    "2f105172e6e5286477b2e91ee0a29efa2bacf8ca8a58e945dc856f29175a48f7": [
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml"
+    ],
+    "91dacd406dcf7182c49dc6cf93b14d766cb25f4761188801bd17183e181a3d5a": [
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml"
+    ],
+    "4913360533250c3d4ebc65032312bb0bdf1ef92026a48a76138fdbd481eb8c79": [
+      "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml"
+    ],
+    "fb52cc382e3d715c01e9a2a71d4a046df6de4325c78442c10fb1dcf33722b731": [
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml"
+    ],
+    "bc18f2524421cb98ccb491a36a053ea13c36e3ce94fbccf30b1be8756a2f8499": [
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml"
+    ],
+    "80f0ab3ad2f410d7ddb02391658f9808b9cbe79cb38a5920a72258aeadebde97": [
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml"
+    ],
+    "257371f1c5d4ea6ba78dc9a3a41e5464a30feb5e362cf4ab1591b3f01a7a40be": [
+      "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml"
+    ],
+    "820bad1a9ed44319cd7960acaba55464f39a1243bbf749e8753a2c20888c5507": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml"
+    ],
+    "ae7a930e7b2233a64f06255944584009ad7fec5da071dbf1760dbb6e61570f33": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml"
+    ],
+    "db837c7327419234c9332d0b6f385f7d32f6d741267e965602ff185a85cbf8c3": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml"
+    ],
+    "f6905da824601bdb68d812b0bbe4132b0ebb9fffeefac42322c9cb5ff851552f": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml"
+    ],
+    "83a0b91b1828aeed4551185912c379db289e6b5461b844a2f0a9b6b2e94ad09b": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml"
+    ],
+    "75377a81d1138ad57a94ac2309eacee93c397b6385ece1cd4bfbab12610b5a54": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml"
+    ],
+    "f7709da36efbe5467a5cbcd286c62371c269cd92dcff23ee71f6a005be834145": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml"
+    ],
+    "985f03150eeb32dc650e3237171d685485607770fa726908fa87c40e95b8a419": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml"
+    ],
+    "d9d2e4a47095ee718a4f39da210ce8209e1c34ef8c0f44a56f722b166e83cd53": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml"
+    ],
+    "5d97de4028d67c2d270cccdac8152bd7ba387784075e7cdeab58aeab55d8f8f3": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml"
+    ],
+    "3f71bff57fe09e436d60492954dd5c11f54c02aae6aaa7b13b7caf151f9d74a0": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml"
+    ],
+    "177ebd7ad5c18e0ed674db93986a6ee3b14f73f5cd3afbdbf16477995d4e8831": [
+      "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml"
+    ],
+    "ab2fd4a8aeec73db870a8ceb65e46b10a6d46ce433df19999245984da88252df": [
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml"
+    ],
+    "8fd879038ab2d977efafe4e763da7da62e6bcdfc056b25d5a1acde0e71691471": [
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml"
+    ],
+    "243734b2cc37a6e23247861f82c2542bf1bb9721f9492ab71ad155e1c2652f71": [
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml"
+    ],
+    "2459020ba9aeb130be0dc78c5b158931ae2c51ae1b307736e43664dba4bd5771": [
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml"
+    ],
+    "01c3469fd09e3f0a4cd7152c4f99088ba546488cf2fe772c58be20845c0eacc6": [
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml"
+    ],
+    "bd1af39791c09c2040d80dd39fcddc38d758443e66a90d0bcd66a4e30abb62df": [
+      "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml"
+    ]
+  },
+  "panic_source_note": "32 distinct source variants, grouped by identical failure signatures into24 len2 and8 len1 underflows; not32 independent bug mechanisms. Source hashes retained separately."
+}

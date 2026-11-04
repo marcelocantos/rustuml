@@ -1,0 +1,56 @@
+{
+  "cli_exit": 0,
+  "comparison_exit": 0,
+  "svg_match": true,
+  "panic": false,
+  "calls": [
+    {
+      "mode": "svg",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "RAYON_NUM_THREADS": "4"
+      },
+      "exit": 0,
+      "stdout_sha256": "6b4ac555c727dad1ae89881ca6e3e417ebcb85240a6a0c56d5eae45aa11885be",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "mode": "yaml",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+        "--yaml",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "RAYON_NUM_THREADS": "4"
+      },
+      "exit": 0,
+      "stdout_sha256": "216f3e2b957f2c30da2c791a651bac14efc1cd8153fff20ee80ef0931cbfc4eb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "comparison_argv": [
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/probe",
+    "compare",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/relay24/keys_local_snapshot/java.svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/replay/fresh24/after/8d5ed66d9ad54b-keys_local_snapshot/rust.svg"
+  ],
+  "model": {
+    "type": "Class",
+    "entities": 1,
+    "source": "@startuml\nclass \"first/plum/$a\" as Snapshot\n@enduml\n"
+  },
+  "source_equal": true,
+  "reference_source_sha256": "3b54e53adaf82ef148b7645e803ae46fb26e2cc93d2a4c346a3ab939275eae7a"
+}

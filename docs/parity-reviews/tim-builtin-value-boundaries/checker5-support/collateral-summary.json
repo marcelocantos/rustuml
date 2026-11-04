@@ -1,0 +1,19 @@
+{
+  "total": 1516,
+  "valid": 1459,
+  "before": 567,
+  "after": 567,
+  "source_matches": 59,
+  "negative_rejected": 37,
+  "panics": 32,
+  "losses": [],
+  "new_valid_errors": [],
+  "cohort955": {
+    "total": 955,
+    "after": 431
+  },
+  "cohort1044": {
+    "total": 1044,
+    "after": 495
+  }
+}

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "0/3/#FF0000/12" as Dispatch
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Dispatch
+  entities:
+  - id: Dispatch
+    label: '0/3/#FF0000/12'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

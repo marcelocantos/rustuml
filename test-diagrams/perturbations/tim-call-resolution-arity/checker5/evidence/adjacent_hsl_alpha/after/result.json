@@ -1,0 +1,56 @@
+{
+  "cli_exit": 0,
+  "comparison_exit": 1,
+  "svg_match": false,
+  "panic": false,
+  "calls": [
+    {
+      "mode": "svg",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "RAYON_NUM_THREADS": "4"
+      },
+      "exit": 0,
+      "stdout_sha256": "17815d572e3c0aba3f19c243a9dbd60355d8e3f67e39dcc88b61206003a609d9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "mode": "yaml",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+        "--yaml",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "RAYON_NUM_THREADS": "4"
+      },
+      "exit": 0,
+      "stdout_sha256": "bfd1849ec62e025438460705ad78410fc2adf37e63d5093ad69d0c561fa8d252",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "comparison_argv": [
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/probe",
+    "compare",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/relay5/adjacent_hsl_alpha/java.svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/replay/supplement5/after/ce2bfba17293af-adjacent_hsl_alpha/rust.svg"
+  ],
+  "model": {
+    "type": "Class",
+    "entities": 1,
+    "source": "@startuml\nclass \"#FF0000/#FF0000/#00FF00\" as Color\n@enduml\n"
+  },
+  "source_equal": false,
+  "reference_source_sha256": "18545bd2492556f3f621245435d2ac34772046e304a4d2f5b0edc0c2091fff9d"
+}

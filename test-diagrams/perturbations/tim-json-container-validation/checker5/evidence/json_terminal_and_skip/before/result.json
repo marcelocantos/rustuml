@@ -1,0 +1,56 @@
+{
+  "cli_exit": 0,
+  "comparison_exit": 0,
+  "svg_match": true,
+  "panic": false,
+  "calls": [
+    {
+      "mode": "svg",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-before/release/rustuml",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "RAYON_NUM_THREADS": "4"
+      },
+      "exit": 0,
+      "stdout_sha256": "c9c940e68c14c031924bf53f5431d53d6b39444cbd193b235e3f616e91f9c3f3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "mode": "yaml",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-before/release/rustuml",
+        "--yaml",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "RAYON_NUM_THREADS": "4"
+      },
+      "exit": 0,
+      "stdout_sha256": "6a9f61c5d190311466864f8c40e6ed950d78dfe6b4d283dc4db0750e30690f3f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "comparison_argv": [
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/probe",
+    "compare",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/relay24/json_terminal_and_skip/java.svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/replay/fresh24/before/2f462c6275d2ed-json_terminal_and_skip/rust.svg"
+  ],
+  "model": {
+    "type": "Class",
+    "entities": 1,
+    "source": "@startuml\nclass \"0082//2/4\" as Json\n@enduml\n"
+  },
+  "source_equal": true,
+  "reference_source_sha256": "c99f2aef23685b84c2f08f5216afcd9b1ce1ced3d870366a70b8b332a4f6b297"
+}

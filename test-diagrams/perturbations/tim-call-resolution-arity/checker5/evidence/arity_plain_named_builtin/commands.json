@@ -1,0 +1,73 @@
+{
+  "exit_code": 200,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.0712217500113184,
+  "stdout_sha256": "ad6e5df352c5fbd9d85a1dd578eb2dd219f3f778c2a480f4218cd9f5d1590825",
+  "stderr_sha256": "1b0d02eaf6640263b0e46c6e6bd38eb435cafc8392258f3b3d768eb84a7ff337",
+  "id": "arity_plain_named_builtin",
+  "timezone": "GMT+11:00",
+  "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_plain_named_builtin.puml",
+  "source_sha256": "89f88c9aeb4a88326b675a78f2db19801be7fd4314ab330acc05783279566ed1",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new/arity_plain_named_builtin.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new/arity_plain_named_builtin.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new/arity_plain_named_builtin.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.SSQHpgKU/new",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.4417665419896366,
+    "stdout_sha256": "f9e89182ab95b7e0e5f59fa30d27fd6b3968519964621cd8b387e2849799cbef",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}
