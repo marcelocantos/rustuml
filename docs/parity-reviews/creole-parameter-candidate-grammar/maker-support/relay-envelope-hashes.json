@@ -1,0 +1,26 @@
+[
+  {
+    "path": "reference-results.json.gz",
+    "sha256": "a3b538e932791d9fd6bd1c323f3f365a3376276b43cbc79d6ace094f2be74393"
+  },
+  {
+    "path": "reference-transport.json",
+    "sha256": "1a8a863e63a009a8be0f7a662f824b4c4184b324e2c3fdcdb2cd5d2345de9103"
+  },
+  {
+    "path": "parent-relay-input.json.gz",
+    "sha256": "8ee85a47546233248956e1e685201b6db1f111cdd70e842cff18c8369a37c4be"
+  },
+  {
+    "path": "request.json",
+    "sha256": "806899a9903fdbff9feec428efbb4d5f0fbbe82d9572109127172673914b5a13"
+  },
+  {
+    "path": "manifest.json",
+    "sha256": "550f1ade62d5a70aeffc368346fc177af0189387bb5dc1fbac2de311730f3ac9"
+  },
+  {
+    "path": "input-bundle.json.gz",
+    "sha256": "6ed6a2a11b796bdea72a3ccbf3558059c69dc9962e7acd6f45c3a057a883ce50"
+  }
+]
