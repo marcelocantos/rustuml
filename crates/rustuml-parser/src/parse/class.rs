@@ -856,6 +856,9 @@ impl ClassParser {
         if self.try_note(line)? {
             return Ok(());
         }
+        if self.try_url(line)? {
+            return Ok(());
+        }
         if self.try_meta(line) {
             return Ok(());
         }
@@ -1789,6 +1792,82 @@ impl ClassParser {
             self.scope_stack.push(ClassScope::Package);
             true
         }
+    }
+
+    fn try_url(&mut self, line: &str) -> Result<bool, ParseError> {
+        // classdiagram.command.CommandUrl#getRegexConcat: consume the complete
+        // command, then resolve existing quark data without allocating a UID.
+        static URL: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+            r#"(?i)^url\s*(?:of|for)?\s+(?P<code>[\p{L}\p{N}_.]+|"[^"]+")\s+(?:is)?\s*(?P<url>\[\[.+\]\])$"#
+        ).unwrap()
+        });
+        let Some(caps) = URL.captures(line) else {
+            return Ok(false);
+        };
+        let code = caps["code"].trim_matches('"');
+        // CucaDiagram.quarkInContextSafe(true) first reuses a unique
+        // short-name quark, then resolves relative to the current group.
+        let path = self.resolve_quark_path(code, QuarkLookup::ReuseUnique);
+        let id = self.path_id(&path);
+        // UrlBuilder#getRegexp/getUrl tests these strict alternatives in order.
+        // Keep this consuming grammar local: older declaration extractors are
+        // not a validator for a standalone CommandUrl.
+        static BUILDERS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
+            [
+            r#"^\[\[\s*"(?P<link>[^"]+)"(?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
+            r"^\[\[\s*\{(?P<tip>.*)\}\s*\]\]$",
+            r"^\[\[\s*\{(?P<tip>[^{}]*)\}\s*[^\s{}\[\]][^\[\]]*\s*\]\]$",
+            r#"^\[\[\s*(?P<link>[^\s"{}\[\]]+?)\s*\{(?P<tip>.+)\}\s*\]\]$"#,
+            r#"^\[\[\s*(?P<link>[^\s"\[\]]+?)(?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
+        ].into_iter().map(|pattern| Regex::new(pattern).unwrap()).collect()
+        });
+        let Some(value) = BUILDERS
+            .iter()
+            .find_map(|pattern| pattern.captures(&caps["url"]))
+        else {
+            return Ok(false);
+        };
+        let mut url = value
+            .name("link")
+            .map_or(String::new(), |m| m.as_str().to_string());
+        let tooltip = value.name("tip").map(|m| m.as_str().to_string());
+        // UrlBuilder.withTopUrl prefixes everything except these three schemes;
+        // tooltip-only alternatives bypass that helper altogether.
+        if value.name("link").is_some()
+            && !["http:", "https:", "file:"]
+                .iter()
+                .any(|scheme| url.starts_with(scheme))
+            && let Some(top) = self
+                .meta
+                .skinparams
+                .iter()
+                .rev()
+                .find(|p| p.key.eq_ignore_ascii_case("topurl"))
+        {
+            url = format!("{}{url}", top.value);
+        }
+        let url = Some(url);
+        if let Some(&index) = self.entity_by_path.get(&path) {
+            self.entities[index].url = url;
+            self.entities[index].url_tooltip = tooltip;
+        } else if let Some(&index) = self.package_by_path.get(&path) {
+            self.packages[index].url = url;
+            self.packages[index].url_tooltip = tooltip;
+        } else if let Some(note) = self
+            .notes
+            .iter_mut()
+            .find(|note| note.alias.as_deref() == Some(&id))
+        {
+            note.url = url;
+            note.url_tooltip = tooltip;
+        } else {
+            return Err(ParseError {
+                line: self.current_line,
+                message: format!("{code} does not exist"),
+            });
+        }
+        Ok(true)
     }
 
     fn try_note(&mut self, line: &str) -> Result<bool, ParseError> {
@@ -2846,6 +2925,67 @@ mod tests {
     fn parse(input: &str) -> ClassDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_class(&lines).unwrap()
+    }
+
+    #[test]
+    fn url_command_consumes_existing_named_quarks_without_new_uids() {
+        for command in ["url Memo", "url of Memo is", "URL for \"Memo\" is"] {
+            let source = format!(
+                "package Harbor {{\nclass Anchor\nnote \"chart\" as Memo\n{command} [[https://example.org/map{{Open chart}}]]\n}}"
+            );
+            let d = parse(&source);
+            assert_eq!(d.entities.len(), 1);
+            assert_eq!(d.notes.len(), 1);
+            assert_eq!(d.notes[0].alias.as_deref(), Some("Harbor.Memo"));
+            assert_eq!(d.notes[0].url.as_deref(), Some("https://example.org/map"));
+            assert_eq!(d.notes[0].url_tooltip.as_deref(), Some("Open chart"));
+            assert_eq!(
+                d.uid_events
+                    .iter()
+                    .filter(|e| matches!(e, ClassUidEvent::Note(_)))
+                    .count(),
+                1
+            );
+        }
+        let d = parse(
+            "note \"chart\" as Harbor.Memo\nurl for \"Harbor.Memo\" [[https://example.org/qualified]]\nclass Bolt",
+        );
+        assert_eq!(
+            d.notes[0].url.as_deref(),
+            Some("https://example.org/qualified")
+        );
+    }
+
+    #[test]
+    fn url_command_uses_unique_lookup_and_strict_url_builder_forms() {
+        let d = parse(
+            "skinparam topurl https://example.org/\npackage Harbor {\nnote \"chart\" as Memo\n}\nurl for Memo is [[\"path with spaces\"{Inspect} label]]",
+        );
+        assert_eq!(
+            d.notes[0].url.as_deref(),
+            Some("https://example.org/path with spaces")
+        );
+        assert_eq!(d.notes[0].url_tooltip.as_deref(), Some("Inspect"));
+        let d = parse("note \"chart\" as Memo\nurl Memo [[{Only tooltip}]]");
+        assert_eq!(d.notes[0].url.as_deref(), Some(""));
+        assert_eq!(d.notes[0].url_tooltip.as_deref(), Some("Only tooltip"));
+        let source = "package East {\nnote \"one\" as Memo\n}\npackage West {\nnote \"two\" as Memo\n}\nurl Memo [[https://example.org/]]";
+        assert!(parse_class(&source.lines().map(str::to_string).collect::<Vec<_>>()).is_err());
+    }
+
+    #[test]
+    fn url_command_does_not_create_forward_targets_or_accept_inline_note_urls() {
+        for source in [
+            "class Bolt\nurl of Missing is [[https://example.org/]]",
+            "class Bolt\nurl of Memo is [[https://example.org/]]\nnote \"chart\" as Memo",
+            "class Bolt\nnote \"chart\" as Memo [[https://example.org/]]",
+            "class Bolt\nnote \"chart\" as Memo\nurl of Memo is [[https://example.org/]] garbage",
+        ] {
+            assert!(
+                parse_class(&source.lines().map(str::to_string).collect::<Vec<_>>()).is_err(),
+                "{source}"
+            );
+        }
     }
 
     #[test]

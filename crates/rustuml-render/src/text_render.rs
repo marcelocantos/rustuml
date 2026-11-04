@@ -59,6 +59,130 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     emit_segments(buf, &segments, base)
 }
 
+/// Positioned description stripe, following StripeSimple -> Sea -> AtomText.
+/// This opt-in path leaves the baseline-oriented `emit_text` API unchanged.
+/// Preferred boxes and LimitFinder bounds intentionally remain distinct.
+#[derive(Debug)]
+pub(crate) struct PositionedStripe {
+    pub width: f64,
+    pub height: f64,
+    pub min_x: f64,
+    pub min_y: f64,
+    pub max_x: f64,
+    pub max_y: f64,
+    runs: Vec<PositionedRun>,
+}
+
+#[derive(Debug)]
+struct PositionedRun {
+    text: String,
+    style: Style,
+    x: f64,
+    baseline: f64,
+    width: f64,
+}
+
+impl PositionedStripe {
+    pub(crate) fn new(content: &str, base: &TextBase<'_>) -> Self {
+        let content = normalize_tab_escapes(content);
+        let mut segments = if base.skip_underline {
+            creole::parse_segments_no_underline(&content)
+        } else {
+            creole::parse_segments(&content)
+        };
+        // StripeSimple.getAtoms supplies a space atom, including its baseline,
+        // when no text command produced an atom. It is not an empty UText.
+        if segments.is_empty() {
+            segments.push(Segment {
+                text: " ".into(),
+                style: Style::default(),
+            });
+        }
+        // Sea.doAlign: bottom-align each effective-font box at its altitude;
+        // translateMinYto then pins the stripe's minimum to zero.
+        let min_top = segments
+            .iter()
+            .map(|segment| {
+                let size = positioned_segment_size(segment, base.font_size as f64);
+                -family_text_height(size, segment_metric_family(segment, base)).max(10.0)
+                    + segment_starting_altitude(segment)
+            })
+            .fold(f64::INFINITY, f64::min);
+        let mut result = Self {
+            width: 0.0,
+            height: 0.0,
+            min_x: f64::INFINITY,
+            min_y: f64::INFINITY,
+            max_x: f64::NEG_INFINITY,
+            max_y: f64::NEG_INFINITY,
+            runs: Vec::new(),
+        };
+        for segment in segments {
+            let size = positioned_segment_size(&segment, base.font_size as f64);
+            let family = segment_metric_family(&segment, base);
+            let font_height = family_text_height(size, family);
+            let top = -font_height.max(10.0) + segment_starting_altitude(&segment) - min_top;
+            result.height = result.height.max(top + font_height.max(10.0));
+            // AtomText.drawU places UText at the effective font ascent. Font
+            // position was already consumed by Sea; do not apply it twice.
+            let baseline = top + family_ascent(size, family);
+            let mut style = segment.style;
+            style.size = Some(size as u32);
+            style.baseline_shift = None;
+            let mut atom_advance = 0.0;
+            let parts = segment.text.split('\t').collect::<Vec<_>>();
+            for (index, part) in parts.iter().enumerate() {
+                if !part.is_empty() {
+                    let width = text_width_for_style(part, &style, base);
+                    let x = result.width + atom_advance;
+                    // LimitFinder.drawText measures UText before the SVG
+                    // driver trims outer spaces; maxY is baseline + 1.5.
+                    result.min_x = result.min_x.min(x);
+                    result.max_x = result.max_x.max(x + width);
+                    result.min_y = result.min_y.min(baseline - font_height + 1.5);
+                    result.max_y = result.max_y.max(baseline + 1.5);
+                    let (lead, text, trimmed_width) = trim_text_for_emit(part, &style, base);
+                    result.runs.push(PositionedRun {
+                        text,
+                        style: style.clone(),
+                        x: x + lead,
+                        baseline,
+                        width: trimmed_width,
+                    });
+                    atom_advance += width;
+                }
+                // AtomText owns tab stops within its atom, not the whole Sea.
+                if index + 1 < parts.len() {
+                    atom_advance = next_tab_advance(atom_advance, tab_stop_width(&style, base));
+                }
+            }
+            result.width += atom_advance;
+        }
+        result
+    }
+
+    /// `base.x/y` translate the stripe origin; the stored run owns its baseline.
+    pub(crate) fn emit(&self, buf: &mut String, base: &TextBase<'_>) {
+        for run in &self.runs {
+            let mut positioned = base.clone();
+            positioned.y += run.baseline;
+            // Pass the run's own drop so the legacy serializer applies no
+            // additional alignment or rounding; Sea already positioned it.
+            let size = run.style.size.unwrap_or(base.font_size) as f64;
+            let drop = clamp_drop(size, style_metric_family(&run.style, base));
+            write_text_element(
+                buf,
+                &run.text,
+                &positioned,
+                &run.style,
+                base.x + run.x,
+                run.width,
+                drop,
+            );
+        }
+    }
+}
+
 /// Like [`emit_text`] but neutralises monospace styling: `""..."" ` and
 /// backtick runs render as plain (sans-serif) text. PlantUML's edge/link
 /// labels parse creole markup (bold, italic, size, colour) but, unlike
@@ -1747,6 +1871,58 @@ fn escape_xml_attr(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn positioned_stripe_owns_blank_atom_and_effective_font_boxes() {
+        let base = base(0.0, 0.0);
+        let blank = PositionedStripe::new("", &base);
+        assert_eq!(blank.runs.len(), 1);
+        assert_eq!(blank.width, measure(" ", 12.0, false));
+        assert_eq!(blank.height, pm::text_height(12.0).max(10.0));
+        assert_eq!(blank.max_y, blank.runs[0].baseline + 1.5);
+        for text in [
+            "<sub>low</sub>",
+            "<sup>high</sup>",
+            "<size:7>tiny</size><size:27>wide</size>",
+        ] {
+            let stripe = PositionedStripe::new(text, &base);
+            for run in &stripe.runs {
+                assert!(run.style.baseline_shift.is_none());
+                assert!(run.baseline + 1.5 <= stripe.max_y);
+            }
+            let mut svg = String::new();
+            stripe.emit(&mut svg, &base);
+            assert_eq!(svg.matches("<text ").count(), stripe.runs.len());
+            for run in &stripe.runs {
+                assert!(svg.contains(&format!("y=\"{}\"", pm::fmt_coord(run.baseline))));
+            }
+        }
+    }
+
+    #[test]
+    fn positioned_stripes_do_not_mutate_legacy_emission() {
+        let base = base(7.0, 21.0);
+        for text in [
+            "plain",
+            "**bold** and //italic//",
+            "<size:24>large</size><sub>index</sub>",
+            "",
+            "a\tb",
+        ] {
+            let mut before = String::new();
+            emit_text(&mut before, text, &base);
+            let stripe = PositionedStripe::new(text, &base);
+            let mut positioned = String::new();
+            stripe.emit(&mut positioned, &base);
+            let mut after = String::new();
+            emit_text(&mut after, text, &base);
+            assert_eq!(before, after);
+        }
+        let mut legacy_blank = String::new();
+        emit_text(&mut legacy_blank, "", &base);
+        assert!(legacy_blank.contains("textLength=\"0\""));
+        assert!(!legacy_blank.contains("&#160;"));
+    }
 
     #[test]
     fn inline_colors_use_the_legacy_plantuml_palette() {

@@ -910,6 +910,12 @@ struct DescriptionLeafStyle {
     family: String,
     size: u32,
     bold: bool,
+    italic: bool,
+    stereo_family: String,
+    stereo_size: u32,
+    stereo_bold: bool,
+    stereo_italic: bool,
+    stereo_text: String,
     fill: String,
     stroke: String,
     text: String,
@@ -917,46 +923,163 @@ struct DescriptionLeafStyle {
     round: f64,
 }
 
+impl DescriptionLeafStyle {
+    fn text_base(&self, stereotype: bool) -> TextBase<'_> {
+        // EntityImageDescription uses fc and fcStereo independently.
+        TextBase {
+            x: 0.0,
+            y: 0.0,
+            font_size: if stereotype {
+                self.stereo_size
+            } else {
+                self.size
+            },
+            font_family: if stereotype {
+                &self.stereo_family
+            } else {
+                &self.family
+            },
+            fill: if stereotype {
+                &self.stereo_text
+            } else {
+                &self.text
+            },
+            bold: if stereotype {
+                self.stereo_bold
+            } else {
+                self.bold
+            },
+            italic: if stereotype {
+                self.stereo_italic
+            } else {
+                self.italic
+            },
+            underline: false,
+            skip_underline: true,
+        }
+    }
+}
+
+struct DescriptionText {
+    stripes: Vec<text_render::PositionedStripe>,
+    width: f64,
+    height: f64,
+    alignment: LegendHorizontalAlignment,
+}
+
+impl DescriptionText {
+    fn new(lines: &[String], base: &TextBase<'_>, alignment: LegendHorizontalAlignment) -> Self {
+        let stripes = lines
+            .iter()
+            .map(|line| text_render::PositionedStripe::new(line, base))
+            .collect::<Vec<_>>();
+        let width = stripes
+            .iter()
+            .map(|stripe| stripe.width)
+            .fold(0.0_f64, f64::max);
+        let height = stripes.iter().map(|stripe| stripe.height).sum();
+        Self {
+            stripes,
+            width,
+            height,
+            alignment,
+        }
+    }
+
+    fn line_x(&self, width: f64) -> f64 {
+        match self.alignment {
+            LegendHorizontalAlignment::Left => 0.0,
+            LegendHorizontalAlignment::Center => (self.width - width) / 2.0,
+            LegendHorizontalAlignment::Right => self.width - width,
+        }
+    }
+
+    fn emit(&self, svg: &mut String, mut base: TextBase<'_>) {
+        // SheetBlock1 stacks the same Sea boxes whose runs are drawn below.
+        for stripe in &self.stripes {
+            let mut line = base.clone();
+            line.x += self.line_x(stripe.width);
+            stripe.emit(svg, &line);
+            base.y += stripe.height;
+        }
+    }
+
+    fn stereotype_bounds(&self) -> (f64, f64, f64, f64) {
+        let bounds = self.bounds();
+        if self.stripes.is_empty() {
+            return bounds;
+        }
+        // EntityImageDescription wraps stereo in TextBlockMarged(1,0).
+        // TextBlockMarged.drawU first draws UEmpty(width+2,height), then
+        // translates the text by (1,0); LimitFinder measures both primitives.
+        (
+            0.0_f64.min(1.0 + bounds.0),
+            0.0_f64.min(bounds.1),
+            (self.width + 2.0).max(1.0 + bounds.2),
+            self.height.max(bounds.3),
+        )
+    }
+
+    fn bounds(&self) -> (f64, f64, f64, f64) {
+        let (mut min_x, mut min_y, mut max_x, mut max_y) = (
+            f64::INFINITY,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NEG_INFINITY,
+        );
+        let mut y = 0.0;
+        for stripe in &self.stripes {
+            let x = self.line_x(stripe.width);
+            min_x = min_x.min(x + stripe.min_x);
+            min_y = min_y.min(y + stripe.min_y);
+            max_x = max_x.max(x + stripe.max_x);
+            max_y = max_y.max(y + stripe.max_y);
+            y += stripe.height;
+        }
+        (min_x, min_y, max_x, max_y)
+    }
+}
+
+fn description_text(
+    entity: &ClassEntity,
+    hide: HideFlags,
+    style: &DescriptionLeafStyle,
+) -> (DescriptionText, DescriptionText) {
+    let label = DescriptionText::new(
+        &escaped_newline_lines(&entity.label),
+        &style.text_base(false),
+        style.alignment,
+    );
+    let stereos = if hide.stereotype {
+        Vec::new()
+    } else {
+        entity
+            .stereotypes
+            .iter()
+            .map(|label| format!("«{label}»"))
+            .collect()
+    };
+    let stereo = DescriptionText::new(
+        &stereos,
+        &style.text_base(true),
+        LegendHorizontalAlignment::Center,
+    );
+    (label, stereo)
+}
+
 fn description_text_size(
     entity: &ClassEntity,
     hide: HideFlags,
     style: &DescriptionLeafStyle,
 ) -> (f64, f64, f64) {
-    let name_lines = escaped_newline_lines(&entity.label);
-    let name_width = name_lines
-        .iter()
-        .map(|line| {
-            text_render::measure_no_underline_with_family(
-                line,
-                style.size as f64,
-                style.bold,
-                &style.family,
-            )
-        })
-        .fold(0.0, f64::max);
-    let stereo_width = if hide.stereotype {
+    let (label, stereo) = description_text(entity, hide, style);
+    // EntityImageDescription adds one horizontal pixel on each stereotype side.
+    let stereo_width = if stereo.stripes.is_empty() {
         0.0
     } else {
-        entity
-            .stereotypes
-            .iter()
-            .map(|label| {
-                // EntityImageDescription wraps stereotype text with
-                // TextBlockUtils.withMargin(text, 1, 0): one pixel per side.
-                text_render::measure(&format!("«{label}»"), style.size as f64, false) + 2.0
-            })
-            .fold(0.0, f64::max)
+        stereo.width + 2.0
     };
-    let stereo_height = if hide.stereotype {
-        0.0
-    } else {
-        entity.stereotypes.len() as f64 * text_render::label_height("X", style.size as f64)
-    };
-    (
-        name_width.max(stereo_width),
-        name_lines.len() as f64 * text_render::label_height("X", style.size as f64),
-        stereo_height,
-    )
+    (label.width.max(stereo_width), label.height, stereo.height)
 }
 
 fn calc_entity_dims(
@@ -2830,6 +2953,14 @@ fn render_with_oracle_uid_origin(
             // dot's solve but its margin is not part of the SVG envelope.
             .then_some(())
             .filter(|_| diagram.together.is_empty())
+            // SvekResult measures painted images, not Graphviz's preferred
+            // bounding box. Simple symbols have distinct preferred/ink sizes.
+            .filter(|_| {
+                !diagram
+                    .entities
+                    .iter()
+                    .any(|entity| matches!(entity.kind, EntityKind::Actor | EntityKind::Boundary))
+            })
             .map(|()| (result.width, result.height)),
         None,
         None,
@@ -3252,6 +3383,13 @@ impl ClassFontOverrides {
                 .property("shadowing")
                 .map(parse_shadowing_delta)
                 .unwrap_or(0.0);
+            // USymbolBoundary.getDrawing normalizes every nonzero Fashion
+            // shadow to 4. ActorStickMan retains the original Fashion value.
+            let shadow = if matches!(selected, DescriptionSymbol::Boundary) && shadow != 0.0 {
+                4.0
+            } else {
+                shadow
+            };
             font.description = Some(DescriptionLeafStyle {
                 symbol: selected,
                 stereotype_alignment: match stereo_style.property("horizontalAlignment") {
@@ -3290,6 +3428,33 @@ impl ClassFontOverrides {
                 bold: style
                     .property("fontStyle")
                     .is_some_and(|s| s.to_ascii_lowercase().contains("bold")),
+                italic: style
+                    .property("fontStyle")
+                    .is_some_and(|s| s.to_ascii_lowercase().contains("italic")),
+                // EntityImageDescription's fcStereo comes from styleStereo,
+                // not from fc or an unconditional italic override.
+                stereo_family: stereo_style
+                    .property("fontName")
+                    .map(canonical_class_font_family)
+                    .unwrap_or_else(|| "sans-serif".into()),
+                stereo_size: stereo_style
+                    .property("fontSize")
+                    .and_then(|s| s.parse().ok())
+                    .unwrap_or(14),
+                stereo_bold: stereo_style
+                    .property("fontStyle")
+                    .is_some_and(|s| s.to_ascii_lowercase().contains("bold")),
+                // plantuml.skin stereotype defaults to italic; a resolved
+                // inherited fontStyle replaces that default rather than OR-merging.
+                stereo_italic: stereo_style
+                    .property("fontStyle")
+                    .unwrap_or("italic")
+                    .to_ascii_lowercase()
+                    .contains("italic"),
+                stereo_text: stereo_style
+                    .property("fontColor")
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| "#000000".into()),
                 fill: entity
                     .color
                     .as_deref()
@@ -5180,7 +5345,12 @@ fn render_plantuml_svg(
         // UEmpty retains the full right extent, making the native image's
         // measured block one pixel wider than its painted rectangle.
         body_min_x = body_min_x.min(*x - LIMIT_FINDER_RECTANGLE_INSET);
-        let generic_right = if !uses_degenerated_entity && diagram.entities[i].generic.is_some() {
+        let generic_right = if !uses_degenerated_entity
+            && diagram.entities[i].generic.is_some()
+            && ClassFontOverrides::from_diagram_for_entity(diagram, &diagram.entities[i])
+                .description
+                .is_none()
+        {
             GENERIC_BOX_OVERHANG + LIMIT_FINDER_RECTANGLE_INSET
         } else {
             0.0
@@ -5285,7 +5455,15 @@ fn render_plantuml_svg(
         .entities
         .iter()
         .zip(&entity_positions)
-        .filter(|(entity, _)| !uses_degenerated_entity && entity.generic.is_some())
+        // EntityImageDescription never draws EntityImageClassHeader's generic
+        // badge, even when the parser retains generic-looking label metadata.
+        .filter(|(entity, _)| {
+            !uses_degenerated_entity
+                && entity.generic.is_some()
+                && ClassFontOverrides::from_diagram_for_entity(diagram, entity)
+                    .description
+                    .is_none()
+        })
         .map(|(_, (_, y))| y - GENERIC_BOX_OVERHANG)
         .fold(f64::INFINITY, f64::min);
     let generic_body_dy = if generic_top.is_finite() && generic_top < body_top {
@@ -5374,7 +5552,11 @@ fn render_plantuml_svg(
         let mut max_y = 0.0_f64;
         let mut latex_image_max_x = 0.0_f64;
         for (i, (x, y)) in entity_positions.iter().enumerate() {
-            let generic_right = if !uses_degenerated_entity && diagram.entities[i].generic.is_some()
+            let generic_right = if !uses_degenerated_entity
+                && diagram.entities[i].generic.is_some()
+                && ClassFontOverrides::from_diagram_for_entity(diagram, &diagram.entities[i])
+                    .description
+                    .is_none()
             {
                 GENERIC_BOX_OVERHANG + LIMIT_FINDER_RECTANGLE_INSET
             } else {
@@ -8449,17 +8631,8 @@ fn render_description_leaf(
     style: &DescriptionLeafStyle,
 ) {
     let (text_width, _, stereo_height) = description_text_size(entity, dim.hide, style);
-    let label_width = escaped_newline_lines(&entity.label)
-        .iter()
-        .map(|line| {
-            text_render::measure_no_underline_with_family(
-                line,
-                style.size as f64,
-                style.bold,
-                &style.family,
-            )
-        })
-        .fold(0.0_f64, f64::max);
+    let (label, stereo) = description_text(entity, dim.hide, style);
+    let label_width = label.width;
     let boundary = matches!(style.symbol, DescriptionSymbol::Boundary);
     let actor = matches!(style.symbol, DescriptionSymbol::Actor);
     let simple = boundary || actor;
@@ -8548,43 +8721,16 @@ fn render_description_leaf(
             (text_width - width) / 2.0
         }
     };
-    let stereo_width = if dim.hide.stereotype {
+    let stereo_width = if stereo.stripes.is_empty() {
         0.0
     } else {
-        entity
-            .stereotypes
-            .iter()
-            .map(|label| {
-                text_render::measure(&format!("«{label}»"), style.size as f64, false) + 2.0
-            })
-            .fold(0.0_f64, f64::max)
+        stereo.width + 2.0
     };
-    let line_height = text_render::label_height("X", style.size as f64);
     let mut stereotype_image = String::new();
-    // EntityImageDescription uses the stereotype style (skin default italic).
-    if !dim.hide.stereotype {
-        for (i, label) in entity.stereotypes.iter().enumerate() {
-            let label = format!("«{label}»");
-            let width = text_render::measure(&label, style.size as f64, false);
-            text_render::emit_text(
-                &mut stereotype_image,
-                &label,
-                &TextBase {
-                    x: text_x + merge_offset(stereo_width) + (stereo_width - width) / 2.0,
-                    y: text_y
-                        + i as f64 * line_height
-                        + text_render::label_ascent(&label, style.size as f64),
-                    font_size: style.size,
-                    font_family: &style.family,
-                    fill: &style.text,
-                    bold: false,
-                    italic: true,
-                    underline: false,
-                    skip_underline: true,
-                },
-            );
-        }
-    }
+    let mut stereo_base = style.text_base(true);
+    stereo_base.x = text_x + merge_offset(stereo_width) + 1.0;
+    stereo_base.y = text_y;
+    stereo.emit(&mut stereotype_image, stereo_base);
     if !simple {
         svg.push_str(&stereotype_image);
     }
@@ -8611,11 +8757,16 @@ fn render_description_leaf(
         // USymbolSimpleAbstract paints Boundary, label, then stereotype.
         // Boundary.drawU paints path then circle with margin=4,
         // radius=12 and arm=17.
+        let shadow_attr = style
+            .shadow_filter_id
+            .as_ref()
+            .map(|id| format!(r#" filter="url(#{id})""#))
+            .unwrap_or_default();
         let bx = x + (dim.width - 49.0) / 2.0 + 4.0;
         let by = y + stereo_height + 4.0;
-        write!(svg, r#"<path d="M{},{} L{},{} M{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        write!(svg, r#"<path d="M{},{} L{},{} M{},{} L{},{}" fill="none"{shadow_attr} style="stroke:{};stroke-width:{};"/>"#,
             fmt4(bx),fmt4(by),fmt4(bx),fmt4(by+24.0),fmt4(bx),fmt4(by+12.0),fmt4(bx+17.0),fmt4(by+12.0),style.stroke,fmt4(style.thickness)).unwrap();
-        write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{}" rx="12" ry="12" style="stroke:{};stroke-width:{};"/>"#,
+        write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{}"{shadow_attr} rx="12" ry="12" style="stroke:{};stroke-width:{};"/>"#,
             fmt4(bx+29.0),fmt4(by+12.0),style.fill,style.stroke,fmt4(style.thickness)).unwrap();
     }
     let label_y = text_y
@@ -8627,38 +8778,10 @@ fn render_description_leaf(
         } else {
             0.0
         };
-    for (i, line) in escaped_newline_lines(&entity.label).iter().enumerate() {
-        let width = text_render::measure_no_underline_with_family(
-            line,
-            style.size as f64,
-            style.bold,
-            &style.family,
-        );
-        text_render::emit_text(
-            svg,
-            line,
-            &TextBase {
-                // mergeTB centers the label block; BodyEnhanced2 aligns its lines.
-                x: text_x
-                    + merge_offset(label_width)
-                    + match style.alignment {
-                        LegendHorizontalAlignment::Left => 0.0,
-                        LegendHorizontalAlignment::Center => (label_width - width) / 2.0,
-                        LegendHorizontalAlignment::Right => label_width - width,
-                    },
-                y: label_y
-                    + i as f64 * line_height
-                    + text_render::label_ascent(line, style.size as f64),
-                font_size: style.size,
-                font_family: &style.family,
-                fill: &style.text,
-                bold: style.bold,
-                italic: false,
-                underline: false,
-                skip_underline: true,
-            },
-        );
-    }
+    let mut label_base = style.text_base(false);
+    label_base.x = text_x + merge_offset(label_width);
+    label_base.y = label_y;
+    label.emit(svg, label_base);
     if simple {
         svg.push_str(&stereotype_image);
     }
@@ -13869,57 +13992,13 @@ fn entity_painted_extent(
                         stereo_height + 32.0,
                     )
                 };
-            let lines = escaped_newline_lines(&entity.label);
-            let widths = lines
-                .iter()
-                .map(|line| {
-                    text_render::measure_no_underline_with_family(
-                        line,
-                        style.size as f64,
-                        style.bold,
-                        &style.family,
-                    )
-                })
-                .collect::<Vec<_>>();
-            let label_width = widths.iter().copied().fold(0.0_f64, f64::max);
-            let line_height = text_render::label_height("X", style.size as f64);
-            for (i, (line, width)) in lines.iter().zip(widths).enumerate() {
-                // Empty stripes retain preferred height but emit no UText.
-                if line.is_empty() {
-                    continue;
-                }
-                // USymbolSimpleAbstract centers the label block. BodyFactory
-                // owns its inner alignment, as in render_description_leaf.
-                let line_x = (dim.width - label_width) / 2.0
-                    + match style.alignment {
-                        LegendHorizontalAlignment::Left => 0.0,
-                        LegendHorizontalAlignment::Center => (label_width - width) / 2.0,
-                        LegendHorizontalAlignment::Right => label_width - width,
-                    };
-                right = right.max(line_x + width);
-                // LimitFinder.drawText subtracts height-1.5 from the baseline,
-                // then adds height: the resulting maximum is baseline+1.5.
-                bottom = bottom.max(
-                    label_y
-                        + i as f64 * line_height
-                        + text_render::label_ascent(line, style.size as f64)
-                        + 1.5,
-                );
-            }
-            if !dim.hide.stereotype {
-                for (i, label) in entity.stereotypes.iter().enumerate() {
-                    let label = format!("«{label}»");
-                    let width = text_render::measure(&label, style.size as f64, false);
-                    // EntityImageDescription's 1px stereotype margins affect
-                    // preferred width; centered UText itself has no margin ink.
-                    right = right.max((dim.width + width) / 2.0);
-                    bottom = bottom.max(
-                        i as f64 * line_height
-                            + text_render::label_ascent(&label, style.size as f64)
-                            + 1.5,
-                    );
-                }
-            }
+            let (label, stereo) = description_text(entity, dim.hide, style);
+            let (_, _, label_right, label_bottom) = label.bounds();
+            right = right.max((dim.width - label.width) / 2.0 + label_right);
+            bottom = bottom.max(label_y + label_bottom);
+            let (_, _, stereo_right, stereo_bottom) = stereo.stereotype_bounds();
+            right = right.max((dim.width - (stereo.width + 2.0)) / 2.0 + stereo_right);
+            bottom = bottom.max(stereo_bottom);
             return (right, bottom);
         }
         // Rectangle-based USymbols carry their Fashion shadow on the border.
@@ -13959,24 +14038,33 @@ fn entity_frontier_min(
         }
         return (0.0, 0.0);
     };
-    if entity.kind == EntityKind::Actor {
+    if matches!(entity.kind, EntityKind::Actor | EntityKind::Boundary) && !degenerated {
         let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
         if let Some(style) = &font.description {
-            // USymbolSimpleAbstract centers the actor and label independently;
-            // ActorStickMan's first painted head starts at the stroke inset.
-            let (text_width, _, stereo_height) =
-                description_text_size(entity, effective_hide(diagram, entity), style);
+            let (label, stereo) = description_text(entity, effective_hide(diagram, entity), style);
+            let (label_x, label_y, _, _) = label.bounds();
+            let (stereo_x, stereo_y, _, _) = stereo.stereotype_bounds();
+            // USymbolSimpleAbstract independently centers the symbol and both
+            // text blocks. Their minima come from the same positioned runs.
+            let actor = matches!(style.symbol, DescriptionSymbol::Actor);
+            let symbol_x = if actor {
+                position.width / 2.0 - 13.0
+            } else {
+                (position.width - 49.0) / 2.0 + 4.0
+            };
+            let symbol_y = stereo.height + if actor { style.thickness } else { 4.0 };
+            let symbol_height = if actor {
+                59.0 + 2.0 * style.thickness + style.shadow
+            } else {
+                32.0
+            };
             return (
-                ((position.width - text_width) / 2.0).min(position.width / 2.0 - 13.0),
-                if stereo_height > 0.0 {
-                    // LimitFinder.drawText subtracts (font height - 1.5)
-                    // from the emitted baseline, not merely the ascent.
-                    text_render::label_ascent("X", style.size as f64)
-                        - text_render::label_height("X", style.size as f64)
-                        + 1.5
-                } else {
-                    style.thickness
-                },
+                symbol_x
+                    .min((position.width - label.width) / 2.0 + label_x)
+                    .min((position.width - (stereo.width + 2.0)) / 2.0 + stereo_x),
+                symbol_y
+                    .min(stereo.height + symbol_height + label_y)
+                    .min(stereo_y),
             );
         }
     }
@@ -13996,27 +14084,6 @@ fn entity_frontier_min(
             return (
                 -5.0 - LIMIT_FINDER_RECTANGLE_INSET,
                 -LIMIT_FINDER_RECTANGLE_INSET,
-            );
-        }
-    }
-    if entity.kind == EntityKind::Boundary && !degenerated {
-        // USymbolSimpleAbstract stacks stereotype, Boundary(49x32), label.
-        // Boundary draws its first vertical at (4,4); unlike class/component
-        // images it has no URectangle and therefore no LimitFinder -1 inset.
-        let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
-        if let Some(style) = font.description.as_ref() {
-            let (text_width, _, stereo_height) =
-                description_text_size(entity, effective_hide(diagram, entity), style);
-            return (
-                ((position.width - text_width) / 2.0).min((position.width - 49.0) / 2.0 + 4.0),
-                if stereo_height > 0.0 {
-                    // LimitFinder.drawText: baseline - (font height - 1.5).
-                    text_render::label_ascent("X", style.size as f64)
-                        - text_render::label_height("X", style.size as f64)
-                        + 1.5
-                } else {
-                    4.0
-                },
             );
         }
     }
