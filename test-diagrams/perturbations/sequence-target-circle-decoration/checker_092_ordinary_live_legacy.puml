@@ -1,0 +1,7 @@
+@startuml
+participant Quartz
+participant Finch
+Quartz -[#42719B80]>>o Finch ++ : longer transit
+Quartz o<-- Finch : reply
+deactivate Finch
+@enduml

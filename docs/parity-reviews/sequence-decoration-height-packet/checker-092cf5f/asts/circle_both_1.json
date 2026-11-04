@@ -1,0 +1,6 @@
+{
+  "source": "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/circle_both_1.puml",
+  "exit": 0,
+  "stdout": "Class(\n    ClassDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nWren o->o Lark : two circles\\nLark o-->>o Wren : two circles open\\nWren -/o Lark : half head\\n@enduml\\n\",\n            ),\n        },\n        direction: TopToBottom,\n        uid_events: [],\n        entities: [],\n        relationships: [],\n        association_classes: [],\n        together: [],\n        packages: [],\n        notes: [],\n        hide_show: [],\n        header_line: None,\n        footer_line: None,\n        title_line: None,\n        caption_line: None,\n        legend_line: None,\n    },\n)\n",
+  "stderr": ""
+}

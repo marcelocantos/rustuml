@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-message-text-component-height",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A3e06ca94-2269-474d-820c-d3eae66e6612",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness in T3 Code",
+    "children": 0
+  },
+  "account_commit": "54fb67fce0c99cab0152e748b033099feb8462ca",
+  "implementation_commit": "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c",
+  "tested_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "before_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_commits": [
+    "350e776a2cd376dd2171dc79b61010da8f01fc2e",
+    "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c",
+    "71b465a98aa5c511588d87ee080088e8614d975e"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT REPO_CWD",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_legacy.svg",
+      "axes": [
+        "underline inline/whole",
+        "multiline/font",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_teoz.svg",
+      "axes": [
+        "underline inline/whole",
+        "multiline/font",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    }
+  ],
+  "findings": [
+    "Both fresh message-only controls match at font19 with whole-line, inline and multiline underline; both were mismatches before. AtomText.calculateDimensionSlow has no underline-only flow surcharge. Exact main baseline/intermediate/final reproduction confirms the recovered regression; all1966 retained entries have no lost pass.",
+    "No counterexample to removal of the synthetic message-only surcharge was found in this matrix. This is explicitly positive bounded evidence, not a fabricated defect. Acceptance of this production combination is withheld: its complete attached-note clause still depends on the failing nonempty BodyEnhanced title/body composition, and the unwaived standing gate is red.",
+    "Exact candidate is rejected as a combination. No old bounded acceptance transfers. Every source, including invalid and zero-byte sources, remains executable; no comparator, baseline, skip, target, policy or production edit.",
+    "Independent frozen CLI replay: 1350 matches, 569 valid mismatches, 47 invalid references among1966 entries/1918 unique byte strings;31 recoveries and0 losses. Every maker status and actual CLI SVG hash reproduces.",
+    "Exact candidate library tiers11181/11251 and10497/11251, sequence1411/1411; parser570, renderer790, CLI13 pass. Standing perturbations686/1279; guards4/6. Owned formatting passes; workspace formatting and Clippy remain red."
+  ],
+  "verdict": "rejected",
+  "assessment": "bounded support; no extracted acceptance of the combined message/note change",
+  "causal_repair_guidance": "Keep the AtomText-derived message height and removal of duplicate folded-note tail flow. Repair the note block tree as a separate causal change without reinstating underline surcharges; rerun the held-out title/body pairs with the full CLI.",
+  "evidence": "docs/parity-reviews/sequence-decoration-height-packet/checker-092cf5f/README.md"
+}

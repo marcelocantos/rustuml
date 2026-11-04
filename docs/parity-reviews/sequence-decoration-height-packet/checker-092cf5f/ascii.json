@@ -1,0 +1,786 @@
+[
+  {
+    "name": "ordinary_live_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502  longer transit  \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       reply      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502  longer transit  \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       reply      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "bidir_legacy",
+    "same": false,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n     \u2502   doubled marker  \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n     \u2502   doubled marker  \u2502\n     <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "self_half_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510uire\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510ted\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510n half\n      \u2502<\u2500\u2500\u2518\n      \u2502---\u2510erse half\n      \u2502<--\u2518\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510uire\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510ted\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510n half\n      \u2502<\u2500\u2500\u2518\n      \u2502---\u2510erse half\n      \u2502<--\u2518\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "exo_source_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n outer source\n \u2500\u2500\u2500\u2500>\n right source\n ---->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n outer source\n \u2500\u2500\u2500\u2500>\n right source\n ---->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "exo_target_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n inner target\n \u2500\u2500\u2500\u2500>\n     \u2502                               outer target\n     \u2502------------------------------------------------------------------------->\n     \u2502                               left target\n     \u2502------------------------------------------------------------------------->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n inner target\n \u2500\u2500\u2500\u2500>\n     \u2502                               outer target\n     \u2502------------------------------------------------------------------------->\n     \u2502                               left target\n     \u2502------------------------------------------------------------------------->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "both_dispatch_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n     \u25bc return leg\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n     \u25bc return leg\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "child_small_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502   wide message   \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510        \u2502\n      \u2502 \u2502 short \u2502        \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518        \u2502\n      \u2502       next       \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502   wide message   \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510        \u2502\n      \u2502 \u2502 short \u2502        \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518        \u2502\n      \u2502       next       \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "child_multi_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     delivery     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n  \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510  \u2502\n  \u2502 tall\nsecond\nthird \u2502  \u2502\n  \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518  \u2502\n      \u2502                  \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502                  \u2502 \u2502 tiny \u2502\n      \u2502                  \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502     continue     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     delivery     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n  \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510  \u2502\n  \u2502 tall\nsecond\nthird \u2502  \u2502\n  \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518  \u2502\n      \u2502                  \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502                  \u2502 \u2502 tiny \u2502\n      \u2502                  \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502     continue     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "rule_alone_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    \u2502\n      \u2502 \u2502 __title__ \u2502    \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518    \u2502\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    \u2502\n      \u2502 \u2502 __title__ \u2502    \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518    \u2502\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "rule_body_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502 \u2502 __title__\nbody after title \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502 \u2502 __title__\nbody after title \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "underline_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     __first__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 inline __second__\u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n      \u2502  __third__\\nlast \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     __first__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 inline __second__\u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n      \u2502  __third__\\nlast \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "style_lines_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      inherit     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2510             \u2502\n\u2502 envelope \u2502             \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2518             \u2502\n      \u2502     finish       \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      inherit     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2510             \u2502\n\u2502 envelope \u2502             \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2518             \u2502\n      \u2502     finish       \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "style_shadow_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     shadowed     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u2502\n      \u2502 \u2502 unshadowed \u2502   \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2502\n      \u2502     release      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     shadowed     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u2502\n      \u2502 \u2502 unshadowed \u2502   \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2502\n      \u2502     release      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "style_create_legacy",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      create      \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       alive      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      create      \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       alive      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "ordinary_live_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502  longer transit  \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       reply      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502  longer transit  \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       reply      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "bidir_teoz",
+    "same": false,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n     \u2502   doubled marker  \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n     \u2502   doubled marker  \u2502\n     <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502          \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "self_half_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510uire\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510ted\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510n half\n      \u2502<\u2500\u2500\u2518\n      \u2502---\u2510erse half\n      \u2502<--\u2518\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510uire\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510ted\n      \u2502<\u2500\u2500\u2518\n      \u2502\u2500\u2500\u2500\u2510n half\n      \u2502<\u2500\u2500\u2518\n      \u2502---\u2510erse half\n      \u2502<--\u2518\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "exo_source_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n outer source\n \u2500\u2500\u2500\u2500>\n right source\n ---->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n outer source\n \u2500\u2500\u2500\u2500>\n right source\n ---->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "exo_target_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n inner target\n \u2500\u2500\u2500\u2500>\n     \u2502                               outer target\n     \u2502------------------------------------------------------------------------->\n     \u2502                               left target\n     \u2502------------------------------------------------------------------------->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n inner target\n \u2500\u2500\u2500\u2500>\n     \u2502                               outer target\n     \u2502------------------------------------------------------------------------->\n     \u2502                               left target\n     \u2502------------------------------------------------------------------------->\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "both_dispatch_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n     \u25bc return leg\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n     \u25bc return leg\n \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "child_small_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502   wide message   \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510        \u2502\n      \u2502 \u2502 short \u2502        \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518        \u2502\n      \u2502       next       \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502   wide message   \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510        \u2502\n      \u2502 \u2502 short \u2502        \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518        \u2502\n      \u2502       next       \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "child_multi_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     delivery     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n  \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510  \u2502\n  \u2502 tall\nsecond\nthird \u2502  \u2502\n  \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518  \u2502\n      \u2502                  \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502                  \u2502 \u2502 tiny \u2502\n      \u2502                  \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502     continue     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     delivery     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n  \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510  \u2502\n  \u2502 tall\nsecond\nthird \u2502  \u2502\n  \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518  \u2502\n      \u2502                  \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502                  \u2502 \u2502 tiny \u2502\n      \u2502                  \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502     continue     \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "rule_alone_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    \u2502\n      \u2502 \u2502 __title__ \u2502    \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518    \u2502\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510    \u2502\n      \u2502 \u2502 __title__ \u2502    \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518    \u2502\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "rule_body_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502 \u2502 __title__\nbody after title \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502    __ribbon__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n      \u2502 \u2502 __title__\nbody after title \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n      \u2502       plain      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "underline_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     __first__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 inline __second__\u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n      \u2502  __third__\\nlast \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     __first__    \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 inline __second__\u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n      \u2502  __third__\\nlast \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "style_lines_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      inherit     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2510             \u2502\n\u2502 envelope \u2502             \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2518             \u2502\n      \u2502     finish       \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      inherit     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2510             \u2502\n\u2502 envelope \u2502             \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2518             \u2502\n      \u2502     finish       \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "style_shadow_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     shadowed     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u2502\n      \u2502 \u2502 unshadowed \u2502   \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2502\n      \u2502     release      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502     shadowed     \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510   \u2502\n      \u2502 \u2502 unshadowed \u2502   \u2502\n      \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518   \u2502\n      \u2502     release      \u2502\n      <------------------\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  },
+  {
+    "name": "style_create_teoz",
+    "same": true,
+    "results": {
+      "before": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      create      \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       alive      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      },
+      "after": {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+          "-ttxt",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+        "exit": 0,
+        "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n      \u2502      create      \u2502\n      \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n      \u2502       alive      \u2502\n      <\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Quartz \u2502          \u2502 Finch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+        "stderr": ""
+      }
+    }
+  }
+]
