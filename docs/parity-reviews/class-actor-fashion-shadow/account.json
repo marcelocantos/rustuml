@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-actor-fashion-shadow",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "7fa39737be47590a9186d48066358ea1bbaa6b1f",
+  "java_locations": [
+    "svek/image/EntityImageDescription#constructor Fashion",
+    "skin/ActorStickMan#getPreferredHeight,drawU",
+    "klimt/drawing/svg/DriverEllipseSvg#draw",
+    "klimt/drawing/svg/DriverPathSvg#draw"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "invariant": "The actor Fashion deltaShadow contributes to preferred height and to both head/path paint, with the same registry filter used by other diagram shapes.",
+  "causal_divergence": "DescriptionLeafStyle drops shadow; actor dimensions and primitives omit it.",
+  "planned_change": "Carry source-time resolved shadow into actor preferred height, label placement and head/path filter attributes; include the filter definition once through existing class defs. No Graphviz changes.",
+  "perturbation_axes": [
+    "Shadow zero/positive crossed with stroke thickness",
+    "Stereotype present/absent crossed with multiline labels and LR/TB topology"
+  ],
+  "verification_plan": "Retained checker3c and maker references via unchanged real CLI comparator; focused unit/model probes, then final suite. New source-guided probes staged until remote reference transport returns. Independent checker required."
+}

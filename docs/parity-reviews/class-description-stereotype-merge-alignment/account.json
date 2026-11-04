@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-description-stereotype-merge-alignment",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "7fa39737be47590a9186d48066358ea1bbaa6b1f",
+  "java_locations": [
+    "svek/image/EntityImageDescription#constructor styleStereo,asSmall",
+    "decoration/symbol/USymbolRectangle#asSmall",
+    "decoration/symbol/USymbolComponent1#asSmall",
+    "decoration/symbol/USymbolComponent2#asSmall"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "invariant": "The chosen symbol owns vertical block merge alignment, separately from label line alignment. Rectangle uses current stereotype style alignment; component symbols use their own centered merge.",
+  "causal_divergence": "Rust always centers stereotype and label blocks, even when selected rectangle and stereotype style request left/right.",
+  "planned_change": "Resolve stereotype alignment at entity source time and apply it to rectangle merge. Preserve the stereotype one-pixel side margin and center its individual lines. Leave hard-centered symbol merges unchanged.",
+  "perturbation_axes": [
+    "Left/right stereotype alignment crossed with wide label/narrow stereotype and narrow label/wide stereotype",
+    "Selected rectangle versus UML1/UML2 and declaration-order style changes"
+  ],
+  "verification_plan": "Retained checker3c and maker references via unchanged real CLI comparator; focused unit/model probes, then final suite. New source-guided probes staged until remote reference transport returns. Independent checker required."
+}

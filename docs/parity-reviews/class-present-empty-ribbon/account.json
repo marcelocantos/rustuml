@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-present-empty-ribbon",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "7fa39737be47590a9186d48066358ea1bbaa6b1f",
+  "java_locations": [
+    "klimt/creole/DisplayPositioned#createRibbon",
+    "klimt/creole/StripeSimple#getAtoms",
+    "svek/DiagramChromeFactory12026#create"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "invariant": "A present empty header/footer has a single fallback space stripe; absence remains distinct from present empty display.",
+  "causal_divergence": "DecorationLayout filters Some(empty) out before StripeSimple fallback, and emit returns early.",
+  "planned_change": "Preserve present header/footer through dimension and emission; apply existing fallback space. Keep absent decorations absent and avoid unrelated font mapping changes.",
+  "perturbation_axes": [
+    "Header/footer and one/multiple blank lines",
+    "Default/styled fonts with and without other chrome"
+  ],
+  "verification_plan": "Retained checker3c and maker references via unchanged real CLI comparator; focused unit/model probes, then final suite. New source-guided probes staged until remote reference transport returns. Independent checker required."
+}
