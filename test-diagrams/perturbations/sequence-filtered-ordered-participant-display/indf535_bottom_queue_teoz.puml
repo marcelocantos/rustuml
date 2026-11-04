@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition bottom
+queue "EnormouslyLongCedarName" as Cedar7 <<s>>
+skinparam stereotypePosition top
+participant Wren
+Cedar7 -> Wren: export
+@enduml

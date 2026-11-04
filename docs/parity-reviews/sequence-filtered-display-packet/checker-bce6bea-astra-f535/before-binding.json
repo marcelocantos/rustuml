@@ -1,0 +1,8 @@
+{
+  "revision": "0cde5d7e55139b63cb8e91f8e42acd473441f80a",
+  "binaries": {
+    "compare_cli": "2c4a67b60af69a3c1ad55d3e163b8bb84a322187214b270c5ab4fd086ad1d58d",
+    "diff_one": "ba49dda891e0e752e10a5f052c7dd2882f94e77271f3c949b434bc0cd454b9fe",
+    "rustuml": "d565a2db29c4dd71b1061684dc5f11761ae809664a403cfc627e92e9095706a5"
+  }
+}

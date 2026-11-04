@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Heather
+Heather ->]: pollen
+note over Heather
+seed
+stem
+end note
+@enduml

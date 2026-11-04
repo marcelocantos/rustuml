@@ -1,0 +1,6 @@
+@startuml
+queue Nectar <<vastlyexpandedclassification>>
+entity Petal <<thin>>
+hide Nectar stereotype
+Nectar -> Petal: dust
+@enduml
