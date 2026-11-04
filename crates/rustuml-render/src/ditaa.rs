@@ -80,6 +80,7 @@ fn draw_shape(svg: &mut SvgBuilder, shape: &DitaaShape) {
                 mid3 = mid + w / 4.0,
                 mid1 = mid - w / 4.0,
                 stroke = BOX_STROKE,
+                fill = crate::svg::escape_attribute(fill),
             );
             svg.raw(&path);
         }

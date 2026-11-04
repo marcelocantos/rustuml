@@ -701,6 +701,7 @@ pub fn render_with_oracle(
             r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;{background_style}" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><defs/><g></g></svg>"#,
             width = width as i64,
             height = height as i64,
+            background_style = crate::svg::escape_attribute(&background_style),
         );
     }
 
@@ -788,8 +789,8 @@ pub fn render_with_oracle(
         svg.raw(&format!(
             r#"<rect fill="{bg}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
             h = total_h as i64,
-            w = total_w as i64,
-        ));
+            w = total_w as i64, bg = crate::svg::escape_attribute(bg),
+));
     }
 
     render_header(&mut svg, diagram, &chrome);
@@ -2704,6 +2705,7 @@ fn render_package_group(
     svg.raw(&format!("<!--cluster {}-->", sanitize_comment(&pkg.name)));
     svg.raw(&format!(
         r#"<g class="cluster" data-qualified-name="{qname}"{src_attr} id="{ent_id}">"#,
+        qname = crate::svg::escape_attribute(&qname),
     ));
     let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
     let (label_x, label_y) = match pkg.kind {
@@ -2714,8 +2716,8 @@ fn render_package_group(
                 h = fc(rect_h),
                 w = fc(rect_w),
                 x = fc(rect_x),
-                y = fc(rect_y),
-            ));
+                y = fc(rect_y), fill = crate::svg::escape_attribute(&fill),
+));
             (rect_x + (rect_w - label_w) / 2.0, rect_y + 15.5352)
         }
         PackageKind::Package => {
@@ -2748,6 +2750,7 @@ fn render_package_group(
             );
             svg.raw(&format!(
                 r#"<path d="{d}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"#,
+                fill = crate::svg::escape_attribute(&fill),
             ));
             // Divider under the tab from the left edge to the slope end.
             svg.raw(&format!(
@@ -2819,6 +2822,8 @@ fn render_actor(
     let src_attr = source_line_attr(actor.source_line);
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{display}"{src_attr} id="{ent_id}">"#,
+        display = crate::svg::escape_attribute(&display),
+        ent_id = crate::svg::escape_attribute(&ent_id),
     ));
     // Per-element `#color` overrides skinparam; both override the default.
     let fill = actor
@@ -2832,8 +2837,8 @@ fn render_actor(
         r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
         cx = fc(cx),
         cy = fc(cy),
-        stroke_width = skin.actor_border_thickness,
-    ));
+        stroke_width = skin.actor_border_thickness, fill = crate::svg::escape_attribute(&fill), stroke = crate::svg::escape_attribute(stroke),
+));
     let body_top_y = cy + ACTOR_HEAD_R;
     let body_bot_y = body_top_y + ACTOR_BODY_LEN;
     let arm_y = body_top_y + ACTOR_ARM_OFFSET;
@@ -2853,8 +2858,8 @@ fn render_actor(
         leg_x_left = fc(leg_x_left),
         leg_x_right = fc(leg_x_right),
         leg_y = fc(leg_y),
-        stroke_width = skin.actor_border_thickness,
-    ));
+        stroke_width = skin.actor_border_thickness, stroke = crate::svg::escape_attribute(stroke),
+));
     let cx_anchor = round_coord(cx);
     // Prefer PlantUML's captured per-line text x (label first, stereotype
     // second in document order) over reconstructing it from the rounded centre.
@@ -2950,6 +2955,8 @@ fn render_use_case(
     let src_attr = source_line_attr(uc.source_line);
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
+        qualified = crate::svg::escape_attribute(&qualified),
+        ent_id = crate::svg::escape_attribute(&ent_id),
     ));
     let orc_rect = oracle.and_then(|orc| {
         orc.entities
@@ -2979,8 +2986,8 @@ fn render_use_case(
         cy = fc(cy),
         rx = fc(rx),
         ry = fc(ry),
-        stroke_width = skin.uc_border_thickness,
-    ));
+        stroke_width = skin.uc_border_thickness, fill = crate::svg::escape_attribute(&fill), stroke = crate::svg::escape_attribute(stroke),
+));
     let cx_anchor = round_coord(cx);
     // PlantUML's emitted text x values are captured per line (stereotype first,
     // then label/description lines). Reconstructing them from the 4-dp-rounded
@@ -3083,7 +3090,11 @@ fn render_use_case(
                             .unwrap_or("stroke:#181818;stroke-width:1;");
                         svg.raw(&format!(
                             r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            l.x1, l.x2, l.y1, l.y2,
+                            l.x1,
+                            l.x2,
+                            l.y1,
+                            l.y2,
+                            style = crate::svg::escape_attribute(style),
                         ));
                         *sep_idx += 1;
                     } else {
@@ -3215,8 +3226,8 @@ fn render_usecase_separator(
             fc(x1),
             fc(x2),
             fc(y),
-            fc(y),
-        ));
+            fc(y), stroke = crate::svg::escape_attribute(stroke),
+));
     };
 
     match separator.style {
@@ -3248,7 +3259,8 @@ fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity
     let ent_id = note.entity_id.as_deref().unwrap_or("");
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qn}"{src_attr} id="{ent_id}">"#,
-        qn = note.qualified_name,
+        qn = crate::svg::escape_attribute(&note.qualified_name),
+        ent_id = crate::svg::escape_attribute(ent_id),
     ));
     svg.raw(&format!(
         r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
@@ -3383,6 +3395,7 @@ fn emit_model_note(
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qname}"{} id="{entity_id}">"#,
         source_line_attr(note.source_line),
+        qname = crate::svg::escape_attribute(qname),
     ));
     svg.raw(&format!(
         r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
@@ -3486,8 +3499,8 @@ fn render_oracle_connections(
             .unwrap_or_default();
         svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
         svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#,
-        ));
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+));
         let path_style = oracle_edge
             .path_style
             .as_deref()
@@ -3499,7 +3512,9 @@ fn render_oracle_connections(
             .unwrap_or_default();
         svg.raw(&format!(
             r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="{path_style}"/>"#,
-            oracle_edge.d, oracle_edge.id,
+            oracle_edge.d,
+            crate::svg::escape_attribute(&oracle_edge.id),
+            path_style = crate::svg::escape_attribute(path_style),
         ));
         if let Some(ref points) = oracle_edge.arrow_points {
             let fill = oracle_edge.arrow_fill.as_deref().unwrap_or("#181818");
@@ -3509,6 +3524,8 @@ fn render_oracle_connections(
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             svg.raw(&format!(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                poly_style = crate::svg::escape_attribute(poly_style),
             ));
         }
         if let Some(ref points) = oracle_edge.second_arrow_points {
@@ -3519,6 +3536,8 @@ fn render_oracle_connections(
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             svg.raw(&format!(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                poly_style = crate::svg::escape_attribute(poly_style),
             ));
         }
         // Edge labels and any `note on link` shape. PlantUML emits, in document
@@ -3552,7 +3571,8 @@ fn render_oracle_connections(
                     .as_deref()
                     .unwrap_or("stroke:#181818;stroke-width:0.5;");
                 svg.raw(&format!(
-                    r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#
+                    r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#,
+                    style = crate::svg::escape_attribute(style),
                 ));
             }
         };
@@ -3763,8 +3783,8 @@ fn render_no_oracle_connections(
         svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
         svg.raw(&format!(
             r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
-            line = conn.source_line,
-        ));
+            line = conn.source_line, ent1 = crate::svg::escape_attribute(ent1), ent2 = crate::svg::escape_attribute(ent2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(&link_id),
+));
         let raw_points = quantized_svek_edge_points(edge);
         let mut path_points = raw_points.clone();
         if let Some(decoration) = start_decoration {
@@ -3802,6 +3822,8 @@ fn render_no_oracle_connections(
             };
             svg.raw(&format!(
                 r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
+                path_id = crate::svg::escape_attribute(&path_id),
+                path_style = crate::svg::escape_attribute(&path_style),
             ));
         }
         if let Some(decoration) = start_decoration
@@ -4056,15 +4078,15 @@ fn render_usecase_extremity(
             let points = dependency_arrow_points(control, endpoint);
             svg.raw(&format!(
                 r#"<polygon fill="{color}" points="{points}" style="stroke:{color};stroke-width:{stroke_width};"/>"#,
-                stroke_width = fc(stroke_width),
-            ));
+                stroke_width = fc(stroke_width), color = crate::svg::escape_attribute(color),
+));
         }
         UseCaseExtremity::Extension => {
             let points = extension_arrow_points(control, endpoint);
             svg.raw(&format!(
                 r#"<polygon fill="none" points="{points}" style="stroke:{color};stroke-width:{stroke_width};"/>"#,
-                stroke_width = fc(stroke_width),
-            ));
+                stroke_width = fc(stroke_width), color = crate::svg::escape_attribute(color),
+));
         }
     }
 }

@@ -317,8 +317,8 @@ fn render_node(
             let rx = w / 2.0;
             let ry = h / 2.0;
             svg.raw(&format!(
-                r#"<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
-            ));
+                r#"<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#, fill = crate::svg::escape_attribute(&fill), stroke = crate::svg::escape_attribute(stroke),
+));
             svg.text(cx, cy + FONT_SIZE / 3.0, &label, "middle", FONT_SIZE);
         }
         "circle" => {

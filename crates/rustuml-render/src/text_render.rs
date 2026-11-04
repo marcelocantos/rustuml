@@ -1436,20 +1436,49 @@ pub(crate) fn single_pass_unescape(s: &str) -> String {
     out
 }
 
-/// Normalise a colour spec to PlantUML's preferred form: lower-case hex
-/// (`#RRGGBB`) for known named colours, pass-through otherwise.
-///
-/// PlantUML emits resolved hex colours in SVG output even when the source
-/// uses HTML colour names — `<color:blue>` becomes `fill="#0000FF"`.
+/// HColorSet.parseSimpleColor / XColor.toSvg: expand short hex and use
+/// uppercase RGB, retaining the alpha byte until the paint role is known.
 pub(crate) fn normalize_color(s: &str) -> String {
-    if s.starts_with('#') {
-        return s.to_string();
+    let value = s.strip_prefix('#').unwrap_or(s);
+    if value.bytes().all(|ch| ch.is_ascii_hexdigit()) {
+        match value.len() {
+            1 => return format!("#{}", value.repeat(6).to_ascii_uppercase()),
+            3 => {
+                let mut rgb = String::from("#");
+                for ch in value.chars() {
+                    rgb.push(ch.to_ascii_uppercase());
+                    rgb.push(ch.to_ascii_uppercase());
+                }
+                return rgb;
+            }
+            6 | 8 => return format!("#{}", value.to_ascii_uppercase()),
+            _ => {}
+        }
     }
-    let lower = s.to_ascii_lowercase();
+    let lower = value.to_ascii_lowercase();
+    // HColors.none() is transparent black. Automatic needs the consumer's
+    // active/default background, and must not be guessed here (T14.15).
+    if matches!(lower.as_str(), "transparent" | "background") {
+        return "#00000000".to_string();
+    }
     match css_color_hex(&lower) {
         Some(hex) => hex.to_string(),
         None => s.to_string(),
     }
+}
+
+/// Split Java RRGGBBAA into the RGB value and its non-default opacity.
+/// The renderer-only Style carries the byte without a floating-point model.
+pub(crate) fn color_with_opacity(value: &str) -> (String, Option<u8>) {
+    let color = normalize_color(value);
+    if color.len() == 9
+        && color.starts_with('#')
+        && color[1..].bytes().all(|ch| ch.is_ascii_hexdigit())
+    {
+        let alpha = u8::from_str_radix(&color[7..], 16).unwrap();
+        return (color[..7].to_string(), (alpha != u8::MAX).then_some(alpha));
+    }
+    (color, None)
 }
 
 /// CSS3 named colours, lowercased keys. PlantUML accepts the same names
@@ -1458,6 +1487,14 @@ fn css_color_hex(name: &str) -> Option<&'static str> {
     // Listed in case-insensitive lookup order; values are uppercase
     // `#RRGGBB` to match PlantUML's golden SVG output.
     match name {
+        // HColorSet delegates to ColorTrieNode's Archimate palette.
+        "business" => Some("#FFFFCC"),
+        "application" => Some("#C2F0FF"),
+        "motivation" => Some("#CCCCFF"),
+        "strategy" => Some("#F8E7C0"),
+        "technology" => Some("#C9FFC9"),
+        "physical" => Some("#97FF97"),
+        "implementation" => Some("#FFE0E0"),
         "aliceblue" => Some("#F0F8FF"),
         "antiquewhite" => Some("#FAEBD7"),
         "aqua" | "cyan" => Some("#00FFFF"),
@@ -1655,7 +1692,15 @@ fn write_text_element(
         _ => (nominal_size, line_descent_diff),
     };
     let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
-    let fill = normalize_color(raw_fill);
+    let (fill, parsed_opacity) = color_with_opacity(raw_fill);
+    let opacity = style.fill_opacity.or(parsed_opacity);
+    // DriverTextSvg.draw:94-97 suppresses transparent text before painting.
+    // The caller still measures and advances this atom. Shape fill-none
+    // serialization is a separate SvgGraphics path.
+    if opacity == Some(0) {
+        return;
+    }
+    let opacity_attr = crate::svg::fill_opacity_attribute(opacity);
 
     // `<back:color>` segments carry an SVG `<filter>` reference. The id is
     // allocated lazily in the active `FilterRegistry`; the filter element
@@ -1697,10 +1742,10 @@ fn write_text_element(
     // When the segment carries a link URL, PlantUML wraps the <text> in an
     // <a> element with both modern (href) and legacy (xlink:*) attributes.
     if let Some(url) = style.link_url.as_deref() {
-        let escaped = escape_xml_attr(url);
+        let escaped = crate::svg::escape_attribute(url);
         // `title` / `xlink:title` is the `{tooltip}` when supplied, else the URL.
         let normalized_title = normalize_svg_link_title(style.link_title.as_deref().unwrap_or(url));
-        let title = escape_xml_attr(&normalized_title);
+        let title = crate::svg::escape_attribute(&normalized_title);
         write!(
             buf,
             r#"<a href="{escaped}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{escaped}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
@@ -1724,24 +1769,15 @@ fn write_text_element(
     let content = content.replace('\u{00a0}', "&#160;");
     write!(
         buf,
-        r#"<text fill="{fill}"{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
+        r#"<text fill="{fill}"{opacity_attr}{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
         tl = pm::fmt_coord(width),
         x_s = pm::fmt_coord(x),
-        y_s = pm::fmt_coord(effective_y),
-    )
+        y_s = pm::fmt_coord(effective_y), fill = crate::svg::escape_attribute(&fill), font_family = crate::svg::font_family_attribute(font_family),
+)
     .unwrap();
     if style.link_url.is_some() {
         buf.push_str("</a>");
     }
-}
-
-/// Escape characters that have special meaning in an XML attribute value.
-fn escape_xml_attr(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\n', "&#10;")
 }
 
 #[cfg(test)]
@@ -1765,6 +1801,19 @@ mod tests {
             italic: false,
             underline: false,
             skip_underline: false,
+        }
+    }
+
+    #[test]
+    fn transparent_text_advances_without_painting() {
+        let style = base(0.0, 20.0);
+        for color in ["transparent", "background", "#8044aa00"] {
+            let source = format!("q<color:{color}>fir</color>r");
+            let mut output = String::new();
+            let advance = emit_text(&mut output, &source, &style);
+            assert_eq!(advance, total_width("qfirr", &style));
+            assert_eq!(output.matches("<text ").count(), 2);
+            assert!(!output.contains(">fir</text>"));
         }
     }
 

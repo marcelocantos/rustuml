@@ -1,0 +1,3 @@
+@startuml
+Elm -> Cedar : q<font:"Oak & Pine">fir</font>r\nq<font:Oak'Pine>fir</font>r
+@enduml

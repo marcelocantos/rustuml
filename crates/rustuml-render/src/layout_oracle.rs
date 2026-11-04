@@ -465,17 +465,22 @@ pub fn emit_oracle_note_entity(
     let source_attr = note
         .source_line
         .as_deref()
-        .map(|sl| format!(r#" data-source-line="{}""#, escape_xml_attr(sl)))
+        .map(|sl| {
+            format!(
+                r#" data-source-line="{}""#,
+                crate::svg::escape_attribute(sl)
+            )
+        })
         .unwrap_or_default();
     let id_attr = note
         .entity_id
         .as_deref()
-        .map(|id| format!(r#" id="{}""#, escape_xml_attr(id)))
+        .map(|id| format!(r#" id="{}""#, crate::svg::escape_attribute(id)))
         .unwrap_or_default();
     let _ = write!(
         out,
         r#"<g class="entity" data-qualified-name="{}"{source_attr}{id_attr}>"#,
-        escape_xml_attr(&note.qualified_name),
+        crate::svg::escape_attribute(&note.qualified_name),
     );
     if !g.children.is_empty() {
         for child in &g.children {
@@ -488,6 +493,8 @@ pub fn emit_oracle_note_entity(
     let _ = write!(
         out,
         r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     );
     let _ = write!(
         out,
@@ -496,6 +503,8 @@ pub fn emit_oracle_note_entity(
         by_s = pm::fmt_coord(by),
         yf_s = pm::fmt_coord(yf),
         r_s = pm::fmt_coord(right),
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     );
 
     if g.text_lines.is_empty() {
@@ -544,32 +553,36 @@ pub fn emit_oracle_note_entity(
 fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
     match child {
         OracleNoteChild::Path(path) => {
-            let _ = write!(out, r#"<path d="{}""#, escape_xml_attr(&path.d));
+            let _ = write!(
+                out,
+                r#"<path d="{}""#,
+                crate::svg::escape_attribute(&path.d)
+            );
             if let Some(fill) = path.fill.as_deref() {
-                let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                let _ = write!(out, r#" fill="{}""#, crate::svg::escape_attribute(fill));
             }
             if let Some(filter) = path.filter.as_deref() {
-                let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
+                let _ = write!(out, r#" filter="{}""#, crate::svg::escape_attribute(filter));
             }
             if let Some(style) = path.style.as_deref() {
-                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
             }
             out.push_str("/>");
         }
         OracleNoteChild::Rect(rect) => {
             let _ = write!(out, "<rect");
             if let Some(fill) = rect.fill.as_deref() {
-                let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                let _ = write!(out, r#" fill="{}""#, crate::svg::escape_attribute(fill));
             }
             let _ = write!(out, r#" height="{}""#, pm::fmt_coord(rect.height),);
             if let Some(rx) = rect.rx.as_deref() {
-                let _ = write!(out, r#" rx="{}""#, escape_xml_attr(rx));
+                let _ = write!(out, r#" rx="{}""#, crate::svg::escape_attribute(rx));
             }
             if let Some(ry) = rect.ry.as_deref() {
-                let _ = write!(out, r#" ry="{}""#, escape_xml_attr(ry));
+                let _ = write!(out, r#" ry="{}""#, crate::svg::escape_attribute(ry));
             }
             if let Some(style) = rect.style.as_deref() {
-                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
             }
             let _ = write!(
                 out,
@@ -586,14 +599,14 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
             let _ = write!(
                 out,
                 r#"<a href="{}" target="{}" title="{}" xlink:actuate="{}" xlink:href="{}" xlink:show="{}" xlink:title="{}" xlink:type="{}">"#,
-                escape_xml_attr(&link.href),
-                escape_xml_attr(&link.target),
-                escape_xml_attr(&link.title),
-                escape_xml_attr(&link.xlink_actuate),
-                escape_xml_attr(&link.xlink_href),
-                escape_xml_attr(&link.xlink_show),
-                escape_xml_attr(&link.xlink_title),
-                escape_xml_attr(&link.xlink_type),
+                crate::svg::escape_attribute(&link.href),
+                crate::svg::escape_attribute(&link.target),
+                crate::svg::escape_attribute(&link.title),
+                crate::svg::escape_attribute(&link.xlink_actuate),
+                crate::svg::escape_attribute(&link.xlink_href),
+                crate::svg::escape_attribute(&link.xlink_show),
+                crate::svg::escape_attribute(&link.xlink_title),
+                crate::svg::escape_attribute(&link.xlink_type),
             );
             for text in &link.texts {
                 emit_note_text(out, text);
@@ -607,7 +620,7 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
                 pm::fmt_coord(image.height),
                 pm::fmt_coord(image.width),
                 pm::fmt_coord(image.x),
-                escape_xml_attr(&image.href),
+                crate::svg::escape_attribute(&image.href),
                 pm::fmt_coord(image.y),
             );
         }
@@ -619,7 +632,7 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
                 pm::fmt_coord(ellipse.cy),
             );
             if let Some(fill) = ellipse.fill.as_deref() {
-                let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                let _ = write!(out, r#" fill="{}""#, crate::svg::escape_attribute(fill));
             }
             let _ = write!(
                 out,
@@ -628,14 +641,14 @@ fn emit_note_child(out: &mut String, child: &OracleNoteChild) {
                 pm::fmt_coord(ellipse.ry),
             );
             if let Some(style) = ellipse.style.as_deref() {
-                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
             }
             out.push_str("/>");
         }
         OracleNoteChild::Line(line) => {
             let _ = write!(out, "<line");
             if let Some(style) = line.style.as_deref() {
-                let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
             }
             let _ = write!(
                 out,
@@ -653,27 +666,47 @@ fn emit_note_text(out: &mut String, text: &OracleNoteText) {
     let _ = write!(
         out,
         r#"<text fill="{}" font-family="{}" font-size="{}""#,
-        escape_xml_attr(&text.fill),
-        escape_xml_attr(&text.font_family),
-        escape_xml_attr(&text.font_size),
+        crate::svg::escape_attribute(&text.fill),
+        crate::svg::font_family_attribute(&text.font_family),
+        crate::svg::escape_attribute(&text.font_size),
     );
     if let Some(style) = text.font_style.as_deref() {
-        let _ = write!(out, r#" font-style="{}""#, escape_xml_attr(style));
+        let _ = write!(
+            out,
+            r#" font-style="{}""#,
+            crate::svg::escape_attribute(style)
+        );
     }
     if let Some(weight) = text.font_weight.as_deref() {
-        let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
+        let _ = write!(
+            out,
+            r#" font-weight="{}""#,
+            crate::svg::escape_attribute(weight)
+        );
     }
     if let Some(filter) = text.filter.as_deref() {
-        let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
+        let _ = write!(out, r#" filter="{}""#, crate::svg::escape_attribute(filter));
     }
     if let Some(length_adjust) = text.length_adjust.as_deref() {
-        let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));
+        let _ = write!(
+            out,
+            r#" lengthAdjust="{}""#,
+            crate::svg::escape_attribute(length_adjust)
+        );
     }
     if let Some(decoration) = text.text_decoration.as_deref() {
-        let _ = write!(out, r#" text-decoration="{}""#, escape_xml_attr(decoration));
+        let _ = write!(
+            out,
+            r#" text-decoration="{}""#,
+            crate::svg::escape_attribute(decoration)
+        );
     }
     if let Some(text_length) = text.text_length.as_deref() {
-        let _ = write!(out, r#" textLength="{}""#, escape_xml_attr(text_length));
+        let _ = write!(
+            out,
+            r#" textLength="{}""#,
+            crate::svg::escape_attribute(text_length)
+        );
     }
     let _ = write!(
         out,
@@ -682,13 +715,6 @@ fn emit_note_text(out: &mut String, text: &OracleNoteText) {
         pm::fmt_coord(text.y),
         escape_xml_text(&text.text),
     );
-}
-
-fn escape_xml_attr(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
 }
 
 fn escape_xml_text(s: &str) -> String {
@@ -733,32 +759,36 @@ pub fn emit_oracle_cluster_children(out: &mut String, cluster: &OracleCluster) {
     for child in &cluster.children {
         match child {
             OracleClusterChild::Path(path) => {
-                let _ = write!(out, r#"<path d="{}""#, escape_xml_attr(&path.d));
+                let _ = write!(
+                    out,
+                    r#"<path d="{}""#,
+                    crate::svg::escape_attribute(&path.d)
+                );
                 if let Some(fill) = path.fill.as_deref() {
-                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                    let _ = write!(out, r#" fill="{}""#, crate::svg::escape_attribute(fill));
                 }
                 if let Some(filter) = path.filter.as_deref() {
-                    let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
+                    let _ = write!(out, r#" filter="{}""#, crate::svg::escape_attribute(filter));
                 }
                 if let Some(style) = path.style.as_deref() {
-                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                    let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
                 }
                 out.push_str("/>");
             }
             OracleClusterChild::Rect(rect) => {
                 let _ = write!(out, "<rect");
                 if let Some(fill) = rect.fill.as_deref() {
-                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                    let _ = write!(out, r#" fill="{}""#, crate::svg::escape_attribute(fill));
                 }
                 let _ = write!(out, r#" height="{}""#, pm::fmt_coord(rect.height),);
                 if let Some(rx) = rect.rx.as_deref() {
-                    let _ = write!(out, r#" rx="{}""#, escape_xml_attr(rx));
+                    let _ = write!(out, r#" rx="{}""#, crate::svg::escape_attribute(rx));
                 }
                 if let Some(ry) = rect.ry.as_deref() {
-                    let _ = write!(out, r#" ry="{}""#, escape_xml_attr(ry));
+                    let _ = write!(out, r#" ry="{}""#, crate::svg::escape_attribute(ry));
                 }
                 if let Some(style) = rect.style.as_deref() {
-                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                    let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
                 }
                 let _ = write!(
                     out,
@@ -779,7 +809,7 @@ pub fn emit_oracle_cluster_children(out: &mut String, cluster: &OracleCluster) {
                     pm::fmt_coord(ellipse.cy),
                 );
                 if let Some(fill) = ellipse.fill.as_deref() {
-                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                    let _ = write!(out, r#" fill="{}""#, crate::svg::escape_attribute(fill));
                 }
                 let _ = write!(
                     out,
@@ -788,14 +818,14 @@ pub fn emit_oracle_cluster_children(out: &mut String, cluster: &OracleCluster) {
                     pm::fmt_coord(ellipse.ry),
                 );
                 if let Some(style) = ellipse.style.as_deref() {
-                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                    let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
                 }
                 out.push_str("/>");
             }
             OracleClusterChild::Line(line) => {
                 let _ = write!(out, "<line");
                 if let Some(style) = line.style.as_deref() {
-                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                    let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
                 }
                 let _ = write!(
                     out,
@@ -809,11 +839,15 @@ pub fn emit_oracle_cluster_children(out: &mut String, cluster: &OracleCluster) {
             OracleClusterChild::Polygon(polygon) => {
                 let _ = write!(out, "<polygon");
                 if let Some(fill) = polygon.fill.as_deref() {
-                    let _ = write!(out, r#" fill="{}""#, escape_xml_attr(fill));
+                    let _ = write!(out, r#" fill="{}""#, crate::svg::escape_attribute(fill));
                 }
-                let _ = write!(out, r#" points="{}""#, escape_xml_attr(&polygon.points));
+                let _ = write!(
+                    out,
+                    r#" points="{}""#,
+                    crate::svg::escape_attribute(&polygon.points)
+                );
                 if let Some(style) = polygon.style.as_deref() {
-                    let _ = write!(out, r#" style="{}""#, escape_xml_attr(style));
+                    let _ = write!(out, r#" style="{}""#, crate::svg::escape_attribute(style));
                 }
                 out.push_str("/>");
             }
@@ -825,27 +859,47 @@ fn emit_cluster_text(out: &mut String, text: &OracleNoteText) {
     let _ = write!(
         out,
         r#"<text fill="{}" font-family="{}" font-size="{}""#,
-        escape_xml_attr(&text.fill),
-        escape_xml_attr(&text.font_family),
-        escape_xml_attr(&text.font_size),
+        crate::svg::escape_attribute(&text.fill),
+        crate::svg::font_family_attribute(&text.font_family),
+        crate::svg::escape_attribute(&text.font_size),
     );
     if let Some(style) = text.font_style.as_deref() {
-        let _ = write!(out, r#" font-style="{}""#, escape_xml_attr(style));
+        let _ = write!(
+            out,
+            r#" font-style="{}""#,
+            crate::svg::escape_attribute(style)
+        );
     }
     if let Some(weight) = text.font_weight.as_deref() {
-        let _ = write!(out, r#" font-weight="{}""#, escape_xml_attr(weight));
+        let _ = write!(
+            out,
+            r#" font-weight="{}""#,
+            crate::svg::escape_attribute(weight)
+        );
     }
     if let Some(filter) = text.filter.as_deref() {
-        let _ = write!(out, r#" filter="{}""#, escape_xml_attr(filter));
+        let _ = write!(out, r#" filter="{}""#, crate::svg::escape_attribute(filter));
     }
     if let Some(length_adjust) = text.length_adjust.as_deref() {
-        let _ = write!(out, r#" lengthAdjust="{}""#, escape_xml_attr(length_adjust));
+        let _ = write!(
+            out,
+            r#" lengthAdjust="{}""#,
+            crate::svg::escape_attribute(length_adjust)
+        );
     }
     if let Some(decoration) = text.text_decoration.as_deref() {
-        let _ = write!(out, r#" text-decoration="{}""#, escape_xml_attr(decoration));
+        let _ = write!(
+            out,
+            r#" text-decoration="{}""#,
+            crate::svg::escape_attribute(decoration)
+        );
     }
     if let Some(text_length) = text.text_length.as_deref() {
-        let _ = write!(out, r#" textLength="{}""#, escape_xml_attr(text_length));
+        let _ = write!(
+            out,
+            r#" textLength="{}""#,
+            crate::svg::escape_attribute(text_length)
+        );
     }
     let _ = write!(
         out,
@@ -988,7 +1042,7 @@ pub fn emit_entity_image(out: &mut String, image: &EntityImage) {
         pm::fmt_coord(image.height),
         pm::fmt_coord(image.width),
         pm::fmt_coord(image.x),
-        escape_xml_attr(&image.href),
+        crate::svg::escape_attribute(&image.href),
         pm::fmt_coord(image.y),
     );
 }

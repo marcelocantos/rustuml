@@ -313,7 +313,7 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         };
                         let content = collect_until_tag(&mut chars, "</color>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);
-                        let escaped_color = escape_creole_text(color);
+                        let escaped_color = crate::svg::escape_attribute(color);
                         write!(result, "<tspan fill=\"{escaped_color}\">{inner}</tspan>").unwrap();
                     }
                     _ if tag.starts_with("size:") => {
@@ -337,8 +337,12 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         let content = collect_until_tag(&mut chars, "</font>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);
                         let inner = inner.replace(' ', "\u{00a0}");
-                        write!(result, "<tspan font-family=\"{font_name}\">{inner}</tspan>")
-                            .unwrap();
+                        write!(
+                            result,
+                            "<tspan font-family=\"{font_name}\">{inner}</tspan>",
+                            font_name = crate::svg::font_family_attribute(font_name),
+                        )
+                        .unwrap();
                     }
                     _ if tag.starts_with("font") => {
                         // <font ...>text</font> — strip tag, keep inner markup processed.
@@ -818,6 +822,9 @@ pub struct Style {
     pub monospace: bool,
     /// SVG `fill` attribute when overridden by `<color:...>`.
     pub fill: Option<String>,
+    /// Non-default alpha byte from HColorSet RRGGBBAA; absent means opaque.
+    /// This renderer-only model is not serialized in diagram YAML/JSON.
+    pub fill_opacity: Option<u8>,
     /// Absolute font-size override from `<size:N>` (pixels).
     pub size: Option<u32>,
     /// Custom font-family from `<font:Name>` (only used when not monospace).
@@ -1242,6 +1249,7 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 nested.link_url = Some(url.clone());
                 nested.link_title = tooltip;
                 nested.fill = Some("#0000FF".to_string());
+                nested.fill_opacity = None;
                 nested.underline = true;
                 push_literal(out, display, &nested);
                 last_char = display.chars().last();
@@ -1424,7 +1432,9 @@ fn handle_tag(
                 // CommandCreoleColorChange catches NoSuchColorException and
                 // keeps fc1 while still consuming/analyzing the command body.
                 if is_resolvable_color(color) {
+                    let (_, opacity) = crate::text_render::color_with_opacity(color);
                     nested.fill = Some(color.to_string());
+                    nested.fill_opacity = opacity;
                 }
                 Some("</color>")
             }
@@ -1433,7 +1443,9 @@ fn handle_tag(
                     nested.size = Some(size);
                 }
                 if let Some(color) = color {
+                    let (_, opacity) = crate::text_render::color_with_opacity(color);
                     nested.fill = Some(color.to_string());
+                    nested.fill_opacity = opacity;
                 }
                 Some("</font>")
             }
@@ -1710,6 +1722,20 @@ fn walk_with(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn opacity_follows_fill_changes_and_restores_after_recursion() {
+        let segments = parse_segments("<color:#8044aa77>a<font color=red>b</font>c</color>d");
+        let runs: Vec<_> = segments
+            .iter()
+            .filter(|s| !s.text.is_empty())
+            .map(|s| (s.text.as_str(), s.style.fill_opacity))
+            .collect();
+        assert_eq!(
+            runs,
+            [("a", Some(119)), ("b", None), ("c", Some(119)), ("d", None)]
+        );
+    }
 
     // --- Segment-based parsing tests ---
 

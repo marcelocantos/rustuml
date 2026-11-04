@@ -5,6 +5,67 @@
 
 use std::fmt::Write;
 
+/// Encode a DOM attribute as PlantUML's US-ASCII XML transformer does.
+///
+/// Java: SvgGraphics.getTransformer; OpenJDK 21.0.5 ToStream.writeAttrString,
+/// accumDefaultEscape and CharInfo. See shared-svg-attributes/account.json.
+pub(crate) fn escape_attribute(value: &str) -> String {
+    let mut result = String::with_capacity(value.len());
+    for ch in value.chars() {
+        match ch {
+            '&' => result.push_str("&amp;"),
+            '<' => result.push_str("&lt;"),
+            '>' => result.push_str("&gt;"),
+            '"' => result.push_str("&quot;"),
+            '\n' | '\r' | '\t' => write!(result, "&#{};", ch as u32).unwrap(),
+            ch if !ch.is_ascii() => write!(result, "&#{};", ch as u32).unwrap(),
+            // XML-invalid C0 scalars require Java's export-error contract.
+            // T14.20 owns that fallible path. Preserve the current value;
+            // do not delete, replace, panic, or manufacture a crash diagram.
+            _ => result.push(ch),
+        }
+    }
+    result
+}
+
+/// UFontImpl.getFamily(SVG) replaces definition quotes before DOM emission.
+/// This deliberately does not change the family used for font measurement.
+pub(crate) fn font_family_attribute(value: &str) -> String {
+    escape_attribute(&value.replace('"', "'"))
+}
+
+pub(crate) fn fill_opacity_attribute(alpha: Option<u8>) -> String {
+    // SvgGraphics.fillMe uses five decimal places. Alpha zero is handled
+    // by setFillColor/fixColor as fill="none"; opaque fills omit opacity.
+    match alpha {
+        Some(alpha) if alpha != 0 && alpha != u8::MAX => {
+            format!(
+                r#" fill-opacity="{:.5}""#,
+                f64::from(alpha) / f64::from(u8::MAX)
+            )
+        }
+        _ => String::new(),
+    }
+}
+
+fn fill_attributes(value: &str) -> String {
+    let (rgb, alpha) = crate::text_render::color_with_opacity(value);
+    let fill = if alpha == Some(0) { "none" } else { &rgb };
+    format!(
+        r#"fill="{}"{}"#,
+        escape_attribute(fill),
+        fill_opacity_attribute(alpha)
+    )
+}
+
+fn stroke_attribute(value: &str) -> String {
+    let color = crate::text_render::normalize_color(value);
+    // SvgGraphics.setStrokeColor/fixColor does not split partial alpha into
+    // stroke-opacity. HColor.toSvg collapses zero-alpha colors to transparent.
+    let (_, alpha) = crate::text_render::color_with_opacity(value);
+    escape_attribute(if alpha == Some(0) { "none" } else { &color })
+}
+
 pub(crate) fn normalize_svg_link_title(title: &str) -> String {
     let mut normalized = String::with_capacity(title.len());
     let mut rest = title;
@@ -92,8 +153,8 @@ impl SvgBuilder {
         let mut buf = String::new();
         write!(
             buf,
-            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{background_style}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
-        )
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{background_style}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#, background_style = crate::svg::escape_attribute(&background_style),
+)
         .unwrap();
         // PlantUML processing instruction and defs.
         buf.push_str("<?plantuml ?>");
@@ -126,8 +187,8 @@ impl SvgBuilder {
 
     pub fn rect(&mut self, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
         self.line(&format!(
-            r#"<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
-        ));
+            r#"<rect x="{x}" y="{y}" width="{w}" height="{h}" {fill_paint} stroke="{stroke}" stroke-width="1"/>"#, fill_paint = fill_attributes(fill), stroke = stroke_attribute(stroke),
+));
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -142,8 +203,8 @@ impl SvgBuilder {
         stroke: &str,
     ) {
         self.line(&format!(
-            r#"<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
-        ));
+            r#"<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" {fill_paint} stroke="{stroke}" stroke-width="1"/>"#, fill_paint = fill_attributes(fill), stroke = stroke_attribute(stroke),
+));
     }
 
     pub fn line_segment(&mut self, x1: f64, y1: f64, x2: f64, y2: f64, stroke: &str, dashed: bool) {
@@ -153,8 +214,8 @@ impl SvgBuilder {
             ""
         };
         self.line(&format!(
-            r#"<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="1"{dash}/>"#
-        ));
+            r#"<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{stroke}" stroke-width="1"{dash}/>"#, stroke = stroke_attribute(stroke),
+));
     }
 
     pub fn text(&mut self, x: f64, y: f64, content: &str, anchor: &str, font_size: f64) {
@@ -213,8 +274,8 @@ impl SvgBuilder {
     ) {
         let escaped = escape_xml(content);
         self.line(&format!(
-            r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}" fill="{color}">{escaped}</text>"#
-        ));
+            r#"<text x="{x}" y="{y}" text-anchor="{anchor}" font-family="sans-serif" font-size="{font_size}" {color_paint}>{escaped}</text>"#, color_paint = fill_attributes(color),
+));
     }
 
     /// Emit a text element with creole markup processed, but treating `__`
@@ -309,8 +370,8 @@ impl SvgBuilder {
 
     pub fn circle(&mut self, cx: f64, cy: f64, r: f64, fill: &str, stroke: &str) {
         self.line(&format!(
-            r#"<circle cx="{cx}" cy="{cy}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
-        ));
+            r#"<circle cx="{cx}" cy="{cy}" r="{r}" {fill_paint} stroke="{stroke}" stroke-width="1"/>"#, fill_paint = fill_attributes(fill), stroke = stroke_attribute(stroke),
+));
     }
 
     pub fn polygon(&mut self, points: &[(f64, f64)], fill: &str, stroke: &str) {
@@ -320,7 +381,9 @@ impl SvgBuilder {
             .collect::<Vec<_>>()
             .join(" ");
         self.line(&format!(
-            r#"<polygon points="{pts}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
+            r#"<polygon points="{pts}" {fill_paint} stroke="{stroke}" stroke-width="1"/>"#,
+            fill_paint = fill_attributes(fill),
+            stroke = stroke_attribute(stroke),
         ));
     }
 
@@ -343,7 +406,9 @@ impl SvgBuilder {
             .collect::<Vec<_>>()
             .join(" ");
         self.line(&format!(
-            r#"<polygon points="{pts_str}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
+            r#"<polygon points="{pts_str}" {fill_paint} stroke="{stroke}" stroke-width="1"/>"#,
+            fill_paint = fill_attributes(fill),
+            stroke = stroke_attribute(stroke),
         ));
         // Dog-ear fold triangle.
         let ear_pts = [(x + w - ear, y), (x + w, y + ear), (x + w - ear, y + ear)];
@@ -353,7 +418,9 @@ impl SvgBuilder {
             .collect::<Vec<_>>()
             .join(" ");
         self.line(&format!(
-            r#"<polygon points="{ear_str}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>"#
+            r#"<polygon points="{ear_str}" {fill_paint} stroke="{stroke}" stroke-width="1"/>"#,
+            fill_paint = fill_attributes(fill),
+            stroke = stroke_attribute(stroke),
         ));
     }
 
@@ -371,7 +438,10 @@ impl SvgBuilder {
     }
 
     pub fn open_group(&mut self, class: &str) {
-        self.line(&format!(r#"<g class="{class}">"#));
+        self.line(&format!(
+            r#"<g class="{class}">"#,
+            class = crate::svg::escape_attribute(class),
+        ));
         self.indent += 1;
         self.group_depth += 1;
     }
@@ -407,8 +477,8 @@ impl SvgBuilder {
     /// ways (`href`, `xlink:href`, plus `target`/`title`/`xlink:*`) to support
     /// multiple SVG viewers. `title` defaults to the URL when `None`.
     pub fn open_link_with_title(&mut self, url: &str, title: Option<&str>) {
-        let h = escape_xml(url);
-        let t = title.map(escape_xml).unwrap_or_else(|| h.clone());
+        let h = escape_attribute(url);
+        let t = title.map(escape_attribute).unwrap_or_else(|| h.clone());
         self.line(&format!(
             r#"<a href="{h}" target="_top" title="{t}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{t}" xlink:type="simple">"#,
         ));
@@ -443,7 +513,8 @@ impl SvgBuilder {
     /// Emit an `<image>` element with the given data URI.
     pub fn image(&mut self, x: f64, y: f64, w: f64, h: f64, href: &str) {
         self.line(&format!(
-            r#"<image x="{x}" y="{y}" width="{w}" height="{h}" xlink:href="{href}"/>"#
+            r#"<image x="{x}" y="{y}" width="{w}" height="{h}" xlink:href="{href}"/>"#,
+            href = crate::svg::escape_attribute(href),
         ));
     }
 
@@ -773,7 +844,8 @@ impl SvgBuilder {
             i += 3;
         }
         self.line(&format!(
-            r#"<path d="{d}" fill="none" stroke="{color}" stroke-width="1"{dash}/>"#
+            r#"<path d="{d}" fill="none" stroke="{color}" stroke-width="1"{dash}/>"#,
+            color = stroke_attribute(color),
         ));
     }
 
@@ -804,7 +876,8 @@ impl SvgBuilder {
         let x2 = x - arrow_size * (angle + 0.4).cos();
         let y2 = y - arrow_size * (angle + 0.4).sin();
         self.line(&format!(
-            r#"<polygon points="{x},{y} {x1},{y1} {x2},{y2}" fill="{color}"/>"#
+            r#"<polygon points="{x},{y} {x1},{y1} {x2},{y2}" {color_paint}/>"#,
+            color_paint = fill_attributes(color),
         ));
     }
 
@@ -837,7 +910,8 @@ impl SvgBuilder {
             i += 2;
         }
         self.line(&format!(
-            r#"<path d="{d}" fill="none" stroke="{color}" stroke-width="1"{dash}/>"#
+            r#"<path d="{d}" fill="none" stroke="{color}" stroke-width="1"{dash}/>"#,
+            color = stroke_attribute(color),
         ));
     }
 
@@ -894,6 +968,33 @@ mod tests {
     use super::*;
 
     #[test]
+    fn attributes_follow_java_ascii_xml_serialization() {
+        assert_eq!(
+            escape_attribute("&<>\"'\n\r\t\u{a0}é𐐷"),
+            "&amp;&lt;&gt;&quot;'&#10;&#13;&#9;&#160;&#233;&#66615;"
+        );
+        assert_eq!(font_family_attribute("\"Oak & Fir\""), "'Oak &amp; Fir'");
+        // Values in the numeric/path attribute domain must be byte-identical.
+        let safe: String = (' '..='~').filter(|c| !"&<>\"".contains(*c)).collect();
+        assert_eq!(escape_attribute(&safe), safe);
+        // T14.20: do not silently turn an export failure into another value.
+        assert_eq!(escape_attribute("a\0\u{1}\u{1b}b"), "a\0\u{1}\u{1b}b");
+    }
+
+    #[test]
+    fn shared_paints_follow_java_rgb_alpha_and_transparency_roles() {
+        assert_eq!(fill_attributes("#2ad"), r##"fill="#22AADD""##);
+        assert_eq!(
+            fill_attributes("#8044aa77"),
+            r##"fill="#8044AA" fill-opacity="0.46667""##
+        );
+        assert_eq!(fill_attributes("#abcdef00"), r#"fill="none""#);
+        assert_eq!(fill_attributes("#abcdefff"), r##"fill="#ABCDEF""##);
+        assert_eq!(stroke_attribute("#8044aa77"), "#8044AA77");
+        assert_eq!(stroke_attribute("background"), "none");
+    }
+
+    #[test]
     fn link_titles_follow_java_unicode_and_newline_normalization() {
         assert_eq!(
             normalize_svg_link_title("Docs <U+0026> Support\\nPortal"),
@@ -916,7 +1017,7 @@ mod tests {
         let output = svg.finalize();
         assert!(output.contains(r#"<path d="M 10,10 C 30,50 70,50 90,10""#));
         assert!(output.contains(r#"fill="none""#));
-        assert!(output.contains(r##"stroke="#000""##));
+        assert!(output.contains(r##"stroke="#000000""##));
         assert!(!output.contains("stroke-dasharray"));
     }
 
@@ -967,7 +1068,7 @@ mod tests {
         assert!(output.contains("<path d=\"M 0,50 C 30,0 70,0 100,50\""));
         // Arrowhead polygon present
         assert!(output.contains("<polygon points=\"100,50"));
-        assert!(output.contains(r##"fill="#333""##));
+        assert!(output.contains(r##"fill="#333333""##));
     }
 
     #[test]
@@ -997,7 +1098,7 @@ mod tests {
         svg.quadratic_path(&[(10.0, 10.0), (50.0, 80.0), (90.0, 10.0)], "blue", false);
         let output = svg.finalize();
         assert!(output.contains(r#"<path d="M 10,10 Q 50,80 90,10""#));
-        assert!(output.contains(r#"stroke="blue""#));
+        assert!(output.contains(r##"stroke="#0000FF""##));
     }
 
     #[test]

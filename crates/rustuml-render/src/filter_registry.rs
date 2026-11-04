@@ -64,8 +64,8 @@ impl FilterRegistry {
         for (color, id) in &self.entries {
             write!(
                 &mut out,
-                r#"<filter height="1" id="{id}" width="1" x="0" y="0"><feFlood flood-color="{color}" result="flood"/><feComposite in="SourceGraphic" in2="flood" operator="over"/></filter>"#,
-            )
+                r#"<filter height="1" id="{id}" width="1" x="0" y="0"><feFlood flood-color="{color}" result="flood"/><feComposite in="SourceGraphic" in2="flood" operator="over"/></filter>"#, color = crate::svg::escape_attribute(color),
+)
             .unwrap();
         }
         out
@@ -404,7 +404,9 @@ pub fn id_for_current(color: &str) -> Option<String> {
 /// resolved to upper-case `#RRGGBB`; explicit hex is upper-cased. Anything
 /// we don't recognise is passed through.
 fn normalize_back_color(color: &str) -> String {
-    let resolved = text_render::normalize_color(color);
+    // DriverTextSvg.draw uses HColor.toRGB for BACKCOLOR, including alpha
+    // colors. Its feFlood receives RGB, not the text fill's opacity.
+    let (resolved, _) = text_render::color_with_opacity(color);
     if let Some(rest) = resolved.strip_prefix('#') {
         format!("#{}", rest.to_ascii_uppercase())
     } else {
@@ -458,6 +460,15 @@ fn abs_base36(seed: i64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn backcolor_uses_rgb_even_when_text_fill_would_be_transparent() {
+        assert_eq!(normalize_back_color("transparent"), "#000000");
+        assert_eq!(normalize_back_color("background"), "#000000");
+        assert_eq!(normalize_back_color("#8044aa77"), "#8044AA");
+        assert_eq!(normalize_back_color("#abcdef00"), "#ABCDEF");
+        assert_eq!(normalize_back_color("#2ad"), "#22AADD");
+    }
 
     #[test]
     fn registry_scope_returns_body_value_and_collected_filters() {

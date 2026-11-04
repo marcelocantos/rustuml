@@ -223,7 +223,7 @@ fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
         write!(
         buf,
         r#"<rect fill="{fill}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        fill = node.fill,
+        fill = crate::svg::escape_attribute(&(node.fill)),
         h = pm::fmt_coord(node.main_h),
         w = pm::fmt_coord(node.main_w),
         x = pm::fmt_coord(x),

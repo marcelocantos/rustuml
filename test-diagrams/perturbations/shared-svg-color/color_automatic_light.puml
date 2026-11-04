@@ -1,0 +1,6 @@
+@startuml
+participant Elm
+note right of Elm
+q<color:automatic>fir</color>r
+end note
+@enduml
