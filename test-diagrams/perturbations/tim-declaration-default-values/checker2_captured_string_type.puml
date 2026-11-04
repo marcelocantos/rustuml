@@ -1,0 +1,9 @@
+@startuml
+!$seed = "007"
+!procedure $emit($value = $seed)
+!$joined = $value + 2
+class "$joined" as Captured
+!endprocedure
+!$seed = "99"
+$emit()
+@enduml

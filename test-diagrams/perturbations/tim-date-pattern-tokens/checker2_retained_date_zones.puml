@@ -1,0 +1,4 @@
+@startuml
+!$s = %date("Z ZZ z zzzz X XX XXX", -1)
+class "$s" as Copper
+@enduml

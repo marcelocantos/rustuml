@@ -1,0 +1,18 @@
+@startuml
+title WW.quartz iii transmission envelope
+header Header WW.quartz iii transmission envelope
+caption Caption WW.quartz iii transmission envelope
+footer Footer WW.quartz iii transmission envelope
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+T -> Q ++ : WW.quartz iii transmission envelope
+group window
+note left of Q : wide WWWWWW
+Q -> E : next
+end
+newpage Followup
+Q -> Q ++ : second page
+return inner
+return done
+@enduml

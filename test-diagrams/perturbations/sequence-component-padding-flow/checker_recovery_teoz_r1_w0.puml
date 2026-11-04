@@ -1,0 +1,19 @@
+@startuml
+!pragma teoz true
+skinparam Padding 1
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+alt i.f\nsecond guard
+Q -> E ++ : call
+note left
+i.f
+line
+end note
+else
+group inner
+note over Q,T : span
+return done
+end
+end
+@enduml

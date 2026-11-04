@@ -1,0 +1,21 @@
+@startuml
+!pragma teoz true
+skinparam shadowing false
+skinparam Padding 2
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+T -> Q ++ : enter
+Q -> Q ++ : recursive
+group notes
+Q -> E : i.f
+note left : attached while live
+note right of Q
+line one
+line two
+end note
+... pause ...
+return unwind
+end
+return release
+@enduml

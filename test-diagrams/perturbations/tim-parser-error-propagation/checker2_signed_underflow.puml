@@ -1,0 +1,4 @@
+@startuml
+class Before
+!$v = %date("yyyy",-2147483649)
+@enduml

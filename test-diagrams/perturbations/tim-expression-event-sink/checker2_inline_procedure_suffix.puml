@@ -1,0 +1,12 @@
+@startuml
+!$count = 0
+!function $tick()
+!$count = $count + 1
+!return "leaf"
+!endfunction
+!procedure $emit()
+class "prefix
+!endprocedure
+$emit() $tick()" as Tree
+class "count $count" as Count
+@enduml

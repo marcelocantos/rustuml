@@ -1,0 +1,6 @@
+@startuml
+participant "Mica.i" as M
+participant "Long heron" as H
+M -// M ++ : half loop
+return complete
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+!procedure $exists($value)
+!$name = "$" + "value"
+!if %variable_exists($name)
+class PresentRecord
+!endif
+!if %variable_exists("value")
+class WrongBareRecord
+!endif
+!if %variable_exists("$absent")
+class WrongAbsentRecord
+!endif
+!endprocedure
+$exists("payload")
+@enduml

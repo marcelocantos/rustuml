@@ -1,0 +1,6 @@
+@startuml
+!theme cerulean
+class Before
+!$v = %date("yyyy Q",-1)
+class After
+@enduml

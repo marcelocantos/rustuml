@@ -1,0 +1,8 @@
+@startuml
+skinparam shadowing true
+participant "Mica.i" as M
+participant "Long heron" as H
+group frame
+M -> H : sample
+end
+@enduml

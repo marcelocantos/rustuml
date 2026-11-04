@@ -1,0 +1,6 @@
+@startuml
+!$instant = 946684800
+!$next = %date("yyyy-MM-dd", $instant + 86400)
+!theme minty
+class "$next" as TopazClock
+@enduml

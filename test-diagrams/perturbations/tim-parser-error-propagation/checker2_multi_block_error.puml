@@ -1,0 +1,7 @@
+@startuml
+class Good
+@enduml
+@startuml
+class Before
+!$v = %date("QQ",0)
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+!$count = 0
+!function $tick()
+!$count = $count + 1
+!theme cerulean
+!return "ok"
+!endfunction
+!startsub glyph
+sprite $bud [2x2/16] {
+F1
+2F
+}
+!endsub
+!log $tick() / $tick()
+class "buds $count" as Bud
+@enduml

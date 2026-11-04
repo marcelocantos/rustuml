@@ -1,0 +1,17 @@
+@startuml
+!pragma teoz true
+skinparam Padding 3
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+group initial
+E -> E ++ : i.f
+note right : attached
+return finish
+end
+newpage Followup
+E -> E ++ : later wide WWWWWWWW
+E -> E ++ : nested
+return inner
+return outer
+@enduml
