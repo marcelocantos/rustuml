@@ -1,0 +1,52 @@
+[
+  {
+    "test": "define_substitution",
+    "unchanged_original_input_expression": "\"@startuml\\n!define NAME Alice\\n$NAME -> Bob : hello\\n@enduml\"",
+    "old_assertion": "vec![\"Alice -> Bob : hello\"]",
+    "new_assertion": "vec![\"$Alice -> Bob : hello\"]",
+    "input": "@startuml\n!define NAME Alice\n$NAME -> Bob : hello\n@enduml",
+    "old_block_verified": true,
+    "new_block_verified": true,
+    "derivation": "EaterAffectationDefine stores exact bare key globally. VariableManager scans original characters and retains a literal dollar when no matching dollar key exists. ShuntingYard instead resolves the full dollar key or keeps its name as a literal. Included lines share memory; foreach only binds its own exact key."
+  },
+  {
+    "test": "multiple_vars",
+    "unchanged_original_input_expression": "\"@startuml\\n!define FROM Alice\\n!define TO Bob\\n!define MSG hello\\n$FROM -> $TO : $MSG\\n@enduml\"",
+    "old_assertion": "vec![\"Alice -> Bob : hello\"]",
+    "new_assertion": "vec![\"$Alice -> $Bob : $hello\"]",
+    "input": "@startuml\n!define FROM Alice\n!define TO Bob\n!define MSG hello\n$FROM -> $TO : $MSG\n@enduml",
+    "old_block_verified": true,
+    "new_block_verified": true,
+    "derivation": "EaterAffectationDefine stores exact bare key globally. VariableManager scans original characters and retains a literal dollar when no matching dollar key exists. ShuntingYard instead resolves the full dollar key or keeps its name as a literal. Included lines share memory; foreach only binds its own exact key."
+  },
+  {
+    "test": "include_with_defines",
+    "unchanged_original_input_expression": "\"@startuml\\n!include defs.puml\\n$AUTHOR -> Bob : hi\\n@enduml\"",
+    "old_assertion": "vec![\"Alice -> Bob : hi\"]",
+    "new_assertion": "vec![\"$Alice -> Bob : hi\"]",
+    "input": "@startuml\n!include defs.puml\n$AUTHOR -> Bob : hi\n@enduml",
+    "old_block_verified": true,
+    "new_block_verified": true,
+    "derivation": "EaterAffectationDefine stores exact bare key globally. VariableManager scans original characters and retains a literal dollar when no matching dollar key exists. ShuntingYard instead resolves the full dollar key or keeps its name as a literal. Included lines share memory; foreach only binds its own exact key."
+  },
+  {
+    "test": "foreach_preserves_other_vars",
+    "unchanged_original_input_expression": "\"@startuml\\n!define WHO Alice\\n!foreach $x in [\\\"hello\\\", \\\"world\\\"]\\n$WHO -> Bob : $x\\n!endfor\\n@enduml\"",
+    "old_assertion": "vec![\"Alice -> Bob : hello\", \"Alice -> Bob : world\"]",
+    "new_assertion": "vec![\"$Alice -> Bob : hello\", \"$Alice -> Bob : world\"]",
+    "input": "@startuml\n!define WHO Alice\n!foreach $x in [\"hello\", \"world\"]\n$WHO -> Bob : $x\n!endfor\n@enduml",
+    "old_block_verified": true,
+    "new_block_verified": true,
+    "derivation": "EaterAffectationDefine stores exact bare key globally. VariableManager scans original characters and retains a literal dollar when no matching dollar key exists. ShuntingYard instead resolves the full dollar key or keeps its name as a literal. Included lines share memory; foreach only binds its own exact key."
+  },
+  {
+    "test": "if_else",
+    "unchanged_original_input_expression": "\"@startuml\\n!define MODE prod\\n!if $MODE == \\\"prod\\\"\\nA -> B : production\\n!else\\nA -> B : dev\\n!endif\\n@enduml\"",
+    "old_assertion": "vec![\"A -> B : production\"]",
+    "new_assertion": "vec![\"A -> B : dev\"]",
+    "input": "@startuml\n!define MODE prod\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml",
+    "old_block_verified": true,
+    "new_block_verified": true,
+    "derivation": "EaterAffectationDefine stores exact bare key globally. VariableManager scans original characters and retains a literal dollar when no matching dollar key exists. ShuntingYard instead resolves the full dollar key or keeps its name as a literal. Included lines share memory; foreach only binds its own exact key."
+  }
+]

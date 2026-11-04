@@ -1,0 +1,13 @@
+@startuml
+!function $choose(a="old")
+!return a
+!endfunction
+!function $choose(a=$choose(),b="captured")
+!return a+"/"+b
+!endfunction
+!function $choose(a="new")
+!return a
+!endfunction
+!$answer=$choose()+"/"+$choose("one","two")
+class "$answer" as Node
+@enduml

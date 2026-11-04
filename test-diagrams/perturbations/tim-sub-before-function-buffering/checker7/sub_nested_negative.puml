@@ -1,0 +1,9 @@
+@startuml
+!procedure $unused()
+!startsub outer
+!$fail=%intval("bad")
+!startsub inner
+!endsub
+!endprocedure
+class Survivor
+@enduml

@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-exact-memory-identities",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A797285a5-2bc0-46e3-b562-d8c4c8bcf12c",
+    "model": "gpt-6-astra, high reasoning, Codex in T3",
+    "independent": true,
+    "children": []
+  },
+  "account_commit": "4652860936464f02d80584ef158a29a4a1c13cd1",
+  "implementation_commit": "55de7dd6cb090d86febc1e5e3f57804134429a19",
+  "candidate_commit": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67",
+  "before_commit": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+  "production_parent_commit": "329c39f48eccddfbb4896f1710dd97ddd1c1f2e8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=<private>/target-before cargo build --release -p rustuml (cwd: git archive of exact before)",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=<private>/target-after cargo build --release -p rustuml (cwd: isolated candidate checkout)",
+    "uv run --no-project python <private>/replay.py",
+    "uv run --no-project python <private>/fresh.py",
+    "Fresh Java through parent existing Monkey Man runner only: exact wrapper/Java argv, cwd and env in checker7-support/remote-request.json and measurements.tar.gz/fresh-references/*/commands.json",
+    "All final gate argv, cwd, env, real exits in checker7-support/gates2.json; executed once before evidence packaging"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/dual_cedar.puml",
+      "golden": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/dual_cedar.svg",
+      "axes": [
+        "renamed exact keys",
+        "local override removal and display boundary"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "a2430cc24c65d18c13776477cbccf2965cd29ee65dbae3d022131daef3ce356c",
+      "golden_sha256": "b1b2c412a2302b1562fa5ae48ac5dfed9ff584b6e3a990af3e79ffcbe49f36ff"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/dual_birch.puml",
+      "golden": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/dual_birch.svg",
+      "axes": [
+        "renamed exact keys",
+        "local override removal and display boundary"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "da2515b580dd6ba72fe17b7fbefd1d89e4f064af7afb2799042fa881b6e3929d",
+      "golden_sha256": "ec65d8c70e7f7e26ebf03b2c6ce1601021235f6a7c0499bb9ebd74bf916b3ed5"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/defaults_siblings.puml",
+      "golden": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/defaults_siblings.svg",
+      "axes": [
+        "captured defaults versus mutated global",
+        "sibling frame versus overrides"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "aeb648300114249231b5cea76d49b4d8cd4d6975d629cdc82b4366abd645f4c4",
+      "golden_sha256": "13b836b4818a06d0c3b1e28fb508812e70fced5b1b2482b08a8eca45095ed3bf"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/builtin_global_remove.puml",
+      "golden": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/builtin_global_remove.svg",
+      "axes": [
+        "global builtin assignment",
+        "override removal and exact existence"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "efcce8d17780a97f3d6c3d643ecc7effe17964fa8ba6c24546890118947a09c9",
+      "golden_sha256": "84655187c0cc7e86ced3dba1cf9f1f7b8148f545cc728d658542e5d12c95221e"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/key_dollar.puml",
+      "golden": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/key_dollar.svg",
+      "axes": [
+        "builtin-created exact name",
+        "text trie versus direct lookup"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": false
+      },
+      "exact_source_equal": false,
+      "svg_match": false,
+      "semantic_control_pass": false,
+      "source_sha256": "8f4df88644058e202a47e475c415ee7338850e894153d128b0f68b4a596589b2",
+      "golden_sha256": "d1edab42084631386918a1e256ca65db644b0eecdc4eb36b8e0064e12a620e5a"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/key_combining.puml",
+      "golden": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/key_combining.svg",
+      "axes": [
+        "builtin-created exact name",
+        "text trie versus direct lookup"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": false
+      },
+      "exact_source_equal": false,
+      "svg_match": false,
+      "semantic_control_pass": false,
+      "source_sha256": "4d3623b4e1f9541a65e62e404351c831b3688b3d09fb469d36d70e6a0bf4d31f",
+      "golden_sha256": "fc7372f58d9efdbd1e1c4e5d4463d95bc71f43615cbb7780404a8d27541c77f2"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/parameter_duplicate.puml",
+      "golden": "test-diagrams/perturbations/tim-exact-memory-identities/checker7/parameter_duplicate.svg",
+      "axes": [
+        "duplicate declared parameter keys",
+        "named versus positional assignment"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": false
+      },
+      "exact_source_equal": false,
+      "svg_match": false,
+      "semantic_control_pass": false,
+      "source_sha256": "3a0176a4878a0ff86e7abf43049c9ca05a8408259097561e8fae9d2834f2268d",
+      "golden_sha256": "02bb36e96097b1fae9337c334aa9f204466fdc4c1f2f89b82a18790ac71bc161"
+    }
+  ],
+  "findings": [
+    "Exact-key storage, global/override/local lookup, removal, defaults captured at declaration, sibling frames, bare expressions, and ordinary text boundaries are supported by the traced Java data flow and passing controls; this is bounded evidence, not complete memory equivalence.",
+    "Valid key_dollar and key_combining fail before and after. SetVariableValue accepts exact names a$b and twig followed by U+0301. Java VariableManager uses the memory trie; Rust substitute_vars consumes alphanumeric/underscore tokens and cannot reach these complete keys. Direct get/existence succeed but text remains literal. Java source is spruce / spruce / 1; Rust source retains a$b or the combining key in the middle.",
+    "Valid parameter_duplicate fails before and after: Java TFunctionImpl.getNewMemory reads namedArguments without removing it for each formal, then overwrites the duplicate result key. Rust call_function_values removes the named value on the first formal, allowing the second default to overwrite it. Java named / right becomes Rust two / right.",
+    "Five changed ordinary unit expectations are justified individually by Java exact-key define/text/expression behavior with unchanged original inputs and preserved old failing assertions; green units do not approve this mechanism.",
+    "Standing gates are not waived: main product and assisted library diagnostics, standing perturbations, guards and clippy remain failing. Preserve historical class-body, Unicode IntVal, sequence panics, and all 27 environment discrepancies.",
+    "No fixture-shaped branches, golden reads, or SVG output surgery were found in the production diff. Candidate production is identical to final production 55de7dd6; filename dispatch is restored verbatim and its original CLI regression passes."
+  ],
+  "repair_obligations": [
+    "Implement memory-driven text matching for all names admitted through builtin assignment, with Java boundary behavior; retain both key counterexamples.",
+    "Bind duplicate declared names using nonconsuming named lookup and Java final-key overwrite behavior; retain named and positional controls."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-exact-memory-identities/checker7-support/README.md",
+  "nonpositive_result_policy": "result is pass only for a valid Java reference matching the unchanged SVG comparator. Properly rejected negative controls are recorded separately and do not become positive suite passes."
+}

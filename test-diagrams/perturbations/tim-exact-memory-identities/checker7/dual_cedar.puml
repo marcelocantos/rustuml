@@ -1,0 +1,11 @@
+@startuml
+!cedar="bare"
+!$cedar="cash"
+!function $frame(cedar="007",$cedar="09")
+!local cedar=cedar+2
+!undef $cedar
+!return cedar+"/"+$cedar+"/"+%get_variable_value("cedar")
+!endfunction
+!$answer=$frame()
+class "$answer / cedar / $cedar / xcedar / x$cedar" as Node
+@enduml
