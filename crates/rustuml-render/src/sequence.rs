@@ -10625,6 +10625,59 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     if !diagram.teoz
                         && note.on_message
                         && note.shape == NoteShape::Note
+                        && let Some(&owner) = note_owner.get(&event_idx)
+                        && let Event::Message(message) = &diagram.events[owner]
+                        && message.from != message.to
+                        && let (Some(&from), Some(&to)) =
+                            (id_to_idx.get(&message.from), id_to_idx.get(&message.to))
+                    {
+                        // ArrowAndNoteBox#getPreferredWidth / MessageArrow:
+                        // preferred and actual arrow widths are independent.
+                        // NoteBox#getRightShift samples the component start,
+                        // before an activation at the arrow contact (bc18300d).
+                        let (left, right) = if from < to { (from, to) } else { (to, from) };
+                        let arrow_y = horizontal_event_y_positions[owner];
+                        let endpoints = sequence_arrow_endpoints(
+                            participants[left].center_x,
+                            horizontal_life_lines.depth_at(&participants[left].id, arrow_y),
+                            participants[right].center_x,
+                            horizontal_life_lines.depth_at(&participants[right].id, arrow_y),
+                        );
+                        let (has_text, text_height) =
+                            event_message_text_height(&diagram.events[owner]);
+                        let component_y = arrow_y
+                            - (msg_step(has_text, text_height) + 2.0 * global_padding
+                                - 2.0 * ARROW_HALF_H);
+                        let right_shift = horizontal_life_lines
+                            .depth_at(&participants[right].id, component_y)
+                            as f64
+                            * ACTIVATION_HALF_W
+                            + NOTE_LIFELINE_GAP;
+                        let preferred_arrow = message_label_width(&process_label(&message.label))
+                            + 2.0 * MSG_TEXT_LEFT_PAD
+                            + ARROW_SIZE
+                            + 2.0 * global_padding;
+                        let note_width = folded_note_component_width(
+                            max_line_width,
+                            note_global_padding,
+                            note_shadow_delta,
+                        );
+                        let note_start = (participants[right].center_x
+                            + note_right_live_shift_by_event
+                                .get(&event_idx)
+                                .copied()
+                                .unwrap_or(0.0))
+                        .trunc();
+                        let extent = endpoints.left.min(note_start)
+                            + preferred_arrow.max(endpoints.right - endpoints.left)
+                            + note_width
+                            + right_shift;
+                        max_arrow_note_right = max_arrow_note_right.max(extent);
+                        continue;
+                    }
+                    if !diagram.teoz
+                        && note.on_message
+                        && note.shape == NoteShape::Note
                         && let Some(owner) = note_owner.get(&event_idx)
                         && let Some(model) = self_arrow_by_event.get(owner)
                         && let Event::Message(message) = &diagram.events[*owner]
