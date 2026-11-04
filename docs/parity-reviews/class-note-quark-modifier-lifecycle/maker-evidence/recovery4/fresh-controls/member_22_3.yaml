@@ -1,0 +1,66 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: classattributeiconsize
+      value: '22'
+    - key: padding
+      value: '3'
+    source: |
+      @startuml
+      skinparam classAttributeIconSize 22
+      skinparam padding 3
+      struct Fastener {
+      +head
+      -shaft
+      #turn()
+      ~seat()
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Fastener
+  entities:
+  - id: Fastener
+    label: Fastener
+    explicit_alias: false
+    kind: Struct
+    is_static: false
+    visibility: Default
+    members:
+    - name: head
+      return_type: null
+      visibility: Public
+      is_static: false
+      is_abstract: false
+      kind: Field
+      display_text: head
+    - name: shaft
+      return_type: null
+      visibility: Private
+      is_static: false
+      is_abstract: false
+      kind: Field
+      display_text: shaft
+    - name: turn()
+      return_type: null
+      visibility: Protected
+      is_static: false
+      is_abstract: false
+      kind: Method
+      display_text: turn()
+    - name: seat()
+      return_type: null
+      visibility: Package
+      is_static: false
+      is_abstract: false
+      kind: Method
+      display_text: seat()
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

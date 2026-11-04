@@ -1,0 +1,52 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: padding
+      value: '4'
+    - key: circledcharacterradius
+      value: '9'
+    - key: classfontsize
+      value: '20'
+    style_program:
+      declarations:
+      - selector:
+        - element
+        - class
+        - header
+        property: fontsize
+        value: '20'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+    source: |
+      @startuml
+      skinparam padding 4
+      skinparam circledCharacterRadius 9
+      skinparam classFontSize 20
+      class "Long catalogue\nentry" as Catalog <<(Q,#ABCDEF) ledger>>
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Catalog
+  entities:
+  - id: Catalog
+    label: Long catalogue\nentry
+    explicit_alias: true
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - ledger
+    spot_color: '#ABCDEF'
+    spot_character: 'Q'
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

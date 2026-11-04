@@ -1,0 +1,8 @@
+@startuml
+footer
+
+Station register
+
+end footer
+class Fastener
+@enduml

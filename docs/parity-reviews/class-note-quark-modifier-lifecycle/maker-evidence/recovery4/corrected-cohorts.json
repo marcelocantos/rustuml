@@ -1,0 +1,131 @@
+{
+  "original810": {
+    "entries": 810,
+    "before": {
+      "pass": 546,
+      "mismatch": 257,
+      "invalid_reference": 7
+    },
+    "after": {
+      "pass": 553,
+      "mismatch": 250,
+      "invalid_reference": 7
+    }
+  },
+  "current955": {
+    "entries": 955,
+    "before": {
+      "pass": 603,
+      "mismatch": 336,
+      "invalid_reference": 9,
+      "process_error": 7
+    },
+    "after": {
+      "pass": 610,
+      "mismatch": 329,
+      "invalid_reference": 9,
+      "process_error": 7
+    }
+  },
+  "class23": {
+    "entries": 23,
+    "before": {
+      "pass": 23
+    },
+    "after": {
+      "pass": 23
+    }
+  },
+  "maker62": {
+    "entries": 62,
+    "before": {
+      "pass": 62
+    },
+    "after": {
+      "pass": 62
+    }
+  },
+  "checker139": {
+    "entries": 139,
+    "before": {
+      "pass": 124,
+      "invalid_reference": 4,
+      "mismatch": 11
+    },
+    "after": {
+      "pass": 124,
+      "invalid_reference": 4,
+      "mismatch": 11
+    }
+  },
+  "frozen1192": {
+    "entries": 1192,
+    "before": {
+      "pass": 814,
+      "mismatch": 348,
+      "invalid_reference": 13,
+      "process_error": 17
+    },
+    "after": {
+      "pass": 821,
+      "mismatch": 341,
+      "invalid_reference": 13,
+      "process_error": 17
+    }
+  },
+  "combined1449": {
+    "entries": 1449,
+    "before": {
+      "pass": 831,
+      "mismatch": 525,
+      "invalid_reference": 33,
+      "process_error": 60
+    },
+    "after": {
+      "pass": 838,
+      "mismatch": 518,
+      "invalid_reference": 33,
+      "process_error": 60
+    }
+  },
+  "checker62": {
+    "entries": 62,
+    "before": {
+      "mismatch": 27,
+      "pass": 32,
+      "process_error": 1,
+      "invalid_reference": 2
+    },
+    "after": {
+      "mismatch": 13,
+      "pass": 47,
+      "invalid_reference": 2
+    }
+  },
+  "maker48": {
+    "entries": 48,
+    "before": {
+      "pass": 45,
+      "mismatch": 3
+    },
+    "after": {
+      "pass": 45,
+      "mismatch": 3
+    }
+  },
+  "combined1559": {
+    "entries": 1559,
+    "before": {
+      "mismatch": 555,
+      "pass": 908,
+      "process_error": 61,
+      "invalid_reference": 35
+    },
+    "after": {
+      "mismatch": 534,
+      "pass": 930,
+      "process_error": 60,
+      "invalid_reference": 35
+    }
+  }
+}

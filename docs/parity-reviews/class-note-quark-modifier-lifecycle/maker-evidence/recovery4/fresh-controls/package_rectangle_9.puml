@@ -1,0 +1,7 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 9
++package "Field station" as Basin <<zone>> {
+class Pin
+}
+@enduml

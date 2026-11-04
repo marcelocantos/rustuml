@@ -1,0 +1,29 @@
+{
+  "entries": 1559,
+  "model_errors": 50,
+  "changes": [
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.puml",
+      "before_family": null,
+      "after_family": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/stereo_brace.puml",
+      "before_family": "Component",
+      "after_family": "Class"
+    }
+  ],
+  "dropped_class_objects": [],
+  "limitation": "Object census compares existing Class model collections and entity ids; reference SVG inventory and fresh explicit model tests supplement it, not a full Java AST equivalence claim.",
+  "incremental_recheck": {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "reason": "Restored exact parent include dependency; parser unchanged since full census.",
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+      "--yaml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml"
+    ],
+    "exit": 0,
+    "revision": "7bd5c9f5d2f4dee23472ddc8e3ac4b96a3e196e3"
+  }
+}

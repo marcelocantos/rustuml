@@ -1,0 +1,962 @@
+[
+  {
+    "name": "modifier_left",
+    "mechanism": "note-quark",
+    "entities": 1,
+    "notes": 1,
+    "packages": 0,
+    "source_sha256": "d8421e5a85994e6045ffb9b7ef51ae053ff1d70ec535f757909fcc7c77e184a7",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/modifier_left.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/modifier_left.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "modifier_bottom",
+    "mechanism": "note-quark",
+    "entities": 1,
+    "notes": 1,
+    "packages": 0,
+    "source_sha256": "e35a0efed685fb119c2074ac91cba633d0a951c5e34db77b3b047d47d0a79097",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/modifier_bottom.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/modifier_bottom.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "quark_group",
+    "mechanism": "note-quark",
+    "entities": 1,
+    "notes": 2,
+    "packages": 1,
+    "source_sha256": "4d1c90451b738d892221ceab083fc9a52f258151cdcf88fe715b7b9bd9586f46",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/quark_group.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/quark_group.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "quark_class",
+    "mechanism": "note-quark",
+    "entities": 1,
+    "notes": 2,
+    "packages": 1,
+    "source_sha256": "be6839fbfd6a62411f83351db74015ac5f21b76475c667a9f610f194211cea8c",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/quark_class.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/quark_class.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "merge_left_rectangle",
+    "mechanism": "symbol-merge",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "2df19ed5a3eef98e4c9d556543ec64ee2c242b988003787764506a837989668d",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_left_rectangle.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_left_rectangle.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "merge_left_uml2",
+    "mechanism": "symbol-merge",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "1e01f6e96ce72273b5a58002eecf3141cea7e3b0dfdf814e96226dcc1ced6175",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_left_uml2.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_left_uml2.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "merge_right_rectangle",
+    "mechanism": "symbol-merge",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "f6fa1ec16cebc178292449c666610a40dcb4bbd77fa855e751ccf007e4b07309",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_right_rectangle.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_right_rectangle.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "merge_right_uml2",
+    "mechanism": "symbol-merge",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "d102c90f1cdf17c6c845c6e4297be1f20abd7de600a70b24f2927687f7ad4d93",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_right_uml2.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/merge_right_uml2.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "actor_false_top ",
+    "mechanism": "actor-shadow",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "96c08d7c0039496ad6defb7b57c9e400afca09530f45f3b610e6238bd29c9844",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_false_top .puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_false_top .puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "actor_false_left",
+    "mechanism": "actor-shadow",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "a046be09f79c06a90b657e96633b52d1a18f57e8dd18115a17c1adfdbcb721c3",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_false_left.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_false_left.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "actor_true_top ",
+    "mechanism": "actor-shadow",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "d9972925b893a2a0db4bf0221ce9db7475fc4d06096bf371bdc95bc99d99c8a4",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_true_top .puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_true_top .puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "actor_true_left",
+    "mechanism": "actor-shadow",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "f5cf9f817f2bd7670e97cc47d38d9ebc1353cec4559785cbe4ea5ee85cfc75b1",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_true_left.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/actor_true_left.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "boundary_12_False",
+    "mechanism": "boundary-frontier",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "6c8a182c53d9815348cee3b1b9f450e96db31140661038d7cf293c8ac54a4a3e",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_12_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_12_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "boundary_12_True",
+    "mechanism": "boundary-frontier",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "4a37071fe489f41d6c23dd7e240e14fa0f0f5a90738eb11a477b8161239d702a",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_12_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_12_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "boundary_18_False",
+    "mechanism": "boundary-frontier",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "3f884a0273feaff77e8e6f7375a614fb7f992e05540ff55518edeb8bdc51c94f",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_18_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_18_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "boundary_18_True",
+    "mechanism": "boundary-frontier",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "ce99b51144360c762649428f0ef1edefe64133665faf6fe4280005c2ad14bce1",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_18_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/boundary_18_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "package_rectangle_9",
+    "mechanism": "package-title",
+    "entities": 1,
+    "notes": 0,
+    "packages": 1,
+    "source_sha256": "d92dabb598e534c560309a1ab3903402841c74cce158563c98b5a8f93452dfa5",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_rectangle_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_rectangle_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "package_rectangle_18",
+    "mechanism": "package-title",
+    "entities": 1,
+    "notes": 0,
+    "packages": 1,
+    "source_sha256": "69ae11e31b002e8873030e650bae65212364b673dfa4b3247d60bb1bae4bcaaa",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_rectangle_18.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_rectangle_18.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "package_node_9",
+    "mechanism": "package-title",
+    "entities": 1,
+    "notes": 0,
+    "packages": 1,
+    "source_sha256": "e23b7e3ddff8059730f954e3f2bb7a106511a24e3514ab485422cfb2959a75d2",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_node_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_node_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "package_node_18",
+    "mechanism": "package-title",
+    "entities": 1,
+    "notes": 0,
+    "packages": 1,
+    "source_sha256": "01f74f435854f4d0e51820a6801b1bb3f8b64c515e48c5c1383d8aecd6a5398b",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_node_18.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/package_node_18.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "member_3_0",
+    "mechanism": "member-placement",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "dca71a2da2494f4293a157b81a9471df2dbad9da0642ace409ba0e549476e17c",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_3_0.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_3_0.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "member_3_3",
+    "mechanism": "member-placement",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "907dc376dc04b663526e6f6133a898941f824d7cea27efffff2ac1ba4c1b328e",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_3_3.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_3_3.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "member_22_0",
+    "mechanism": "member-placement",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "2879f6b5cf2504f07b344095166f8c36083191acc414bc9ff0e512a8d1def05d",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_22_0.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_22_0.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "member_22_3",
+    "mechanism": "member-placement",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "f03b69d7edb4176334947bb3a59cf53ad4bbe44ebb95a7bf7f2bc6c1b7efa58b",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_22_3.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/member_22_3.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "ribbon_header_False",
+    "mechanism": "ribbon-lines",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "a6c956aa13a783d9c91a43026e4de6eb2e29f91506ffdb0088cf7757a2907864",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_header_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_header_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "ribbon_header_True",
+    "mechanism": "ribbon-lines",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "fa47b3fcd02257b0de192a80b2fd9d3a27747c08dcdfe7245e32ab4e05647de2",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_header_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_header_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "ribbon_footer_False",
+    "mechanism": "ribbon-lines",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "cd049f907ddbe319ee65bdf09733c95a7398010894f4b772d417aad9d827007c",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_footer_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_footer_False.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "ribbon_footer_True",
+    "mechanism": "ribbon-lines",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "d23d7835278235254c2a0708701ff5478385bd1565e5a4710424166cc546759e",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_footer_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/ribbon_footer_True.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "header_0_9",
+    "mechanism": "header-centering",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "ce3cd0b7a1af674433839e267cca1bec70e87e054c7f7abdfd569e890b82482d",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_0_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_0_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "header_0_15",
+    "mechanism": "header-centering",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "640f8e2c91f4d906e6620a0124983676bf10ac105e5e562a45365d6b7df4ff24",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_0_15.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_0_15.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "header_4_9",
+    "mechanism": "header-centering",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "a55fee5c6d4f4928f926006ae919ac71985fa9e1eee2019f6eb82bd4bf4680b3",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_4_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_4_9.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "header_4_15",
+    "mechanism": "header-centering",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "205fd1a737d5da98b60444dcceeca49d324788a1205447266b5a72c8abf3a2e5",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_4_15.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/fresh-final-controls/header_4_15.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  }
+]

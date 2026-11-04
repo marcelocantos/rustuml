@@ -1,0 +1,6 @@
+@startuml
+skinparam padding 4
+skinparam circledCharacterRadius 9
+skinparam classFontSize 20
+class "Long catalogue\nentry" as Catalog <<(Q,#ABCDEF) ledger>>
+@enduml

@@ -1,0 +1,122 @@
+[
+  {
+    "name": "shadow_False_false",
+    "mechanism": "degenerated-shadow-envelope",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "cf1a6a506e8330a1672c231495a1c7b3150222f1074b8b893e771e7604b92473",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_False_false.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_False_false.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "shadow_False_true",
+    "mechanism": "degenerated-shadow-envelope",
+    "entities": 1,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "78f032f79748ec41118dd64d975b7a5838671f7998c92a27d3430151f499dc05",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_False_true.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_False_true.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "shadow_True_false",
+    "mechanism": "degenerated-shadow-envelope",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "d640313b56c4cd85f87e2b5ae8c4e879f29feaa2d4132326f8a688bbbb00b418",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_True_false.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_True_false.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "shadow_True_true",
+    "mechanism": "degenerated-shadow-envelope",
+    "entities": 2,
+    "notes": 0,
+    "packages": 0,
+    "source_sha256": "e32f38896997670e576b0cc14ced640ce6a86bdfd0c05004f6f4ca6bb6eb3956",
+    "reference_status": "pending Java validation; transport unavailable; no local Java launched",
+    "model_retained": true,
+    "runs": [
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_True_true.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/target/release/rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/shadow-controls/shadow_True_true.puml"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  }
+]

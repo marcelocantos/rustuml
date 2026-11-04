@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+<style>
+boundary {
+FontSize 18
+}
+</style>
+class Pin
+boundary "Service gate" as Gate
+Pin --> Gate
+@enduml

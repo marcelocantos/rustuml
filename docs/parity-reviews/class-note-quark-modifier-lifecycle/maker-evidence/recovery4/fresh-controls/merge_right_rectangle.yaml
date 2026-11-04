@@ -1,0 +1,72 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: componentstyle
+      value: rectangle
+    style_program:
+      declarations:
+      - selector:
+        - component
+        property: horizontalalignment
+        value: right
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      skinparam componentStyle rectangle
+      <style>
+      component {
+      HorizontalAlignment right
+      }
+      </style>
+      class Pin
+      component "A longer field station\nx" as Service <<routed>>
+      Service --> Pin
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Pin
+  - !Entity Service
+  - !Relationship 0
+  entities:
+  - id: Pin
+    label: Pin
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 8
+  - id: Service
+    label: A longer field station\nx
+    explicit_alias: true
+    kind: Component
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - routed
+    source_line: 9
+  relationships:
+  - from: Service
+    to: Pin
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 10
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

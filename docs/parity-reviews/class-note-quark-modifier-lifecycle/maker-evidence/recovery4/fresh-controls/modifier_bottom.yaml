@@ -1,0 +1,45 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Meridian
+      note bottom of Meridian $audit <<notice>> #pink [[https://example.org/meridian{context}]]
+      component is body text
+      class still body text
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Meridian
+  - !Note 0
+  entities:
+  - id: Meridian
+    label: Meridian
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - component is body text
+    - class still body text
+    target: Meridian
+    position: Bottom
+    alias: null
+    stereotypes:
+    - notice
+    tags:
+    - audit
+    url: https://example.org/meridian
+    url_tooltip: context
+    color: '#pink'
+    source_line: 3
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

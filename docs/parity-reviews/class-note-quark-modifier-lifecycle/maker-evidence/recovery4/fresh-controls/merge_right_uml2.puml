@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+skinparam componentStyle uml2
+<style>
+component {
+HorizontalAlignment right
+}
+</style>
+class Pin
+component "A longer field station\nx" as Service <<routed>>
+Service --> Pin
+@enduml

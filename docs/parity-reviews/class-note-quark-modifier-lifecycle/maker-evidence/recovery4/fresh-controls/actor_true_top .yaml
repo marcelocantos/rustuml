@@ -1,0 +1,80 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: shadowing
+      value: 'true'
+    - key: actorborderthickness
+      value: '2'
+    style_program:
+      declarations:
+      - selector:
+        - root
+        property: shadowing
+        value: '3'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+      - selector:
+        - actor
+        property: linethickness
+        value: '2'
+        source_line: 4
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_skin_param
+    source: |
+      @startuml
+      allowmixing
+      top to bottom direction
+      skinparam shadowing true
+      skinparam actorBorderThickness 2
+      class Rivet
+      actor "Caretaker\nStation" as Keeper <<operator>>
+      Keeper --> Rivet
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Rivet
+  - !Entity Keeper
+  - !Relationship 0
+  entities:
+  - id: Rivet
+    label: Rivet
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 5
+  - id: Keeper
+    label: Caretaker\nStation
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - operator
+    source_line: 6
+  relationships:
+  - from: Keeper
+    to: Rivet
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 7
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

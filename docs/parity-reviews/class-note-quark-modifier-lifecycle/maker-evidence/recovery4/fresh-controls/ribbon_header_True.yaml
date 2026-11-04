@@ -1,0 +1,35 @@
+type: Class
+diagram:
+  meta:
+    header: |2
+
+      Station register
+    source: |
+      @startuml
+      header
+
+      Station register
+
+      end header
+      class Fastener
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Fastener
+  entities:
+  - id: Fastener
+    label: Fastener
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_line: 1
+  header_alignment: null
+  footer_alignment: null

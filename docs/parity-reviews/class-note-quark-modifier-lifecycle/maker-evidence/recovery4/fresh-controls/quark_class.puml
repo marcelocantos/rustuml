@@ -1,0 +1,5 @@
+@startuml
+note "record" as Basin.Registry
+class Rivet
+note right of Basin.Registry : explanation
+@enduml

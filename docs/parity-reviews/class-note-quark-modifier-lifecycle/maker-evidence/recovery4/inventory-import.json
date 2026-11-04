@@ -1,0 +1,2587 @@
+{
+  "source_commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "source_count": 1559,
+  "existing_files_verified_unchanged": 2604,
+  "imported_files": [
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "e00361cc0ad2f9bd6b6a56883c124284145453cadb02a4cc0eb18215c7253c47",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "b24bd305a3d44b0f8c140385f0704f8fdebedef2b505da9118a290c5e900e0a2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "fd71eb2011197a148e6c3a2d77c45ec6f0c942134ecab6485c219df89fd102dd",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "49f8e92eafdf87dd3396a3f048817a80940086ec342498672499bee2065f998a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "6537af2aa11af9358d2e6418041eeb1d293b90fbd5561fe648d15682167a6ddd",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "c4e0db38341688d9f6cce8e197ca827463a66ed0b7b3d199b66d137730dae12e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "df80c0b4f79dcbc030ffa64e34721b9beb9f3ba7dacac24cc637dbe0bda542a4",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "cb500503027654ad2ef52b6855e0538c779568491297303e0c695fdbc179965b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "ff89992fb3569bb43eb2455bcb858d6a4191fa1dc56874e4982518571c301c7b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "c3adb119b82848ef5a4d6b79c1bc04a3ed34ad97026d0a450eaea67cb9f465fc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "d6556da24ede15e491903051f93e4e9e4a29ead1892c57bb65e403f7a4d4eadf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "7ce835e9323b08fb4a1d9a0d3b65818ec9bc81f3a2ea727f89901a6d7d7f7b48",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "ffc7d536e26a0c91b4819e9745f6cad0dc4b00503d193f40dcb3293a42464a63",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "ad94669ab8f674046454a50a8f55d8b04bcce421a41218bf27be6fb13cd9411f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "eefbe088d864d36c52e036b2024748db2683e792f7a5ca49c1bd7a1d99f92b93",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "44ed16de87a7062fbd067508d7838697d31d5eb488bf5ec69e796bbef8d08cc4",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz0.puml",
+      "sha256": "f3397a75c1a1609c12dd28caca3535e42d99d05cc2b2f977ae0231b92ecb8a7b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz0.svg",
+      "sha256": "d71a47497829ebe3f62f92fe63f9a0e463bb2462c2c3d08b09f155b373088257",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz1.puml",
+      "sha256": "abae795fde98143e87fdd1e2a2064c2506b98af80fdfded918fdbca0157988e3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz1.svg",
+      "sha256": "f508e4beaa9c53b3f095416a23eda3a93536afdd105cac5c768e085b56f79bd4",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz0.puml",
+      "sha256": "b5bc9a476c0f3683157e7f4a758b22b822220aa9310eeb52b93b5dfbafc707fe",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz0.svg",
+      "sha256": "66e902b63c040fa6f817bca3d86eb331eb937e592049a2581d0da3f782d88116",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz1.puml",
+      "sha256": "330e9845f0f49dcbd54f2ea6657a96c4338c76dae68049a42bcb9d785966034c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz1.svg",
+      "sha256": "a990ba8853f4d3beeed5d17f85f37f067bda7fe374d91d383fd5b62209672b3a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz0.puml",
+      "sha256": "3943c935d8c243777c6933ab13ca15a6189960a779b180ae090883850bf99d37",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz0.svg",
+      "sha256": "0d049ffd9a0414558f8da39814ddb3389b7d3387dd514a7123d1238925338862",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz1.puml",
+      "sha256": "f598968b683ffd179a7d76778c6a94fa01fbd3bf1bc06a4fcf876f5d3c12bcd7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz1.svg",
+      "sha256": "b8bf1b4fc4f6b01ea77c712d0e7a7184fda1494e498e0eb7c89b93bcaea70a5f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz0.puml",
+      "sha256": "8a8ac65713c4be21456847a3d4318f65a14ff7ac3055bfb03228ba0c7d84e9a2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz0.svg",
+      "sha256": "8f7e5298fa13241650dd540bc1ca9ee9fce0678383ff374a63f85830234d4780",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz1.puml",
+      "sha256": "f70364a9cb04bf58424298725fee53d904a06109f167cc4c3d7f53ef7d878dfd",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz1.svg",
+      "sha256": "5d351d64caca8b9a435274f1b938e300f3394d42095b687b04d29f11f883b87e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e0.puml",
+      "sha256": "561f35c24f4b4781fd05c76c7f804568fac7d119dd6a7c75d50cd9fc56ba6dc1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e0.svg",
+      "sha256": "b8bc9640522e090eb556ae93370908aea2030186b6c308c7336456efb2ee6e4c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e1.puml",
+      "sha256": "156c630f7cda03adbd7fc449e65bddcfb2ff8a14e403d55ba5d0422876ff6449",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e1.svg",
+      "sha256": "319afffe433e5d54824cd3eb0f279c0f1e01faff661fab646a32462d2bd8cca8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e0.puml",
+      "sha256": "cd2274ce0d6df174e66ffb39f9f407e44bdfa553437ee35495567ac205283aba",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e0.svg",
+      "sha256": "71230fe16b1dd09584c75fc1141593dba0b3b5bf0bf82be7b133d063c9b1a899",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e1.puml",
+      "sha256": "290500edf0035a197d4f934c18bc3c6c3ade90cc58121da7194b7c7bc1938102",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e1.svg",
+      "sha256": "fc03cfa3b26a39b3a58cbe5696b71d1e358382709f3853a09eefaba4ba32c424",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "8a64e14ceab02a04d923dd4eb8775297dc4be76cbfe3e18f3686f59110584a34",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "3ab5998e100488f0b74404b87aaa1747582160462fe631d709f10fcf3c33ce5d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "0e7553fac10ca057a794140186be5506e22aae2f2529cdc800059abc55859249",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "94e0a66ee31280bb086902de02f91cac13f6cc085b7a722cbdf949611bd83a73",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "52681d8c0ffc8f77219b8806e875eb76bf9ee123db42e9738bd86a3612f5a1b2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "6eec811486f9c5bd98382144df35798bb151b00b5382c880c3a24c89c0f1ce61",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "2207e0469f7996d71ee5f4f58846e6a0a47503bbb15927ea34bc931fa9c750f2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "f10a03e0304787dd88d7278552ee60391bfaeecffa54ac38b6658da6d7e99983",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "f5ee3e9f3f8d694f58f9b804df5ceb3f97ebb65d65d5b14a9b90b3ffed030eaf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "602c8ff81f219c1b3f6b2a386a663628a95316b7f94b96c24c399c593d4fbfb2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "437e7854b8a5934a8553ca43962ae58d7f6ca36b09503d14f968dc6065fa3c21",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "d2f1fee199182bc369fa97d258138bd0f3567a67a2ec976f077ac4fb181af85a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "3e383e75fe109c0c48f4a595e0eea05f10e677ef064114362d9061b514579807",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "f31308586345d5db21f9fc88d929634af45e8962f646822f5c98c46328c71f69",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "5134bc084aa7c9a68a0e4b2894b11b9afc43f4c937fac9d9e8d2d5fdfb55ef93",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "552c13a6602ad42dd755f508bb6fcd6f9cb1652f83dc4c9e0c88943f2b7af045",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.puml",
+      "sha256": "5cc8ed5d3b5c11ee74e01b6aad66a92f91bd581809a1eb185bc5ca8084109698",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.svg",
+      "sha256": "2a178ca00bd33dbbbfa61093a8454c5321e15a2ed828a657bc90f337a9d0f319",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.puml",
+      "sha256": "4b4cf1e196c25a649179689d817adb7c75d862d5d10a698730356e4078ed787f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.svg",
+      "sha256": "5b90ad0ae07fd7a7a61bb5fa3a006ce30afb1ee527b7a4712ce3dc4fb8859227",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.puml",
+      "sha256": "4b8bbf395982fce6f4165f80dbe8d8c1f5136db5bc18e8c68c2f284095cee053",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.svg",
+      "sha256": "321f9b44f2693b7833cc192f08ed6e94ba60bf6d9b0920dae24eee9105037bf9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.puml",
+      "sha256": "9b21cb8cbcb87039e9a4c653a8475ab20044b2367af66e90c617d40ff2fc20d2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.svg",
+      "sha256": "e62ae79efd837ab2e0ebd964882cc53f205ef37e19544d9e397f978b81d75c69",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "eac705a19ee2b617769a60f30250243ded6475ba3075fba9759640744376f48d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "803d1214e46e2776f295dda2945c9db94496688b02c60cc64f20a23d52bc1f1f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "2f105172e6e5286477b2e91ee0a29efa2bacf8ca8a58e945dc856f29175a48f7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "a338f7dde4459ffbb345fbb847e3d60d3b0d984248d00756f1535a74d0049330",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "52aca32320cf0f57e5bd99335a5e2de29863955e7dc72a32f297c6d3bb9b829a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "870822c27f60b44dd61cf18cfa8520b9bc5227ae44f2de1309edd7040f1bd30a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "efca7917c8b51dddaf8427caebc6b32e76c51c70c1eb08d2e385e0c56d9a3207",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "e6f52120e6be4bf61552e4c3ef05374a93eaa109f989ecdbf4cf5456d68b4812",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "91dacd406dcf7182c49dc6cf93b14d766cb25f4761188801bd17183e181a3d5a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "4d4b25db3ce9171168c12e5311a5c4e6dac464370503ff8ff294279f8c86722d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "4913360533250c3d4ebc65032312bb0bdf1ef92026a48a76138fdbd481eb8c79",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "e1efe7d72b44f5c8e26984b84cc0ad278f7fad7dbe14a571c7cb630c6ecce658",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "1374e243385192cdabc7985708f5511ee2d8523f8ab79865e1d1af9a1c87a377",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "6f2a26332d95c4fbc158e53162571b7b9905c1b359cc5a856221c535e7267946",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "3f1094030d2c99513e5b01726f67aa4a4a80062406fa166191888ec2a54f9ede",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "d5637ddfa5ae68fc0926a4fad258adc2fd663b0306a43c33ced7318f8e5c1f31",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e0.puml",
+      "sha256": "dccaa111ce4161b58af0dd5c349794554b73eefb3258c32dfae82d23d5e47d11",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e0.svg",
+      "sha256": "20ebad148194f22a9d4d5e2c240fd1412c0189818ecad5bc0abede5b60261965",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e1.puml",
+      "sha256": "ebfc50673d8b8ada858e7a602aebfa115eb7d7102a69e994c34e21f8ea16d1d2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e1.svg",
+      "sha256": "a725555be7bf1017313d9c338e27d7943d637be7a3ca33f6c62b501e765b61fb",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e0.puml",
+      "sha256": "e01c2704c302d9822db5bb4747c14882f233acc6e648722890c3b5112d11909f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e0.svg",
+      "sha256": "c5b00d0921e7aec897ac33afcb94c51225db523ff4d0f9aa605f1ffdfc1ee23e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e1.puml",
+      "sha256": "3b1c460c5aca073ed30ed8dd49574c3301d62c2e36dbebf7711e84602023461c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e1.svg",
+      "sha256": "9b0629b3acdeaedd39f68a3341c9fa5c273552d97b3ea0879441feb66344490b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "84428fc4da1bc3813c45dfeedcf6ab3d64bc4661389605f6cc00d463c449947c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "3be4ba93c46cdaeb45b0cbfe4ca09ca9a6d6399bf90ebc29845eb5fc008516bf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "ed352548bf037991209362dbdf2f8c6b8a0d3cc3654079b09467806bb8fb0288",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "d1c835bb5c13451b9ca0735db96167bb26556cf4cce8aa594c70c30544c6e67a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "570ec4897c57d2ac32c3447482da183860455350fbca705c7059222600828623",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "ca49ea502437edd5d4a3294d9add607dbf500989ed6acb2a499964f9cf3f90bf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "ba289c53de5502c86b1b1652d3d1909156e3bb16e2c4e151f557c82aba957a0c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "ee9bff52cc5f5b721eca4e0ad13b295f62a6bc0b652b457fb7a5e0a95b1fd0bc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "e0705551d7b230915e1b235e321401e8610449da42e6710eced3bbd4f31df5f0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "25ca6bdc2205d86c2491285437a250f1c6884bbe430ae8fd08180c4bbf1a1702",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "c7414dd78af92437262990e2a7bb7ff3a0df5fc2a4992b5eb0314c1a84e66530",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "fcace9af8f85ad4e6972b104384faf27654cd3e867808b99a4f5d94f08219bbd",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "1709f062cb2041a5bb15f2b5e4c0187cc0c59b053222a16f0d5dc3565b514bca",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "81852c4ce5a77c01310c3393d7e7080809495ec00d1d4b7cb0312e6ab2755f2c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "4205722a1374ebd6e2546ad3a91db866435638a4892f94d40ca8e196ceb5aa96",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "f6a9b235799f4c1e79e56c444b6312c369166188f7a7e85e5d5f01353fc255f3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "e43accd92927b32f36b57c4e95cf57d865450b77002ea4500faadfd7edd1b186",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "9b0a87b6745dec18c3b0593cca6666e91338dedf281881a2fd3d8586a7429124",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "7a47f4927c88e4576154d5f2857d92d3bb0d6f9c9a92ee46cde01b10f2229181",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "2abc98676e08da6d7813dcf84491e63743633b853dfb5c1f9e497a5dd44c16d3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "e58e7c7579c9b5865cc9c8e6789beb558b058aade981cb432e8e5286c487fb39",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "fcd43991b25caa36aeb87efbf6f24845b2c155c8f8ce6f25f4edb02d5905bcd4",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "c60c5066f64bf3071a19249c0b115624f433d1c4ecd27c078a20f63e6166af77",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "f8579aa94cb0c21dccccfd6e754cad78018df6813be4722782e6a315ccc38427",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "d2e687615aeceda750ffdcfc884bb4c72fa547a3e1ca85b84c9b226cd0e76d6c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "92c0d31f1f8eee79068e59ec3ba8e13a3f7e1c87ab0f43a5463864cf16f138d9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "79b521b56d497bc538d2542cdbfead50ebb24b0ae7aa53420383852a06b7d02a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "60aa13e136a514bc061588a3d6cbadd0f1bc724adc2f12207c4c6570642aa915",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "45a8b9663cbba1e2a65274690cb3f8c48b76130f7bb0d56863a187ca21b10c76",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "0d973d381ff8651b64d08803e9040de02e9f0817d48b9736ff723a5ebbeafba7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "7f722a34d2969e5e5b3e31d566600f02d699526c82e84006af772ef893ec5d3f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "6a0e51e2370ae1bbad6b5ca0eb993e329673db294c31d3ba7dbeee51e764de9d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz0.puml",
+      "sha256": "f6a0ce77cc27f396e1ab8fa29812b5474c0af1561493fb6c7beeb87f5c4c7017",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz0.svg",
+      "sha256": "4720f6a4a19ded184b3ee08f1b6bf3f4b3785bc3b7bebe963618e8e70fdc3342",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz1.puml",
+      "sha256": "1ac2c9c961184f638450226b60f3d49c3692463bcc3260e01f5128937bf0a5eb",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz1.svg",
+      "sha256": "3b2f379953ddff46066f5189c0efbd33de746bec7d08b18d38eaed954bad0a62",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "fb52cc382e3d715c01e9a2a71d4a046df6de4325c78442c10fb1dcf33722b731",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "727fe51c4ae6441e762ffb2629dd3051880ccaf57254f712c7ddb3b18eb113c8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "bc18f2524421cb98ccb491a36a053ea13c36e3ce94fbccf30b1be8756a2f8499",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "23ff300e2e8da5fbd17f020bbdf4986250276d232a769e7c818f7c1640beeae0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "e9928d60c505033b748247a743fb4112323478cf3a9c18856f1e63fb507d70da",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "de1828a9aeb309f62e0577366d43d647135d2052cfa86b081773cb49f7daae99",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "883f7bb3905498b6a0ba54ce64cde06d81289e5c42cd60851547db631b21f385",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "4a6f20fc5f45afd466e8dbbfd09731a5fc604b2c17dab5692b71e9a3866158fe",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "80f0ab3ad2f410d7ddb02391658f9808b9cbe79cb38a5920a72258aeadebde97",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "7c86693cfbb74e85e1cc9d80fa0eec1202e92b993eecdf0f33da1eaa9a744545",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "257371f1c5d4ea6ba78dc9a3a41e5464a30feb5e362cf4ab1591b3f01a7a40be",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "6719f94cda0931ba2e382ed318ec6c8d71a9d8292ef130ea5f936a77f0666049",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "4ab6a7bf182a8116b448de80c09632f68389409ad8ed983c5ba4759e851a3152",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "ea5c2612d4073871c4b68aede541cafc886b34d4e96b03d949535913fba2af59",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "4bd2eee1a30a9417d86200444ce850be8b61069a9400c753ac92b08da1095a4e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "00a98e4519b7c7fe09ebed8656766e1b5ff1b66f899f6bd90037a6acbe5f00bf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d0.puml",
+      "sha256": "9ee170cec51e9f9236152c2005660126e3be64b5edbae972e6eb0046df6996d9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d0.svg",
+      "sha256": "bb55d03dd7b0b8d1873f50d25364ae7a8e0c1164900edd17656c9b3fe42de0e7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d2.puml",
+      "sha256": "196b0cace05d62ce04decf07f2ae44a02fa89979b25e5c5265a0e55462e66906",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d2.svg",
+      "sha256": "77e9115540938ce81bee9537ca4f4a4a99686a44340776e13ae93e748be3c793",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d0.puml",
+      "sha256": "55d9ea737f71d35e9ced14b7323af2ddeca28415aa3ea884d9d664feeacabbd7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d0.svg",
+      "sha256": "a3400bde55fa2f126dda9e3df26977448f38fcb8626bf05cdc23ccb6ed662728",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d2.puml",
+      "sha256": "fb1c00977524da72c0b7f6cddaf15d2b94d1d7d44596e3f0516347502e904259",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d2.svg",
+      "sha256": "76df00340eb548d6b69a83fa40abee380e73d2359f5907bcd2cb6b6df4ad5daf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d0.puml",
+      "sha256": "591787e90d28224594607d03d26a2fc75148bbd496cebc1a66211c9dde3c0139",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d0.svg",
+      "sha256": "7cffb8a5532188f70101a02200efc4a1e514703911e839e1ea1c7c01ff9f928d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d2.puml",
+      "sha256": "09e87544dd902f3fc3c6f12bd17ba3cfdcd78ccb9478b7924959c5f54b709011",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d2.svg",
+      "sha256": "214b2cf73c3fc8cd871e4e9206474da2ea278b1ca43e6c5f9a5d8773ae6ceceb",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d0.puml",
+      "sha256": "c847d3c64bd42cbae083a21369d0b582516e2dbb2ba3cb4dd3e665d8b2fbbe76",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d0.svg",
+      "sha256": "2c19d777b29483d45476ce844c7ddd453328584eef0c0b3b15ec5733642ebad9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d2.puml",
+      "sha256": "d50148223502e32f05f59732276b73e1d2bfe8e496a8a8429f7591df726c9733",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d2.svg",
+      "sha256": "1ee58f3271bb6763bb50a2da457832292f540bc8ee65355ddf9d10ba2d4201e6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+      "sha256": "820bad1a9ed44319cd7960acaba55464f39a1243bbf749e8753a2c20888c5507",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.svg",
+      "sha256": "111d0ced290cadc3c5b2dfcc33986b5ca59dd73502714ed0d8b8e80662fd2ff7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+      "sha256": "ae7a930e7b2233a64f06255944584009ad7fec5da071dbf1760dbb6e61570f33",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.svg",
+      "sha256": "816592bb4f18e859a71f4ae63fbf446e90336f7acedd560d654d75196f00d28b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+      "sha256": "db837c7327419234c9332d0b6f385f7d32f6d741267e965602ff185a85cbf8c3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.svg",
+      "sha256": "2943ee62fe77316e9e0b492f6f907e7c9d8ac9d4fb855555e0a66af9339c1751",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+      "sha256": "f6905da824601bdb68d812b0bbe4132b0ebb9fffeefac42322c9cb5ff851552f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.svg",
+      "sha256": "208f2c2f3db07ca3b00200ef117a75d39e3481ba619d50311ee1e30f99211f55",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+      "sha256": "83a0b91b1828aeed4551185912c379db289e6b5461b844a2f0a9b6b2e94ad09b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.svg",
+      "sha256": "7135f21f3289eacf50c3639b65795607474f8119abac245d92e47af8fe8678e6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+      "sha256": "75377a81d1138ad57a94ac2309eacee93c397b6385ece1cd4bfbab12610b5a54",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.svg",
+      "sha256": "e31894e2b42d7461d03d1b4f304e6bff6c67bd847336628774d2c283440910b5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+      "sha256": "f7709da36efbe5467a5cbcd286c62371c269cd92dcff23ee71f6a005be834145",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.svg",
+      "sha256": "ba95e4f26c9e3b00e22ffd291f7f07d680a14ee90e2c0e3941d3d43dda39ab24",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml",
+      "sha256": "985f03150eeb32dc650e3237171d685485607770fa726908fa87c40e95b8a419",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.svg",
+      "sha256": "4b87abb7597c967646cabbcfa04100a56e15cd1bcf92513e310818578bec9ff3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "d9d2e4a47095ee718a4f39da210ce8209e1c34ef8c0f44a56f722b166e83cd53",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "3ec1212fbeea6dc9e5bbecb13ca0d687435a020aa66f12d17d397dbd3986b7e1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "5d97de4028d67c2d270cccdac8152bd7ba387784075e7cdeab58aeab55d8f8f3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "05dcd284b112ef7a77c92aa79b4e36328c6e772b8670476666fb850fc44da593",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "e4c0a9e3515b411a519b41304b9303beb124d27e2f323f09cc053fbd21e7aa6f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "d58c02856da2e3495b5e502f6e3d9fdda8f26c6b3d2b34bb737c23b584c5a8fb",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "cf133d11e15eb1fade14c4080bcd8b2ecbcb772cca78cc44e03bdd94448674d2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "d178abc1d157045853d9b46009ca27593c057ed16bca51ff6132300bead07bd5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "3f71bff57fe09e436d60492954dd5c11f54c02aae6aaa7b13b7caf151f9d74a0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "a29f07589a012b1f4bd5823e7ed35f7ee1adcdb4bd2a67745cac63efbc6b09ab",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "177ebd7ad5c18e0ed674db93986a6ee3b14f73f5cd3afbdbf16477995d4e8831",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "085f452c38a89c6487570a7d858eb3cdf1c653bfd758a471168e8430d47a9b21",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "b127fc898189c346f19456e7e954b2da066f1a5958f8c303cf857518f94f8a5b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "73f0d4a3bf0b36bb5eb3cc3481e4b57a5b4729ab5d63568df184df12da52b2a0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "6a6886ef88e0a42ed65f2ca491eed7e25797c7197dcb45ab8a14720df420e2fe",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "b23384ea87811b811bdf84eee2fdabef17823f2e56085118938956d3339829bf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "b117a23fedaea21eaedb13816669345eb436784321abc9d25fdaff9f0e50ea14",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "7e21b63d8e46d778d9a9c72e407afb45b9807657a44a4d6874475eaedf70b9cd",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "1722fd876ed0aa718947139a5811976a450d5503d78057e5e296d6a2c0875a5d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "e3839d6ed07de1f2e161aeef1ac5b6adb106e059211024b4a15676e8eabe1e25",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "521a487e5dcfb1496c89aec5d239eaf25c077fa55e14c63619afb7cbe89c04bc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "3fd94995e75e8b3d3c360a7335a9fe8ce286b38dbeb32bea3afe1b71f29e33fc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "ba77432bcc3f22d89a461893ef17c2c8154a7d0f668f07ff313db99a59e984c5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "c669075cf98b12aeaaf45d2dbf2789fce6d59d75c8f8a495bda3e8e64ba95294",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "4fe6c5446c077fa1eef2b0358d1a02e428d41678077f55c60ed8f39da224145b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "31be5511500b583ce954637e79e13993a27365fcacb486451149a9eaf7d9b12b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "e5381ba0cfdcf268897aa8bab681b493e31465fa00de4ff42d9d908722584a32",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "3b215df294dcf848bc88c77482fdc6ae990f4a28ca07cf296649edcdb765cbb6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "6eeb96dc700f7eb5d21a0ada5b7067b7938cfbfb2d0352f1612665adb53ccd66",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "bc7e7715331545d8f0c3f630ee3e62b39c9a998c6d4303b29b9b1e749d87a1d6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "aea39b55407a42249efe016c7db39a744248fec7969bfbd6751d360f84a43461",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "e585222fc256db5976808f23ef58b1096f33a04d518e4ab59354785591e561de",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "2969f9355a963a100e724dcff831d4f18aebc6b93904172312063c1eccdea5b2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "a1c0fa951af0a184ad81f51b4f2236fe0ecd84743db519b49b99511d7763580a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "dbd97ab8f9ff8346fa8369210c2d348383a6525e6ddbf599af7c80343b46aa5a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "315d40ff62826f8612d87237e19872af637f2643259485dc7f18398952b725d5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "3c59e3dce2cc56114bbf1fae8b50ae17c3b3d7aa2188618d8d87234128fed3c7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "10c001f9f2e615d5414cfef489ec31032d05be1653cb1b536a4e65fcc3dfebeb",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "39e3f80fb17585e3ecffc5f9f10467b7167cf7a12b1a3b335c586d20c1ece356",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "b82add0774908920e07658aa01e431b8bc7440eb7b0a55e4f525ab970490c55b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "f25e13cae035a3e7508f19956efc582cbb40f57dafacd2dc10311baa00b1c40f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "2ddb90d6c115fcb2efae6362cc8acc203c9ec597b760fe5117183f5807fb772a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "02caa56c5d03ef010a3f0f8660c88d897c30a317d9b6d5f9b52f7f150bfec86e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "0a3eccef1f844bbf3c50a0c63f2bb5dba280eaf40daa3a6cb63b4f45b59555df",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "d24af5c9304564394028e8fa7a79feae3e8e7d2f112239515c790a6c81317079",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "2269663dbebfafa588b24090e70099c49050aaed6a9f90fc26f63f4ae6b13b47",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "9bc84974c0447d32ec9f4e019c21ffd3757ba70430d69144bbc19963ab8fd6af",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "a155504bbbca37eb0d00e9db0425e5b28ea76dc523bfa2b7f51616e8da2c6f00",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+      "sha256": "ab2fd4a8aeec73db870a8ceb65e46b10a6d46ce433df19999245984da88252df",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.svg",
+      "sha256": "fcbdbb6a3a6e81b7454e757d430009b13ee453478b48a493b433dd0078b75c66",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+      "sha256": "8fd879038ab2d977efafe4e763da7da62e6bcdfc056b25d5a1acde0e71691471",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.svg",
+      "sha256": "346edeae416538c4852489c1bc9f7058ab1e06054b19402a6a5134547059ce84",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+      "sha256": "243734b2cc37a6e23247861f82c2542bf1bb9721f9492ab71ad155e1c2652f71",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.svg",
+      "sha256": "0ff468071e89097951aca5ab743a16b952395a0ed9b5d42f3ebc6b26f5bac919",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+      "sha256": "2459020ba9aeb130be0dc78c5b158931ae2c51ae1b307736e43664dba4bd5771",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.svg",
+      "sha256": "c2e6b81089c150c04810a4eb2bd586f6a8c7f0465b79ddd63b9afa062aa7dcb6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w0.puml",
+      "sha256": "5c5ac59816397b4161d8cfa00370157fc6ec84f1fd14551a4395a43c5def20fa",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w0.svg",
+      "sha256": "f0a81d5f9a2885614e69585d31550e3c6e78baa617d7c91ea9aaaa102626794f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w1.puml",
+      "sha256": "d1cf0fdaf2d845018108e3d952b6a220c8218c22f6d67cecb941aba25dc173a8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w1.svg",
+      "sha256": "43b5273d66a81f3bd74dfb8e7c83e2d2f4671e0943888645774bfab4fde75daf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+      "sha256": "912dc57c2bcc8b7758c1333a0aff748c367ff384d078763926c6d8f40bf1f92e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.svg",
+      "sha256": "2b85f6343d1f3756f2a74ed5de20b024a2a1477748e15e8023d0cff79a53c035",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+      "sha256": "82e0d1a8cba230ec2da2bf01d70aec66b148cfda3f0fe22a6b9c757d804ee7d3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.svg",
+      "sha256": "de45b18e491222e9151f4748438f1bec1b5766d913094250b6cef73c6e6acfa8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+      "sha256": "01c3469fd09e3f0a4cd7152c4f99088ba546488cf2fe772c58be20845c0eacc6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.svg",
+      "sha256": "67de82551e224819bb9e2b22327b01a39bc98456875fd3f04b3c9df4e6cf88a9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml",
+      "sha256": "bd1af39791c09c2040d80dd39fcddc38d758443e66a90d0bcd66a4e30abb62df",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.svg",
+      "sha256": "1a48f620a7beaafe3d6dab27c6fe34d817f8a052ff57ce75de42cd7dc5096762",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w0.puml",
+      "sha256": "0ffa0bd1e694705d9cf8e2b6bbbaa9487bdf012d56ea8a777851235f8a9050df",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w0.svg",
+      "sha256": "3d60cfca86390cbb3652798ddba6464bb180f39754e77222bf825c86bb827600",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w1.puml",
+      "sha256": "8409f603f5fe1feed7daa36a3169731ff2cd7d5357fa6848afe9a6c164860d1d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w1.svg",
+      "sha256": "e11690cd646250da56cfdf4ca7c4f152fb6881bed4ab5d9d2d752370b1a8e2d7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.puml",
+      "sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.svg",
+      "sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.puml",
+      "sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.svg",
+      "sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.puml",
+      "sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.svg",
+      "sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.puml",
+      "sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.svg",
+      "sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.puml",
+      "sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.svg",
+      "sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.puml",
+      "sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.svg",
+      "sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.puml",
+      "sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.svg",
+      "sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.puml",
+      "sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.svg",
+      "sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_0.puml",
+      "sha256": "92185eb1aff3ecbcc885e691671afaf01857728581be3f542cb97f8a71f10d05",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_0.svg",
+      "sha256": "7defc3cf9559d0aea1d4fdca4e61eeae7b2ffb0fbad6d046ca571214b8555c5e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_1.puml",
+      "sha256": "f02f4fb1f8339fa1ad40d0390bf78256eff6882c69dab270d2d9aee3dbd07ca7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_1.svg",
+      "sha256": "1009c9a5dfae70b80e48f913d60e3303088b07391c6bd836395591ff54607109",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_10.puml",
+      "sha256": "15a795ce707b9ee962ed691e4fdc5cfe5ac81452e19d4cef4649a1c488688395",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_10.svg",
+      "sha256": "8804d58731f69a045c9d8dcb3a7df4438a7603068dde8344dd17efb93aced56a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_11.puml",
+      "sha256": "52b25f36a17230126e889aa88946709e5cf9c39ba87f2b87ca516fd1aa2f0529",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_11.svg",
+      "sha256": "419bf968dea751c932a3bacc8d760b02071b91f58837e36f266b8fe0a0e28e70",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_12.puml",
+      "sha256": "f6e0b708477ea9d8ff5b108d78b058b2871b5963e2c841e210990d1747819c36",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_12.svg",
+      "sha256": "0955f41c4c2e620606a471bdc3447f83f7f49e73dfffa67249bf66787e4b307e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_13.puml",
+      "sha256": "a57ea060ee9e5499b9e4dd72acb8965ab2f50ee17491f8f643110c6c32948902",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_13.svg",
+      "sha256": "e7cdb150038be577bbefc8d4ec94ad1278bcee6f3c0785cfa134d330f2c1651b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_14.puml",
+      "sha256": "1f0d71ab322bc17f14e249e16aae0d69f3800787d0c93170ef71fa76a5fb2464",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_14.svg",
+      "sha256": "6819e896ae5f00138391e3512bd700d4455995c4c92b4371ed374cdb20235e9e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_15.puml",
+      "sha256": "0a678127e08c421cf9b539875264b2afdf2bc21427d65151ccb2a2f38243915e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_15.svg",
+      "sha256": "63e43306a443e3a7be29ee1c5bd9e5e0b9dfe9e9dc2e9e9dd00c40845c7c5542",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_16.puml",
+      "sha256": "1f006bd536ee4c9b2b7893c63a7eee7c327ab5981ea751759b1f0df61940b159",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_16.svg",
+      "sha256": "3f61d2acad7a0e3cda23708265c9c8a54ef230960b4d736cafec831568b28e16",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_18.puml",
+      "sha256": "a2df1a9bf02c75190faadc54f8954bdff26cb319a6ae51b9084bb07c5f1b0b82",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_18.svg",
+      "sha256": "199545a0d8198829d4b1c0d19a39d081593a159ff44a5bfc1b43e465c8f858ff",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_19.puml",
+      "sha256": "ab97c7ba4031e48cd5bb5466ef4c0205da8b90e687d6f3a8e1ab463525b746cf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_19.svg",
+      "sha256": "e782150cb2a581b5ecd80c23a4e183469e7bc72ba917fdb5d4ba6cf76ef20b6b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_2.puml",
+      "sha256": "e3aa7b27df55e8cfae7d26948898224684e5e690a232ff146c397f8d8bc5a9a0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_2.svg",
+      "sha256": "05503bfaa02fd614b8accbee82be79777fa9d421b57c80cefa4ca212deeb9750",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_20.puml",
+      "sha256": "b5bb58e09f238d1a3861509d9f5582a3040a3525e70673044e34725ab90672b5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_20.svg",
+      "sha256": "b99536d290a0e4eb5b89a878503217d296981c8544050eda05e0239be92db2b9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_21.puml",
+      "sha256": "3c55f88ac96f427c2269a5fead56386351078300d124d335cdd40aa2a6c0d29f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_21.svg",
+      "sha256": "7c2a7ee5d42cdbc5543154d959b440ff57622ef85e0e6b4afe4ce230955cbce3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_22.puml",
+      "sha256": "c9633969dcca1745305b22154e811b0a9479fea59e61ccc0b694297e96256e3f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_22.svg",
+      "sha256": "c7d5ffe57befff40190725aadd4faaa8937b3fca0d55d1fef4c660b48b1efc47",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_23.puml",
+      "sha256": "650c0036bafae1c134846be71484030ba278e3afead751a823e5690760e97a4f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_23.svg",
+      "sha256": "cbf2e25be1ddd80b43faeca093837bb4672905254a784cda68869e546d8cfa3f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_3.puml",
+      "sha256": "886e41d3a17821f20d7498b201ce053c5fcedf4fcaf8a19876e9b3c5343e4b35",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_3.svg",
+      "sha256": "69ff12437d101eba7169b4d0f26ece8cd48c77de44513ac14620886a62c72f51",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_4.puml",
+      "sha256": "fda1788fbb2588d6221e3e8d1e37c8c5034fef0fc49fe84fcc116b45ee2f850c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_4.svg",
+      "sha256": "b62b3cd8452341bef05fd1f2932cbd8673ce42cc60c3d7720f66c89b710981c1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_6.puml",
+      "sha256": "4cfe2a11476240e81a56734bdd26f7825379e4fec53cae3aea7a671ed72c2e3a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_6.svg",
+      "sha256": "441820e54904f68460c8b14f6385e2829d9a153795b537375a7f369f16f71e49",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_7.puml",
+      "sha256": "d3d0e7803bcc5a1fd3287cdf1b8284afd6b4d14070795659b4ba48930a74af74",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_7.svg",
+      "sha256": "ca684c3f7b369ee2869f2527a4ca4cfc08fbeabbe3292ebf23e6e1957602e5f6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_8.puml",
+      "sha256": "8b4e7420cb099463a4ad56a6a167460c1e57c6199076b2d47d4b06532b8eb3e6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_8.svg",
+      "sha256": "b30ae0f442557aa685965ef6ce8f867f09e83184dc80d480892de42ee5b9f1d1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_9.puml",
+      "sha256": "396a6b3924a72d65f09df0c057cda286a01135c98bd990e4e1c9051e240bca23",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_9.svg",
+      "sha256": "1fbac616727417a6a76c421e2bd4d44d9348b496c07056dbc805e4b59ce369f1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.puml",
+      "sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.svg",
+      "sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.puml",
+      "sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.svg",
+      "sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.puml",
+      "sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.svg",
+      "sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.puml",
+      "sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.svg",
+      "sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.puml",
+      "sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.svg",
+      "sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.puml",
+      "sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.svg",
+      "sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.puml",
+      "sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.svg",
+      "sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.puml",
+      "sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.svg",
+      "sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_left.puml",
+      "sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_left.svg",
+      "sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_right.puml",
+      "sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_right.svg",
+      "sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_left.puml",
+      "sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_left.svg",
+      "sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_right.puml",
+      "sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_right.svg",
+      "sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_left.puml",
+      "sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_left.svg",
+      "sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_right.puml",
+      "sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_right.svg",
+      "sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_left.puml",
+      "sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_left.svg",
+      "sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_right.puml",
+      "sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_right.svg",
+      "sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+      "sha256": "46181455ceb5bc39cc9c972d8eda5554ddc126b836acf425252b4cb20853f5ab",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.svg",
+      "sha256": "c175dbf136d52a05d8b76587cebf6793a3603f92e31e8c3a9a9e3e36363b4d2b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "sha256": "fbe670845207b7d7452eb44da50c73ca095d2c5058874fe0b21e2c9f736a7f52",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.svg",
+      "sha256": "2dcd31c6cd990a7cb11214c7bace514c894a4c4f8d08d9715fa4b513bf773a9c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+      "sha256": "d5ad3344977c7d8a50e6c11f16cee5e2af4fac528ff84dd10db45023619789f7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.svg",
+      "sha256": "0b957ba461b456781b7c26b4e47724acd08c98b277daa8e84d787e9688395a2e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+      "sha256": "b6e6ee02414fd5659b64b4a8b2262a6c65bc9c96c5828634c474f1b2803943c1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.svg",
+      "sha256": "3fcd653923a035c02d5d5deefe019861c3468cbd98c83f28127b75069454fa3b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+      "sha256": "a70cd8975e8a454424ccbb60642eadcc74a1f38eb3d7cda41c441cbcbb89a390",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.svg",
+      "sha256": "415e92ece67c159161617174b61cea28ebc07631787dfacbdb10993bdd5aea97",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "sha256": "316d52f5c637aefb9f2984e34313cf3a07b6a576e972b17e171ae388f2fd1fbf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.svg",
+      "sha256": "7fc55f691b10c7a6a1ed73d8dc83f450b30b354511b86071f22d30c31d7eab03",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_negative_width.puml",
+      "sha256": "1041ee0b0e8e3b68a8fffa29ffcc1e3c3a9731f9ce874b98a97d9050e00af6ac",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_negative_width.svg",
+      "sha256": "b796e8b24b0daa22fe8f63c60eb7123f3428af266369b66e1abd048c8b7a79aa",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_quote_unicode.puml",
+      "sha256": "a9ecc0b54d88baa35f73745a4c70f792275b173bc8a8a4a51714ac05fa938f95",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_quote_unicode.svg",
+      "sha256": "6a4372b62f20a4d768f44c70079332cf4b5492f399e97bb3dc456f933ab29b2b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_text_and_literals.puml",
+      "sha256": "131e6d7a1d2d1e4ff66bc7152c30024f7fb1cd479e8d539cb9e1f1fb18da8f84",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_text_and_literals.svg",
+      "sha256": "4647cdb59870eebd3587e60fcc3f1748de542569d580c022708394d2c1645b07",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_week_fields.puml",
+      "sha256": "11979be6da1ce49d395908d7d28204d024aaf44e4d2a370042b064b6bb85e92c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_week_fields.svg",
+      "sha256": "8a22b3379030fb9100a5d68fe1e3bd29b0a7280aab70f210f24271965c91b2d2",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_width_and_clock_fields.puml",
+      "sha256": "aa51f96ed4eb60ca4577a50418266f7fc163a75316f25dfee4d45845bad44dce",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_width_and_clock_fields.svg",
+      "sha256": "134d30b70670c12bed07cda6c8a14ff1b77d605f8221208a4e124d908d2a2496",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_zones.puml",
+      "sha256": "de2b83de4ace91469fb5225fec7ddac21e85742490e1c228c47b95838d9b1a33",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_zones.svg",
+      "sha256": "e1e099639f0a5777665b8781519a8c962a6be883e7e4fce9f1c7f3abc9f51b4c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+      "sha256": "954a83809f5e488dde3f1d06ad03b9f186fd50134f6353fbcc408effc8352169",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.svg",
+      "sha256": "20d40ba4eb4df38ec79757a789d3f73ffadedc37fe981960d091f48bd47e7e1c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+      "sha256": "887f6b8e96c9d2f10ece4ae967c12865ea6a2ac5035a24b7561e8be0846c93e6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.svg",
+      "sha256": "287bd814828314085e1c718e40f46bbcf06e5ec1c17d29a71f325cf9b5ada4e0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+      "sha256": "1dd39284f7476480d01fb691e662cf662e0265971af6be14f7cad9e32fd88fb9",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.svg",
+      "sha256": "a4423d1510ccf3d5b198a4806383e6f3386ca59c1d7aa3500a8928216ab6fc9b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_year_boundary.puml",
+      "sha256": "bfae56ec331cbef0a6d5860c11ef267084ecfb5ea9602ac2cf4a090a67f46572",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_year_boundary.svg",
+      "sha256": "29630190b3e6a35355a8fe6f3ed0efa5c3c1eff8e981d5867f14778bb6b4dcf5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+      "sha256": "c97f2ff4811466690934ec8d66b4ca4615270abeb9244b67cc74926a85069cf3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.svg",
+      "sha256": "86da2c2a5fe061a12299b531390e5366de241a5326d95ad212964b08d5a3bdef",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.puml",
+      "sha256": "44de9b2aabf55e70cc7e067595542a91bb0725c08e4568a0a326a15bfd5ddd4d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.svg",
+      "sha256": "c2c5c29eed35f17d2ed763f60a51249fcb5728624c3ebc0b75e555c84b5ab497",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+      "sha256": "f5c199d610fbba0cf067659183d0541767a844a4aadef87d242787a10a85fd9b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.svg",
+      "sha256": "16f98d3356c56b3ba843d5050ce12c5cbfd7c5cd618ff08029603ca8b8a96a10",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+      "sha256": "9dc883ebcf7c2ccca7ce136f4e464aa92b57c9c26506ed8ff969b92778abf538",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.svg",
+      "sha256": "9b9e9bbaa895b07734b71a99e40ab940a14a27a54eb631791a36067ec039e485",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_nested_sibling_capture.puml",
+      "sha256": "35918f87b9d7df86b31455aa5a863711382b73f4598d7c690a2ef86c1b77bf21",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_nested_sibling_capture.svg",
+      "sha256": "7f3f67376642766357923658055fc7c7021f9233febb84a4efa900c32966aa1e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.puml",
+      "sha256": "f3d8204356c8c9b1c6c9af2c01f517924838764a91b6900c68a22d5bc9a2266a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.svg",
+      "sha256": "a3911a1b1cc465747ef2263a248cc148638f0afc718b0e24dd3f29fc8913f031",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.puml",
+      "sha256": "71b58680f157172751526bf64e5aaea5326650288c4065dda619070c1a002cca",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.svg",
+      "sha256": "0962f6647ea42349e16953896d9dcb81ddb09151b02de27be7d939f96612387b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.puml",
+      "sha256": "34b73e83224f31e219742387247cce9821483be1ad5942921b7b7e5d18946741",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.svg",
+      "sha256": "c72b03115fd4ee19a3baa05ac9f9dc629376ae58876155ead420d6ff699c422e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+      "sha256": "b40e05ad10ff1f2b29658a233be947eee3c23f007467b6d2a57866d496bf035b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.svg",
+      "sha256": "53d38e3e5604d096452e62edcc1a49acddedcee7edd1b7c7d0d4e09151ffba42",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+      "sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.svg",
+      "sha256": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+      "sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.svg",
+      "sha256": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+      "sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.svg",
+      "sha256": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+      "sha256": "cb84ec9ba65672388b12d36361561582cfd23465d1fb8eb743ead1fd04cc4e79",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.svg",
+      "sha256": "0cf5e7baa0234a012124261d3586220f29b94b3b3f6b8334e6705c9dae94060a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+      "sha256": "0de0cd6899f56f6cbddbfa5ae94e309e11e8675118e7af4e476f049791652f48",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.svg",
+      "sha256": "a7b3e16324c35482f94cc24243f3691064458dd62ebaf7d04629df02541e9fdc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_aws_activity_seed.puml",
+      "sha256": "4c1b80f05035e5920580e8ea66abdd9388c40390fef252e40b04ebceedea2be3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_aws_activity_seed.svg",
+      "sha256": "d131cfa655d65569ee69298bc47a00d8e92bba60ed142c67b46bb2b54579d507",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam2_shadowing_true.puml",
+      "sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam2_shadowing_true.svg",
+      "sha256": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam_shadowing.puml",
+      "sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam_shadowing.svg",
+      "sha256": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_edge_whitespace_multiple_blank_lines.puml",
+      "sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_edge_whitespace_multiple_blank_lines.svg",
+      "sha256": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_function_selector_parameter.puml",
+      "sha256": "e190ae7121e462decd61a9c3e3b3a0f6a62a9dc9c4b9aec361a201fddc73895b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_function_selector_parameter.svg",
+      "sha256": "cef02567e48187d770976da80b26064e79c48ab0960e279e67dd3d1ea912d9bf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.puml",
+      "sha256": "da2f5c5a3210229ec4a912f3a30398c537f6829b284c7f2fa7fa8d08df1c81e5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.svg",
+      "sha256": "b57bd7c578e24342ccd5689fe4d3a840cc73e21114bec824bed5455871a9b253",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "sha256": "f4c35dd6325d31d8461d15bf1e8ba69b7152d46e6646aa9ee7577c0191b95d32",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.svg",
+      "sha256": "c0f5633316d130a671b8e75a10980f11b67ca7bfd3b91de4c38c9348725ef30a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_loop_side_effect.puml",
+      "sha256": "fe5e53afa758b9635df77da4a1e56f4bde33bf7136b07e8b20f09eae143d858e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_loop_side_effect.svg",
+      "sha256": "6bb36c4b341e8fb7cbb7651c49e713e4901730c7eace6471b0635493030d1939",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_parser_blank_origin_control.puml",
+      "sha256": "9cc2120f80237a6168906158084a56aab9ba53082e2d5a5a2acd3e5c01581b00",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_parser_blank_origin_control.svg",
+      "sha256": "94af2688d932fe6d9ba71f6c537792b976f52d8b7fd4f3e5d2583369b0d1be3d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.puml",
+      "sha256": "6a21a685b6cfa5c16070e9b2005910b3ecf2e673f732fb98fb862f62c8e05bc0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.svg",
+      "sha256": "2ef3ae3465f8d8acd2591eb685f220a9c5161dac8bd03604288bbdb62086676c",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.puml",
+      "sha256": "5189d6dd336fa0e033c5b19eb4fe77fba48573d996f7fc6ef14257f266ed2aab",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.svg",
+      "sha256": "34ed4f98d272b1e81b423fc0edb02659ef59eac7e369814ac17ccdc7a2af59cb",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_sprite_after_theme.puml",
+      "sha256": "9ba002d35dcd03a6f88900d0c553e9fad9c440196deff52d15631a98fc2a02a6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_sprite_after_theme.svg",
+      "sha256": "a8e57fea5a984003c0751cd8e24cb7579b7be67cf4ecc80a19a196aba3c45e4d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_state_two_mutations.puml",
+      "sha256": "104094aef151e341c73b87d636645a6a83be073a658ef533cc32aead9f65c705",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_state_two_mutations.svg",
+      "sha256": "f60f7c10cfb2462c6ee4d18db9aa67d38123e6f08a8cca069ce96ef92f1cf0ec",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.puml",
+      "sha256": "b1fdcb79076a777bde77637bd47063614415e5985a853a43ff112593106906b1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.svg",
+      "sha256": "1d3849d5f5a5c40088149a1db5f7dc7e3f5d734bf0cd2f590e0c5120b8ce8cdc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.puml",
+      "sha256": "3e2a5f2937f219102ec47127ea35774e1182d21b99941acfd0ba601b1e0f096a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.svg",
+      "sha256": "8f58f9eb06d4bd7a0d1ea3c65d60223c8f548e16feb8e944f6002330f3c5fa9d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.puml",
+      "sha256": "0ca87e09283af069695ffc103afa3fb769244421202a102e8eab63b90f0e6a35",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.svg",
+      "sha256": "40209bf1a5319a5c8aaecb3e2a177d12323001e23c9af2eed9e4b0938f18be06",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.puml",
+      "sha256": "13287de5d2866609e848df02ee396c24c01145427c443019327817b5e47e2fdb",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.svg",
+      "sha256": "4dc5b0197e329ecd0cd8f3e006bac6873f11643c6aff6bb399af61f892b846c5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+      "sha256": "8194071a76bf94e119fe39d5194fd8307bb17e77cbbcdb1a798d89a0af6ffe26",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.svg",
+      "sha256": "15a1d83ac0f44f4af8f882904bc1319326c6e6dcdb815c93322047d22f28137a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.puml",
+      "sha256": "649772d1ac83f25f5c78343559656fc7a858460085fe5ed8038d185f1c634512",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.svg",
+      "sha256": "5abe6620c4694c1119cdeff3718cc7aebd6e23271632b24c77220437a0ca3c47",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+      "sha256": "cd0e329e69600cc2c18a3bfeb0cbc84cf58a1a63db04b28587ad58d073079d47",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.svg",
+      "sha256": "a9d7d8865c96cddfd69c5e86923e3611894b55c54a4d7d1c57e6bac9aa3d16a1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.puml",
+      "sha256": "35fab53859257bef2a7ae549f34ec19e8cc39dd4d3f1d82915744230c514b6ca",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.svg",
+      "sha256": "62b40c408659cc1d3f2aeceda7fd162e66dbf2e1ff1edff8c8a84d3cde996bee",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.puml",
+      "sha256": "ebb3f91058dce53cea5c8effc5a4469a1c6f3a7a1422eb78ec7764ade3c87b99",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.svg",
+      "sha256": "5e954a5380470ca7b78edbaa4d94a9308b381dbfa10a0e896f9f18ccf065883a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.puml",
+      "sha256": "9d59b68b0ca1823f74cb7ed269aca9ebde2980fb8d1920b9d9a0810b97081e5d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.svg",
+      "sha256": "e0e1ed9154282512de2847af9c0bae56f37c184e93d459fee5661e3f9e10ab3f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.puml",
+      "sha256": "3e9991704ad9f092a98982d9edb1280ee628c5b5f37b184884184bf25d637b94",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.svg",
+      "sha256": "720b2219fea35c96aa0ff9f49c360699efa799ba3e7ef30ee1ddd2fd53d00f5b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+      "sha256": "00f24985c9b46503c904780651d170a448f3d8fd60488cd5f90f487873e6116e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.svg",
+      "sha256": "ccd339d00391bb7a8346ffd87005fdc4ac50b550d1f7757ecefc69930fd8a876",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.puml",
+      "sha256": "106795fa636387bd5a483dd181243880644ef3e9affd0d3ca4a719cad1b39019",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.svg",
+      "sha256": "c8f7d03cc14220c4043f7d1efb7d13c5ecf7ffa8f993fcc334875220291147cf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "sha256": "c79bfe7f1226a4149e8b261656989bc165d01fa34453c1e23b055b08f30d64bf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.svg",
+      "sha256": "546692b27d12b537469ecab0939ab2fe815a6217c145abba9688198c957c7f5d",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_nested_name_side_effect.puml",
+      "sha256": "f025bcb7520285044effafcb8c5517d6be1f72e499e8b98e9a43793e76e0a971",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_nested_name_side_effect.svg",
+      "sha256": "a382bf7a71f51df7bcc5329677980272196c35d7a7bc0e8328a4c5faa8a34aff",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+      "sha256": "22ffe2aa22ece63d4fea4ae5f3e9fcec0ec9ffed0deaa71d41cb8a24a69a6d89",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.svg",
+      "sha256": "d940feb4e378c326d4cf2d982b252c8c9460a9754d34e45c29870f7e1629730b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.puml",
+      "sha256": "2afd0e32cdc93c07e5236edaea7185d9ea82dd32548efd4bc2e71d2c37ccdfbf",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.svg",
+      "sha256": "0438a27adfa71f7fc9fc853cdf4fef50ab07757e06b895f714b844c575bc9cd8",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_literal_backslash_and_quotes.puml",
+      "sha256": "c92247e26d074eed57ca3969ce3dd312d7b01e5428c65690d70a8ebac714aa6b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_literal_backslash_and_quotes.svg",
+      "sha256": "27f40e004fa57ebee02345cc1696f7e40e521b05e5acaec831fa27c1e340ba01",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.puml",
+      "sha256": "e96670863b1d2ae659bc9fdcc2d5eeeb33717d120d4ae29d2331f6cc9bc08aef",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.svg",
+      "sha256": "d7ddd80891d8513586ce3b63ee2a8c4ee9f2eb5a43456c2a9ad5cd44bd31b004",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_quoted_commas_and_unicode.puml",
+      "sha256": "ac73c5b41a2b1b4a88e5674312bf47a7c184b7b335bf594f89ae1db56e204075",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_quoted_commas_and_unicode.svg",
+      "sha256": "982ed3020f21a0a6a23ef088d3ad3fda63666b202b06bb4fad62b3f9a6248d14",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+      "sha256": "ddfdbc32076a2a881d8d582ca7ff489c1ded00e233b5b5259692f3510962cfd5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.svg",
+      "sha256": "2d362d0ffb128aed2eeefb5d22a03b08bf01ce713dd78c0601257dd3c53ba219",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_computed_local_name.puml",
+      "sha256": "912834235473bd49e0bbae65268e1b4a9289795a75dd7afbef62847bcbf0e61e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_computed_local_name.svg",
+      "sha256": "3edbc8ae4860be0f0c1e55bda4046d6c271b952247481a88a7d6badc1aec4609",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.puml",
+      "sha256": "1e6b7e61f87d8a2427396fa37c66a86f6d4966f8b3da4d303a60ff44e407fc61",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.svg",
+      "sha256": "2592f920cfacfa73811d8138184dc204f13d3cada8cbafbcc6ffa6823b4b98e4",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme_valid.puml",
+      "sha256": "5d028324861b06ead35fdecead9b81e09926a0aac93af9db1c1f1541ee193c79",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme_valid.svg",
+      "sha256": "10c9c986aef0e3a0bcae3c28e530f0d04bc71a600ad8b0824077b1f38016e2f5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_name_literal_control.puml",
+      "sha256": "7bb7ec3ae0ea373bed17bb381342f5b2257ce750ecc2e2b01c3de5b6d0fb36f1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_name_literal_control.svg",
+      "sha256": "68d6953a056bf079eae8b51d99c04150dc0db9a6c258f3a6a5bde87ee2c4f749",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+      "sha256": "8b29e8755da32eba52745a1d70a3e2619d2aae226be97f3d165dbd6d4f7d7876",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.svg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+      "sha256": "6796e29c7eedcaa83b7f7224aa94d9e608be7dff1e8eac9ba31fe1227588a026",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.svg",
+      "sha256": "2c139ff7584ca1b1da45d066662e15276edf67832ccb190c61f6dc49178f70e6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+      "sha256": "fa9a115e6ec5da20343275bf51c618d5563a1cda4e33b698fa1d7a90a82fd39b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.svg",
+      "sha256": "9a8d00316eee49b00bd14b6c525345357c2cb9fae8bf7b93f20d354e9158188e",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+      "sha256": "b8f87bbfb4153a8f9c701439bee5859342bd6e72f6ef25931556094419338de7",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.svg",
+      "sha256": "525ac36cc98b90bd3f8d13f352fdcb7bd74d3a1f5f36f874f93c182f2455b401",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+      "sha256": "d569808fce0059b3d97321077372186500f37c7739773b4276c37951eea3b9d1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.svg",
+      "sha256": "846f23fb82e0ff8a713a3a7533786978ec69f0e8e438328f38838fa9b5cd0047",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+      "sha256": "070d7caab26437d73adabe5d2c80e1c69b8ecfa71a8df09c350ea96a7b6c6f72",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.svg",
+      "sha256": "ba87c8a7369ecb6ecb73a6f7a81f6ac4708706d543d36400244de1c93d479a55",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+      "sha256": "16accd8a191dc783c64775758f436a0622c72750d9d3ec239f7d03185b5d46c6",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.svg",
+      "sha256": "1436d688fd3bdfbbeaca579e15191867f87a2067bf17aa113dcb5cad14788bc0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+      "sha256": "216a38380ecc3c783b188cb0491caf0bcd3257332291dcef032c630fc251d842",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.svg",
+      "sha256": "f4c7917342def5193aec96b1f27fd1e77cf93d149b33c4945923829adde3d90a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+      "sha256": "4c6bb511046da15a0c1999b15500354d49d8fe4a1d1a202fac28d3cd63e7c004",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.svg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+      "sha256": "e4ca7bed3006d7d496ff7772794df728723165abc582bd7ec8599e117dfda483",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.svg",
+      "sha256": "cfb8dff08ace6f07fc02f6f3450da3cf99abf6fd5ab4ffb2d98c3023885be82b",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+      "sha256": "e499390b80fd22e757c757631b13a2280855d3d632c683718542ce39dd6033d5",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.svg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+      "sha256": "057630086b2a234e61710828cc647e066121ab45a7c4bf1278e590ddd06d103a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.svg",
+      "sha256": "1fa5949e5f93cbfa97b5fbf07ea8275dc212e1fca9ab506b7fd0ebca0f05c2ab",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+      "sha256": "abb1dbfbfeab8b0514371f1ffa979ffd2979bf1feface78368da8f8b9e2f3a69",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.svg",
+      "sha256": "4a475abb89561b6432109b2676ed9ee03ad8c947fdafc09bf03306d5dffc16cc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+      "sha256": "642b5c2073293e92f65e09e3b8af98839bebcad815116077d339c14cc3ba6818",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.svg",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "sha256": "2f7e440d7c52cf514efe20f126806c38e78cac541b1f9c6908cd18423f18eb79",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.svg",
+      "sha256": "e88df586ba4cc74b7f5cff8b8a03f7bde611dd9e3dd3bace494f22146a9d3ff0",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+      "sha256": "98c93155e330343d4eddb12887b7d4b921a1beb5576af3d68eb754916ef502a3",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.svg",
+      "sha256": "3ce882a42d75320d0d961ff09fdd878d70ad1e3c08e8f2d32f01dcb0b366de0a",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+      "sha256": "be07aeac9360e683a5e3bfea9b1719ebe6b68605e8b045de52c802496dc46845",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.svg",
+      "sha256": "90f23b385fdc768482db683b74ac9d532520e85bb5dc4f5f56498d05d3f602ca",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.puml",
+      "sha256": "8cde4ded058086a5172174d3f418e9bf0de3b4a508bf642a63bf59e4c0946af1",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.svg",
+      "sha256": "b68dd333714583a9e6c10326b51bb808a7c0db340d1452ab70025103d32565c4",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.puml",
+      "sha256": "f251a9ef7fbb1c715d87a50273f0b8b8c98aa75fc3b26575bd9dbd31449fb5ce",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.svg",
+      "sha256": "75c637f7a94fb8da62833a6c132dee95d0479851f1fd610497281d903f8ccfcc",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_nested_local_and_global.puml",
+      "sha256": "1c87c28983864ef71b10c39806fef1e97963a48d59330d327ea20cb11d98bf77",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_nested_local_and_global.svg",
+      "sha256": "3d313cb54101a000ed379383e84c94365452c39c84b89cab40ab4227d109daaa",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_theme_scope_helper.puml",
+      "sha256": "439daec858d75a96779311f0aff32fa4d1995bd4b2a9cb4397aea01f2e72821f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    },
+    {
+      "path": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_theme_scope_helper.svg",
+      "sha256": "2f43ae6b271778ad70291c250da6835c97c9292b1bcd465f817ec35b07582b9f",
+      "commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+    }
+  ],
+  "include_dependency": {
+    "path": "docs/parity-reviews/tim-theme-post-expansion-source-identity/checker-support/include-theme.iuml",
+    "sha256": "5df0ff8151b8e41a511acd40a8168b1adc8c366f8810f064786a130ab784db52",
+    "source_commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+  },
+  "subroutine_include_dependency": {
+    "path": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_body.inc",
+    "sha256": "c03bc3c7267f72f9033f1c8bff796e9c87bffbacb14839e769e7111d5752e3c6",
+    "source_commit": "5233a26ab8aa96852aa542a9334958fb7d0f906c"
+  }
+}

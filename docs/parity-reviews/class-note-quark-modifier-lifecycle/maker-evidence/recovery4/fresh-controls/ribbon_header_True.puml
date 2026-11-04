@@ -1,0 +1,8 @@
+@startuml
+header
+
+Station register
+
+end header
+class Fastener
+@enduml

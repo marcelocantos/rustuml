@@ -1,0 +1,82 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: shadowing
+      value: 'false'
+    style_program:
+      declarations:
+      - selector:
+        - root
+        property: shadowing
+        value: '0'
+        source_line: 1
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+    source: |
+      @startuml
+      skinparam shadowing false
+      class Spindle {
+      +head
+      +turn()
+      }
+      class Bearing
+      Spindle --> Bearing
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Spindle
+  - !Entity Bearing
+  - !Relationship 0
+  entities:
+  - id: Spindle
+    label: Spindle
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members:
+    - name: head
+      return_type: null
+      visibility: Public
+      is_static: false
+      is_abstract: false
+      kind: Field
+      display_text: head
+    - name: turn()
+      return_type: null
+      visibility: Public
+      is_static: false
+      is_abstract: false
+      kind: Method
+      display_text: turn()
+    stereotypes: []
+    source_line: 2
+  - id: Bearing
+    label: Bearing
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships:
+  - from: Spindle
+    to: Bearing
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 7
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

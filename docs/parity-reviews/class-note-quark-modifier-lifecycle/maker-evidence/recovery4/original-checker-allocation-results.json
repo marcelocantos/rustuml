@@ -1,0 +1,101 @@
+[
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "0",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "1",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "2",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "3",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "4",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "5",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "6",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "7",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "8",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "9",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety",
+      "10",
+      "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker-artifacts/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  }
+]

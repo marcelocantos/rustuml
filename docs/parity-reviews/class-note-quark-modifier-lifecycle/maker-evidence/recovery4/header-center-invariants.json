@@ -1,0 +1,26 @@
+[
+  {
+    "input": "header_0_15.rust.svg",
+    "expected": 42.6211,
+    "actual": 42.6211,
+    "delta": 0.0
+  },
+  {
+    "input": "header_0_9.rust.svg",
+    "expected": 42.6211,
+    "actual": 42.6211,
+    "delta": 0.0
+  },
+  {
+    "input": "header_4_15.rust.svg",
+    "expected": 50.6211,
+    "actual": 50.6211,
+    "delta": 0.0
+  },
+  {
+    "input": "header_4_9.rust.svg",
+    "expected": 50.6211,
+    "actual": 50.6211,
+    "delta": 0.0
+  }
+]

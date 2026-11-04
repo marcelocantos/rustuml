@@ -1,0 +1,15 @@
+2eaccb21af562b53fe28b00c22942007ca7e0786 test: reject class continuation with recovered independent evidence
+3e94010e384baac280d282f256becae65ddcbdab docs: account for static grid cleanup and integer parsing correction
+7fa39737be47590a9186d48066358ea1bbaa6b1f fix(layout): preserve grid cleanup ownership and integer-prefix dimensions
+d45793fbc6f0cd8170fee40107296e2de6637761 docs: account for symbol alignment shadow frontier and empty ribbon corrections
+48f452f0e91e411ffc49583bc681d0b3e03e4e63 docs: account for note modifier and quark allocation lifecycle correction
+a5fa19793e55bf2636a84a1e0941afa10346e3e0 docs: account for remaining image composition and note serialization contracts
+ce2380331ff1371e64a22a86f1fe402c9f7a2d3a docs: distinguish member placement height from preferred compartment height
+8d81598b9ba970878504d403c6715e0c15db5c05 test: preserve the missing parent 1449 reference inventory byte for byte
+8532de2063219360f2a11eca6c95e8149586ff11 docs: account for quark parent materialization timing rather than reopening mutation
+33588b1aa9290300599ed0d7fd3fcc2cf10a51c9 test: preserve the parent theme include required by the root-cwd replay
+d756ff1c2cd3513673f51b02edb8fdf455c7e06f docs: account for measured class header circle centering
+aba7e2a86753e1ae19765868d54d86150263e910 fix(class): close note quark ownership and dependent image composition
+82ace8b93921f3e0702685cc1d61671304260e57 test: preserve the parent selected-subroutine include dependency
+197b020094784f6a825bfebc47c920b13e420056 docs: account for preferred size versus Svek shadow frontier boundary
+7bd5c9f5d2f4dee23472ddc8e3ac4b96a3e196e3 fix(class): retain preferred shadow dimensions for degenerated images

@@ -1,0 +1,58 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "record" as Basin.Registry
+      package Basin {
+      class Rivet
+      }
+      note right of Basin.Registry : explanation
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  - !Package Basin
+  - !Entity Basin.Rivet
+  - !Note 1
+  entities:
+  - id: Basin.Rivet
+    label: Rivet
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Basin
+    kind: Package
+    color: null
+    entities:
+    - Basin.Rivet
+    source_line: 2
+    stereotypes: []
+    display_name: Basin
+  notes:
+  - lines:
+    - record
+    target: null
+    position: null
+    alias: Basin.Registry
+    source_line: 1
+    owner_package: Basin
+  - lines:
+    - explanation
+    target: Basin.Registry
+    position: Right
+    alias: null
+    source_line: 5
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

@@ -1,0 +1,2761 @@
+[
+  {
+    "path": "docs/parity-reviews/class-simple-actor-image/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-simple-actor-image",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "372a84d6abb20df41a3690ba5ee5774b1ed03998",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_False.puml",
+          "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_False.svg",
+          "axes": [
+            "multiline/stereotype and renamed display",
+            "nested/root ownership and edge/declaration direction"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "387ea71a49f19a11385dc480a3ff4754ad461a31b9236590795b17c0508e26df",
+          "java_sha256": "0a2a5b46ed8f418d3b8586f3060af42bf43297c9c4c25ab5793ce315f6b80d57",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_True.puml",
+          "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_True.svg",
+          "axes": [
+            "multiline/stereotype and renamed display",
+            "nested/root ownership and edge/declaration direction"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "2ffdef85a3a04c21c328513cce2a1f78ede3934205f6b2e485fcfd076fc15159",
+          "java_sha256": "6dd8b446e599862d6966cc9a05a428370ae3be3eaad6449a673d14c9538caa4a",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/nested_stereo.puml",
+          "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/nested_stereo.svg",
+          "axes": [
+            "multiline/stereotype and renamed display",
+            "nested/root ownership and edge/declaration direction"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "cfdc3ea13da9a0dbd35bce5cef4f4b3f216aea0fd5df846da6147a59edba3801",
+          "java_sha256": "22407b91d1e1296e271343d9211e3b0e6d38d759d5550e616973ba79501373c8",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/plain.puml",
+          "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/plain.svg",
+          "axes": [
+            "multiline/stereotype and renamed display",
+            "nested/root ownership and edge/declaration direction"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "221f0244ca3cc3d475dad6c826209aa04d8fadd99c8423ed585e9bad29733137",
+          "java_sha256": "ee8475dfd8771e3d6e5e6b75608baaf35996ba35fc12ab28a572fa87e9a2817f",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/shadow.puml",
+          "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/shadow.svg",
+          "axes": [
+            "multiline/stereotype and renamed display",
+            "nested/root ownership and edge/declaration direction"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "43042b2af26b5617ecd23b4f1983cb411f2554467016f85460b7f13dd8dda1dd",
+          "java_sha256": "3d36b3c7bc2578caf1cb696bba6d62fdddea6f7f794139da615f9fb956b58f1b",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/thick.puml",
+          "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/thick.svg",
+          "axes": [
+            "multiline/stereotype and renamed display",
+            "nested/root ownership and edge/declaration direction"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "8e6623c8b2e74b61dbead0963626d30893d978b56d708119e057ec3e6fecdf0c",
+          "java_sha256": "dbb5cd5dac84017b8b9562c4b911384f0a7249f150341d0436a614f27daf5440",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        }
+      ],
+      "findings": [
+        "ActorStickMan's 16px head, 27px body, 13px half-arm width, 15px legs and stroke-dependent dimensions justify the default geometry. Three fresh plain/nested/thick controls pass.",
+        "shadow fails. ActorStickMan.getPreferredHeight adds fashion.getDeltaShadow and drawU applies shadow to head and path. Rust DescriptionLeafStyle carries no shadow, calc_entity_dims omits it and actor paint emits no shadow. This is a source-confirmed model omission, not an external-dot hypothesis."
+      ],
+      "bounded_repair_guidance": "Retain shadow in the selected image's measured fashion and paint, including its contribution to preferred dimensions and final bounds.",
+      "source_audit": {
+        "java_locations": [
+          "skin/ActorStickMan#getPreferredWidth,getPreferredHeight,drawU",
+          "decoration/symbol/USymbolSimpleAbstract#asSmall"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-boundary-primitive-paint-order/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-boundary-primitive-paint-order",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "a9a42c3a6b7f4e685b6e8ad6198b91612f571bf8",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c-retained-maker/boundary_body.puml",
+          "golden": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c-retained-maker/boundary_body.svg",
+          "axes": [
+            "stereotype absent/present and unequal multiline name widths",
+            "component versus boundary and declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "340dbcc4ab26fffa654f52c3f07c1746825f306784442975ce261f980f3be556",
+          "java_sha256": "326024c485e092917df8cc80ccb8d641834523ed4f812e9d9ff318a79e824327",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/nested_reverse.puml",
+          "golden": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/nested_reverse.svg",
+          "axes": [
+            "stereotype absent/present and unequal multiline name widths",
+            "component versus boundary and declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "0a1d47b61e3eef80220032c33a30b102c7adfa0abbf0e95102e1813c5760ac34",
+          "java_sha256": "0728f80f710d7b983e97efdfb3210fcefbdc979a2796e7371d993234137b46a0",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/plain.puml",
+          "golden": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/plain.svg",
+          "axes": [
+            "stereotype absent/present and unequal multiline name widths",
+            "component versus boundary and declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "ca9d6d0c3f2d35fded5f9bc28a4cdf0e4508b7a8c224bb8e383196b9b07a4064",
+          "java_sha256": "4e609c02f7c7908637ea7674e5f5a1015d6ce3b2dd4fda1b4aa508eba5cc9434",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/stereo.puml",
+          "golden": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/stereo.svg",
+          "axes": [
+            "stereotype absent/present and unequal multiline name widths",
+            "component versus boundary and declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "ec9dcaeb413c1c2db42eb099ce57075e2351e55734553904fc766efcc27866c7",
+          "java_sha256": "a2631a3780ca46e027c69cad084d4b39f07f04f3ef4d50ee4e4b465369ce89b1",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "USymbolSimpleAbstract draws shape, label, stereotype, and Boundary.drawU draws path then circle with margin 4/radius 12/arm 17. Rust's changed primitive order and constants match that source; plain and nested_reverse pass.",
+        "The stereotyped multiline case still fails geometry. Rust boundary frontier returns y=0 whenever stereo_height>0, while LimitFinder.drawText measures glyph bounds rather than the block origin. The actor branch already distinguishes that calculation. No primitive-order defect is inferred merely from this remaining geometry failure, but the valid pair remains blocking."
+      ],
+      "bounded_repair_guidance": "Retain the corrected paint order and derive the stereotype's painted minimum from the same text metrics/LimitFinder path.",
+      "source_audit": {
+        "java_locations": [
+          "decoration/symbol/USymbolSimpleAbstract#asSmall.drawU",
+          "svek/Boundary#drawU"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#render_description_leaf"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-note-leaf-emission-and-group-links/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-note-leaf-emission-and-group-links",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "a9a42c3a6b7f4e685b6e8ad6198b91612f571bf8",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/before_after.puml",
+          "golden": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/before_after.svg",
+          "axes": [
+            "mixed attached/named note order and nested owners",
+            "group target shape and endpoint side with multiline notes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "a44cb8befe47b3f9039aed1f17790f75415f24cdeab7467dad816c02bc473549",
+          "java_sha256": "831f799844251db7525f351b0dbacf4c7b271c4bcd4d18f5031097d72fbac4f8",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/empty_peer.puml",
+          "golden": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/empty_peer.svg",
+          "axes": [
+            "mixed attached/named note order and nested owners",
+            "group target shape and endpoint side with multiline notes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "b882e815ee0b937bc86491b5d08573901a64aed1ea5c43423d068110705b0c0c",
+          "java_sha256": "e3b37b3a76a34e3371e5bace86bdb3f0487608262c576297f2a6bbc5f77aad8a",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/nested_group.puml",
+          "golden": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/nested_group.svg",
+          "axes": [
+            "mixed attached/named note order and nested owners",
+            "group target shape and endpoint side with multiline notes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "849867ac20500213e0a774c1ca023ad8180899bc4152bf1d2d2d088644e3ac8d",
+          "java_sha256": "1588dc896214956c47a3785ae06fff4b11ea77c38e29e70f91fa1b5f5f4837f9",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "The merged note emission stream follows Bibliotekon order; before_after passes. GraphvizImageBuilder requires an actual peer SvekNode before setting Opale, consistent with the new nonempty-cluster guard.",
+        "nested_group and empty_peer remain mismatches. Empty package role is a layout leaf, but leaf existence alone does not prove equivalent image/connector behavior; the latter has missing primitives as well as geometry differences. Group-point runtime differences are a separate uncertainty for populated groups."
+      ],
+      "bounded_repair_guidance": "Audit empty-group peer images and actual Bibliotekon node eligibility, then connector clipping and magnetic-border order, without waiving unresolved group reference differences.",
+      "source_audit": {
+        "java_locations": [
+          "svek/SvekResult#drawU",
+          "svek/GraphvizImageBuilder#isOpalisable,buildImage",
+          "svek/SvekEdge#drawU",
+          "svek/Cluster#getMagneticBorder"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#render_plantuml_svg,floating_note_opale_relationship,render_no_oracle_attached_note_connector"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-painted-frontier-union/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-painted-frontier-union",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "de192dc216b6795b6d820c240e82234988d1f39d",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_cloud.puml",
+          "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_cloud.svg",
+          "axes": [
+            "root notes versus nested cloud/rectangle groups",
+            "TB/LR wide and narrow interface labels, component styles and endpoint order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "60ceaccf28c6d3a280310f6aac495cb43e27c9c9422bc9ceb8ce788ffb7bd45f",
+          "java_sha256": "a29b773b02b42d643c1b1a189024e8c7d50e6e64dfc1a5af02b5e6d4f977677a",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_node.puml",
+          "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_node.svg",
+          "axes": [
+            "root notes versus nested cloud/rectangle groups",
+            "TB/LR wide and narrow interface labels, component styles and endpoint order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "0f944237b69a4d2055c497d85c0ae0aaaf555e709d963fb0f0413e26941ca7be",
+          "java_sha256": "b7ac3baaf24ff24358b21b678ec2346b9e773608680f7448fb5efeb10570a2b8",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_rectangle.puml",
+          "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_rectangle.svg",
+          "axes": [
+            "root notes versus nested cloud/rectangle groups",
+            "TB/LR wide and narrow interface labels, component styles and endpoint order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "41adc5c3e9acef7b7263441b33a1136b1ac34898c15d48095ae03b4ef0b2e0d4",
+          "java_sha256": "887dcbca19d7e428532addb1e91953056d9696c1def0565520c6ba8897a45d5e",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/cloud_nested.puml",
+          "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/cloud_nested.svg",
+          "axes": [
+            "root notes versus nested cloud/rectangle groups",
+            "TB/LR wide and narrow interface labels, component styles and endpoint order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "ccc2bd6f4dcfee0c593df0b13889fde2add3555b576ac244c749a93847764f9b",
+          "java_sha256": "d24a6697ab7b4e23e4036bf2c62befef5d7d6374c5359643057ee292db9486f6",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/root_note.puml",
+          "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/root_note.svg",
+          "axes": [
+            "root notes versus nested cloud/rectangle groups",
+            "TB/LR wide and narrow interface labels, component styles and endpoint order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "10bbb572b3711e289fa0ff06db68568996a4ee5b3447bf1617716a974aec42ea",
+          "java_sha256": "0032a96ad0ee584171e7c39d3c768a4f952e9de5a1ee6ef57d66254a39666de5",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/uml1_note.puml",
+          "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/uml1_note.svg",
+          "axes": [
+            "root notes versus nested cloud/rectangle groups",
+            "TB/LR wide and narrow interface labels, component styles and endpoint order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "26f7b33697dc684a48b1da100bb6ff03e6d5a5b99e64d5585894c38f2a1507b4",
+          "java_sha256": "106f84d57b2fa5ea7bf5e42d8e691d3d74f2c881f5e9f2b14b3eef49b706d3b6",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "Removing the raw note-box correction and zero/clamped minimum seed follows SvekResult/LimitFinder's union of painted primitives. The component interface label and UML1 protruding tabs now contribute to the minimum.",
+        "All three fresh paired comparisons remain red; the retained root_note_rectangle and cloud outline failures also remain executable. A model-shaped correction is not full frontier coverage. Cloud path construction, attached-note geometry and remote group-point layout are separate unresolved contributors; no measured offset is proposed."
+      ],
+      "bounded_repair_guidance": "Trace the failing primitive extrema and Opale/group image contributions independently; resolve environment-sensitive DOT differences before changing final translation.",
+      "source_audit": {
+        "java_locations": [
+          "svek/SvekResult#calculateDimension",
+          "klimt/drawing/LimitFinder#drawU",
+          "svek/image/EntityImageDescription#drawU",
+          "svek/image/EntityImageNote#drawU",
+          "svek/Opale#drawU"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#svek_layout_x_bias,svek_layout_y_bias,entity_frontier_min",
+          "crates/rustuml-render/src/component.rs#component_svek_translation"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-sequence-shared-entity-command/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-sequence-shared-entity-command",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "4fd5d7039d9b8f27bda1712aaa0d1b8d5399311d",
+      "implementation_commit": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+      "prepared_implementation_commit": "cfc933f0c7a5b9be93f2f7fa556d9afebae57aed",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_body.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_body.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "c01ff0c94d531c973556c2a677f1bcd5d1ebf934f784b4cd8eecf1066a2a9fa3",
+          "java_sha256": "35badae811ce5a0ce42af868edee392ba9b1a0ce5c75539e2f37b081de5abde6",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_nested.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_nested.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "0cf981bc5351f5c8994075ea00b5647839c042565608c9e1a79735efde3cfa00",
+          "java_sha256": "f671aa03ca1bc5fbc7a61b4a14f5268f6acbeb0f7f78706e8cb4bd91e2e51c59",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_self.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_self.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "b44bd7e54766b3a5d38805f5489b28945bfe793ee64beeffc1291b8c7e9a8704",
+          "java_sha256": "be0904d5bf42d8749bac5992b0da7ed0b7a8b7a5cc22674e1e2d07a93007f699",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/root_record_peer.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/root_record_peer.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "27f7a04e84903709a44fc6ab8dcbe8374bfcf372645df95c57c3d7b4251119a7",
+          "java_sha256": "dc61662f87427309980ab1b3266e015e8bb50f9876c927c854142f06b0252205",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_order.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_order.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "42c958abba14a58657817b396302a572e06d880156a098030775b563150b699c",
+          "java_sha256": "0bb83d295ff5346ed3ca3af0ca682a01abaa7919414bc8eecfec5a5fc3e511f8",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_quoted.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_quoted.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "4102dec03d0b6170a14a8d6efe32e6d910e9c319a13860d0aa96b539d1cf7328",
+          "java_sha256": "d433a00be85b73b7fc7f624ba9ceced4a5b74a5a49d39b6b7f0bedc7689d478c",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/entity_url.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/entity_url.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "3298bd1cbe7b6e41a0e43a30ad49339e91241171defcaa0efa90a8a87f8bb465",
+          "java_sha256": "eed39e5e44003a85a5b42ebe244a09c27df6ca3e4417c5787b24969c3ee19a47",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/generic_entity.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/generic_entity.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "63f1709b50632b73c45f14cd0395fad1080896839141cad4cf29865feab4b0e1",
+          "java_sha256": "660bbd8a4529396c17ac401cfa733fe2606bf60f47f8400da705a5df1128a702",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/group_shared.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/group_shared.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "cd5c4b3a1a95bd1ac04655b42500f3599cad17195c07550b6f4d1b28345b26fe",
+          "java_sha256": "ad880289104c6a77b2681ee09823a9d27904714225bada435f5f294a237bcd57",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_note.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_note.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "05e9b2b28e3b44df0de531e58121209ef7504df8216397da9046252287bf7673",
+          "java_sha256": "97e2d0b4975191c431346af4d507d912f47a90d61c404866fba102bb3ff5590f",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_stereo.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_stereo.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "b926d63c56dcc858f7a3878818983e73e80463f2a599390470feb7efd76e0c98",
+          "java_sha256": "f034dfa4409bde8eb9f9e89c3166d7ea3067eada64f9968291809ef74c7b793b",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/order_stereo_entity.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/order_stereo_entity.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "b5d406bce365362a00d9d30bc30ee0ab13ce83f2f02278d4d0e6c4825398d62b",
+          "java_sha256": "7fd376de09549ae93ea49ab05438b20278905c4b5c27c2259aa4f2494662c86b",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/root_brace.puml",
+          "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/root_brace.svg",
+          "axes": [
+            "root entity versus record/struct and braced/native modifiers",
+            "self messages versus nested ownership and quoted displays"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "d63c8676e1d49e54bd1016e133036f7d7fd61a16c43ab3ee2b8bcfc051ffa902",
+          "java_sha256": "ee2c254e08697e5d49cffe717ce79151d00a461239392aa73ce88cfb30ab1d1c",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        }
+      ],
+      "findings": [
+        "PSystemBuilder gives Sequence priority; the candidate tests parsed declaration kind/modifiers and opaque quoted display rather than keyword scores. Root/group/braced/native/order/URL/generic cases exercise that boundary.",
+        "Seven fresh comparisons pass; bare_quoted and order_stereo_entity remain Sequence in both Java SVG and Rust AST, but the product omits stereotype text. YAML confirms order_stereo_entity retains stereotype store and order 7, locating this residue downstream of parsing. A family-label-only check would incorrectly certify the full image. Full model/image parity remains rejected even where the precedence decision is correct.",
+        "The main failure inventory contains none of the 14 transient losses. This review does not authorize extracting this small correction from the tested full packet."
+      ],
+      "bounded_repair_guidance": "Preserve parser ownership evidence while tracing the already-retained participant stereotype through Sequence rendering; verify model content and emitted images, not only selected family.",
+      "source_audit": {
+        "java_locations": [
+          "PSystemBuilder#createPSystem (Sequence before Class)",
+          "sequencediagram/command/CommandParticipant#getRegexType",
+          "sequencediagram/command/CommandParticipantA,A2,A3,A4#getRegexConcat",
+          "classdiagram/command/CommandCreateClass#getRegexConcat"
+        ],
+        "rust_locations": [
+          "crates/rustuml-parser/src/parse/class.rs#native_container_candidate,try_class_decl"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-empty-symbol-painted-frontier/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-empty-symbol-painted-frontier",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "372a84d6abb20df41a3690ba5ee5774b1ed03998",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_cloud.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_cloud.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "d2346f4539328a7ed95db93bb48c71a53786e0f7fef105972260db4e2b3590ed",
+          "java_sha256": "b439868be2e10e5ad1e69df65465443ebb8e031def6037935166dfe7d6a2687b",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_database.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_database.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "d162f30673a6d04d36baf1c6c94efeb176ce938481c5081e23fab2c95dd9962d",
+          "java_sha256": "8496ec1163a93f2aa4f3a45e99bbe77d38bab9feb77dd0775712a42682444331",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_node.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_node.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "456bc345f25e0b6f220449ef9685fb89e382c76cc63db01dc84585f42340eba3",
+          "java_sha256": "fe7281c0dc72645239e7e3454942080ed14f2690589c24c6564ffbca5e9e6e26",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_rectangle.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_rectangle.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "5bf5a24e279d63192c8844d4d578ee765c53863ebc50bab0e1a1dc7aaa0c9935",
+          "java_sha256": "f7949fb3724086564c06d48b5113922400d33cb3ba34b6ffc44596b60717d74a",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/cloud_unlinked.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/cloud_unlinked.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "3ee3eab43bf27388052d859d77be6003e15769c84c20896d3165cdbec2eb687b",
+          "java_sha256": "a100d7103e976690e1135e959b07083fb30930c28e2a3babdd7d965e09bff75e",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/database_link.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/database_link.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "0179cd31670e7d10ac8b8b70311b93b56524affe8fd4eebb224829cea183e2c2",
+          "java_sha256": "f9fa55dd65d32ff249a1e3c1d3dff8e04716526fc54723841acfee320ca28ae8",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/node_link.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/node_link.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "634ffbcaf63d5c3c4d4e93b3200dd5b87e8bab536fac11ed86652e8cbe6cd3b4",
+          "java_sha256": "6d7ab045d665807225314fbc9b831c7145c4f62dd3ba920bc2dac25db97f4da4",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/rectangle_nested.puml",
+          "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/rectangle_nested.svg",
+          "axes": [
+            "empty node/cloud/rectangle/database symbols",
+            "linked/unlinked groups and label lengths"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "d4df87f24ac69dbf7a4c5465025e48db1d677aa2130097e5fbe48d6df4441d48",
+          "java_sha256": "5a61650d3b99d0442d2070c85483d0c7894d7ae4d2c5d797c8862cab2c7a1620",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "Mapping empty package layout slots back to package image roles extends primitive frontier and UEmpty accounting to empty leaves; fresh node/cloud/database controls pass.",
+        "rectangle_nested remains a mismatch: Java emits link id Empty-to-Seed while Rust emits Bay.Empty-to-Seed. The path endpoint also differs by .01, which is within the frozen geometry tolerance; the identifier difference is not. Correct frontier geometry does not waive qualified-name/link serialization residue."
+      ],
+      "bounded_repair_guidance": "Preserve the frontier correction and resolve contextual endpoint serialization using Java model identity, without changing comparator rules.",
+      "source_audit": {
+        "java_locations": [
+          "svek/SvekResult#calculateDimension",
+          "svek/image/EntityImageDescription#drawU",
+          "decoration/symbol/USymbolNode#drawNode",
+          "decoration/symbol/USymbolCloud#drawCloud"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-command-quark-note-ownership",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "8a7bfb71cb202caecfdb9c33a099f0c32c726571",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_False.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_False.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "9ee3c448b65a50f04fe897ae4f07d3c881e09d45d5a57e1abf9a51b5d0d53890",
+          "java_sha256": "e36e7899c6192833039c20fad61e5befd8b0321cf2dde3fa6e56a95021a735e8",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_True.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_True.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "403d4b927336b1cfd46d379c7ab78606ac61ff8c2e46d5c050115a8432bd4adc",
+          "java_sha256": "9ca8d2c8b8fd47ce2c04e1d66bf4c46846fe7eb36f921489ced10bff3d8b1d12",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_False.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_False.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "4ad4cdb844cb8bd674b4d2e760ccca6d5c9b09abca68cb78823aa03df8766e97",
+          "java_sha256": "f1d02f5d5130d7b0a3b2e56549739af71eca7f67166af0e7afed7fd1ba9a9296",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_True.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_True.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "92f73ddc152f5991ad4ac89b6a1d102e38183baf0e3fab6570fe64d7bb36da11",
+          "java_sha256": "b9ec83c776006107b7a216e4d212caa4fa0fba5faf1b4a79bded8e027b1959ad",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_False.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_False.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "715febb4c80e7b161d19546b49243de7978000841ad9abe9e7dda67094e3e498",
+          "java_sha256": "2655f204a1b46c02b3a923d0a28bc382aa7f96ca0d7aec150aec19dd7e105653",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_True.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_True.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "7563fd5a968b0886da4aa29eb670391616537822d4d17e34e264ec9d3adaa2ad",
+          "java_sha256": "0feebbb8073d97e2cce6ded588600f0a8600b8f70675b19998657f7d4a5d7d00",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/nested_brace.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/nested_brace.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "21aa80a9abf4c4535467faa63b50d0758e2c1e8a4760ccece6f52594dfc246c0",
+          "java_sha256": "274f22a1fa8d21b0bb4c993802a8400840b529232a0e5c9a42c909bf6a09b05b",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "process_error",
+          "before_status": "process_error",
+          "source_sha256": "afac6c73f77ac1620dc21a9363ef1d354d30b88b53ceea5e9320f332e1a100dc",
+          "java_sha256": "ed6185025c7391a35fbef2e49a3f9bc47befe310beeb427ba28e836b638d825c",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 1,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/qualified_reopen.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/qualified_reopen.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "651abcc96bd41f4d71363e38acceb81a0e18ce15967d027d5736dbfc9f821451",
+          "java_sha256": "dc90c3b53e777b93bb9af1bbadcd6923471eab764a3cdbfe31e6fbcd5f85326c",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/stereo_brace.puml",
+          "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/stereo_brace.svg",
+          "axes": [
+            "root/native kinds versus nested groups and declaration order",
+            "brace versus end-note ownership with command-looking body text",
+            "qualified aliases, package visibility and mixing order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "e46e65ec98f9254e90ee81572a7bbff74435217c2a7d1f82e0f14472ef4fd961",
+          "java_sha256": "1b93a41e3e9101c487ced5614058583f64d9a3beb749c671987c6bc12b36e7c9",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "CommandFactoryNoteOnEntity.executeInternal resolves Quark<Entity>.getData without restricting leaf kind. Rust try_note searches entity_by_path and package_by_path only. The preserved Java-valid note_peer is rejected with unknown note target: M.",
+        "The Java bracket-note grammar permits stereotype, tags and URL before the brace. Rust ATTACHED_ML_RE omits these; stereo_brace succeeds through the wrong Description fallback and loses the class/note model. This is model loss despite CLI exit zero.",
+        "push_note materializes phantom packages before the named note. qualified_reopen retains objects but reverses the note/group UIDs and retains the implicit group's source line instead of the explicit package command. Named quark existence and entity materialization need separate ordering.",
+        "nested_brace correctly retains entity Fake and end note as text and keeps one record plus two notes. Its remote-reference geometry still differs; that comparison is not waived."
+      ],
+      "bounded_repair_guidance": "Resolve every materialized quark kind through one ownership model; consume the full note modifier grammar; separate quark creation from group materialization and source attribution.",
+      "source_audit": {
+        "java_locations": [
+          "classdiagram/ClassDiagramFactory#initCommandsList",
+          "command/note/CommandFactoryNoteOnEntity#createMultiLine,executeInternal",
+          "command/note/CommandFactoryNote#getRegexConcat,executeInternal",
+          "command/CommandPackage#getRegexConcat,executeArg"
+        ],
+        "rust_locations": [
+          "crates/rustuml-parser/src/parse/class.rs#native_container_candidate,parse_line,try_note,try_package",
+          "crates/rustuml-parser/src/diagram/class.rs#Package",
+          "crates/rustuml-render/src/class.rs#attached note endpoint layout"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-description-mixed-symbol-images/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-description-mixed-symbol-images",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "3518e81fcfa3c88340f84cfdf6f25a13068ff3d7",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_database_False.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_database_False.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "83765595debc1913c3e6da6d0d3dd06d591140fd5d8e36d80d8881ca49c6cb7c",
+          "java_sha256": "a540d53f26e56b377790fde9a7fe678fb4f09757ec223afcdb76445fcfa79cbc",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_database_True.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_database_True.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "5f266fff9c8d29d208988a06bd030b4937b441e7fae8531a10edccbc3caa9fe8",
+          "java_sha256": "0645650204a8a93fceee875eab132a74f20b171008c67318b106588524dbe7c7",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_queue_False.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_queue_False.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "cb6089dcf49eabb117de59e815a8f8f775c87236142e559677f22159d3917217",
+          "java_sha256": "f89cf6167a0d51399169f0df8fe1331052962cc4ec50e0abdb4096f3916c8d99",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_queue_True.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_queue_True.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "8d7349ddfeba10cbea86566a6ccca595c2a9d0463e35dda7c9e4c98832a0ec8b",
+          "java_sha256": "4d24a8175c679dcc60a59e78bb5a617e4759222e03edbb9b13d672d48a2916af",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_rectangle_False.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_rectangle_False.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "d3984e3ca47844a4b69f9ad30b8168a14557111a9b7610a5041b7f6e2c7ea9ab",
+          "java_sha256": "dd064ce8aedd988daf683bd6a8500d3ce96b991623b8310344de0bd628f065a6",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_rectangle_True.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c-retained-maker/mixed_rectangle_True.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "eec8bd12f6ba7005b2910ec70a1170c41079429f6750ba613b3a8ff21e3b7d1b",
+          "java_sha256": "cb41d0a4c289d5ca8f413e3e750a0826a16caddd4e834ffa9578d0f93222ec87",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/database_body.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/database_body.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "93f9a566b7b2122978fb5e4bc3e0b436cbb2ad8ea2ab9aaba527c5e7996382bb",
+          "java_sha256": "fa3896aff7f967684cfc28da814d158e0f29990f16f3019e085bd178ee9893be",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/database_stereo_alignment.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/database_stereo_alignment.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "7a0f8e009b9a90e6487055ffb94122a1f4aab14793fd52c8a3a7095e12fbd5f7",
+          "java_sha256": "a5e851842a2cc70967d242e4109c32dbc3c06208d285a2fdcd90db02b3ea9dda",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/queue_stereo.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/queue_stereo.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "106658095a71de6aa5af6242aa66c336ff9b784e9cc5fe466e3bdfbd782ff47c",
+          "java_sha256": "04be65eee29ba6337960e11aee9b07d296ca6eddbf124b20eed2998e7dacd900",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/rectangle_nested.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/rectangle_nested.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "847ab9270e2287482b4b12121acb9f25dec3d95ea3ad772d5db251c62f249ec3",
+          "java_sha256": "5b4638da4f2bf5ece87608baf44a8741d1454a0e1e3d31fae8d2f2aa61184c77",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/rectangle_stereo_alignment.puml",
+          "golden": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/rectangle_stereo_alignment.svg",
+          "axes": [
+            "symbol kind and multiline/stereotyped labels",
+            "root/nested ownership and declaration/edge direction order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "0e76d2e0ffc9e540cda2bce491d936534fc29637fbce99587ad3d513943e64cd",
+          "java_sha256": "6122eab2e5cfcc9a89b930f86fec922dd3088f39503bbce4d93519958cbc63ea",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "USymbolDatabase/Queue dimensions, margins and UEmpty overscan have named provenance; fresh database, queue and default nested rectangle examples pass.",
+        "rectangle_stereo_alignment fails the same USymbolRectangle.asSmall stereotype merge alignment as rectangle componentStyle. The AST retains the accepted symbol; the defect is text composition, not family selection."
+      ],
+      "bounded_repair_guidance": "Share the selected USymbol's alignment-aware text composition rather than centering all stereotype blocks.",
+      "source_audit": {
+        "java_locations": [
+          "svek/image/EntityImageDescription#getUSymbol",
+          "decoration/symbol/USymbolRectangle#asSmall,getMargin",
+          "decoration/symbol/USymbolDatabase#asSmall,drawDatabase,getMargin",
+          "decoration/symbol/USymbolQueue#asSmall,drawQueue,getMargin",
+          "klimt/drawing/LimitFinder#drawU"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#ClassFontOverrides,calc_entity_dims,render_description_leaf,entity_frontier_min"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-package-visibility-title-image/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-package-visibility-title-image",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "de192dc216b6795b6d820c240e82234988d1f39d",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_package.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_package.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "process_error",
+          "source_sha256": "30564b91314d05de2879c67fc8e14c6df9b5b49e70fe347ada86d09a8fa7538b",
+          "java_sha256": "3d4484bdce8669e3055164b09b0af85de1926ac63d0e29ef20d3b1d1138e7988",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_private.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_private.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "process_error",
+          "source_sha256": "521bb09f13c4b7c74d50785f33f10735fdd93a63cfe51a64e53390018bcc678d",
+          "java_sha256": "7afce0102a0ba1d413ad4e3dbfbc9bbc6cb86a092b455a8c104c8b2779af933d",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_protected.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_protected.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "process_error",
+          "source_sha256": "de5b55650215bfa4fccddf3e8c9fff68c2276492f9618b483d81de1b752afc15",
+          "java_sha256": "512a25ff0a6299e490e7a1f4bf81b75f2bb29bf5d490e2c6b75fe3c11b9ea7e1",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_public.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_public.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "process_error",
+          "source_sha256": "dc9d7a31d1afc779b7fcda0f0cc83767315e0b1b616f6e7a76a8a50a35413e05",
+          "java_sha256": "7c67048f85f90e67eb70f81b5344040eced1050b555db229d010bb9b8dc67ab9",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/empty_public.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/empty_public.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "process_error",
+          "source_sha256": "b31ba7c61774f964cc6e9663d726a12f9fc80ef2b39e33506708fc9d93da5266",
+          "java_sha256": "3842ac7b32ce75d41cd9ee8239acf70fd8f8e65ed0e00dba821f1f777f5b20dc",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/large_protected.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/large_protected.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "process_error",
+          "source_sha256": "d6d4f2abd41266b801328de649d144ed87b7683eedf866e62c554b82dfd830bc",
+          "java_sha256": "8862c570ee519356e1cef78bf1d4606324b38e3fd832ac248c92a278a68c0b16",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/stereo_package.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/stereo_package.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "process_error",
+          "source_sha256": "baa49ac93b81ba13c8c82eee5d7cbefc8585d6dcd3d1cdc6a8bbfe7c0f9c1554",
+          "java_sha256": "b0f4a7d6c86644793f59e02dc8308925a904c0fe1c729da05efc3c57c4f201d7",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_node.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_node.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "e0f48e3db4fc9fca67fc084cd2be0100008682debc8765fcc455527467ada26b",
+          "java_sha256": "d69f5cc421b884a0cad2faf63a604fccfb0f51a655fc8dd8c23f5a47d136667f",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_rectangle.puml",
+          "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_rectangle.svg",
+          "axes": [
+            "all four visibility kinds and custom icon sizes",
+            "short/long group names, stereotype and child topology"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "process_error",
+          "source_sha256": "89919ae48637c85ea3d5c985a27d9cb12862d70bcc6000b53ea9bf497884cba1",
+          "java_sha256": "4401440bf0b222389d78e8a36c17bfb85869706ab82ceea7db7af8da85b4bdb7",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "ClusterHeader.getTitleBlock merges a size+1 visibility image with top margin 4 before the title independently of package symbol choice. Measurement changes follow that source for the exercised default folder titles.",
+        "style_rectangle and style_node preserve visibility in the AST and reserve its width but paint no visibility glyph. render_declaration_visibility is called only in the default Package branch of emit_layout_package_cluster; alternate symbol title paths omit it. All three fresh default-style cases pass, including empty groups and custom icon sizes."
+      ],
+      "bounded_repair_guidance": "Compose one visibility-aware title image and use it for every package symbol, both empty leaf and populated cluster paths.",
+      "source_audit": {
+        "java_locations": [
+          "command/CommandPackage#executeArg",
+          "svek/ClusterHeader#getTitleBlock",
+          "skin/VisibilityModifier#getUBlock,drawInternal"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#layout_package_clusters,emit_layout_package_cluster,cluster title dimensions"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-ribbon-empty-stripe/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-ribbon-empty-stripe",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "372a84d6abb20df41a3690ba5ee5774b1ed03998",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_left.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_left.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "0e851c4712faf6d63f47b7cb0f3eb757df78ac0bef3f19fb04a31bc070b258a5",
+          "java_sha256": "8ffa63e84081e511d51a91f8140280bc736649c702eca9c27b70a60452534b24",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_right.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_right.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "25b886f3b23ba377844c1ba00038bbe30d7c480d1d679e652b33ab2b7d1e0911",
+          "java_sha256": "4f3ba8afd704293162824ce33854434c4a3222f49636ae76164561f1ef2fab6b",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_right.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_right.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "invalid_reference",
+          "before_status": "invalid_reference",
+          "source_sha256": "d24260fe8ab99276a8cbc138b72096cad41a7a2a8877daa2164b320d75e2c24b",
+          "java_sha256": "d1ccad85d46c81f7a1013508b9a23d411400977101f3cf92035f012a77060857",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 1,
+          "comparator_exit": 2
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_valid.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_valid.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "5e624f21ccd4bceb1f68f7dda2bee224e0ea5770e796fbdcfaeb14d9a9db3e13",
+          "java_sha256": "1b4fe4a25db4a4ffb7078130564c7ef1c9a60baab832e0d711515aa0342008fb",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_left.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_left.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "invalid_reference",
+          "before_status": "invalid_reference",
+          "source_sha256": "579e42629d0612fc769e71551d99c5bfbbddb3e2fd18d4078a7b05542c9ac025",
+          "java_sha256": "6417a18b92a5e4c87bbeec906c9d72c5459468dfe5ecdafcb74061636f30bed1",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 1,
+          "comparator_exit": 2
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_valid.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_valid.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "04638028a8ced7a1ca18e6d747961a79dc1630e149f9b913a9f7bd7628de6fc7",
+          "java_sha256": "3951bbcd93f66e66e453235d9b2cbddfff2a9d2e8c191252932ec8bcde19b7d1",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_footer_styled.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_footer_styled.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "00aaaeb3d767635a6575f985d6d5db5eb74d72bcd1b978409c6f36d65415023e",
+          "java_sha256": "5f64910849900a5f4e64d259f1ab37e1e05a66df8db70b65f9ee8874876a7706",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_header.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_header.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "216942c1fa8f66ae5810b65ff6aecec73d305fff028c5a3b02ffc7ecea75c20a",
+          "java_sha256": "49f9bd5a5f2c9ee78094a0ca66074078e53f96c7c17caa37dee4f2f7b6edffca",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/title_center.puml",
+          "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/title_center.svg",
+          "axes": [
+            "left/right/center ribbon alignment",
+            "empty middle lines and changed font sizes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "039ea3b76b44e2b9d4310262ab5ae6920d40244d7c6c7f2bd0396502380181b5",
+          "java_sha256": "5e23b7f2d6a9db1b737dd119f3e7ad9ff42751b3f38203d5ad88aee9ed6767a1",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        }
+      ],
+      "findings": [
+        "StripeSimple.getAtoms inserts one space for an empty stripe. Valid mixed-content header/footer/title cases now pass with that behavior.",
+        "only_blank_header and only_blank_footer_styled remain mismatches: DecorationLayout filters empty strings before layout and emit returns early, so a present blank-only ribbon never reaches the fallback atom. The two malformed outer-alignment controls are invalid Java references, preserved as negative evidence and never counted as passes."
+      ],
+      "bounded_repair_guidance": "Distinguish an absent ribbon from a present ribbon containing empty stripes before filtering; retain command syntax negatives.",
+      "source_audit": {
+        "java_locations": [
+          "klimt/creole/legacy/StripeSimple#getAtoms"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-static-shield-cell-grid/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-static-shield-cell-grid",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "3e6ccb6cd4cdb9c015d5e5a83c997a0d05a1fecf",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py",
+        "clang -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer -Ivendor/graphviz/include -Ivendor/graphviz/lib/ -Ivendor/graphviz/lib/common -Ivendor/graphviz/lib/gvc -Ivendor/graphviz/lib/cgraph -Ivendor/graphviz/lib/pathplan -Ivendor/graphviz/lib/pack -Ivendor/graphviz/lib/cdt -Ivendor/graphviz/lib/label /tmp/rustuml-review-cbd/native_safety.c /tmp/rustuml-review-cbd/target/release/build/rustuml-layout-2d2dc6e5d94b037d/out/libgraphviz.a -o /tmp/rustuml-review-cbd/native_safety",
+        "/tmp/rustuml-review-cbd/native_safety 3 /tmp/rustuml-review-cbd/allocation-control.html",
+        "/tmp/rustuml-review-cbd/raw_dot /tmp/rustuml-review-cbd/native/exponent.dot",
+        "/opt/homebrew/bin/dot -Tplain /tmp/rustuml-review-cbd/native/exponent.dot"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_False.puml",
+          "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_False.svg",
+          "axes": [
+            "LR/TB and reversed endpoint order",
+            "fractional label width, stereotype height, declaration order, multiple shields"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "c277a8f21d656ebe6cfb7c5875574e5a2fe2fa1b8d50b7221c5a5b67a93facdb",
+          "java_sha256": "cbb2b9ed09ad6f7b606554f98ee7f370e9e1aaffc1aaf1661ca95d767d543dbe",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_True.puml",
+          "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_True.svg",
+          "axes": [
+            "LR/TB and reversed endpoint order",
+            "fractional label width, stereotype height, declaration order, multiple shields"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "9ad8db821d3a0bd920bac7d5747bacdbcb69755022388280620d0961ca646abf",
+          "java_sha256": "7ab1d20443f4b034f48a4176ead22fcd15fdb678cae95ec42771fda7da9be797",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_False.puml",
+          "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_False.svg",
+          "axes": [
+            "LR/TB and reversed endpoint order",
+            "fractional label width, stereotype height, declaration order, multiple shields"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "3b534b2d005b4e327163a4b3047c5643c5c9a6fa0fdab723527606863fe7e6d3",
+          "java_sha256": "c59f9b8f424cd569276211bbce1ecc3486613f3effa27cfc92c626a4a75e39ae",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_True.puml",
+          "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_True.svg",
+          "axes": [
+            "LR/TB and reversed endpoint order",
+            "fractional label width, stereotype height, declaration order, multiple shields"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "5cea7ef1193fccaffa1dd700bfc2602e9206c6a77ffe86310ef4c7c06318a37a",
+          "java_sha256": "4fada3842550297d266976201b11d75903d076f144e2a898b67f43b3512e13ef",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/group_cross.puml",
+          "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/group_cross.svg",
+          "axes": [
+            "LR/TB and reversed endpoint order",
+            "fractional label width, stereotype height, declaration order, multiple shields"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "41c1aeb60dec5dbcc2e216799004239015a07bfdc512f9e310c8a1ffcdd0dbcb",
+          "java_sha256": "8f08d6ab587c4401c9a461fcec8acabd43042d40f6d54d44f9869e0a33891419",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/multi_tb.puml",
+          "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/multi_tb.svg",
+          "axes": [
+            "LR/TB and reversed endpoint order",
+            "fractional label width, stereotype height, declaration order, multiple shields"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "4f8e57eccf13009fa29a2b8f6e8a3be68f4ecdbbf075d65bfa47ac98b6c11435",
+          "java_sha256": "34002993708d895aa900ad3e92f6037a5c7935588df4ec283426df73b0beb210",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/self_lr.puml",
+          "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/self_lr.svg",
+          "axes": [
+            "LR/TB and reversed endpoint order",
+            "fractional label width, stereotype height, declaration order, multiple shields"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "4d16b2ca6098d8dd6709a67269d8a40ffc8799d0e707f5ec127b4bd499635232",
+          "java_sha256": "0164170f95aa292c2da5e6757e8656f5227b0fa74cb805e3f1432d1f8fd3537f",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        }
+      ],
+      "findings": [
+        "SvekNode.appendLabelHtml/appendTd emit the fractional 3x3 plaintext grid and h central port now emitted by Rust. Fresh multiple-node, self-link, cross-group and direction/width cases pass, as do the four retained maker shields.",
+        "The native parser's first cell allocation failure followed by successful realloc stores an unterminated array, then free_html_label traverses uninitialized pointers. Fault-injection index 3 reproduces an AddressSanitizer SEGV against the exact helper translation unit. This is an allocation-failure path, not a normal-input crash in the shipped CLI.",
+        "htmllex.doInt uses strtol and then range-checks the integer. The helper uses strtod, requires the complete token, and range-checks before truncation. Exact DOT probes show WIDTH=1e2 means 100 here versus 1 in Graphviz; WIDTH=65535.9 is rejected here but truncated to 65535 externally, losing the native h port on fallback. Empty width is accepted here despite doInt rejecting it. These are distinct from the ordinary fractional cases that pass.",
+        "153 bounded malformed/truncated/numeric/ragged/duplicate-port/oversize-row probes have no non-injected sanitizer crash. Row/column maxima, fixed-cell centering and ordinary fractional grid node dimensions agree with external 16.1 on tested inputs. The parser remains a general native entrypoint, so passing 3x3 production examples does not excuse malformed-input or numeric-contract failures.",
+        "The shipping binary links only libSystem and libiconv on macOS; no JVM, external Graphviz, Expat or font-library dependency was introduced. This is host linkage evidence, not a claim that the macOS executable has literally no dynamic OS libraries."
+      ],
+      "bounded_repair_guidance": "Make partial allocations cleanup-safe before exposing an array; implement doInt's exact numeric contract or deliberately reject the unsupported subset without claiming parity. Keep central-port geometry and non-class callers covered.",
+      "source_audit": {
+        "java_locations": [
+          "svek/SvekNode#appendHtml,appendLabelHtml,appendTd",
+          "svek/image/EntityImageDescription#getShield",
+          "Graphviz common/htmllex.c#doInt,widthfn,heightfn",
+          "Graphviz common/htmltable.c#size_html_tbl,pos_html_tbl,pos_html_cell,html_port",
+          "Graphviz common/shapes.c#poly_init,poly_port"
+        ],
+        "rust_locations": [
+          "crates/rustuml-layout/src/graph.rs#svek_shielded_node_table,create_node",
+          "vendor/graphviz/lib/rustuml_helpers.c#rustuml_make_fixed_html_table_label"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-member-visibility-even-image/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-member-visibility-even-image",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "3518e81fcfa3c88340f84cfdf6f25a13068ff3d7",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_class_14.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_class_14.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "e1a8bfd808e2821a6b150f612c5ef11e2ecac0c738966a5fccc05a1b681ac19b",
+          "java_sha256": "6993740853ee1ce20d7cea6f60ea9b6dd43fb9b4dca18df24aab07a6c9993e87",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_class_15.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_class_15.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "cf26842a985a0d3207ff52d6415112b11486890f1adcd567c67b0fc392d4d081",
+          "java_sha256": "456f132aa15bc15aebb257e0a6b6be516c89604240f9d328cd751647de38c112",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_class_9.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_class_9.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "af0b989140e32d668de4609c4cec3f0f1577c4c52a1ed21b8bb2a27bdc63e17e",
+          "java_sha256": "80cc215dae9e15bc9f21264c76ddc66abc7c1f62d2609f4129ec19012ba509c2",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_record_14.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_record_14.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "5afb7e9e8e15dc04ea20ba0b9ad6563e77a34de7bcd7697eb9426ec983c9457c",
+          "java_sha256": "4ab6c79258ab966febf4dd8f77680987a0b87384fd1f0f6f9cf7d916e0b24304",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_record_15.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_record_15.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "fe160448012fa8724203aeffdd035a0579e9cb52901fce83049c617dffc00473",
+          "java_sha256": "3836165fe1bf149386613a1d88a089f1477c17825f25b58a7a31699e894701cb",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_record_9.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c-retained-maker/member_record_9.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "91def113983b84f2aafad38bb272568b994ae92bc369f9da993fce4a6e879990",
+          "java_sha256": "b86875dbb0fcd28bbf5b5e04ced826c19b596013542dc71151836d04b3ba5546",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/large.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/large.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "54b340444a9b09df82d094cba85a887d9bbc27e44fd2acbc945519a1a4974dcf",
+          "java_sha256": "c0704827033479fe60ff4456f33f71441d7954ef35b74f4cd4056e0e1c3ed7bf",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/odd.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/odd.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "e849e73defe973a0320f3b2543cd43e3bb8935fc6caeab84c1f9e30b64fb356f",
+          "java_sha256": "bc06e09d932c5c2fc1cfbf138e48664046788e580677a61ec257951e555acee4",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/tiny.puml",
+          "golden": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/tiny.svg",
+          "axes": [
+            "odd/even icon sizes and public/private/protected/package primitives",
+            "native record/struct/protocol and ordinary class members"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "d9b048af3278e331d0596fb52c464acaf4ebf9d74266a74aa4a481c3e580e479",
+          "java_sha256": "a082cfa3debaf7b4437af9e8efa3356283b551416357c5e73138e8312ba5e194",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "VisibilityModifier.ensureEven, size-minus-four circle/square and size-minus-two polygon formulas justify the changed glyph constants. The odd-size protocol control passes.",
+        "The 22px struct case gets individual glyph dimensions right but places later rows too early: MethodsOrFieldsArea.getLayout and PlacementStrategyVisibility use each measured block's height; Rust's fixed text-row advance does not retain the larger icon block height. The 3px case emits a negative-size square that Java's SVG rectangle driver suppresses. Neither failure is fixed by the new even-size primitive geometry."
+      ],
+      "bounded_repair_guidance": "Use per-row max(icon block,text) dimensions and the SVG primitive driver's nonpositive-size behavior; keep requested block size distinct from even glyph size.",
+      "source_audit": {
+        "java_locations": [
+          "skin/VisibilityModifier#ensureEven,drawCircle,drawSquare,drawDiamond,drawTriangle",
+          "cucadiagram/MethodsOrFieldsArea#asBlock,getUBlock"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#VisibilityIconGeom"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-current-document-ribbon-style/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-current-document-ribbon-style",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "1051c34cc9ac39115368720fa8e5ed44ebdbadc5",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_center.puml",
+          "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_center.svg",
+          "axes": [
+            "header/footer font size and inner alignment versus outer command alignment",
+            "multiline unequal labels with nested containers and title/caption siblings"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "61410bb8ccb0560d764181868c464f7e4d8e246cdbdf75abde3654d69beb9fba",
+          "java_sha256": "54fc6ab7384efd7a3fd6dfb1372386b0332bee735f11742b4c0eda40a96dce7e",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_left.puml",
+          "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_left.svg",
+          "axes": [
+            "header/footer font size and inner alignment versus outer command alignment",
+            "multiline unequal labels with nested containers and title/caption siblings"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "48112057ac74f43ba9059f1b839ad25230437db4a882b6d12e1223e72ebd8e2f",
+          "java_sha256": "ee7ff25f9bb795943cdfbd1863e1af303d2e061d6eda569215a10f271f1e3c10",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_right.puml",
+          "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_right.svg",
+          "axes": [
+            "header/footer font size and inner alignment versus outer command alignment",
+            "multiline unequal labels with nested containers and title/caption siblings"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "c69bf4f20a81c784a60349810ded6f3e8b03c41fff28e7ae7d23349ec92d0074",
+          "java_sha256": "2f6cadf4296140e7dcf1e2efddb43f66f7d3d0800d156315d08e00d212341b48",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/footer_serif.puml",
+          "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/footer_serif.svg",
+          "axes": [
+            "header/footer font size and inner alignment versus outer command alignment",
+            "multiline unequal labels with nested containers and title/caption siblings"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "26312c2e5162db3fb99c264bd8d93797919bc92bfa7b6a99e216928bbd4ec612",
+          "java_sha256": "3b35032850368dc3c0f0805267af60f2c10528ca1a99dc8a28dfa939c226bc58",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/header_mono.puml",
+          "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/header_mono.svg",
+          "axes": [
+            "header/footer font size and inner alignment versus outer command alignment",
+            "multiline unequal labels with nested containers and title/caption siblings"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "534dcb34e76b522d1af0615bfd84f8db37b6048512aa70108ccfb83583fe6671",
+          "java_sha256": "ba432a8813ef222a73456f849f018b52d588c654223aa1284f3b63195509396c",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/title_italic.puml",
+          "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/title_italic.svg",
+          "axes": [
+            "header/footer font size and inner alignment versus outer command alignment",
+            "multiline unequal labels with nested containers and title/caption siblings"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "9822f2d9ce3b44373382b9cd0a1988e5d1046d11a88381682114d2c2f7441d91",
+          "java_sha256": "5de4db7461a68b26480d8b85b00a63745db5b3433f9b28387ea60d7f400bceaf",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "DiagramChromeFactory12026, DisplayPositioned.createRibbon and Style.createTextBlockBordered confirm current document style flow. Rust now reads font/color/alignment for measurement and emission, but all three fresh alternate-font/style examples fail.",
+        "header_mono preserves requested italic/font/color but differs in measured advances, baseline and significant spaces (Java nonbreaking spaces versus Rust spaces). Rust block_height and emitted line_height still use generic metrics while width uses the selected family. Font mapping across remote and origin remains unproven; these failures are retained, not relabeled style passes.",
+        "The three retained cloud chrome maker cases still fail their outlines. They do not license acceptance of the complete mechanism."
+      ],
+      "bounded_repair_guidance": "Use the resolved font/text model consistently for width, height, ascent and Creole whitespace; identify font-environment dependence explicitly and retain cloud frontier failures.",
+      "source_audit": {
+        "java_locations": [
+          "core/DiagramChromeFactory12026#addHeaderAndFooter,addTitle,addCaption",
+          "abel/DisplayPositioned#createRibbon",
+          "style/Style#createTextBlockBordered"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#DecorationStyle,DecorationLayout"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-final-svek-cluster-origin/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-final-svek-cluster-origin",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "8a7bfb71cb202caecfdb9c33a099f0c32c726571",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/nested_lr.puml",
+          "golden": "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/nested_lr.svg",
+          "axes": [
+            "LR/TB, root and nested containers",
+            "group endpoint decorations, wide labels, root and attached notes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "2516ac9253e06bfb078a45eba326b7527c0cf58a77bd0328ce055de9fdf3b173",
+          "java_sha256": "1c4aea4983aca471d7d596b5c229fb7322a74407005fb1cc4f7013050280bcc4",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/nested_wide_lr.puml",
+          "golden": "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/nested_wide_lr.svg",
+          "axes": [
+            "LR/TB, root and nested containers",
+            "group endpoint decorations, wide labels, root and attached notes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "cb6553faccf7c157a1fd47930526b6667fce1a5b33e7929b4422b7b0abfd9e8b",
+          "java_sha256": "48dffcb5400e2c3d276e0859e10a61c3249dcb555c7c6344d25e4ea619b5e7f2",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/reversed_tb.puml",
+          "golden": "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/reversed_tb.svg",
+          "axes": [
+            "LR/TB, root and nested containers",
+            "group endpoint decorations, wide labels, root and attached notes"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "b640d3ed3444d48c51374b97f000d02ff1d3945dd21d43994c2e895fe92f8791",
+          "java_sha256": "cf39a7c49b06d533d7de1b0b4ccd4fd186c8aad7703f3a3e903daa0976e522bf",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        }
+      ],
+      "findings": [
+        "SvekResult.calculateDimension calls clusterManager.moveDelta(6-minX,6-minY). The candidate now passes the same final x bias into cluster images and cluster canvas bounds; this directly addresses the omitted translation.",
+        "All three fresh nested/directional group-endpoint SVG comparisons remain mismatches. They include remote Graphviz 12.2 point-node behavior; the interrupted checker's DOT investigation is historical evidence, not a fresh remote run. Preserved exact Java DOT solves on local 16.1 and the candidate native engine both retain explicit .01-inch point nodes. This does not establish equivalence to 12.2 or attribute every fresh mismatch to Rust.",
+        "No further coordinate offset is justified. The unchanged rejection rule prevents accepting this mechanism with its valid paired comparisons red."
+      ],
+      "bounded_repair_guidance": "Resolve the precise DOT runtime discrepancy with an available pinned remote runtime and replay the preserved pairs; keep solver origin and final image translation distinct.",
+      "source_audit": {
+        "java_locations": [
+          "svek/SvekResult#calculateDimension,drawU,moveDelta",
+          "svek/Cluster#moveDelta,drawU"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#render_plantuml_svg,layout_package_clusters,svek_layout_x_bias"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  },
+  {
+    "path": "docs/parity-reviews/class-description-body-symbol-choice/review.json",
+    "record": {
+      "schema_version": 1,
+      "mechanism": "class-description-body-symbol-choice",
+      "reviewer": {
+        "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+        "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+        "role": "Independent recovery checker; no production edits or children",
+        "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+      },
+      "account_commit": "92f3bdc9e90fc24b14d6af8563c6a7bd78016194",
+      "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+      "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+      "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+      "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+      "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+      "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "reference_environment": {
+        "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+        "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+        "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+      },
+      "commands": [
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+        "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+        "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+        "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+        "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+      ],
+      "perturbations": [
+        {
+          "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_rectangle.puml",
+          "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_rectangle.svg",
+          "axes": [
+            "componentStyle uml1/uml2/rectangle and explicit style alignment",
+            "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "8be77e8876c13b415acbe7d1fab5b37a086717e7be64e505f04971e4cbee5b12",
+          "java_sha256": "9aa34168d032649980f41f90c365e429817056d9f80217ec21cb84aad2eac274",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml1.puml",
+          "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml1.svg",
+          "axes": [
+            "componentStyle uml1/uml2/rectangle and explicit style alignment",
+            "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "09cd2d99095a4173db46fe4f6572cf0913ccde72ea057044bd70636f4ea7559a",
+          "java_sha256": "9fc0873133e43f09a3d51dc7acfd75a23beb0ca30d46e1d0f9cb7800b6d1058b",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml2.puml",
+          "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml2.svg",
+          "axes": [
+            "componentStyle uml1/uml2/rectangle and explicit style alignment",
+            "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "6c541dc338179f4b099c95a752808d6ee42cf37185e7e2b9b18e9cf3dd3266aa",
+          "java_sha256": "4732519ab4a8bf6121a45c7b178cca07b04ce4e68713070ed4896fff6bdba655",
+          "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/rectangle_left.puml",
+          "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/rectangle_left.svg",
+          "axes": [
+            "componentStyle uml1/uml2/rectangle and explicit style alignment",
+            "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "fail",
+          "observed_status": "mismatch",
+          "before_status": "mismatch",
+          "source_sha256": "349196e44a3e4bba7ae21cb34f1236d8cb1affda0c29f6d700fedc714be9cf58",
+          "java_sha256": "a7d647433f620404eb8fa5892213f228fee8dc3df852047078c1c45b55efc686",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 1
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml1_right.puml",
+          "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml1_right.svg",
+          "axes": [
+            "componentStyle uml1/uml2/rectangle and explicit style alignment",
+            "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "mismatch",
+          "source_sha256": "b2fc6b5a5bae89c6fd69567866d5deb21abcc9d132de6dc21cad1c560eced52b",
+          "java_sha256": "0ae960a37c711674b16ec98f31c8e992a5fd5d56a6a1a3cef9f5fb8382f9d695",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml2_center.puml",
+          "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml2_center.svg",
+          "axes": [
+            "componentStyle uml1/uml2/rectangle and explicit style alignment",
+            "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+          ],
+          "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+          "result": "pass",
+          "observed_status": "pass",
+          "before_status": "pass",
+          "source_sha256": "74ba6485c82d3cd71606ca1e1d9d82ce883764bf0b6b2d3dd16b6a43732ac9b3",
+          "java_sha256": "d2a7b7d66a6807bd880269d193b5458f4aa4a97f0346e6ea34f4e9241b89ed72",
+          "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+          "cli_exit": 0,
+          "comparator_exit": 0
+        }
+      ],
+      "findings": [
+        "ComponentStyle selection and Component1/2 margins and tab primitives trace to the named USymbols. Fresh UML1/right and UML2/center examples pass.",
+        "rectangle_left fails only at the stereotype x position: reference 18, candidate 66.769. USymbolRectangle.asSmall merges stereotype and label using stereoAlignment; Rust always centers the stereotype within text_width and does not retain independent stereotype alignment. The same gap appears in the mixed rectangle account."
+      ],
+      "bounded_repair_guidance": "Carry title/body alignment and stereotype merge alignment separately through the selected symbol's measured text composition.",
+      "source_audit": {
+        "java_locations": [
+          "svek/image/EntityImageDescription#getUSymbol,constructor",
+          "cucadiagram/BodyFactory#create3",
+          "cucadiagram/BodyEnhanced2#getTextBlock",
+          "decoration/symbol/USymbolComponent1#getMargin,drawComponent1",
+          "decoration/symbol/USymbolComponent2#getMargin,drawComponent2",
+          "decoration/symbol/USymbolBoundary#asSmall",
+          "svek/Boundary#drawU"
+        ],
+        "rust_locations": [
+          "crates/rustuml-render/src/class.rs#DescriptionLeafStyle,calc_entity_dims,render_description_leaf,ClassFontOverrides::from_diagram_for_entity"
+        ],
+        "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+      },
+      "verdict": "rejected",
+      "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+      "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+      "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+    }
+  }
+]

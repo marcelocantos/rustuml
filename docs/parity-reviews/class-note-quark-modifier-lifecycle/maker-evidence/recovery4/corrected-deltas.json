@@ -1,0 +1,500 @@
+{
+  "repaired": [
+    "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/stereo.puml",
+    "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.puml",
+    "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/qualified_reopen.puml",
+    "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/stereo_brace.puml",
+    "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/rectangle_left.puml",
+    "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/rectangle_stereo_alignment.puml",
+    "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_nested_linked.puml",
+    "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_nested_unaliased_lr.puml",
+    "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_target_nested_alias_lr_long.puml",
+    "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_empty_to_filled_lr_long.puml",
+    "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_filled_to_empty_tb.puml",
+    "test-diagrams/perturbations/class-empty-package-link-endpoint/nested_empty_alias_target_tb.puml",
+    "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/rectangle_nested.puml",
+    "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/large.puml",
+    "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/tiny.puml",
+    "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/empty_peer.puml",
+    "test-diagrams/perturbations/class-package-modifier-order/followup_explicit_node_tooltip_unicode_tb.puml",
+    "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_node.puml",
+    "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_rectangle.puml",
+    "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_footer_styled.puml",
+    "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_header.puml",
+    "test-diagrams/perturbations/class-simple-actor-image/checker3c/shadow.puml"
+  ],
+  "lost_passes": [],
+  "new_process_errors": [],
+  "repaired_errors": [
+    "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.puml"
+  ],
+  "remaining_errors": [
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+      "exit": 1,
+      "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+      "exit": 1,
+      "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+      "exit": 1,
+      "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+      "exit": 1,
+      "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13167544) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13167548) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168275) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168279) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168302) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168308) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168362) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168376) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168386) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168400) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168548) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168554) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168573) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168579) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168655) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168661) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168663) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168677) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168679) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168685) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168687) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168703) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168705) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168713) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168731) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168737) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168855) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168861) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168865) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168877) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168903) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13168913) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.puml",
+      "exit": 1,
+      "stderr": "parse error: line 6: unrecognized class command: !procedure $emit($a = 2, $b = 1)\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+      "exit": 1,
+      "stderr": "parse error: line 3: unrecognized class command: class \"$b=\"named / second\" as Named\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !function $label($prefix = \"\u00e9,(x)\", $suffix = early)\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.puml",
+      "exit": 1,
+      "stderr": "parse error: line 6: unrecognized class command: !procedure $emit($caption = a,b)\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.puml",
+      "exit": 1,
+      "stderr": "parse error: line 3: unrecognized class command: class \"$seed + \" suffix\" as Copper\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.puml",
+      "exit": 1,
+      "stderr": "parse error: line 4: unrecognized class command: class CobaltRegistry /' suffix\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.puml",
+      "exit": 1,
+      "stderr": "parse error: line 7: unrecognized class command: ' [dump] palette=cerulean\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "exit": 1,
+      "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !$key =\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.puml",
+      "exit": 1,
+      "stderr": "parse error: line 6: unrecognized class command: !$raw =\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.puml",
+      "exit": 1,
+      "stderr": "parse error: line 5: unrecognized class command: class \"%variable_exists((\"$\" +/\" as Copper\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+      "exit": 101,
+      "stderr": "\nthread 'main' (13172064) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 26 is not a char boundary; it is inside '\u00e9' (bytes 25..27 of string)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+      "exit": 1,
+      "stderr": "parse error: line 1: unrecognized class command: !procedure $unused($v = 2026)\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.puml",
+      "exit": 1,
+      "stderr": "parse error: line 4: unrecognized class command: !global parameter = \"updated\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "exit": 1,
+      "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "exit": 1,
+      "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+    }
+  ],
+  "invalid_references": [
+    "test-diagrams/perturbations/class-command-execution-ownership/checker/negative_late_mixing.puml",
+    "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+    "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+    "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_1.puml",
+    "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_3.puml",
+    "test-diagrams/perturbations/class-native-leaf-presentation/checker/negative_mandatory_modifier.puml",
+    "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_right.puml",
+    "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_left.puml",
+    "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+    "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+    "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+    "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+    "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+    "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.puml",
+    "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+    "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+    "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml"
+  ],
+  "changed_status": [
+    {
+      "source": "test-diagrams/perturbations/class-boundary-primitive-paint-order/checker3c/stereo.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/qualified_reopen.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/stereo_brace.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/rectangle_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-mixed-symbol-images/checker3c/rectangle_stereo_alignment.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_nested_linked.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_nested_unaliased_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_target_nested_alias_lr_long.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_empty_to_filled_lr_long.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_filled_to_empty_tb.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/nested_empty_alias_target_tb.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/rectangle_nested.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/large.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-member-visibility-even-image/checker3c/tiny.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/empty_peer.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/followup_explicit_node_tooltip_unicode_tb.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_node.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_rectangle.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_footer_styled.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_header.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/shadow.puml",
+      "before": "mismatch",
+      "after": "pass"
+    }
+  ],
+  "focused110_residuals": [
+    "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/nested_brace.puml",
+    "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_center.puml",
+    "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_left.puml",
+    "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_right.puml",
+    "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/footer_serif.puml",
+    "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/header_mono.puml",
+    "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/title_italic.puml",
+    "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/nested_lr.puml",
+    "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/nested_wide_lr.puml",
+    "test-diagrams/perturbations/class-final-svek-cluster-origin/checker3c/reversed_tb.puml",
+    "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/nested_group.puml",
+    "test-diagrams/perturbations/class-painted-frontier-union/checker3c/cloud_nested.puml",
+    "test-diagrams/perturbations/class-painted-frontier-union/checker3c/root_note.puml",
+    "test-diagrams/perturbations/class-painted-frontier-union/checker3c/uml1_note.puml",
+    "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_quoted.puml",
+    "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/order_stereo_entity.puml"
+  ]
+}

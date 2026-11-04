@@ -1,0 +1,10 @@
+@startuml
+skinparam classAttributeIconSize 22
+skinparam padding 3
+struct Fastener {
++head
+-shaft
+#turn()
+~seat()
+}
+@enduml

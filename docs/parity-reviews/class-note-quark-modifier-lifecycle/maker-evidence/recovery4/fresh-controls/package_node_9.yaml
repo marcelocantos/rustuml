@@ -1,0 +1,49 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: packagestyle
+      value: node
+    - key: classattributeiconsize
+      value: '9'
+    source: |
+      @startuml
+      skinparam packageStyle node
+      skinparam classAttributeIconSize 9
+      -package "Field station" as Basin <<zone>> {
+      class Pin
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Basin
+  - !Entity Basin.Pin
+  entities:
+  - id: Basin.Pin
+    label: Pin
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages:
+  - visibility: Private
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Basin
+    kind: Package
+    color: null
+    entities:
+    - Basin.Pin
+    source_line: 3
+    stereotypes:
+    - zone
+    display_name: Field station
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

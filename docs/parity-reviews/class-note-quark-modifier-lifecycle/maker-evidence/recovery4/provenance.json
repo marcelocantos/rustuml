@@ -1,0 +1,35 @@
+{
+  "kind": "maker measurements; no acceptance attestation",
+  "tested_revision": "7bd5c9f5d2f4dee23472ddc8e3ac4b96a3e196e3",
+  "baseline_candidate": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "baseline_evidence": "fc698b9b42abf2870c3ea27e44d07984211cc8c9",
+  "imported_evidence_commit": "2eaccb21af562b53fe28b00c22942007ca7e0786",
+  "java_source_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "stdlib_revision": "747d1eae809cde20675976d67e3eb84dc0021a0c",
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "new_reference_invocations": 0,
+  "reference_policy": "All paired SVG/source hashes verified against immutable checker results; no trimming, rewriting or regeneration. Remote OpenJDK 21.0.5 / Graphviz 12.2.0 calibration is scoped, not global equivalence. Historical fonts/Graphviz byte-equivalence remains unproven.",
+  "local_jvm_audit": {
+    "dormant_unguarded_launcher": "crates/rustuml-oracle/src/runner.rs:105 Command::new(\"java\")",
+    "action": "Not invoked or edited; gates prepend rejecting java/javac wrappers and append headless to existing JAVA_TOOL_OPTIONS. No JVM guard marker observed. No local Java/javac invocation.",
+    "remote": "192.168.1.112 unavailable from origin; no connection polling or new endpoint; fresh sources preserved pending remote validation."
+  },
+  "fresh_controls": {
+    "32_base_controls_revision": "7bd5c9f5d2f4dee23472ddc8e3ac4b96a3e196e3",
+    "4_shadow_controls_revision": "7bd5c9f5d2f4dee23472ddc8e3ac4b96a3e196e3",
+    "java_validity": "Not yet verified; source-guided intended-valid controls only. No SVG parity claim."
+  },
+  "model_census": "Full 1559 models at aba7e2a, one incremental include recheck at final revision; no subsequent parser changes. Renderer-only final correction does not affect model census.",
+  "binary_sha256": "8644f0d90cd68e15dc2d1975a62cf3deaf74fc3d4fafe97898379d308925dc7f",
+  "comparator_source_sha256": "523e1750b056f05293b101b59ae9bb4a2aac8ffbe670eabf7cc6a13bbfaba033",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+  "private_cache": "/Users/marcelo/Library/Caches/rustuml-class-cff4",
+  "original_checker_native_injector": {
+    "source_sha256": "d0e747d90449dc60f70205929300d65a41cfd0d4cd7a71cb12044d3891a21177",
+    "binary_sha256": "41ad2cfbd7fa22b92ed51cf7808396b66ee41ce84f2ec04e5e768c194e131828",
+    "dynamic_libraries": "/Users/marcelo/Library/Caches/rustuml-class-cff4/checker_native_safety:\n\t/opt/homebrew/opt/llvm/lib/clang/23/lib/darwin/libclang_rt.asan_osx_dynamic.dylib (compatibility version 0.0.0, current version 0.0.0)\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1359.40.3)\n",
+    "rebuild_recipe": "Use the clang command in native-build.log with scripts/original_checker_native_safety.c as source and checker_native_safety as output, retaining -fsanitize=address,undefined. Run each command in original-checker-allocation-results.json."
+  }
+}
