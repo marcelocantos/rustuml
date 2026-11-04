@@ -1,0 +1,1656 @@
+[
+  {
+    "registration_index": 0,
+    "class": "net.sourceforge.plantuml.command.CommandTitle",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^title(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+        "fox_signature": "2106432"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_meta",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandTitle.java",
+    "java_source_sha256": "04b107c823b6f922b9b22488ae7071f5f529ebc3eda16e20275309320edc696a"
+  },
+  {
+    "registration_index": 1,
+    "class": "net.sourceforge.plantuml.command.CommandMainframe",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^mainframe(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*)$",
+        "fox_signature": "574660"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMainframe.java",
+    "java_source_sha256": "9edad6702f27c8953ad4995ec70f4dadd3368ef0d1ac131da110e9d718e7da62"
+  },
+  {
+    "registration_index": 2,
+    "class": "net.sourceforge.plantuml.command.CommandCaption",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^caption(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+        "fox_signature": "2327572"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_meta",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandCaption.java",
+    "java_source_sha256": "ebcf602ba83bd15674c54ab65cec7ccf4e8abee3473072cc2551b9528e35b617"
+  },
+  {
+    "registration_index": 3,
+    "class": "net.sourceforge.plantuml.command.CommandMultilinesCaption",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "starting",
+        "pattern": "^caption$"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "ending",
+        "pattern": "^end[%s]?caption$"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMultilinesCaption.java",
+    "java_source_sha256": "1370826a3312d1c84db5675c46227981842e99717071165e28a03330f80ec0f5"
+  },
+  {
+    "registration_index": 4,
+    "class": "net.sourceforge.plantuml.command.CommandMultilinesTitle",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "starting",
+        "pattern": "^title$"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "ending",
+        "pattern": "^end[%s]?title$"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMultilinesTitle.java",
+    "java_source_sha256": "1c0d78e6de4b1d0ce6dc62a58e7da40a5674f0b527c4f3ec1fbc5068c496ca37"
+  },
+  {
+    "registration_index": 5,
+    "class": "net.sourceforge.plantuml.command.CommandMultilinesLegend",
+    "end_pattern": "^end[%s]?legend$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^legend(?:[%s]+(top|bottom))?(?:[%s]+(left|right|center))?$",
+        "fox_signature": "41312"
+      }
+    ],
+    "rust_handler": "try_meta",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMultilinesLegend.java",
+    "java_source_sha256": "31a5a3bd2862ae6ddb4f2d3d21592f5d77a016c3e1ae25b2b8d3db9fc8ae358e"
+  },
+  {
+    "registration_index": 6,
+    "class": "net.sourceforge.plantuml.command.CommandLegend",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^legend(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+        "fox_signature": "41312"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandLegend.java",
+    "java_source_sha256": "66acbf23ad03c5e3e3ee735e7097ce6f20e45dc5958a7c5d6d83c173cc3d264b"
+  },
+  {
+    "registration_index": 7,
+    "class": "net.sourceforge.plantuml.command.CommandFooter",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(?:(left|right|center))?[%s]*footer(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+        "fox_signature": "2687168"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_meta",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandFooter.java",
+    "java_source_sha256": "750b5adadc2a2101fcbbac70bbc6482082991e6d6eddea34ac3b3ad9493931d7"
+  },
+  {
+    "registration_index": 8,
+    "class": "net.sourceforge.plantuml.command.CommandMultilinesFooter",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "starting",
+        "pattern": "^(?:(left|right|center)?[%s]*)footer$"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "ending",
+        "pattern": "^end[%s]?footer$"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMultilinesFooter.java",
+    "java_source_sha256": "013195e9d7e67b4fc6d982b9e31fbe578315ab6feeb84643cf0079b18f8751db"
+  },
+  {
+    "registration_index": 9,
+    "class": "net.sourceforge.plantuml.command.CommandHeader",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(?:(left|right|center))?[%s]*header(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+        "fox_signature": "524900"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_meta",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandHeader.java",
+    "java_source_sha256": "c227f39258ffe392fb61a53623c8f2d2371f3aa5eedf4ab739d35107e0a731a5"
+  },
+  {
+    "registration_index": 10,
+    "class": "net.sourceforge.plantuml.command.CommandMultilinesHeader",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "starting",
+        "pattern": "^(?:(left|right|center)?[%s]*)header$"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "ending",
+        "pattern": "^end[%s]?header$"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMultilinesHeader.java",
+    "java_source_sha256": "95cda08730db9b266443e4e992cc71c32623875a4901c0068ba9fc31e026725c"
+  },
+  {
+    "registration_index": 11,
+    "class": "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^set[%s]+(?:separator|namespaceseparator)[%s]+(\\S+)$",
+        "fox_signature": "3145793"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandNamespaceSeparator.java",
+    "java_source_sha256": "823055130b08e7e6d48cefe7978510fc6e4b8e134a7ab9a0c18e01e0006934e1"
+  },
+  {
+    "registration_index": 12,
+    "class": "net.sourceforge.plantuml.command.CommandNope",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^[%s]*$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "empty",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandNope.java",
+    "java_source_sha256": "d8b1c41f8ab9d469aea516cda2256e12934177e91f8e11ac84bec575e93536c0"
+  },
+  {
+    "registration_index": 13,
+    "class": "net.sourceforge.plantuml.command.CommandPragma",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^!pragma[%s]+([A-Za-z_][A-Za-z_0-9]*)(?:[%s]+(.*))?$",
+        "fox_signature": "537542917"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_pragma",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandPragma.java",
+    "java_source_sha256": "87d2e4c6d7574c2ba5051d7dfff4a726bde66139828bd80b1597287300734002"
+  },
+  {
+    "registration_index": 14,
+    "class": "net.sourceforge.plantuml.command.CommandAssumeTransparent",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^!assume[%s]+transparent[%s]+(dark|light)$",
+        "fox_signature": "544915525"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandAssumeTransparent.java",
+    "java_source_sha256": "da9502d816d54c341ca5c2a4cdc31b1307f25354bfe63112b8df142edb99ccaa"
+  },
+  {
+    "registration_index": 15,
+    "class": "net.sourceforge.plantuml.command.CommandSkinParam",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(skinparam|skinparamlocked)[%s]+([\\w.]*(?:\\<\\<[^<>]*\\>\\>)?[\\w.]*)[%s]+([^{}]*)$",
+        "fox_signature": "1758213"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_skinparam",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSkinParam.java",
+    "java_source_sha256": "eb2acc94a4c6b933b496d6a3a0c60883044f7a0ef9477d5551201ab5f6f30c9e"
+  },
+  {
+    "registration_index": 16,
+    "class": "net.sourceforge.plantuml.command.CommandSkinParamJaws",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^((skinparam|skinparamlocked)[%s]+.*\ue100.*)+$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSkinParamJaws.java",
+    "java_source_sha256": "9537d7f8863f8953edbdffd40559e773cd4fcae0d1937bdf7359903ab0535844"
+  },
+  {
+    "registration_index": 17,
+    "class": "net.sourceforge.plantuml.command.CommandSkinParamMultilines",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilinesBracket",
+        "name": "starting",
+        "pattern": "^skinparam[%s]*(?:[%s]+([\\w.]*(?:\\<\\<.*\\>\\>)?[\\w.]*))?[%s]*\\{$"
+      }
+    ],
+    "rust_handler": "skinparam_block",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSkinParamMultilines.java",
+    "java_source_sha256": "fa571317a733c7bcbb489989967d65ecaf538d5e8e2ae93d6f347dcf1804d45d"
+  },
+  {
+    "registration_index": 18,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandSkin",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^skin[%s]+([\\w.]+)$",
+        "fox_signature": "1086465"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandSkin.java",
+    "java_source_sha256": "1b2dc7c5d814bab22f6cf9a76a749cdb08fcc5e54a26d57e9ae8c87cf5521360"
+  },
+  {
+    "registration_index": 19,
+    "class": "net.sourceforge.plantuml.command.CommandMinwidth",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^minwidth[%s]+(\\d+)$",
+        "fox_signature": "18925089"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMinwidth.java",
+    "java_source_sha256": "1cb787d28683e333b40330ba8fc158db1d7061dfc97795d0d5bc7c110c0d1d91"
+  },
+  {
+    "registration_index": 20,
+    "class": "net.sourceforge.plantuml.command.CommandPage",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^page[%s]+(\\d+)[%s]*x*[%s]*(\\d+)$",
+        "fox_signature": "131397"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandPage.java",
+    "java_source_sha256": "c2463ee4e12f9092dda23ba2787791e817ba970a556a7c235b4ecc29b1411176"
+  },
+  {
+    "registration_index": 21,
+    "class": "net.sourceforge.plantuml.command.CommandRotate",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^rotate$",
+        "fox_signature": "2687044"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandRotate.java",
+    "java_source_sha256": "9b185fa9ab20eb7ee75fb60b9249ea09b0321848d9273667578bddb0319850ae"
+  },
+  {
+    "registration_index": 22,
+    "class": "net.sourceforge.plantuml.command.CommandFactorySprite$1",
+    "end_pattern": "^end[%s]?sprite|\\}$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)?|(color))\\])?[%s]*\\{$",
+        "fox_signature": "72057594041730113"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandFactorySprite.java",
+    "java_source_sha256": "d11e794549b2f8f2552cb99dd4ad07099e0d9b7234b8c299f0973927ddfd7815"
+  },
+  {
+    "registration_index": 23,
+    "class": "net.sourceforge.plantuml.command.CommandFactorySprite$2",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)|(color))\\])?[%s]+([-_A-Za-z0-9]+)$",
+        "fox_signature": "3802177"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandFactorySprite.java",
+    "java_source_sha256": "d11e794549b2f8f2552cb99dd4ad07099e0d9b7234b8c299f0973927ddfd7815"
+  },
+  {
+    "registration_index": 24,
+    "class": "net.sourceforge.plantuml.command.CommandSpriteSvg",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*\\</svg\\>)$",
+        "fox_signature": "360639826101569"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSpriteSvg.java",
+    "java_source_sha256": "844f9180bfd10a6126d4ece42cadffd18a7a41f40cd004ddcd8f6182cc13b6d5"
+  },
+  {
+    "registration_index": 25,
+    "class": "net.sourceforge.plantuml.command.CommandSpriteStdlib",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^sprite[%s]+\\$([-%pLN_]+)[%s]*#([^#]+)#([^%s]+)$",
+        "fox_signature": "4298769473"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSpriteStdlib.java",
+    "java_source_sha256": "f2d9cdbeb60dfa43782485365348d77ac905a55589811d97930ff1595dc10dac"
+  },
+  {
+    "registration_index": 26,
+    "class": "net.sourceforge.plantuml.command.CommandSpriteStdlibSvg",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]*:([^:]+):([^%s]+)$",
+        "fox_signature": "3802177"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSpriteStdlibSvg.java",
+    "java_source_sha256": "bd4caca79648b1f2935c92acadc5ba4532d56465674e86aa82be4c26c200e959"
+  },
+  {
+    "registration_index": 27,
+    "class": "net.sourceforge.plantuml.command.CommandSpriteSvgMultiline",
+    "end_pattern": "(.*\\</svg\\>)$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*)$",
+        "fox_signature": "70368756368705"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSpriteSvgMultiline.java",
+    "java_source_sha256": "31479aa05dad54e1d62b39cc9935a30f8c1e6f86c619cb7374e999a3798a4a00"
+  },
+  {
+    "registration_index": 28,
+    "class": "net.sourceforge.plantuml.command.CommandSpriteFile",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+([^<>%g#]*)$",
+        "fox_signature": "3802177"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandSpriteFile.java",
+    "java_source_sha256": "e1d4defb8c493d6ec590744d60941b898cadf7007ccf7c00a71674f0121b7814"
+  },
+  {
+    "registration_index": 29,
+    "class": "net.sourceforge.plantuml.style.CommandStyleMultilinesCSS",
+    "end_pattern": "^[%s]*\\</?style\\>[%s]*$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^\\<style\\>$",
+        "fox_signature": "351843791151168"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/CommandStyleMultilinesCSS.java",
+    "java_source_sha256": "cb9ce30a3ed858b7983e53b60f1abc201d42b88f23f4773de8c3ed494339f35f"
+  },
+  {
+    "registration_index": 30,
+    "class": "net.sourceforge.plantuml.style.CommandStyleImport",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^\\<style[%s]*\\w+[%s]*=[%s]*[%q%g]?([^%q%g]*)[%q%g]?\\>$",
+        "fox_signature": "492581279506498"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/CommandStyleImport.java",
+    "java_source_sha256": "fca093338cb95caa93cea6915efa99b494dd5ee7708972258b989e32b3fd9780"
+  },
+  {
+    "registration_index": 31,
+    "class": "net.sourceforge.plantuml.command.CommandScale",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^scale[%s]+([0-9.]+)(?:[%s]*/[%s]*([0-9.]+))?$",
+        "fox_signature": "1056853"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandScale.java",
+    "java_source_sha256": "8ff4d988e9222bc4e732775729164d3e0b5e7a1eee059b06bfb44ced27985ba5"
+  },
+  {
+    "registration_index": 32,
+    "class": "net.sourceforge.plantuml.command.CommandScaleWidthAndHeight",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^scale[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+        "fox_signature": "1056853"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandScaleWidthAndHeight.java",
+    "java_source_sha256": "6c46581b1519eb6d2fb8aa22068b21c1820e1da44f9ce9c10d057fe7e48ff206"
+  },
+  {
+    "registration_index": 33,
+    "class": "net.sourceforge.plantuml.command.CommandScaleWidthOrHeight",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^scale[%s]+([0-9.]+)[%s]+(width|height)$",
+        "fox_signature": "3155541"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandScaleWidthOrHeight.java",
+    "java_source_sha256": "7cc36c0c744a8fd2f4bfaa932fe289420478df23284e6bc60ced69b97d412ea6"
+  },
+  {
+    "registration_index": 34,
+    "class": "net.sourceforge.plantuml.command.CommandScaleMaxWidth",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+width$",
+        "fox_signature": "53503605"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandScaleMaxWidth.java",
+    "java_source_sha256": "026aa6a05d1c7e84152d18dfbffbb676f364692b2c524a596f20c0686cce82f9"
+  },
+  {
+    "registration_index": 35,
+    "class": "net.sourceforge.plantuml.command.CommandScaleMaxHeight",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+height$",
+        "fox_signature": "36726613"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandScaleMaxHeight.java",
+    "java_source_sha256": "ac7ab0f51cb6c0d40492c45126dda2dd8e669d8813c7287d93a2e3f480c6d5b0"
+  },
+  {
+    "registration_index": 36,
+    "class": "net.sourceforge.plantuml.command.CommandScaleMaxWidthAndHeight",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+        "fox_signature": "34627669"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandScaleMaxWidthAndHeight.java",
+    "java_source_sha256": "89a6b45ecbf9ce60d249a201f515b24bea4488b4b8a6382afc054c6eaa98a38a"
+  },
+  {
+    "registration_index": 37,
+    "class": "net.sourceforge.plantuml.statediagram.command.CommandHideEmptyDescription",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(hide|show)[%s]+empty[%s]+description$",
+        "fox_signature": "71026289"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/statediagram/command/CommandHideEmptyDescription.java",
+    "java_source_sha256": "99885ff8305dba78aa690cd32ad20b34cb841895e495b9eed3087ed2da810c4d"
+  },
+  {
+    "registration_index": 38,
+    "class": "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByVisibility",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(hide|show)[%s]+((?:public|private|protected|package)?(?:[,%s]+(?:public|private|protected|package))*)[%s]+(members?|attributes?|fields?|methods?)$",
+        "fox_signature": "577"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByVisibility.java",
+    "java_source_sha256": "722f87059bf8f102ab28601a62fb680c6d7da4c6331276a889ac05630795c6e8"
+  },
+  {
+    "registration_index": 39,
+    "class": "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByGender",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(hide|show)[%s]+(?:(class|object|interface|enum|annotation|dataclass|record|abstract|[%pLN_.]+|[%g][^%g]+[%g]|\\<\\<.*\\>\\>)[%s]+)*?(?:(empty)[%s]+)?(members?|attributes?|fields?|methods?|circles?|circled?|stereotypes?)$",
+        "fox_signature": "577"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_hide",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByGender.java",
+    "java_source_sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4"
+  },
+  {
+    "registration_index": 40,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandHideUnlinked",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(hide|show)[%s]+@?unlinked$",
+        "fox_signature": "4240993"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandHideUnlinked.java",
+    "java_source_sha256": "e49ca327c44f3559bf9aca2a76a01be584ac7e2bd113edd3173e7ed4e683c94e"
+  },
+  {
+    "registration_index": 41,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandActivate",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(activate|deactivate|destroy|create)[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(#\\w+)?(?:[%s]+(#\\w+))?$",
+        "fox_signature": "2097217"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_activate_deactivate / try_create_destroy",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandActivate.java",
+    "java_source_sha256": "8d653402d29619ab112333ffb17e5e188ae84661fc1e1f75df676de54cf81299"
+  },
+  {
+    "registration_index": 42,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandDeactivateShort",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^deactivate[%s]*$",
+        "fox_signature": "10486900"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDeactivateShort.java",
+    "java_source_sha256": "0bc321e64b82099b7ee926234974cf8efb86e3e06c24ab030326bcdbc39da9d5"
+  },
+  {
+    "registration_index": 43,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+(?:[%g]([^%g]+)[%g][%s]+as[%s]+)?([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+        "fox_signature": "1"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_participant_decl / try_create_destroy",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java",
+    "java_source_sha256": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597"
+  },
+  {
+    "registration_index": 44,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA2",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+        "fox_signature": "1048581"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_participant_decl",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA2.java",
+    "java_source_sha256": "04ef56cbcccf57d00ac734924789fd28035b30d6cea69cba566e0825e8bf06af"
+  },
+  {
+    "registration_index": 45,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA3",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+        "fox_signature": "1048581"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_participant_decl",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA3.java",
+    "java_source_sha256": "ed1f123de770356792aee51faa0baf1ceb2217cc2dc0d9371b2b30daa9427fa0"
+  },
+  {
+    "registration_index": 46,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA4",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+        "fox_signature": "1"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_participant_decl",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA4.java",
+    "java_source_sha256": "65d1e19a67935a50316be252968046d8baf7677378a56612e2fe0f079ddcff29"
+  },
+  {
+    "registration_index": 47,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantMultilines",
+    "end_pattern": "^([^\\[\\]]*)\\]$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^(participant)[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*\\[$",
+        "fox_signature": "2251799816471573"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantMultilines.java",
+    "java_source_sha256": "a9dcf9bc059e3c931048024b39aaf17a4e812c22ac8c039d004ac1b8fdd44508"
+  },
+  {
+    "registration_index": 48,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandArrow",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:([%s][ox]|(?:[%s][ox]|\\(\\d+\\))?<<?_?|(?:[%s][ox])?//?|(?:[%s][ox])?\\\\\\\\?))?(?:(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)|(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))(?:(_?>>?(?:[ox][%s]|\\(\\d+\\))?|//?(?:[ox][%s])?|\\\\\\\\?(?:[ox][%s])?|[ox][%s]))?[%s]*(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])((?:\\s&\\s[%pLN_.@]+)*)(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:(\\+\\+|\\*\\*|!!|--|--\\+\\+|\\+\\+--)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_message",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+    "java_source_sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b"
+  },
+  {
+    "registration_index": 49,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowLeft",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([?\\[\\]][ox]?)?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox][%s]+)?[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:([+*!-]+)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_external_message",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowLeft.java",
+    "java_source_sha256": "97c0f744c0fa01bce1f1cb61ecd19296d41bca857dac2f7f7c14d64f301e548b"
+  },
+  {
+    "registration_index": 50,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowRight",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*([%s]+[ox])?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox]?[?\\]\\[])?[%s]*(?:([+*!-]+)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_external_message",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowRight.java",
+    "java_source_sha256": "ed229434c93f7226764e8228bd3bb57d66576b8020a1c2c346d26e5057f62c95"
+  },
+  {
+    "registration_index": 51,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$2",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s])?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+        "fox_signature": "17592188239937"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_note",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+    "java_source_sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508"
+  },
+  {
+    "registration_index": 52,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$1",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+        "fox_signature": "18691708780609"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_note",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+    "java_source_sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17"
+  },
+  {
+    "registration_index": 53,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$1",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+        "fox_signature": "17592189812820"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_note",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+    "java_source_sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175"
+  },
+  {
+    "registration_index": 54,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandBoxStart",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^box(?:(?:[%s]+[%g]([^%g]+)[%g]|[%s]+([^#]+)))?[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+        "fox_signature": "33619976"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_box",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxStart.java",
+    "java_source_sha256": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198"
+  },
+  {
+    "registration_index": 55,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandBoxEnd",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^end[%s]*box$",
+        "fox_signature": "33652840"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_box",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxEnd.java",
+    "java_source_sha256": "f96861ce32f742154859937834d9ddb7b3d3a43a995a337d1b21c76812e2a486"
+  },
+  {
+    "registration_index": 56,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandGrouping",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(&[%s]*)?(opt|alt|loop|par|par2|break|critical|else|end|also|group|partition)((?<!else)(?<!also)(?<!end)#\\w+)?(?:[%s]+(#\\w+))?(?:[%s]+(.*?))?$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_group",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandGrouping.java",
+    "java_source_sha256": "fa1736360451c1a8a01d860a6a124b0031ce56a925d2c699330ff5c25654d5cb"
+  },
+  {
+    "registration_index": 57,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandActivate2",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^([%pLN_.@]+)[%s]*(\\+\\+|--)[%s]*(#\\w+)?$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandActivate2.java",
+    "java_source_sha256": "4146916326223e086860be0960442c48e6fbbfad5b186232853508fea3284fc8"
+  },
+  {
+    "registration_index": 58,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandReturn",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(&[%s]*)?[%s]*return[%s]*(?:(#\\w+)[%s]+)?(.*)$",
+        "fox_signature": "6848576"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_return",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReturn.java",
+    "java_source_sha256": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53"
+  },
+  {
+    "registration_index": 59,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$1",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+        "fox_signature": "17592188239936"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_note",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+    "java_source_sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29"
+  },
+  {
+    "registration_index": 60,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$1",
+    "end_pattern": "^end[%s]?(note|hnote|rnote)$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+        "fox_signature": "2195521"
+      }
+    ],
+    "rust_handler": "note_buffer",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+    "java_source_sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508"
+  },
+  {
+    "registration_index": 61,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$2",
+    "end_pattern": "^end[%s]?(note|hnote|rnote)$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+        "fox_signature": "1099522736193"
+      }
+    ],
+    "rust_handler": "note_buffer",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+    "java_source_sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17"
+  },
+  {
+    "registration_index": 62,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$2",
+    "end_pattern": "^[%s]*end[%s]?note$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+        "fox_signature": "2195520"
+      }
+    ],
+    "rust_handler": "note_buffer",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+    "java_source_sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29"
+  },
+  {
+    "registration_index": 63,
+    "class": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$2",
+    "end_pattern": "^end[%s]?(note|hnote|rnote)$",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines2",
+        "name": "starting",
+        "pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+        "fox_signature": "3768404"
+      }
+    ],
+    "rust_handler": "note_buffer",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+    "java_source_sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175"
+  },
+  {
+    "registration_index": 64,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandNewpage",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^@?newpage(?:(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*))?$",
+        "fox_signature": "16941380"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_newpage",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandNewpage.java",
+    "java_source_sha256": "d32ae4dded850b6e33d70e8144eb46c4afd99f985216236b1c7e664648c81b16"
+  },
+  {
+    "registration_index": 65,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandIgnoreNewpage",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^ignore[%s]*newpage$",
+        "fox_signature": "17532228"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandIgnoreNewpage.java",
+    "java_source_sha256": "893f4287998c8361c38456931ac9e1109ccc9892377224cabba088a1f2b18c9a"
+  },
+  {
+    "registration_index": 66,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandAutoNewpage",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^autonewpage[%s]+(\\d+)$",
+        "fox_signature": "23298373"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutoNewpage.java",
+    "java_source_sha256": "c4d1c00e5977cdddf4d8f4acbdef36cd88f1221adf58c19de187e242495135b1"
+  },
+  {
+    "registration_index": 67,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandDivider",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^==[%s]*(.*)[%s]*==$",
+        "fox_signature": "140737488355330"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_divider",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDivider.java",
+    "java_source_sha256": "02b14eff2e2eee29b7277e978287e2e81c7d67e0f7a87d858fa23fcfd1814e02"
+  },
+  {
+    "registration_index": 68,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandHSpace",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^\\|\\|(\\d+)?\\|+$",
+        "fox_signature": "144115188075855872"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_space",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandHSpace.java",
+    "java_source_sha256": "11b8fb89c3c9f3124644de6ba5b8df33e2a3ddd31e54c802cb878ecf3482581a"
+  },
+  {
+    "registration_index": 69,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceOverSeveral",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^ref(#\\w+)?[%s]+over[%s]+(([%pLN_.@]+|[%g][^%g]+[%g])([%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*:[%s]*(.*)$",
+        "fox_signature": "17592195023041"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_ref",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceOverSeveral.java",
+    "java_source_sha256": "9948cf0d17ee31420cd89bb69a04b36ef4a9d96ed47ac937a8ae56021072dac7"
+  },
+  {
+    "registration_index": 70,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceMultilinesOverSeveral",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "starting",
+        "pattern": "^ref(#\\w+)?[%s]+over[%s]+((?:[%pLN_.@]+|[%g][^%g]+[%g])(?:[%s]*,[%s]*(?:[%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*(#\\w+)?$"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.CommandMultilines",
+        "name": "ending",
+        "pattern": "^end[%s]?(ref)?$"
+      }
+    ],
+    "rust_handler": "ref_buffer",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceMultilinesOverSeveral.java",
+    "java_source_sha256": "11e6d7dadc1d8d924bd3df29098bf01f54bf36b04caaee8ae0d67a013487adae"
+  },
+  {
+    "registration_index": 71,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumber",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^autonumber[%s]*(\\d(?:(?:[^%pLN%s]+|\\d+)*\\d)?)?(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?[%s]*$",
+        "fox_signature": "6930508"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_autonumber",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumber.java",
+    "java_source_sha256": "546c672dff29eb3edebe20bad232b5e831c50250c8aa78ce8d4241960e7ab6b6"
+  },
+  {
+    "registration_index": 72,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberStop",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^autonumber[%s]+stop[%s]*$",
+        "fox_signature": "8110157"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_autonumber",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberStop.java",
+    "java_source_sha256": "ed713305507ff2a520969a1059d3aa9a12916e267b14cb667e1d93f2558d2634"
+  },
+  {
+    "registration_index": 73,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^autonumber[%s]+resume[%s]*(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?$",
+        "fox_signature": "7979085"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_autonumber",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberResume.java",
+    "java_source_sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321"
+  },
+  {
+    "registration_index": 74,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberIncrement",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^autonumber[%s]+inc(?:[%s]+([A-Za-z]))?[%s]*$",
+        "fox_signature": "6931549"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberIncrement.java",
+    "java_source_sha256": "79ebb1dcf3b63dd755cc798cbae58c39585a41724d0a78a12d4400cddec89313"
+  },
+  {
+    "registration_index": 75,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandAutoactivate",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^autoactivate[%s]+(off|on)$",
+        "fox_signature": "14746709"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_autoactivate",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutoactivate.java",
+    "java_source_sha256": "545bdee1cad86bab5c526b1f4a9001085e9369c6ace51954a1d9d7e47090e0e1"
+  },
+  {
+    "registration_index": 76,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandFootbox",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(hide|show)?[%s]*footbox$",
+        "fox_signature": "35717256"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_hide",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandFootbox.java",
+    "java_source_sha256": "feecf9dc535c1f6d71dcc16c5142f3c9ca629e4554501cefd8a81d5779ecf4dc"
+  },
+  {
+    "registration_index": 77,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandDelay",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^(?:\\.{3}|\u2026)(?:(.*)(?:\\.{3}|\u2026))?$",
+        "fox_signature": "0"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_delay",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDelay.java",
+    "java_source_sha256": "56d490f356a65c30e581119ab8f826c823d9d4756f49a756379f6ce6747d603d"
+  },
+  {
+    "registration_index": 78,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandFootboxOld",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^footbox[%s]*(on|off)?[%s]*$",
+        "fox_signature": "35717256"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": "try_hide",
+    "rust_support": "existing partial handler; unmatched variants produce a warning",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandFootboxOld.java",
+    "java_source_sha256": "d0e437a74ad956af8f8c35123434822b999bceb1afc5f38d2c72aed7c7926284"
+  },
+  {
+    "registration_index": 79,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandUrl",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^url[%s]*(?:of|for)?[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]+(?:is)?[%s]*(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\])$",
+        "fox_signature": "4726785"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandUrl.java",
+    "java_source_sha256": "48bae03b333685c5cc81d7ca59ba0581a9cfefe49faa76906ed7d44479302e3f"
+  },
+  {
+    "registration_index": 80,
+    "class": "net.sourceforge.plantuml.sequencediagram.command.CommandLinkAnchor",
+    "fields": [
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "pattern",
+        "pattern": "^\\{([%pLN_]+)\\}[%s]*\\<-\\>[%s]*\\{([%pLN_]+)\\}[%s]*(?::[%s]*(.*))?$",
+        "fox_signature": "354042744143874"
+      },
+      {
+        "owner": "net.sourceforge.plantuml.command.SingleLineCommand2",
+        "name": "doTrim",
+        "value": "true"
+      }
+    ],
+    "rust_handler": null,
+    "rust_support": "unimplemented in sequence parser; class warning, no fabricated event",
+    "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandLinkAnchor.java",
+    "java_source_sha256": "37cb04663c74f403596679837d4e8ddfe9cc16cc9f810d04d5f511962e4206db"
+  }
+]
