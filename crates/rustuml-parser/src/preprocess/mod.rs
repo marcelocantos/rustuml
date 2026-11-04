@@ -573,10 +573,8 @@ fn tim_hsl_color(values: &[Value]) -> String {
 // ---------------------------------------------------------------------------
 
 struct PreprocessContext {
-    /// `!$var = value` style variables.
+    /// Exact Java variable keys (both `name` and `$name`), including !define.
     defines: HashMap<String, Value>,
-    /// `!define TOKEN value` style macros.
-    token_defines: HashMap<String, Value>,
     /// `!definelong TOKEN(params)` style multi-line macros.
     definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
@@ -594,8 +592,8 @@ struct PreprocessContext {
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
     while_stack: Vec<WhileState>,
-    functions: HashMap<String, FunctionDef>,
-    collecting_function: Option<String>,
+    functions: HashMap<String, Vec<FunctionDef>>,
+    collecting_function: Option<(String, FunctionDef)>,
     collecting_definelong: Option<String>,
     subs: HashMap<String, Vec<BufferedLine>>,
     collecting_sub: Option<(String, usize)>,
@@ -677,6 +675,27 @@ struct FunctionDef {
     body: Vec<BufferedLine>,
 }
 
+impl FunctionDef {
+    // TFunctionImpl.canCover: exact named keys, positional maximum and defaults.
+    fn can_cover(&self, count: usize, named: Option<&HashMap<String, Value>>) -> bool {
+        if named.is_some_and(|keys| {
+            keys.keys()
+                .any(|key| !self.params.iter().any(|p| &p.name == key))
+        }) {
+            return false;
+        }
+        count <= self.params.len()
+            && count
+                >= self
+                    .params
+                    .iter()
+                    .filter(|p| {
+                        p.default.is_none() && !named.is_some_and(|keys| keys.contains_key(&p.name))
+                    })
+                    .count()
+    }
+}
+
 #[derive(Clone)]
 struct FuncParam {
     name: String,
@@ -693,7 +712,6 @@ impl PreprocessContext {
     fn new(base_dir: Option<PathBuf>, mark_function_body_source_lines: bool) -> Self {
         Self {
             defines: HashMap::new(),
-            token_defines: HashMap::new(),
             definelong_macros: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
@@ -972,20 +990,6 @@ impl PreprocessContext {
             return;
         }
 
-        // Collecting definelong body.
-        if self.collecting_definelong.is_some() {
-            if trimmed == "!enddefinelong" {
-                self.collecting_definelong = None;
-            } else if let Some(name) = self.collecting_definelong.clone() {
-                let buffered = self.current_buffered_line(line);
-                if let Some(dl) = self.definelong_macros.get_mut(&name) {
-                    dl.body.push(buffered);
-                }
-            }
-            self.push_directive_placeholder(output);
-            return;
-        }
-
         // CodeIteratorSub buffers then replays the body at its definition,
         // before the conditional/function iterators. Capture origins as well
         // as text; no special theme-only subblock execution path exists.
@@ -1009,6 +1013,36 @@ impl PreprocessContext {
                 self.collecting_sub_lines
                     .push(self.current_buffered_line(&line_no_comment));
             }
+            return;
+        }
+
+        // Startsub.
+        if let Some(name) = directive_argument(trimmed, "!startsub") {
+            if !valid_sub_name(name) {
+                self.fail("Bad sub name".into());
+                return;
+            }
+            self.collecting_sub = Some((name.to_string(), self.current_diagram_source_line()));
+            self.collecting_sub_lines.clear();
+            self.push_directive_placeholder(output);
+            return;
+        }
+        if directive_argument(trimmed, "!endsub").is_some() {
+            self.push_directive_placeholder(output);
+            return;
+        }
+
+        // Collecting definelong body.
+        if self.collecting_definelong.is_some() {
+            if trimmed == "!enddefinelong" {
+                self.collecting_definelong = None;
+            } else if let Some(name) = self.collecting_definelong.clone() {
+                let buffered = self.current_buffered_line(line);
+                if let Some(dl) = self.definelong_macros.get_mut(&name) {
+                    dl.body.push(buffered);
+                }
+            }
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -1043,22 +1077,6 @@ impl PreprocessContext {
             return;
         }
 
-        // Startsub.
-        if let Some(name) = directive_argument(trimmed, "!startsub") {
-            if !valid_sub_name(name) {
-                self.fail("Bad sub name".into());
-                return;
-            }
-            self.collecting_sub = Some((name.to_string(), self.current_diagram_source_line()));
-            self.collecting_sub_lines.clear();
-            self.push_directive_placeholder(output);
-            return;
-        }
-        if directive_argument(trimmed, "!endsub").is_some() {
-            self.push_directive_placeholder(output);
-            return;
-        }
-
         // Definelong.
         if self.try_definelong(trimmed) {
             self.preamble_body |= self.include_depth == 0 && !self.seen_start_tag;
@@ -1087,7 +1105,7 @@ impl PreprocessContext {
             if self.is_active() {
                 // Do NOT pre-substitute here: eval_expr_to_value handles
                 // substitution internally, and pre-substituting first would
-                // cause token_defines with quoted values (e.g. !define VERSION
+                // cause bare definitions with quoted values (e.g. !define VERSION
                 // "2.0") to have their quotes stripped during concatenation.
                 self.return_signal = Some(self.eval_expr_to_value(expr));
             }
@@ -1209,11 +1227,9 @@ impl PreprocessContext {
 
     fn try_define(&mut self, line: &str) -> bool {
         static RE_DEFINE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!define\s+(\w+)(?:\s+(.+))?$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!define\s+(\$?\w+)(?:\s+(.+))?$").unwrap());
         static RE_VAR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!\$(\w+)\s*=\s*(.+)$").unwrap());
-        static RE_LEGACY_VAR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!(\w+)\s*=\s*(.+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!(\$?\w+)\s*=\s*(.+)$").unwrap());
 
         // !define with args: !define MACRO(a,b) body
         static RE_DEFINE_ARGS: LazyLock<Regex> =
@@ -1247,7 +1263,7 @@ impl PreprocessContext {
                 let value = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
                 // EaterAffectationDefine evaluates the replacement once now.
                 let value = self.substitute_vars(&value);
-                self.token_defines.insert(name, Value::Str(value));
+                self.defines.insert(name, Value::Str(value));
             }
             return true;
         }
@@ -1260,20 +1276,13 @@ impl PreprocessContext {
             }
             return true;
         }
-        if let Some(caps) = RE_LEGACY_VAR.captures(line) {
-            if self.is_active() {
-                self.token_defines
-                    .insert(caps[1].to_string(), Value::Str(caps[2].trim().to_string()));
-            }
-            return true;
-        }
         false
     }
 
     fn try_local_var(&mut self, line: &str) -> bool {
         // EaterAffectation.analyze selects LOCAL/GLOBAL before putVariable.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!(local|global)\s+\$(\w+)\s*=\s*(.+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!(local|global)\s+(\$?\w+)\s*=\s*(.+)$").unwrap());
         if let Some(caps) = RE.captures(line) {
             if self.is_active() {
                 let name = &caps[2];
@@ -1366,28 +1375,73 @@ impl PreprocessContext {
         (lines.join("\n"), definition.body.len() > 1)
     }
 
+    fn register_function(&mut self, name: String, function: FunctionDef) {
+        // FunctionsSet.addFunction / TFunctionSignature.equals replace only
+        // (exact name, declared arity), retaining every other completed overload.
+        let overloads = self.functions.entry(name).or_default();
+        if let Some(previous) = overloads
+            .iter_mut()
+            .find(|f| f.params.len() == function.params.len())
+        {
+            *previous = function;
+        } else {
+            overloads.push(function);
+        }
+    }
+
+    fn resolve_function(
+        &self,
+        name: &str,
+        count: usize,
+        named: Option<&HashMap<String, Value>>,
+    ) -> Option<&FunctionDef> {
+        let overloads = self.functions.get(name)?;
+        if let Some(exact) = overloads.iter().find(|f| f.params.len() == count) {
+            return Some(exact);
+        }
+        // FunctionsSet.getFunctionSmart traverses the ordinary JDK HashMap
+        // buckets after exact lookup. TContext.addStandardFunctions registers
+        // 74 signatures on the JVM (excluding commented LoadJsonLegacy).
+        // JDK21 HashMap defaults: capacity16, load3/4, doubling on overflow;
+        // hashCode then xor-shift16; TFunctionSignature hashes name then arity
+        // with multiplier31. Equal-bucket list order retains insertion order.
+        // Tree-bin tie ordering and unsupported legacy-overload syntax are not
+        // established by this bounded model (account 46528609).
+        const STANDARD_SIGNATURES: usize = 74;
+        let size = STANDARD_SIGNATURES
+            + self.functions.values().map(Vec::len).sum::<usize>()
+            + self.definelong_macros.len();
+        let mut capacity = 16;
+        while size > capacity - capacity / 4 {
+            capacity *= 2;
+        }
+        let name_hash = name
+            .encode_utf16()
+            .fold(0u32, |h, c| h.wrapping_mul(31).wrapping_add(u32::from(c)));
+        overloads
+            .iter()
+            .filter(|f| f.can_cover(count, named))
+            .min_by_key(|f| {
+                let hash = 31u32
+                    .wrapping_add(name_hash)
+                    .wrapping_mul(31)
+                    .wrapping_add(f.params.len() as u32);
+                ((hash ^ (hash >> 16)) as usize) & (capacity - 1)
+            })
+    }
+
     fn try_function_def(&mut self, line: &str) -> bool {
         let trimmed = line.trim();
-        // Currently collecting a function body?
-        if let Some(func_name) = &self.collecting_function.clone() {
+        // FunctionsSet publishes a definition only at executeEndfunction.
+        if let Some((name, mut function)) = self.collecting_function.take() {
             if trimmed == "!endfunction" || trimmed == "!endprocedure" {
-                self.collecting_function = None;
+                self.register_function(name, function);
             } else {
-                let raw_source_line = self.current_source_line;
-                let source_line = self.current_diagram_source_line();
-                let buffered = BufferedLine {
-                    text: line.to_string(),
-                    raw_source_line,
-                    source_line,
-                };
-                if let Some(func) = self.functions.get_mut(func_name) {
-                    // Keep the pre-existing no-return !function extension explicit.
-                    // Every valid Java return function contains a !return directive.
-                    if trimmed.starts_with("!return ") && func.kind == FunctionKind::Legacy {
-                        func.kind = FunctionKind::Return;
-                    }
-                    func.body.push(buffered);
+                if trimmed.starts_with("!return ") && function.kind == FunctionKind::Legacy {
+                    function.kind = FunctionKind::Return;
                 }
+                function.body.push(self.current_buffered_line(line));
+                self.collecting_function = Some((name, function));
             }
             return true;
         }
@@ -1395,13 +1449,13 @@ impl PreprocessContext {
         // TIM also accepts a complete unquoted function on one line:
         // `!unquoted function $name($arg) !return expression`.
         static INLINE_RETURN_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:unquoted\s+)?function\s+\$?(\w+)\s*\((.*)\)\s+!return\s+(.+)$")
+            Regex::new(r"^!(?:unquoted\s+)?function\s+(\$?\w+)\s*\((.*)\)\s+!return\s+(.+)$")
                 .unwrap()
         });
         if let Some(caps) = INLINE_RETURN_RE.captures(trimmed) {
             let name = caps[1].to_string();
             let params = self.parse_func_params(&caps[2]);
-            self.functions.insert(
+            self.register_function(
                 name,
                 FunctionDef {
                     kind: FunctionKind::Return,
@@ -1419,15 +1473,15 @@ impl PreprocessContext {
         // !function $name($param1, $param2 = "default")
         // !procedure name() is also accepted by PlantUML themes.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:function|procedure)\s+\$?(\w+)\s*\((.*)\)$").unwrap()
+            Regex::new(r"^!(?:function|procedure)\s+(\$?\w+)\s*\((.*)\)$").unwrap()
         });
 
         if let Some(caps) = RE.captures(trimmed) {
             let name = caps[1].to_string();
             let params = self.parse_func_params(&caps[2]);
 
-            self.functions.insert(
-                name.clone(),
+            self.collecting_function = Some((
+                name,
                 FunctionDef {
                     kind: if trimmed.starts_with("!procedure") {
                         FunctionKind::Procedure
@@ -1437,8 +1491,7 @@ impl PreprocessContext {
                     params,
                     body: Vec::new(),
                 },
-            );
-            self.collecting_function = Some(name);
+            ));
             return true;
         }
 
@@ -1507,28 +1560,14 @@ impl PreprocessContext {
         if self.error.is_some() {
             return (None, Vec::new());
         }
-        let Some(func) = self.functions.get(name).cloned() else {
+        let keys = if expression_call { None } else { Some(&named) };
+        let Some(func) = self.resolve_function(name, positional.len(), keys).cloned() else {
             self.fail(format!("Unknown built-in function {name}"));
             return (None, Vec::new());
         };
-        // FunctionsSet first matches positional signature arity. RPN also
-        // calls canCover with an empty named set; plain calls supply key names.
-        let exact_signature = positional.len() == func.params.len();
-        let needed = func
-            .params
-            .iter()
-            .filter(|param| {
-                param.default.is_none() && (expression_call || !named.contains_key(&param.name))
-            })
-            .count();
-        let unknown_name = !expression_call
-            && named
-                .keys()
-                .any(|key| !func.params.iter().any(|param| &param.name == key));
-        if (expression_call || !exact_signature)
-            && (positional.len() > func.params.len() || positional.len() < needed || unknown_name)
-        {
-            self.fail(format!("Unknown built-in function ${name}"));
+        // RPN canCover checks an empty named set even after an exact lookup.
+        if expression_call && !func.can_cover(positional.len(), None) {
+            self.fail(format!("Bad number of arguments for {name}"));
             return (None, Vec::new());
         }
         // TFunctionImpl.executeReturnFunction checks kind after signature lookup.
@@ -1544,16 +1583,8 @@ impl PreprocessContext {
                 .or_else(|| positional.next())
                 .or_else(|| param.default.clone())
                 .unwrap_or_else(|| Value::Str(String::new()));
-            // Exact Java key matching occurs above. Only the Rust memory index
-            // omits the leading dollar, as do get_var and assignment storage.
-            scope.overrides.insert(
-                param
-                    .name
-                    .strip_prefix('$')
-                    .unwrap_or(&param.name)
-                    .to_string(),
-                value,
-            );
+            // TFunctionImpl.getNewMemory preserves the parameter's complete key.
+            scope.overrides.insert(param.name.clone(), value);
         }
         let outer_kind = std::mem::replace(&mut self.execution_kind, func.kind);
         self.local_vars.push(scope);
@@ -1600,7 +1631,7 @@ impl PreprocessContext {
         // $funcName("arg1", "arg2"). PlantUML themes also use bare
         // procedure calls like `basic_style()` inside skinparam blocks.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\$?(\w+)\s*\((.*)\)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^(\$?\w+)\s*\((.*)\)$").unwrap());
 
         let trimmed = line.trim();
         if let Some(caps) = RE.captures(trimmed) {
@@ -1677,7 +1708,7 @@ impl PreprocessContext {
             }
         }
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^!foreach\s+\$(\w+)\s+in\s+(.+)$"#).unwrap());
+            LazyLock::new(|| Regex::new(r#"^!foreach\s+(\$?\w+)\s+in\s+(.+)$"#).unwrap());
 
         if let Some(caps) = RE.captures(trimmed) {
             if !self.is_active() {
@@ -2079,7 +2110,7 @@ impl PreprocessContext {
 
     fn try_undefine(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!undef(?:ine)?\s+\$?(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!undef(?:ine)?\s+(\$?\w+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             // CodeIteratorIf suppresses inactive lines before TContext reaches
@@ -2087,7 +2118,6 @@ impl PreprocessContext {
             if self.is_active() {
                 let name = &caps[1];
                 self.remove_var(name);
-                self.token_defines.remove(name);
             }
             return true;
         }
@@ -2101,17 +2131,14 @@ impl PreprocessContext {
         static RE_IFDEF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^!ifdef\s+(.+)$").unwrap());
         static RE_IFNDEF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!ifndef\s+\$?(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!ifndef\s+(\$?\w+)$").unwrap());
 
         if let Some(caps) = RE_IFDEF.captures(line) {
             // PlantUML EaterIfdef delegates the complete expression to
             // EvalBoolean, whose Truth callback checks variables and
             // functions. Preserve its !, &&, || and parenthesis grammar.
             let defined = eval_defined_expression(&caps[1], |symbol| {
-                let name = symbol.strip_prefix('$').unwrap_or(symbol);
-                self.get_var(name).is_some()
-                    || self.token_defines.contains_key(name)
-                    || self.functions.contains_key(name)
+                self.get_var(symbol).is_some() || self.functions.contains_key(symbol)
             })
             .unwrap_or(false);
             self.cond_stack.push(CondState {
@@ -2122,9 +2149,7 @@ impl PreprocessContext {
         }
         if let Some(caps) = RE_IFNDEF.captures(line) {
             let name = &caps[1];
-            let defined = self.defines.contains_key(name)
-                || self.token_defines.contains_key(name)
-                || self.get_var(name).is_some();
+            let defined = self.get_var(name).is_some();
             self.cond_stack.push(CondState {
                 active: !defined && self.is_active(),
                 has_matched: !defined,
@@ -2270,15 +2295,7 @@ impl PreprocessContext {
                 return Expression::Value(Value::Str(expanded));
             }
         }
-        if let Some(value) = expr
-            .strip_prefix('$')
-            .and_then(|n| self.get_var(n))
-            .or_else(|| {
-                expr.strip_prefix('$')
-                    .and_then(|n| self.token_defines.get(n))
-            })
-            .or_else(|| self.token_defines.get(expr))
-        {
+        if let Some(value) = self.get_var(expr) {
             return Expression::Value(value.clone());
         }
         if !expr.is_empty()
@@ -2368,22 +2385,13 @@ impl PreprocessContext {
                 // RPN OPEN_PAREN_FUNC subtracts the current DISTINCT named keys,
                 // including those assigned before a nested call in this expression.
                 let count = args.len().checked_sub(named.len());
-                let function_name = name.strip_prefix('$').unwrap_or(name);
                 let covered = count.is_some_and(|count| {
                     if let Some(builtin) = name.strip_prefix('%') {
                         // Unknown arity retains existing Rust extensions; their
                         // body dispatcher still rejects unimplemented names.
                         builtin_arity(builtin).is_none_or(|arity| arity.contains(&count))
                     } else {
-                        self.functions.get(function_name).is_some_and(|function| {
-                            count <= function.params.len()
-                                && count
-                                    >= function
-                                        .params
-                                        .iter()
-                                        .filter(|p| p.default.is_none())
-                                        .count()
-                        })
+                        self.resolve_function(name, count, None).is_some()
                     }
                 });
                 if !covered {
@@ -2400,7 +2408,7 @@ impl PreprocessContext {
                     self.eval_builtin_values(builtin, &positional)
                 } else {
                     let (ret, events) =
-                        self.call_function_values(function_name, positional, named.clone(), true);
+                        self.call_function_values(name, positional, named.clone(), true);
                     self.expression_events.extend(events);
                     ret.unwrap_or_else(|| Value::Str(String::new()))
                 };
@@ -2507,15 +2515,24 @@ impl PreprocessContext {
                 offset += end + 1;
                 continue;
             }
-            if matches!(ch, '$' | '%') {
-                let name_end = line[offset + 1..]
+            // TContext.getFunctionNameAt permits $/% after a letter, but bare
+            // names require the same original-text boundary as VariableManager.
+            let bare_boundary = offset == 0
+                || line[..offset].ends_with("\\n")
+                || !line[..offset]
+                    .chars()
+                    .next_back()
+                    .is_some_and(|c| c.is_alphanumeric() || c == '_');
+            if matches!(ch, '$' | '%') || ((ch.is_alphabetic() || ch == '_') && bare_boundary) {
+                let name_start = offset + usize::from(matches!(ch, '$' | '%'));
+                let name_end = line[name_start..]
                     .char_indices()
                     .find(|(_, c)| !c.is_alphanumeric() && *c != '_')
-                    .map_or(line.len(), |(i, _)| offset + 1 + i);
-                let name = &line[offset + 1..name_end];
+                    .map_or(line.len(), |(i, _)| name_start + i);
+                let name = &line[name_start..name_end];
                 if line[name_end..].starts_with('(')
                     && ((ch == '%' && registered_builtin(name))
-                        || (ch == '$' && self.functions.contains_key(name)))
+                        || (ch != '%' && self.functions.contains_key(&line[offset..name_end])))
                     && let Some(close) = find_matching_paren_from(line, name_end)
                 {
                     if ch == '%' {
@@ -2526,7 +2543,8 @@ impl PreprocessContext {
                         );
                     } else {
                         let args = parse_call_args(&line[name_end + 1..close]);
-                        let (value, mut events) = self.call_function(name, &args);
+                        let (value, mut events) =
+                            self.call_function(&line[offset..name_end], &args);
                         if let Some(value) = value {
                             self.expression_events.extend(events);
                             result.push_str(&value.to_display());
@@ -2559,10 +2577,7 @@ impl PreprocessContext {
                     continue;
                 }
                 if ch == '$'
-                    && let Some(value) = self
-                        .get_var(name)
-                        .cloned()
-                        .or_else(|| self.token_defines.get(name).cloned())
+                    && let Some(value) = self.get_var(&line[offset..name_end]).cloned()
                 {
                     let (value, end) = self.variable_path(value, line, name_end);
                     result.push_str(&value.to_display());
@@ -2646,7 +2661,7 @@ impl PreprocessContext {
                     offset = close + 1;
                     continue;
                 }
-                if let Some(value) = self.token_defines.get(name).cloned() {
+                if let Some(value) = self.get_var(name).cloned() {
                     let (value, end) = self.variable_path(value, line, end);
                     result.push_str(&value.to_display());
                     offset = end;
@@ -2998,20 +3013,14 @@ impl PreprocessContext {
             "not" => return Value::Int(i32::from(!values.first().is_some_and(Value::truth))),
             "get_variable_value" => {
                 let name = refs.first().copied().unwrap_or("");
-                return name
-                    .strip_prefix('$')
-                    .and_then(|n| self.get_var(n))
+                return self
+                    .get_var(name)
                     .cloned()
-                    .or_else(|| self.token_defines.get(name).cloned())
                     .unwrap_or_else(|| Value::Str(String::new()));
             }
             "set_variable_value" if values.len() >= 2 => {
-                if let Some(name) = args[0].strip_prefix('$') {
-                    self.defines.insert(name.to_string(), values[1].clone());
-                } else {
-                    self.token_defines
-                        .insert(args[0].clone(), values[1].clone());
-                }
+                // SetVariableValue explicitly uses GLOBAL, preserving its exact key.
+                self.defines.insert(args[0].clone(), values[1].clone());
                 return Value::Str(String::new());
             }
             "str2json" => {
@@ -3151,25 +3160,18 @@ impl PreprocessContext {
                 }
             }
             "variable_exists" => {
-                // VariableExists calls memory.getVariable with the exact name.
-                // Our TIM map omits the leading '$'. EaterAffectationDefine
-                // stores bare !define names in global memory as well.
-                // TValue.fromBoolean renders numeric 1 or 0.
+                // VariableExists delegates the exact name to TMemory.getVariable.
                 let name = args.first().copied().unwrap_or("");
-                if name
-                    .strip_prefix('$')
-                    .and_then(|name| self.get_var(name))
-                    .is_some()
-                    || self.token_defines.contains_key(name)
-                {
-                    "1".to_string()
+                if self.get_var(name).is_some() {
+                    "1"
                 } else {
-                    "0".to_string()
+                    "0"
                 }
+                .to_string()
             }
             "is_defined" => {
                 let name = args.first().copied().unwrap_or("");
-                if self.defines.contains_key(name) || self.token_defines.contains_key(name) {
+                if self.get_var(name).is_some() {
                     "true"
                 } else {
                     "false"
@@ -3177,25 +3179,14 @@ impl PreprocessContext {
                 .to_string()
             }
             "function_exists" => {
-                // PlantUML requires the function name to include the leading '$'.
-                // %function_exists("$myFunc") → true, %function_exists("myFunc") → false.
+                // FunctionsSet.doesFunctionExist indexes the exact declared name.
                 let name = args.first().copied().unwrap_or("");
-                let lookup = name.strip_prefix('$').unwrap_or("");
-                if !lookup.is_empty() && self.functions.contains_key(lookup) {
+                if self.functions.contains_key(name) {
                     "true"
                 } else {
                     "false"
                 }
                 .to_string()
-            }
-            "filename" => {
-                // PlantUML's `%filename()` returns the source file name (basename
-                // without extension) when called from a real file. The picoweb /
-                // "From string" pipeline used to generate our goldens produces
-                // empty for this builtin (no source file). Return empty to match
-                // that golden behaviour; file-API callers would need to thread
-                // the actual filename through a separate channel.
-                String::new()
             }
             "file_exists" => {
                 // Always return false — file system access is not permitted in the
@@ -3710,6 +3701,140 @@ mod tests {
     }
 
     #[test]
+    fn exact_parameter_keys_survive_memory_and_all_lookup_paths() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!function $mix(b=\"007\",$b=\"08\")\n!return b+2+\"/\"+$b+3+\"/\"+%get_variable_value(\"b\")\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value("$mix()").to_display(),
+            "0072/083/007"
+        );
+        assert_eq!(
+            ctx.substitute_vars(r#"$mix(b="oak",$b="ash")"#),
+            "oak2/ash3/oak"
+        );
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn exact_bare_and_dollar_globals_do_not_alias_local_or_sibling_frames() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!b=\"global\"\n!$b=\"dollar\"\n!function $inner()\n!return b+\"/\"+$b\n!endfunction\n!function $outer(b=\"local\",$b=\"override\")\n!return $inner()+\"/\"+b+\"/\"+$b\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value("$outer()").to_display(),
+            "global/dollar/local/override"
+        );
+        assert_eq!(ctx.substitute_vars("b/$b"), "global/dollar");
+        ctx.process("!undef b");
+        assert!(ctx.get_var("b").is_none());
+        assert_eq!(ctx.get_var("$b").unwrap().to_display(), "dollar");
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"%variable_exists("b")+%variable_exists("$b")"#)
+                .to_display(),
+            "1"
+        );
+    }
+
+    #[test]
+    fn exact_local_mutation_and_global_builtin_assignment_are_separate() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!b=\"root\"\n!$b=\"dollar\"\n!function $edit(b=\"local\",$b=\"override\")\n!b=\"changed\"\n!local $b=\"leaf\"\n!return b+\"/\"+$b\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value("$edit()").to_display(),
+            "changed/leaf"
+        );
+        ctx.eval_expr_to_value(r#"%set_variable_value("b","new")"#);
+        assert_eq!(ctx.substitute_vars("b/$b"), "new/dollar");
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn completed_overloads_keep_arity_and_kind_in_both_declaration_orders() {
+        let function = "!function $pick($a)\n!return \"value \"+$a\n!endfunction\n";
+        let procedure = "!procedure $pick($a,$b)\nclass \"$a/$b\" as Kept\n!endprocedure\n";
+        for definitions in [
+            format!("{function}{procedure}"),
+            format!("{procedure}{function}"),
+        ] {
+            let output = preprocess_full(
+                &format!(
+                    "@startuml\n{definitions}!$v=$pick(7)\nclass \"$v\" as Value\n$pick(\"fir\",\"yew\")\n@enduml"
+                ),
+                None,
+            );
+            assert!(output.error.is_none());
+            assert!(output.uml_source.contains("class \"value 7\" as Value"));
+            assert!(output.uml_source.contains("class \"fir/yew\" as Kept"));
+        }
+    }
+
+    #[test]
+    fn signature_replacement_preserves_other_arities_and_pending_default_capture() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!function $pick($a=\"seed\")\n!return $a\n!endfunction\n!function $pick($a,$b)\n!return $a+\"/\"+$b\n!endfunction\n!function $pick($a=$pick())\n!return \"new \"+$a\n!endfunction");
+        assert_eq!(ctx.eval_expr_to_value("$pick()").to_display(), "new seed");
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"$pick("fir","yew")"#).to_display(),
+            "fir/yew"
+        );
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn function_names_preserve_dollars_and_text_token_boundaries() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!function read($a)\n!return \"bare \"+$a\n!endfunction\n!function $read($a)\n!return \"dollar \"+$a\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"read("oak")+"/"+$read("ash")"#)
+                .to_display(),
+            "bare oak/dollar ash"
+        );
+        assert_eq!(
+            ctx.substitute_vars(r#"spread("oak") / read("ash")"#),
+            r#"spread("oak") / bare ash"#
+        );
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"%function_exists("read")+%function_exists("$read")"#)
+                .to_display(),
+            "2"
+        );
+    }
+
+    #[test]
+    fn sub_collection_precedes_uncalled_return_and_procedure_bodies() {
+        for (start, end, ret) in [
+            ("!function $unused()", "!endfunction", "!return 1\n"),
+            ("!procedure $unused()", "!endprocedure", ""),
+        ] {
+            let output = preprocess_full(
+                &format!(
+                    "@startuml\n{start}\n!startsub stored\nclass Kept\n!endsub\n{ret}{end}\n!includesub stored\n@enduml"
+                ),
+                None,
+            );
+            assert!(output.error.is_none());
+            assert_eq!(output.uml_source.matches("class Kept").count(), 1);
+        }
+    }
+
+    #[test]
+    fn collected_sub_body_executes_only_through_its_downstream_consumer() {
+        let source = "@startuml\n!$n=0\n!procedure $tick()\n!startsub saved\n!$n=$n+1\n!endsub\n!endprocedure\n!includesub saved\n$tick()\n!includesub saved\nclass \"$n\" as Count\n@enduml";
+        let output = preprocess_full(source, None);
+        assert!(output.error.is_none());
+        assert!(output.uml_source.contains("class \"3\" as Count"));
+    }
+
+    #[test]
+    fn nested_sub_in_uncalled_body_fails_before_buffered_expression() {
+        let output = preprocess_full(
+            "@startuml\n!procedure $never()\n!startsub outer\n!$v=%intval(\"bad\")\n!startsub inner\n!endsub\n!endprocedure\nclass Survivor\n@enduml",
+            None,
+        );
+        assert_eq!(output.error.unwrap().message, "Cannot nest sub");
+        assert!(!output.uml_source.contains("Survivor"));
+    }
+
+    #[test]
     fn rpn_named_keys_keep_exact_spelling_and_expression_stack_lifetime() {
         let mut ctx = PreprocessContext::new(None, false);
         ctx.process("@startuml\n!$key=\"b\"\n!function $pair($a=\"first\",$b=\"last\")\n!return $a+\"/\"+$b\n!endfunction");
@@ -3749,9 +3874,9 @@ mod tests {
             ctx.substitute_vars(r#"%strlen("oak",$ignored=$tick())"#),
             "3"
         );
-        assert!(matches!(ctx.get_var("n"), Some(Value::Int(1))));
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(1))));
         ctx.substitute_vars(r#"%strlen($ignored=$tick())"#);
-        assert!(matches!(ctx.get_var("n"), Some(Value::Int(2))));
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(2))));
         assert_eq!(ctx.error.unwrap().message, "Function not found %strlen");
     }
 
@@ -3786,7 +3911,7 @@ mod tests {
     fn nested_sub_collection_rejects_before_effects_and_reports_outer_origin() {
         let mut ctx = PreprocessContext::new(None, false);
         ctx.process("@startuml\n!$n=0\n!startsub outer\n!$n=8\n!if 0\n!startsub inner\n!endif\n!endsub\nclass Lost\n@enduml");
-        assert!(matches!(ctx.get_var("n"), Some(Value::Int(0))));
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(0))));
         let error = ctx.error.unwrap();
         assert_eq!(error.message, "Cannot nest sub");
         assert_eq!(error.line, 2);
@@ -3913,7 +4038,7 @@ mod tests {
             ctx.error.as_ref().unwrap().message,
             "Unknown built-in function %strlen"
         );
-        assert!(matches!(ctx.get_var("n"), Some(Value::Int(1))));
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(1))));
         let output = preprocess_full(
             "@startuml\n!function $only($a)\n!return $a\n!endfunction\n!$v=$only()\nclass After\n@enduml",
             None,
@@ -4146,9 +4271,9 @@ class "$count / $v" as Actual
                 .message
                 .contains("unsupported letter Q")
         );
-        assert!(matches!(ctx.get_var("n"), Some(Value::Int(0))));
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(0))));
         ctx.eval_expr_to_value("%set_variable_value(\"$n\",9)");
-        assert!(matches!(ctx.get_var("n"), Some(Value::Int(0))));
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(0))));
         assert!(
             ctx.error
                 .as_ref()
@@ -4395,7 +4520,11 @@ $inspect("payload")
     fn define_substitution() {
         let input = "@startuml\n!define NAME Alice\n$NAME -> Bob : hello\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["$Alice -> Bob : hello"]);
     }
 
     #[test]
@@ -4430,7 +4559,11 @@ $inspect("payload")
     fn if_else() {
         let input = "@startuml\n!define MODE prod\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["A -> B : production"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["A -> B : dev"]);
     }
 
     #[test]
@@ -4535,7 +4668,11 @@ now-undefined
     fn multiple_vars() {
         let input = "@startuml\n!define FROM Alice\n!define TO Bob\n!define MSG hello\n$FROM -> $TO : $MSG\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["$Alice -> $Bob : $hello"]);
     }
 
     #[test]
@@ -4581,7 +4718,11 @@ now-undefined
 
         let input = "@startuml\n!include defs.puml\n$AUTHOR -> Bob : hi\n@enduml";
         let lines = preprocess_with_base(input, &dir);
-        assert_eq!(lines, vec!["Alice -> Bob : hi"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["$Alice -> Bob : hi"]);
 
         let _ = std::fs::remove_dir_all(&dir);
     }
@@ -4611,7 +4752,14 @@ now-undefined
     fn foreach_preserves_other_vars() {
         let input = "@startuml\n!define WHO Alice\n!foreach $x in [\"hello\", \"world\"]\n$WHO -> Bob : $x\n!endfor\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello", "Alice -> Bob : world"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(
+            lines,
+            vec!["$Alice -> Bob : hello", "$Alice -> Bob : world"]
+        );
     }
 
     #[test]
