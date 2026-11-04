@@ -5187,19 +5187,25 @@ fn render_plantuml_svg(
         };
         // EntityImageDegenerated.calculateDimension uses the original preferred
         // image size; only SvekResult measures the painted LimitFinder union.
-        let shadow_extra = if uses_degenerated_entity {
-            (0.0, 0.0)
+        let (painted_width, painted_height) = if uses_degenerated_entity {
+            (dims[i].width, dims[i].height)
         } else {
-            entity_shadow_extent(
+            entity_painted_extent(
                 diagram,
                 &diagram.entities[i],
                 &dims[i],
                 class_shadow_filter_id.is_some(),
             )
         };
-        body_max_x = body_max_x.max(x + dims[i].width + generic_right.max(shadow_extra.0));
+        // HeaderLayout's generic UEmpty overhang remains an independent maximum.
+        let right = if generic_right > 0.0 {
+            painted_width.max(dims[i].width + generic_right)
+        } else {
+            painted_width
+        };
+        body_max_x = body_max_x.max(x + right);
         body_top = body_top.min(*y);
-        body_bottom = body_bottom.max(y + dims[i].height + shadow_extra.1);
+        body_bottom = body_bottom.max(y + painted_height);
         // USymbolDatabase.drawDatabase: UEmpty(10,10) at (width,height).
         if diagram.entities[i].kind == EntityKind::Database {
             body_max_x = body_max_x.max(x + dims[i].width + DATABASE_CLUSTER_ENVELOPE_EXTRA);
@@ -5376,18 +5382,24 @@ fn render_plantuml_svg(
             };
             // EntityImageDegenerated.calculateDimension uses the original preferred
             // image size; only SvekResult measures the painted LimitFinder union.
-            let shadow_extra = if uses_degenerated_entity {
-                (0.0, 0.0)
+            let (painted_width, painted_height) = if uses_degenerated_entity {
+                (dims[i].width, dims[i].height)
             } else {
-                entity_shadow_extent(
+                entity_painted_extent(
                     diagram,
                     &diagram.entities[i],
                     &dims[i],
                     class_shadow_filter_id.is_some(),
                 )
             };
-            max_x = max_x.max(x + dims[i].width + generic_right.max(shadow_extra.0));
-            max_y = max_y.max(y + dims[i].height + shadow_extra.1);
+            // HeaderLayout's generic UEmpty overhang remains an independent maximum.
+            let right = if generic_right > 0.0 {
+                painted_width.max(dims[i].width + generic_right)
+            } else {
+                painted_width
+            };
+            max_x = max_x.max(x + right);
+            max_y = max_y.max(y + painted_height);
             let entity = &diagram.entities[i];
             // USymbolDatabase.drawDatabase's UEmpty extends the painted envelope.
             if entity.kind == EntityKind::Database {
@@ -13816,10 +13828,10 @@ fn package_leaf_frontier_position(index: usize, position: &NodePosition) -> Clus
     }
 }
 
-// LimitFinder.drawRectangle/drawEllipse include 2*deltaShadow - 1 at
-// maxima. drawUPath ignores shadow; ActorStickMan's text is independent of
-// its head ellipse, so a wide label must not receive a rectangle shadow pad.
-fn entity_shadow_extent(
+// SvekResult measures the drawn image through LimitFinder; preferred dimensions
+// remain the Graphviz input and the EntityImageDegenerated envelope. In particular,
+// USymbolSimpleAbstract's label line box is not its painted text maximum.
+fn entity_painted_extent(
     diagram: &ClassDiagram,
     entity: &ClassEntity,
     dim: &EntityDims,
@@ -13827,16 +13839,91 @@ fn entity_shadow_extent(
 ) -> (f64, f64) {
     let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
     if let Some(style) = &font.description {
-        if matches!(style.symbol, DescriptionSymbol::Actor) {
+        // USymbolSimpleAbstract draws the symbol, label and stereotype separately.
+        // Union their actual primitive maxima, without shrinking the layout box.
+        if matches!(
+            style.symbol,
+            DescriptionSymbol::Actor | DescriptionSymbol::Boundary
+        ) {
             let (_, _, stereo_height) = description_text_size(entity, dim.hide, style);
-            let head_right = dim.width / 2.0 + 8.0 - 1.0 + style.shadow * 2.0;
-            let head_bottom = stereo_height + style.thickness + 16.0 - 1.0 + style.shadow * 2.0;
-            return (
-                (head_right - dim.width).max(0.0),
-                (head_bottom - dim.height).max(0.0),
-            );
+            let (mut right, mut bottom, label_y) =
+                if matches!(style.symbol, DescriptionSymbol::Actor) {
+                    // ActorStickMan: head diameter16, arms/legs half-width13,
+                    // body27 and legs15. LimitFinder's ellipse adds 2*shadow-1;
+                    // its UPath contributes endpoints without a shadow expansion.
+                    let head_y = stereo_height + style.thickness;
+                    (
+                        (dim.width / 2.0 + 13.0)
+                            .max(dim.width / 2.0 + 8.0 - 1.0 + style.shadow * 2.0),
+                        (head_y + 16.0 + 27.0 + 15.0).max(head_y + 16.0 - 1.0 + style.shadow * 2.0),
+                        stereo_height + 59.0 + 2.0 * style.thickness + style.shadow,
+                    )
+                } else {
+                    // Boundary.drawU: margin4, radius12, arm17; preferred49x32.
+                    // Its path and ellipse have distinct LimitFinder maxima.
+                    let symbol_x = (dim.width - 49.0) / 2.0 + 4.0;
+                    let symbol_y = stereo_height + 4.0;
+                    (
+                        (symbol_x + 17.0).max(symbol_x + 17.0 + 24.0 - 1.0 + style.shadow * 2.0),
+                        (symbol_y + 24.0).max(symbol_y + 24.0 - 1.0 + style.shadow * 2.0),
+                        stereo_height + 32.0,
+                    )
+                };
+            let lines = escaped_newline_lines(&entity.label);
+            let widths = lines
+                .iter()
+                .map(|line| {
+                    text_render::measure_no_underline_with_family(
+                        line,
+                        style.size as f64,
+                        style.bold,
+                        &style.family,
+                    )
+                })
+                .collect::<Vec<_>>();
+            let label_width = widths.iter().copied().fold(0.0_f64, f64::max);
+            let line_height = text_render::label_height("X", style.size as f64);
+            for (i, (line, width)) in lines.iter().zip(widths).enumerate() {
+                // Empty stripes retain preferred height but emit no UText.
+                if line.is_empty() {
+                    continue;
+                }
+                // USymbolSimpleAbstract centers the label block. BodyFactory
+                // owns its inner alignment, as in render_description_leaf.
+                let line_x = (dim.width - label_width) / 2.0
+                    + match style.alignment {
+                        LegendHorizontalAlignment::Left => 0.0,
+                        LegendHorizontalAlignment::Center => (label_width - width) / 2.0,
+                        LegendHorizontalAlignment::Right => label_width - width,
+                    };
+                right = right.max(line_x + width);
+                // LimitFinder.drawText subtracts height-1.5 from the baseline,
+                // then adds height: the resulting maximum is baseline+1.5.
+                bottom = bottom.max(
+                    label_y
+                        + i as f64 * line_height
+                        + text_render::label_ascent(line, style.size as f64)
+                        + 1.5,
+                );
+            }
+            if !dim.hide.stereotype {
+                for (i, label) in entity.stereotypes.iter().enumerate() {
+                    let label = format!("«{label}»");
+                    let width = text_render::measure(&label, style.size as f64, false);
+                    // EntityImageDescription's 1px stereotype margins affect
+                    // preferred width; centered UText itself has no margin ink.
+                    right = right.max((dim.width + width) / 2.0);
+                    bottom = bottom.max(
+                        i as f64 * line_height
+                            + text_render::label_ascent(&label, style.size as f64)
+                            + 1.5,
+                    );
+                }
+            }
+            return (right, bottom);
         }
         // Rectangle-based USymbols carry their Fashion shadow on the border.
+        // Keep the existing UEmpty/preferred maxima for other image owners.
         if matches!(
             style.symbol,
             DescriptionSymbol::Rectangle
@@ -13844,17 +13931,18 @@ fn entity_shadow_extent(
                 | DescriptionSymbol::Component2
         ) {
             let extra = (style.shadow * 2.0 - 1.0).max(0.0);
-            return (extra, extra);
+            return (dim.width + extra, dim.height + extra);
         }
-        return (0.0, 0.0);
+        return (dim.width, dim.height);
     }
-    // FromSkinparamToStyle maps enabled class shadowing to deltaShadow=3.
+    // FromSkinparamToStyle maps enabled class shadowing to deltaShadow=3;
+    // LimitFinder.drawRectangle adds 2*deltaShadow-1 to its maxima.
     let extra = if class_shadow {
         (parse_shadowing_delta("true") * 2.0 - 1.0).max(0.0)
     } else {
         0.0
     };
-    (extra, extra)
+    (dim.width + extra, dim.height + extra)
 }
 
 fn entity_frontier_min(
@@ -14963,9 +15051,6 @@ fn render_attached_note(
     sprites: &HashMap<String, SpriteData>,
 ) {
     let anchor = note_anchor(diagram, note);
-    if let Some(anchor) = &anchor {
-        svg.push_str(anchor);
-    }
     let style = ResolvedNoteStyle::for_note(diagram, note);
     let shadow_attr = note_shadow_attr(diagram, &style);
     let f = crate::plantuml_metrics::fmt_coord;
@@ -15100,12 +15185,21 @@ fn render_attached_note(
         }
     };
 
+    // EntityImageNote.drawU opens the entity group before its URL.
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="{}" fill="{}"{shadow_attr} style="stroke:{};stroke-width:{};"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
         escape_xml(&translate_qualified_name(qualified_name)),
         note.source_line,
-        entity_id,
+        entity_id
+    )
+    .unwrap();
+    if let Some(anchor) = &anchor {
+        svg.push_str(anchor);
+    }
+    write!(
+        svg,
+        r#"<path d="{}" fill="{}"{shadow_attr} style="stroke:{};stroke-width:{};"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         path,
         style.background,
         style.border,
@@ -15124,10 +15218,11 @@ fn render_attached_note(
     )
     .unwrap();
     emit_note_body(svg, note, x, y, width, sprites, &style);
-    svg.push_str("</g>");
+    // EntityImageNote closes the URL before closing its owning entity group.
     if anchor.is_some() {
         svg.push_str("</a>");
     }
+    svg.push_str("</g>");
 }
 
 fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> String {
@@ -15695,9 +15790,6 @@ fn render_floating_note_entity(
     sprites: &HashMap<String, SpriteData>,
 ) {
     let anchor = note_anchor(diagram, note);
-    if let Some(anchor) = &anchor {
-        svg.push_str(anchor);
-    }
     let style = ResolvedNoteStyle::for_note(diagram, note);
     let shadow_attr = note_shadow_attr(diagram, &style);
     let right = x + width;
@@ -15713,6 +15805,10 @@ fn render_floating_note_entity(
         note.source_line,
     )
     .unwrap();
+    // EntityImageNote.drawU nests the URL inside this entity group.
+    if let Some(anchor) = &anchor {
+        svg.push_str(anchor);
+    }
     write!(
         svg,
         r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}"{shadow_attr} style="stroke:{};stroke-width:{};"/>"#,
@@ -15749,10 +15845,11 @@ fn render_floating_note_entity(
     )
     .unwrap();
     emit_note_body(svg, note, x, y, width, sprites, &style);
-    svg.push_str("</g>");
+    // EntityImageNote closes the URL before closing its owning entity group.
     if anchor.is_some() {
         svg.push_str("</a>");
     }
+    svg.push_str("</g>");
 }
 
 /// `EntityImageNoteLink.drawU` paints directly inside the owning `SvekEdge`
@@ -21162,6 +21259,68 @@ mod tests {
             );
         }
         assert!(!svg.contains(r#"id="FreshSource953-FreshTarget967-2""#));
+    }
+
+    #[test]
+    fn simple_symbol_canvas_uses_painted_label_baseline() {
+        // Java LimitFinder.drawText and SvekResult.calculateDimension measure
+        // the drawing, independently of USymbolSimpleAbstract's line boxes.
+        for symbol in ["boundary", "actor"] {
+            for size in [11, 19, 23] {
+                let source = format!(
+                    "@startuml\nallowmixing\n<style>\n{symbol} {{\nFontSize {size}\n}}\n</style>\nclass Control\n{symbol} \"Signal\\nterminal\" as Subject\nControl --> Subject\n@enduml"
+                );
+                let diagram = rustuml_parser::parse::parse(&source).unwrap();
+                let svg = crate::render_svg(&diagram);
+                let root = svg.split_once('>').unwrap().0;
+                let height = attr_value(root, "height")
+                    .unwrap()
+                    .trim_end_matches("px")
+                    .parse::<f64>()
+                    .unwrap();
+                let label = svg
+                    .split_once(">terminal</text>")
+                    .unwrap()
+                    .0
+                    .rsplit_once("<text ")
+                    .unwrap()
+                    .1;
+                let baseline = attr_value(label, " y").unwrap().parse::<f64>().unwrap();
+                // Source-derived painted text maximum + Svek envelope; do not
+                // use font-size-specific expected dimensions or label fixtures.
+                assert_eq!(height, (baseline + 1.5).floor() + 15.0, "{source}\n{svg}");
+            }
+        }
+    }
+
+    #[test]
+    fn note_entity_group_owns_url_for_leaf_and_group_targets() {
+        for group in [false, true] {
+            for braced in [false, true] {
+                let (declarations, target) = if group {
+                    ("package Room {\nclass Ledger\n}", "Room")
+                } else {
+                    ("class Ledger", "Ledger")
+                };
+                let (opening, closing) = if braced {
+                    (" {", "}")
+                } else {
+                    ("", "end note")
+                };
+                let source = format!(
+                    "@startuml\nskinparam svgLinkTarget _blank\n{declarations}\nnote right of {target} [[https://example.org/a?x=1&y=2{{Inspect}}]]{opening}\nclass is note body\n{closing}\n@enduml"
+                );
+                let diagram = rustuml_parser::parse::parse(&source).unwrap();
+                let svg = crate::render_svg(&diagram);
+                let (before, after) = svg.split_once("<a href=").unwrap();
+                let entity_start = before.rsplit_once("<g class=\"entity\"").unwrap().1;
+                assert_eq!(entity_start.matches('>').count(), 1, "{svg}");
+                assert!(after.contains("target=\"_blank\""), "{svg}");
+                assert!(after.contains("title=\"Inspect\""), "{svg}");
+                assert!(after.contains("</a></g>"), "{svg}");
+                assert!(after.contains(">class is note body</text>"), "{svg}");
+            }
+        }
     }
 
     #[test]
