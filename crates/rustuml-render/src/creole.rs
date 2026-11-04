@@ -889,7 +889,33 @@ fn parse_segments_inner(text: &str, skip_underline: bool) -> Vec<Segment> {
     let mut out: Vec<Segment> = Vec::new();
     let style = Style::default();
     walk_segments(text, &style, skip_underline, &mut out);
+    // StripeSimple.modifyStripe flushes pending text before every command,
+    // even when addSprite finds no sprite. Empty segments are private barriers
+    // against push_segment's same-style coalescing, not drawable atoms.
+    let had_barriers = out.iter().any(|segment| segment.text.is_empty());
+    out.retain(|segment| !segment.text.is_empty());
+    if had_barriers && out.is_empty() {
+        // StripeSimple.getAtoms supplies one space for an otherwise empty
+        // stripe. Size/color commands restore the surrounding configuration
+        // after recursively analyzing their content (including EOL forms).
+        push_literal(&mut out, " ", &style);
+    }
     out
+}
+
+fn is_sprite_tag(tag: &str) -> bool {
+    // Java Splitter.spritePattern + scaleOrColor, SpriteUtils.SPRITE_NAME,
+    // and Pattern2.compileInternal (ASCII case-insensitive keywords/\w).
+    // Match the complete tag, not merely a <$ prefix: malformed commands and
+    // ordinary angle-bracket text remain literal. No sprite lookup lives here;
+    // sprite-aware consumers resolve their images before shared text parsing.
+    static SPRITE_TAG: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(
+            r"\A(?:#[A-Za-z0-9_]+)?\$[-\p{L}0-9_/]+(?:[\{,]?(?:(?:(?i-u:scale=)|\*)[0-9.]+)?(?:,?(?i-u:color)[= :](?:#[0-9a-fA-F]{1,8}|[A-Za-z0-9_]+))?\}?)?\z",
+        )
+        .expect("Java sprite command grammar")
+    });
+    SPRITE_TAG.is_match(tag)
 }
 
 fn push_segment(out: &mut Vec<Segment>, text: &str, style: &Style) {
@@ -1184,6 +1210,15 @@ fn handle_tag(
     out: &mut Vec<Segment>,
 ) {
     match tag {
+        _ if is_sprite_tag(tag) => {
+            // CommandCreoleSprite.executeAndGetRemaining consumes the entire
+            // token; StripeSimple.addSprite adds nothing when lookup fails.
+            // Keep the command's flush boundary until final segment projection.
+            out.push(Segment {
+                text: String::new(),
+                style: style.clone(),
+            });
+        }
         // PlantUML's HTML subset supports only the short tags (`<b>`, `<i>`,
         // `<u>`, `<s>`, `<w>`, `<del>`, `<strike>`, `<code>`, `<sub>`, `<sup>`,
         // `<color:>`, `<size:>`, `<font:>`, `<back:>`, `<img:>`). The HTML5
@@ -1451,6 +1486,71 @@ mod tests {
         assert_eq!(
             parse_segments("hello world"),
             vec![seg("hello world", Style::default())]
+        );
+    }
+
+    #[test]
+    fn missing_sprites_consume_commands_but_keep_atom_boundaries() {
+        assert_eq!(
+            parse_segments("Oak<$unavailable>Grove<$other> end"),
+            vec![
+                seg("Oak", Style::default()),
+                seg("Grove", Style::default()),
+                seg(" end", Style::default()),
+            ]
+        );
+        assert_eq!(
+            parse_segments("<size:20><$unavailable></size>"),
+            vec![seg(" ", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("<$one><$two>"),
+            vec![seg(" ", Style::default())]
+        );
+        assert_eq!(
+            parse_segments("**Oak<$missing>Grove**"),
+            vec![seg("Oak", bold_style()), seg("Grove", bold_style())]
+        );
+    }
+
+    #[test]
+    fn sprite_command_grammar_preserves_neighboring_literal_syntax() {
+        for tag in [
+            "$oak/leaf-2",
+            "$枝",
+            "#red$oak{scale=2,color=blue}",
+            "$oak*1.5",
+            "$oak,color:red",
+            "$oak{SCALE=2,COLOR=#ff0000}",
+        ] {
+            assert!(is_sprite_tag(tag), "{tag}");
+        }
+        for tag in [
+            "$",
+            "$bad.name",
+            "$bad name",
+            "$oak*bad",
+            "$oak{scale=-2}",
+            "space key",
+        ] {
+            assert!(!is_sprite_tag(tag), "{tag}");
+            let text = format!("a <{tag}> b");
+            assert_eq!(stripped_text(&text), text);
+        }
+        for text in [
+            "~<$oak>",
+            "<$oak",
+            "https://example.test/a",
+            "[[https://example.test/a <$oak>]]",
+        ] {
+            let segments = parse_segments(text);
+            assert!(!segments.is_empty(), "{text}");
+        }
+        assert_eq!(stripped_text("~<$oak>"), "<$oak>");
+        assert_eq!(stripped_text("<$oak"), "<$oak");
+        assert_eq!(
+            stripped_text("https://example.test/a"),
+            "https://example.test/a"
         );
     }
 

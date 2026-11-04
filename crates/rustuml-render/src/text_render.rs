@@ -1780,6 +1780,21 @@ mod tests {
     }
 
     #[test]
+    fn unresolved_sprite_commands_share_emission_and_measurement() {
+        let style = base(0.0, 20.0);
+        let mut output = String::new();
+        let advance = emit_text(&mut output, "Oak<$missing>Grove", &style);
+        assert_eq!(output.matches("<text ").count(), 2);
+        assert!(!output.contains("missing"));
+        assert_eq!(advance, total_width("OakGrove", &style));
+        assert_eq!(advance, total_width("Oak<$missing>Grove", &style));
+        output.clear();
+        let blank = emit_text(&mut output, "<$missing>", &style);
+        assert_eq!(blank, total_width(" ", &style));
+        assert!(output.contains("&#160;"));
+    }
+
+    #[test]
     fn uniform_bold_lifts_to_text_element() {
         let mut buf = String::new();
         emit_text(&mut buf, "**bold**", &base(0.0, 0.0));
