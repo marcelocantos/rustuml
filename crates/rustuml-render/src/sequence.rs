@@ -3923,20 +3923,14 @@ fn sequence_lifelines(
 }
 
 fn sequence_create_message_indices(events: &[Event]) -> HashMap<String, Vec<usize>> {
-    // SequenceDiagram#addMessage attaches each pending CREATE life event to
-    // its compatible message. Participant creation is not a one-shot index.
     let mut result: HashMap<String, Vec<usize>> = HashMap::new();
-    let mut pending = Vec::new();
-    for (event_index, event) in events.iter().enumerate() {
-        match event {
-            Event::Create(participant) => pending.push(participant.clone()),
-            Event::Message(message) => {
-                if let Some(position) = pending.iter().position(|id| *id == message.to) {
-                    let participant = pending.remove(position);
-                    result.entry(participant).or_default().push(event_index);
-                }
+    // Source parsing validates compatibility after return lowering. A caller
+    // supplying an invalid model directly gets no invented creation ownership.
+    if let Ok(owners) = sequence_create_attachments(events) {
+        for (index, owner) in owners.into_iter().enumerate() {
+            if let (Event::Create(id), Some(message)) = (&events[index], owner) {
+                result.entry(id.clone()).or_default().push(message);
             }
-            _ => {}
         }
     }
     result
@@ -4129,7 +4123,7 @@ struct TeozHistory {
 impl TeozHistory {
     fn new(events: &[Event], owners: &[Option<usize>]) -> Self {
         let mut items = Vec::new();
-        let creates = sequence_create_message_indices(events);
+        let creates = sequence_create_attachments(events).unwrap_or_default();
         let mut parallel_previous = vec![None; events.len()];
         let mut previous_message = None;
         let mut source_position = vec![0; events.len()];
@@ -4153,13 +4147,10 @@ impl TeozHistory {
             items.push(TeozHistoryItem {
                 source: index,
                 life,
-                owner: if let Event::Create(id) = event {
-                    // Each raw CREATE owns its next attached message, not the
-                    // participant's first or final creation callback.
-                    creates
-                        .get(id)
-                        .and_then(|indices| indices.iter().find(|&&owner| owner > index))
-                        .copied()
+                owner: if matches!(event, Event::Create(_)) {
+                    // Use the actual raw event identity. An overwritten pending
+                    // CREATE must not borrow a later event for the same participant.
+                    creates.get(index).copied().flatten()
                 } else {
                     owners[index].filter(|&i| matches!(events[i], Event::Message(_)))
                 },
@@ -9143,13 +9134,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Driven entirely by `Event::Autonumber` directives in stream order.
     let mut spacing_auto = AutoState::default();
 
-    // Pending `create X` ids awaiting their first message — that message reserves
-    // extra horizontal space for the inline head box centered on X's lifeline.
-    let mut spacing_pending_create: Vec<String> = Vec::new();
+    // Creation spacing uses the same attached raw events as head painting.
 
     for (event_idx, event) in diagram.events.iter().enumerate() {
         match event {
-            Event::Create(id) => spacing_pending_create.push(id.clone()),
             Event::Message(msg) => {
                 let from_idx = id_to_idx.get(msg.from.as_str()).copied();
                 let to_idx = id_to_idx.get(msg.to.as_str()).copied();
@@ -9364,10 +9352,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // A message that creates its target reserves extra space
                         // for the inline head box centered on the target lifeline:
                         // half the box width sits left of center.
-                        let create_extra = if let Some(pos) =
-                            spacing_pending_create.iter().position(|id| *id == msg.to)
+                        let create_extra = if create_msg_idx
+                            .get(&msg.to)
+                            .is_some_and(|indices| indices.contains(&event_idx))
                         {
-                            spacing_pending_create.remove(pos);
                             participants[ti].preferred_width / 2.0
                         } else {
                             0.0

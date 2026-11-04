@@ -131,7 +131,9 @@ fn validate_return_destinations(events: &[Event]) -> Result<(), ParseError> {
             });
         }
     }
-    resolve_sequence_returns(events)
+    let lowered =
+        resolve_sequence_returns(events).map_err(|(line, message)| ParseError { line, message })?;
+    sequence_create_attachments(&lowered)
         .map(|_| ())
         .map_err(|(line, message)| ParseError { line, message })
 }
@@ -1709,6 +1711,48 @@ mod tests {
         }
         for source in ["A -[#a]o> B", "[--o> A", "A --o>]", "A <o-- B"] {
             assert!(parse_sequence(&[source.into()]).is_err(), "{source}");
+        }
+    }
+
+    #[test]
+    fn pending_create_overwrites_only_unattached_events() {
+        for earlier in ["Birch", "Willow"] {
+            let input = format!(
+                "participant Ash\nparticipant Birch\nparticipant Willow\ncreate {earlier}\ncreate Birch\nAsh -> Birch: one\nAsh -> {earlier}: ordinary\ncreate Birch\nAsh -> Birch: two"
+            );
+            let diagram = parse(&input);
+            let owners = sequence_create_attachments(&diagram.events).unwrap();
+            let creates: Vec<_> = diagram
+                .events
+                .iter()
+                .enumerate()
+                .filter_map(|(i, event)| matches!(event, Event::Create(_)).then_some(i))
+                .collect();
+            assert_eq!(creates.len(), 3);
+            assert_eq!(owners[creates[0]], None);
+            assert_eq!(owners[creates[1]], Some(creates[1] + 1));
+            assert_eq!(owners[creates[2]], Some(creates[2] + 1));
+        }
+        for message in ["Birch -> Ash", "Birch -> Birch"] {
+            let lines =
+                format!("participant Ash\nparticipant Birch\ncreate Birch\n{message}: invalid")
+                    .lines()
+                    .map(str::to_owned)
+                    .collect::<Vec<_>>();
+            assert!(parse_sequence(&lines).is_err(), "{message}");
+        }
+        for message in ["[-> Birch", "Birch ->]"] {
+            let diagram = parse(&format!(
+                "participant Birch\ncreate Birch\n{message}: external"
+            ));
+            assert_eq!(
+                sequence_create_attachments(&diagram.events)
+                    .unwrap()
+                    .iter()
+                    .filter(|x| x.is_some())
+                    .count(),
+                1
+            );
         }
     }
 

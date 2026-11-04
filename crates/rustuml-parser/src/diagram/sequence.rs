@@ -421,3 +421,43 @@ pub fn resolve_sequence_returns(events: &[Event]) -> Result<Vec<Event>, (usize, 
     }
     Ok(result)
 }
+
+/// Java SequenceDiagram#activate overwrites one pending CREATE. addMessage
+/// consumes that exact raw event, keeping earlier attached creations intact.
+/// Owners are indexed by raw event, so overwritten CREATEs stay unowned.
+pub fn sequence_create_attachments(
+    events: &[Event],
+) -> Result<Vec<Option<usize>>, (usize, String)> {
+    let mut owners = vec![None; events.len()];
+    let mut pending: Option<(usize, &str)> = None;
+    for (index, event) in events.iter().enumerate() {
+        match event {
+            Event::Create(id) => pending = Some((index, id)),
+            Event::Message(message) => {
+                if let Some((create, participant)) = pending {
+                    // Message#compatibleForCreate excludes self/source;
+                    // MessageExo accepts its sole real participant in either direction.
+                    let compatible = if matches!(message.from.as_str(), "[" | "]") {
+                        message.to == participant
+                    } else if matches!(message.to.as_str(), "[" | "]") {
+                        message.from == participant
+                    } else {
+                        message.from != participant && message.to == participant
+                    };
+                    if !compatible {
+                        return Err((
+                            message.source_line,
+                            format!(
+                                "After create command, you have to send a message to \"{participant}\""
+                            ),
+                        ));
+                    }
+                    owners[create] = Some(index);
+                    pending = None;
+                }
+            }
+            _ => {}
+        }
+    }
+    Ok(owners)
+}
