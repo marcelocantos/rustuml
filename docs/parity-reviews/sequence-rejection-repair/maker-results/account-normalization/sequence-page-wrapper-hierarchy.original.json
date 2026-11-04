@@ -1,0 +1,10 @@
+{
+  "status": "maker causal account; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": ["core/DiagramChromeFactory12026.java#create/addLegend/addTitle/addCaption/addHeaderAndFooter: raw -> legend -> title -> caption -> header/footer", "svek/DecorateEntityImage.java#calculateDimension/#drawU: heights sum, widths max, child centered horizontally; bottom child starts after complete original", "klimt/shape/TextBlockBordered.java#calculateDimension/#drawU: text plus margins plus one dimension pixel; text paint translated by margins", "sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java#getTextBlock12026: raw body wrapped by 5px each side", "sequencediagram/teoz/PlayingSpaceWithParticipants.java#calculateDimensionSlow/#drawU: all-history preferred body and heads; newpage clip passed to SVG drawing, no truncation of dimensions", "sequencediagram/teoz/NewpageTile.java: zero preferred height and no drawing"],
+  "rust": ["crates/rustuml-render/src/sequence.rs#page1_end", "vertical caption/legend envelope", "horizontal page chrome", "caption/footer painting"],
+  "invariant": "Page decorations compose complete measured blocks in Java wrapper order. Captions follow the legend-bearing body and have multiline dimensions. Teoz newpage does not use legacy page-one extent or separator geometry.",
+  "divergence": "Caption starts at tail boxes independently of legend; legend uses max-height instead of stacking. Caption treated as one text line. Teoz keeps a participant midpoint heuristic and incorrectly truncates to legacy first page.",
+  "change": "Model chrome band dimensions and origins from wrapper hierarchy, sharing composition across engines around their distinct raw bodies. Replace caption single-line sizing/painting. Preserve complete Teoz event history with zero-height newpage while retaining legacy split behavior.",
+  "axes": ["title/legend/caption/footer combinations and multiline width/height", "newpage with later self calls and returns, both engines", "hidden footbox and declaration order"]
+}

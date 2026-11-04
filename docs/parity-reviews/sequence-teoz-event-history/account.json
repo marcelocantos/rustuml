@@ -1,10 +1,53 @@
 {
   "status": "maker causal account; independent review required",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "java": ["teoz/LiveBoxes.java#getLevelAtInternal: raw LifeEvents with three future-history modes; forward scan skips notes and filters owning message", "teoz/LiveBoxes.java#addStep/#getStairs/#drawOneLevel: event callbacks; deactivation collision adds 5 only if existing callback ordinate; standalone Note resets message ownership; steps can reopen levels", "teoz/Stairs.java#addStep: decreasing ordinates rejected, equal ordinates retained", "teoz/LifeEventTile.java#getPreferredHeight/#callbackY_internal: zero height except standalone destruction, callback at tile origin", "teoz/GroupingTile.java#fillPositionelTiles: callbacks in tile order, cursor advances preferred height", "teoz/CommunicationTileSelf.java#callbackY_internal/#drawU: activation at end point else deactivation at start; paint uses IGNORE_FUTURE_ACTIVATE and CONSIDERE_FUTURE_DEACTIVATE", "teoz/CommunicationTile.java#callbackY_internal/#drawU and CommunicationExoTile.java: endpoint modes and border constraints; external tile min/max from preferred-width endpoints and xOrigin"],
-  "rust": ["crates/rustuml-render/src/sequence.rs#sequence_lifecycle_layout", "sequence_lifelines", "Teoz message constraints/endpoints", "activation_bars", "external tile origins"],
+  "java": [
+    "teoz/LiveBoxes.java#getLevelAtInternal: raw LifeEvents with three future-history modes; forward scan skips notes and filters owning message",
+    "teoz/LiveBoxes.java#addStep/#getStairs/#drawOneLevel: event callbacks; deactivation collision adds 5 only if existing callback ordinate; standalone Note resets message ownership; steps can reopen levels",
+    "teoz/Stairs.java#addStep: decreasing ordinates rejected, equal ordinates retained",
+    "teoz/LifeEventTile.java#getPreferredHeight/#callbackY_internal: zero height except standalone destruction, callback at tile origin",
+    "teoz/GroupingTile.java#fillPositionelTiles: callbacks in tile order, cursor advances preferred height",
+    "teoz/CommunicationTileSelf.java#callbackY_internal/#drawU: activation at end point else deactivation at start; paint uses IGNORE_FUTURE_ACTIVATE and CONSIDERE_FUTURE_DEACTIVATE",
+    "teoz/CommunicationTile.java#callbackY_internal/#drawU and CommunicationExoTile.java: endpoint modes and border constraints; external tile min/max from preferred-width endpoints and xOrigin"
+  ],
+  "rust": [
+    "crates/rustuml-render/src/sequence.rs#sequence_lifecycle_layout",
+    "sequence_lifelines",
+    "Teoz message constraints/endpoints",
+    "activation_bars",
+    "external tile origins"
+  ],
   "invariant": "Teoz levels derive from raw source life events and mode-specific lookahead, while paint stairs derive from ordered tile callbacks. Legacy accepted LifeLine variations and combined rows are not Teoz history.",
   "divergence": "Both engines reuse legacy accepted variations, 30px combined rows and paired activation bars. Attached flags, note ownership resets and reopenings are lost. External tile origin/constraint is approximated by legacy border shifts.",
   "change": "Introduce a sequence-local Teoz event-history model with implicit suffix life events expanded semantically, mode-specific levels, callback positions and ordered stairs. Use it for self/internal/external constraints and paint; leave legacy model distinct. Derive external bounds from CommunicationExoTile.",
-  "axes": ["activate/deactivate order across notes and groups, repeated close and reopening", "self/internal/external and declaration order", "padding and attached notes, both controls and previously failing history matrix"]
+  "axes": [
+    "activate/deactivate order across notes and groups, repeated close and reopening",
+    "self/internal/external and declaration order",
+    "padding and attached notes, both controls and previously failing history matrix"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-event-history",
+  "java_locations": [
+    "teoz/LiveBoxes.java#getLevelAtInternal: raw LifeEvents with three future-history modes; forward scan skips notes and filters owning message",
+    "teoz/LiveBoxes.java#addStep/#getStairs/#drawOneLevel: event callbacks; deactivation collision adds 5 only if existing callback ordinate; standalone Note resets message ownership; steps can reopen levels",
+    "teoz/Stairs.java#addStep: decreasing ordinates rejected, equal ordinates retained",
+    "teoz/LifeEventTile.java#getPreferredHeight/#callbackY_internal: zero height except standalone destruction, callback at tile origin",
+    "teoz/GroupingTile.java#fillPositionelTiles: callbacks in tile order, cursor advances preferred height",
+    "teoz/CommunicationTileSelf.java#callbackY_internal/#drawU: activation at end point else deactivation at start; paint uses IGNORE_FUTURE_ACTIVATE and CONSIDERE_FUTURE_DEACTIVATE",
+    "teoz/CommunicationTile.java#callbackY_internal/#drawU and CommunicationExoTile.java: endpoint modes and border constraints; external tile min/max from preferred-width endpoints and xOrigin"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs#sequence_lifecycle_layout",
+    "sequence_lifelines",
+    "Teoz message constraints/endpoints",
+    "activation_bars",
+    "external tile origins"
+  ],
+  "causal_divergence": "Both engines reuse legacy accepted variations, 30px combined rows and paired activation bars. Attached flags, note ownership resets and reopenings are lost. External tile origin/constraint is approximated by legacy border shifts.",
+  "planned_change": "Introduce a sequence-local Teoz event-history model with implicit suffix life events expanded semantically, mode-specific levels, callback positions and ordered stairs. Use it for self/internal/external constraints and paint; leave legacy model distinct. Derive external bounds from CommunicationExoTile.",
+  "perturbation_axes": [
+    "activate/deactivate order across notes and groups, repeated close and reopening",
+    "self/internal/external and declaration order",
+    "padding and attached notes, both controls and previously failing history matrix"
+  ]
 }

@@ -1,10 +1,43 @@
 {
   "status": "maker causal account; independent review required",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "java": ["teoz/SequenceDiagramFileMakerTeoz#createMainTile lines85-104: construct contiguous preferred-width participant heads, construct PlayingSpace and group tiles, then add constraints and compile Real positions", "real/RealImpl#addAtLeast and RealDelta#addAtLeast: initial values carry fixed preferred head widths without later spacing forces", "teoz/NoteTile#getX/#getMinX/#getMaxX: getUsedWidth is evaluated into addFixed while bounds are constructed; the center remains a Real expression", "teoz/NoteTile#drawU: evaluate getUsedWidth again after constraints for painting", "teoz/GroupingTile constructor captures child bounds before constraint compilation; its draw uses those captured bounds"],
-  "rust": ["crates/rustuml-render/src/sequence.rs#teoz_note_geometry", "measure_group_frames", "Teoz min_tile"],
+  "java": [
+    "teoz/SequenceDiagramFileMakerTeoz#createMainTile lines85-104: construct contiguous preferred-width participant heads, construct PlayingSpace and group tiles, then add constraints and compile Real positions",
+    "real/RealImpl#addAtLeast and RealDelta#addAtLeast: initial values carry fixed preferred head widths without later spacing forces",
+    "teoz/NoteTile#getX/#getMinX/#getMaxX: getUsedWidth is evaluated into addFixed while bounds are constructed; the center remains a Real expression",
+    "teoz/NoteTile#drawU: evaluate getUsedWidth again after constraints for painting",
+    "teoz/GroupingTile constructor captures child bounds before constraint compilation; its draw uses those captured bounds"
+  ],
+  "rust": [
+    "crates/rustuml-render/src/sequence.rs#teoz_note_geometry",
+    "measure_group_frames",
+    "Teoz min_tile"
+  ],
   "invariant": "Teoz bound expressions capture the note allocation width in the initial contiguous-head constraint state while retaining live participant center references. Note painting samples final allocated span width. Both use the same preferred component width; their allocation phase is intentionally different.",
   "divergence": "Using the final stretched span to rebuild group bound expressions moves asymmetric-head minima by fractional amounts and widens group frames. This is not a font metric error and must not be corrected with offsets.",
   "change": "Compute initial participant preferred-width prefix positions explicitly. Resolve bound allocation from that state and paint allocation from final participant positions. Keep both calculations in the same component geometry model with a named phase.",
-  "axes": ["short span note with asymmetric participant head widths and declaration reversal", "arrow constraints expanding the span, with padding and shadow"]
+  "axes": [
+    "short span note with asymmetric participant head widths and declaration reversal",
+    "arrow constraints expanding the span, with padding and shadow"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-real-bound-capture",
+  "java_locations": [
+    "teoz/SequenceDiagramFileMakerTeoz#createMainTile lines85-104: construct contiguous preferred-width participant heads, construct PlayingSpace and group tiles, then add constraints and compile Real positions",
+    "real/RealImpl#addAtLeast and RealDelta#addAtLeast: initial values carry fixed preferred head widths without later spacing forces",
+    "teoz/NoteTile#getX/#getMinX/#getMaxX: getUsedWidth is evaluated into addFixed while bounds are constructed; the center remains a Real expression",
+    "teoz/NoteTile#drawU: evaluate getUsedWidth again after constraints for painting",
+    "teoz/GroupingTile constructor captures child bounds before constraint compilation; its draw uses those captured bounds"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs#teoz_note_geometry",
+    "measure_group_frames",
+    "Teoz min_tile"
+  ],
+  "causal_divergence": "Using the final stretched span to rebuild group bound expressions moves asymmetric-head minima by fractional amounts and widens group frames. This is not a font metric error and must not be corrected with offsets.",
+  "planned_change": "Compute initial participant preferred-width prefix positions explicitly. Resolve bound allocation from that state and paint allocation from final participant positions. Keep both calculations in the same component geometry model with a named phase.",
+  "perturbation_axes": [
+    "short span note with asymmetric participant head widths and declaration reversal",
+    "arrow constraints expanding the span, with padding and shadow"
+  ]
 }

@@ -10,9 +10,48 @@
     "skin/rose/ComponentRoseGroupingHeader.java#drawInternalU: guard origin marginY+1 (2); ComponentRoseGroupingElse.java#drawInternalU: marginY (1) or marginY+2 (3), relative to line at y=1; Display block adds padding; default 11pt ascent=10.634765625 from pinned font metrics",
     "skin/rose/ComponentRoseArrow.java#drawInternalU: aligned text positions use padded TextBlock dimensions, then TextBlock paint adds padding"
   ],
-  "rust": ["crates/rustuml-render/src/sequence.rs#ParticipantLayout", "over_several_note_geometry", "group note bounds", "span note painting", "delay scheduling", "group guard baselines", "message alignment"],
+  "rust": [
+    "crates/rustuml-render/src/sequence.rs#ParticipantLayout",
+    "over_several_note_geometry",
+    "group note bounds",
+    "span note painting",
+    "delay scheduling",
+    "group guard baselines",
+    "message alignment"
+  ],
   "invariant": "Preferred dimensions are distinct from visible shape dimensions but must be shared by allocation, group membership and paint. Text padding belongs to component size and text-block translation, not a final diagram adjustment.",
   "divergence": "Several consumers reconstruct participant/note width from painted box width and omit shadow. Delay scheduling omits Display padding. Changed group guard composites lack explicit source derivations. Message alignment may discard padded text width.",
   "change": "Store preferred participant width once and consume it consistently in span-note allocation and group membership. Use the same note preferred-width helper for every folded span path. Derive padded delay height and guard baselines from Java component/text models; inspect message alignment dataflow before correction.",
-  "axes": ["shadow enabled/disabled with narrow and wide spanning notes, declaration order", "global padding with delayed messages and reverse/forward alignment", "group header versus else and engine"]
+  "axes": [
+    "shadow enabled/disabled with narrow and wide spanning notes, declaration order",
+    "global padding with delayed messages and reverse/forward alignment",
+    "group header versus else and engine"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-preferred-component-flow",
+  "java_locations": [
+    "graphic/ParticipantBox.java#getMinX,#getMaxX,#getCenterX: one head preferred width flows into center and right boundary; min=startingX+outMargin, max=startingX+preferredWidth+2*outMargin",
+    "skin/rose/ComponentRoseParticipant.java#getPreferredWidth and drawInternalU: preferred dimensions include deltaShadow while painted rectangle excludes it",
+    "graphic/NoteBox.java#getPreferredWidth,#getStartingX: span allocation max(componentWidth, participant2.max-participant1.min), origin truncation after centering",
+    "skin/rose/ComponentRoseNote.java#getPreferredWidth,#drawInternalU: shadow participates in preferred width; expanded allocated width changes integer polygon width; unstretched polygon retains text width",
+    "skin/rose/ComponentRoseDelayText.java#getPreferredHeight: getTextHeight+20; AbstractTextualComponent adds 2*marginY (8), Display#create0 includes skin padding in text block",
+    "skin/rose/ComponentRoseGroupingHeader.java#drawInternalU: guard origin marginY+1 (2); ComponentRoseGroupingElse.java#drawInternalU: marginY (1) or marginY+2 (3), relative to line at y=1; Display block adds padding; default 11pt ascent=10.634765625 from pinned font metrics",
+    "skin/rose/ComponentRoseArrow.java#drawInternalU: aligned text positions use padded TextBlock dimensions, then TextBlock paint adds padding"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs#ParticipantLayout",
+    "over_several_note_geometry",
+    "group note bounds",
+    "span note painting",
+    "delay scheduling",
+    "group guard baselines",
+    "message alignment"
+  ],
+  "causal_divergence": "Several consumers reconstruct participant/note width from painted box width and omit shadow. Delay scheduling omits Display padding. Changed group guard composites lack explicit source derivations. Message alignment may discard padded text width.",
+  "planned_change": "Store preferred participant width once and consume it consistently in span-note allocation and group membership. Use the same note preferred-width helper for every folded span path. Derive padded delay height and guard baselines from Java component/text models; inspect message alignment dataflow before correction.",
+  "perturbation_axes": [
+    "shadow enabled/disabled with narrow and wide spanning notes, declaration order",
+    "global padding with delayed messages and reverse/forward alignment",
+    "group header versus else and engine"
+  ]
 }

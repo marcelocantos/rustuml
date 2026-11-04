@@ -10,9 +10,43 @@
     "teoz/CommunicationTileSelf.java#getMinX,#getMaxX,#addConstraints,#drawU: reverse uses center-componentWidth-liveHalfWidth and preceding participant constraint; lifecycle levels use event-history modes",
     "graphic/ArrowAndNoteBox.java constructor: preferred height=max(arrow,note); each child centered within that height"
   ],
-  "rust": ["crates/rustuml-render/src/sequence.rs#SequenceSelfArrow", "constraint phase", "self arrow envelope/group membership", "self arrow paint", "attached note scheduling"],
+  "rust": [
+    "crates/rustuml-render/src/sequence.rs#SequenceSelfArrow",
+    "constraint phase",
+    "self arrow envelope/group membership",
+    "self arrow paint",
+    "attached note scheduling"
+  ],
   "invariant": "A reverse self message shares one directional model for constraints, origin, bounds and paint. Attached-note placement is centered from preferred component heights, not direction-specific label offsets.",
   "divergence": "Rust stores arrow direction but models every self message as forward, reserving only following-participant space and drawing a right loop. Self-note top uses unpadded first-line height rather than padded preferred component geometry.",
   "change": "Extend self-arrow model with reverse origin and constraint side; derive both border constraints and group extents from it. Port reverse component stroke/head construction. Express attached-note vertical placement from ArrowAndNoteBox dimensions. Keep Teoz history semantics distinct and repair its level source in a separate account.",
-  "axes": ["direction and participant declaration/order including first and interior participants", "head shape, activation recursion and label width", "attached notes with padding and multiline labels"]
+  "axes": [
+    "direction and participant declaration/order including first and interior participants",
+    "head shape, activation recursion and label width",
+    "attached notes with padding and multiline labels"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-reverse-self-component",
+  "java_locations": [
+    "graphic/MessageSelfArrow.java#getStartingX: reverse starts at live segment pos2 minus full preferred width; forward adds deltaX",
+    "graphic/Step1Message.java#prepareMessage: reverse ensures ConstraintBefore, forward ConstraintAfter; length is graphical arrow width plus live segment length",
+    "graphic/Step1Message.java#createMessageSelfArrow,#getLevelAt: independent lifecycle deltaY; level is live-segment-length/halfLifeWidth minus one",
+    "skin/rose/ComponentRoseSelfArrow.java#drawLeftSide,#getPolygon: component preferred text width, live delta and current level determine strokes; reverse polygon changes x direction; same component text origin",
+    "teoz/CommunicationTileSelf.java#getMinX,#getMaxX,#addConstraints,#drawU: reverse uses center-componentWidth-liveHalfWidth and preceding participant constraint; lifecycle levels use event-history modes",
+    "graphic/ArrowAndNoteBox.java constructor: preferred height=max(arrow,note); each child centered within that height"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs#SequenceSelfArrow",
+    "constraint phase",
+    "self arrow envelope/group membership",
+    "self arrow paint",
+    "attached note scheduling"
+  ],
+  "causal_divergence": "Rust stores arrow direction but models every self message as forward, reserving only following-participant space and drawing a right loop. Self-note top uses unpadded first-line height rather than padded preferred component geometry.",
+  "planned_change": "Extend self-arrow model with reverse origin and constraint side; derive both border constraints and group extents from it. Port reverse component stroke/head construction. Express attached-note vertical placement from ArrowAndNoteBox dimensions. Keep Teoz history semantics distinct and repair its level source in a separate account.",
+  "perturbation_axes": [
+    "direction and participant declaration/order including first and interior participants",
+    "head shape, activation recursion and label width",
+    "attached notes with padding and multiline labels"
+  ]
 }
