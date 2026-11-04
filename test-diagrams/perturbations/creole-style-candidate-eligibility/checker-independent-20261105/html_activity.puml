@@ -1,0 +1,6 @@
+@startuml
+start
+:unused;
+:Birch <b></B> Cedar <i>Elm</I>;
+stop
+@enduml

@@ -1,0 +1,25 @@
+SVG structural differences:
+  element count: expected 18, got 16
+  [9] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "7.5527"), ("x", "80.7852"), ("y", "158.1328")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "12.4629"), ("x", "80.7852"), ("y", "158.1328")]
+  [9] <text> text mismatch:
+    expected: Some("q")
+    actual:   Some("qr")
+  [10] tag mismatch: expected <text>, got <line>
+  [11] tag mismatch: expected <line>, got <rect>
+  [12] tag mismatch: expected <rect>, got <text>
+  [13] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "37.2773"), ("x", "46.6689"), ("y", "41.6016")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "12.4629"), ("x", "46.6689"), ("y", "55.7344")]
+  [13] <text> text mismatch:
+    expected: Some("Crown")
+    actual:   Some("qr")
+  [14] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "7.5527"), ("x", "46.6689"), ("y", "55.7344")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "3.7969"), ("x", "46.6689"), ("y", "69.8672")]
+  [14] <text> text mismatch:
+    expected: Some("q")
+    actual:   None
+  [15] tag mismatch: expected <text>, got <line>
+

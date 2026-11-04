@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-style-candidate-eligibility",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3Ac2ac4971-4f46-4299-a5b4-2629a816be59",
+    "model": "gpt-6-astra / high / Codex harness in T3 Code",
+    "independence": "New checker; no prior maker involvement; no children; evidence-only isolated checkout"
+  },
+  "account_commit": "829154e5bdd2c0a919410bbff46c2c3168a6991e",
+  "implementation_commit": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+  "evidence_tip": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git archive a84856637adcd8e8d4e78fd2ee00658c9c612feb and 8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6 into private source snapshots; cargo build -p rustuml --release -j 4 with distinct private targets (after additionally builds rustuml-oracle)",
+    "uv run --no-project --with pyyaml python replay_check.py before|after (all immutable cohorts; actual CLI -pipe and --yaml -pipe; unchanged compare_svg_strict)",
+    "Parent existing Monkey Man runner: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact request/manifest/streams retained",
+    "uv run --no-project --with pyyaml python fresh_check.py and supplement_check.py; adjudicate.py classifies embedded math failures without rerunning CLI",
+    "cargo test --workspace --lib --release; cargo test -p rustuml --test pipe_mode --release",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle -- --nocapture; golden_pairs, parity_perturbations and harness_guards once each",
+    "cargo clippy --workspace --all-targets -- -D warnings; cargo fmt --all -- --check; rustfmt --edition 2024 --check --config skip_children=true on four touched files"
+  ],
+  "command_records": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support/gates.json",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_nested.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_nested.svg",
+      "axes": [
+        "nesting",
+        "closing aliases"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "d290692be3197b0e72230b1b0666ab6809f9d88963b9f7de44c943a94119db34",
+      "golden_sha256": "e3efbd86f976c1a88e4fbc801dc67c5e4587b0ce072151b1d53e68ae883af8ba",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_nested",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_restore.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_restore.svg",
+      "axes": [
+        "flush boundaries",
+        "nested color"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "2a01e7dbc93feba2d6264e3c51e30ff693f7e46295d9089fa566b1aa104e02e6",
+      "golden_sha256": "f030452ccbcb897c85e167d7e956439c1dbc0ecec0da09d695fa7901ac6137db",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_restore",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_unicode.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_unicode.svg",
+      "axes": [
+        "Unicode boundaries",
+        "escaped close"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "84d554bb1c76b94c06ab048917d525e0201416cda5cb7257dc51fcee023a75d7",
+      "golden_sha256": "e9883944ddc3a43574d20f39c37dc2d8ca6b88d5e4e3d9ea29cbf0c5544b8c96",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_unicode",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_parameters.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_parameters.svg",
+      "axes": [
+        "size changes",
+        "empty parameter/body contrast"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "97a4818c6c7148ee6da3d2539c0b08d8dcf628517e3f117f28e55673afac1abb",
+      "golden_sha256": "732312d3dbc3e8eed303a31cc92955f056c6b9ab3c99c8240371eeb9daec3203",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_parameters",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_escape_pairs.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_escape_pairs.svg",
+      "axes": [
+        "escape parity",
+        "nesting"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "eb0f2003ae3d7433fcc699644aceaa26f1847a6faed82ad7a8697af8f8a6cd88",
+      "golden_sha256": "640d11e60d8bb6d0fc3c4841bf8e42d7d69175040f13d4eaf9c5f8ca1ba4f1db",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_escape_pairs",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_activity.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_activity.svg",
+      "axes": [
+        "activity consumer",
+        "empty/closed aliases"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "9effdbb21984fbbcc8e91ea3579969cdbba1ef7b05594445c49a98fcf8fd5fc6",
+      "golden_sha256": "1da8d52a610f375f56a2551e32e995909b0451c5ea4462ca107a6d08838dad3f",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_activity",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_state.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_state.svg",
+      "axes": [
+        "state edge consumer",
+        "closing aliases"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "840487c921bd4707974b7b3865339c921bc855ce9abb3978745f7af0681f8b1e",
+      "golden_sha256": "88716e8b8d128ed186b607ef999a29313dddb4f6fe26b131f1acd7bf7f0a71f1",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_state",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_note.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_note.svg",
+      "axes": [
+        "note consumer",
+        "empty/closed styles"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "831704bc82dba980941e252cd486d5a63021b45e9cbc918db6ed0aa64c86deaf",
+      "golden_sha256": "ddb4c7580e4a4646f91b61dc32aa82f125512875cc60687c7ec019c11122558d",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_note",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_extended.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_extended.svg",
+      "axes": [
+        "extended color style",
+        "activation variants"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "63b98e2f34a3ce68743673c00937f1d9cee03c53deffb70cc1fce9bad343bd39",
+      "golden_sha256": "d993a72a47cba5e5eac3c7cd79907797b076fa06bd0dea670739e37628b9ac93",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_extended",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_url_math.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/html_url_math.svg",
+      "axes": [
+        "URL region",
+        "math region"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": false,
+      "intended_validity": "intended_valid",
+      "observed_classification": "reference_dependency_failure",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "6f28da74d328a8ac72523d32843ce211e8142e6df7e6322d3e56e4d1d85d63a8",
+      "golden_sha256": "53d10b7f2c5ab35ca6ed506657376c26cc153e01aee7b7a5028184038af408d6",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/html_url_math",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/s_html_bold_backslash.puml",
+      "golden": "test-diagrams/perturbations/creole-style-candidate-eligibility/checker-independent-20261105/s_html_bold_backslash.svg",
+      "axes": [
+        "escaped tilde",
+        "bold/italic restoration"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "4a1d0977e5a8671393392d2f4de8115c681886c037a6f29e66f0c28da698842c",
+      "golden_sha256": "3c88c889c2a4dec5623e385ee4fadafff1d371908c29da129bf7d6aec0da4a11",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_html_bold_backslash",
+      "verdict_excluded": false
+    }
+  ],
+  "findings": [
+    "Bounded support: nested empty/closed/EOL styles, closing aliases, Unicode boundaries, restoration around a missing sprite, and activity/state/note consumers pass. Java CommandCreoleBuilder orders closed then EOL candidates; CommandCreoleStyle.matchingSize returns captured body length. New walk_style_tag follows that selection for the supported bare styles. No fixture-dependent branch or unexplained changed constant was found.",
+    "Counterexample html_escape_pairs and minimal s_html_bold_backslash: Java CharHidder.hide consumes backslash-tilde into a hidden literal tilde before matching and recursive traversal. Rust walk_style_tag skips that pair while searching for a closing candidate but walk_segments has no corresponding backslash arm when painting the captured body. Rust emits a\\~ versus Java a~. This was already failing before the packet; it disproves complete escaped-candidate handling, not a lost pass.",
+    "Counterexample html_parameters: q<size:19></size>r<color:navy></color>s produces separate q/r/s Java text atoms but a merged qrs Rust atom. Java StripeSimple.modifyStripe/addPending flushes each selected size/color command; the unchanged Rust size/color arms recurse into an empty body without a barrier. Its second size31 line also exposes the separately owned sequence baseline (Java95.7695, Rust78.3672). Both are retained failures, not newly lost passes.",
+    "html_extended remains a pre-existing unsupported activation surface: FontStyle allows color-bearing u/w/strike and mixed-case BACK, while Rust handle_tag recognizes a narrower set. The packet adds aliases but does not establish the complete Java activation grammar.",
+    "html_url_math has an exact URL label slice but no clean whole positive reference: the pinned runner lacks Batik and embeds a formula fallback. Preserve it as reference-environment residue, not a Java semantics assertion or a positive pass."
+  ],
+  "causal_locations": {
+    "java": [
+      "klimt/creole/legacy/CommandCreoleBuilder#constructor: createLegacy before createLegacyEol for BOLD,ITALIC,UNDERLINE,STRIKE,WAVE,BACKCOLOR",
+      "klimt/creole/legacy/StripeSimple#searchCommand/modifyStripe/addPending",
+      "klimt/creole/command/CommandCreoleStyle#matchingSize/executeAndGetRemaining/createLegacy/createLegacyEol",
+      "klimt/font/FontStyle#getUbrexActivationPattern/getUbrexDeactivationPattern",
+      "klimt/creole/command/CommandCreoleSizeChange#matchingSize (size group length)",
+      "klimt/creole/command/CommandCreoleColorChange#matchingSize (color group length)",
+      "utils/CharHidder#hide"
+    ],
+    "rust": [
+      "crates/rustuml-render/src/creole.rs::handle_tag/walk_with/walk_segments/collect_until_tag",
+      "crates/rustuml-render/src/text_render.rs::line_segments (unchanged actual-line projection)"
+    ]
+  },
+  "verdict": "rejected",
+  "reason": "Fresh clean-positive whole-output failures remain executable. Bounded mechanism support is recorded separately; no failures are waived and no pre-existing failure is called a maker regression.",
+  "fresh_counts": {
+    "entries": 11,
+    "clean_positive": 10,
+    "verdict_eligible": 10,
+    "before_pass": 1,
+    "after_pass": 6
+  },
+  "evidence": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support",
+  "reference_limitations": [
+    "Historical font/Graphviz environment equivalence unproved.",
+    "Java argv derived from pinned wrapper, not independently process-traced.",
+    "Pinned runner lacks Batik; math/latex fallback outputs are nonpositive reference-environment evidence, not PlantUML semantics.",
+    "No combined correctness with class candidate 68ab512be964e243ae1943f7a9fefd3537091401 or concurrent sequence work."
+  ],
+  "reviewed_at": "2026-11-04T14:22:12.466560+00:00"
+}

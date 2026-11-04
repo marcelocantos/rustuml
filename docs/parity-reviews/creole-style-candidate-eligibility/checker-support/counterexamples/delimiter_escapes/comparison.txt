@@ -1,0 +1,38 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "184px"), ("preserveAspectRatio", "none"), ("style", "width:141px;height:184px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 141 184"), ("width", "141px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "184px"), ("preserveAspectRatio", "none"), ("style", "width:148px;height:184px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 148 184"), ("width", "148px"), ("zoomAndPan", "magnify")]
+  [9] <rect> attr mismatch:
+    expected: [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "110.5527"), ("width", "8"), ("x", "102.0864"), ("y", "36.4883")]
+    actual:   [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "110.5527"), ("width", "8"), ("x", "108.9038"), ("y", "36.4883")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "105.6479"), ("x2", "105.6479"), ("y1", "36.4883"), ("y2", "147.041")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "112.4653"), ("x2", "112.4653"), ("y1", "36.4883"), ("y2", "147.041")]
+  [18] <rect> attr mismatch:
+    expected: [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "48.877"), ("x", "81.6479"), ("y", "5")]
+    actual:   [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "48.877"), ("x", "88.4653"), ("y", "5")]
+  [19] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.877"), ("x", "88.6479"), ("y", "25.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.877"), ("x", "95.4653"), ("y", "25.5352")]
+  [21] <rect> attr mismatch:
+    expected: [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "48.877"), ("x", "81.6479"), ("y", "146.041")]
+    actual:   [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "48.877"), ("x", "88.4653"), ("y", "146.041")]
+  [22] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.877"), ("x", "88.6479"), ("y", "166.5762")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.877"), ("x", "95.4653"), ("y", "166.5762")]
+  [24] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "94.0864,125.041,104.0864,129.041,94.0864,133.041,98.0864,129.041"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "100.9038,125.041,110.9038,129.041,100.9038,133.041,104.9038,129.041"), ("style", "stroke:#181818;stroke-width:1;")]
+  [25] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "35.4438"), ("x2", "100.0864"), ("y1", "129.041"), ("y2", "129.041")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "35.4438"), ("x2", "106.9038"), ("y1", "129.041"), ("y2", "129.041")]
+  [39] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("text-decoration", "wavy underline"), ("textLength", "31.8018"), ("x", "50.626"), ("y", "124.2988")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("text-decoration", "wavy underline"), ("textLength", "38.6191"), ("x", "50.626"), ("y", "124.2988")]
+  [39] <text> text mismatch:
+    expected: Some("a~~b")
+    actual:   Some("a\\~~b")
+  [40] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "6.6587"), ("x", "82.4277"), ("y", "124.2988")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "6.6587"), ("x", "89.2451"), ("y", "124.2988")]
+

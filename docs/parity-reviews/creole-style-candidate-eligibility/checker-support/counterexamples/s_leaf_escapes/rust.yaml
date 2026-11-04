@@ -1,0 +1,35 @@
+type: Wbs
+diagram:
+  meta:
+    source: |
+      @startwbs
+      *_ Ash
+      **_ <b>a\~</B>
+      ***_ i
+      --_ <i>j\~</i>
+      @endwbs
+  nodes:
+  - label: Ash
+    shape: None
+    color: null
+    depth: 1
+    side: Right
+    children:
+    - label: <b>a\~</B>
+      shape: None
+      color: null
+      depth: 2
+      side: Right
+      children:
+      - label: i
+        shape: None
+        color: null
+        depth: 3
+        side: Right
+        children: []
+    - label: <i>j\~</i>
+      shape: None
+      color: null
+      depth: 2
+      side: Left
+      children: []

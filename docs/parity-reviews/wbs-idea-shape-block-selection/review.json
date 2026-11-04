@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "mechanism": "wbs-idea-shape-block-selection",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3Ac2ac4971-4f46-4299-a5b4-2629a816be59",
+    "model": "gpt-6-astra / high / Codex harness in T3 Code",
+    "independence": "New checker; no prior maker involvement; no children; evidence-only isolated checkout"
+  },
+  "account_commit": "829154e5bdd2c0a919410bbff46c2c3168a6991e",
+  "implementation_commit": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+  "evidence_tip": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git archive a84856637adcd8e8d4e78fd2ee00658c9c612feb and 8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6 into private source snapshots; cargo build -p rustuml --release -j 4 with distinct private targets (after additionally builds rustuml-oracle)",
+    "uv run --no-project --with pyyaml python replay_check.py before|after (all immutable cohorts; actual CLI -pipe and --yaml -pipe; unchanged compare_svg_strict)",
+    "Parent existing Monkey Man runner: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact request/manifest/streams retained",
+    "uv run --no-project --with pyyaml python fresh_check.py and supplement_check.py; adjudicate.py classifies embedded math failures without rerunning CLI",
+    "cargo test --workspace --lib --release; cargo test -p rustuml --test pipe_mode --release",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle -- --nocapture; golden_pairs, parity_perturbations and harness_guards once each",
+    "cargo clippy --workspace --all-targets -- -D warnings; cargo fmt --all -- --check; rustfmt --edition 2024 --check --config skip_children=true on four touched files"
+  ],
+  "command_records": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support/gates.json",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_colors_new.puml",
+      "golden": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_colors_new.svg",
+      "axes": [
+        "color ordering",
+        "depth/sides/literal underscores"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "75856f7ab992772f7f7ac50060936160fb43ee3f937578acebc23426fcbc601b",
+      "golden_sha256": "b1e6d8b1fe896727d8f5afe6079161828daf3aa9ce202c92e9dea86f8a8b70d6",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/shape_colors_new",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_colors_old.puml",
+      "golden": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_colors_old.svg",
+      "axes": [
+        "old color ordering",
+        "depth/sides"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "5eeaacaea93df1f27f4bd5532f6631ec7a46ff5879e5aae1d2d900ce9fd3e8ea",
+      "golden_sha256": "fc6e106e395ea79f500fcf732acaa358221d0f8d9f37bd2fd3ebf98dc640e54c",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/shape_colors_old",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_new.puml",
+      "golden": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_new.svg",
+      "axes": [
+        "direction/shape order",
+        "color/topology"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": false,
+      "intended_validity": "intended_valid",
+      "observed_classification": "error_svg",
+      "reference_exit": 200,
+      "reference_timed_out": false,
+      "source_sha256": "b776cbdd381cdc0c6a5166aa8419c0a431a37c6eb35c4334864ce7679d57e4fa",
+      "golden_sha256": "7ea8f3c6dd608147788db20d7c943a1df419e162f7b737e1dd5ccee48329a43d",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/shape_direction_new",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_old.puml",
+      "golden": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_old.svg",
+      "axes": [
+        "old direction/shape order",
+        "color/depth"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": false,
+      "intended_validity": "intended_valid",
+      "observed_classification": "error_svg",
+      "reference_exit": 200,
+      "reference_timed_out": false,
+      "source_sha256": "0e7fcbac4aa1b5429a8bcfe1efbde0dd491b2eb9a38b7f358321f16811ac9bce",
+      "golden_sha256": "5bb6945bd1695587abf62f4f4957b5f9e3dca8b3e31255b13cd99d9f9e1d230c",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/shape_direction_old",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_literal.puml",
+      "golden": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_literal.svg",
+      "axes": [
+        "whitespace literal underscore",
+        "depth/sides"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "3070b88aa9b373f8ed9ad2425e824e3a66225d843926fdcdae2c89dec898e7cb",
+      "golden_sha256": "967142e32a545e67b797db5e1d3bb5ccefcc39a3bdde3e73b73555bec24b63fe",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/shape_literal",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/s_shape_color_literals.puml",
+      "golden": "test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/s_shape_color_literals.svg",
+      "axes": [
+        "color with whitespace literal",
+        "depth and side"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "abaada290e5f14ecccb25e2861b3244ff53917e2343f2f1e65d65d17f94bad5e",
+      "golden_sha256": "182254b930cb4b7d7cf4b2131332bc8791d8a7f4adde3bdbe2fefad2945c34a2",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_shape_color_literals",
+      "verdict_excluded": false
+    }
+  ],
+  "findings": [
+    "Bounded support: new-order underscore/color syntax, left/right deep boxed versus unboxed trees, whitespace-delimited literal underscores including immediately after a color token, and raw label preservation pass. WbsShape is stored in the model; renderer selection matches IdeaShape BOX versus NONE. PAD_X10 is pinned plantuml.skin; TextBlockUtils.withMargin maps 0/3/1/1 to left/right/top/bottom, confirmed through TextBlockMarged.",
+    "Valid old-order shape_colors_old remains a whole failure: CommandWBSItemOld adds Please define Direction/Shape before Color/Id. Java decorates the output and shifts it by the warning block; Rust has correct shape/color data but no warning metadata or decoration. Original wbs_shape_color remains failing as well. It was not a prior pass.",
+    "The two original direction probes were intended valid but Java returned syntax-error SVGs (exit200). Intent is retained unchanged; these are nonpositive and are not evidence that Rust should panic or that the bounded shape repair regressed. Rust exits0 for both. The pinned CommandWBSItemNew/Old grammar has narrower direction/shape combinations than the attempted inputs.",
+    "Independent nested serialized-model probe confirms old absent shape defaults to Box at root and child, Box serialization omits shape, and explicit None round-trips exactly. The five changed historical models contain twelve shape additions and one color-field correction only; topology/depth/side/source are unchanged."
+  ],
+  "causal_locations": {
+    "java": [
+      "wbs/CommandWBSItemNew#getRegexConcat/executeArg: SHAPE adjacent to prefix before optional color/id",
+      "wbs/CommandWBSItemOld#getRegexConcat/executeArg: legacy optional color/id before SHAPE",
+      "mindmap/IdeaShape#fromDesc: underscore maps NONE, otherwise BOX",
+      "wbs/WBSDiagram#addIdea/initRoot and wbs/WElement#shape",
+      "wbs/WBSTextBlock#buildMain (87) and wbs/ITFLeaf#constructor (58): BOX FtileBoxOld versus Display text with margins0,3,1,1",
+      "klimt/shape/TextBlockUtils#withMargin (76) and TextBlockMarged#calculateDimension/drawU",
+      "src/main/resources/skin/plantuml.skin::wbsDiagram Padding10"
+    ],
+    "rust": [
+      "crates/rustuml-parser/src/diagram/wbs.rs::WbsShape (new), WbsNode.shape",
+      "crates/rustuml-parser/src/parse/wbs.rs::parse_wbs prefix/color interpretation and sole WbsNode constructor",
+      "crates/rustuml-render/src/wbs.rs::measure/emit_box"
+    ]
+  },
+  "verdict": "rejected",
+  "reason": "Fresh clean-positive whole-output failures remain executable. Bounded mechanism support is recorded separately; no failures are waived and no pre-existing failure is called a maker regression.",
+  "fresh_counts": {
+    "entries": 6,
+    "clean_positive": 4,
+    "verdict_eligible": 4,
+    "before_pass": 1,
+    "after_pass": 3
+  },
+  "evidence": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support",
+  "reference_limitations": [
+    "Historical font/Graphviz environment equivalence unproved.",
+    "Java argv derived from pinned wrapper, not independently process-traced.",
+    "Pinned runner lacks Batik; math/latex fallback outputs are nonpositive reference-environment evidence, not PlantUML semantics.",
+    "No combined correctness with class candidate 68ab512be964e243ae1943f7a9fefd3537091401 or concurrent sequence work."
+  ],
+  "reviewed_at": "2026-11-04T14:22:12.468152+00:00"
+}
