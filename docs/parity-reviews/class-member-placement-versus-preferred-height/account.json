@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-member-placement-versus-preferred-height",
+  "status": "maker correction plan; not accepted",
+  "corrects_prior_plan": "class-member-row-icon-envelope",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "a5fa19793e55bf2636a84a1e0941afa10346e3e0",
+  "java_locations": [
+    "cucadiagram/MethodsOrFieldsArea#calculateDimensionOnlyMembers lines154-177",
+    "klimt/geom/PlacementStrategyVisibility#getPositions lines55-70"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#member_content_height,member_block_height,render_entity_content"
+  ],
+  "invariant": "Preferred member area height sums text blocks. Drawing placement advances each row by max(icon block,text block), independently of preferred height and subsequent compartment origins.",
+  "causal_divergence": "The prior planned correction incorrectly generalized placement max to preferred size. Direct source inspection shows MethodsOrFieldsArea.calculateDimensionOnlyMembers ignores icon height; PlacementStrategyVisibility alone increments by max. Existing 22px reference keeps container/separator geometry while moving second row in each compartment.",
+  "planned_change": "Retain text-only member_block_height and members_content_height for preferred sizes and separators. Use max only for row drawing cursor advances, preserving first-baseline centering. Keep nonpositive square suppression from the earlier account.",
+  "perturbation_axes": [
+    "22px and other oversized icons crossed with multi-row fields/methods",
+    "Padding and explicit separators with mixed visible/default modifiers"
+  ],
+  "verification_plan": "Retained large/tiny/odd and maker-size controls, focused class units and main tiers; no acceptance claim."
+}
