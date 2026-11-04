@@ -10790,6 +10790,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     }
     let mut max_note_right: f64 = 0.0;
     let mut max_arrow_note_right: f64 = 0.0;
+    let mut max_message_note_right: f64 = 0.0;
     for (event_idx, event) in diagram.events.iter().enumerate() {
         if let Event::Note(note) = event {
             if let Some((_, _, _, max)) =
@@ -10847,7 +10848,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             max_line_width,
                             note_global_padding,
                             note_shadow_delta,
-                        );
+                        ) + if note_text_align == MessageAlign::Center {
+                            // ComponentRoseNote's constructor selects marginX1=15
+                            // for CENTER instead of 6; AbstractTextualComponent
+                            // includes it in getTextWidth (account 76972e36).
+                            ROSE_NOTE_MARGIN_X2 - NOTE_TEXT_X_PAD
+                        } else {
+                            0.0
+                        };
                         let note_start = (participants[right].center_x
                             + note_right_live_shift_by_event
                                 .get(&event_idx)
@@ -10858,7 +10866,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             + preferred_arrow.max(endpoints.right - endpoints.left)
                             + note_width
                             + right_shift;
-                        max_arrow_note_right = max_arrow_note_right.max(extent);
+                        max_message_note_right = max_message_note_right.max(extent);
                         continue;
                     }
                     if !diagram.teoz
@@ -11222,11 +11230,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         0.0
     };
-    let note_envelope_dominates = note_envelope_right > participant_envelope_right;
+    // DrawableSetInitializer#prepareMissingSpace compares every graphical
+    // element's preferred extent. ArrowAndNoteBox remains a note-bearing event
+    // envelope when it wins this comparison (source refinement 09eec925).
+    let canvas_shadow_pad = if sequence_shadowing {
+        SHADOW_CANVAS_RIGHT_PAD
+    } else {
+        0.0
+    };
+    let note_envelope_dominates = note_envelope_right
+        .max(max_arrow_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
+        .max(max_message_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
+        > participant_envelope_right;
     let effective_right = participant_envelope_right
         .max(note_envelope_right)
         .max(max_self_msg_right)
         .max(max_arrow_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
+        // ComponentRoseNote#getPreferredWidth already includes deltaShadow.
+        // Convert this complete composite extent to the existing pre-shadow
+        // canvas domain; the shared addition below restores it exactly once
+        // (DrawableSetInitializer#prepareMissingSpace, account 14228d60).
+        .max(
+            max_message_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN
+                - RIGHT_MARGIN
+                - canvas_shadow_pad,
+        )
         // A wide divider strip ends at max_divider_right; the canvas adds
         // RIGHT_MARGIN (10) but the divider only needs +5, so offset by -5.
         .max(max_divider_right - 5.0)
@@ -11250,13 +11278,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         -theme_top_padding
     };
-    let mut svg_width_exact = svg_width_exact
-        + theme_horizontal_margin
-        + if sequence_shadowing {
-            SHADOW_CANVAS_RIGHT_PAD
-        } else {
-            0.0
-        };
+    let mut svg_width_exact = svg_width_exact + theme_horizontal_margin + canvas_shadow_pad;
     if has_deprecated_handwritten {
         let teoz_warning_shift = if diagram.teoz { HEAD_BOX_Y } else { 0.0 };
         svg_width_exact = svg_width_exact
@@ -15314,8 +15336,15 @@ mod tests {
                             "@startuml\n!pragma teoz true\n{declarations}{}Worker -> Worker : point\n{life}Worker -> Caller : after\n@enduml\n",
                             "Caller -> Worker ++ : enter\n".repeat(depth)
                         );
-                        let rustuml_parser::diagram::Diagram::Sequence(diagram) =
-                            rustuml_parser::parse::parse(&source).unwrap()
+                        let parsed = rustuml_parser::parse::parse(&source);
+                        if !first_open {
+                            // AbstractMessage#addLifeEvent rejects ACTIVATE after
+                            // DEACTIVATE on the same message, including across a
+                            // note. The raw-history mode has no valid input here.
+                            assert!(parsed.is_err(), "{source}");
+                            continue;
+                        }
+                        let rustuml_parser::diagram::Diagram::Sequence(diagram) = parsed.unwrap()
                         else {
                             panic!("sequence expected")
                         };
