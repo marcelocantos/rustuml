@@ -1,0 +1,3 @@
+@startuml
+class "leaf / xsapbud / sap$tip2 / sap$tip / sap$tip / \nleaf / leaf" as Boundaries
+@enduml

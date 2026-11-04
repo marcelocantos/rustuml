@@ -1,0 +1,3 @@
+@startuml
+class "082 / 045 / 052" as Defaults
+@enduml

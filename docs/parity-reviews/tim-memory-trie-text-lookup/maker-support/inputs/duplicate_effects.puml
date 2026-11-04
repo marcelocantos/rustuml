@@ -1,0 +1,11 @@
+@startuml
+!$count=0
+!function $tick()
+!$count=$count+1
+!return "named"
+!endfunction
+!procedure $draw($a="one",$mid="middle",$a="two")
+class "$a / $mid / $count" as Once
+!endprocedure
+$draw($a=$tick(),"position")
+@enduml

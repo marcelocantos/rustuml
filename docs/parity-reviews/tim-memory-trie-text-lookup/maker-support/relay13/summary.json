@@ -1,0 +1,20 @@
+{
+  "total": 13,
+  "valid": 11,
+  "negative": 2,
+  "before_matches": 3,
+  "current_matches": 10,
+  "current_source_matches": 11,
+  "nonpositive_source_matches": 2,
+  "negative_rejected": 0,
+  "lost_passes": [],
+  "valid_failures": [
+    "/Users/marcelo/Library/Caches/rustuml-tim8-maker/new/empty_include.puml"
+  ],
+  "new_valid_errors": [],
+  "input_compressed_sha256": "a317f27a1ee8513aefe58dff48af67782677b35dc854d1ad688ff2f32e537672",
+  "output_compressed_sha256": "ee90662329405f51a1904dd1b9bd5c093913d0e55d5e76162a398ea03c6f3ab4",
+  "output_json_sha256": "a7d0aa595fe3e0b239012ec0825c59c3190ce2fba1df75d5dbb7d2b6a716822c",
+  "resources_verified": 15,
+  "calls_verified": 26
+}

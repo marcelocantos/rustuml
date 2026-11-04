@@ -1,0 +1,3 @@
+@startuml
+class "local / abcdX / abcdeg / long" as Scoped
+@enduml

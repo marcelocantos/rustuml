@@ -1,0 +1,7 @@
+@startuml
+!$x=%set_variable_value("branch$tip","oak")
+!$x=%set_variable_value("twiǵ","ash")
+!$x=%set_variable_value("stone.key","fir")
+!$x=%set_variable_value("two words","elm")
+class "branch$tip / twiǵ / stone.key / two words" as Names
+@enduml

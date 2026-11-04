@@ -1,0 +1,9 @@
+@startuml
+!ab="global"
+!abcdef="long"
+!procedure $draw(ab="local",abcdeg="other")
+!undef abcdeg
+class "ab / abcdX / abcdeg / abcdef" as Scoped
+!endprocedure
+$draw()
+@enduml
