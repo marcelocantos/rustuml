@@ -1,0 +1,40 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "files": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleUrl.java",
+      "sha256": "84df5275eaf87f525e12751444aebeb8e1e4c936b3872643b82521f18f025f52",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "sha256": "78f64269ceccf430d3e31a6298acc35f2a563f5d699e5db1c86ab8239edf7d49",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "sha256": "3b34cd97df5bd5fcea39e132bffb8d42390842f21cfc7a92163f6e6200c59862",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Sea.java",
+      "sha256": "b2fcda1618c7dfa46d2eecf6096cb8b9a47f811f976ddd1d805d62b1eafd4c63",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomTextUtils.java",
+      "sha256": "b4ab0a3222a55203349b08723538874aa5d93c9838b9aefbd3a5aa18efc27d89",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/FontStyle.java",
+      "sha256": "82ae22373e5b948b65f634e37493d6e349ebea823bfc09f2e8750fbf17407837",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/url/UrlBuilder.java",
+      "sha256": "4b349f8636eac12301a8a5e1d2f90eaa6d5b1f0e373597802cbc2929bc764432",
+      "matches_pin": true
+    }
+  ]
+}

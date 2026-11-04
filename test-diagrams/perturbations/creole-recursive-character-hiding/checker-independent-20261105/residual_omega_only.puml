@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Alder : P~a~ΩQ
+@enduml

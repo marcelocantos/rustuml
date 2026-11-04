@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Alder : X<size:13>Y</size>Z\nX<color:black>Y</color>Z\nX<b>A<size:13></size>B</b>Y\nX<color:black>A<color:black></color>B</color>Y
+@enduml
