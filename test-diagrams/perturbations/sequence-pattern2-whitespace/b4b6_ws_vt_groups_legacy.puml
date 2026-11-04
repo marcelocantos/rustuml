@@ -1,0 +1,12 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+altfirst
+Juniper -> Kestrel: one
+elsesecond
+looptwice
+Kestrel -> Juniper: two
+end
+end
+@enduml

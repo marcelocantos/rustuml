@@ -1,0 +1,6 @@
+@startuml
+participant "Reserved Alias" as of
+participant Kestrel
+of -> Kestrel: seed
+note over of, Kestrel: reserved identity
+@enduml

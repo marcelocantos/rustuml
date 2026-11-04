@@ -1,0 +1,176 @@
+{
+  "regex_calls": [
+    {
+      "line": 31,
+      "method": "sequence_regex",
+      "code": "sequence_regex("
+    },
+    {
+      "line": 38,
+      "method": "sequence_regex",
+      "code": "sequence_regex("
+    },
+    {
+      "line": 45,
+      "method": "sequence_regex",
+      "code": "sequence_regex("
+    },
+    {
+      "line": 52,
+      "method": "sequence_regex",
+      "code": "sequence_regex("
+    },
+    {
+      "line": 515,
+      "method": "parse_line",
+      "code": "LazyLock::new(|| sequence_regex(r\"(?i)^end[%s]?(note|hnote|rnote)$\").unwrap());"
+    },
+    {
+      "line": 644,
+      "method": "try_participant_decl",
+      "code": "sequence_regex("
+    },
+    {
+      "line": 903,
+      "method": "try_note",
+      "code": "sequence_regex(r\"^(h|r)?note[%s]+(left|right|over)[%s]*(?:of[%s]+)?(\\w+(?:[%s]*,[%s]*\\w+)*)?[%s]*(#[^%s]+)?[%s]*(?::[%s]*(.*))?$\").unwrap()"
+    },
+    {
+      "line": 989,
+      "method": "try_group",
+      "code": "sequence_regex(r\"^(alt|opt|loop|par|break|critical|group)[%s]*(.*)$\").unwrap()"
+    },
+    {
+      "line": 992,
+      "method": "try_group",
+      "code": "LazyLock::new(|| sequence_regex(r\"^else[%s]*(.*)$\").unwrap());"
+    },
+    {
+      "line": 1047,
+      "method": "try_divider",
+      "code": "LazyLock::new(|| sequence_regex(r\"^==[%s]*(.*?)[%s]*==$\").unwrap());"
+    },
+    {
+      "line": 1059,
+      "method": "try_delay",
+      "code": "LazyLock::new(|| sequence_regex(r\"^\\.\\.\\.(.*?)\\.\\.\\.$\").unwrap());"
+    },
+    {
+      "line": 1077,
+      "method": "try_space",
+      "code": "static RE: LazyLock<Regex> = LazyLock::new(|| sequence_regex(r\"^\\|\\|(\\d+)\\|\\|$\").unwrap());"
+    },
+    {
+      "line": 1094,
+      "method": "try_autonumber",
+      "code": "sequence_regex(r#\"^autonumber(?:[%s]+(\\d+))?(?:[%s]+(\\d+))?(?:[%s]+\"([^\"]*)\")?$\"#)"
+    },
+    {
+      "line": 1098,
+      "method": "try_autonumber",
+      "code": "sequence_regex(r#\"^autonumber[%s]+resume(?:[%s]+(\\d+))?(?:[%s]+\"([^\"]*)\")?$\"#).unwrap()"
+    },
+    {
+      "line": 1149,
+      "method": "try_activate_deactivate",
+      "code": "sequence_regex(r\"^(activate|deactivate)[%s]+(\\w+)(?:[%s]+(#[^%s]+))?\").unwrap()"
+    },
+    {
+      "line": 1200,
+      "method": "try_create_destroy",
+      "code": "LazyLock::new(|| sequence_regex(r\"^(create|destroy)[%s]+(.*)$\").unwrap());"
+    },
+    {
+      "line": 1205,
+      "method": "try_create_destroy",
+      "code": "sequence_regex("
+    },
+    {
+      "line": 1250,
+      "method": "try_return",
+      "code": "LazyLock::new(|| sequence_regex(r\"^(#\\w+)[%s]+(.*)$\").unwrap());"
+    },
+    {
+      "line": 1272,
+      "method": "try_ref",
+      "code": "sequence_regex(r\"^ref[%s]+over[%s]+(\\w+(?:[%s]*,[%s]*\\w+)*)[%s]*:[%s]*(.+)$\").unwrap()"
+    },
+    {
+      "line": 1276,
+      "method": "try_ref",
+      "code": "sequence_regex(r\"^ref[%s]+over[%s]+(\\w+(?:[%s]*,[%s]*\\w+)*)[%s]*$\").unwrap()"
+    },
+    {
+      "line": 1442,
+      "method": "try_hide",
+      "code": "sequence_regex("
+    }
+  ],
+  "bare_unicode_space_regexes": [],
+  "findings": [
+    {
+      "id": "citation-participant",
+      "severity": "evidence",
+      "claim": "CommandParticipant#getRegexConcat",
+      "actual": "CommandParticipant is abstract and owns getRegexType/getOrderRegex/executeArg; CommandParticipantA#getRegexConcat and the other declaration-form subclasses compose the command. Source-map hash is correct but the method citation and command grammar coverage are incomplete."
+    },
+    {
+      "id": "citation-initializer",
+      "severity": "evidence",
+      "claim": "DrawableSetInitializer#createParticipant",
+      "actual": "No such method at pinned revision. prepareParticipant lines 598-656 selects eight kinds and passes p.getDisplay to head/tail at lines 630-634. Mechanism itself is supported."
+    },
+    {
+      "id": "optional-of",
+      "severity": "introduced-valid-rejection",
+      "rust": "parse/sequence.rs try_note RE line 903 and empty-over guard lines 918-925",
+      "java": "FactorySequenceNoteCommand#getRegexConcatSingleLine and #getRegexConcatMultiLine require PARTICIPANT after optional of. Regex can backtrack to use of as the identity.",
+      "causal": "Rust optional of prefix and optional participant admit a match with no participant. New post-match rejection fires without retrying the alternative where of is the participant. before exit0, after exit1 for 10 fresh alias-of cases; All 16 follow-up references independently classify as valid SEQUENCE SVGs; 10 affected cases are introduced valid-input rejections."
+    },
+    {
+      "id": "literal-prefixes",
+      "severity": "bounded-preexisting",
+      "actual": "try_box requires box SPACE; try_autonumber resume preguard requires autonumber SPACE resume; try_note across requires literal SPACE. These remain outside sequence_regex despite their Java commands using RegexLeaf whitespace. Map documents regex correction only, so broad command-family whitespace parity is not established."
+    },
+    {
+      "id": "message-gap-path",
+      "severity": "known-T14.17",
+      "actual": "parse_sequence lines 64-95 calls parse_line then parser.finish without testing unconsumed. parse_line lines 539-634 reaches self.unconsumed=true after sequence_regex refuses EM SPACE/narrow NBSP message. Independent frozen replay retains exit0 while AST omits the malformed message."
+    },
+    {
+      "id": "fixture-audit",
+      "severity": "bounded-support",
+      "actual": "Full production diff reviewed: no fixture name predicates, golden reads/embedding, per-branch-count ladder, post-hoc SVG surgery, or new decimal calibration. Shared Display painter, source-cited margins7/3 and complete Display height replace reconstruction; existing symbol constants remain. No combined creole correctness claim."
+    },
+    {
+      "id": "self-note-flow",
+      "severity": "bounded-support",
+      "actual": "render resolves returns first then normalizes renderer-local clone for Teoz self-message on_message left/right notes; requested model shape stays unchanged. Java self-note left/right getComponent explicitly use NOTE. No offsets introduced."
+    },
+    {
+      "id": "sawmill-fallback",
+      "severity": "tool-setup",
+      "actual": "Sawmill parse on documented single-file path failed: loading sequence.rs/.sawmill/scopes.yaml: not a directory. Fell back to exact source reads and Git diff."
+    },
+    {
+      "id": "java-fox-vt",
+      "severity": "whole-command-boundary",
+      "actual": "Pattern2 expands %s to Java ASCII whitespace plus NBSP, including VT. However RegexLeaf#getFoxSignature assigns a required whitespace mask to [%s]+; RegexConcat#match rejects a line missing that mask before executing the regex. FoxSignature initializes SPACE/TAB/CR/LF/FF and NBSP but omits VT. Thus an only-VT-separated command can be Java-invalid although its regex alone would accept. Preserved VT deactivate/destroy/hide/resume counterexamples expose this pre-existing Rust/Java command-pipeline discrepancy; raw regex class equality does not prove whole-command equivalence."
+    },
+    {
+      "id": "java-error-export",
+      "severity": "reference-nonpositive",
+      "actual": "Eight VT/FF divider/delay inputs exit Java0 but yield an error SVG and javax.xml.transform/SAX invalid-XML-character exception in stderr. They are reference exporter failures, not valid SVG passes and not evidence of syntax rejection. Preserved separately from 52 Java-invalid syntax/semantic outcomes."
+    },
+    {
+      "id": "accross-intention",
+      "severity": "checker-intention-correction",
+      "actual": "accross was deliberately generated from the factory regex alternative (accross|across). executeInternal explicitly rejects it with Use across instead of accross. Intended-valid remains true in immutable manifest; observed invalid is recorded for both engines."
+    },
+    {
+      "id": "color-order-intention",
+      "severity": "checker-intention-correction",
+      "actual": "The six NBSP/VT/FF color_boundary cases place order 4 after #pink. CommandParticipantA puts getOrderRegex before ColorParser.exp1, which is terminal. Their Java invalidity is explained by option order, not evidence against the whitespace class; immutable intended_valid remains true."
+    }
+  ]
+}

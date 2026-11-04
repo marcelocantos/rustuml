@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+participant Lark
+Juniper -> Juniper ++: recursive
+return yielded
+rnote right
+<b>amber</b>
+line two
+line three
+end note
+Juniper -> Kestrel: final
+@enduml

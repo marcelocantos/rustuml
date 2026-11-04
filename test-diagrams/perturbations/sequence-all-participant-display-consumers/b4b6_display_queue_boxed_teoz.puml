@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition top
+box "Enclosure" #ivory
+queue "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+queue "Q" as Q <<longer classification>> #pink
+end box
+M -> Q: register
+@enduml

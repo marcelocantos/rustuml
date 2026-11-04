@@ -1,0 +1,6 @@
+@startuml
+skinparam stereotypePosition bottom
+collections "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+collections "Q" as Q <<longer classification>> #pink
+M -> Q: register
+@enduml

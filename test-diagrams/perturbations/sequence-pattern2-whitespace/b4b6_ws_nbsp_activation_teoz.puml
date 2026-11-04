@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+activate Kestrel #pink
+Kestrel -> Juniper: reply
+deactivate Kestrel
+@enduml

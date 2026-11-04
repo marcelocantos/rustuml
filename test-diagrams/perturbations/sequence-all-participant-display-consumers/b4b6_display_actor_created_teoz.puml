@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition bottom
+participant Sender
+create actor "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+actor "Q" as Q <<longer classification>> #pink
+Sender -> M: born
+M -> Q: register
+@enduml

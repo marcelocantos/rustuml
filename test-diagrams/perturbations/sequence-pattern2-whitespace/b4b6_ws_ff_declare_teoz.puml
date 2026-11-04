@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+participant"Third Finch"asF <<role>> #pink
+F -> Kestrel: ping
+@enduml

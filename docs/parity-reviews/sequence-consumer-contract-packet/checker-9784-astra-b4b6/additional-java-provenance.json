@@ -1,0 +1,34 @@
+[
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java",
+    "sha256": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxStart.java",
+    "sha256": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxEnd.java",
+    "sha256": "f96861ce32f742154859937834d9ddb7b3d3a43a995a337d1b21c76812e2a486"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDelay.java",
+    "sha256": "56d490f356a65c30e581119ab8f826c823d9d4756f49a756379f6ce6747d603d"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+    "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/text/FoxSignature.java",
+    "sha256": "327ea8b237d3a2d65ebb0775087b5d9203a4bfd40b4cae27d3dcf3e120ad6985"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/regex/RegexConcat.java",
+    "sha256": "8b8b9f89abb93776bc09b62360843e20e8522778ce47b96b4dbcd4bf1b2871cd"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/regex/RegexLeaf.java",
+    "sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b"
+  }
+]

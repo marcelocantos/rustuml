@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+createactor "Late Finch" as F
+Juniper -> F: arrive
+destroyF
+@enduml
