@@ -1410,16 +1410,15 @@ fn parse_arrow(s: &str) -> Arrow {
         LineStyle::Solid
     };
 
-    // CommandArrow#executeArg determines reverseDefine from head dressings,
-    // independently of the optional outer circle/cross decorations.
-    let dressing = s.trim_matches(['o', 'x']);
-    let direction = if dressing.starts_with('<') && dressing.ends_with('>') {
+    // CommandArrow#executeArg separates dressings from the body before deciding
+    // reverseDefine. Decorations do not participate in that decision.
+    let left = s.split('-').next().unwrap_or("");
+    let right = s.rsplit('-').next().unwrap_or("");
+    let left_head = left.contains(['<', '/', '\\']);
+    let right_head = right.contains(['>', '/', '\\']);
+    let direction = if left_head && right_head {
         ArrowDirection::Bidirectional
-    } else if dressing.starts_with('/') || dressing.starts_with('\\') {
-        // Java `CommandArrow` treats a left half-head dressing as
-        // reverseDefine before it swaps the semantic participants.
-        ArrowDirection::RightToLeft
-    } else if s.contains("<-") || s.contains('<') && !s.contains("->") {
+    } else if left_head {
         ArrowDirection::RightToLeft
     } else {
         ArrowDirection::LeftToRight
@@ -1449,41 +1448,37 @@ fn parse_arrow(s: &str) -> Arrow {
     } else {
         s.ends_with('o')
     };
-    let target_open = match direction {
-        ArrowDirection::RightToLeft => s.contains("<<"),
-        ArrowDirection::LeftToRight => s.contains(">>"),
-        ArrowDirection::Bidirectional | ArrowDirection::Self_ => {
-            s.contains("<<") || s.contains(">>")
-        }
+    // CommandArrow computes sync1/sync2 independently, then assigns the part
+    // to both dressings. ArrowConfiguration keeps decorations separate.
+    let (source, target) = if reverse {
+        (right, left)
+    } else {
+        (left, right)
     };
+    let is_async = |part: &str| {
+        part.contains("<<") || part.contains(">>") || part.contains("//") || part.contains("\\\\")
+    };
+    let source_dressing =
+        (direction == ArrowDirection::Bidirectional).then_some(if is_async(source) {
+            ArrowHead::Open
+        } else {
+            ArrowHead::Filled
+        });
     let head = if target_cross {
         ArrowHead::Cross
-    } else if target_open {
+    } else if is_async(target) && !target.contains(['/', '\\']) {
         ArrowHead::Open
     } else {
         ArrowHead::Filled
     };
-
-    // Half-arrowhead modifiers: `/` draws only the bottom wing, `\` only the
-    // top wing. Doubling the modifier (`//`, `\\`) renders a thin open stroke
-    // instead of a filled triangle.
-    let (mut head_half, thin_head) = if s.contains("//") {
-        (Some(ArrowHalf::Bottom), true)
-    } else if s.contains("\\\\") {
-        (Some(ArrowHalf::Top), true)
-    } else if s.contains('/') {
-        (Some(ArrowHalf::Bottom), false)
-    } else if s.contains('\\') {
-        (Some(ArrowHalf::Top), false)
+    let head_half = if right.contains('/') || left.contains('\\') {
+        Some(ArrowHalf::Bottom)
+    } else if right.contains('\\') || left.contains('/') {
+        Some(ArrowHalf::Top)
     } else {
-        (None, false)
+        None
     };
-    if direction == ArrowDirection::RightToLeft && (s.starts_with('/') || s.starts_with('\\')) {
-        head_half = head_half.map(|half| match half {
-            ArrowHalf::Top => ArrowHalf::Bottom,
-            ArrowHalf::Bottom => ArrowHalf::Top,
-        });
-    }
+    let thin_head = head_half.is_some() && is_async(target);
 
     Arrow {
         line,
@@ -1495,6 +1490,7 @@ fn parse_arrow(s: &str) -> Arrow {
         source_cross,
         source_circle,
         target_circle,
+        source_dressing,
     }
 }
 
@@ -1598,6 +1594,38 @@ fn note_text_from_lines(lines: &[String]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn endpoint_heads_are_independent_and_old_models_default() {
+        for (token, source, target) in [
+            ("o<<->o", ArrowHead::Open, ArrowHead::Filled),
+            ("o<-->>o", ArrowHead::Filled, ArrowHead::Open),
+        ] {
+            let arrow = parse_arrow(token);
+            assert_eq!(arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(arrow.source_dressing, Some(source));
+            assert_eq!(arrow.head, target);
+            let mut value = serde_json::to_value(&arrow).unwrap();
+            let roundtrip: Arrow = serde_json::from_value(value.clone()).unwrap();
+            assert_eq!(roundtrip.source_dressing, Some(source));
+            value.as_object_mut().unwrap().remove("source_dressing");
+            let old: Arrow = serde_json::from_value(value).unwrap();
+            assert_eq!(old.source_dressing, None);
+            assert!(
+                serde_json::to_value(old)
+                    .unwrap()
+                    .get("source_dressing")
+                    .is_none()
+            );
+        }
+        for token in ["o\\--", "o\\\\--", "\\--"] {
+            assert_eq!(
+                parse_arrow(token).head_half,
+                Some(ArrowHalf::Bottom),
+                "{token}"
+            );
+        }
+    }
 
     #[test]
     fn circle_decoration_retains_head_direction_and_serialization_default() {

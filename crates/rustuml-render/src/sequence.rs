@@ -5802,6 +5802,140 @@ impl PlantUmlSvg {
 
     /// Write a message group with filled arrow (->).
     #[allow(clippy::too_many_arguments)]
+    /// ComponentRoseArrow#drawInternalU paints physical dressing1, dressing2,
+    /// then the body. Each dressing owns its head and circle transform.
+    #[allow(clippy::too_many_arguments)]
+    fn message_endpoint_pair(
+        &mut self,
+        entity1: &str,
+        entity2: &str,
+        source_line: u32,
+        msg_id: u32,
+        arrow: &Arrow,
+        left: f64,
+        right: f64,
+        y: f64,
+        is_right: bool,
+        line_style: &str,
+        text_x: f64,
+        text_y: f64,
+        text: &str,
+        text_len: f64,
+        color: &str,
+        autonumber: Option<(&str, f64, &AutoNumberStyle)>,
+        align: MessageAlign,
+    ) {
+        let source_head = arrow.source_dressing.unwrap_or(arrow.head);
+        let endpoints = if is_right {
+            [
+                (source_head, arrow.source_circle),
+                (arrow.head, arrow.target_circle),
+            ]
+        } else {
+            [
+                (arrow.head, arrow.target_circle),
+                (source_head, arrow.source_circle),
+            ]
+        };
+        self.message_group_open(entity1, entity2, source_line, msg_id);
+        let mut line_start = left;
+        let mut line_end = right - 1.0;
+        for (index, (head, circle)) in endpoints.into_iter().enumerate() {
+            let inward = if index == 0 { 1.0 } else { -1.0 };
+            let mut tip = if index == 0 { left + 1.0 } else { right - 2.0 };
+            // Rose drawDressing1/2: diamCircle=8, thinCircle=1.5. Head and
+            // body reserve radius+thin independently of the physical ellipse.
+            if circle {
+                self.write_arrow_circle(
+                    Some((
+                        tip - inward * SOURCE_CIRCLE_STROKE,
+                        y + SOURCE_CIRCLE_Y_OFFSET,
+                    )),
+                    color,
+                );
+                let reserve = SOURCE_CIRCLE_RADIUS + SOURCE_CIRCLE_STROKE;
+                tip += inward * reserve;
+                if index == 0 {
+                    line_start += reserve;
+                } else {
+                    line_end -= reserve;
+                }
+            }
+            let wing = tip + inward * ARROW_SIZE;
+            if head == ArrowHead::Open {
+                for half in [ArrowHalf::Top, ArrowHalf::Bottom] {
+                    if arrow.head_half.is_some_and(|part| part != half) {
+                        continue;
+                    }
+                    let dy = if half == ArrowHalf::Top {
+                        -ARROW_HALF_H
+                    } else {
+                        ARROW_HALF_H
+                    };
+                    self.write_line(
+                        &format!("stroke:{color};stroke-width:{};", self.arrow_thickness),
+                        tip,
+                        wing,
+                        y,
+                        y + dy,
+                    );
+                }
+            } else {
+                let points = match arrow.head_half {
+                    Some(ArrowHalf::Top) => vec![(wing, y - ARROW_HALF_H), (tip, y), (wing, y)],
+                    Some(ArrowHalf::Bottom) => vec![(wing, y), (tip, y), (wing, y + ARROW_HALF_H)],
+                    None => vec![
+                        (wing, y - ARROW_HALF_H),
+                        (tip, y),
+                        (wing, y + ARROW_HALF_H),
+                        (wing - inward * FILLED_ARROW_NOTCH, y),
+                    ],
+                };
+                let points = points
+                    .into_iter()
+                    .map(|(x, y)| format!("{},{}", fmt_coord(x), fmt_coord(y)))
+                    .collect::<Vec<_>>()
+                    .join(",");
+                self.write_polygon(color, &points, &format!("stroke:{color};stroke-width:1;"));
+                // drawInternalU shortens FULL NORMAL by arrowDeltaX/2.
+                if arrow.head_half.is_none() {
+                    if index == 0 {
+                        line_start += ARROW_SIZE / 2.0;
+                    } else {
+                        line_end -= ARROW_SIZE / 2.0;
+                    }
+                }
+            }
+        }
+        self.write_line(
+            &format!(
+                "stroke:{color};stroke-width:{};{line_style}",
+                self.arrow_thickness
+            ),
+            line_start,
+            line_end,
+            y,
+            y,
+        );
+        let mut label_x = aligned_label_x(
+            align,
+            text_x,
+            line_start,
+            line_end,
+            text_len,
+            is_right,
+            self.message_label_component_left_shift,
+        );
+        if let Some((number, width, style)) = autonumber {
+            emit_autonumber_prefix(&mut self.buf, number, label_x, text_y, style);
+            label_x += width + AUTONUMBER_LABEL_GAP;
+        }
+        if !text.is_empty() {
+            self.emit_message_label(label_x, text_y, text, color);
+        }
+        self.message_group_close();
+    }
+
     fn message_filled_arrow(
         &mut self,
         entity1: &str,
@@ -13367,6 +13501,59 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 fmt_coord(y1), fmt_coord(y2)).unwrap();
                         }
                     }
+                    // ComponentRoseSelfArrow#drawRightSide paints dressing1
+                    // after the three body strokes and before dressing2.
+                    if is_bidirectional {
+                        let head = msg.arrow.source_dressing.unwrap_or(msg.arrow.head);
+                        if head == ArrowHead::Open {
+                            for (half, dy) in [
+                                (ArrowHalf::Top, ARROW_HALF_H),
+                                (ArrowHalf::Bottom, -ARROW_HALF_H),
+                            ] {
+                                if head_half.is_some_and(|part| part != half) {
+                                    continue;
+                                }
+                                svg.write_line(
+                                    &format!("stroke:{arrow_color};stroke-width:{loop_thickness};"),
+                                    start_x,
+                                    start_x + ARROW_SIZE,
+                                    draw_y,
+                                    draw_y + dy,
+                                );
+                            }
+                        } else {
+                            let tip = start_x - if head_half.is_some() { 1.0 } else { 0.0 };
+                            let wing = tip + ARROW_SIZE;
+                            let points = match head_half {
+                                Some(ArrowHalf::Top) => vec![
+                                    (wing, draw_y - ARROW_HALF_H),
+                                    (tip, draw_y),
+                                    (wing, draw_y),
+                                ],
+                                Some(ArrowHalf::Bottom) => vec![
+                                    (wing, draw_y),
+                                    (tip, draw_y),
+                                    (wing, draw_y + ARROW_HALF_H),
+                                ],
+                                None => vec![
+                                    (wing, draw_y - ARROW_HALF_H),
+                                    (tip, draw_y),
+                                    (wing, draw_y + ARROW_HALF_H),
+                                    (wing - FILLED_ARROW_NOTCH, draw_y),
+                                ],
+                            };
+                            let points = points
+                                .into_iter()
+                                .map(|(x, y)| format!("{},{}", fmt_coord(x), fmt_coord(y)))
+                                .collect::<Vec<_>>()
+                                .join(",");
+                            svg.write_polygon(
+                                &arrow_color,
+                                &points,
+                                &format!("stroke:{arrow_color};stroke-width:1;"),
+                            );
+                        }
+                    }
                     // Arrow head at bottom-left
                     if is_cross {
                         let cross_left =
@@ -13417,11 +13604,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // ComponentRoseSelfArrow#getPolygon offsets every
                             // filled half-head point by -1 before drawRightSide
                             // translates the polygon by the component's x2.
-                            let tip_x = if diagram.teoz {
-                                special_return_tip.unwrap_or(active_anchor)
-                            } else {
-                                special_return_tip.unwrap_or(active_anchor + 1.0) - 1.0
-                            };
+                            // getPolygon applies -1 to each half-head point in
+                            // both engines; Teoz supplies the same component.
+                            let tip_x = special_return_tip.unwrap_or(active_anchor + 1.0) - 1.0;
                             let arrow_pts = format!(
                                 "{},{},{},{},{},{}",
                                 fmt_coord(tip_x + head_direction * ARROW_SIZE),
@@ -13637,7 +13822,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         text_x
                     };
 
-                    if is_right {
+                    if is_bidirectional {
+                        let (left, right) = if is_right {
+                            (from_x_shifted, to_x - target_shift)
+                        } else {
+                            (to_x + target_shift, from_x_shifted)
+                        };
+                        svg.message_endpoint_pair(
+                            &from_uid,
+                            &to_uid,
+                            src_line,
+                            msg_id,
+                            &msg.arrow,
+                            left,
+                            right,
+                            msg_y,
+                            is_right,
+                            line_style,
+                            text_x,
+                            text_y_pos,
+                            &label,
+                            label_w,
+                            &arrow_color,
+                            autonumber_ref,
+                            message_align,
+                        );
+                    } else if is_right {
                         let tip_x = to_x - target_shift - ARROW_TIP_GAP;
                         // ComponentRoseArrow#drawDressing2: ellipse at pos2+thin,
                         // then translate the head back by radius+thin (account 0b329582).
@@ -16301,6 +16511,7 @@ mod tests {
                     source_cross: false,
                     source_circle: false,
                     target_circle: false,
+                    source_dressing: None,
                 },
                 activation: None,
                 activation_color: None,

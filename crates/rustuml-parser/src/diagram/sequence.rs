@@ -159,6 +159,10 @@ pub struct Arrow {
     /// ArrowConfiguration keeps decoration2 independent of its head dressing.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub target_circle: bool,
+    /// Independent source head from CommandArrow/ArrowConfiguration. Missing
+    /// values retain the historical bidirectional-head fallback for old models.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source_dressing: Option<ArrowHead>,
 }
 
 /// Which half of the arrowhead is drawn when a `/` or `\` modifier is present.
