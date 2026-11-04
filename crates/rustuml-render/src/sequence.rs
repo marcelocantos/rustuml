@@ -1401,6 +1401,10 @@ impl<'a> EnhancedNoteBody<'a> {
         size: f64,
         family: &str,
     ) -> EnhancedNoteBlock<'a> {
+        // BodyEnhancedAbstract's empty titled Display still becomes a
+        // StripeSimple; getAtoms inserts one space when it has no atoms.
+        // Retain that atom in the same component used by size and paint.
+        let title = title.map(|text| if text.is_empty() { " " } else { text });
         let mut counters = Vec::new();
         let body_width = body
             .iter()
