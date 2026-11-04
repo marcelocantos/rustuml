@@ -1,0 +1,75 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Fleet {
+      class Vessel
+      }
+      class Pier
+      note right of Fleet [[https://example.org/map]]
+      chart
+      end note
+      Fleet --> Pier
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Fleet
+  - !Entity Fleet.Vessel
+  - !Entity Pier
+  - !Note 0
+  - !Relationship 0
+  entities:
+  - id: Fleet.Vessel
+    label: Vessel
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  - id: Pier
+    label: Pier
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships:
+  - from: Fleet
+    to: Pier
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 8
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Fleet
+    kind: Package
+    color: null
+    entities:
+    - Fleet.Vessel
+    source_line: 1
+    stereotypes: []
+  notes:
+  - lines:
+    - chart
+    target: Fleet
+    position: Right
+    alias: null
+    url: https://example.org/map
+    source_line: 6
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

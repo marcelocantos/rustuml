@@ -1,0 +1,38 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "<size:23>Header</size>" as Orb
+      class "Peer<T>" as Peer
+      Orb --> Peer
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: Orb
+    label: <size:23>Header</size>
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces:
+  - id: Peer
+    label: Peer
+    source_line: 3
+  connections:
+  - from: Orb
+    to: Peer
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 3
+  packages: []
+  notes: []

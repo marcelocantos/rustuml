@@ -1,0 +1,42 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Memo
+      package Basin {
+      class Memo
+      url Memo [[https://example.org/current]]
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Memo
+  - !Package Basin
+  entities:
+  - id: Memo
+    label: Memo
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    url: https://example.org/current
+    source_line: 1
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Basin
+    kind: Package
+    color: null
+    entities: []
+    source_line: 2
+    stereotypes: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

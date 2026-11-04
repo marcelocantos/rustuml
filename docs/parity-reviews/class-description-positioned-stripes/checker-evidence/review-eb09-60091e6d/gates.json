@@ -1,0 +1,191 @@
+[
+  {
+    "name": "build",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml"
+    ],
+    "exit": 0,
+    "seconds": 67.04271507263184,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "build.log"
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 1.2048420906066895,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "fmt.log"
+  },
+  {
+    "name": "units",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--release",
+      "--lib",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "seconds": 58.72162318229675,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "units.log"
+  },
+  {
+    "name": "cli",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--release",
+      "--test",
+      "pipe_mode",
+      "--test",
+      "error_paths",
+      "--test",
+      "doc_claims",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "seconds": 5.228771209716797,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "cli.log"
+  },
+  {
+    "name": "product",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 2.7552709579467773,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "product.log"
+  },
+  {
+    "name": "assisted",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 2.528053045272827,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "assisted.log"
+  },
+  {
+    "name": "guards",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 1.4044079780578613,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "guards.log"
+  },
+  {
+    "name": "clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 101,
+    "seconds": 19.12632966041565,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d",
+    "revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PATH": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/no-jvm:/Users/marcelo/.py/bin:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.den/bin:/Users/marcelo/.den/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/Library/TeX/texbin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/marcelo/.codex/tmp/arg0-macos/codex-arg0fE0ZGs:/Users/marcelo/.codex/packages/standalone/releases/0.166.0-aarch64-apple-darwin/codex-path:/Users/marcelo/.unity/bin:/Users/marcelo/.den/bin:/Users/marcelo/.grok/bin:/Users/marcelo/.py/bin:/Users/marcelo/google-cloud-sdk/bin:/Users/marcelo/.den/envs/ROOT/bin:/Users/marcelo/.fly/bin:/Users/marcelo/.docker/bin:/Users/marcelo/.jenv/shims:/Users/marcelo/.elan/bin:/Users/marcelo/.bun/bin:/Users/marcelo/Library/Android/sdk/tools/bin:/Users/marcelo/Library/Android/sdk/build-tools/36.0.0:/Users/marcelo/.jenv/bin:/opt/zerobrew/prefix/bin:/Users/marcelo/.local/bin:/opt/homebrew/opt/python@3.10/bin:/Users/marcelo/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/marcelo/.cargo/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin:/Users/marcelo/.fzf/bin:/opt/homebrew/opt/fzf/bin:/opt/homebrew/opt/llvm/bin:/Users/marcelo/.orbstack/bin:/Users/marcelo/.oh-my-zsh/custom/plugins/fzf-zsh-plugin/bin"
+    },
+    "log": "clippy.log"
+  }
+]

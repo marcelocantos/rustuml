@@ -1,0 +1,5 @@
+@startuml
+class Anchor
+url Memo [[https://example.org/forward]]
+note "later" as Memo
+@enduml

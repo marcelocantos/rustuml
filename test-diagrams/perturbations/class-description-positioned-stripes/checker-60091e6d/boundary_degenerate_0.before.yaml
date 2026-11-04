@@ -1,0 +1,34 @@
+type: Sequence
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - boundary
+        property: shadowing
+        value: '0'
+        source_line: 1
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      <style>
+      boundary {
+       Shadowing 0
+      }
+      </style>
+      boundary "<size:25>top</size>\n\n<sub>end</sub>" as Orb <<small>>
+      @enduml
+  participants:
+  - id: Orb
+    label: <size:25>top</size>\n\n<sub>end</sub>
+    kind: Boundary
+    order: 0
+    stereotype: small
+    source_line: 6
+  events: []
+  autonumber: null
+  hide_footbox: false
+  teoz: false

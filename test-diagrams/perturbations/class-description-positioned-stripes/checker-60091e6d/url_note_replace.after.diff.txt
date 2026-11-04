@@ -1,0 +1,9 @@
+SVG structural differences:
+  element count: expected 8, got 7
+  [4] tag mismatch: expected <a>, got <path>
+  [5] <path> depth mismatch: expected 5, got 4
+  [5] <path> attr mismatch:
+    expected: [("d", "M7,7 L7,32.3105 L102.7563,32.3105 L102.7563,17 L92.7563,7 L7,7"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M92.7563,7 L92.7563,17 L102.7563,17 L92.7563,7"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+  [6] tag mismatch: expected <path>, got <text>
+

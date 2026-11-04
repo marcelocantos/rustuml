@@ -1,0 +1,9 @@
+@startuml
+allowmixing
+<style>
+boundary {
+ Shadowing 11
+}
+</style>
+boundary "<size:25>top</size>\n\n<sub>end</sub>" as Orb <<small>>
+@enduml

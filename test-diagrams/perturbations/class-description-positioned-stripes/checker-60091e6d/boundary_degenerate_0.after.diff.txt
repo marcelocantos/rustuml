@@ -1,0 +1,48 @@
+SVG structural differences:
+  element count: expected 21, got 19
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "245px"), ("preserveAspectRatio", "none"), ("style", "width:72px;height:245px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 72 245"), ("width", "72px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "127px"), ("preserveAspectRatio", "none"), ("style", "width:114px;height:127px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 114 127"), ("width", "114px"), ("zoomAndPan", "magnify")]
+  [5] <rect> attr mismatch:
+    expected: [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "20"), ("width", "8"), ("x", "29.3511"), ("y", "112.375")]
+    actual:   [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "20"), ("width", "8"), ("x", "50.1904"), ("y", "53.4883")]
+  [6] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "33"), ("x2", "33"), ("y1", "112.375"), ("y2", "132.375")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "54"), ("x2", "54"), ("y1", "53.4883"), ("y2", "73.4883")]
+  [8] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "50.7021"), ("x", "5"), ("y", "50.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "25"), ("lengthAdjust", "spacing"), ("textLength", "40.4419"), ("x", "5"), ("y", "50.5352")]
+  [8] <text> text mismatch:
+    expected: Some("«small»")
+    actual:   Some("top")
+  [9] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "25"), ("lengthAdjust", "spacing"), ("textLength", "40.4419"), ("x", "10.1301"), ("y", "77.6582")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "32.0605"), ("x", "45.4419"), ("y", "52.8555")]
+  [9] <text> text mismatch:
+    expected: Some("top")
+    actual:   Some("\\n\\n")
+  [10] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "4.4297"), ("x", "28.1362"), ("y", "96.4668")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "19.8784"), ("x", "77.5024"), ("y", "56.4883")]
+  [10] <text> text mismatch:
+    expected: None
+    actual:   Some("end")
+  [11] tag mismatch: expected <text>, got <path>
+  [12] tag mismatch: expected <path>, got <ellipse>
+  [13] tag mismatch: expected <ellipse>, got <g>
+  [14] tag mismatch: expected <g>, got <text>
+  [15] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "50.7021"), ("x", "5"), ("y", "144.9102")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "32.0605"), ("x", "45.4419"), ("y", "88.3438")]
+  [15] <text> text mismatch:
+    expected: Some("«small»")
+    actual:   Some("\\n\\n")
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "25"), ("lengthAdjust", "spacing"), ("textLength", "40.4419"), ("x", "10.1301"), ("y", "172.0332")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "19.8784"), ("x", "77.5024"), ("y", "91.9766")]
+  [16] <text> text mismatch:
+    expected: Some("top")
+    actual:   Some("end")
+  [17] tag mismatch: expected <text>, got <path>
+  [18] tag mismatch: expected <text>, got <ellipse>
+

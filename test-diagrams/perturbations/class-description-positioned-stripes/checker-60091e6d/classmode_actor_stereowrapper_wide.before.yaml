@@ -1,0 +1,114 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - actor
+        property: fontsize
+        value: '17'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        property: fontstyle
+        value: bold
+        source_line: 2
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        - stereotype
+        property: fontsize
+        value: '8'
+        source_line: 2
+        epoch: 2
+        priority: 2
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        - stereotype
+        property: fontstyle
+        value: plain
+        source_line: 2
+        epoch: 3
+        priority: 3
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        - stereotype
+        property: fontcolor
+        value: DarkRed
+        source_line: 2
+        epoch: 4
+        priority: 4
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      <style>
+      actor {
+       FontSize 17
+       FontStyle bold
+       stereotype {
+       FontSize 8
+       FontStyle plain
+       FontColor DarkRed
+       }
+      }
+      </style>
+      actor "<size:6>i</size>\n<size:25>Wide label</size>" as Orb <<LONG_STEREOTYPE>>
+      class Dock
+      Dock -down-> Orb
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Orb
+  - !Entity Dock
+  - !Relationship 0
+  entities:
+  - id: Orb
+    label: <size:6>i</size>\n<size:25>Wide label
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - LONG_STEREOTYPE
+    generic: /size
+    source_line: 13
+  - id: Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 14
+  relationships:
+  - from: Dock
+    to: Orb
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 15
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

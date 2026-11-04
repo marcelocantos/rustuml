@@ -1,0 +1,4 @@
+@startuml
+class Anchor
+url Anchor [[https://example.org/]] trailing
+@enduml

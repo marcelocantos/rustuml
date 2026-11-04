@@ -1,0 +1,749 @@
+{
+  "fresh": [
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_blankstyle.svg",
+      "sha256": "8e1a5deaa59c58dcd0801b4dadd3adbc3e19b152e4decf1f93ae2cbc235615a5",
+      "kind": "fresh",
+      "name": "actor_blankstyle",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_0.svg",
+      "sha256": "1727ef27b256e70e43a8ea49feeab333479ed3b7b0f5af847a43e601c1db0907",
+      "kind": "fresh",
+      "name": "actor_degenerate_0",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_11.svg",
+      "sha256": "9134b0f859d537af4918493812a4a1f88300f1e2e70a405d183612c50be95cae",
+      "kind": "fresh",
+      "name": "actor_degenerate_11",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_mixedfamily.svg",
+      "sha256": "9ca1c49dbc7badae36ef48543b01218912554f588dd60b7aaa14e35167103aae",
+      "kind": "fresh",
+      "name": "actor_mixedfamily",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0.svg",
+      "sha256": "e9e1be1166a0cfdad2e3766b9d03aabf5498ddc6cc7f79851a525aaa5f3514ba",
+      "kind": "fresh",
+      "name": "actor_shadow_0",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0p5.svg",
+      "sha256": "18fd4acbbdbf5b9d43b41b691bfd3d40998bf12848b01b9f437c71ee586478da",
+      "kind": "fresh",
+      "name": "actor_shadow_0p5",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_13.svg",
+      "sha256": "c78065b87a77ff8f771654398bd193d079b1de9accbf786b84f05b93c57fdc85",
+      "kind": "fresh",
+      "name": "actor_shadow_13",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_neg3.svg",
+      "sha256": "0b56a7423b00f9a8ecab760b10d04c468212b68599123104f054dbef25715871",
+      "kind": "fresh",
+      "name": "actor_shadow_neg3",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_spaceblank.svg",
+      "sha256": "1901dd05cb2183bffb2b1ef474114fcba350b024aaab30422bd51be5361e154b",
+      "kind": "fresh",
+      "name": "actor_spaceblank",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_small.svg",
+      "sha256": "18e45e2ea183cd0332542ac9dac33dd8be72936266a70297b789791dcb17d0c6",
+      "kind": "fresh",
+      "name": "actor_stereowrapper_small",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_wide.svg",
+      "sha256": "d37fa60123997bc0309b7169684a938af4dfcb9a3d3b358bd3370ea1e2f07a0e",
+      "kind": "fresh",
+      "name": "actor_stereowrapper_wide",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_subsup.svg",
+      "sha256": "fb9d2b37dc1275e6663a37b80c88173a71981e8f160f4301f8d3ec0a7624350d",
+      "kind": "fresh",
+      "name": "actor_subsup",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_tabonly.svg",
+      "sha256": "6ec745c63e7b6539e0a2cdb4d4611f12ce886f1c9b2c4950666fe78dec534293",
+      "kind": "fresh",
+      "name": "actor_tabonly",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_blankstyle.svg",
+      "sha256": "e046a465be898aa9ad0f2bb56eab53838dad7e1ac8a1c18b925bdd26857921c7",
+      "kind": "fresh",
+      "name": "boundary_blankstyle",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_0.svg",
+      "sha256": "ebcb852a7bbf5320ae6ecf59b0b5e0225b7c9b204b83970b367e6cdbc15533e6",
+      "kind": "fresh",
+      "name": "boundary_degenerate_0",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_11.svg",
+      "sha256": "1d258fd2c59dd32d87713f87fac9f27a86d4a69e0c1d8a9e487a76bb12d791cb",
+      "kind": "fresh",
+      "name": "boundary_degenerate_11",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_mixedfamily.svg",
+      "sha256": "4d27a0384109a3ad25042b82ff03de79d51d040e5392455dae8ca0bcd1741faa",
+      "kind": "fresh",
+      "name": "boundary_mixedfamily",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0.svg",
+      "sha256": "08a5b9d0fef1faa6357d412b495b56cd3e7029a83f94a275200dcc711cb630d9",
+      "kind": "fresh",
+      "name": "boundary_shadow_0",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0p5.svg",
+      "sha256": "f34f9844df35d1f19c9cc1abec595a47f7578cccc29d41375819475948a258f8",
+      "kind": "fresh",
+      "name": "boundary_shadow_0p5",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_13.svg",
+      "sha256": "b79f79a9e5871414650ec142850fee900dbf2d6eb8182ad87dec3a4d668bce58",
+      "kind": "fresh",
+      "name": "boundary_shadow_13",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_neg3.svg",
+      "sha256": "012c72ba055df4e8690d9b3997fc809e49008d52872848a96b200920b57e1cb8",
+      "kind": "fresh",
+      "name": "boundary_shadow_neg3",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_spaceblank.svg",
+      "sha256": "2c980bf85915a6e5e9ad6d7a398ca00bee5048e36491a744e7ae9cdb7543f917",
+      "kind": "fresh",
+      "name": "boundary_spaceblank",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_small.svg",
+      "sha256": "74d79f43ac7f1a9f51f181cc9c7fc93b68f71f32ef5164373b3183c3d8864db5",
+      "kind": "fresh",
+      "name": "boundary_stereowrapper_small",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_wide.svg",
+      "sha256": "89ae6653d188fa5982aa399d1c5ab76dd3a4b3e093e7ad87210e26334894c943",
+      "kind": "fresh",
+      "name": "boundary_stereowrapper_wide",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_subsup.svg",
+      "sha256": "692156ae8e452eb1e729c15be4ac3706651b317149c4539e8ba41925098ed6cb",
+      "kind": "fresh",
+      "name": "boundary_subsup",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_tabonly.svg",
+      "sha256": "4af3872c5a9fe668852fbf620be18afd77d8f1f9d9e5509a034be404d9f3ad03",
+      "kind": "fresh",
+      "name": "boundary_tabonly",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/class_generic_contrast.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/class_generic_contrast.svg",
+      "sha256": "f6b6d171e45133e26969b35d131b5d2f25c280bed00149aacdd4aef4867cc7dd",
+      "kind": "fresh",
+      "name": "class_generic_contrast",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_blankstyle.svg",
+      "sha256": "645b0db1d1ca8d3a473ee83c5639bff5233bd483be211190289043c40d834ac1",
+      "kind": "fresh",
+      "name": "classmode_actor_blankstyle",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_0.svg",
+      "sha256": "668e942de08a23ec76f2bf116055ae189b5d3043f32c372dae25cf8e3c5aa966",
+      "kind": "fresh",
+      "name": "classmode_actor_degenerate_0",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_11.svg",
+      "sha256": "561ef8d968a20959d7b4e46ace4f4edba99d6fe9e84ef805b05ac628e8455c67",
+      "kind": "fresh",
+      "name": "classmode_actor_degenerate_11",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_mixedfamily.svg",
+      "sha256": "3821033baac8a37049f49618ef9046c0384232d4702b458227806840a7e97dbc",
+      "kind": "fresh",
+      "name": "classmode_actor_mixedfamily",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0.svg",
+      "sha256": "631a196ef866379a23ce61a7206cb58f1994c542c048b91be522b910a81e3559",
+      "kind": "fresh",
+      "name": "classmode_actor_shadow_0",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0p5.svg",
+      "sha256": "ae8b2600ba0abf1782a1bb9c4d3517689f37f6c0eb221ca6a313521e369ef341",
+      "kind": "fresh",
+      "name": "classmode_actor_shadow_0p5",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_13.svg",
+      "sha256": "77bae3b5d166cf08dd84efc7b37f170e1481108f20b5e42ab255266d1828ded9",
+      "kind": "fresh",
+      "name": "classmode_actor_shadow_13",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_neg3.svg",
+      "sha256": "b915a332017d57e0d8d3dd696ad9344399c89713e16ca0ed767986484da462bf",
+      "kind": "fresh",
+      "name": "classmode_actor_shadow_neg3",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_spaceblank.svg",
+      "sha256": "9cf036a89e168a205fd79d9569f43e0e0c333130a003f2223025c0895de4b487",
+      "kind": "fresh",
+      "name": "classmode_actor_spaceblank",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_small.svg",
+      "sha256": "76f65d3d96feee3fbe5d53ff5c944462f046463a5ef684366f8cab217cfa759c",
+      "kind": "fresh",
+      "name": "classmode_actor_stereowrapper_small",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_wide.svg",
+      "sha256": "2dbf4e618d846396546a20ae4b99e620dfb1732f11ef5b13c26bdc1ba8509ac2",
+      "kind": "fresh",
+      "name": "classmode_actor_stereowrapper_wide",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_subsup.svg",
+      "sha256": "a932b4006c535abc18f620027039ae1b288ce3a43571067ecbf6bf694abaf549",
+      "kind": "fresh",
+      "name": "classmode_actor_subsup",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_tabonly.svg",
+      "sha256": "9fe43ea23c2160026c6efcef6745322603ea9381b932acaed11d7095cdf400cc",
+      "kind": "fresh",
+      "name": "classmode_actor_tabonly",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_blankstyle.svg",
+      "sha256": "12d39480f47f7d092d3434c780a114294ce837d83647effa9f2614349c25a558",
+      "kind": "fresh",
+      "name": "classmode_boundary_blankstyle",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_0.svg",
+      "sha256": "fa3d5ffdc9bca1abe0434ff2ccb1c931658a9e6aa6c73c2d75d3ab23139d08c8",
+      "kind": "fresh",
+      "name": "classmode_boundary_degenerate_0",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_11.svg",
+      "sha256": "9562f4d2b7edacb79542de502911110f0fa847945f937b6db5e8efac57c33d88",
+      "kind": "fresh",
+      "name": "classmode_boundary_degenerate_11",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_mixedfamily.svg",
+      "sha256": "ea4de6c10cc34f0d0a3ddbfccb2db1495b7f8f549bc79df0f8fc960ebbf0d96d",
+      "kind": "fresh",
+      "name": "classmode_boundary_mixedfamily",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0.svg",
+      "sha256": "b85079b1e9107dfd25dd3a39e8836f4238c9a371999f2d007a5dad5c5021268a",
+      "kind": "fresh",
+      "name": "classmode_boundary_shadow_0",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0p5.svg",
+      "sha256": "ff1fdae1277072c5fa001595e95306da711ef3b1d52036d04b4bcab7fa813095",
+      "kind": "fresh",
+      "name": "classmode_boundary_shadow_0p5",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_13.svg",
+      "sha256": "46a4eb78aeac9fd9435887968926d19bac09cae8a7ce73d60e88795682aa0341",
+      "kind": "fresh",
+      "name": "classmode_boundary_shadow_13",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_neg3.svg",
+      "sha256": "b5fbfa2b29e77e527292574820de749cee3b9930be1853833e608eb16621759b",
+      "kind": "fresh",
+      "name": "classmode_boundary_shadow_neg3",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_spaceblank.svg",
+      "sha256": "3d7fc2e246a7dca0618bdb6311544d83ec524f1eb5ee094833dde828ffc47bfd",
+      "kind": "fresh",
+      "name": "classmode_boundary_spaceblank",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_small.svg",
+      "sha256": "edef0cc7717ccc9eead8104ce482a728fc820aa578ec51e2d3cdf356a4b975b9",
+      "kind": "fresh",
+      "name": "classmode_boundary_stereowrapper_small",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_wide.svg",
+      "sha256": "05c863d23b22ef176109258ea1ea21321a7b86e5ae71da41fd066ff91eead9e9",
+      "kind": "fresh",
+      "name": "classmode_boundary_stereowrapper_wide",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_subsup.svg",
+      "sha256": "e4e24551ae867dc4357dddbb5fd438eef8b0a14b76cfc1dacab72c0ed0e0cd1c",
+      "kind": "fresh",
+      "name": "classmode_boundary_subsup",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_tabonly.svg",
+      "sha256": "e270ae98701732d857e559880038e409769d029e8e4cee534f68ea821778aa9e",
+      "kind": "fresh",
+      "name": "classmode_boundary_tabonly",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_class_generic_contrast.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_class_generic_contrast.svg",
+      "sha256": "efba8f6485cf3fbde9e4080d6dc8ee4bc12e477f45fc96a1e5765f2521acd227",
+      "kind": "fresh",
+      "name": "classmode_class_generic_contrast",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_component_generic_contrast.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_component_generic_contrast.svg",
+      "sha256": "f400ee6179744e5987cfdbf99f8ced67102a7b8bfa55bde1d3f95466f1535c65",
+      "kind": "fresh",
+      "name": "classmode_component_generic_contrast",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_rectangle_generic_contrast.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_rectangle_generic_contrast.svg",
+      "sha256": "e80cdff6a85288e5a295c36dab5e11a3834f292f7f620ce99e4227921952384f",
+      "kind": "fresh",
+      "name": "classmode_rectangle_generic_contrast",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/component_generic_contrast.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/component_generic_contrast.svg",
+      "sha256": "e855a94acecd3cd9f7a47413c209c5f82e663957aaf88e8de72d83603256e8b1",
+      "kind": "fresh",
+      "name": "component_generic_contrast",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_multi_False.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_multi_False.svg",
+      "sha256": "d893c204b7a6fc31a27fcddfa628c61be7ac61c0b7b097176d84fa2680402f62",
+      "kind": "fresh",
+      "name": "group_multi_False",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_multi_True.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_multi_True.svg",
+      "sha256": "c24471c4ec451e366d2b714daa1cbac901ca6f406e74e13dc3e0770401d0bc0f",
+      "kind": "fresh",
+      "name": "group_multi_True",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_False.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_False.svg",
+      "sha256": "a141b84d8a9415d6a12c6326b83b77e269724bdd3940bf164b966770ce7bc091",
+      "kind": "fresh",
+      "name": "group_single_False",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_True.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_True.svg",
+      "sha256": "8d5c0271a36fefd2634a2eadd702247df8b6087981702864c1d11400577d0bd0",
+      "kind": "fresh",
+      "name": "group_single_True",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/rectangle_generic_contrast.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/rectangle_generic_contrast.svg",
+      "sha256": "b657067a7fad50f754e9c327b57bee3fac1d99060315cc3d1e1fef29798244b7",
+      "kind": "fresh",
+      "name": "rectangle_generic_contrast",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_current.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_current.svg",
+      "sha256": "ec6ae73b4a9ed99aa11fb9fe7e535ca69358fa83c2364a838dc9444801abbce6",
+      "kind": "fresh",
+      "name": "url_ambiguous_current",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_root.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_root.svg",
+      "sha256": "d29919ae80f9f3015386f0cac47b1c585fdb36c7ae95f28d353ddc508dcb7660",
+      "kind": "fresh",
+      "name": "url_ambiguous_root",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.svg",
+      "sha256": "4c26d05d696ee2489edc6cbf3a2420cfcb2a8e2b645ac3f67b64c8a8d1e6cf1d",
+      "kind": "fresh",
+      "name": "url_bad_separator",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_class_replace.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_class_replace.svg",
+      "sha256": "172d4929fa8ce580c4e0512481e9f8c5b0acecb4bd3bea77225e37076c6f4910",
+      "kind": "fresh",
+      "name": "url_class_replace",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.svg",
+      "sha256": "2b0b7b92da5735b451cab49d2af94a6680f672151d323dcfca8e2ab791fadfef",
+      "kind": "fresh",
+      "name": "url_current_group_self",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_empty.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_empty.svg",
+      "sha256": "7d01eb0a15e2b44654344b2bbec3cd61156a8dd5001c221f31b57026f443dc8c",
+      "kind": "fresh",
+      "name": "url_empty",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_empty_tip.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_empty_tip.svg",
+      "sha256": "4651cccde445a4b4304d02f16f9fba59c7d5aba951290f78c9839f94f80ca55a",
+      "kind": "fresh",
+      "name": "url_form_empty_tip",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_file.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_file.svg",
+      "sha256": "4c1854e285d2b95f752bec657d873ed064293dc6552dc0e6ded41bb23bace5ec",
+      "kind": "fresh",
+      "name": "url_form_file",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_nested_tip.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_nested_tip.svg",
+      "sha256": "1fd3a60fae074d05989d645f20f3987e0f8311f3a615023b4ccd985cbc6f8c48",
+      "kind": "fresh",
+      "name": "url_form_nested_tip",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_quoted.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_quoted.svg",
+      "sha256": "8d04043c4d814c5376a3decfe13618248278536a6996513f14db43718018e7f5",
+      "kind": "fresh",
+      "name": "url_form_quoted",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_scheme_upper.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_scheme_upper.svg",
+      "sha256": "60cbbd49d311a1a66019515b8502541032cd345df0921b8722124a0bd6689d4e",
+      "kind": "fresh",
+      "name": "url_form_scheme_upper",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip.svg",
+      "sha256": "35ecc0c600d27c6fa869e2e22a5cf50bc5bce4a6a72725495549bff1a6cbed56",
+      "kind": "fresh",
+      "name": "url_form_tooltip",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip_label.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip_label.svg",
+      "sha256": "e165f6b2863b33e10538af459a1de3b59054d09e212b65f2620bd9091c619536",
+      "kind": "fresh",
+      "name": "url_form_tooltip_label",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_forward.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_forward.svg",
+      "sha256": "18dc943379d8cca1090b0ff5e5247b198237277e681b6a24bc14aadedca26264",
+      "kind": "fresh",
+      "name": "url_forward",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_group_replace.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_group_replace.svg",
+      "sha256": "b56a0d07ca9db039f20cf5b014a6caa738254a52748b1a03efc5be438976b6e1",
+      "kind": "fresh",
+      "name": "url_group_replace",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_inline_note.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_inline_note.svg",
+      "sha256": "dcc3e4b8973466d3f23a42a2ab1755df5726c94e81fce7e15cccb5a64da115f6",
+      "kind": "fresh",
+      "name": "url_inline_note",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_namespace_none.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_namespace_none.svg",
+      "sha256": "4c9b96bc130e0f6114124552fdb6c7ca983d0c7a31c3f5229a0a4ed89bd74f77",
+      "kind": "fresh",
+      "name": "url_namespace_none",
+      "status": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_note_replace.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_note_replace.svg",
+      "sha256": "60a4da10269debf2ffa3e03a39cc3ff765f85ba78da0373a26a161b70a5ce0ba",
+      "kind": "fresh",
+      "name": "url_note_replace",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.svg",
+      "sha256": "e426a68598ab7b4cb35917c584ff5e469d51e71622e58b2751387f14f14fca6d",
+      "kind": "fresh",
+      "name": "url_root_class_ambiguous",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.svg",
+      "sha256": "83ff93c8717a36ac0cd81552347beec2738373ac7377bc3b4e805b7a38c1bf26",
+      "kind": "fresh",
+      "name": "url_root_class_note_ambiguous",
+      "status": "process_error"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_rooted_existing.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_rooted_existing.svg",
+      "sha256": "ac59039be33bfbb445885ba22c52d111eaea4bf8acfaab36ea3b429e8e62b137",
+      "kind": "fresh",
+      "name": "url_rooted_existing",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.svg",
+      "sha256": "735956c5edcf6c07ab859a7850fba31166faa9b126d31de37e614e22c4278bac",
+      "kind": "fresh",
+      "name": "url_smart_quotes",
+      "status": "process_error"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_trailing.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_trailing.svg",
+      "sha256": "b5f4c94c10e32ba1c87eb1d95c428e35e4297da27124f903e929284541760e7a",
+      "kind": "fresh",
+      "name": "url_trailing",
+      "status": "invalid_reference"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_unique_crosscontext.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_unique_crosscontext.svg",
+      "sha256": "583100eba2dc91e2fbaf5c53e3577218761a53a655a47e287bc8571d1e993cb1",
+      "kind": "fresh",
+      "name": "url_unique_crosscontext",
+      "status": "pass"
+    }
+  ],
+  "retained_maker": [
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_blank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_blank.svg",
+      "original_source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/actor_blank.puml",
+      "sha256": "e4920665600282bf2a3fcbd8b37eae68c6dfe32dad2155cc6ca314c3180637a6",
+      "kind": "retained maker, duplicate enforcement copy; NOT fresh",
+      "name": "actor_blank",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_blank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_blank.svg",
+      "original_source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_blank.puml",
+      "sha256": "6487a1b738e89ea69b0d5c9c430e2665bf315cc82222ee9e2eb3e3b1a2309ffc",
+      "kind": "retained maker, duplicate enforcement copy; NOT fresh",
+      "name": "boundary_blank",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_stereo.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_stereo.svg",
+      "original_source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/actor_stereo.puml",
+      "sha256": "fe2048125f5f13ad36d58cf65eb108221b4dbb42e3e4b510461aa214f65e63af",
+      "kind": "retained maker, duplicate enforcement copy; NOT fresh",
+      "name": "actor_stereo",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_stereo.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_stereo.svg",
+      "original_source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_stereo.puml",
+      "sha256": "62590c1c75783c1ab463cbbbe8b17bc8494df63158c080f8922445e811cef80e",
+      "kind": "retained maker, duplicate enforcement copy; NOT fresh",
+      "name": "boundary_stereo",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_left.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_left.svg",
+      "original_source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/group_left.puml",
+      "sha256": "72cd97904829c2019c4429049922f7278ae25916b8ea18cc2edc47fe6eae0696",
+      "kind": "retained maker, duplicate enforcement copy; NOT fresh",
+      "name": "group_left",
+      "status": "mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_top.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_top.svg",
+      "original_source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/group_top.puml",
+      "sha256": "00525d3735f76401240209e2b86f51df7885a9b7339792f14bf41eadd7779900",
+      "kind": "retained maker, duplicate enforcement copy; NOT fresh",
+      "name": "group_top",
+      "status": "mismatch"
+    }
+  ],
+  "denominators": "86 fresh sources, all disjoint from preserved1675. Six maker copies duplicate existing source hashes; they add zero new controls or unique sources."
+}

@@ -1,0 +1,31 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: topurl
+      value: https://late.example/
+    source: |
+      @startuml
+      note "memo body" as Memo
+      url Memo [[https://example.org/old{Old}]]
+      urlfor Memo is [["doc with space"{New} caption]]
+      skinparam topurl https://late.example/
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  entities: []
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - memo body
+    target: null
+    position: null
+    alias: Memo
+    url: doc with space
+    url_tooltip: New
+    source_line: 1
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

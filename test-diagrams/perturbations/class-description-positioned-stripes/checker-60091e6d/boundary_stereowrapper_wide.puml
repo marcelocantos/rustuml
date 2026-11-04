@@ -1,0 +1,16 @@
+@startuml
+<style>
+boundary {
+ FontSize 17
+ FontStyle bold
+ stereotype {
+ FontSize 8
+ FontStyle plain
+ FontColor DarkRed
+ }
+}
+</style>
+boundary "<size:6>i</size>\n<size:25>Wide label</size>" as Orb <<LONG_STEREOTYPE>>
+class Dock
+Dock -down-> Orb
+@enduml

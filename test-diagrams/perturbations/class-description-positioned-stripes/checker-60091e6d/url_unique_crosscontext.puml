@@ -1,0 +1,9 @@
+@startuml
+package First {
+note "memo body" as Memo
+}
+package Second {
+class Anchor
+url Memo [[https://example.org/unique]]
+}
+@enduml

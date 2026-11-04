@@ -1,0 +1,1724 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_False.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Mooring"
+      },
+      {
+        "Note": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Mooring",
+        "label": "Mooring",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "Detached chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://example.org/chart?x=2&y=5",
+        "url_tooltip": "Inspect chart",
+        "source_line": 3
+      }
+    ],
+    "relationships": [],
+    "source_sha256": "dbf6add0e8c1e89b631988da3936c4dcb5acc050c32a7d19b7eeb3a939e1e030",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 0
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/class-note-url-group-ownership/note_url_command_True.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Mooring"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Mooring",
+        "label": "Mooring",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "Detached chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://example.org/chart?x=2&y=5",
+        "url_tooltip": "Inspect chart",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Mooring",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "f08005f775d2d0eec19b9f49be8012a027399d8fb227979fedce7d1e31bc2a5b",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_0_False.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 3
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 4
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 6
+      }
+    ],
+    "source_sha256": "de3a1ae1178c892c08ef2aad3d0c9e8c5deae2e47effc10f5f22daa1ccdf34d7",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_0_True.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 3
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 5
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 8
+      }
+    ],
+    "source_sha256": "93210d65b5d3d0f9acb54b42eafe6272fc5be4dcf5fa77f1be33e0f41157cc78",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_1_False.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 3
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 4
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 6
+      }
+    ],
+    "source_sha256": "181877923a5419aa2dabd6882af772e8ff236ad351df146d0cdd448e2bbdd98a",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_1_True.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 3
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 5
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 8
+      }
+    ],
+    "source_sha256": "b7fd43b36d67a268ab0577e03baef99a5e3439fdd200ae317788a12824df18e9",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_2_False.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Port"
+      },
+      {
+        "Entity": "Port.Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Port.Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 4
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Port",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Port.Berth"
+        ],
+        "source_line": 3,
+        "stereotypes": []
+      }
+    ],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Port.Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 5,
+        "owner_package": "Port"
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Port.Memo",
+        "to": "Port.Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 7
+      }
+    ],
+    "source_sha256": "e947088f71b753887dc0bc0b6895e64cde6cdfb7d3bdf2f913e349922aded697",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_2_True.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Port"
+      },
+      {
+        "Entity": "Port.Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Port.Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 4
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Port",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Port.Berth"
+        ],
+        "source_line": 3,
+        "stereotypes": []
+      }
+    ],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Port.Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 6,
+        "owner_package": "Port"
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Port.Memo",
+        "to": "Port.Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 9
+      }
+    ],
+    "source_sha256": "2d5d3a91fa7c91354eb9c0ea4426325db7a6ce1c6e36f9fc63468038be533f91",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_3_False.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Port"
+      },
+      {
+        "Entity": "Port.Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Port.Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 4
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Port",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Port.Berth"
+        ],
+        "source_line": 3,
+        "stereotypes": []
+      }
+    ],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Port.Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 5,
+        "owner_package": "Port"
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Port.Memo",
+        "to": "Port.Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 8
+      }
+    ],
+    "source_sha256": "6493ba2054911b63f8e5df18b73d82421c92685abfec1ff127cf7428242232ed",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/url_3_True.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Port"
+      },
+      {
+        "Entity": "Port.Berth"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Port.Berth",
+        "label": "Berth",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 4
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Port",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Port.Berth"
+        ],
+        "source_line": 3,
+        "stereotypes": []
+      }
+    ],
+    "notes": [
+      {
+        "lines": [
+          "Tidal chart"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Port.Memo",
+        "url": "https://example.org/chart",
+        "url_tooltip": "Open chart",
+        "source_line": 6,
+        "owner_package": "Port"
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Port.Memo",
+        "to": "Port.Berth",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 10
+      }
+    ],
+    "source_sha256": "2e301b7fcc3a87d24ba805a29b3022750da893575d49ea44cb6c07eca23ff69a",
+    "source_derived_expectations": {
+      "entities": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "retention_checks": {
+      "entities": true,
+      "notes": true,
+      "relationships": true,
+      "note_uids": true,
+      "note_url": true
+    }
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_ambiguous_current.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "First"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Package": "Second"
+      },
+      {
+        "Note": "1"
+      },
+      {
+        "Entity": "Anchor"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 8
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "First",
+        "kind": "Package",
+        "color": null,
+        "entities": [],
+        "source_line": 1,
+        "stereotypes": []
+      },
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Second",
+        "kind": "Package",
+        "color": null,
+        "entities": [],
+        "source_line": 4,
+        "stereotypes": []
+      }
+    ],
+    "notes": [
+      {
+        "lines": [
+          "one"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "First.Memo",
+        "source_line": 2,
+        "owner_package": "First"
+      },
+      {
+        "lines": [
+          "two"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Second.Memo",
+        "url": "https://example.org/current",
+        "source_line": 5,
+        "owner_package": "Second"
+      }
+    ],
+    "relationships": [],
+    "source_sha256": "ec6ae73b4a9ed99aa11fb9fe7e535ca69358fa83c2364a838dc9444801abbce6"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_bad_separator.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Basin"
+      },
+      {
+        "Entity": "Basin.Anchor"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Basin.Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "url": "https://example.org/double",
+        "source_line": 2
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Basin",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Basin.Anchor"
+        ],
+        "source_line": 1,
+        "stereotypes": []
+      }
+    ],
+    "notes": [],
+    "relationships": [],
+    "source_sha256": "4c26d05d696ee2489edc6cbf3a2420cfcb2a8e2b645ac3f67b64c8a8d1e6cf1d"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_class_replace.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "url": "doc with space",
+        "url_tooltip": "New",
+        "source_line": 1
+      }
+    ],
+    "packages": [],
+    "notes": [],
+    "relationships": [],
+    "source_sha256": "172d4929fa8ce580c4e0512481e9f8c5b0acecb4bd3bea77225e37076c6f4910"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_current_group_self.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Basin"
+      },
+      {
+        "Entity": "Basin.Anchor"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Basin.Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": "https://example.org/self",
+        "url_tooltip": null,
+        "name": "Basin",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Basin.Anchor"
+        ],
+        "source_line": 1,
+        "stereotypes": []
+      }
+    ],
+    "notes": [],
+    "relationships": [],
+    "source_sha256": "2b0b7b92da5735b451cab49d2af94a6680f672151d323dcfca8e2ab791fadfef"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_empty_tip.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://prefix.example/path",
+        "url_tooltip": "",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Anchor",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "4651cccde445a4b4304d02f16f9fba59c7d5aba951290f78c9839f94f80ca55a"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_file.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "file:/tmp/name",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Anchor",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "4c1854e285d2b95f752bec657d873ed064293dc6552dc0e6ded41bb23bace5ec"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_nested_tip.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://prefix.example/path",
+        "url_tooltip": "a {nested} b",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Anchor",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "1fd3a60fae074d05989d645f20f3987e0f8311f3a615023b4ccd985cbc6f8c48"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_quoted.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://prefix.example/a b?q=x&v=y",
+        "url_tooltip": "hint",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Anchor",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "8d04043c4d814c5376a3decfe13618248278536a6996513f14db43718018e7f5"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_scheme_upper.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "https://prefix.example/HTTPS://example.org/a",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Anchor",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "60cbbd49d311a1a66019515b8502541032cd345df0921b8722124a0bd6689d4e"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_tooltip.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "",
+        "url_tooltip": "outer {nested} tip",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Anchor",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "35ecc0c600d27c6fa869e2e22a5cf50bc5bce4a6a72725495549bff1a6cbed56"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_tooltip_label.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Anchor"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Relationship": "0"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "",
+        "url_tooltip": "Hint",
+        "source_line": 3
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Memo",
+        "to": "Anchor",
+        "kind": "Association",
+        "label": null,
+        "label_arrow": "None",
+        "from_multiplicity": null,
+        "to_multiplicity": null,
+        "decorated_end": "None",
+        "dashed": true,
+        "length": 2,
+        "source_line": 5
+      }
+    ],
+    "source_sha256": "e165f6b2863b33e10538af459a1de3b59054d09e212b65f2620bd9091c619536"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_group_replace.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Harbor"
+      },
+      {
+        "Entity": "Harbor.Anchor"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Harbor.Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 2
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": "doc with space",
+        "url_tooltip": "New",
+        "name": "Harbor",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Harbor.Anchor"
+        ],
+        "source_line": 1,
+        "stereotypes": []
+      }
+    ],
+    "notes": [],
+    "relationships": [],
+    "source_sha256": "b56a0d07ca9db039f20cf5b014a6caa738254a52748b1a03efc5be438976b6e1"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_namespace_none.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "Basin"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Entity": "Anchor"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 5
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Basin",
+        "kind": "Package",
+        "color": null,
+        "entities": [],
+        "source_line": 2,
+        "stereotypes": []
+      }
+    ],
+    "notes": [
+      {
+        "lines": [
+          "memo"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Basin.Memo",
+        "url": "https://example.org/none",
+        "source_line": 3,
+        "owner_package": "Basin"
+      }
+    ],
+    "relationships": [],
+    "source_sha256": "4c9b96bc130e0f6114124552fdb6c7ca983d0c7a31c3f5229a0a4ed89bd74f77"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_note_replace.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Note": "0"
+      }
+    ],
+    "entities": [],
+    "packages": [],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "Memo",
+        "url": "doc with space",
+        "url_tooltip": "New",
+        "source_line": 1
+      }
+    ],
+    "relationships": [],
+    "source_sha256": "60a4da10269debf2ffa3e03a39cc3ff765f85ba78da0373a26a161b70a5ce0ba"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_root_class_ambiguous.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Memo"
+      },
+      {
+        "Package": "Basin"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Memo",
+        "label": "Memo",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "url": "https://example.org/current",
+        "source_line": 1
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Basin",
+        "kind": "Package",
+        "color": null,
+        "entities": [],
+        "source_line": 2,
+        "stereotypes": []
+      }
+    ],
+    "notes": [],
+    "relationships": [],
+    "source_sha256": "e426a68598ab7b4cb35917c584ff5e469d51e71622e58b2751387f14f14fca6d"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_rooted_existing.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Entity": "Memo"
+      },
+      {
+        "Package": "Basin"
+      },
+      {
+        "Entity": "Basin.Other"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Memo",
+        "label": "Memo",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "url": "https://example.org/rooted",
+        "source_line": 1
+      },
+      {
+        "id": "Basin.Other",
+        "label": "Other",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 3
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Basin",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Basin.Other"
+        ],
+        "source_line": 2,
+        "stereotypes": []
+      }
+    ],
+    "notes": [],
+    "relationships": [],
+    "source_sha256": "ac59039be33bfbb445885ba22c52d111eaea4bf8acfaab36ea3b429e8e62b137"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml",
+    "before_exit": 1,
+    "after_exit": 0,
+    "type": "Class",
+    "uid_events": [
+      {
+        "Package": "First"
+      },
+      {
+        "Note": "0"
+      },
+      {
+        "Package": "Second"
+      },
+      {
+        "Entity": "Second.Anchor"
+      }
+    ],
+    "entities": [
+      {
+        "id": "Second.Anchor",
+        "label": "Anchor",
+        "explicit_alias": false,
+        "kind": "Class",
+        "is_static": false,
+        "visibility": "Default",
+        "members": [],
+        "stereotypes": [],
+        "source_line": 5
+      }
+    ],
+    "packages": [
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "First",
+        "kind": "Package",
+        "color": null,
+        "entities": [],
+        "source_line": 1,
+        "stereotypes": []
+      },
+      {
+        "visibility": "Default",
+        "tags": [],
+        "url": null,
+        "url_tooltip": null,
+        "name": "Second",
+        "kind": "Package",
+        "color": null,
+        "entities": [
+          "Second.Anchor"
+        ],
+        "source_line": 4,
+        "stereotypes": []
+      }
+    ],
+    "notes": [
+      {
+        "lines": [
+          "memo body"
+        ],
+        "target": null,
+        "position": null,
+        "alias": "First.Memo",
+        "url": "https://example.org/unique",
+        "source_line": 2,
+        "owner_package": "First"
+      }
+    ],
+    "relationships": [],
+    "source_sha256": "583100eba2dc91e2fbaf5c53e3577218761a53a655a47e287bc8571d1e993cb1"
+  }
+]

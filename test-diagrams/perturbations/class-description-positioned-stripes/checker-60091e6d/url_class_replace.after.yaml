@@ -1,0 +1,34 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: topurl
+      value: https://late.example/
+    source: |
+      @startuml
+      class Anchor
+      url Anchor [[https://example.org/old{Old}]]
+      urlfor Anchor is [["doc with space"{New} caption]]
+      skinparam topurl https://late.example/
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Anchor
+  entities:
+  - id: Anchor
+    label: Anchor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    url: doc with space
+    url_tooltip: New
+    source_line: 1
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

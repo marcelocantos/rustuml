@@ -1,0 +1,5 @@
+@startuml
+class Anchor
+note "memo" as Memo
+url “Memo” [[“doc with spaces”{Hint}]]
+@enduml

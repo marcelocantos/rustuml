@@ -1,0 +1,6 @@
+@startuml
+note "memo body" as Memo
+url Memo [[https://example.org/old{Old}]]
+urlfor Memo is [["doc with space"{New} caption]]
+skinparam topurl https://late.example/
+@enduml

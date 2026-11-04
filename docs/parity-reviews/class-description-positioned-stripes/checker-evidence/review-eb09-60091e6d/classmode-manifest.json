@@ -1,0 +1,578 @@
+{
+  "schema_version": 1,
+  "review": "class-packet6-classmode-60091e6d",
+  "candidate": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "timezone": "GMT+11:00",
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "resources": [],
+  "cases": [
+    {
+      "name": "classmode_actor_blankstyle",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_blankstyle.puml",
+      "remote_name": "classmode_actor_blankstyle.puml",
+      "source_sha256": "645b0db1d1ca8d3a473ee83c5639bff5233bd483be211190289043c40d834ac1",
+      "bytes": 98,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmFjdG9yICJ1cHBlclxuPHNpemU6MzE+XG5sb3dlciIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_actor_tabonly",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_tabonly.puml",
+      "remote_name": "classmode_actor_tabonly.puml",
+      "source_sha256": "9fe43ea23c2160026c6efcef6745322603ea9381b932acaed11d7095cdf400cc",
+      "bytes": 83,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmFjdG9yICJcdFxuXHRcdCIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_actor_subsup",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_subsup.puml",
+      "remote_name": "classmode_actor_subsup.puml",
+      "source_sha256": "a932b4006c535abc18f620027039ae1b288ce3a43571067ecbf6bf694abaf549",
+      "bytes": 158,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmFjdG9yICI8c2l6ZTo3PnQ8c3VwPnU8L3N1cD48L3NpemU+PHNpemU6Mjg+VzxzdWI+ajwvc3ViPjwvc2l6ZT5cbjxzdXA+QTwvc3VwPjxzdWI+ejwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_actor_mixedfamily",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_mixedfamily.puml",
+      "remote_name": "classmode_actor_mixedfamily.puml",
+      "source_sha256": "3821033baac8a37049f49618ef9046c0384232d4702b458227806840a7e97dbc",
+      "bytes": 151,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmFjdG9yICI8Zm9udDptb25vc3BhY2VkPldcdGk8L2ZvbnQ+PHNpemU6OT5qPC9zaXplPlxuPHNpemU6MjY+PGk+c2xhbnRlZDwvaT48L3NpemU+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_actor_spaceblank",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_spaceblank.puml",
+      "remote_name": "classmode_actor_spaceblank.puml",
+      "source_sha256": "9cf036a89e168a205fd79d9569f43e0e0c333130a003f2223025c0895de4b487",
+      "bytes": 94,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmFjdG9yICIgIHdpZGUgIFxuICAgXG5sYXN0IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_actor_stereowrapper_wide",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml",
+      "remote_name": "classmode_actor_stereowrapper_wide.puml",
+      "source_sha256": "2dbf4e618d846396546a20ae4b99e620dfb1732f11ef5b13c26bdc1ba8509ac2",
+      "bytes": 259,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDgKIEZvbnRTdHlsZSBwbGFpbgogRm9udENvbG9yIERhcmtSZWQKIH0KfQo8L3N0eWxlPgphY3RvciAiPHNpemU6Nj5pPC9zaXplPlxuPHNpemU6MjU+V2lkZSBsYWJlbDwvc2l6ZT4iIGFzIE9yYiA8PExPTkdfU1RFUkVPVFlQRT4+CmNsYXNzIERvY2sKRG9jayAtZG93bi0+IE9yYgpAZW5kdW1sCg==",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_actor_stereowrapper_small",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_small.puml",
+      "remote_name": "classmode_actor_stereowrapper_small.puml",
+      "source_sha256": "76f65d3d96feee3fbe5d53ff5c944462f046463a5ef684366f8cab217cfa759c",
+      "bytes": 246,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDI2CiBGb250U3R5bGUgcGxhaW4KIEZvbnRDb2xvciBEYXJrUmVkCiB9Cn0KPC9zdHlsZT4KYWN0b3IgIjxzaXplOjY+aTwvc2l6ZT5cbjxzaXplOjI1PldpZGUgbGFiZWw8L3NpemU+IiBhcyBPcmIgPDxzPj4KY2xhc3MgRG9jawpEb2NrIC1kb3duLT4gT3JiCkBlbmR1bWwK",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_actor_shadow_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_shadow_0.puml",
+      "remote_name": "classmode_actor_shadow_0.puml",
+      "source_sha256": "631a196ef866379a23ce61a7206cb58f1994c542c048b91be522b910a81e3559",
+      "bytes": 142,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDAKIExpbmVUaGlja25lc3MgMwp9Cjwvc3R5bGU+CmFjdG9yICJtXG48c3ViPm48L3N1Yj4iIGFzIE9yYgpjbGFzcyBEb2NrCk9yYiAtLT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_actor_shadow_0p5",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_shadow_0p5.puml",
+      "remote_name": "classmode_actor_shadow_0p5.puml",
+      "source_sha256": "ae8b2600ba0abf1782a1bb9c4d3517689f37f6c0eb221ca6a313521e369ef341",
+      "bytes": 144,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDAuNQogTGluZVRoaWNrbmVzcyAzCn0KPC9zdHlsZT4KYWN0b3IgIm1cbjxzdWI+bjwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC0tPiBEb2NrCkBlbmR1bWwK",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_actor_shadow_13",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_shadow_13.puml",
+      "remote_name": "classmode_actor_shadow_13.puml",
+      "source_sha256": "77bae3b5d166cf08dd84efc7b37f170e1481108f20b5e42ab255266d1828ded9",
+      "bytes": 143,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDEzCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgphY3RvciAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_actor_shadow_neg3",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_shadow_neg3.puml",
+      "remote_name": "classmode_actor_shadow_neg3.puml",
+      "source_sha256": "b915a332017d57e0d8d3dd696ad9344399c89713e16ca0ed767986484da462bf",
+      "bytes": 143,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIC0zCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgphY3RvciAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_actor_degenerate_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_degenerate_0.puml",
+      "remote_name": "classmode_actor_degenerate_0.puml",
+      "source_sha256": "668e942de08a23ec76f2bf116055ae189b5d3043f32c372dae25cf8e3c5aa966",
+      "bytes": 133,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDAKfQo8L3N0eWxlPgphY3RvciAiPHNpemU6MjU+dG9wPC9zaXplPlxuXG48c3ViPmVuZDwvc3ViPiIgYXMgT3JiIDw8c21hbGw+PgpAZW5kdW1sCg==",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_actor_degenerate_11",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_degenerate_11.puml",
+      "remote_name": "classmode_actor_degenerate_11.puml",
+      "source_sha256": "561ef8d968a20959d7b4e46ace4f4edba99d6fe9e84ef805b05ac628e8455c67",
+      "bytes": 134,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDExCn0KPC9zdHlsZT4KYWN0b3IgIjxzaXplOjI1PnRvcDwvc2l6ZT5cblxuPHN1Yj5lbmQ8L3N1Yj4iIGFzIE9yYiA8PHNtYWxsPj4KQGVuZHVtbAo=",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_boundary_blankstyle",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_blankstyle.puml",
+      "remote_name": "classmode_boundary_blankstyle.puml",
+      "source_sha256": "12d39480f47f7d092d3434c780a114294ce837d83647effa9f2614349c25a558",
+      "bytes": 101,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmJvdW5kYXJ5ICJ1cHBlclxuPHNpemU6MzE+XG5sb3dlciIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_boundary_tabonly",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_tabonly.puml",
+      "remote_name": "classmode_boundary_tabonly.puml",
+      "source_sha256": "e270ae98701732d857e559880038e409769d029e8e4cee534f68ea821778aa9e",
+      "bytes": 86,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmJvdW5kYXJ5ICJcdFxuXHRcdCIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_boundary_subsup",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_subsup.puml",
+      "remote_name": "classmode_boundary_subsup.puml",
+      "source_sha256": "e4e24551ae867dc4357dddbb5fd438eef8b0a14b76cfc1dacab72c0ed0e0cd1c",
+      "bytes": 161,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmJvdW5kYXJ5ICI8c2l6ZTo3PnQ8c3VwPnU8L3N1cD48L3NpemU+PHNpemU6Mjg+VzxzdWI+ajwvc3ViPjwvc2l6ZT5cbjxzdXA+QTwvc3VwPjxzdWI+ejwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_boundary_mixedfamily",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_mixedfamily.puml",
+      "remote_name": "classmode_boundary_mixedfamily.puml",
+      "source_sha256": "ea4de6c10cc34f0d0a3ddbfccb2db1495b7f8f549bc79df0f8fc960ebbf0d96d",
+      "bytes": 154,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmJvdW5kYXJ5ICI8Zm9udDptb25vc3BhY2VkPldcdGk8L2ZvbnQ+PHNpemU6OT5qPC9zaXplPlxuPHNpemU6MjY+PGk+c2xhbnRlZDwvaT48L3NpemU+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_boundary_spaceblank",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_spaceblank.puml",
+      "remote_name": "classmode_boundary_spaceblank.puml",
+      "source_sha256": "3d7fc2e246a7dca0618bdb6311544d83ec524f1eb5ee094833dde828ffc47bfd",
+      "bytes": 97,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmJvdW5kYXJ5ICIgIHdpZGUgIFxuICAgXG5sYXN0IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_boundary_stereowrapper_wide",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_stereowrapper_wide.puml",
+      "remote_name": "classmode_boundary_stereowrapper_wide.puml",
+      "source_sha256": "05c863d23b22ef176109258ea1ea21321a7b86e5ae71da41fd066ff91eead9e9",
+      "bytes": 265,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDgKIEZvbnRTdHlsZSBwbGFpbgogRm9udENvbG9yIERhcmtSZWQKIH0KfQo8L3N0eWxlPgpib3VuZGFyeSAiPHNpemU6Nj5pPC9zaXplPlxuPHNpemU6MjU+V2lkZSBsYWJlbDwvc2l6ZT4iIGFzIE9yYiA8PExPTkdfU1RFUkVPVFlQRT4+CmNsYXNzIERvY2sKRG9jayAtZG93bi0+IE9yYgpAZW5kdW1sCg==",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_boundary_stereowrapper_small",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_stereowrapper_small.puml",
+      "remote_name": "classmode_boundary_stereowrapper_small.puml",
+      "source_sha256": "edef0cc7717ccc9eead8104ce482a728fc820aa578ec51e2d3cdf356a4b975b9",
+      "bytes": 252,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDI2CiBGb250U3R5bGUgcGxhaW4KIEZvbnRDb2xvciBEYXJrUmVkCiB9Cn0KPC9zdHlsZT4KYm91bmRhcnkgIjxzaXplOjY+aTwvc2l6ZT5cbjxzaXplOjI1PldpZGUgbGFiZWw8L3NpemU+IiBhcyBPcmIgPDxzPj4KY2xhc3MgRG9jawpEb2NrIC1kb3duLT4gT3JiCkBlbmR1bWwK",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_boundary_shadow_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_shadow_0.puml",
+      "remote_name": "classmode_boundary_shadow_0.puml",
+      "source_sha256": "b85079b1e9107dfd25dd3a39e8836f4238c9a371999f2d007a5dad5c5021268a",
+      "bytes": 148,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDAKIExpbmVUaGlja25lc3MgMwp9Cjwvc3R5bGU+CmJvdW5kYXJ5ICJtXG48c3ViPm48L3N1Yj4iIGFzIE9yYgpjbGFzcyBEb2NrCk9yYiAtLT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_boundary_shadow_0p5",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_shadow_0p5.puml",
+      "remote_name": "classmode_boundary_shadow_0p5.puml",
+      "source_sha256": "ff1fdae1277072c5fa001595e95306da711ef3b1d52036d04b4bcab7fa813095",
+      "bytes": 150,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDAuNQogTGluZVRoaWNrbmVzcyAzCn0KPC9zdHlsZT4KYm91bmRhcnkgIm1cbjxzdWI+bjwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC0tPiBEb2NrCkBlbmR1bWwK",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_boundary_shadow_13",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_shadow_13.puml",
+      "remote_name": "classmode_boundary_shadow_13.puml",
+      "source_sha256": "46a4eb78aeac9fd9435887968926d19bac09cae8a7ce73d60e88795682aa0341",
+      "bytes": 149,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDEzCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgpib3VuZGFyeSAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_boundary_shadow_neg3",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_shadow_neg3.puml",
+      "remote_name": "classmode_boundary_shadow_neg3.puml",
+      "source_sha256": "b5fbfa2b29e77e527292574820de749cee3b9930be1853833e608eb16621759b",
+      "bytes": 149,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIC0zCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgpib3VuZGFyeSAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "classmode_boundary_degenerate_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_degenerate_0.puml",
+      "remote_name": "classmode_boundary_degenerate_0.puml",
+      "source_sha256": "fa3d5ffdc9bca1abe0434ff2ccb1c931658a9e6aa6c73c2d75d3ab23139d08c8",
+      "bytes": 139,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDAKfQo8L3N0eWxlPgpib3VuZGFyeSAiPHNpemU6MjU+dG9wPC9zaXplPlxuXG48c3ViPmVuZDwvc3ViPiIgYXMgT3JiIDw8c21hbGw+PgpAZW5kdW1sCg==",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_boundary_degenerate_11",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_boundary_degenerate_11.puml",
+      "remote_name": "classmode_boundary_degenerate_11.puml",
+      "source_sha256": "9562f4d2b7edacb79542de502911110f0fa847945f937b6db5e8efac57c33d88",
+      "bytes": 140,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDExCn0KPC9zdHlsZT4KYm91bmRhcnkgIjxzaXplOjI1PnRvcDwvc2l6ZT5cblxuPHN1Yj5lbmQ8L3N1Yj4iIGFzIE9yYiA8PHNtYWxsPj4KQGVuZHVtbAo=",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "classmode_class_generic_contrast",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_class_generic_contrast.puml",
+      "remote_name": "classmode_class_generic_contrast.puml",
+      "source_sha256": "efba8f6485cf3fbde9e4080d6dc8ee4bc12e477f45fc96a1e5765f2521acd227",
+      "bytes": 105,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmNsYXNzICI8c2l6ZToyMz5IZWFkZXI8L3NpemU+IiBhcyBPcmIKY2xhc3MgIlBlZXI8VD4iIGFzIFBlZXIKT3JiIC0tPiBQZWVyCkBlbmR1bWwK",
+      "axes": [
+        "image owner",
+        "generic-looking markup",
+        "native peer",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-header-envelope-ownership",
+        "class-description-positioned-stripes"
+      ]
+    },
+    {
+      "name": "classmode_component_generic_contrast",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_component_generic_contrast.puml",
+      "remote_name": "classmode_component_generic_contrast.puml",
+      "source_sha256": "f400ee6179744e5987cfdbf99f8ced67102a7b8bfa55bde1d3f95466f1535c65",
+      "bytes": 109,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCmNvbXBvbmVudCAiPHNpemU6MjM+SGVhZGVyPC9zaXplPiIgYXMgT3JiCmNsYXNzICJQZWVyPFQ+IiBhcyBQZWVyCk9yYiAtLT4gUGVlcgpAZW5kdW1sCg==",
+      "axes": [
+        "image owner",
+        "generic-looking markup",
+        "native peer",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-header-envelope-ownership",
+        "class-description-positioned-stripes"
+      ]
+    },
+    {
+      "name": "classmode_rectangle_generic_contrast",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_rectangle_generic_contrast.puml",
+      "remote_name": "classmode_rectangle_generic_contrast.puml",
+      "source_sha256": "e80cdff6a85288e5a295c36dab5e11a3834f292f7f620ce99e4227921952384f",
+      "bytes": 109,
+      "source_base64": "QHN0YXJ0dW1sCmFsbG93bWl4aW5nCnJlY3RhbmdsZSAiPHNpemU6MjM+SGVhZGVyPC9zaXplPiIgYXMgT3JiCmNsYXNzICJQZWVyPFQ+IiBhcyBQZWVyCk9yYiAtLT4gUGVlcgpAZW5kdW1sCg==",
+      "axes": [
+        "image owner",
+        "generic-looking markup",
+        "native peer",
+        "explicit class factory selection"
+      ],
+      "mechanisms": [
+        "class-description-header-envelope-ownership",
+        "class-description-positioned-stripes"
+      ]
+    }
+  ],
+  "generation_note": "Original 29 graphical controls lacked allowmixing: mixed class/description negatives or alternate factory, not coverage of class description path. Preserve originals and separately add explicit class-factory versions before reference execution."
+}

@@ -1,0 +1,148 @@
+{
+  "source_sha256": "e9e1be1166a0cfdad2e3766b9d03aabf5498ddc6cc7f79851a525aaa5f3514ba",
+  "java_sha256": "e5ea9cf2ae1d90c8446b89bc67ed52eb26b341e631dfb1f49c5f9683558804cc",
+  "java": {
+    "name": "actor_shadow_0",
+    "remote_name": "actor_shadow_0.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml",
+    "source_sha256": "e9e1be1166a0cfdad2e3766b9d03aabf5498ddc6cc7f79851a525aaa5f3514ba",
+    "exit_code": 200,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.eR1QU1P3",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.eR1QU1P3",
+    "env_overrides": {},
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1861858330084942,
+    "stdout_sha256": "e5ea9cf2ae1d90c8446b89bc67ed52eb26b341e631dfb1f49c5f9683558804cc",
+    "stderr_sha256": "87a52489d6c871799b956d640f04dfdcf8814006578761d339838616660e442e",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "before": {
+    "index": 4,
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml",
+    "source_sha256": "e9e1be1166a0cfdad2e3766b9d03aabf5498ddc6cc7f79851a525aaa5f3514ba",
+    "java_sha256": "e5ea9cf2ae1d90c8446b89bc67ed52eb26b341e631dfb1f49c5f9683558804cc",
+    "status": "invalid_reference",
+    "outputs": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-before/0004-actor_shadow_0",
+    "cli": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "-tsvg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.01570725440979004,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5309cf4666150a66a776eec09977242e3035de0a8795239531139efe20fe9f35",
+      "stderr": "parse error: line 7: Use 'allowmixing' before mixing classes and other UML elements\n"
+    },
+    "ast": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "--ast",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.015043020248413086,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5309cf4666150a66a776eec09977242e3035de0a8795239531139efe20fe9f35",
+      "stderr": "parse error: line 7: Use 'allowmixing' before mixing classes and other UML elements\n"
+    },
+    "yaml": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "--yaml",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.014999151229858398,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5309cf4666150a66a776eec09977242e3035de0a8795239531139efe20fe9f35",
+      "stderr": "parse error: line 7: Use 'allowmixing' before mixing classes and other UML elements\n"
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/check_svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-before/0004-actor_shadow_0/rust.svg"
+      ],
+      "exit": 2,
+      "seconds": 0.0030210018157958984,
+      "stderr": "invalid Java reference\n"
+    }
+  },
+  "after": {
+    "index": 4,
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml",
+    "source_sha256": "e9e1be1166a0cfdad2e3766b9d03aabf5498ddc6cc7f79851a525aaa5f3514ba",
+    "java_sha256": "e5ea9cf2ae1d90c8446b89bc67ed52eb26b341e631dfb1f49c5f9683558804cc",
+    "status": "invalid_reference",
+    "outputs": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-after/0004-actor_shadow_0",
+    "cli": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "-tsvg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.014984846115112305,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5309cf4666150a66a776eec09977242e3035de0a8795239531139efe20fe9f35",
+      "stderr": "parse error: line 7: Use 'allowmixing' before mixing classes and other UML elements\n"
+    },
+    "ast": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "--ast",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.015198945999145508,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5309cf4666150a66a776eec09977242e3035de0a8795239531139efe20fe9f35",
+      "stderr": "parse error: line 7: Use 'allowmixing' before mixing classes and other UML elements\n"
+    },
+    "yaml": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "--yaml",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.014712095260620117,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5309cf4666150a66a776eec09977242e3035de0a8795239531139efe20fe9f35",
+      "stderr": "parse error: line 7: Use 'allowmixing' before mixing classes and other UML elements\n"
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/check_svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-after/0004-actor_shadow_0/rust.svg"
+      ],
+      "exit": 2,
+      "seconds": 0.003164052963256836,
+      "stderr": "invalid Java reference\n"
+    }
+  }
+}

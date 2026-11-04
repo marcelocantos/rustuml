@@ -1,0 +1,53 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      allowmixing
+      rectangle "<size:23>Header</size>" as Orb
+      class "Peer<T>" as Peer
+      Orb --> Peer
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Orb
+  - !Entity Peer
+  - !Relationship 0
+  entities:
+  - id: Orb
+    label: <size:23>Header
+    explicit_alias: true
+    kind: Rectangle
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    generic: /size
+    source_line: 2
+  - id: Peer
+    label: Peer
+    explicit_alias: true
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    generic: T
+    source_line: 3
+  relationships:
+  - from: Orb
+    to: Peer
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 4
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

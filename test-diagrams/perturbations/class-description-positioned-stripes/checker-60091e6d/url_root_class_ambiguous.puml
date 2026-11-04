@@ -1,0 +1,7 @@
+@startuml
+class Memo
+package Basin {
+class Memo
+url Memo [[https://example.org/current]]
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+package Harbor {
+class Anchor
+}
+url Harbor [[https://example.org/old{Old}]]
+urlfor Harbor is [["doc with space"{New} caption]]
+skinparam topurl https://late.example/
+@enduml

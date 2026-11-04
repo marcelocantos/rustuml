@@ -1,0 +1,906 @@
+{
+  "schema_version": 1,
+  "review": "class-packet6-60091e6d",
+  "candidate": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "timezone": "GMT+11:00",
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "resources": [],
+  "cases": [
+    {
+      "name": "actor_blankstyle",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_blankstyle.puml",
+      "remote_name": "actor_blankstyle.puml",
+      "source_sha256": "8e1a5deaa59c58dcd0801b4dadd3adbc3e19b152e4decf1f93ae2cbc235615a5",
+      "bytes": 86,
+      "source_base64": "QHN0YXJ0dW1sCmFjdG9yICJ1cHBlclxuPHNpemU6MzE+XG5sb3dlciIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "actor_tabonly",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_tabonly.puml",
+      "remote_name": "actor_tabonly.puml",
+      "source_sha256": "6ec745c63e7b6539e0a2cdb4d4611f12ce886f1c9b2c4950666fe78dec534293",
+      "bytes": 71,
+      "source_base64": "QHN0YXJ0dW1sCmFjdG9yICJcdFxuXHRcdCIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "actor_subsup",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_subsup.puml",
+      "remote_name": "actor_subsup.puml",
+      "source_sha256": "fb9d2b37dc1275e6663a37b80c88173a71981e8f160f4301f8d3ec0a7624350d",
+      "bytes": 146,
+      "source_base64": "QHN0YXJ0dW1sCmFjdG9yICI8c2l6ZTo3PnQ8c3VwPnU8L3N1cD48L3NpemU+PHNpemU6Mjg+VzxzdWI+ajwvc3ViPjwvc2l6ZT5cbjxzdXA+QTwvc3VwPjxzdWI+ejwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "actor_mixedfamily",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_mixedfamily.puml",
+      "remote_name": "actor_mixedfamily.puml",
+      "source_sha256": "9ca1c49dbc7badae36ef48543b01218912554f588dd60b7aaa14e35167103aae",
+      "bytes": 139,
+      "source_base64": "QHN0YXJ0dW1sCmFjdG9yICI8Zm9udDptb25vc3BhY2VkPldcdGk8L2ZvbnQ+PHNpemU6OT5qPC9zaXplPlxuPHNpemU6MjY+PGk+c2xhbnRlZDwvaT48L3NpemU+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "actor_spaceblank",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_spaceblank.puml",
+      "remote_name": "actor_spaceblank.puml",
+      "source_sha256": "1901dd05cb2183bffb2b1ef474114fcba350b024aaab30422bd51be5361e154b",
+      "bytes": 82,
+      "source_base64": "QHN0YXJ0dW1sCmFjdG9yICIgIHdpZGUgIFxuICAgXG5sYXN0IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "actor_stereowrapper_wide",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_stereowrapper_wide.puml",
+      "remote_name": "actor_stereowrapper_wide.puml",
+      "source_sha256": "d37fa60123997bc0309b7169684a938af4dfcb9a3d3b358bd3370ea1e2f07a0e",
+      "bytes": 247,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDgKIEZvbnRTdHlsZSBwbGFpbgogRm9udENvbG9yIERhcmtSZWQKIH0KfQo8L3N0eWxlPgphY3RvciAiPHNpemU6Nj5pPC9zaXplPlxuPHNpemU6MjU+V2lkZSBsYWJlbDwvc2l6ZT4iIGFzIE9yYiA8PExPTkdfU1RFUkVPVFlQRT4+CmNsYXNzIERvY2sKRG9jayAtZG93bi0+IE9yYgpAZW5kdW1sCg==",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "actor_stereowrapper_small",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_stereowrapper_small.puml",
+      "remote_name": "actor_stereowrapper_small.puml",
+      "source_sha256": "18e45e2ea183cd0332542ac9dac33dd8be72936266a70297b789791dcb17d0c6",
+      "bytes": 234,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDI2CiBGb250U3R5bGUgcGxhaW4KIEZvbnRDb2xvciBEYXJrUmVkCiB9Cn0KPC9zdHlsZT4KYWN0b3IgIjxzaXplOjY+aTwvc2l6ZT5cbjxzaXplOjI1PldpZGUgbGFiZWw8L3NpemU+IiBhcyBPcmIgPDxzPj4KY2xhc3MgRG9jawpEb2NrIC1kb3duLT4gT3JiCkBlbmR1bWwK",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "actor_shadow_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0.puml",
+      "remote_name": "actor_shadow_0.puml",
+      "source_sha256": "e9e1be1166a0cfdad2e3766b9d03aabf5498ddc6cc7f79851a525aaa5f3514ba",
+      "bytes": 130,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDAKIExpbmVUaGlja25lc3MgMwp9Cjwvc3R5bGU+CmFjdG9yICJtXG48c3ViPm48L3N1Yj4iIGFzIE9yYgpjbGFzcyBEb2NrCk9yYiAtLT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "actor_shadow_0p5",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_0p5.puml",
+      "remote_name": "actor_shadow_0p5.puml",
+      "source_sha256": "18fd4acbbdbf5b9d43b41b691bfd3d40998bf12848b01b9f437c71ee586478da",
+      "bytes": 132,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDAuNQogTGluZVRoaWNrbmVzcyAzCn0KPC9zdHlsZT4KYWN0b3IgIm1cbjxzdWI+bjwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC0tPiBEb2NrCkBlbmR1bWwK",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "actor_shadow_13",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_13.puml",
+      "remote_name": "actor_shadow_13.puml",
+      "source_sha256": "c78065b87a77ff8f771654398bd193d079b1de9accbf786b84f05b93c57fdc85",
+      "bytes": 131,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDEzCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgphY3RvciAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "actor_shadow_neg3",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_shadow_neg3.puml",
+      "remote_name": "actor_shadow_neg3.puml",
+      "source_sha256": "0b56a7423b00f9a8ecab760b10d04c468212b68599123104f054dbef25715871",
+      "bytes": 131,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIC0zCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgphY3RvciAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "actor_degenerate_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_degenerate_0.puml",
+      "remote_name": "actor_degenerate_0.puml",
+      "source_sha256": "1727ef27b256e70e43a8ea49feeab333479ed3b7b0f5af847a43e601c1db0907",
+      "bytes": 121,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDAKfQo8L3N0eWxlPgphY3RvciAiPHNpemU6MjU+dG9wPC9zaXplPlxuXG48c3ViPmVuZDwvc3ViPiIgYXMgT3JiIDw8c21hbGw+PgpAZW5kdW1sCg==",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "actor_degenerate_11",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/actor_degenerate_11.puml",
+      "remote_name": "actor_degenerate_11.puml",
+      "source_sha256": "9134b0f859d537af4918493812a4a1f88300f1e2e70a405d183612c50be95cae",
+      "bytes": 122,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewogU2hhZG93aW5nIDExCn0KPC9zdHlsZT4KYWN0b3IgIjxzaXplOjI1PnRvcDwvc2l6ZT5cblxuPHN1Yj5lbmQ8L3N1Yj4iIGFzIE9yYiA8PHNtYWxsPj4KQGVuZHVtbAo=",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "boundary_blankstyle",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_blankstyle.puml",
+      "remote_name": "boundary_blankstyle.puml",
+      "source_sha256": "e046a465be898aa9ad0f2bb56eab53838dad7e1ac8a1c18b925bdd26857921c7",
+      "bytes": 89,
+      "source_base64": "QHN0YXJ0dW1sCmJvdW5kYXJ5ICJ1cHBlclxuPHNpemU6MzE+XG5sb3dlciIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "boundary_tabonly",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_tabonly.puml",
+      "remote_name": "boundary_tabonly.puml",
+      "source_sha256": "4af3872c5a9fe668852fbf620be18afd77d8f1f9d9e5509a034be404d9f3ad03",
+      "bytes": 74,
+      "source_base64": "QHN0YXJ0dW1sCmJvdW5kYXJ5ICJcdFxuXHRcdCIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "boundary_subsup",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_subsup.puml",
+      "remote_name": "boundary_subsup.puml",
+      "source_sha256": "692156ae8e452eb1e729c15be4ac3706651b317149c4539e8ba41925098ed6cb",
+      "bytes": 149,
+      "source_base64": "QHN0YXJ0dW1sCmJvdW5kYXJ5ICI8c2l6ZTo3PnQ8c3VwPnU8L3N1cD48L3NpemU+PHNpemU6Mjg+VzxzdWI+ajwvc3ViPjwvc2l6ZT5cbjxzdXA+QTwvc3VwPjxzdWI+ejwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC1yaWdodC0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "boundary_mixedfamily",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_mixedfamily.puml",
+      "remote_name": "boundary_mixedfamily.puml",
+      "source_sha256": "4d27a0384109a3ad25042b82ff03de79d51d040e5392455dae8ca0bcd1741faa",
+      "bytes": 142,
+      "source_base64": "QHN0YXJ0dW1sCmJvdW5kYXJ5ICI8Zm9udDptb25vc3BhY2VkPldcdGk8L2ZvbnQ+PHNpemU6OT5qPC9zaXplPlxuPHNpemU6MjY+PGk+c2xhbnRlZDwvaT48L3NpemU+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "boundary_spaceblank",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_spaceblank.puml",
+      "remote_name": "boundary_spaceblank.puml",
+      "source_sha256": "2c980bf85915a6e5e9ad6d7a398ca00bee5048e36491a744e7ae9cdb7543f917",
+      "bytes": 85,
+      "source_base64": "QHN0YXJ0dW1sCmJvdW5kYXJ5ICIgIHdpZGUgIFxuICAgXG5sYXN0IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLXJpZ2h0LT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "boundary_stereowrapper_wide",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_stereowrapper_wide.puml",
+      "remote_name": "boundary_stereowrapper_wide.puml",
+      "source_sha256": "89ae6653d188fa5982aa399d1c5ab76dd3a4b3e093e7ad87210e26334894c943",
+      "bytes": 253,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDgKIEZvbnRTdHlsZSBwbGFpbgogRm9udENvbG9yIERhcmtSZWQKIH0KfQo8L3N0eWxlPgpib3VuZGFyeSAiPHNpemU6Nj5pPC9zaXplPlxuPHNpemU6MjU+V2lkZSBsYWJlbDwvc2l6ZT4iIGFzIE9yYiA8PExPTkdfU1RFUkVPVFlQRT4+CmNsYXNzIERvY2sKRG9jayAtZG93bi0+IE9yYgpAZW5kdW1sCg==",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "boundary_stereowrapper_small",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_stereowrapper_small.puml",
+      "remote_name": "boundary_stereowrapper_small.puml",
+      "source_sha256": "74d79f43ac7f1a9f51f181cc9c7fc93b68f71f32ef5164373b3183c3d8864db5",
+      "bytes": 240,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogRm9udFNpemUgMTcKIEZvbnRTdHlsZSBib2xkCiBzdGVyZW90eXBlIHsKIEZvbnRTaXplIDI2CiBGb250U3R5bGUgcGxhaW4KIEZvbnRDb2xvciBEYXJrUmVkCiB9Cn0KPC9zdHlsZT4KYm91bmRhcnkgIjxzaXplOjY+aTwvc2l6ZT5cbjxzaXplOjI1PldpZGUgbGFiZWw8L3NpemU+IiBhcyBPcmIgPDxzPj4KY2xhc3MgRG9jawpEb2NrIC1kb3duLT4gT3JiCkBlbmR1bWwK",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "mechanisms": [
+        "class-description-stereotype-font",
+        "class-description-stereotype-margin-envelope",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "boundary_shadow_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_shadow_0.puml",
+      "remote_name": "boundary_shadow_0.puml",
+      "source_sha256": "08a5b9d0fef1faa6357d412b495b56cd3e7029a83f94a275200dcc711cb630d9",
+      "bytes": 136,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDAKIExpbmVUaGlja25lc3MgMwp9Cjwvc3R5bGU+CmJvdW5kYXJ5ICJtXG48c3ViPm48L3N1Yj4iIGFzIE9yYgpjbGFzcyBEb2NrCk9yYiAtLT4gRG9jawpAZW5kdW1sCg==",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "boundary_shadow_0p5",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_shadow_0p5.puml",
+      "remote_name": "boundary_shadow_0p5.puml",
+      "source_sha256": "f34f9844df35d1f19c9cc1abec595a47f7578cccc29d41375819475948a258f8",
+      "bytes": 138,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDAuNQogTGluZVRoaWNrbmVzcyAzCn0KPC9zdHlsZT4KYm91bmRhcnkgIm1cbjxzdWI+bjwvc3ViPiIgYXMgT3JiCmNsYXNzIERvY2sKT3JiIC0tPiBEb2NrCkBlbmR1bWwK",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "boundary_shadow_13",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_shadow_13.puml",
+      "remote_name": "boundary_shadow_13.puml",
+      "source_sha256": "b79f79a9e5871414650ec142850fee900dbf2d6eb8182ad87dec3a4d668bce58",
+      "bytes": 137,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDEzCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgpib3VuZGFyeSAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "boundary_shadow_neg3",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_shadow_neg3.puml",
+      "remote_name": "boundary_shadow_neg3.puml",
+      "source_sha256": "012c72ba055df4e8690d9b3997fc809e49008d52872848a96b200920b57e1cb8",
+      "bytes": 137,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIC0zCiBMaW5lVGhpY2tuZXNzIDMKfQo8L3N0eWxlPgpib3VuZGFyeSAibVxuPHN1Yj5uPC9zdWI+IiBhcyBPcmIKY2xhc3MgRG9jawpPcmIgLS0+IERvY2sKQGVuZHVtbAo=",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "mechanisms": [
+        "class-boundary-fashion-shadow",
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope"
+      ]
+    },
+    {
+      "name": "boundary_degenerate_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_degenerate_0.puml",
+      "remote_name": "boundary_degenerate_0.puml",
+      "source_sha256": "ebcb852a7bbf5320ae6ecf59b0b5e0225b7c9b204b83970b367e6cdbc15533e6",
+      "bytes": 127,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDAKfQo8L3N0eWxlPgpib3VuZGFyeSAiPHNpemU6MjU+dG9wPC9zaXplPlxuXG48c3ViPmVuZDwvc3ViPiIgYXMgT3JiIDw8c21hbGw+PgpAZW5kdW1sCg==",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "boundary_degenerate_11",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/boundary_degenerate_11.puml",
+      "remote_name": "boundary_degenerate_11.puml",
+      "source_sha256": "1d258fd2c59dd32d87713f87fac9f27a86d4a69e0c1d8a9e487a76bb12d791cb",
+      "bytes": 128,
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewogU2hhZG93aW5nIDExCn0KPC9zdHlsZT4KYm91bmRhcnkgIjxzaXplOjI1PnRvcDwvc2l6ZT5cblxuPHN1Yj5lbmQ8L3N1Yj4iIGFzIE9yYiA8PHNtYWxsPj4KQGVuZHVtbAo=",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "mechanisms": [
+        "class-description-positioned-stripes",
+        "class-description-svek-envelope",
+        "class-description-stereotype-margin-envelope",
+        "class-description-header-envelope-ownership"
+      ]
+    },
+    {
+      "name": "class_generic_contrast",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/class_generic_contrast.puml",
+      "remote_name": "class_generic_contrast.puml",
+      "source_sha256": "f6b6d171e45133e26969b35d131b5d2f25c280bed00149aacdd4aef4867cc7dd",
+      "bytes": 93,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzICI8c2l6ZToyMz5IZWFkZXI8L3NpemU+IiBhcyBPcmIKY2xhc3MgIlBlZXI8VD4iIGFzIFBlZXIKT3JiIC0tPiBQZWVyCkBlbmR1bWwK",
+      "axes": [
+        "image owner",
+        "generic-looking markup",
+        "native peer"
+      ],
+      "mechanisms": [
+        "class-description-header-envelope-ownership",
+        "class-description-positioned-stripes"
+      ]
+    },
+    {
+      "name": "component_generic_contrast",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/component_generic_contrast.puml",
+      "remote_name": "component_generic_contrast.puml",
+      "source_sha256": "e855a94acecd3cd9f7a47413c209c5f82e663957aaf88e8de72d83603256e8b1",
+      "bytes": 97,
+      "source_base64": "QHN0YXJ0dW1sCmNvbXBvbmVudCAiPHNpemU6MjM+SGVhZGVyPC9zaXplPiIgYXMgT3JiCmNsYXNzICJQZWVyPFQ+IiBhcyBQZWVyCk9yYiAtLT4gUGVlcgpAZW5kdW1sCg==",
+      "axes": [
+        "image owner",
+        "generic-looking markup",
+        "native peer"
+      ],
+      "mechanisms": [
+        "class-description-header-envelope-ownership",
+        "class-description-positioned-stripes"
+      ]
+    },
+    {
+      "name": "rectangle_generic_contrast",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/rectangle_generic_contrast.puml",
+      "remote_name": "rectangle_generic_contrast.puml",
+      "source_sha256": "b657067a7fad50f754e9c327b57bee3fac1d99060315cc3d1e1fef29798244b7",
+      "bytes": 97,
+      "source_base64": "QHN0YXJ0dW1sCnJlY3RhbmdsZSAiPHNpemU6MjM+SGVhZGVyPC9zaXplPiIgYXMgT3JiCmNsYXNzICJQZWVyPFQ+IiBhcyBQZWVyCk9yYiAtLT4gUGVlcgpAZW5kdW1sCg==",
+      "axes": [
+        "image owner",
+        "generic-looking markup",
+        "native peer"
+      ],
+      "mechanisms": [
+        "class-description-header-envelope-ownership",
+        "class-description-positioned-stripes"
+      ]
+    },
+    {
+      "name": "url_note_replace",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_note_replace.puml",
+      "remote_name": "url_note_replace.puml",
+      "source_sha256": "60a4da10269debf2ffa3e03a39cc3ff765f85ba78da0373a26a161b70a5ce0ba",
+      "bytes": 173,
+      "source_base64": "QHN0YXJ0dW1sCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgTWVtbyBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvb2xke09sZH1dXQp1cmxmb3IgTWVtbyBpcyBbWyJkb2Mgd2l0aCBzcGFjZSJ7TmV3fSBjYXB0aW9uXV0Kc2tpbnBhcmFtIHRvcHVybCBodHRwczovL2xhdGUuZXhhbXBsZS8KQGVuZHVtbAo=",
+      "axes": [
+        "existing owner kind",
+        "replacement command",
+        "optional words/no gap"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_class_replace",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_class_replace.puml",
+      "remote_name": "url_class_replace.puml",
+      "source_sha256": "172d4929fa8ce580c4e0512481e9f8c5b0acecb4bd3bea77225e37076c6f4910",
+      "bytes": 165,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEFuY2hvcgp1cmwgQW5jaG9yIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9vbGR7T2xkfV1dCnVybGZvciBBbmNob3IgaXMgW1siZG9jIHdpdGggc3BhY2Uie05ld30gY2FwdGlvbl1dCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9sYXRlLmV4YW1wbGUvCkBlbmR1bWwK",
+      "axes": [
+        "existing owner kind",
+        "replacement command",
+        "optional words/no gap"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_group_replace",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_group_replace.puml",
+      "remote_name": "url_group_replace.puml",
+      "source_sha256": "b56a0d07ca9db039f20cf5b014a6caa738254a52748b1a03efc5be438976b6e1",
+      "bytes": 184,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgSGFyYm9yIHsKY2xhc3MgQW5jaG9yCn0KdXJsIEhhcmJvciBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvb2xke09sZH1dXQp1cmxmb3IgSGFyYm9yIGlzIFtbImRvYyB3aXRoIHNwYWNlIntOZXd9IGNhcHRpb25dXQpza2lucGFyYW0gdG9wdXJsIGh0dHBzOi8vbGF0ZS5leGFtcGxlLwpAZW5kdW1sCg==",
+      "axes": [
+        "existing owner kind",
+        "replacement command",
+        "optional words/no gap"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_form_tooltip",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_tooltip.puml",
+      "remote_name": "url_form_tooltip.puml",
+      "source_sha256": "35ecc0c600d27c6fa869e2e22a5cf50bc5bce4a6a72725495549bff1a6cbed56",
+      "bytes": 153,
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9wcmVmaXguZXhhbXBsZS8KY2xhc3MgQW5jaG9yCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgZm9yIE1lbW8gaXMgW1t7b3V0ZXIge25lc3RlZH0gdGlwfV1dCk1lbW8gLi4gQW5jaG9yCkBlbmR1bWwK",
+      "axes": [
+        "UrlBuilder alternative",
+        "tooltip",
+        "topurl"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_form_tooltip_label",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_tooltip_label.puml",
+      "remote_name": "url_form_tooltip_label.puml",
+      "source_sha256": "e165f6b2863b33e10538af459a1de3b59054d09e212b65f2620bd9091c619536",
+      "bytes": 153,
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9wcmVmaXguZXhhbXBsZS8KY2xhc3MgQW5jaG9yCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgZm9yIE1lbW8gaXMgW1t7SGludH0gdmlzaWJsZSBsYWJlbF1dCk1lbW8gLi4gQW5jaG9yCkBlbmR1bWwK",
+      "axes": [
+        "UrlBuilder alternative",
+        "tooltip_label",
+        "topurl"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_form_quoted",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_quoted.puml",
+      "remote_name": "url_form_quoted.puml",
+      "source_sha256": "8d04043c4d814c5376a3decfe13618248278536a6996513f14db43718018e7f5",
+      "bytes": 158,
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9wcmVmaXguZXhhbXBsZS8KY2xhc3MgQW5jaG9yCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgZm9yIE1lbW8gaXMgW1siYSBiP3E9eCZ2PXkie2hpbnR9IGxhYmVsXV0KTWVtbyAuLiBBbmNob3IKQGVuZHVtbAo=",
+      "axes": [
+        "UrlBuilder alternative",
+        "quoted",
+        "topurl"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_form_scheme_upper",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_scheme_upper.puml",
+      "remote_name": "url_form_scheme_upper.puml",
+      "source_sha256": "60cbbd49d311a1a66019515b8502541032cd345df0921b8722124a0bd6689d4e",
+      "bytes": 154,
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9wcmVmaXguZXhhbXBsZS8KY2xhc3MgQW5jaG9yCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgZm9yIE1lbW8gaXMgW1tIVFRQUzovL2V4YW1wbGUub3JnL2FdXQpNZW1vIC4uIEFuY2hvcgpAZW5kdW1sCg==",
+      "axes": [
+        "UrlBuilder alternative",
+        "scheme_upper",
+        "topurl"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_form_file",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_file.puml",
+      "remote_name": "url_form_file.puml",
+      "source_sha256": "4c1854e285d2b95f752bec657d873ed064293dc6552dc0e6ded41bb23bace5ec",
+      "bytes": 147,
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9wcmVmaXguZXhhbXBsZS8KY2xhc3MgQW5jaG9yCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgZm9yIE1lbW8gaXMgW1tmaWxlOi90bXAvbmFtZV1dCk1lbW8gLi4gQW5jaG9yCkBlbmR1bWwK",
+      "axes": [
+        "UrlBuilder alternative",
+        "file",
+        "topurl"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_form_empty_tip",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_empty_tip.puml",
+      "remote_name": "url_form_empty_tip.puml",
+      "source_sha256": "4651cccde445a4b4304d02f16f9fba59c7d5aba951290f78c9839f94f80ca55a",
+      "bytes": 139,
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9wcmVmaXguZXhhbXBsZS8KY2xhc3MgQW5jaG9yCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgZm9yIE1lbW8gaXMgW1twYXRoe31dXQpNZW1vIC4uIEFuY2hvcgpAZW5kdW1sCg==",
+      "axes": [
+        "UrlBuilder alternative",
+        "empty_tip",
+        "topurl"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_form_nested_tip",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_form_nested_tip.puml",
+      "remote_name": "url_form_nested_tip.puml",
+      "source_sha256": "1fd3a60fae074d05989d645f20f3987e0f8311f3a615023b4ccd985cbc6f8c48",
+      "bytes": 151,
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9wcmVmaXguZXhhbXBsZS8KY2xhc3MgQW5jaG9yCm5vdGUgIm1lbW8gYm9keSIgYXMgTWVtbwp1cmwgZm9yIE1lbW8gaXMgW1twYXRoe2Ege25lc3RlZH0gYn1dXQpNZW1vIC4uIEFuY2hvcgpAZW5kdW1sCg==",
+      "axes": [
+        "UrlBuilder alternative",
+        "nested_tip",
+        "topurl"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_unique_crosscontext",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml",
+      "remote_name": "url_unique_crosscontext.puml",
+      "source_sha256": "583100eba2dc91e2fbaf5c53e3577218761a53a655a47e287bc8571d1e993cb1",
+      "bytes": 133,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgRmlyc3Qgewpub3RlICJtZW1vIGJvZHkiIGFzIE1lbW8KfQpwYWNrYWdlIFNlY29uZCB7CmNsYXNzIEFuY2hvcgp1cmwgTWVtbyBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvdW5pcXVlXV0KfQpAZW5kdW1sCg==",
+      "axes": [
+        "unique shortname",
+        "other current context"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_ambiguous_current",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_ambiguous_current.puml",
+      "remote_name": "url_ambiguous_current.puml",
+      "source_sha256": "ec6ae73b4a9ed99aa11fb9fe7e535ca69358fa83c2364a838dc9444801abbce6",
+      "bytes": 147,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgRmlyc3Qgewpub3RlICJvbmUiIGFzIE1lbW8KfQpwYWNrYWdlIFNlY29uZCB7Cm5vdGUgInR3byIgYXMgTWVtbwp1cmwgTWVtbyBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvY3VycmVudF1dCn0KY2xhc3MgQW5jaG9yCkBlbmR1bWwK",
+      "axes": [
+        "ambiguous shortname",
+        "current context"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_ambiguous_root",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_ambiguous_root.puml",
+      "remote_name": "url_ambiguous_root.puml",
+      "source_sha256": "d29919ae80f9f3015386f0cac47b1c585fdb36c7ae95f28d353ddc508dcb7660",
+      "bytes": 131,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgRmlyc3Qgewpub3RlICJvbmUiIGFzIE1lbW8KfQpwYWNrYWdlIFNlY29uZCB7Cm5vdGUgInR3byIgYXMgTWVtbwp9CnVybCBNZW1vIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9yb290XV0KQGVuZHVtbAo=",
+      "axes": [
+        "ambiguous shortname",
+        "absent current-context entity"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_forward",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_forward.puml",
+      "remote_name": "url_forward.puml",
+      "source_sha256": "18dc943379d8cca1090b0ff5e5247b198237277e681b6a24bc14aadedca26264",
+      "bytes": 93,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEFuY2hvcgp1cmwgTWVtbyBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvZm9yd2FyZF1dCm5vdGUgImxhdGVyIiBhcyBNZW1vCkBlbmR1bWwK",
+      "axes": [
+        "command order",
+        "missing target"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_trailing",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_trailing.puml",
+      "remote_name": "url_trailing.puml",
+      "source_sha256": "b5f4c94c10e32ba1c87eb1d95c428e35e4297da27124f903e929284541760e7a",
+      "bytes": 76,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEFuY2hvcgp1cmwgQW5jaG9yIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9dXSB0cmFpbGluZwpAZW5kdW1sCg==",
+      "axes": [
+        "anchoring",
+        "existing class"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_inline_note",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_inline_note.puml",
+      "remote_name": "url_inline_note.puml",
+      "source_sha256": "dcc3e4b8973466d3f23a42a2ab1755df5726c94e81fce7e15cccb5a64da115f6",
+      "bytes": 76,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEFuY2hvcgpub3RlICJtZW1vIiBhcyBNZW1vIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9dXQpAZW5kdW1sCg==",
+      "axes": [
+        "declaration/command ownership",
+        "inline negative"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_empty",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_empty.puml",
+      "remote_name": "url_empty.puml",
+      "source_sha256": "7d01eb0a15e2b44654344b2bbec3cd61156a8dd5001c221f31b57026f443dc8c",
+      "bytes": 47,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEFuY2hvcgp1cmwgQW5jaG9yIFtbXV0KQGVuZHVtbAo=",
+      "axes": [
+        "strict empty URL",
+        "existing class"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_smart_quotes",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_smart_quotes.puml",
+      "remote_name": "url_smart_quotes.puml",
+      "source_sha256": "735956c5edcf6c07ab859a7850fba31166faa9b126d31de37e614e22c4278bac",
+      "bytes": 98,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEFuY2hvcgpub3RlICJtZW1vIiBhcyBNZW1vCnVybCDigJxNZW1v4oCdIFtb4oCcZG9jIHdpdGggc3BhY2Vz4oCde0hpbnR9XV0KQGVuZHVtbAo=",
+      "axes": [
+        "Java %g smart quotation",
+        "quoted code and URL"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "group_single_False",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/group_single_False.puml",
+      "remote_name": "group_single_False.puml",
+      "source_sha256": "a141b84d8a9415d6a12c6326b83b77e269724bdd3940bf164b966770ce7bc091",
+      "bytes": 116,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgRmxlZXQgewpjbGFzcyBWZXNzZWwKfQpjbGFzcyBQaWVyCm5vdGUgcmlnaHQgb2YgRmxlZXQgW1todHRwczovL2V4YW1wbGUub3JnL21hcF1dIDogY2hhcnQKQGVuZHVtbAo=",
+      "axes": [
+        "note command form",
+        "group external linkage"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark"
+      ]
+    },
+    {
+      "name": "group_single_True",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/group_single_True.puml",
+      "remote_name": "group_single_True.puml",
+      "source_sha256": "8d5c0271a36fefd2634a2eadd702247df8b6087981702864c1d11400577d0bd0",
+      "bytes": 131,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgRmxlZXQgewpjbGFzcyBWZXNzZWwKfQpjbGFzcyBQaWVyCm5vdGUgcmlnaHQgb2YgRmxlZXQgW1todHRwczovL2V4YW1wbGUub3JnL21hcF1dIDogY2hhcnQKRmxlZXQgLS0+IFBpZXIKQGVuZHVtbAo=",
+      "axes": [
+        "note command form",
+        "group external linkage"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark"
+      ]
+    },
+    {
+      "name": "group_multi_False",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/group_multi_False.puml",
+      "remote_name": "group_multi_False.puml",
+      "source_sha256": "d893c204b7a6fc31a27fcddfa628c61be7ac61c0b7b097176d84fa2680402f62",
+      "bytes": 123,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgRmxlZXQgewpjbGFzcyBWZXNzZWwKfQpjbGFzcyBQaWVyCm5vdGUgcmlnaHQgb2YgRmxlZXQgW1todHRwczovL2V4YW1wbGUub3JnL21hcF1dCmNoYXJ0CmVuZCBub3RlCkBlbmR1bWwK",
+      "axes": [
+        "note command form",
+        "group external linkage"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark"
+      ]
+    },
+    {
+      "name": "group_multi_True",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/group_multi_True.puml",
+      "remote_name": "group_multi_True.puml",
+      "source_sha256": "c24471c4ec451e366d2b714daa1cbac901ca6f406e74e13dc3e0770401d0bc0f",
+      "bytes": 138,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgRmxlZXQgewpjbGFzcyBWZXNzZWwKfQpjbGFzcyBQaWVyCm5vdGUgcmlnaHQgb2YgRmxlZXQgW1todHRwczovL2V4YW1wbGUub3JnL21hcF1dCmNoYXJ0CmVuZCBub3RlCkZsZWV0IC0tPiBQaWVyCkBlbmR1bWwK",
+      "axes": [
+        "note command form",
+        "group external linkage"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark"
+      ]
+    }
+  ]
+}

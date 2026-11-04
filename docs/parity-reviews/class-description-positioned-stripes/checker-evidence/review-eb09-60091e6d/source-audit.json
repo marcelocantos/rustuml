@@ -1,0 +1,231 @@
+{
+  "candidate": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "production": "d84b89cd8ee2ddd64ac71863004ec6ee84b1c4cd",
+  "before": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": "T3 independent review 60091e6d; gpt-6-astra high, Codex harness",
+  "chronology": "All eight account commits are ancestors of d84b89cd, all are cited by its message, and every account has identical bytes at candidate. This proves committed order, not that draft implementation work had not begun: corrective accounts explicitly describe v1/v3 results. Those drafts are preserved by maker. The three corrective accounts missing mechanism fields remain unchanged. Candidate shipping files exactly match d84b89cd. All 584 files in original independent commit5416610 retain identical bytes.",
+  "mechanisms": {
+    "class-description-positioned-stripes": {
+      "java": [
+        "klimt.creole.legacy.StripeSimple#getAtoms",
+        "klimt.creole.Sea#add,doAlign,translateMinYto,getHeight",
+        "klimt.creole.legacy.AtomText#calculateDimensionSlow,drawU,getStartingAltitude",
+        "klimt.font.FontPosition#getSpace,mute",
+        "klimt.drawing.LimitFinder#drawText"
+      ],
+      "rust": [
+        "text_render.rs::PositionedStripe::new,emit",
+        "class.rs::DescriptionText::new,emit,bounds",
+        "class.rs::description_text,description_text_size"
+      ],
+      "observations": [
+        "Ordinary atom formulas agree with Java: effective font size is nominal minus3 clamped2 for sub/sup; altitude is +3/-6; preferred height clamps10; bottom alignment followed by min-top normalization; UText baseline uses effective ascent; painted vertical extrema are baseline-height+1.5 and baseline+1.5. Tabs advance within the atom, and text parts alone contribute LimitFinder extrema.",
+        "Stored runs contain reduced size with baseline shift cleared. emit supplies identical own/line drop to legacy serializer, so no second font-position shift or 1/256 resnap is applied. Width is measured before trim, while stored emitted run is trimmed, matching measurement/serialization separation.",
+        "The proposed tag-only blank/cross-line-font counterexample did NOT disprove the mechanism: classmode_actor_blankstyle and classmode_boundary_blankstyle match Java, including the14px space atom and subsequent14px line. Tab-only and mixed-size/sub/sup controls also pass. This reviewer retracts the speculative blank-font-state defect; the independently observed mixed-family failure comes from the inherited explicit-monospace metric override instead.",
+        "The API stores positions within each temporary DescriptionText, not for the entity lifetime. Preferred dimensions, painting, minima, maxima each recreate stripes. render_description_leaf and entity_painted_extent additionally call description_text_size and then description_text, doing the same parse/measure work twice. Shared formulas reduce drift but the claim of a single persisted model across all phases is stronger than the implementation. No functional defect is inferred from repetition alone."
+      ]
+    },
+    "class-description-stereotype-font": {
+      "java": [
+        "svek.image.EntityImageDescription constructor style/styleTitle/styleStereo and fc/fcTitle/fcStereo",
+        "skin/plantuml.skin stereotype defaults"
+      ],
+      "rust": [
+        "class.rs::ClassFontOverrides::from_diagram_for_entity",
+        "class.rs::DescriptionLeafStyle::text_base"
+      ],
+      "observations": [
+        "Independent stereotype family,size,bold,italic,color fields now feed both measurement and emission. Default italic is replaced by resolved fontStyle, not ORed onto inherited bold. However the shared metric family maps logical Serif to Sans; the two maker Serif style controls remain whole-input failures. Style signature and font availability equivalence are not established by attribute equality alone."
+      ]
+    },
+    "class-description-stereotype-margin-envelope": {
+      "java": [
+        "svek.image.EntityImageDescription withMargin(stereo,1,0)",
+        "klimt.shape.TextBlockMarged#calculateDimension,drawU",
+        "klimt.drawing.LimitFinder#drawEmpty"
+      ],
+      "rust": [
+        "class.rs::DescriptionText::stereotype_bounds",
+        "class.rs::render_description_leaf",
+        "class.rs::entity_painted_extent,entity_frontier_min"
+      ],
+      "observations": [
+        "The margin wrapper contributes UEmpty(width+2,height), and text is translated by1. The new bounds union records both, including negative ink minima and text exceeding preferred height. The emitter's extra1 is consistent with centered wrapped width. Empty stereotype vector retains infinite empty bounds and contributes nothing to min/max operations. Preferred width+2 is calculated in three call sites; it is sourced but duplicated."
+      ]
+    },
+    "class-boundary-fashion-shadow": {
+      "java": [
+        "decoration.symbol.USymbolBoundary#getDrawing",
+        "klimt.Fashion#isShadowing",
+        "svek.Boundary#drawU,calculateDimension",
+        "skin.ActorStickMan",
+        "klimt.drawing.LimitFinder#drawEllipse,drawUPath"
+      ],
+      "rust": [
+        "class.rs::parse_shadowing_delta",
+        "class.rs::ClassFontOverrides::from_diagram_for_entity",
+        "class.rs::render_description_leaf",
+        "class.rs::entity_painted_extent,entity_frontier_min"
+      ],
+      "observations": [
+        "Java Fashion.isShadowing tests delta>0. However that alone is not the input contract: Style.getShadowing calls ValueImpl.asDoubleDefaultTo, which extracts digits and dots, so style Shadowing -3 becomes3 before Boundary normalizes it to4. Rust parse_shadowing_delta parses -3 and clamps to0, dropping both filters. Actor -3 also differs because Java style conversion yields3 while Rust yields0. Positive, fractional and zero cases match in both actor/boundary controls; the signed-style spelling is a real whole-input failure, not a native/environment effect.",
+        "Boundary constants4,12,17 derive from its fields; preferred49x32=2*margin+left+2*radius and2*margin+2*radius. Actor59 is16+27+15+1, arms/legs half-width13. Ellipse LimitFinder maximum includes -1+2*shadow, paths have no shadow expansion. No native change or fault test is involved."
+      ]
+    },
+    "class-description-svek-envelope": {
+      "java": [
+        "svek.SvekResult#calculateDimension",
+        "svek.EntityImageDegenerated#calculateDimension,drawU",
+        "svek.GraphvizImageBuilder degenerate selection"
+      ],
+      "rust": [
+        "class.rs::render_with_oracle_uid_origin",
+        "class.rs::render_plantuml_svg",
+        "class.rs::entity_frontier_min"
+      ],
+      "observations": [
+        "SvekResult uses painted MinMax, translates origin to6-min and adds15 to measured dimensions. Omitting a supplemental Graphviz preferred bounding rectangle for actor/boundary graphs is causally consistent. The full union still depends on existing edge, note and cluster measurements; this change does not establish those as correct.",
+        "Degenerated Java image translates by7 and adds14 to preferred dimensions, then paints its trailing UEmpty. Excluding degenerated actor from painted-min correction fixes the previous origin policy mismatch; preferred dimensions remain the source of its envelope."
+      ]
+    },
+    "class-description-header-envelope-ownership": {
+      "java": [
+        "svek.image.EntityImageDescription",
+        "svek.image.EntityImageClassHeader#drawU"
+      ],
+      "rust": [
+        "class.rs::render_plantuml_svg generic_right and generic_top branches"
+      ],
+      "observations": [
+        "All three generic-overhang unions now require native image ownership. Parsed generic-looking metadata is retained in descriptions but no longer manufactures a native generic badge extent. Native class headers still take the original path. No label-value or fixture-name branching was added."
+      ]
+    },
+    "class-command-url-named-quark": {
+      "java": [
+        "classdiagram.command.CommandUrl#getRegexConcat,executeArg",
+        "net.atmp.CucaDiagram#quarkInContextSafe",
+        "abel.Entity#addUrl"
+      ],
+      "rust": [
+        "parse/class.rs::parse_line,try_url,resolve_quark_path"
+      ],
+      "observations": [
+        "Anchored command is tried after note and before meta. It mutates existing entity/package/note URL fields and creates no entity/UID. Entity.addUrl replaces the Java URL, so replacement is correct. Recovered named-note controls retain class, note and relationships in the independent YAML captures.",
+        "The reused resolver differs from Java: unique lookup must reject the current group itself and fall back to its child; Rust does not. Root entity_by_path early return can also bypass Java context resolution. Supplemental current-group, root/ambiguous and namespace controls probe these exact branches; this is source evidence, not a blanket verdict on every URL control."
+      ]
+    },
+    "class-command-url-builder-context": {
+      "java": [
+        "url.UrlBuilder#getRegexp,getUrl,withTopUrl",
+        "regex.Pattern2 static substitutions",
+        "net.atmp.CucaDiagram#badName,quarkInContextSafe"
+      ],
+      "rust": [
+        "parse/class.rs::try_url BUILDERS",
+        "parse/class.rs::split_identity,resolve_quark_path"
+      ],
+      "observations": [
+        "The five strict alternatives and prefix exceptions http:/https:/file: follow Java ordering. Tooltip-only alternatives deliberately bypass topurl. UrlBuilder retains labels internally though named entity drawing uses URL and tooltip.",
+        "Java %g accepts ASCII, curly double quotes and its invisible quote token; Rust patterns encode only ASCII double quotes. This is an independently identified grammar gap. split_identity also filters empty components, whereas Java badName rejects malformed separator paths. Smart-quote and repeated-separator controls preserve raw statuses and cannot be accepted by label-only DOM checks."
+      ]
+    }
+  },
+  "unchanged_emit_text": "Diff adds PositionedStripe and tests only; existing emit_text, helpers and existing caller text are byte-unchanged. The new unit test calls the same implementation before/after constructing a stripe and cannot itself establish cross-revision compatibility. Independent bounded existing CLI runs establish byte-identical SVG and models for28 controls across sequence/activity/state/object/mindmap/wbs/timing:24 frozen comparator matches and4 invalid Java references, not28 valid parity passes.",
+  "fixture_and_constant_audit": "No golden data inclusion/read, fixture-label conditions, per-branch-count ladders or coordinate SVG surgery found in the three-file production diff. Existing fonts/metrics, native/layout, baseline, comparator and skip inputs are byte-unchanged. New numerical formulas were traced to Sea, AtomText, FontPosition, Boundary, ActorStickMan, TextBlockMarged and LimitFinder, with provenance limitations declared per mechanism.",
+  "known_residue": "All six maker failures remain whole-input failures. Logical Serif family mismatch is independently visible in metric_family and raw SVG widths; independent stereotype attributes do not waive it. Java single-line CommandFactoryNoteOnEntity passes null URL while multiline parses URL, confirming ownership differs. Group-point geometry remains independently wrong even apart from anchors. Preserved exact-DOT reports scope a remote12.2 versus vendor/local point-size difference only to their captured inputs. No native task was resumed, no fault tooling ran, and no global environment explanation is asserted.",
+  "fresh_findings": [
+    {
+      "id": "F1-mixed-family",
+      "severity": "blocking",
+      "cases": [
+        "classmode_actor_mixedfamily",
+        "classmode_boundary_mixedfamily"
+      ],
+      "cause": "text_render::explicit_monospace_font_uses_surrounding_metrics forces <font:monospaced> to surrounding Sans metrics and preserves monospaced spelling. Java FontConfiguration.changeFamily obtains logical monospaced font and UFontImpl.getFamily maps its SVG name to monospace. At14px Java W/i widths both8.4287, Rust11.9766/4.0469; tab i x73.4297 vs41.4375. Different heights propagate to next stripe and peer position. Existing helper, newly consumed by PositionedStripe, remains an unsatisfied dependency."
+    },
+    {
+      "id": "F2-shadow-value-input",
+      "severity": "blocking",
+      "cases": [
+        "classmode_actor_shadow_neg3",
+        "classmode_boundary_shadow_neg3"
+      ],
+      "cause": "ValueImpl.extractDigitsAndDot(-3) yields3, whereas parse_shadowing_delta clamps -3 to0. Boundary Java emits both filtered primitives, Rust no filters. Actor preferred height also differs3px. Factory normalization on an already-positive value is supported; the complete source-to-Fashion model is not."
+    },
+    {
+      "id": "F3-note-only-url-dropped",
+      "severity": "blocking",
+      "cases": [
+        "url_note_replace"
+      ],
+      "cause": "The parser correctly replaces URL and tooltip and retains sole Note UID, but render_notes_only dispatches to render_single_named_note, which never calls note_anchor or emits an anchor. Java EntityImageNote draws the existing note-owned URL inside the entity group even on the degenerated path. Whole input mismatch despite correct YAML."
+    },
+    {
+      "id": "F4-url-smart-quotes",
+      "severity": "blocking",
+      "cases": [
+        "url_smart_quotes"
+      ],
+      "cause": "Pattern2 substitutes %g with ASCII plus curly/invisible double quotes. CommandUrl and UrlBuilder share this grammar. Rust try_url and BUILDERS accept only ASCII quotes. Java exits0 with valid diagram; Rust exits1 unrecognized command."
+    },
+    {
+      "id": "F5-current-group-self",
+      "severity": "blocking",
+      "cases": [
+        "url_current_group_self"
+      ],
+      "cause": "CucaDiagram.quarkInContextSafe(true) excludes byName==currentQuark and resolves its child; that child is absent so Java exits200. Rust ReuseUnique returns current group and try_url mutates its URL, exit0. This is invalid-input acceptance, not a valid SVG pass."
+    },
+    {
+      "id": "F6-invalid-path-filtered",
+      "severity": "blocking",
+      "cases": [
+        "url_bad_separator"
+      ],
+      "cause": "Java badName rejects the repeated separator; Rust split_identity filters empty components and updates Basin.Anchor, exit0 where Java exits200."
+    },
+    {
+      "id": "F7-root-scope-identity",
+      "severity": "blocking",
+      "cases": [
+        "url_root_class_ambiguous",
+        "url_root_class_note_ambiguous"
+      ],
+      "cause": "Java renders distinct Memo and Basin.Memo and attaches URL to the local class/note. Rust early root entity_by_path reuse merges class declarations or rejects the local named note as already created. Existing shared resolver/creation mismatch predates the new command; valid-input process error persists, and new URL consumption depends on that incorrect model."
+    },
+    {
+      "id": "F8-rooted-command-residue",
+      "severity": "blocking",
+      "cases": [
+        "url_rooted_existing"
+      ],
+      "cause": "Java retains extra entity Basin.url (ent0005) alongside Basin.Other and root Memo, while Rust retains only two entities. Both attach URL to root Memo. CommandLinkClass precedes CommandUrl in Java factory; the precise multi-pass side effect has not been instrumented. Retain full failure as unresolved command/model ownership, not geometry/environment."
+    },
+    {
+      "id": "F9-group-geometry-and-inline-ownership",
+      "severity": "blocking",
+      "cases": [
+        "group_single_False",
+        "group_single_True",
+        "group_multi_False",
+        "group_multi_True"
+      ],
+      "cause": "Single-line Java CommandFactoryNoteOnEntity passes null URL; Rust emits extra anchor. Multiline both own one anchor but Java note text x184.46 versus Rust182.46, canvas338 versus336 without external link and246 versus244 with link. Geometry fails independently of anchor ownership. No fresh native solve or global environment claim."
+    },
+    {
+      "id": "F10-native-and-alternate-factory-residue",
+      "severity": "blocking",
+      "cases": [
+        "class_generic_contrast",
+        "classmode_class_generic_contrast",
+        "actor_degenerate_0",
+        "actor_degenerate_11",
+        "boundary_degenerate_0",
+        "boundary_degenerate_11"
+      ],
+      "cause": "Native styled class retains a phantom generic header badge and divergent envelope; before/after raw CLI SVGs are unchanged. Four initial no-allowmixing degenerate probes select alternate Java SEQUENCE paths and remain mismatches. They do not decide the class-degenerate mechanism; all four corrected explicit-class degenerate probes pass."
+    }
+  ],
+  "fresh_model_ownership_note": "Java model claims above are limited to SVG metadata/anchor ownership and pinned source flow; no Java AST probe ran. Rust models are raw --ast Debug text and --yaml captures, never mislabeled as JSON or whole-SVG success."
+}

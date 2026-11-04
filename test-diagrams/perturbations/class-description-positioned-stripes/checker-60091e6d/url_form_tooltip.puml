@@ -1,0 +1,7 @@
+@startuml
+skinparam topurl https://prefix.example/
+class Anchor
+note "memo body" as Memo
+url for Memo is [[{outer {nested} tip}]]
+Memo .. Anchor
+@enduml

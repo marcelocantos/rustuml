@@ -1,0 +1,148 @@
+{
+  "source_sha256": "2dbf4e618d846396546a20ae4b99e620dfb1732f11ef5b13c26bdc1ba8509ac2",
+  "java_sha256": "31746a5c1417457976510b265668555a4c221b4f8ecb098634a3addebce40414",
+  "java": {
+    "name": "classmode_actor_stereowrapper_wide",
+    "remote_name": "classmode_actor_stereowrapper_wide.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml",
+    "source_sha256": "2dbf4e618d846396546a20ae4b99e620dfb1732f11ef5b13c26bdc1ba8509ac2",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.NnfnxHMR",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.NnfnxHMR",
+    "env_overrides": {},
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.2201038749917643,
+    "stdout_sha256": "31746a5c1417457976510b265668555a4c221b4f8ecb098634a3addebce40414",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "before": {
+    "index": 37,
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml",
+    "source_sha256": "2dbf4e618d846396546a20ae4b99e620dfb1732f11ef5b13c26bdc1ba8509ac2",
+    "java_sha256": "31746a5c1417457976510b265668555a4c221b4f8ecb098634a3addebce40414",
+    "status": "mismatch",
+    "outputs": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-before/0037-classmode_actor_stereowrapper_wide",
+    "cli": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "-tsvg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.012490272521972656,
+      "stdout_sha256": "486da843a9026a32898ba61a8e586b5ebc775a04b0181c544844d10541301124",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "ast": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "--ast",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.012659072875976562,
+      "stdout_sha256": "806fd73a81abed8c80d8f23a12c651a795a7fda4105bbc6d039c7d9255661d9b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "yaml": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "--yaml",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.012542963027954102,
+      "stdout_sha256": "8d2954669f98bc368ac83a8705789233cfa041115c8e27b816113d354bec338f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/check_svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-before/0037-classmode_actor_stereowrapper_wide/rust.svg"
+      ],
+      "exit": 1,
+      "seconds": 0.0033829212188720703,
+      "stderr": ""
+    }
+  },
+  "after": {
+    "index": 37,
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml",
+    "source_sha256": "2dbf4e618d846396546a20ae4b99e620dfb1732f11ef5b13c26bdc1ba8509ac2",
+    "java_sha256": "31746a5c1417457976510b265668555a4c221b4f8ecb098634a3addebce40414",
+    "status": "pass",
+    "outputs": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-after/0037-classmode_actor_stereowrapper_wide",
+    "cli": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "-tsvg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.012823820114135742,
+      "stdout_sha256": "32b8d578761543c0d54278fdc975c9e0ac07d51010afcfaca0d9c55cbdde7714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "ast": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "--ast",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.012379169464111328,
+      "stdout_sha256": "806fd73a81abed8c80d8f23a12c651a795a7fda4105bbc6d039c7d9255661d9b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "yaml": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "--yaml",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.013630390167236328,
+      "stdout_sha256": "8d2954669f98bc368ac83a8705789233cfa041115c8e27b816113d354bec338f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/check_svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/classmode_actor_stereowrapper_wide.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-after/0037-classmode_actor_stereowrapper_wide/rust.svg"
+      ],
+      "exit": 0,
+      "seconds": 0.0031201839447021484,
+      "stderr": ""
+    }
+  }
+}

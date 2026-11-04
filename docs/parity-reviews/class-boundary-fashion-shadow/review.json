@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-boundary-fashion-shadow",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A39457d79-0e4b-4e29-88ed-087e0951d23d",
+    "model": "gpt-6-astra high / Codex harness / T3 Code"
+  },
+  "account_commit": "98f3e5ce8b40c208079897334d189d7172e68a6c",
+  "implementation_commit": "d84b89cd8ee2ddd64ac71863004ec6ee84b1c4cd",
+  "candidate_revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "before_revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before CARGO_BUILD_JOBS=4 cargo build --release -p rustuml (at b074d2082cb9ed2b9460f79a32b170e31cc1ab5e)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-60091e6d/run_gates.py (at exact eb09cecbc90f5690c4a09bf49118f2feff8c1c12; all exact commands and env in evidence/gates.json)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-60091e6d/replay.py {before|after} {preserved|fresh|nonclass} (six actual invocations, raw argv in reports)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing Monkey Man relay only; three exact worker cwd/argv/environment manifests retained)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    }
+  ],
+  "findings": [
+    "Java Fashion.isShadowing tests delta>0. However that alone is not the input contract: Style.getShadowing calls ValueImpl.asDoubleDefaultTo, which extracts digits and dots, so style Shadowing -3 becomes3 before Boundary normalizes it to4. Rust parse_shadowing_delta parses -3 and clamps to0, dropping both filters. Actor -3 also differs because Java style conversion yields3 while Rust yields0. Positive, fractional and zero cases match in both actor/boundary controls; the signed-style spelling is a real whole-input failure, not a native/environment effect.",
+    "Boundary constants4,12,17 derive from its fields; preferred49x32=2*margin+left+2*radius and2*margin+2*radius. Actor59 is16+27+15+1, arms/legs half-width13. Ellipse LimitFinder maximum includes -1+2*shadow, paths have no shadow expansion. No native change or fault test is involved.",
+    "F2-shadow-value-input: ValueImpl.extractDigitsAndDot(-3) yields3, whereas parse_shadowing_delta clamps -3 to0. Boundary Java emits both filtered primitives, Rust no filters. Actor preferred height also differs3px. Factory normalization on an already-positive value is supported; the complete source-to-Fashion model is not.",
+    "Independent real release CLI replay: preserved1649 990\u21921004 matches; maker26 2\u219220; zero lost passes/new valid process errors. These1675 entries contain1601 unique source hashes; smaller cohorts overlap and are not additive.",
+    "Independent fresh86:36 pass,17 mismatch,2 valid-input process errors,31 invalid Java references.55 Java-valid inputs;36/55 match. The29 explicit-class controls are24 pass/5 mismatch. Original no-allowmixing controls remain preserved separately.",
+    "Main exact-candidate library tiers:11188/11251 product and10523/11251 assisted, both exit101. Guards4/6, clippy20 diagnostics remain red.1444 unit and34 CLI/doc/error tests plus fmt pass. Neither main tier is a CLI headline.",
+    "All prior584 independent evidence files are byte-identical. No historic account/review/pair or production/baseline/comparator/skip/target/policy was edited. Source account commit ancestry is established, but corrective-account descriptions of v1/v3 drafts prevent certifying a literal before-any-code-written chronology.",
+    "No broad gate was rerun after evidence-only additions. New pairs are collected by the existing parity_perturbations test; no green standing-perturbation claim or packet acceptance. No local JVM/javac/SSH, children, native fault/production work or shipping."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/class-description-positioned-stripes/checker-evidence/review-eb09-60091e6d",
+  "source_audit_locations": {
+    "java": [
+      "decoration.symbol.USymbolBoundary#getDrawing",
+      "klimt.Fashion#isShadowing",
+      "svek.Boundary#drawU,calculateDimension",
+      "skin.ActorStickMan",
+      "klimt.drawing.LimitFinder#drawEllipse,drawUPath"
+    ],
+    "rust": [
+      "class.rs::parse_shadowing_delta",
+      "class.rs::ClassFontOverrides::from_diagram_for_entity",
+      "class.rs::render_description_leaf",
+      "class.rs::entity_painted_extent,entity_frontier_min"
+    ],
+    "observations": [
+      "Java Fashion.isShadowing tests delta>0. However that alone is not the input contract: Style.getShadowing calls ValueImpl.asDoubleDefaultTo, which extracts digits and dots, so style Shadowing -3 becomes3 before Boundary normalizes it to4. Rust parse_shadowing_delta parses -3 and clamps to0, dropping both filters. Actor -3 also differs because Java style conversion yields3 while Rust yields0. Positive, fractional and zero cases match in both actor/boundary controls; the signed-style spelling is a real whole-input failure, not a native/environment effect.",
+      "Boundary constants4,12,17 derive from its fields; preferred49x32=2*margin+left+2*radius and2*margin+2*radius. Actor59 is16+27+15+1, arms/legs half-width13. Ellipse LimitFinder maximum includes -1+2*shadow, paths have no shadow expansion. No native change or fault test is involved."
+    ]
+  },
+  "scope": "Complete exact candidate with all retained failures; narrow supported formulas do not authorize extracted-patch acceptance."
+}

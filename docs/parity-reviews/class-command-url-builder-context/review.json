@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-command-url-builder-context",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A39457d79-0e4b-4e29-88ed-087e0951d23d",
+    "model": "gpt-6-astra high / Codex harness / T3 Code"
+  },
+  "account_commit": "00e00750b42f448ab45441c9d2cdd84b1ee5eb78",
+  "implementation_commit": "d84b89cd8ee2ddd64ac71863004ec6ee84b1c4cd",
+  "candidate_revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "before_revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before CARGO_BUILD_JOBS=4 cargo build --release -p rustuml (at b074d2082cb9ed2b9460f79a32b170e31cc1ab5e)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-60091e6d/run_gates.py (at exact eb09cecbc90f5690c4a09bf49118f2feff8c1c12; all exact commands and env in evidence/gates.json)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-60091e6d/replay.py {before|after} {preserved|fresh|nonclass} (six actual invocations, raw argv in reports)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing Monkey Man relay only; three exact worker cwd/argv/environment manifests retained)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_current.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_current.svg",
+      "axes": [
+        "ambiguous shortname",
+        "current context"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_root.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_root.svg",
+      "axes": [
+        "ambiguous shortname",
+        "absent current-context entity"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.svg",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_class_replace.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_class_replace.svg",
+      "axes": [
+        "existing owner kind",
+        "replacement command",
+        "optional words/no gap"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.svg",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_empty.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_empty.svg",
+      "axes": [
+        "strict empty URL",
+        "existing class"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_empty_tip.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_empty_tip.svg",
+      "axes": [
+        "UrlBuilder alternative",
+        "empty_tip",
+        "topurl"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_file.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_file.svg",
+      "axes": [
+        "UrlBuilder alternative",
+        "file",
+        "topurl"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_nested_tip.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_nested_tip.svg",
+      "axes": [
+        "UrlBuilder alternative",
+        "nested_tip",
+        "topurl"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_quoted.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_quoted.svg",
+      "axes": [
+        "UrlBuilder alternative",
+        "quoted",
+        "topurl"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_scheme_upper.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_scheme_upper.svg",
+      "axes": [
+        "UrlBuilder alternative",
+        "scheme_upper",
+        "topurl"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip.svg",
+      "axes": [
+        "UrlBuilder alternative",
+        "tooltip",
+        "topurl"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip_label.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip_label.svg",
+      "axes": [
+        "UrlBuilder alternative",
+        "tooltip_label",
+        "topurl"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_forward.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_forward.svg",
+      "axes": [
+        "command order",
+        "missing target"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_group_replace.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_group_replace.svg",
+      "axes": [
+        "existing owner kind",
+        "replacement command",
+        "optional words/no gap"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_inline_note.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_inline_note.svg",
+      "axes": [
+        "declaration/command ownership",
+        "inline negative"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_namespace_none.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_namespace_none.svg",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_note_replace.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_note_replace.svg",
+      "axes": [
+        "existing owner kind",
+        "replacement command",
+        "optional words/no gap"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.svg",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.svg",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "result": "fail",
+      "classification": "process_error",
+      "java_exit": 0,
+      "rust_exit": 1,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_rooted_existing.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_rooted_existing.svg",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.svg",
+      "axes": [
+        "Java %g smart quotation",
+        "quoted code and URL"
+      ],
+      "result": "fail",
+      "classification": "process_error",
+      "java_exit": 0,
+      "rust_exit": 1,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_trailing.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_trailing.svg",
+      "axes": [
+        "anchoring",
+        "existing class"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_unique_crosscontext.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_unique_crosscontext.svg",
+      "axes": [
+        "unique shortname",
+        "other current context"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": "see raw model/factory metadata"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_left.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_left.svg",
+      "axes": [
+        "retained maker source, not fresh",
+        "group note position and URL ownership"
+      ],
+      "result": "fail",
+      "classification": "retained mismatch",
+      "provenance": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/group_left.puml"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_top.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_group_top.svg",
+      "axes": [
+        "retained maker source, not fresh",
+        "group note position and URL ownership"
+      ],
+      "result": "fail",
+      "classification": "retained mismatch",
+      "provenance": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/group_top.puml"
+    }
+  ],
+  "findings": [
+    "The five strict alternatives and prefix exceptions http:/https:/file: follow Java ordering. Tooltip-only alternatives deliberately bypass topurl. UrlBuilder retains labels internally though named entity drawing uses URL and tooltip.",
+    "Java %g accepts ASCII, curly double quotes and its invisible quote token; Rust patterns encode only ASCII double quotes. This is an independently identified grammar gap. split_identity also filters empty components, whereas Java badName rejects malformed separator paths. Smart-quote and repeated-separator controls preserve raw statuses and cannot be accepted by label-only DOM checks.",
+    "F4-url-smart-quotes: Pattern2 substitutes %g with ASCII plus curly/invisible double quotes. CommandUrl and UrlBuilder share this grammar. Rust try_url and BUILDERS accept only ASCII quotes. Java exits0 with valid diagram; Rust exits1 unrecognized command.",
+    "F5-current-group-self: CucaDiagram.quarkInContextSafe(true) excludes byName==currentQuark and resolves its child; that child is absent so Java exits200. Rust ReuseUnique returns current group and try_url mutates its URL, exit0. This is invalid-input acceptance, not a valid SVG pass.",
+    "F6-invalid-path-filtered: Java badName rejects the repeated separator; Rust split_identity filters empty components and updates Basin.Anchor, exit0 where Java exits200.",
+    "F7-root-scope-identity: Java renders distinct Memo and Basin.Memo and attaches URL to the local class/note. Rust early root entity_by_path reuse merges class declarations or rejects the local named note as already created. Existing shared resolver/creation mismatch predates the new command; valid-input process error persists, and new URL consumption depends on that incorrect model.",
+    "F8-rooted-command-residue: Java retains extra entity Basin.url (ent0005) alongside Basin.Other and root Memo, while Rust retains only two entities. Both attach URL to root Memo. CommandLinkClass precedes CommandUrl in Java factory; the precise multi-pass side effect has not been instrumented. Retain full failure as unresolved command/model ownership, not geometry/environment.",
+    "Independent real release CLI replay: preserved1649 990\u21921004 matches; maker26 2\u219220; zero lost passes/new valid process errors. These1675 entries contain1601 unique source hashes; smaller cohorts overlap and are not additive.",
+    "Independent fresh86:36 pass,17 mismatch,2 valid-input process errors,31 invalid Java references.55 Java-valid inputs;36/55 match. The29 explicit-class controls are24 pass/5 mismatch. Original no-allowmixing controls remain preserved separately.",
+    "Main exact-candidate library tiers:11188/11251 product and10523/11251 assisted, both exit101. Guards4/6, clippy20 diagnostics remain red.1444 unit and34 CLI/doc/error tests plus fmt pass. Neither main tier is a CLI headline.",
+    "All prior584 independent evidence files are byte-identical. No historic account/review/pair or production/baseline/comparator/skip/target/policy was edited. Source account commit ancestry is established, but corrective-account descriptions of v1/v3 drafts prevent certifying a literal before-any-code-written chronology.",
+    "No broad gate was rerun after evidence-only additions. New pairs are collected by the existing parity_perturbations test; no green standing-perturbation claim or packet acceptance. No local JVM/javac/SSH, children, native fault/production work or shipping."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/class-description-positioned-stripes/checker-evidence/review-eb09-60091e6d",
+  "source_audit_locations": {
+    "java": [
+      "url.UrlBuilder#getRegexp,getUrl,withTopUrl",
+      "regex.Pattern2 static substitutions",
+      "net.atmp.CucaDiagram#badName,quarkInContextSafe"
+    ],
+    "rust": [
+      "parse/class.rs::try_url BUILDERS",
+      "parse/class.rs::split_identity,resolve_quark_path"
+    ],
+    "observations": [
+      "The five strict alternatives and prefix exceptions http:/https:/file: follow Java ordering. Tooltip-only alternatives deliberately bypass topurl. UrlBuilder retains labels internally though named entity drawing uses URL and tooltip.",
+      "Java %g accepts ASCII, curly double quotes and its invisible quote token; Rust patterns encode only ASCII double quotes. This is an independently identified grammar gap. split_identity also filters empty components, whereas Java badName rejects malformed separator paths. Smart-quote and repeated-separator controls preserve raw statuses and cannot be accepted by label-only DOM checks."
+    ]
+  },
+  "scope": "Complete exact candidate with all retained failures; narrow supported formulas do not authorize extracted-patch acceptance."
+}

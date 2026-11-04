@@ -1,0 +1,7 @@
+@startuml
+class Memo
+package Basin {
+class Other
+url .Memo [[https://example.org/rooted]]
+}
+@enduml
