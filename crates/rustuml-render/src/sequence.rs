@@ -3922,14 +3922,24 @@ fn sequence_lifelines(
     model
 }
 
-fn sequence_create_message_indices(events: &[Event]) -> HashMap<String, Vec<usize>> {
+fn sequence_ordinary_creation_messages(events: &[Event]) -> HashMap<String, Vec<usize>> {
     let mut result: HashMap<String, Vec<usize>> = HashMap::new();
     // Source parsing validates compatibility after return lowering. A caller
     // supplying an invalid model directly gets no invented creation ownership.
     if let Ok(owners) = sequence_create_attachments(events) {
         for (index, owner) in owners.into_iter().enumerate() {
             if let (Event::Create(id), Some(message)) = (&events[index], owner) {
-                result.entry(id.clone()).or_default().push(message);
+                // DrawableSetInitializer dispatches MessageExo to Step1MessageExo;
+                // Teoz dispatches it to CommunicationExoTile. Neither consumer
+                // draws an ordinary creation head or calls setCreate/goCreate.
+                // Attachment ownership remains in sequence_create_attachments
+                // and TeozHistory; this map is solely the ordinary head consumer.
+                if let Event::Message(message_event) = &events[message]
+                    && !matches!(message_event.from.as_str(), "[" | "]")
+                    && !matches!(message_event.to.as_str(), "[" | "]")
+                {
+                    result.entry(id.clone()).or_default().push(message);
+                }
             }
         }
     }
@@ -8364,7 +8374,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let teoz_history = diagram
         .teoz
         .then(|| TeozHistory::new(&diagram.events, &lifecycle_owner));
-    let create_msg_idx = sequence_create_message_indices(&diagram.events);
+    let create_msg_idx = sequence_ordinary_creation_messages(&diagram.events);
     // -----------------------------------------------------------------------
     // Phase 4: Pre-compute y positions for each event and vertical dimensions
     // -----------------------------------------------------------------------
@@ -16633,6 +16643,36 @@ mod tests {
     }
 
     #[test]
+    fn external_creation_keeps_attachment_without_ordinary_head_consumer() {
+        for teoz in [false, true] {
+            for arrow in ["[-> Born", "Born <-]", "[<- Born", "Born ->]"] {
+                let input = format!(
+                    "@startuml\n{}participant Seed\nactor Born\ncreate Born\n{arrow}: edge\ncreate Born\nSeed -> Born: internal\n@enduml",
+                    if teoz { "!pragma teoz true\n" } else { "" }
+                );
+                let diagram = rustuml_parser::parse::parse(&input).unwrap();
+                let rustuml_parser::diagram::Diagram::Sequence(sequence) = &diagram else {
+                    panic!("expected sequence");
+                };
+                let attached = sequence_create_attachments(&sequence.events).unwrap();
+                assert_eq!(attached.iter().flatten().count(), 2);
+                let external = attached.iter().flatten().next().copied().unwrap();
+                let heads = sequence_ordinary_creation_messages(&sequence.events);
+                assert_eq!(heads["Born"].len(), 1);
+                assert_ne!(heads["Born"][0], external);
+                let history =
+                    TeozHistory::new(&sequence.events, &vec![None; sequence.events.len()]);
+                assert!(history.items.iter().any(|item| {
+                    matches!(&item.life, Some((id, TeozLifeKind::Create, _)) if id == "Born")
+                        && item.owner == Some(external)
+                }));
+                let svg = crate::render_svg(&diagram);
+                assert!(!svg.is_empty());
+            }
+        }
+    }
+
+    #[test]
     fn repeated_creation_keeps_each_message_owner() {
         for source in ["Seed", "Other"] {
             let input = format!(
@@ -16642,7 +16682,7 @@ mod tests {
             let rustuml_parser::diagram::Diagram::Sequence(sequence) = diagram else {
                 panic!("expected sequence");
             };
-            let owners = sequence_create_message_indices(&sequence.events);
+            let owners = sequence_ordinary_creation_messages(&sequence.events);
             let indices = owners.get("Born").unwrap();
             assert_eq!(indices.len(), 3);
             assert!(indices.windows(2).all(|pair| pair[0] < pair[1]));
