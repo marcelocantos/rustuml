@@ -3188,6 +3188,15 @@ impl PreprocessContext {
                 }
                 .to_string()
             }
+            "filename" => {
+                // PlantUML's `%filename()` returns the source file name (basename
+                // without extension) when called from a real file. The picoweb /
+                // "From string" pipeline used to generate our goldens produces
+                // empty for this builtin (no source file). Return empty to match
+                // that golden behaviour; file-API callers would need to thread
+                // the actual filename through a separate channel.
+                String::new()
+            }
             "file_exists" => {
                 // Always return false — file system access is not permitted in the
                 // preprocessor (matches PlantUML sandboxed/server behaviour).
@@ -3698,6 +3707,16 @@ mod tests {
             .into_iter()
             .filter(|l| !l.is_empty())
             .collect()
+    }
+
+    #[test]
+    fn filename_without_source_environment_remains_empty() {
+        // Filename.executeReturnFunction returns empty when getenv("filename") is null.
+        let mut ctx = PreprocessContext::new(None, false);
+        assert_eq!(ctx.eval_expr_to_value("%filename()").to_display(), "");
+        assert!(ctx.error.is_none());
+        assert_eq!(ctx.substitute_vars("file: %filename()"), "file: ");
+        assert!(ctx.error.is_none());
     }
 
     #[test]
