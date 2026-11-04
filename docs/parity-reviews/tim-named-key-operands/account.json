@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-named-key-operands",
+  "rust_revision": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/expression/ShuntingYard.java:constructor",
+    "tim/expression/ReversePolishInterpretor.java:AFFECTATION",
+    "tim/EaterFunctionCall.java:analyze"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Expression named-key operands are resolved to values during preparation; plain-call named keys are literal variable names.",
+  "causal_divergence": "Rust strips every named key before preparation, merging Java distinct parser contracts.",
+  "planned_change": "Prepare the expression key using the same memory lookup as its operand token and retain its resulting key text; keep plain keys literal. Do not change expression argument snapshots or default capture.",
+  "perturbation_axes": [
+    "Global and local/default key shadowing",
+    "Expression versus plain invocation and mutation after key capture"
+  ],
+  "oracle_plan": [
+    "Preserved checker4 31 controls, full restored1516, exact source/model and unchanged actual CLI SVG comparator.",
+    "Compact new maker cases via parent checksummed T3 relay only; all outputs/errors retained.",
+    "Main release tiers once stabilized; parser/CLI/guards/touched formatting. No baselines, old records, renderer/date/reader changes or acceptance claim."
+  ]
+}

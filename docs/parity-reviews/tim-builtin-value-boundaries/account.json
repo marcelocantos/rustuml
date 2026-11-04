@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-value-boundaries",
+  "rust_revision": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/builtin/Upper.java:executeReturnFunction",
+    "tim/builtin/Lower.java:executeReturnFunction",
+    "tim/builtin/Chr.java:executeReturnFunction",
+    "tim/builtin/BoolVal.java:executeReturnFunction",
+    "tim/expression/TValue.java:toInt"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Builtin-specific conversions retain UTF-16 strings; Chr consumes TValue.toInt, BoolVal accepts exactly case-folded true/1/false/0 and otherwise fails.",
+  "causal_divergence": "The display adapter replaces isolated surrogates, parses string/JSON numerals for Chr, and has no BoolVal implementation despite registration.",
+  "planned_change": "Route these builtins through typed values before display conversion. Case-convert valid UTF-16 spans while retaining unmatched units; use Character.toChars code-point domain including BMP surrogate units and NUL fallback; implement BoolVal exact conversion/error. Audit all registered names against dispatch without implementing unrelated missing builtins.",
+  "perturbation_axes": [
+    "Surrogate split/rejoin through upper versus lower and ordinary multi-character case mappings",
+    "Integer/string/JSON character and boolean conversions, including invalid Boolean text"
+  ],
+  "oracle_plan": [
+    "Preserved checker4 31 controls, full restored1516, exact source/model and unchanged actual CLI SVG comparator.",
+    "Compact new maker cases via parent checksummed T3 relay only; all outputs/errors retained.",
+    "Main release tiers once stabilized; parser/CLI/guards/touched formatting. No baselines, old records, renderer/date/reader changes or acceptance claim."
+  ]
+}
