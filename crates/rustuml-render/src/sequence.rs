@@ -569,6 +569,8 @@ const CAPTION_FONT_SIZE: u32 = 14;
 const ARROW_SIZE: f64 = 10.0; // horizontal size of arrow polygon
 const ARROW_HALF_H: f64 = 4.0; // vertical half-height of arrow polygon
 const FILLED_ARROW_NOTCH: f64 = 4.0; // notch indent in filled arrow
+// ComponentRoseArrow#spaceCrossX; used by self-arrow decoration endpoints.
+const SELF_CROSS_SPACE: f64 = 6.0;
 // `ComponentRoseArrow` places dressing 1 at pos1=1 and dressing 2 at
 // pos2=width-2. Its CROSSX centre is another spaceCrossX(6)+half-width(5)
 // inward, yielding asymmetric offsets from the two spatial endpoints.
@@ -12417,6 +12419,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     );
                     let mut loop_right = active_anchor + SELF_MSG_EXTEND;
                     let mut reverse_return_stroke = None;
+                    let mut reverse_cross_left = None;
+                    let mut source_cross_left = active_anchor + SELF_CROSS_SPACE;
                     if reverse {
                         // ComponentRoseSelfArrow#drawLeftSide, account a519af2d.
                         // Its prefTextWidth is the component width, not the
@@ -12444,6 +12448,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             x1 -= indent - ACTIVATION_HALF_W;
                             x2 -= indent - ACTIVATION_HALF_W;
                         }
+                        // ComponentRoseSelfArrow#drawLeftSide applies CROSSX
+                        // endpoint shifts after the live-depth adjustment.
+                        let cross_shift =
+                            SELF_CROSS_SPACE + if level > 0 { indent } else { SELF_CROSS_SPACE };
+                        if has_source_cross {
+                            x1 += cross_shift;
+                        }
+                        if is_cross {
+                            x2 += cross_shift;
+                        }
                         let full_normal = !is_open && !is_cross && head_half.is_none();
                         let extra_line = if full_normal { 1.0 } else { 0.0 };
                         start_x = active_anchor + pref - (x1 + 1.0);
@@ -12453,6 +12467,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             x2 += 1.0;
                         }
                         special_return_tip = Some(active_anchor + pref - x2);
+                        source_cross_left =
+                            active_anchor + pref - (x1 + 1.0) - SELF_CROSS_SPACE / 2.0;
+                        reverse_cross_left =
+                            Some(active_anchor + pref - x2 - SELF_CROSS_SPACE / 2.0);
+                    } else if has_source_cross {
+                        // drawRightSide shifts x1 by twice spaceCrossX; painted
+                        // diagonals stay at spaceCrossX, independent of live delta.
+                        start_x += 2.0 * SELF_CROSS_SPACE;
                     }
                     let head_direction = if reverse { -1.0 } else { 1.0 };
                     let loop_bottom = draw_y + SELF_MSG_DROP;
@@ -12512,7 +12534,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // lifeline. Java places a 10px cross to the right of
                         // the self-loop anchor and starts the segment slightly
                         // inside that mark.
-                        active_anchor + ARROW_SIZE + 3.0
+                        special_return_tip.unwrap() + 2.0 * SELF_CROSS_SPACE
                     } else if let Some(tip_x) = special_return_tip {
                         // ComponentRoseSelfArrow#drawRightSide subtracts one
                         // from ASYNC x2 for the stroke, then restores it before
@@ -12540,9 +12562,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     )
                     .unwrap();
 
+                    // ComponentRoseSelfArrow draws solid CROSSX strokes after
+                    // the arrow body, independent of the body's dotted style.
+                    if has_source_cross {
+                        for (y1, y2) in [
+                            (draw_y - ARROW_SIZE / 2.0, draw_y + ARROW_SIZE / 2.0),
+                            (draw_y + ARROW_SIZE / 2.0, draw_y - ARROW_SIZE / 2.0),
+                        ] {
+                            write!(svg.buf, r##"<line style="stroke:{};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                                arrow_color, fmt_coord(source_cross_left), fmt_coord(source_cross_left + ARROW_SIZE),
+                                fmt_coord(y1), fmt_coord(y2)).unwrap();
+                        }
+                    }
                     // Arrow head at bottom-left
                     if is_cross {
-                        let cross_left = active_anchor + ARROW_SIZE - ARROW_HALF_H;
+                        let cross_left =
+                            reverse_cross_left.unwrap_or(active_anchor + SELF_CROSS_SPACE);
                         let cross_right = cross_left + ARROW_SIZE;
                         write!(
                             svg.buf,
