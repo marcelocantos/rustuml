@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-sub-before-function-buffering",
+  "rust_revision": "ba57d3c7275a688b1f1ac565551cdff08fc52d32",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:buildCodeIterator",
+    "tim/iterator/CodeIteratorSub.java:peek,next",
+    "tim/iterator/CodeIteratorReturnFunction.java:peek",
+    "tim/iterator/CodeIteratorProcedure.java:peek"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Comment-stripped subblock collection precedes function/procedure and legacy-body buffering. It registers and validates subblocks even inside uncalled definitions, then sends their located body through downstream collectors exactly once; later inclusion executes the stored body with preserved origins.",
+  "causal_divergence": "Only an already active sub collector precedes function buffering; new STARTSUB recognition comes later, so pending procedures consume the markers and hide registration/nesting until execution or forever.",
+  "planned_change": "Move both sub collection entry and active collection ahead of all function/procedure/legacy-body collection. Replay flattened located bodies into the same downstream stream, so definitions capture content without executing it early. Preserve external Sub.fromFile raw selection, comments, errors and source origins. No parser or error-output changes.",
+  "perturbation_axes": [
+    "Uncalled versus called functions/procedures with valid stored inclusion versus nested markers",
+    "Comments and inactive blocks, side-effect replay counts, declaration order and origin retention"
+  ],
+  "prior_evidence": "checker6 a3b48251354497c68eaa0b93a168d3ba5c455c0f; all prior accounts/reviews retained",
+  "oracle_plan": [
+    "Existing reference cohorts first; source/model/real CLI and unchanged comparator, negative XML/status separately.",
+    "Compact fresh inputs via immutable persistent-cache request through parent Monkey Man relay; no local Java/SSH.",
+    "Final stable parser/CLI, both library tiers, standing/guards/format/clippy once; actual nonzero gates retained, no self-review or acceptance."
+  ]
+}

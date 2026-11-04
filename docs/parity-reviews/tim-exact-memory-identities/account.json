@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-exact-memory-identities",
+  "rust_revision": "ba57d3c7275a688b1f1ac565551cdff08fc52d32",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TFunctionImpl.java:getNewMemory",
+    "tim/TMemoryLocal.java:putVariable,getVariable,removeVariable,forkFromGlobal",
+    "tim/TMemoryGlobal.java",
+    "tim/EaterAffectation.java:analyze",
+    "tim/EaterAffectationDefine.java:analyze",
+    "tim/builtin/GetVariableValue.java",
+    "tim/builtin/SetVariableValue.java",
+    "tim/VariableManager.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Exact variable spelling is the key from declaration and assignment through global/local/override storage, direct expression lookup, plain text expansion, builtin lookup, existence, and removal; b and $b never alias. Scope precedence and sibling-from-global frames retain typed values.",
+  "causal_divergence": "Prior correction preserved parameter matching but stripped dollars at storage, omitted bare expression/local lookup and maintained a second bare-variable map outside local-memory precedence.",
+  "planned_change": "Use one exact-key global memory with exact-key local frames. Preserve spelling at every ingress; route bare and dollar expression/text/builtin reads through the same precedence. Keep !define and SetVariableValue global scope, foreach global binding, explicit local overrides and defaults as captured typed values. Update undef/conditional paths consistently. No Unicode IntVal or external grammar expansion.",
+  "perturbation_axes": [
+    "Bare and dollar names coexisting through positional/default/named binding and builtin/direct/plain reads",
+    "Global versus explicit local versus sibling frames, mutation/removal and typed numeric-looking values"
+  ],
+  "prior_evidence": "checker6 a3b48251354497c68eaa0b93a168d3ba5c455c0f; all prior accounts/reviews retained",
+  "oracle_plan": [
+    "Existing reference cohorts first; source/model/real CLI and unchanged comparator, negative XML/status separately.",
+    "Compact fresh inputs via immutable persistent-cache request through parent Monkey Man relay; no local Java/SSH.",
+    "Final stable parser/CLI, both library tiers, standing/guards/format/clippy once; actual nonzero gates retained, no self-review or acceptance."
+  ]
+}
