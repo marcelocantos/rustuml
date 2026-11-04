@@ -1,0 +1,7 @@
+@startuml
+skinparam stereotypePosition bottom
+hide footbox
+control "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+control "Q" as Q <<longer classification>> #pink
+M -> Q: register
+@enduml

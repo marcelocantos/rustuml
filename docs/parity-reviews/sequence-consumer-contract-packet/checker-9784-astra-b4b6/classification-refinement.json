@@ -1,0 +1,7 @@
+{
+  "reason": "An IOException can occur while exporting a syntax error page containing VT. Classify Java exit200 error outcomes separately from exit0 exporter failures; an exception alone does not decide syntax validity.",
+  "cases": 534,
+  "java_invalid": 52,
+  "java_export_error": 8,
+  "rerender": false
+}

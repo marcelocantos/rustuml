@@ -1,0 +1,9 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+box"Aviary" #pink
+participant F
+end box
+F -> Juniper: hello
+@enduml

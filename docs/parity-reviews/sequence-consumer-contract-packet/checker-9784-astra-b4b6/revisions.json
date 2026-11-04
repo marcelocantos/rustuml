@@ -1,0 +1,9 @@
+{
+  "evidence_tip": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "before_evidence": "bce6bea405d8b5efd55136f4768117115e7f634f",
+  "before_production": "61e6aeed6eaf686b3497fbc696aadc03a64e69a2",
+  "after_production": "d491d4bda47faf90d4751484d45aa1387fb1b290",
+  "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+}
