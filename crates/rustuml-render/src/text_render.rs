@@ -47,15 +47,31 @@ pub struct TextBase<'a> {
     pub skip_underline: bool,
 }
 
+/// Project an actual text line, including a present empty line. Absent
+/// displays are handled by callers before asking to measure or paint a line;
+/// lexical `creole::parse_segments` deliberately keeps its zero-atom result.
+fn line_segments(content: &str, skip_underline: bool) -> Vec<Segment> {
+    let mut segments = if skip_underline {
+        creole::parse_segments_no_underline(content)
+    } else {
+        creole::parse_segments(content)
+    };
+    if segments.is_empty() {
+        // StripeSimple.getAtoms inserts a space after recursive commands have
+        // restored the surrounding configuration, also for an ordinary blank.
+        segments.push(Segment {
+            text: " ".to_string(),
+            style: Style::default(),
+        });
+    }
+    segments
+}
+
 /// Emit one or more `<text>` elements covering `content` with creole markup
 /// resolved. Writes to `buf`. Returns the total advance width.
 pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     emit_segments(buf, &segments, base)
 }
 
@@ -66,11 +82,7 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
 /// is consumed and the inner text falls back to the surrounding font.
 pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let mut segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let mut segments = line_segments(&content, base.skip_underline);
     for seg in &mut segments {
         seg.style.monospace = false;
     }
@@ -82,11 +94,7 @@ pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -
 /// one baseline; mixed font sizes/families can consume multiple oracle y slots.
 pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     if segments.is_empty() {
         return 1;
     }
@@ -118,11 +126,7 @@ pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
 /// safely override the line start.
 pub fn emitted_text_element_count(content: &str, base: &TextBase<'_>) -> usize {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     if segments.is_empty() {
         return 1;
     }
@@ -227,7 +231,7 @@ pub fn label_height(content: &str, font_size: f64) -> f64 {
 
 /// Height of `content` using the caller's base font family.
 pub fn label_height_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_text_height(font_size, metric_family(font_family));
     }
@@ -262,7 +266,7 @@ pub fn label_ascent(content: &str, font_size: f64) -> f64 {
 
 /// Ascent of `content` using the caller's base font family.
 pub fn label_ascent_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_ascent(font_size, metric_family(font_family));
     }
@@ -292,7 +296,7 @@ pub fn label_first_baseline_ascent_with_family(
     font_size: f64,
     font_family: &str,
 ) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_ascent(font_size, metric_family(font_family));
     }
@@ -332,7 +336,7 @@ pub(crate) fn label_limit_finder_height_with_family(
     font_size: f64,
     font_family: &str,
 ) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     let first_baseline = label_first_baseline_ascent_with_family(content, font_size, font_family);
     let Some(first) = segments.first() else {
         return first_baseline + 1.5;
@@ -421,11 +425,7 @@ fn sub_extra_space(segments: &[Segment]) -> f64 {
 /// total advance for layout before deciding `x`.
 pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     let mut advance = 0.0;
     for seg in &segments {
         advance = segment_advance(seg, base, advance);
@@ -1792,6 +1792,37 @@ mod tests {
         let blank = emit_text(&mut output, "<$missing>", &style);
         assert_eq!(blank, total_width(" ", &style));
         assert!(output.contains("&#160;"));
+    }
+
+    #[test]
+    fn present_empty_lines_share_the_restored_space_atom() {
+        for size in [8, 12, 24] {
+            let mut style = base(0.0, 20.0);
+            style.font_size = size;
+            style.bold = true;
+            let mut expected = String::new();
+            let width = emit_text(&mut expected, " ", &style);
+            for content in [
+                "",
+                "<$leaf>",
+                "<size:31></size>",
+                "<size:31><color:red><$leaf>",
+            ] {
+                let mut output = String::new();
+                assert_eq!(emit_text(&mut output, content, &style), width, "{content}");
+                assert_eq!(output, expected, "{content}");
+                assert_eq!(total_width(content, &style), width);
+                assert_eq!(
+                    label_height(content, size as f64),
+                    label_height(" ", size as f64)
+                );
+                assert_eq!(
+                    label_ascent(content, size as f64),
+                    label_ascent(" ", size as f64)
+                );
+                assert_eq!(emitted_text_element_count(content, &style), 1);
+            }
+        }
     }
 
     #[test]

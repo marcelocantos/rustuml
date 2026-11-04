@@ -26,13 +26,9 @@ use crate::style::Theme;
 use crate::text_render;
 
 const FONT_SIZE: f64 = 12.0;
+// plantuml.skin wbsDiagram Padding 10; SheetBlock1 uses the same padding
+// for preferred dimensions and painting (FtileBoxOld.createWbs).
 const PAD_X: f64 = 10.0;
-/// Exact box height: text height (14.1328125 at size 12) + 20px vertical
-/// padding.  Kept un-rounded so accumulated row offsets match PlantUML's
-/// per-coordinate HALF_UP rounding.
-const BOX_H: f64 = 34.1328125;
-/// Baseline offset inside a box: (box_h − text_height)/2 + ascent.
-const TEXT_BASELINE: f64 = 21.6015625;
 const MARGIN: f64 = 20.0;
 /// `ITFComposed.delta1x` / `Fork.delta1x` between sibling vertical stacks; also
 /// the length of an elbow stub line from a parent trunk to a child box edge.
@@ -51,8 +47,9 @@ const STROKE: &str = "#181818";
 struct Itf {
     label: String,
     fill: String,
-    text_w: f64,
     main_w: f64,
+    main_h: f64,
+    text_baseline: f64,
     /// Children that grow leftward (`--` prefix), in source order.
     left: Vec<Itf>,
     /// Children that grow rightward (`**` prefix), in source order.
@@ -84,8 +81,17 @@ fn coll_height(children: &[Itf]) -> f64 {
 }
 
 fn measure(node: &WbsNode, is_root: bool) -> Itf {
-    let text_w = pm::text_width(&node.label, FONT_SIZE, false);
-    let main_w = text_w + PAD_X * 2.0;
+    // FtileBoxOld measures and draws the same Creole SheetBlock. Keep the
+    // semantic run projection identical to emit_box, including consumed
+    // commands and styled font sizes; layout only sees its preferred size.
+    let main_w = text_render::measure(&node.label, FONT_SIZE, false) + PAD_X * 2.0;
+    let main_h = text_render::label_height(&node.label, FONT_SIZE) + PAD_X * 2.0;
+    let text_baseline = PAD_X
+        + text_render::label_first_baseline_ascent_with_family(
+            &node.label,
+            FONT_SIZE,
+            "sans-serif",
+        );
     let fill = node
         .color
         .as_deref()
@@ -108,19 +114,20 @@ fn measure(node: &WbsNode, is_root: bool) -> Itf {
 
     // ITFComposed.calculateDimension / ITFLeaf.calculateDimension.
     let (width, height) = if left.is_empty() && right.is_empty() {
-        (main_w, BOX_H)
+        (main_w, main_h)
     } else {
         let w = (main_w / 2.0).max(DELTA_X + coll_width(&left))
             + (main_w / 2.0).max(DELTA_X + coll_width(&right));
-        let h = BOX_H + coll_height(&left).max(coll_height(&right));
+        let h = main_h + coll_height(&left).max(coll_height(&right));
         (w, h)
     };
 
     Itf {
         label: node.label.clone(),
         fill,
-        text_w,
         main_w,
+        main_h,
+        text_baseline,
         left,
         right,
         width,
@@ -147,19 +154,18 @@ fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
         buf,
         r#"<rect fill="{fill}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
         fill = node.fill,
-        h = pm::fmt_coord(BOX_H),
+        h = pm::fmt_coord(node.main_h),
         w = pm::fmt_coord(node.main_w),
         x = pm::fmt_coord(x),
         y = pm::fmt_coord(y),
     )
     .unwrap();
-    let _ = node.text_w; // width is recomputed inside emit_text via the segmenter
     text_render::emit_text(
         buf,
         &node.label,
         &text_render::TextBase {
             x: x + PAD_X,
-            y: y + TEXT_BASELINE,
+            y: y + node.text_baseline,
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: "#000000",
@@ -183,8 +189,8 @@ fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
         return;
     }
 
-    let mut last_y1 = BOX_H;
-    let mut y = BOX_H;
+    let mut last_y1 = node.main_h;
+    let mut y = node.main_h;
     for child in &node.left {
         y += MARGIN_BOTTOM;
         // child.getF2 = (childW, childH/2) for leaf, or (w1+mainW/2, mainH/2).
@@ -202,8 +208,8 @@ fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
         y += child.height;
     }
 
-    let mut last_y2 = BOX_H;
-    y = BOX_H;
+    let mut last_y2 = node.main_h;
+    y = node.main_h;
     for child in &node.right {
         y += MARGIN_BOTTOM;
         let f1x = child.f1_x();
@@ -220,7 +226,13 @@ fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
         y += child.height;
     }
 
-    emit_line(buf, ox + x, oy + BOX_H, ox + x, oy + last_y1.max(last_y2));
+    emit_line(
+        buf,
+        ox + x,
+        oy + node.main_h,
+        ox + x,
+        oy + last_y1.max(last_y2),
+    );
 }
 
 impl Itf {
@@ -245,7 +257,7 @@ impl Itf {
     }
     /// `getF1.y` / `getF2.y`: vertical mid of this node's own box.
     fn f_y(&self) -> f64 {
-        BOX_H / 2.0
+        self.main_h / 2.0
     }
 }
 
@@ -254,7 +266,7 @@ impl Itf {
 /// caller can size the canvas and stack multiple roots.
 fn draw_fork(buf: &mut String, root: &Itf, ox: f64, oy: f64) -> (f64, f64) {
     let main_w = root.main_w;
-    let y0 = BOX_H;
+    let y0 = root.main_h;
     let y1 = y0 + FORK_DELTA_Y / 2.0;
     let y2 = y0 + FORK_DELTA_Y;
 

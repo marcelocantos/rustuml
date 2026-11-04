@@ -1126,17 +1126,20 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 }
             }
             '<' => {
-                let (tag, found_close) = collect_until_char_checked(&mut chars, '>');
-                if !found_close {
-                    // No matching `>` — treat the `<` and the rest as literal
-                    // characters (e.g. `[count < 3]` guard expressions).
-                    buf.push('<');
-                    buf.push_str(&tag);
-                    last_char = tag.chars().last().or(Some('<'));
-                } else {
+                // StripeSimple.searchCommand/modifyStripe: an unrecognized
+                // candidate consumes only one literal character. In particular,
+                // an outer unknown `<` must not hide an inner sprite command.
+                let mut candidate = chars.clone();
+                let (tag, found_close) = collect_until_char_checked(&mut candidate, '>');
+                if found_close {
                     flush_buf!();
-                    handle_tag(&tag, &mut chars, style, skip_underline, out);
-                    last_char = None; // tag content already emitted
+                }
+                if found_close && handle_tag(&tag, &mut candidate, style, skip_underline, out) {
+                    chars = candidate;
+                    last_char = None;
+                } else {
+                    buf.push('<');
+                    last_char = Some('<');
                 }
             }
             '[' if chars.peek() == Some(&'[') => {
@@ -1208,7 +1211,7 @@ fn handle_tag(
     style: &Style,
     skip_underline: bool,
     out: &mut Vec<Segment>,
-) {
+) -> bool {
     match tag {
         _ if is_sprite_tag(tag) => {
             // CommandCreoleSprite.executeAndGetRemaining consumes the entire
@@ -1412,11 +1415,9 @@ fn handle_tag(
         _ if tag.starts_with("&amp;") || tag.starts_with('&') => {
             // OpenIconic icon — handled at the SVG builder level via text_with_icons.
         }
-        _ => {
-            // Unknown tag — emit literally.
-            push_literal(out, &format!("<{tag}>"), style);
-        }
+        _ => return false,
     }
+    true
 }
 
 /// Helper that pushes a style modification, parses inner content until the
@@ -1511,6 +1512,28 @@ mod tests {
             parse_segments("**Oak<$missing>Grove**"),
             vec![seg("Oak", bold_style()), seg("Grove", bold_style())]
         );
+    }
+
+    #[test]
+    fn unknown_angle_candidates_leave_inner_commands_visible() {
+        assert_eq!(
+            parse_segments("Ω<outer<$枝>>🙂"),
+            vec![
+                seg("Ω&lt;outer", Style::default()),
+                seg("&gt;🙂", Style::default())
+            ]
+        );
+        assert_eq!(stripped_text("A<<$leaf>>B"), "A<>B");
+        assert_eq!(stripped_text("Ω<outer~<$枝>>🙂"), "Ω<outer<$枝>>🙂");
+        assert_eq!(
+            stripped_text("Ω<ordinary>🙂<unfinished"),
+            "Ω<ordinary>🙂<unfinished"
+        );
+        assert_eq!(
+            parse_segments("<b>A<outer<$leaf>>B</b>"),
+            vec![seg("A&lt;outer", bold_style()), seg("&gt;B", bold_style())]
+        );
+        assert!(parse_segments("").is_empty());
     }
 
     #[test]
