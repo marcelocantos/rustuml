@@ -7852,7 +7852,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             };
 
-            // DrawableSetInitializer#createParticipant passes Participant#getDisplay
+            // DrawableSetInitializer#prepareParticipant passes Participant#getDisplay
             // to every component, irrespective of box membership. Participant and
             // queue already include the complete Display in their branches above.
             let bh = match p.kind {
