@@ -5902,7 +5902,8 @@ impl PlantUmlSvg {
         line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
-        // USymbolQueue composes the stereotype and name Display vertically.
+        // Participant#getDisplay supplies stereotype and name as one text block;
+        // ComponentRoseQueue passes it to USymbolQueue as the label.
         let stereo_shift = stereo
             .map(|(text, _)| {
                 ParticipantTextBlock::new(
@@ -5980,8 +5981,8 @@ impl PlantUmlSvg {
             &format!("stroke:{border_color};stroke-width:0.5;"),
         );
 
-        // USymbolQueue#asSmall translates mergeTB(stereotype,label) by its
-        // margin. Each child contributes its own first-stripe ascent.
+        // ComponentRoseQueue supplies the complete Display label to USymbolQueue;
+        // its margin translates both stripes, each with its own ascent.
         let text_y = text_top + stereo_shift + label.lines[0].2.ascent;
         if let Some((st_text, st_width)) = stereo {
             let inner_w = box_w - QUEUE_TEXT_H_PAD;
@@ -7130,7 +7131,11 @@ fn render_participant_shape(
                 fill_color,
                 border_color,
                 queue_head_offset,
-                stereo_ref,
+                // Participant#getDisplay includes stereotype regardless of box;
+                // ComponentRoseQueue passes that complete block as its label.
+                p.stereotype
+                    .as_ref()
+                    .map(|s| (s.as_str(), p.stereotype_width)),
                 figure_line_h,
             );
         }
@@ -8155,7 +8160,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let w = max_text_w + QUEUE_TEXT_H_PAD;
                     // USymbolQueue Margin(5,15,5,5); preferred_height adds
                     // back the common band pixel, not an extra text line.
-                    let h = label_height + 5.0 + 5.0 - 1.0;
+                    // ComponentRoseQueue uses Participant#getDisplay, including
+                    // the stereotype stripe, for both preferred size and paint.
+                    let h = stereotype_height + label_height + 5.0 + 5.0 - 1.0;
                     (w, h)
                 }
                 ParticipantKind::Participant => {
@@ -8176,10 +8183,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // Only boxed figure participants render the stereotype (PlantUML
             // drops it from bare-declared figure heads).
             let in_box = boxed_decl_idx.contains(&idx);
-            let bh = if st.is_some() && in_box && p.kind != ParticipantKind::Participant {
-                bh + stereotype_height
-            } else {
-                bh
+            let bh = match p.kind {
+                // These components already compose the complete Display above.
+                ParticipantKind::Participant | ParticipantKind::Queue => bh,
+                _ if st.is_some() && in_box => bh + stereotype_height,
+                _ => bh,
             };
 
             ParticipantLayout {
@@ -16668,6 +16676,21 @@ mod tests {
                 }));
                 let svg = crate::render_svg(&diagram);
                 assert!(!svg.is_empty());
+            }
+        }
+    }
+
+    #[test]
+    fn queue_stereotype_display_survives_bare_and_created_consumers() {
+        for teoz in [false, true] {
+            for declaration in ["queue", "create queue"] {
+                let input = format!(
+                    "@startuml\n{}participant Seed\n{declaration} \"Mail\\nroom\" as Mail <<dispatch>>\nSeed -> Mail: send\n@enduml",
+                    if teoz { "!pragma teoz true\n" } else { "" }
+                );
+                let diagram = rustuml_parser::parse::parse(&input).unwrap();
+                let svg = crate::render_svg(&diagram);
+                assert_eq!(svg.matches("«dispatch»").count(), 2, "{svg}");
             }
         }
     }
