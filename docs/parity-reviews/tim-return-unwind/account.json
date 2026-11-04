@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-return-unwind",
+  "rust_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:executeLines",
+    "tim/TFunctionImpl.java:executeReturnFunction",
+    "tim/iterator/CodeIteratorWhile.java",
+    "tim/iterator/CodeIteratorForeach.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "A return immediately unwinds the current function through buffered loops; no subsequent iteration, condition or body effect executes. Procedures cannot be invoked as expression values.",
+  "causal_divergence": "Buffered loop runners continue after return_signal, overwrite it, and mutate state. Expression calls discard procedure kind.",
+  "planned_change": "Stop loop bodies/iterations on return or fatal error and preserve the first value; enforce procedure/value call context while preserving emitting procedure invocation and the existing no-return legacy extension.",
+  "perturbation_axes": [
+    "Nested while/foreach with effects after return",
+    "Procedure in expression versus plain emission and sibling calls"
+  ],
+  "oracle_plan": [
+    "Reuse checker3 exact references and unchanged shipped CLI comparator; source diagnostics supplementary.",
+    "Bounded new axes via remote headless Monkey Man only, preserving every success/failure.",
+    "Parser/CLI, guards, touched format and both main tiers once stabilized; report actual local cohort and all invalid/error/renderer dependencies."
+  ],
+  "constraints": [
+    "No renderer/parser handoff edits; timezone width implementation unchanged.",
+    "No fixture/reference/comparator/baseline/review/target changes; no self-review.",
+    "All prior evidence retained; new independent checker required."
+  ]
+}
