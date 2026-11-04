@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-url-group-ownership",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "3790f114c79f2d19fdf91e46b84f1f79d85f6677",
+  "java_locations": [
+    "svek/image/EntityImageNote#drawU (startGroup, startUrl, Opale draw, closeUrl, closeGroup)"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_attached_note",
+    "crates/rustuml-render/src/class.rs#render_floating_note_entity,note_anchor"
+  ],
+  "invariant": "The note entity owns the SVG group; its URL scopes the note image inside that group. Closing order is URL then entity group in both Opale attached and ordinary note image paths.",
+  "causal_divergence": "Recovered modifier_left/modifier_bottom references contain g>a>primitives; Rust emits a>g>primitives because note_anchor is opened before entity metadata. Metadata and geometry are retained but DOM ownership is inverted.",
+  "planned_change": "Move anchor opening to immediately after the entity group is emitted and close it before the group in both affected rendering paths. Keep URL construction, metadata, body ownership and geometry unchanged; no output string surgery.",
+  "perturbation_axes": [
+    "Left/right/top/bottom position and brace/end-note body delimiter",
+    "Leaf/group/named-note target, URL tooltip/target setting and URL absent control"
+  ],
+  "verification_plan": "DOM ownership assertions on both renderer paths, preserved36/1559 replay and compact new Java-source controls through parent remote runner; final stabilized release tiers and relevant tests. Preserve all earlier evidence and unresolved Q contour dependency; no acceptance claim."
+}
