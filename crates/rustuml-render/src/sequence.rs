@@ -453,6 +453,17 @@ fn folded_note_component_width(
         + shadow
 }
 
+fn sequence_note_shadow_value(value: &str) -> f64 {
+    // Style#getShadowing delegates a present property to
+    // ValueImpl#asDoubleDefaultTo(1.5), which uses extractDigitsAndDot.
+    // This differs from the boolean skinparam translation and ordinary floats.
+    let numeric: String = value
+        .chars()
+        .filter(|c| c.is_ascii_digit() || *c == '.')
+        .collect();
+    numeric.parse().unwrap_or(1.5)
+}
+
 fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
     let width = note_content_width_raw(max_text_w, shape);
     if align == MessageAlign::Center && shape == NoteShape::Note {
@@ -7175,14 +7186,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // FromSkinparamToStyle#getShadowingValue maps boolean true to 3.
     let note_shadow_delta = note_style
         .property("shadowing")
-        .and_then(|value| value.parse::<f64>().ok())
-        .filter(|value| value.is_finite())
+        .map(sequence_note_shadow_value)
         .unwrap_or(if note_shadow_filter.is_some() {
             SHADOW_VERTICAL_PAD
         } else {
             0.0
-        })
-        .max(0.0);
+        });
     // Fashion.deltaShadow affects preferred dimensions and whether the shape
     // requests SvgGraphics' shared shadow filter. The filter itself is fixed.
     note_shadow_filter = if note_shadow_delta > 0.0 {
@@ -15565,6 +15574,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn scoped_note_shadow_uses_style_value_numeric_extraction() {
+        for (value, expected) in [
+            ("0", 0.0),
+            ("2.5", 2.5),
+            ("-2.5px", 2.5),
+            ("7px", 7.0),
+            ("true", 1.5),
+            ("nonnumeric", 1.5),
+            ("1.2.3", 1.5),
+        ] {
+            assert_eq!(sequence_note_shadow_value(value), expected, "{value}");
+        }
+    }
 
     #[test]
     fn arrow_color_materialization_retains_no_paint_and_alpha() {
