@@ -1,0 +1,8 @@
+@startuml
+participant LeftNode
+participant RightNode
+RightNode -> LeftNode : back
+note right: a considerably wider attached explanation
+return #purple response
+return again
+@enduml

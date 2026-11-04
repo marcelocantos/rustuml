@@ -1,0 +1,8 @@
+@startuml
+participant One
+participant Two
+One -> Two ++ : open
+Two -> Two : work
+destroy Two
+activate Two #cyan
+@enduml

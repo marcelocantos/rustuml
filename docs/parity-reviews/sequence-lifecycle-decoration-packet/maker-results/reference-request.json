@@ -1,0 +1,575 @@
+{
+  "schema_version": 1,
+  "purpose": "New compact maker controls for event identity/lifecycle scheduling/self-cross; no local Java",
+  "remote_private_directory": "allocate with existing new-worker runner",
+  "cases": [
+    {
+      "name": "return_e0_d1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/return_e0_d1.puml",
+      "source_sha256": "2e6023bb4964c2a2ece6239fda3a4573812c1a650273a70670026ed217790ae1",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "destroy with return stack"
+      ]
+    },
+    {
+      "name": "return_e0_d3",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/return_e0_d3.puml",
+      "source_sha256": "6d907cfdde217d22768c29db7a709d6169ba2d494a0046f68efd0a2327e9f9c2",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "destroy with return stack"
+      ]
+    },
+    {
+      "name": "parallel_e0_p0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/parallel_e0_p0.puml",
+      "source_sha256": "1413c633c22ac6831d31cde11e9b3dc6b892b7ac7dfa094de491b163c9f6f4e4",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "parallel ownership",
+        "self topology"
+      ]
+    },
+    {
+      "name": "parallel_e0_p1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/parallel_e0_p1.puml",
+      "source_sha256": "df46cbef92ce9259424e6ded28d55a43044aa9f7c179f01005119ef24cf4c05c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "parallel ownership",
+        "self topology"
+      ]
+    },
+    {
+      "name": "cross_e0_d0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/cross_e0_d0.puml",
+      "source_sha256": "3bbda5463721b3f7ce9f338e149cba4da9913cfd258e97b9cebd7e7662491771",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "cross dressing direction/style"
+      ]
+    },
+    {
+      "name": "cross_e0_d2",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/cross_e0_d2.puml",
+      "source_sha256": "4538fb0527a1d8caeaeb1c3382da36ce7321e776dce1017a858044dae4d44196",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "cross dressing direction/style"
+      ]
+    },
+    {
+      "name": "destroy_e0_note",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/destroy_e0_note.puml",
+      "source_sha256": "a93ba165a31216ea7ecba96d66724581e43f9c397a49a78a66660daa2f4964a6",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "create",
+        "destroy owner note versus group"
+      ]
+    },
+    {
+      "name": "destroy_e0_group",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/destroy_e0_group.puml",
+      "source_sha256": "6af819d073550c602367773ce1192880a93a634e87f363b62e247279108fdb05",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "create",
+        "destroy owner note versus group"
+      ]
+    },
+    {
+      "name": "negative_reopen_e0_deactivate",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/negative_reopen_e0_deactivate.puml",
+      "source_sha256": "b553c58a8393e9f36e506fd9e844c50a793e2574486f74d16416e75484d98a44",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "same-message close type"
+      ]
+    },
+    {
+      "name": "negative_reopen_e0_destroy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/negative_reopen_e0_destroy.puml",
+      "source_sha256": "dcd32d6e4c31cef4dc1c83f40e6272011ce9b4482f5df696597c6653aaca8a26",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "same-message close type"
+      ]
+    },
+    {
+      "name": "color_e0_BlueViolet",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/color_e0_BlueViolet.puml",
+      "source_sha256": "14da61a9f72191bb59209867d9c7ba2a27ebd8b67591e9adefb3b9ca826b2930",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "valid versus invalid named color"
+      ]
+    },
+    {
+      "name": "color_e0_notAPlantColor912",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/color_e0_notAPlantColor912.puml",
+      "source_sha256": "6b3de2113c407050e2565eeedf2f408088f9952468ce425ac9b89a7e493aa0c5",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "valid versus invalid named color"
+      ]
+    },
+    {
+      "name": "return_e1_d1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/return_e1_d1.puml",
+      "source_sha256": "9acf8c1d68570be61d03334aed9e89bc74b0e8cae0565a911fa2579ba3570d9e",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "destroy with return stack"
+      ]
+    },
+    {
+      "name": "return_e1_d3",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/return_e1_d3.puml",
+      "source_sha256": "236be651ca58fea0a2c0d0c9ffaa2d85ae7a3c209d0f0c4a8d630e599b5c3a43",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "destroy with return stack"
+      ]
+    },
+    {
+      "name": "parallel_e1_p0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/parallel_e1_p0.puml",
+      "source_sha256": "427033b9c279dc80b00d5516b151ba3a6ec686adc06c8159197ce20ca76cec9c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "parallel ownership",
+        "self topology"
+      ]
+    },
+    {
+      "name": "parallel_e1_p1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/parallel_e1_p1.puml",
+      "source_sha256": "a0e1006e49aeff7bf55cf89a350a251f659132f3b5c1965551f57758de03fa4d",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "parallel ownership",
+        "self topology"
+      ]
+    },
+    {
+      "name": "cross_e1_d0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/cross_e1_d0.puml",
+      "source_sha256": "24524ee34c8b52cbbfeda6a0c39a29cbdf19291f33e8d6d5aa6fbb8be6f472a2",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "cross dressing direction/style"
+      ]
+    },
+    {
+      "name": "cross_e1_d2",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/cross_e1_d2.puml",
+      "source_sha256": "4e14f0d08292e7563ea9f19423ee9d18e1c57573d1cd149562d792b13f1d7faf",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "depth",
+        "cross dressing direction/style"
+      ]
+    },
+    {
+      "name": "destroy_e1_note",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/destroy_e1_note.puml",
+      "source_sha256": "5ebf44a45ff24123322ee07c821cff91a36f34a61627e620b7d0b011dcebab79",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "create",
+        "destroy owner note versus group"
+      ]
+    },
+    {
+      "name": "destroy_e1_group",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/destroy_e1_group.puml",
+      "source_sha256": "d2a0c06538468dd93b3a97d3300f81a946e123cdb2be0b40a07d7efc4df7bf6c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "create",
+        "destroy owner note versus group"
+      ]
+    },
+    {
+      "name": "negative_reopen_e1_deactivate",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/negative_reopen_e1_deactivate.puml",
+      "source_sha256": "365f5ffabc465f4a9526ac28e77aec4fa9dbe0082e342474a5d39c7ecfb032e7",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "same-message close type"
+      ]
+    },
+    {
+      "name": "negative_reopen_e1_destroy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/negative_reopen_e1_destroy.puml",
+      "source_sha256": "8f83be05367add36ac37415765c2dd870b8d93c96c1331bcc4ef6bfe476b1b28",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "same-message close type"
+      ]
+    },
+    {
+      "name": "color_e1_BlueViolet",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/color_e1_BlueViolet.puml",
+      "source_sha256": "e548329886976651650404f54a1698279f94cd07a21d00deb5def3908a7bd5a0",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "valid versus invalid named color"
+      ]
+    },
+    {
+      "name": "color_e1_notAPlantColor912",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/color_e1_notAPlantColor912.puml",
+      "source_sha256": "46f5de4e6d43fa511a97bb0e6a0cf8600f16e6e84d35f4d7405424eb8e97bfc8",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "engine",
+        "valid versus invalid named color"
+      ]
+    }
+  ]
+}

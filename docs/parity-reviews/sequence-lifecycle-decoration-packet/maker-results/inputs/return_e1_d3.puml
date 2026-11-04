@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+participant Caller
+participant Service
+Caller -> Service ++ : begin
+Service -> Service ++ : inner
+Service -> Service ++ : inner
+destroy Service
+return #teal close
+return #teal close
+return #teal close
+return #abcdef fall back
+@enduml

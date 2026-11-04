@@ -1,0 +1,9 @@
+@startuml
+participant First
+create Second
+First -> Second ++ : born
+Second -> Second ++ : nested
+note over First: separator
+destroy Second
+First -> First : after
+@enduml

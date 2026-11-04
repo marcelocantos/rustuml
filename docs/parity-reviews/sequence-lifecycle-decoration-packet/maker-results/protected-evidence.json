@@ -1,0 +1,13 @@
+{
+  "base": "9af2148f95db1ace898bc0942fbf32a59fb30e38",
+  "head": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+  "modified_existing_paths": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "invariant": "Only the four authorized production/test files modified since imported review evidence. All existing accounts/reviews/fixtures/harness/baselines unchanged.",
+  "comparator_source_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_source_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9"
+}

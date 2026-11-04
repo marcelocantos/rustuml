@@ -1,0 +1,314 @@
+[
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e0_d1.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e0_d1.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "destroy with return stack"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e0_d3.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e0_d3.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "destroy with return stack"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e0_p0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e0_p0.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "parallel ownership",
+      "self topology"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e0_p1.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e0_p1.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "parallel ownership",
+      "self topology"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d0.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "cross dressing direction/style"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d2.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d2.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "cross dressing direction/style"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_note.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_note.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "create",
+      "destroy owner note versus group"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_group.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_group.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "create",
+      "destroy owner note versus group"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "same-message close type"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "same-message close type"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_BlueViolet.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_BlueViolet.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "valid versus invalid named color"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "valid versus invalid named color"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d1.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d1.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "destroy with return stack"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d3.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d3.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "destroy with return stack"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e1_p0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e1_p0.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "parallel ownership",
+      "self topology"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e1_p1.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e1_p1.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "parallel ownership",
+      "self topology"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d0.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "cross dressing direction/style"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d2.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d2.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "depth",
+      "cross dressing direction/style"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_note.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_note.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "create",
+      "destroy owner note versus group"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_group.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_group.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "create",
+      "destroy owner note versus group"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "same-message close type"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "same-message close type"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_BlueViolet.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_BlueViolet.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "valid versus invalid named color"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.svg",
+    "cohort": "new-lifecycle24",
+    "axes": [
+      "engine",
+      "valid versus invalid named color"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d0.svg",
+    "cohort": "new-reverse4",
+    "axes": [
+      "engine",
+      "live depth",
+      "true reverse source cross and lowered return"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d2.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d2.svg",
+    "cohort": "new-reverse4",
+    "axes": [
+      "engine",
+      "live depth",
+      "true reverse source cross and lowered return"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d0.svg",
+    "cohort": "new-reverse4",
+    "axes": [
+      "engine",
+      "live depth",
+      "true reverse source cross and lowered return"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d2.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d2.svg",
+    "cohort": "new-reverse4",
+    "axes": [
+      "engine",
+      "live depth",
+      "true reverse source cross and lowered return"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a0_r0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a0_r0.svg",
+    "cohort": "new-legacy-note4",
+    "axes": [
+      "legacy attached note with repeated returns",
+      "activation state and message direction",
+      "renamed/wider labels"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a0_r1.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a0_r1.svg",
+    "cohort": "new-legacy-note4",
+    "axes": [
+      "legacy attached note with repeated returns",
+      "activation state and message direction",
+      "renamed/wider labels"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a1_r0.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a1_r0.svg",
+    "cohort": "new-legacy-note4",
+    "axes": [
+      "legacy attached note with repeated returns",
+      "activation state and message direction",
+      "renamed/wider labels"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a1_r1.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/legacy_note_a1_r1.svg",
+    "cohort": "new-legacy-note4",
+    "axes": [
+      "legacy attached note with repeated returns",
+      "activation state and message direction",
+      "renamed/wider labels"
+    ]
+  }
+]
