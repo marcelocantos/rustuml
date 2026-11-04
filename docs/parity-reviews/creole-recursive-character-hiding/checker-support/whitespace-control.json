@@ -1,0 +1,8 @@
+{
+  "id": "supplement8/s_shape_color_literals",
+  "before": true,
+  "after": true,
+  "source": "@startwbs\n* Crown\n**[#pink] _ Birch\n***_[#gold] Elm\n--[#cyan] _ Fir\n@endwbs\n",
+  "yaml": "type: Wbs\ndiagram:\n  meta:\n    source: |\n      @startwbs\n      * Crown\n      **[#pink] _ Birch\n      ***_[#gold] Elm\n      --[#cyan] _ Fir\n      @endwbs\n  nodes:\n  - label: Crown\n    color: null\n    depth: 1\n    side: Right\n    children:\n    - label: _ Birch\n      color: '#pink'\n      depth: 2\n      side: Right\n      children:\n      - label: Elm\n        shape: None\n        color: '#gold'\n        depth: 3\n        side: Right\n        children: []\n    - label: _ Fir\n      color: '#cyan'\n      depth: 2\n      side: Left\n      children: []\n",
+  "interpretation": "Whitespace separates _ Birch and _ Fir from color command fields: they are literal labels with default Box (omitted shape). Adjacent ***_[#gold] Elm is shape None. Java new-order command handles these without old-order warning. The maker recategorization is correct; it does not waive shape_colors_old or wbs_shape_color."
+}

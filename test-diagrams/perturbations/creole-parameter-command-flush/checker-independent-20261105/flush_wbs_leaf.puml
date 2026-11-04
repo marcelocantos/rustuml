@@ -1,0 +1,5 @@
+@startwbs
+* Grove
+**_ <size:12></size>X\nY<color:black></color>
+--_ <color:blue></color><size:12></size>\n<color:black><$absent></color>
+@endwbs

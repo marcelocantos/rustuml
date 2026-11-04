@@ -1,0 +1,14 @@
+{
+  "base": {
+    "members": 1766,
+    "harness": 712,
+    "cli_before": 742,
+    "cli_after": 742
+  },
+  "registered": {
+    "members": 50,
+    "harness": 40,
+    "cli_before": 22,
+    "cli_after": 40
+  }
+}

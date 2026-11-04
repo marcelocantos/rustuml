@@ -1,0 +1,8 @@
+@startuml
+participant Grove
+note right of Grove
+X<color:~#123456>fir</color>Y
+X<color:bl\~ue>fir</color>Y
+X<color:~red>fir</color>Y
+end note
+@enduml
