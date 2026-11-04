@@ -1,0 +1,10 @@
+@startuml
+actor Wren
+participant Lyra
+database Juniper
+create Wren
+[<- Wren: depart
+create Juniper
+Lyra -> Juniper: allocate
+Wren -> Juniper: connect
+@enduml

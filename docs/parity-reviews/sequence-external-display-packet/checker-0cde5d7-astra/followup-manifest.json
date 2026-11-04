@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "purpose": "Follow-up to isolate new hidden stereotype paint regression without old width error",
+  "cases": [
+    {
+      "name": "ind5f_hide_widename_bare_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_legacy.puml",
+      "source_sha256": "5b8b2fff10039a758f65268f50da4deb20880318632b51c10849b9d39a148408",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "bare",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display"
+    },
+    {
+      "name": "ind5f_hide_widename_bare_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_teoz.puml",
+      "source_sha256": "26efd4f53e364c77b258cd506bf315dd57e28b0a641aa3c2ff84a813612ad5f7",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "bare",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display"
+    },
+    {
+      "name": "ind5f_hide_widename_created_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_legacy.puml",
+      "source_sha256": "12eb05075e70c5e19871042dc60e54c1cff0dc867d3c8c081e7ab3747b7691c6",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "created",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display"
+    },
+    {
+      "name": "ind5f_hide_widename_created_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_teoz.puml",
+      "source_sha256": "ec406a4942a2cafd1950642295ed44484eb29f931beeb7fb7c8ccfce5d62cae5",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "created",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display"
+    }
+  ]
+}

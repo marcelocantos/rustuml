@@ -1,0 +1,212 @@
+{
+  "cases": 4,
+  "valid": 4,
+  "invalid": 0,
+  "environment": {
+    "batch": "sequence-hide-widename-followup4",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.HsV6TTZx",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "b6eba159a1cdd3fb4028a3a9a6fde6603d712cbddc8793642edcb8eae33b9eb4",
+    "manifest_sha256": "937ae90762b380b6d9863e08bc630ffecef1f7428fc2af7132c480c2fd75ff9c",
+    "env_overrides": {},
+    "environment_policy": "Inherited environment; wrapper removes JAVA_TOOL_OPTIONS, _JAVA_OPTIONS, JDK_JAVA_OPTIONS, CLASSPATH and sets GRAPHVIZ_DOT",
+    "timeout_seconds": 60,
+    "classification_performed": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "manifest_original_path": "/Users/marcelo/rustuml-reference/scratch/transfer.JBgV3Oxe/input-bundle.json.gz#manifest_base64",
+    "manifest_original_bytes": 3353,
+    "manifest_provenance": "Exact original bytes decoded from manifest_base64; SHA256 and semantic equality to bundle.manifest verified",
+    "original_input_bundle_sha256": "cf4adcbaf71c76c6c6d62f1caf7f77820ade7d30dc713ddcc59ddc4da1400f90",
+    "transport_mapping_provenance": {
+      "declared_by": "parent",
+      "mapping": "Original files[].base64 preserved; exact original manifest bytes embedded",
+      "original_envelope_hash_verification": "Parent-declared original hash retained; current envelope and exact manifest verified locally"
+    },
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.JBgV3Oxe/input-bundle.json.gz",
+    "requested_cwd": "PRIVATE_CWD",
+    "timezone": "GMT+11:00",
+    "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  },
+  "records": [
+    {
+      "name": "ind5f_hide_widename_bare_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_legacy.puml",
+      "source_sha256": "5b8b2fff10039a758f65268f50da4deb20880318632b51c10849b9d39a148408",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "bare",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display",
+      "observed_valid": true,
+      "java_exit": 0,
+      "root_attributes": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "SEQUENCE",
+        "height": "123px",
+        "preserveAspectRatio": "none",
+        "style": "width:238px;height:123px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 238 123",
+        "width": "238px",
+        "zoomAndPan": "magnify"
+      },
+      "error_labels": [],
+      "stderr": "",
+      "reference_sha256": "91d38c50baae1d837e81455b1e8584e0d3f96ee67c901f83b802eccc2795814c"
+    },
+    {
+      "name": "ind5f_hide_widename_bare_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_teoz.puml",
+      "source_sha256": "26efd4f53e364c77b258cd506bf315dd57e28b0a641aa3c2ff84a813612ad5f7",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "bare",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display",
+      "observed_valid": true,
+      "java_exit": 0,
+      "root_attributes": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "SEQUENCE",
+        "height": "131px",
+        "preserveAspectRatio": "none",
+        "style": "width:243px;height:131px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 243 131",
+        "width": "243px",
+        "zoomAndPan": "magnify"
+      },
+      "error_labels": [],
+      "stderr": "",
+      "reference_sha256": "05455f912612d30be2943de7c0ac721e35ef53e9805d392b62a60553f5f872aa"
+    },
+    {
+      "name": "ind5f_hide_widename_created_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_legacy.puml",
+      "source_sha256": "12eb05075e70c5e19871042dc60e54c1cff0dc867d3c8c081e7ab3747b7691c6",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "created",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display",
+      "observed_valid": true,
+      "java_exit": 0,
+      "root_attributes": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "SEQUENCE",
+        "height": "130px",
+        "preserveAspectRatio": "none",
+        "style": "width:264px;height:130px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 264 130",
+        "width": "264px",
+        "zoomAndPan": "magnify"
+      },
+      "error_labels": [],
+      "stderr": "",
+      "reference_sha256": "bf70de3427b8c91fad219681606fca754b69e954a4848246134efb11892732da"
+    },
+    {
+      "name": "ind5f_hide_widename_created_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_teoz.puml",
+      "source_sha256": "ec406a4942a2cafd1950642295ed44484eb29f931beeb7fb7c8ccfce5d62cae5",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "hide stereotype",
+        "name wider than stereotype",
+        "created",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "mechanism": "sequence-queue-complete-stereotype-display",
+      "observed_valid": true,
+      "java_exit": 0,
+      "root_attributes": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "SEQUENCE",
+        "height": "131px",
+        "preserveAspectRatio": "none",
+        "style": "width:269px;height:131px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 269 131",
+        "width": "269px",
+        "zoomAndPan": "magnify"
+      },
+      "error_labels": [],
+      "stderr": "",
+      "reference_sha256": "97a21a23005a52fdc2bb7c48149377a003caddc49fd6f7ef5acd5b1ac85dd223"
+    }
+  ]
+}

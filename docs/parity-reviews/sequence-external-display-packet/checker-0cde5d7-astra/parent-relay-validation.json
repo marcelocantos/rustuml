@@ -1,0 +1,25 @@
+{
+  "validated": true,
+  "cases": 60,
+  "calls": 60,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.Y97EOnsD",
+  "hashes": {
+    "reference-results.json.gz": "665e6f803836b6e355d4297be2c2d45668faeceb58ec8f1dd1ada804cf055b37",
+    "reference-transport.json": "cfbb0916e3ea546bfe6c8d9fb9670b2ee5391cf3cb6fc15d0afae5bc4495fd14"
+  },
+  "exit_statuses": {
+    "0": 58,
+    "200": 2
+  },
+  "nonzero": [
+    "ind5f_exo_return_out_legacy",
+    "ind5f_exo_return_out_teoz"
+  ],
+  "nonempty_stderr": [
+    "ind5f_exo_return_out_legacy",
+    "ind5f_exo_return_out_teoz"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

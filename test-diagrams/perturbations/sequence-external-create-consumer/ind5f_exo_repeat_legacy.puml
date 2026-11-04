@@ -1,0 +1,11 @@
+@startuml
+participant Lyra
+entity Swift
+create Swift
+Swift ->]: first
+create Swift
+[-> Swift: second
+create Swift
+Swift <-]: third
+Swift -> Lyra: fourth
+@enduml

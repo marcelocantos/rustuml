@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition bottom
+participant Kite
+queue Q <<underneath>>
+Kite -> Q: deliver
+@enduml

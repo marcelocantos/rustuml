@@ -1,0 +1,9 @@
+@startuml
+box Habitat
+queue Crane
+participant Lyra
+end box
+create Crane
+[-> Crane: enlist
+Crane -> Lyra: receive
+@enduml

@@ -1,0 +1,156 @@
+{
+  "entries": 60,
+  "distinct": 60,
+  "before": {
+    "runtime_failure": 14,
+    "svg_mismatch": 38,
+    "invalid": 2,
+    "match": 6
+  },
+  "after": {
+    "svg_mismatch": 23,
+    "match": 33,
+    "runtime_failure": 2,
+    "invalid": 2
+  },
+  "lost_passes": [],
+  "recoveries": [
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_number_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_number_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_activate_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_alt_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_alt_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_box_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_box_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_repeat_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_repeat_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_then_other_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_then_other_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_return_in_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_destroy_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_destroy_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_nested_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_multilabel_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_multilabel_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_multistereo_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_multistereo_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_styled_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_styled_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_wide_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_wide_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_create_destroy_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_create_destroy_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_two_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_two_teoz.puml"
+  ],
+  "new_valid_errors": [],
+  "final_panics": [],
+  "ast_changed": [],
+  "ascii_changed": [],
+  "losses_by_mode": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "invalid_rust_statuses": {
+    "before": {
+      "1": 2
+    },
+    "after": {
+      "1": 2
+    }
+  },
+  "mechanisms": {
+    "sequence-external-create-consumer": {
+      "entries": 32,
+      "distinct": 32,
+      "before": {
+        "runtime_failure": 14,
+        "svg_mismatch": 14,
+        "invalid": 2,
+        "match": 2
+      },
+      "after": {
+        "svg_mismatch": 9,
+        "match": 19,
+        "runtime_failure": 2,
+        "invalid": 2
+      },
+      "lost_passes": [],
+      "recoveries": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_number_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_number_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_activate_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_alt_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_alt_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_box_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_box_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_repeat_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_repeat_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_then_other_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_then_other_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_return_in_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_destroy_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_destroy_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_nested_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_multilabel_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_exo_multilabel_teoz.puml"
+      ],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {
+          "1": 2
+        },
+        "after": {
+          "1": 2
+        }
+      }
+    },
+    "sequence-queue-complete-stereotype-display": {
+      "entries": 28,
+      "distinct": 28,
+      "before": {
+        "svg_mismatch": 24,
+        "match": 4
+      },
+      "after": {
+        "svg_mismatch": 14,
+        "match": 14
+      },
+      "lost_passes": [],
+      "recoveries": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_multistereo_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_multistereo_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_styled_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_styled_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_wide_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_wide_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_create_destroy_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_create_destroy_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_two_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/reference-inputs/ind5f_queue_two_teoz.puml"
+      ],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {},
+        "after": {}
+      }
+    }
+  }
+}

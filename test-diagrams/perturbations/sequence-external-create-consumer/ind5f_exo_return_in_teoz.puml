@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Lyra
+actor Robin
+create Robin
+[-> Robin: enter
+activate Robin
+return acknowledge
+@enduml
