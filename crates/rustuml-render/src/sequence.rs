@@ -506,7 +506,6 @@ const WARNING_STROKE: &str = "#FFDD88";
 // CommandSkinParam.executeArg stores this warning with one trailing space.
 // WarningBannerBlock measures that space, while UText omits it from the SVG.
 const DEPRECATED_HANDWRITTEN_WARNING: &str = "Please\u{a0}use\u{a0}'!option\u{a0}handwritten\u{a0}true'\u{a0}to\u{a0}enable\u{a0}handwritten";
-const HEAD_BOX_H: f64 = 30.488281250; // exact Java double
 
 fn deprecated_handwritten_warning_text_width() -> f64 {
     plantuml_metrics::mono_text_width(DEPRECATED_HANDWRITTEN_WARNING, WARNING_FONT_SIZE)
@@ -542,7 +541,6 @@ const CREATE_BAR_OFFSET: f64 = 10.0;
 const ACTIVATION_PRE_MESSAGE_OFFSET: f64 = 10.0;
 const HEAD_BOX_RX: f64 = 2.5;
 const BOX_TEXT_X_PAD: f64 = 7.0;
-const BOX_TEXT_Y_OFFSET: f64 = 20.535156250; // exact Java double: baseline from box top
 const PARTICIPANT_FONT_SIZE: f64 = 14.0;
 const MSG_FONT_SIZE: f64 = 13.0;
 /// Text height at message font size (ascent + descent from Java AWT LineMetrics).
@@ -796,18 +794,13 @@ const ACTOR_SPINE_BOTTOM_OFFSET: f64 = 43.5;
 const ACTOR_ARM_Y_OFFSET: f64 = 24.5;
 const ACTOR_ARM_HALF: f64 = 13.0;
 const ACTOR_LEG_BOTTOM_OFFSET: f64 = 58.5;
-/// Extra height for actor beyond HEAD_BOX_H.
-const ACTOR_EXTRA_H: f64 = 45.0;
+// ActorStickMan#getPreferredHeight: head16 + body27 + legs15 +
+// twice the default stroke0.5 + 1; shadow is resolved separately.
+const ACTOR_SYMBOL_HEIGHT: f64 = 16.0 + 27.0 + 15.0 + 2.0 * 0.5 + 1.0;
 /// Padding around actor text (3px each side).
 const ACTOR_TEXT_PAD: f64 = 3.0;
 /// Arm span of stick figure.
 const ACTOR_ARM_SPAN: f64 = 26.0;
-/// Actor head text: text baseline offset from base_y (figure first, then text).
-const ACTOR_HEAD_TEXT_Y_OFFSET: f64 = 73.535156250;
-/// Actor tail text: text baseline offset from base_y (text first, then figure).
-const ACTOR_TAIL_TEXT_Y_OFFSET: f64 = 13.535156250;
-/// Actor tail figure start offset (from base_y) — figure starts below text.
-const ACTOR_TAIL_FIGURE_Y_OFFSET: f64 = 16.488281250;
 
 /// Boundary/Control/Entity: circle radius = 12.
 const STEREOTYPE_CIRCLE_R: f64 = 12.0;
@@ -816,10 +809,8 @@ const STEREOTYPE_CIRCLE_R: f64 = 12.0;
 const STEREOTYPE_CIRCLE_MARGIN: f64 = 4.0;
 /// Circle center Y (from HEAD_BOX_Y).
 const STEREOTYPE_CIRCLE_CY: f64 = 16.0; // 21 - 5 = 16 from HEAD_BOX_Y
-/// Extra height for boundary/control/entity beyond HEAD_BOX_H.
-const CIRCLE_SHAPE_EXTRA_H: f64 = 17.0;
-/// Text baseline Y offset for circle-type shapes.
-const CIRCLE_SHAPE_TEXT_Y_OFFSET: f64 = 45.535156250;
+// svek::{Boundary,Control,EntityDomain}#calculateDimension: radius*2 + margin*2.
+const CIRCLE_SYMBOL_HEIGHT: f64 = 2.0 * STEREOTYPE_CIRCLE_R + 2.0 * STEREOTYPE_CIRCLE_MARGIN;
 
 /// Boundary shape: vertical line extends from y_top to y_bottom, horizontal at center.
 const BOUNDARY_LINE_TOP_OFFSET: f64 = 4.0; // relative to HEAD_BOX_Y
@@ -831,16 +822,10 @@ const DB_CYLINDER_WIDTH: f64 = 36.0;
 const DB_CYLINDER_HALF_W: f64 = 18.0;
 const DB_CYLINDER_HEIGHT: f64 = 46.0; // body from top of shape to bottom
 const DB_ELLIPSE_RY: f64 = 10.0; // top ellipse vertical radius (half of 20px visible curve)
-/// Extra height for database beyond HEAD_BOX_H.
-const DB_EXTRA_H: f64 = 31.0;
-/// Text baseline Y offset for database shapes.
-const DB_TEXT_Y_OFFSET: f64 = 59.535156250;
 
 /// Collections: two stacked rectangles, no rounded corners.
 /// The back rectangle is offset 4px right and 4px down from front.
 const COLLECTIONS_OFFSET: f64 = 4.0;
-/// Extra height for collections beyond HEAD_BOX_H.
-const COLLECTIONS_EXTRA_H: f64 = 4.0;
 
 // Queue: pill shape with same height as regular participant.
 
@@ -1325,6 +1310,54 @@ fn note_table_layout_with_family(
         row_ascents,
         grid_width,
     })
+}
+
+/// Evaluated participant Display, shared by component measurement and painting.
+/// AbstractTextualComponent builds a centered SheetBlock from Display lines;
+/// each stripe contributes its own metrics, not a fixed line-count surcharge.
+struct ParticipantTextBlock<'a> {
+    lines: Vec<(&'a str, f64, RenderedLineMetrics)>,
+    width: f64,
+    height: f64,
+}
+impl<'a> ParticipantTextBlock<'a> {
+    fn new(text: &'a str, size: f64, family: &str, bold: bool) -> Self {
+        let lines: Vec<_> = text
+            .split('\n')
+            .map(|line| {
+                // StripeSimple#getAtoms supplies a space for a present empty line.
+                let line = if line.is_empty() { " " } else { line };
+                let width = text_render::measure_with_family(line, size, bold, family);
+                (
+                    line,
+                    width,
+                    rendered_line_metrics_with_family(line, size, family),
+                )
+            })
+            .collect();
+        let width = lines.iter().map(|line| line.1).fold(0.0, f64::max);
+        let height = lines.iter().map(|line| line.2.height).sum();
+        Self {
+            lines,
+            width,
+            height,
+        }
+    }
+    fn draw(&self, buf: &mut String, base: &TextBase<'_>) {
+        let mut top = base.y - self.lines[0].2.ascent;
+        for (text, width, metrics) in &self.lines {
+            text_render::emit_text(
+                buf,
+                text,
+                &TextBase {
+                    x: base.x + (self.width - width) / 2.0,
+                    y: top + metrics.ascent,
+                    ..base.clone()
+                },
+            );
+            top += metrics.height;
+        }
+    }
 }
 
 /// BodyEnhanced2 segments Display before BodyEnhancedAbstract decorates each
@@ -3155,9 +3188,11 @@ struct ParticipantLayout {
     stereotype: Option<String>,
     /// Text width at the participant label font size.
     text_width: f64,
+    /// Participant#getUsedStyles resolves this kind's font before measure/paint.
+    font_size: u32,
     /// Baseline offset from the participant box top for the label.
     text_y_offset: f64,
-    /// Stereotype display text width at font-size 11 (if any)
+    /// Stereotype Display width in the resolved participant component font.
     stereotype_width: f64,
     /// Box width (used for spacing and centering — meaning varies by kind)
     box_width: f64,
@@ -3574,7 +3609,7 @@ fn add_sequence_life_variation(
     events: &[Event],
     event_y_positions: &[f64],
     lifecycle_owner: &[Option<usize>],
-    create_msg_idx: &HashMap<String, usize>,
+    create_msg_idx: &HashMap<String, Vec<usize>>,
     first_message_index: Option<usize>,
     participant: &str,
     event_index: usize,
@@ -3597,7 +3632,9 @@ fn add_sequence_life_variation(
         .unwrap_or_default();
     let ordinate = match (kind, owner_message) {
         (LifeVariationKind::Open, Some((index, _message)))
-            if create_msg_idx.get(participant) == Some(&index) =>
+            if create_msg_idx
+                .get(participant)
+                .is_some_and(|indices| indices.contains(&index)) =>
         {
             event_y_positions[index] + CREATE_BAR_OFFSET
         }
@@ -3646,7 +3683,7 @@ fn sequence_lifelines(
     event_y_positions: &[f64],
     page1_end: usize,
     lifecycle_owner: &[Option<usize>],
-    create_msg_idx: &HashMap<String, usize>,
+    create_msg_idx: &HashMap<String, Vec<usize>>,
     teoz: bool,
 ) -> SequenceLifeLines {
     let mut model = SequenceLifeLines {
@@ -3885,8 +3922,10 @@ fn sequence_lifelines(
     model
 }
 
-fn sequence_create_message_indices(events: &[Event]) -> HashMap<String, usize> {
-    let mut result = HashMap::new();
+fn sequence_create_message_indices(events: &[Event]) -> HashMap<String, Vec<usize>> {
+    // SequenceDiagram#addMessage attaches each pending CREATE life event to
+    // its compatible message. Participant creation is not a one-shot index.
+    let mut result: HashMap<String, Vec<usize>> = HashMap::new();
     let mut pending = Vec::new();
     for (event_index, event) in events.iter().enumerate() {
         match event {
@@ -3894,7 +3933,7 @@ fn sequence_create_message_indices(events: &[Event]) -> HashMap<String, usize> {
             Event::Message(message) => {
                 if let Some(position) = pending.iter().position(|id| *id == message.to) {
                     let participant = pending.remove(position);
-                    result.entry(participant).or_insert(event_index);
+                    result.entry(participant).or_default().push(event_index);
                 }
             }
             _ => {}
@@ -4115,7 +4154,12 @@ impl TeozHistory {
                 source: index,
                 life,
                 owner: if let Event::Create(id) = event {
-                    creates.get(id).copied()
+                    // Each raw CREATE owns its next attached message, not the
+                    // participant's first or final creation callback.
+                    creates
+                        .get(id)
+                        .and_then(|indices| indices.iter().find(|&&owner| owner > index))
+                        .copied()
                 } else {
                     owners[index].filter(|&i| matches!(events[i], Event::Message(_)))
                 },
@@ -4899,10 +4943,17 @@ impl PlantUmlSvg {
             .unwrap();
         }
 
-        let line_h = atom_height_with_family(
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-        );
+        let line_h = stereotype
+            .map(|(text, _)| {
+                ParticipantTextBlock::new(
+                    &format!("«{text}»"),
+                    self.participant_font_size as f64,
+                    &self.participant_font_family,
+                    false,
+                )
+                .height
+            })
+            .unwrap_or(0.0);
         let label_x = if stereotype.is_some() {
             rect_x + (rect_w - text_len) / 2.0
         } else {
@@ -4914,9 +4965,14 @@ impl PlantUmlSvg {
             let st_display = format!("\u{ab}{st_text}\u{bb}");
             let st_x = rect_x + (rect_w - st_width) / 2.0;
             let st_y = text_y - line_h;
-            text_render::emit_text(
-                &mut self.buf,
+            ParticipantTextBlock::new(
                 &st_display,
+                self.participant_font_size as f64,
+                &self.participant_font_family,
+                false,
+            )
+            .draw(
+                &mut self.buf,
                 &TextBase {
                     x: st_x,
                     y: st_y,
@@ -4931,22 +4987,7 @@ impl PlantUmlSvg {
             );
         }
 
-        let _ = text_len;
-        text_render::emit_text(
-            &mut self.buf,
-            text_content,
-            &TextBase {
-                x: label_x,
-                y: text_y,
-                font_size: self.participant_font_size,
-                font_family: &self.participant_font_family,
-                fill: &self.participant_font_color,
-                bold: self.participant_font_bold,
-                italic: self.participant_font_italic,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        self.participant_text(label_x, text_y, text_content, text_len);
 
         self.participant_group_close();
     }
@@ -5014,10 +5055,15 @@ impl PlantUmlSvg {
 
     /// Write participant text label.
     fn participant_text(&mut self, text_x: f64, text_y: f64, text_content: &str, text_len: f64) {
-        let _ = text_len;
-        text_render::emit_text(
-            &mut self.buf,
+        let block = ParticipantTextBlock::new(
             text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        );
+        let _ = text_len;
+        block.draw(
+            &mut self.buf,
             &TextBase {
                 x: text_x,
                 y: text_y,
@@ -5044,9 +5090,14 @@ impl PlantUmlSvg {
         let st_display = format!("\u{ab}{st_text}\u{bb}");
         let st_x = cx - (st_width + 2.0 * ACTOR_TEXT_PAD) / 2.0;
         let st_y = name_y - line_h;
-        text_render::emit_text(
-            &mut self.buf,
+        ParticipantTextBlock::new(
             &st_display,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            false,
+        )
+        .draw(
+            &mut self.buf,
             &TextBase {
                 x: st_x,
                 y: st_y,
@@ -5238,18 +5289,27 @@ impl PlantUmlSvg {
         // foot figures mirror the head layout (figure on top, text below).
         let is_tail = position == "tail" && !teoz;
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
+        // ComponentRose symbol components compose their text block and symbol
+        // vertically; the tail symbol begins after the complete Display.
+        let label = ParticipantTextBlock::new(
+            text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        );
+        let label_ascent = label.lines[0].2.ascent;
         let (text_y, figure_base) = if is_tail {
             // Tail: text first, figure below.
             (
-                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
-                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+                base_y + stereo_shift + label_ascent,
+                base_y + stereo_shift + label.height,
             )
         } else {
             // Head: figure first, text below.
             // ComponentRoseActor places text below ActorStickMan's complete
             // preferred height, whose vertical dimension includes shadow.
             (
-                base_y + ACTOR_HEAD_TEXT_Y_OFFSET + stereo_shift + shadow_delta,
+                base_y + ACTOR_SYMBOL_HEIGHT + label_ascent + stereo_shift + shadow_delta,
                 base_y,
             )
         };
@@ -5333,13 +5393,25 @@ impl PlantUmlSvg {
 
         let is_tail = position == "tail" && !teoz;
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
+        // ComponentRose symbol components compose their text block and symbol
+        // vertically; the tail symbol begins after the complete Display.
+        let label = ParticipantTextBlock::new(
+            text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        );
+        let label_ascent = label.lines[0].2.ascent;
         let (text_y, figure_base) = if is_tail {
             (
-                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
-                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+                base_y + stereo_shift + label_ascent,
+                base_y + stereo_shift + label.height,
             )
         } else {
-            (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET + stereo_shift, base_y)
+            (
+                base_y + CIRCLE_SYMBOL_HEIGHT + label_ascent + stereo_shift,
+                base_y,
+            )
         };
 
         // Text label
@@ -5414,13 +5486,25 @@ impl PlantUmlSvg {
         // room for the stereotype line above it; the figure stays at the head
         // top (the head height already grew to absorb the extra line).
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
+        // ComponentRose symbol components compose their text block and symbol
+        // vertically; the tail symbol begins after the complete Display.
+        let label = ParticipantTextBlock::new(
+            text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        );
+        let label_ascent = label.lines[0].2.ascent;
         let (text_y, figure_base) = if is_tail {
             (
-                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
-                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+                base_y + stereo_shift + label_ascent,
+                base_y + stereo_shift + label.height,
             )
         } else {
-            (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET + stereo_shift, base_y)
+            (
+                base_y + CIRCLE_SYMBOL_HEIGHT + label_ascent + stereo_shift,
+                base_y,
+            )
         };
 
         // Text label
@@ -5501,13 +5585,25 @@ impl PlantUmlSvg {
 
         let is_tail = position == "tail" && !teoz;
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
+        // ComponentRose symbol components compose their text block and symbol
+        // vertically; the tail symbol begins after the complete Display.
+        let label = ParticipantTextBlock::new(
+            text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        );
+        let label_ascent = label.lines[0].2.ascent;
         let (text_y, figure_base) = if is_tail {
             (
-                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
-                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+                base_y + stereo_shift + label_ascent,
+                base_y + stereo_shift + label.height,
             )
         } else {
-            (base_y + CIRCLE_SHAPE_TEXT_Y_OFFSET + stereo_shift, base_y)
+            (
+                base_y + CIRCLE_SYMBOL_HEIGHT + label_ascent + stereo_shift,
+                base_y,
+            )
         };
 
         // Text label
@@ -5576,13 +5672,25 @@ impl PlantUmlSvg {
 
         let is_tail = position == "tail" && !teoz;
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
+        // ComponentRose symbol components compose their text block and symbol
+        // vertically; the tail symbol begins after the complete Display.
+        let label = ParticipantTextBlock::new(
+            text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        );
+        let label_ascent = label.lines[0].2.ascent;
         let (text_y, figure_base) = if is_tail {
             (
-                base_y + ACTOR_TAIL_TEXT_Y_OFFSET,
-                base_y + ACTOR_TAIL_FIGURE_Y_OFFSET,
+                base_y + stereo_shift + label_ascent,
+                base_y + stereo_shift + label.height,
             )
         } else {
-            (base_y + DB_TEXT_Y_OFFSET + stereo_shift, base_y)
+            (
+                base_y + DB_CYLINDER_HEIGHT + label_ascent + stereo_shift,
+                base_y,
+            )
         };
 
         // Text label
@@ -5662,7 +5770,17 @@ impl PlantUmlSvg {
         // rectangles grow by one line and the name baseline shifts down (the
         // stereotype takes the `text_y` slot the name would otherwise use).
         let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        let rect_h = HEAD_BOX_H + stereo_shift;
+        // ComponentRoseCollections surrounds its complete Display with the
+        // same marginY7 as ComponentRoseParticipant; the second rect is offset.
+        let rect_h = ParticipantTextBlock::new(
+            text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        )
+        .height
+            + 2.0 * 7.0
+            + stereo_shift;
 
         // Back rectangle (offset right and up)
         let back_x = box_x + COLLECTIONS_OFFSET;
@@ -5718,9 +5836,14 @@ impl PlantUmlSvg {
         if let Some((st_text, st_width)) = stereo {
             let st_display = format!("\u{ab}{st_text}\u{bb}");
             let st_x = box_x + (rect_w - st_width) / 2.0;
-            text_render::emit_text(
-                &mut self.buf,
+            ParticipantTextBlock::new(
                 &st_display,
+                self.participant_font_size as f64,
+                &self.participant_font_family,
+                false,
+            )
+            .draw(
+                &mut self.buf,
                 &TextBase {
                     x: st_x,
                     y: text_y,
@@ -5765,9 +5888,25 @@ impl PlantUmlSvg {
         line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
-        // A boxed stereotype adds one line: the pill grows by `line_h` and the
-        // name shifts down, leaving the stereotype on the `text_y` line above.
-        let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
+        // USymbolQueue composes the stereotype and name Display vertically.
+        let stereo_shift = stereo
+            .map(|(text, _)| {
+                ParticipantTextBlock::new(
+                    &format!("«{text}»"),
+                    self.participant_font_size as f64,
+                    &self.participant_font_family,
+                    false,
+                )
+                .height
+            })
+            .unwrap_or(0.0);
+        let label = ParticipantTextBlock::new(
+            text_content,
+            self.participant_font_size as f64,
+            &self.participant_font_family,
+            self.participant_font_bold,
+        );
+        let _ = line_h;
 
         // Pill shape: rounded left side, right side with inner curve
         // From golden SVG for queue "Alice":
@@ -5778,16 +5917,14 @@ impl PlantUmlSvg {
         //              C47.7236,36.4883 52.7236,36.4883 52.7236,36.4883
         //
         // The pill shape: left edge = box_x, right text edge = box_x + text_width + 2*padding
-        // Radius of caps = 5px, half height = HEAD_BOX_H/2
+        // USymbolQueue uses cap radius5 and half of the component height.
         let left = box_x;
         let right = box_x + box_w;
         let cap_r = 5.0;
         let inner_left = left + cap_r;
         let inner_right = right - cap_r;
-        // The queue pill is 4px shorter than a normal head box and is
-        // vertically offset: pushed down 5px in the head region, flush with
-        // the top in the tail region (matching PlantUML).
-        let pill_h = HEAD_BOX_H - 4.0 + stereo_shift;
+        // ComponentRoseQueue -> USymbolQueue uses Display height + margins5/5.
+        let pill_h = label.height + stereo_shift + 5.0 + 5.0;
         let top = if position == "tail" {
             base_y
         } else {
@@ -5836,9 +5973,14 @@ impl PlantUmlSvg {
             let inner_w = box_w - QUEUE_TEXT_H_PAD;
             let st_display = format!("\u{ab}{st_text}\u{bb}");
             let st_x = box_x + QUEUE_TEXT_X_PAD + (inner_w - st_width) / 2.0;
-            text_render::emit_text(
-                &mut self.buf,
+            ParticipantTextBlock::new(
                 &st_display,
+                self.participant_font_size as f64,
+                &self.participant_font_family,
+                false,
+            )
+            .draw(
+                &mut self.buf,
                 &TextBase {
                     x: st_x,
                     y: text_y,
@@ -6797,12 +6939,23 @@ fn render_participant_shape(
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
     svg.active_participant_url = p.url.clone();
-    // Stereotype line for figure participants (drawn italic above the name).
-    // One participant text line; the head height already accounts for it.
-    let figure_line_h = atom_height_with_family(
-        svg.participant_font_size as f64,
-        &svg.participant_font_family,
-    );
+    let outer_font_size = svg.participant_font_size;
+    svg.participant_font_size = p.font_size;
+    // Participant#getDisplay prepends the stereotype component to the label.
+    // Use its complete height for both reservation and paint translation.
+    let figure_line_h = p
+        .stereotype
+        .as_ref()
+        .map(|text| {
+            ParticipantTextBlock::new(
+                &format!("«{text}»"),
+                p.font_size as f64,
+                &svg.participant_font_family,
+                false,
+            )
+            .height
+        })
+        .unwrap_or(0.0);
     // Figure participants only render the stereotype when boxed (see
     // `boxed_decl_idx` / ParticipantLayout::in_box).
     let stereo_ref: Option<(&str, f64)> = if p.in_box {
@@ -6919,7 +7072,7 @@ fn render_participant_shape(
         }
         ParticipantKind::Collections => {
             let text_x = p.box_x + participant_inner_pad;
-            let text_y = base_y + COLLECTIONS_OFFSET + BOX_TEXT_Y_OFFSET;
+            let text_y = base_y + COLLECTIONS_OFFSET + p.text_y_offset;
             svg.collections_shape(
                 part_uid,
                 qualified_name,
@@ -6946,7 +7099,13 @@ fn render_participant_shape(
             } else {
                 base_y + queue_head_offset
             };
-            let text_y = pill_top + (HEAD_BOX_H - 4.0) / 2.0 + 5.29102;
+            // USymbolQueue draws its text block at marginY1=5.
+            let text_y = pill_top
+                + 5.0
+                + ascent_with_family(
+                    svg.participant_font_size as f64,
+                    &svg.participant_font_family,
+                );
             svg.queue_shape(
                 part_uid,
                 qualified_name,
@@ -6971,10 +7130,7 @@ fn render_participant_shape(
             let text_y = base_y
                 + p.text_y_offset
                 + if p.stereotype.is_some() {
-                    atom_height_with_family(
-                        svg.participant_font_size as f64,
-                        &svg.participant_font_family,
-                    )
+                    figure_line_h
                 } else {
                     0.0
                 };
@@ -7001,6 +7157,7 @@ fn render_participant_shape(
         }
     }
     svg.active_participant_url = None;
+    svg.participant_font_size = outer_font_size;
 }
 
 /// Render a sequence diagram with an optional oracle layout.
@@ -7801,32 +7958,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .flat_map(|b| b.members.iter().copied())
         .collect();
     let any_box_titled = participant_boxes.iter().any(|b| !b.title.is_empty());
-    // A titled box whose head is a queue lets the queue's pill offset clear the
-    // title, so that box omits the extra 5px title gap. The head band is global
-    // (one head_box_y for all participants), so the gap can only be dropped when
-    // EVERY titled box has a queue member — otherwise a titled non-queue box
-    // (e.g. an actor box) still needs the gap, and dropping it globally would
-    // raise the whole diagram by 5px (seq_combo_everything, seq_mega_combo_01).
-    let box_is_queue_clearing = |b: &&ParticipantBox| {
-        b.members.iter().any(|&pi| {
-            diagram
-                .participants
-                .get(pi)
-                .is_some_and(|p| p.kind == ParticipantKind::Queue)
-        })
-    };
-    let all_titled_boxes_have_queue = participant_boxes
-        .iter()
-        .filter(|b| !b.title.is_empty())
-        .all(box_is_queue_clearing);
+    // DrawableSet#getHeadAndEngloberHeight composes head plus the englober
+    // component. ComponentRoseEnglober reserves text + marginY1*2 +3;
+    // queue kind does not remove those title margins (account9e6a899c).
     let box_band_h = if !has_boxes {
         0.0
     } else if any_box_titled {
-        let title_gap = if all_titled_boxes_have_queue {
-            0.0
-        } else {
-            BOX_TITLE_HEAD_GAP
-        };
+        let title_gap = 2.0 * 1.0 + 3.0;
         // ComponentRoseEnglober#getPreferredHeight consumes getTextHeight,
         // including AbstractTextualComponent's top/bottom global padding.
         plantuml_metrics::text_height(BOX_TITLE_FONT_SIZE as f64) + title_gap + 2.0 * global_padding
@@ -7877,14 +8015,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         + title_band_h
         + box_band_h
         + header_band_h;
-    let participant_font_size_f = participant_font_size as f64;
-    let participant_line_h =
-        atom_height_with_family(participant_font_size_f, &participant_font_family);
-    let participant_box_h = participant_line_h + 14.0 + 2.0 * global_padding;
-    let participant_text_y_offset =
-        ascent_with_family(participant_font_size_f, &participant_font_family)
-            + 7.0
-            + global_padding;
     let note_content_width_padded = |max_text_w: f64, shape: NoteShape, align: MessageAlign| {
         aligned_note_content_width(max_text_w, shape, align) + 2.0 * note_global_padding
     };
@@ -7911,45 +8041,69 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Phase 1: Compute participant layouts
     // -----------------------------------------------------------------------
 
-    let all_participants_are_queues = !diagram.participants.is_empty()
-        && diagram
-            .participants
-            .iter()
-            .all(|p| p.kind == ParticipantKind::Queue);
-    let queue_head_offset = if all_participants_are_queues {
-        0.0
-    } else {
-        5.0
-    };
-    let queue_layout_h = if all_participants_are_queues {
-        HEAD_BOX_H - 5.0
-    } else {
-        HEAD_BOX_H
-    };
+    // ComponentRoseQueue has no separate internal head translation. Its
+    // preferred dimension participates in the same bottom alignment as heads.
+    let queue_head_offset = 0.0;
 
     let mut participants: Vec<ParticipantLayout> = diagram
         .participants
         .iter()
         .enumerate()
         .map(|(idx, p)| {
+            // Participant#getStyleSignature chooses its kind's sibling style.
+            // A participant font override must not leak into actor/queue text.
+            let kind = match p.kind {
+                ParticipantKind::Participant => "participant",
+                ParticipantKind::Actor => "actor",
+                ParticipantKind::Boundary => "boundary",
+                ParticipantKind::Control => "control",
+                ParticipantKind::Entity => "entity",
+                ParticipantKind::Database => "database",
+                ParticipantKind::Collections => "collections",
+                ParticipantKind::Queue => "queue",
+            };
+            let font_size = component_style(kind)
+                .property("fontSize")
+                .and_then(|value| value.parse::<u32>().ok())
+                .unwrap_or(PARTICIPANT_FONT_SIZE as u32);
+            let participant_font_size_f = font_size as f64;
+
             let st = p.stereotype.clone();
             let st_display = st.as_ref().map(|s| format!("\u{ab}{s}\u{bb}"));
             let st_w = st_display
                 .as_ref()
                 .map(|s| {
-                    text_width_with_family(s, participant_font_size_f, &participant_font_family)
+                    ParticipantTextBlock::new(
+                        s,
+                        participant_font_size_f,
+                        &participant_font_family,
+                        false,
+                    )
+                    .width
                 })
                 .unwrap_or(0.0);
             let label = manage_guillemet(&p.label);
-            let tw = if participant_font_bold {
-                bold_text_width_with_family(
-                    &label,
-                    participant_font_size_f,
-                    &participant_font_family,
-                )
-            } else {
-                text_width_with_family(&label, participant_font_size_f, &participant_font_family)
-            };
+            let label_block = ParticipantTextBlock::new(
+                &label,
+                participant_font_size_f,
+                &participant_font_family,
+                participant_font_bold,
+            );
+            let tw = label_block.width;
+            let label_height = label_block.height;
+            let label_ascent = label_block.lines[0].2.ascent;
+            let stereotype_height = st_display
+                .as_ref()
+                .map(|text| {
+                    ParticipantTextBlock::new(
+                        text,
+                        participant_font_size_f,
+                        &participant_font_family,
+                        false,
+                    )
+                    .height
+                })
+                .unwrap_or(0.0);
             // Box width must accommodate the display label (and stereotype if separate)
             let max_text_w = tw.max(st_w);
 
@@ -7958,7 +8112,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 ParticipantKind::Actor => {
                     // Actor: width = max(arm_span, text_width) + 2*padding
                     let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(ACTOR_ARM_SPAN + 1.0);
-                    let h = HEAD_BOX_H + ACTOR_EXTRA_H;
+                    // ActorStickMan preferred geometry60 plus Display, minus
+                    // the common one-pixel Rose band tracked by preferred_height.
+                    let h = label_height + ACTOR_SYMBOL_HEIGHT - 1.0;
                     (w, h)
                 }
                 ParticipantKind::Boundary => {
@@ -7969,7 +8125,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         + BOUNDARY_LINE_TO_CIRCLE_GAP
                         + 2.0 * STEREOTYPE_CIRCLE_MARGIN;
                     let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(shape_w);
-                    let h = HEAD_BOX_H + CIRCLE_SHAPE_EXTRA_H;
+                    let h = label_height + CIRCLE_SYMBOL_HEIGHT - 1.0;
                     (w, h)
                 }
                 ParticipantKind::Control | ParticipantKind::Entity => {
@@ -7977,13 +8133,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // PlantUML width = max(stickman = 2*r + 2*margin, text + 2*pad).
                     let shape_w = 2.0 * STEREOTYPE_CIRCLE_R + 2.0 * STEREOTYPE_CIRCLE_MARGIN;
                     let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(shape_w);
-                    let h = HEAD_BOX_H + CIRCLE_SHAPE_EXTRA_H;
+                    let h = label_height + CIRCLE_SYMBOL_HEIGHT - 1.0;
                     (w, h)
                 }
                 ParticipantKind::Database => {
                     // Database: cylinder, text below.
                     let w = (max_text_w + 2.0 * ACTOR_TEXT_PAD).max(DB_CYLINDER_WIDTH);
-                    let h = HEAD_BOX_H + DB_EXTRA_H;
+                    let h = label_height + DB_CYLINDER_HEIGHT - 1.0;
                     (w, h)
                 }
                 ParticipantKind::Collections => {
@@ -7991,38 +8147,37 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // The layout width must include the stacking offset so the
                     // lifeline centres on the full visual span.
                     let w = max_text_w + 2.0 * participant_inner_pad + COLLECTIONS_OFFSET;
-                    let h = HEAD_BOX_H + COLLECTIONS_EXTRA_H;
+                    let h = label_height + 2.0 * 7.0 + COLLECTIONS_OFFSET;
                     (w, h)
                 }
                 ParticipantKind::Queue => {
                     // Queue: pill shape, width = text + 20 (caps + padding).
                     let w = max_text_w + QUEUE_TEXT_H_PAD;
-                    let h = queue_layout_h;
+                    // USymbolQueue Margin(5,15,5,5); preferred_height adds
+                    // back the common band pixel, not an extra text line.
+                    let h = label_height + 5.0 + 5.0 - 1.0;
                     (w, h)
                 }
                 ParticipantKind::Participant => {
                     let w = max_text_w + 2.0 * participant_inner_pad;
                     // Box height is taller for stereotyped participants.
                     let h = if st.is_some() {
-                        participant_box_h + participant_line_h
+                        label_height + 14.0 + 2.0 * global_padding + stereotype_height
                     } else {
-                        participant_box_h
+                        label_height + 14.0 + 2.0 * global_padding
                     };
                     (w, h)
                 }
             };
 
-            // A stereotype adds one text line to the head's text block (drawn
-            // italic, above the participant name). For the figure participant
-            // kinds this grows the head by `participant_line_h`; the figure
-            // stays at the head top and the name keeps its baseline (the shape
-            // renderers shift the name + stereotype down accordingly). The
-            // `Participant` kind already folds this into its branch above.
+            // Participant#getDisplay composes the stereotype above the label.
+            // Its measured height participates in every rendered head kind;
+            // Participant already includes it in its rectangle branch.
             // Only boxed figure participants render the stereotype (PlantUML
             // drops it from bare-declared figure heads).
             let in_box = boxed_decl_idx.contains(&idx);
             let bh = if st.is_some() && in_box && p.kind != ParticipantKind::Participant {
-                bh + participant_line_h
+                bh + stereotype_height
             } else {
                 bh
             };
@@ -8035,7 +8190,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 kind: p.kind,
                 stereotype: st,
                 text_width: tw,
-                text_y_offset: participant_text_y_offset,
+                font_size,
+                // ComponentRoseParticipant applies marginY7 before its text block.
+                text_y_offset: label_ascent + 7.0 + global_padding,
                 stereotype_width: st_w,
                 box_width: bw,
                 preferred_width: bw
@@ -8064,17 +8221,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // ComponentRoseParticipant#getPreferredHeight adds shadow+1;
                 // figure components use their own existing preferred geometry.
                 preferred_height: if p.kind == ParticipantKind::Queue {
-                    // ComponentRoseQueue#getPreferredHeight delegates to
-                    // USymbolQueue#asSmall: text plus Margin(5,15,5,5).
-                    // The mixed-kind row alignment band is not this component.
-                    participant_line_h
-                        * if st_display.is_some() && in_box {
-                            2.0
-                        } else {
-                            1.0
-                        }
-                        + 5.0
-                        + 5.0
+                    // USymbolQueue#getMargin surrounds the complete Display.
+                    bh + 1.0
                 } else {
                     bh + if matches!(
                         p.kind,
@@ -8244,18 +8392,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // ParticipantBox#drawHeadTailU and LivingSpaces#drawHeads subtract the
     // resolved component height from the shared head-band bottom. Keep this
     // same band for reservation and paint (account 00845306).
-    let participant_head_band = |p: &ParticipantLayout| {
-        p.box_height
-            + if p.kind == ParticipantKind::Participant {
-                participant_shadow_delta
-            } else if p.kind == ParticipantKind::Actor {
-                p.shadow_delta
-            } else if sequence_shadowing {
-                SHADOW_VERTICAL_PAD
-            } else {
-                0.0
-            }
-    };
+    let participant_head_band = |p: &ParticipantLayout| p.preferred_height - 1.0;
     let max_head_band = participants
         .iter()
         .map(participant_head_band)
@@ -8464,7 +8601,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // ParticipantBox#getHeadHeight). That head includes half of
                     // ComponentRoseLine's preferred height20. Teoz's
                     // CommunicationTile instead consumes the head alone.
-                    if create_msg_idx.get(&msg.to) == Some(&idx) {
+                    if create_msg_idx
+                        .get(&msg.to)
+                        .is_some_and(|indices| indices.contains(&idx))
+                    {
                         let head = &participants[id_to_idx[&msg.to]];
                         let head_height = head.preferred_height
                             + if diagram.teoz {
@@ -10935,7 +11075,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     }
                                     (Some(from), Some(to)) => {
                                         let a = participants[from].center_x;
-                                        let b = if create_msg_idx.get(&msg.to) == Some(&ev_idx) {
+                                        let b = if create_msg_idx
+                                            .get(&msg.to)
+                                            .is_some_and(|indices| indices.contains(&ev_idx))
+                                        {
                                             participants[to].box_x
                                                 + if from > to {
                                                     participants[to].preferred_width
@@ -12139,14 +12282,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &event_y_positions,
                 &teoz_tile_ends,
                 (
-                    create_msg_idx.get(&participant.id).map_or(0.0, |&index| {
-                        let (has_text, height) = event_message_text_height(&diagram.events[index]);
-                        // CommunicationTile#callbackY_internal calls goCreate at
-                        // tile origin, before component startPoint's ordinate.
-                        event_y_positions[index]
-                            - (msg_step(has_text, height) + 2.0 * global_padding
-                                - 2.0 * ARROW_HALF_H)
-                    }),
+                    // LivingSpace#goCreate(y) overwrites createY on every callback.
+                    create_msg_idx
+                        .get(&participant.id)
+                        .and_then(|indices| indices.last())
+                        .map_or(0.0, |&index| {
+                            let (has_text, height) =
+                                event_message_text_height(&diagram.events[index]);
+                            // CommunicationTile#callbackY_internal calls goCreate at
+                            // tile origin, before component startPoint's ordinate.
+                            event_y_positions[index]
+                                - (msg_step(has_text, height) + 2.0 * global_padding
+                                    - 2.0 * ARROW_HALF_H)
+                        }),
                     // LiveBoxes#getStairs appends PlayingSpace preferred height,
                     // which reaches the participant tail; the shared ordinate
                     // representation is shifted by the first/next step difference.
@@ -12267,34 +12415,44 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     // Per-participant lifeline top: created participants begin at their creating
     // message instead of the global top, and draw their head box inline there.
+    let creation_line_top = |id: &str, idx: usize| {
+        if diagram.teoz {
+            let (has_text, height) = event_message_text_height(&diagram.events[idx]);
+            event_y(idx)
+                - (msg_step(has_text, height) + 2.0 * global_padding - 2.0 * ARROW_HALF_H)
+                - 2.0
+        } else {
+            // Step1Message#createArrowCreate records origin+composite/2;
+            // DrawableSet adds ParticipantBox#magicMargin (line height /2).
+            let head = &participants[id_to_idx[id]];
+            let (has_text, h) = event_message_text_height(&diagram.events[idx]);
+            let arrow_height = msg_step(has_text, h) + 2.0 * global_padding;
+            let contact = (if has_text { h } else { 0.0 })
+                + 2.0
+                + ROSE_ARROW_PADDING_Y
+                + 2.0 * global_padding;
+            event_y(idx) - contact
+                + arrow_height.max(head.preferred_height + ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0)
+                    / 2.0
+                + ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0
+        }
+    };
+    let creation_top_by_message: HashMap<usize, f64> = create_msg_idx
+        .iter()
+        .flat_map(|(id, indices)| {
+            indices
+                .iter()
+                .map(|&index| (index, creation_line_top(id, index)))
+        })
+        .collect();
+    // LifeLine#setCreate and LivingSpace#goCreate overwrite the participant's
+    // line start; every earlier message still owns its separately drawn head.
     let created_lifeline_top: HashMap<String, f64> = create_msg_idx
         .iter()
-        .map(|(id, &idx)| {
-            (
-                id.clone(),
-                if diagram.teoz {
-                    let (has_text, height) = event_message_text_height(&diagram.events[idx]);
-                    event_y(idx)
-                        - (msg_step(has_text, height) + 2.0 * global_padding - 2.0 * ARROW_HALF_H)
-                        - 2.0
-                } else {
-                    // Step1Message#createArrowCreate records origin+composite/2.
-                    // DrawableSet#drawLineU22 adds ParticipantBox#magicMargin
-                    // (ComponentRoseLine preferred height20 /2).
-                    let head = &participants[id_to_idx[id]];
-                    let (has_text, h) = event_message_text_height(&diagram.events[idx]);
-                    let arrow_height = msg_step(has_text, h) + 2.0 * global_padding;
-                    let contact = (if has_text { h } else { 0.0 })
-                        + 2.0
-                        + ROSE_ARROW_PADDING_Y
-                        + 2.0 * global_padding;
-                    event_y(idx) - contact
-                        + arrow_height
-                            .max(head.preferred_height + ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0)
-                            / 2.0
-                        + ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0
-                },
-            )
+        .filter_map(|(id, indices)| {
+            indices
+                .last()
+                .map(|&idx| (id.clone(), creation_top_by_message[&idx]))
         })
         .collect();
 
@@ -12988,22 +13146,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
         // Created participants draw their head box inline at the creating message
         // (emitted in the message loop below), not at the top — skip the top head.
-        if let Some(&ev_idx) = create_msg_idx.get(&p.id) {
-            let destroyed_later = diagram
-                .events
-                .iter()
-                .skip(ev_idx + 1)
-                .any(|event| match event {
-                    Event::Destroy(id) => id == &p.id,
-                    Event::Message(msg) => {
-                        msg.to == p.id && matches!(msg.activation, Some(ActivationChange::Destroy))
-                    }
-                    _ => false,
-                });
-            let grouped_create = message_inside_group.get(&ev_idx).copied().unwrap_or(false);
-            let draw_control_glyph =
-                p.kind != ParticipantKind::Control || grouped_create || !destroyed_later;
-            created_inline.insert(ev_idx, (i, fill_color.clone(), draw_control_glyph));
+        if let Some(indices) = create_msg_idx.get(&p.id) {
+            for &ev_idx in indices {
+                let destroyed_later =
+                    diagram
+                        .events
+                        .iter()
+                        .skip(ev_idx + 1)
+                        .any(|event| match event {
+                            Event::Destroy(id) => id == &p.id,
+                            Event::Message(msg) => {
+                                msg.to == p.id
+                                    && matches!(msg.activation, Some(ActivationChange::Destroy))
+                            }
+                            _ => false,
+                        });
+                let grouped_create = message_inside_group.get(&ev_idx).copied().unwrap_or(false);
+                let draw_control_glyph =
+                    p.kind != ParticipantKind::Control || grouped_create || !destroyed_later;
+                created_inline.insert(ev_idx, (i, fill_color.clone(), draw_control_glyph));
+            }
         } else {
             // Head: base_y is where this participant's shape starts (bottom-aligned).
             let head_base_y = head_box_y + max_head_band - participant_head_band(p);
@@ -13096,13 +13258,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 );
                 let reverse = center_of(&message.from) > center_of(&message.to);
                 // CommunicationTile#drawU draws the head at its adjusted posB/posD.
-                shifted.box_x += if reverse {
+                let shift = if reverse {
                     level as f64 * ACTIVATION_HALF_W
                 } else if level > 0 {
                     (level as f64 - 2.0) * ACTIVATION_HALF_W
                 } else {
                     0.0
                 };
+                // CommunicationTile applies UTranslate to the entire head:
+                // symbol center, label anchor and box bounds share the move.
+                shifted.box_x += shift;
+                shifted.center_x += shift;
                 &shifted
             } else {
                 &participants[*pi]
@@ -13110,7 +13276,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let part_uid = format!("part{}", p.decl_idx + 1);
             let sl = p.source_line;
             let inline_base_y = if diagram.teoz {
-                created_lifeline_top[&p.id]
+                creation_top_by_message[&ev_idx]
             } else {
                 // ArrowAndParticipant#drawInternalU starts at the arrow
                 // component origin, plus max(arrowHeight-headHeight,0).
@@ -13819,9 +13985,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // ComponentRoseSelfArrow#drawRightSide paints dressing1
                     // after the three body strokes and before dressing2.
                     if is_bidirectional {
-                        // ArrowConfiguration#withPart selected dressing2;
-                        // the self start dressing remains FULL.
-                        let head_half: Option<ArrowHalf> = None;
+                        // ComponentRoseSelfArrow explicitly uses getPart(),
+                        // unlike ordinary per-dressing paint (account c31c4216).
                         let head = msg.arrow.source_dressing.unwrap_or(msg.arrow.head);
                         if head == ArrowHead::Open {
                             for (half, dy) in [
@@ -16373,6 +16538,64 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn repeated_creation_keeps_each_message_owner() {
+        for source in ["Seed", "Other"] {
+            let input = format!(
+                "@startuml\nparticipant Seed\nparticipant Other\nactor Born\ncreate Born\n{source} -> Born: first\nBorn -> {source}: reply\ncreate Born\n{source} -> Born ++: second\nBorn --> {source} --: release\ncreate Born\n{source} -> Born: third\n@enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let rustuml_parser::diagram::Diagram::Sequence(sequence) = diagram else {
+                panic!("expected sequence");
+            };
+            let owners = sequence_create_message_indices(&sequence.events);
+            let indices = owners.get("Born").unwrap();
+            assert_eq!(indices.len(), 3);
+            assert!(indices.windows(2).all(|pair| pair[0] < pair[1]));
+            for index in indices {
+                assert!(
+                    matches!(&sequence.events[*index], Event::Message(message) if message.to == "Born")
+                );
+                assert!(matches!(&sequence.events[*index - 1], Event::Create(id) if id == "Born"));
+            }
+        }
+    }
+
+    #[test]
+    fn participant_display_measures_and_paints_each_stripe() {
+        for size in [11, 19] {
+            let block =
+                ParticipantTextBlock::new("Long label\n\nEnd", size as f64, "sans-serif", false);
+            assert_eq!(block.lines.len(), 3);
+            assert_eq!(block.lines[1].0, " ");
+            assert_eq!(
+                block.height,
+                block.lines.iter().map(|line| line.2.height).sum::<f64>()
+            );
+            let mut output = String::new();
+            block.draw(
+                &mut output,
+                &TextBase {
+                    x: 0.0,
+                    y: block.lines[0].2.ascent,
+                    font_size: size,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            assert_eq!(output.matches("<text ").count(), 3);
+            // Shared text emits the space atom using its XML whitespace encoding.
+            assert!(output.contains(">&#160;</text>"), "{output}");
+            assert!(
+                output.find(">Long label</text>").unwrap() < output.find(">End</text>").unwrap()
+            );
+        }
+    }
 
     #[test]
     fn enhanced_note_body_paints_body_before_centered_title() {

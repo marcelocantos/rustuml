@@ -136,10 +136,10 @@ fn validate_return_destinations(events: &[Event]) -> Result<(), ParseError> {
         .map_err(|(line, message)| ParseError { line, message })
 }
 
-// Display#getWithNewlines expands inline note escapes before the component
+// Display#getWithNewlines expands inline note/participant escapes before the component
 // measures or draws them. Raw math/link bodies retain their backslashes.
 // Block commands use Display.create and do not run this inline conversion.
-fn inline_note_display(text: &str) -> String {
+fn inline_sequence_display(text: &str) -> String {
     let mut result = String::with_capacity(text.len());
     let mut chars = text.char_indices().peekable();
     let mut raw = false;
@@ -439,7 +439,7 @@ impl SeqParser {
             self.participant_ids.push(id.clone());
             self.participants.push(Participant {
                 id: id.clone(),
-                label: id.clone(),
+                label: inline_sequence_display(&id),
                 kind: ParticipantKind::default(),
                 order: Some(self.participants.len()),
                 stereotype: None,
@@ -655,6 +655,8 @@ impl SeqParser {
             } else {
                 extract_stereotype_from_label(&raw_label)
             };
+            // CommandParticipant passes its label through Display#getWithNewlines.
+            let label = inline_sequence_display(&label);
             let stereotype = caps
                 .get(10)
                 .map(|m| m.as_str().to_string())
@@ -798,7 +800,7 @@ impl SeqParser {
                 self.events.push(Event::Note(Note {
                     position: NotePosition::Over,
                     participants: vec![participant_id],
-                    text: inline_note_display(text),
+                    text: inline_sequence_display(text),
                     shape: NoteShape::Note,
                     color: None,
                     on_message: false,
@@ -827,7 +829,7 @@ impl SeqParser {
             } else {
                 (None, rest)
             };
-            let text = inline_note_display(rest.trim_start_matches(':').trim());
+            let text = inline_sequence_display(rest.trim_start_matches(':').trim());
             if text.is_empty() {
                 self.note_buffer = Some(NoteBuffer {
                     position: NotePosition::Over,
@@ -903,7 +905,7 @@ impl SeqParser {
                     return true;
                 }
                 // Inline note: note right : text
-                let text = inline_note_display(text_match.as_str().trim());
+                let text = inline_sequence_display(text_match.as_str().trim());
                 self.events.push(Event::Note(Note {
                     position,
                     participants,
@@ -1711,7 +1713,24 @@ mod tests {
     }
 
     #[test]
-    fn inline_note_display_normalizes_before_model_storage() {
+    fn participant_labels_keep_display_lines_separate_from_identity() {
+        for kind in ["participant", "actor", "queue"] {
+            let diagram = parse(&format!(
+                r#"{kind} "Long\nShort\nLast" as Mail
+Gate -> Mail: enqueue"#
+            ));
+            let participant = diagram
+                .participants
+                .iter()
+                .find(|p| p.id == "Mail")
+                .unwrap();
+            assert_eq!(participant.label, "Long\nShort\nLast");
+            assert!(matches!(&diagram.events[0], Event::Message(message) if message.to == "Mail"));
+        }
+    }
+
+    #[test]
+    fn inline_sequence_display_normalizes_before_model_storage() {
         for command in ["note right", "note across", "note over Cedar"] {
             let diagram = parse(&format!(
                 "Cedar -> Pine : enter\n{command} : first\\nsecond"
@@ -1728,13 +1747,16 @@ mod tests {
         }
         // Display.create for a block retains literal escapes; getWithNewlines
         // for an inline Display also leaves math and link bodies untouched.
-        assert_eq!(inline_note_display(r"a\\n b\t c\nend"), "a\\n b\t c\nend");
         assert_eq!(
-            inline_note_display(r"<math>x\ny</math>\nz"),
+            inline_sequence_display(r"a\\n b\t c\nend"),
+            "a\\n b\t c\nend"
+        );
+        assert_eq!(
+            inline_sequence_display(r"<math>x\ny</math>\nz"),
             "<math>x\\ny</math>\nz"
         );
         assert_eq!(
-            inline_note_display(r"[[https://example.test/x\ny link]]\nz"),
+            inline_sequence_display(r"[[https://example.test/x\ny link]]\nz"),
             "[[https://example.test/x\\ny link]]\nz"
         );
         let block = parse("Cedar -> Pine : enter\nnote right\nfirst\\nsecond\nend note");
