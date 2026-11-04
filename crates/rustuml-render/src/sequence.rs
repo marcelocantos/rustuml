@@ -571,6 +571,10 @@ const ARROW_HALF_H: f64 = 4.0; // vertical half-height of arrow polygon
 const FILLED_ARROW_NOTCH: f64 = 4.0; // notch indent in filled arrow
 // ComponentRoseArrow#spaceCrossX; used by self-arrow decoration endpoints.
 const SELF_CROSS_SPACE: f64 = 6.0;
+// LiveBoxes#addStep staggers only colliding DEACTIVATE callbacks.
+const TEOZ_DEACTIVATE_CALLBACK_STAGGER: f64 = 5.0;
+// ComponentRoseDestroy#crossSize; preferred width and height are twice this.
+const DESTROY_CROSS_HALF: f64 = 9.0;
 // `ComponentRoseArrow` places dressing 1 at pos1=1 and dressing 2 at
 // pos2=width-2. Its CROSSX centre is another spaceCrossX(6)+half-width(5)
 // inward, yielding asymmetric offsets from the two spatial endpoints.
@@ -2836,6 +2840,7 @@ fn emit_generated_handwritten_warning(svg: &mut String, dx: f64) {
 // Layout data structures
 // ---------------------------------------------------------------------------
 
+#[derive(Clone)]
 struct ParticipantLayout {
     /// Participant declaration index (0-based), used for stable `partN` SVG ids.
     decl_idx: usize,
@@ -3307,8 +3312,9 @@ fn add_sequence_life_variation(
                 }
         }
         (LifeVariationKind::Close, None)
-            if owner_index
-                .is_some_and(|index| matches!(events.get(index), Some(Event::GroupEnd))) =>
+            if !matches!(events.get(event_index), Some(Event::Destroy(_)))
+                && owner_index
+                    .is_some_and(|index| matches!(events.get(index), Some(Event::GroupEnd))) =>
         {
             event_ordinate + GROUP_END_HEIGHT
         }
@@ -3725,9 +3731,32 @@ enum TeozHistoryMode {
     ConsiderFutureDeactivate,
 }
 
+// LifeEventType.CREATE is neutral in LiveBoxes depth scans (ea313c62).
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum TeozLifeKind {
+    Activate,
+    Deactivate,
+    Destroy,
+    Create,
+}
+impl From<ActivationChange> for TeozLifeKind {
+    fn from(change: ActivationChange) -> Self {
+        match change {
+            ActivationChange::Activate => Self::Activate,
+            ActivationChange::Deactivate => Self::Deactivate,
+            ActivationChange::Destroy => Self::Destroy,
+        }
+    }
+}
+impl TeozLifeKind {
+    fn closes(self) -> bool {
+        matches!(self, Self::Deactivate | Self::Destroy)
+    }
+}
+
 struct TeozHistoryItem {
     source: usize,
-    life: Option<(String, ActivationChange, Option<String>)>,
+    life: Option<(String, TeozLifeKind, Option<String>)>,
     owner: Option<usize>,
     implicit: bool,
 }
@@ -3738,29 +3767,49 @@ enum TeozNoteAllocation {
     Paint,
 }
 
+struct TeozLifePainting {
+    segments: Vec<(usize, f64, f64, Option<String>, usize)>,
+    destroys: Vec<(f64, usize)>,
+}
+
 struct TeozHistory {
     items: Vec<TeozHistoryItem>,
     source_position: Vec<usize>,
+    parallel_previous: Vec<Option<usize>>,
 }
 
 impl TeozHistory {
     fn new(events: &[Event], owners: &[Option<usize>]) -> Self {
         let mut items = Vec::new();
+        let creates = sequence_create_message_indices(events);
+        let mut parallel_previous = vec![None; events.len()];
+        let mut previous_message = None;
         let mut source_position = vec![0; events.len()];
         for (index, event) in events.iter().enumerate() {
             source_position[index] = items.len();
+            if let Event::Message(message) = event {
+                if message.parallel {
+                    parallel_previous[index] = previous_message;
+                }
+                previous_message = Some(index);
+            }
             let life = match event {
                 Event::Activate(id, color) => {
-                    Some((id.clone(), ActivationChange::Activate, color.clone()))
+                    Some((id.clone(), TeozLifeKind::Activate, color.clone()))
                 }
-                Event::Deactivate(id) => Some((id.clone(), ActivationChange::Deactivate, None)),
-                Event::Destroy(id) => Some((id.clone(), ActivationChange::Destroy, None)),
+                Event::Deactivate(id) => Some((id.clone(), TeozLifeKind::Deactivate, None)),
+                Event::Destroy(id) => Some((id.clone(), TeozLifeKind::Destroy, None)),
+                Event::Create(id) => Some((id.clone(), TeozLifeKind::Create, None)),
                 _ => None,
             };
             items.push(TeozHistoryItem {
                 source: index,
                 life,
-                owner: owners[index],
+                owner: if let Event::Create(id) = event {
+                    creates.get(id).copied()
+                } else {
+                    owners[index].filter(|&i| matches!(events[i], Event::Message(_)))
+                },
                 implicit: false,
             });
             if let Event::Message(message) = event
@@ -3780,7 +3829,7 @@ impl TeozHistory {
                     source: index,
                     life: Some((
                         participant.clone(),
-                        change,
+                        change.into(),
                         message.activation_color.clone(),
                     )),
                     owner: Some(index),
@@ -3791,6 +3840,20 @@ impl TeozHistory {
         Self {
             items,
             source_position,
+            parallel_previous,
+        }
+    }
+
+    // AbstractMessage#isParallelWith is directional ancestry, not row equality.
+    fn same_message(&self, mut owner: usize, current: usize) -> bool {
+        loop {
+            if owner == current {
+                return true;
+            }
+            let Some(previous) = self.parallel_previous[owner] else {
+                return false;
+            };
+            owner = previous;
         }
     }
 
@@ -3817,9 +3880,9 @@ impl TeozHistory {
             if let Some((id, change, _)) = &item.life
                 && id == participant
             {
-                if *change == ActivationChange::Activate {
+                if *change == TeozLifeKind::Activate {
                     level += 1;
-                } else {
+                } else if change.closes() {
                     level = level.saturating_sub(1);
                 }
             }
@@ -3837,10 +3900,14 @@ impl TeozHistory {
         let (mut opened, mut closed) = (false, false);
         for item in &self.items[position + 1..] {
             if let Some((id, change, _)) = &item.life {
-                if item.owner != Some(current.source) || id != participant {
+                if !item
+                    .owner
+                    .is_some_and(|owner| self.same_message(owner, current.source))
+                    || id != participant
+                {
                     continue;
                 }
-                if *change == ActivationChange::Activate
+                if *change == TeozLifeKind::Activate
                     && mode != TeozHistoryMode::IgnoreFutureActivate
                 {
                     opened = true;
@@ -3849,9 +3916,7 @@ impl TeozHistory {
                     }
                     level += 1;
                 }
-                if *change != ActivationChange::Activate
-                    && mode == TeozHistoryMode::ConsiderFutureDeactivate
-                {
+                if change.closes() && mode == TeozHistoryMode::ConsiderFutureDeactivate {
                     closed = true;
                     if opened {
                         break;
@@ -3873,11 +3938,11 @@ impl TeozHistory {
             if let Some((id, change, _)) = &item.life
                 && id == participant
             {
-                if *change == ActivationChange::Activate {
+                if *change == TeozLifeKind::Activate {
                     depth += 1;
                 }
                 maximum = maximum.max(depth);
-                if *change != ActivationChange::Activate {
+                if change.closes() {
                     depth -= 1;
                 }
             }
@@ -3892,8 +3957,9 @@ impl TeozHistory {
         message_states: &[MessageLifecycleState],
         ordinates: &[f64],
         tile_ends: &[f64],
-        end_y: f64,
-    ) -> Vec<(usize, f64, f64, Option<String>, usize)> {
+        vertical_bounds: (f64, f64),
+    ) -> TeozLifePainting {
+        let (create_y, end_y) = vertical_bounds;
         let mut callbacks = vec![None; self.items.len()];
         let mut record_callbacks = || {
             for (position, item) in self.items.iter().enumerate() {
@@ -3908,8 +3974,8 @@ impl TeozHistory {
                     };
                     // LiveBoxes#addStep: only DEACTIVATE and only an actual callback
                     // ordinate collision gets the five-pixel stagger.
-                    if *change == ActivationChange::Deactivate && callbacks.contains(&Some(y)) {
-                        y += ACTIVATION_HALF_W;
+                    if *change == TeozLifeKind::Deactivate && callbacks.contains(&Some(y)) {
+                        y += TEOZ_DEACTIVATE_CALLBACK_STAGGER;
                     }
                     Some(y)
                 } else if let Event::Message(message) = &events[item.source] {
@@ -3941,7 +4007,7 @@ impl TeozHistory {
         record_callbacks(); // drawU -> getPreferredHeight
         record_callbacks(); // drawBackground, before drawLifeLines
         // drawForeground occurs after the bars and cannot change this snapshot.
-        let mut stairs: Vec<(usize, f64, usize, Option<String>)> = Vec::new();
+        let mut stairs: Vec<(usize, f64, usize, Option<String>, bool)> = Vec::new();
         let (mut last_message, mut position_y) = (None, None);
         let (mut seen_open, mut seen_close) = (false, false);
         let mut indent = 0;
@@ -3961,20 +4027,26 @@ impl TeozHistory {
                 if id != participant {
                     continue;
                 }
-                let opening = *change == ActivationChange::Activate;
+                let opening = *change == TeozLifeKind::Activate;
                 if item.owner.is_none()
-                    || item.owner != last_message
+                    || !item
+                        .owner
+                        .zip(last_message)
+                        .is_some_and(|(owner, last)| self.same_message(owner, last))
                     || (opening && seen_close)
-                    || (!opening && seen_open)
+                    || (*change == TeozLifeKind::Deactivate && seen_open)
                 {
                     position_y = potential;
                 }
                 seen_open |= opening;
-                seen_close |= *change == ActivationChange::Deactivate;
+                seen_close |= *change == TeozLifeKind::Deactivate;
             } else {
                 position_y = potential;
             }
             if item.life.is_none() && matches!(events[item.source], Event::Message(_)) {
+                if last_message.is_some_and(|last| self.same_message(item.source, last)) {
+                    continue;
+                }
                 seen_open = false;
                 seen_close = false;
                 last_message = Some(item.source);
@@ -3986,7 +4058,7 @@ impl TeozHistory {
                     position,
                     TeozHistoryMode::ConsiderFutureDeactivate,
                 );
-                let color = if let Some((_, ActivationChange::Activate, color)) = &item.life {
+                let color = if let Some((_, TeozLifeKind::Activate, color)) = &item.life {
                     color.clone()
                 } else if item.life.is_none() {
                     self.items[position + 1..]
@@ -3995,7 +4067,7 @@ impl TeozHistory {
                             next.life.is_some() || matches!(events[next.source], Event::Note(_))
                         })
                         .find_map(|next| match &next.life {
-                            Some((id, ActivationChange::Activate, color))
+                            Some((id, TeozLifeKind::Activate, color))
                                 if id == participant && next.owner == Some(item.source) =>
                             {
                                 color.clone()
@@ -4007,15 +4079,28 @@ impl TeozHistory {
                 };
                 // Stairs#addStep rejects decreasing y, retaining equal-y changes.
                 if stairs.last().is_none_or(|step| y >= step.1) {
-                    stairs.push((item.source, y, indent, color));
+                    // LiveBoxes#isNextEventADestroy only examines the first
+                    // non-note event after an internal Message; CREATE is neutral.
+                    let destroy = matches!(&events[item.source], Event::Message(m)
+                        if !matches!(m.from.as_str(), "[" | "]") && !matches!(m.to.as_str(), "[" | "]"))
+                        && item.life.is_none()
+                        && self.items[position + 1..].iter()
+                            .find(|next| !matches!(events[next.source], Event::Note(_)))
+                            .is_some_and(|next| matches!(&next.life, Some((id, TeozLifeKind::Destroy, _)) if id == participant));
+                    stairs.push((item.source, y.max(create_y), indent, color, destroy));
                 }
             }
         }
         if stairs.last().is_none_or(|step| end_y >= step.1) {
-            stairs.push((events.len(), end_y, indent, None));
+            stairs.push((events.len(), end_y, indent, None, false));
         }
         let maximum = stairs.iter().map(|step| step.2).max().unwrap_or(0);
         let mut segments = Vec::new();
+        let mut destroys = Vec::new();
+        // LiveBoxes#drawBoxes paints destroy-only stairs only at max indent 0.
+        if maximum == 0 {
+            destroys.extend(stairs.iter().filter(|step| step.4).map(|step| (step.1, 0)));
+        }
         // LiveBoxes#drawOneLevel may reopen a level; it starts only at equality,
         // not whenever a higher level happens to be present.
         for level in 1..=maximum {
@@ -4027,11 +4112,14 @@ impl TeozHistory {
                     && (index + 1 == stairs.len() || step.2 < level)
                 {
                     segments.push((first.0, first.1, step.1, first.3.clone(), level - 1));
+                    if step.4 {
+                        destroys.push((step.1, level - 1));
+                    }
                     start = None;
                 }
             }
         }
-        segments
+        TeozLifePainting { segments, destroys }
     }
 }
 
@@ -7657,6 +7745,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     {
         let mut y = lifeline_top;
         let message_vertical_padding = 2.0 * global_padding;
+        // GroupingTile#mergeParallel captures the preceding tile plus trailing
+        // LifeEventTiles. TileParallel aligns contacts and takes max tails.
+        let mut parallel_members: Vec<usize> = Vec::new();
+        let mut parallel_base = y;
+        let mut parallel_contact: f64 = y;
+        let mut parallel_bottom: f64 = y;
+        let mut parallel_first = false;
         for (idx, event) in diagram.events.iter().enumerate() {
             let (has_text, event_text_height) = event_message_text_height(event);
             match event {
@@ -7667,7 +7762,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // space above (pushing the arrow down) and below (pushing the
                     // next event down).
                     let note_extra = msg_note_extra.get(&idx).copied();
-                    if msg_count == 0 {
+                    let joining = diagram.teoz && msg.parallel && !parallel_members.is_empty();
+                    if diagram.teoz {
+                        if joining {
+                            y = parallel_base;
+                        } else {
+                            parallel_members.clear();
+                            parallel_base = y;
+                            parallel_first = msg_count == 0;
+                        }
+                    }
+                    if msg_count == 0 || (joining && parallel_first) {
                         y += first_msg_offset(
                             has_text,
                             event_text_height - event_pure_underline_flow_extra(event),
@@ -7697,12 +7802,60 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // A creating message draws an inline head box that straddles the
                     // arrow; the next event must clear the box bottom.
                     if let Some(&extra) = create_msg_extra.get(&idx) {
-                        y += extra;
+                        if diagram.teoz {
+                            // CommunicationTile#getPreferredHeight uses max(arrow,
+                            // participant head), not the legacy create advance.
+                            let head = &participants[id_to_idx[&msg.to]];
+                            // ComponentRoseParticipant#getPreferredHeight includes
+                            // its one-pixel reservation beyond the painted rect.
+                            let head_height = head.box_height
+                                + if matches!(
+                                    head.kind,
+                                    ParticipantKind::Participant | ParticipantKind::Collections
+                                ) {
+                                    1.0 + if sequence_shadowing {
+                                        SHADOW_LIVING_WIDTH_EXTRA
+                                    } else {
+                                        0.0
+                                    }
+                                } else {
+                                    0.0
+                                };
+                            let arrow_height =
+                                msg_step(has_text, event_text_height) + message_vertical_padding;
+                            y += (head_height - arrow_height).max(0.0);
+                        } else {
+                            y += extra;
+                        }
                     }
                     // LifeEventTile has zero preferred height. The legacy
                     // Step1Message combined row is not part of the Teoz model.
                     if !diagram.teoz {
                         y += lifecycle_row_after_message[idx];
+                    }
+                    if diagram.teoz {
+                        if joining {
+                            let contact = event_y_positions[idx].max(parallel_contact);
+                            let old_shift = contact - parallel_contact;
+                            let new_shift = contact - event_y_positions[idx];
+                            for &member in &parallel_members {
+                                if matches!(diagram.events[member], Event::Message(_)) {
+                                    event_y_positions[member] += old_shift;
+                                    // Its suffix LifeEventTile is now captured in
+                                    // TileParallel, whose life contact is zero.
+                                    teoz_tile_ends[member] = contact;
+                                } else {
+                                    event_y_positions[member] = contact;
+                                }
+                            }
+                            event_y_positions[idx] += new_shift;
+                            y = (y + new_shift).max(parallel_bottom + old_shift);
+                            parallel_contact = contact;
+                        } else {
+                            parallel_contact = event_y_positions[idx];
+                        }
+                        parallel_bottom = y;
+                        parallel_members.push(idx);
                     }
                     msg_count += 1;
                 }
@@ -7990,7 +8143,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         + if first_ref { REF_FIRST_FLOW_EXTRA } else { 0.0 };
                     msg_count += 1;
                 }
-                Event::Activate(_, _) | Event::Deactivate(_) | Event::Destroy(_) => {
+                Event::Activate(_, _)
+                | Event::Deactivate(_)
+                | Event::Destroy(_)
+                | Event::Create(_) => {
                     let event_y = if diagram.teoz {
                         // Arrow preferred height ends deltaY(4)+paddingY(4)
                         // below the arrow endpoint; y includes the self loop.
@@ -8004,6 +8160,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             } else {
                                 0.0
                             }
+                    } else if matches!(event, Event::Destroy(_))
+                        && !lifecycle_owner[idx]
+                            .is_some_and(|owner| matches!(diagram.events[owner], Event::Message(_)))
+                    {
+                        // A GroupingLeaf owns close variations, but is not a
+                        // LifeEvent.message. Standalone destroy uses freeY,
+                        // not the painted group's bottom stroke ordinate. The
+                        // shared cursor excludes the arrow's trailing padding.
+                        y + 2.0 * ARROW_HALF_H
                     } else {
                         lifecycle_owner[idx]
                             .and_then(|owner| event_y_positions.get(owner).copied())
@@ -8011,6 +8176,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .unwrap_or(y)
                     };
                     event_y_positions.push(event_y);
+                    // LifeEventTile#getPreferredHeight allocates the cross only
+                    // when no AbstractMessage owns the destroy (END is a leaf).
+                    if matches!(event, Event::Destroy(_))
+                        && !lifecycle_owner[idx]
+                            .is_some_and(|owner| matches!(diagram.events[owner], Event::Message(_)))
+                    {
+                        y += 2.0 * DESTROY_CROSS_HALF;
+                    }
                 }
                 Event::NewPage(_) => {
                     // DrawableSetInitializer#prepareNewpage advances the shared
@@ -8025,6 +8198,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
                 _ => {
                     event_y_positions.push(y);
+                }
+            }
+            if diagram.teoz && !matches!(event, Event::Message(_)) {
+                if matches!(
+                    event,
+                    Event::Activate(_, _)
+                        | Event::Deactivate(_)
+                        | Event::Destroy(_)
+                        | Event::Create(_)
+                ) {
+                    parallel_members.push(idx);
+                } else if !matches!(event, Event::Note(note) if note.on_message) {
+                    parallel_members.clear();
                 }
             }
             // Rose arrow preferred height extends paddingY*2 below its
@@ -11215,19 +11401,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
+    let mut teoz_destroys: HashMap<String, Vec<(f64, usize)>> = HashMap::new();
     if let Some(history) = &teoz_history {
         for participant in &participants {
-            for (start_event_idx, start_y, end_y, color, depth) in history.segments(
+            let painting = history.segments(
                 &diagram.events,
                 &participant.id,
                 &lifecycle_message_states,
                 &event_y_positions,
                 &teoz_tile_ends,
-                // LiveBoxes#getStairs appends PlayingSpace preferred height,
-                // which reaches the participant tail; the shared ordinate
-                // representation is shifted by the first/next step difference.
-                tail_box_y + MSG_BASE_FIRST_OFFSET - MSG_BASE_STEP,
-            ) {
+                (
+                    create_msg_idx.get(&participant.id).map_or(0.0, |&index| {
+                        let (has_text, height) = event_message_text_height(&diagram.events[index]);
+                        // CommunicationTile#callbackY_internal calls goCreate at
+                        // tile origin, before component startPoint's ordinate.
+                        event_y_positions[index]
+                            - (msg_step(has_text, height) + 2.0 * global_padding
+                                - 2.0 * ARROW_HALF_H)
+                    }),
+                    // LiveBoxes#getStairs appends PlayingSpace preferred height,
+                    // which reaches the participant tail; the shared ordinate
+                    // representation is shifted by the first/next step difference.
+                    tail_box_y + MSG_BASE_FIRST_OFFSET - MSG_BASE_STEP,
+                ),
+            );
+            teoz_destroys.insert(participant.id.clone(), painting.destroys);
+            for (start_event_idx, start_y, end_y, color, depth) in painting.segments {
                 activation_bars.push(ActivationBar {
                     participant_id: participant.id.clone(),
                     start_event_idx,
@@ -11324,7 +11523,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .unwrap_or(0.0);
             (
                 id.clone(),
-                event_y(idx) + CREATE_LIFELINE_TOP_OFFSET + half_extra - queue_adjust,
+                if diagram.teoz {
+                    let (has_text, height) = event_message_text_height(&diagram.events[idx]);
+                    event_y(idx)
+                        - (msg_step(has_text, height) + 2.0 * global_padding - 2.0 * ARROW_HALF_H)
+                        - 2.0
+                } else {
+                    event_y(idx) + CREATE_LIFELINE_TOP_OFFSET + half_extra - queue_adjust
+                },
             )
         })
         .collect();
@@ -11896,6 +12102,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             {
                 draw_activation_bar(&mut svg, bar);
             }
+            for &(y, depth) in &teoz_destroys[&p.id] {
+                let cx = p.center_x + depth as f64 * ACTIVATION_HALF_W;
+                let cy = y - 2.0; // Same Rose marginY*2 coordinate as liveboxes.
+                for (y1, y2) in [
+                    (cy - DESTROY_CROSS_HALF, cy + DESTROY_CROSS_HALF),
+                    (cy + DESTROY_CROSS_HALF, cy - DESTROY_CROSS_HALF),
+                ] {
+                    write!(svg.buf, r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                        fmt_coord(cx - DESTROY_CROSS_HALF), fmt_coord(cx + DESTROY_CROSS_HALF), fmt_coord(y1), fmt_coord(y2)).unwrap();
+                }
+            }
         }
     }
 
@@ -12078,6 +12295,79 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     }
 
+    let draw_created_head = |svg: &mut PlantUmlSvg, ev_idx: usize, msg_y: f64| {
+        if let Some((pi, fill_color, draw_control_glyph)) = created_inline.get(&ev_idx) {
+            // The created participant's box occupies the next message-id slot.
+            let mut shifted = participants[*pi].clone();
+            let p = if diagram.teoz {
+                let Event::Message(message) = &diagram.events[ev_idx] else {
+                    unreachable!()
+                };
+                let level = teoz_history.as_ref().unwrap().level(
+                    &diagram.events,
+                    &message.to,
+                    ev_idx,
+                    TeozHistoryMode::IgnoreFutureDeactivate,
+                );
+                let reverse = center_of(&message.from) > center_of(&message.to);
+                // CommunicationTile#drawU draws the head at its adjusted posB/posD.
+                shifted.box_x += if reverse {
+                    level as f64 * ACTIVATION_HALF_W
+                } else if level > 0 {
+                    (level as f64 - 2.0) * ACTIVATION_HALF_W
+                } else {
+                    0.0
+                };
+                &shifted
+            } else {
+                &participants[*pi]
+            };
+            let part_uid = format!("part{}", p.decl_idx + 1);
+            let sl = p.source_line;
+            let inline_base_y = if diagram.teoz {
+                created_lifeline_top[&p.id]
+            } else {
+                msg_y - CREATE_BOX_TOP_OFFSET
+            };
+            let mut scratch = PlantUmlSvg::new();
+            scratch.participant_border = svg.participant_border.clone();
+            scratch.participant_border_thickness = svg.participant_border_thickness.clone();
+            let inline_border = svg.participant_border.clone();
+            let inline_queue_head_offset = if p.kind == ParticipantKind::Queue {
+                CREATE_QUEUE_HEAD_OFFSET
+            } else {
+                queue_head_offset
+            };
+            render_participant_shape(
+                &mut scratch,
+                &part_uid,
+                &p.id,
+                sl,
+                "head",
+                p,
+                inline_base_y,
+                p.box_height,
+                fill_color,
+                &inline_border,
+                participant_inner_pad,
+                inline_queue_head_offset,
+                *draw_control_glyph,
+                false,
+            );
+            // Strip the surrounding `<g class="participant participant-head" ...>`
+            // wrapper: PlantUML draws the created head box as bare shape elements.
+            let inner = scratch.buf.as_str();
+            if let Some(start) = inner.find('>') {
+                let body = inner[start + 1..]
+                    .strip_suffix("</g>")
+                    .unwrap_or(&inner[start + 1..]);
+                svg.buf.push_str(body);
+            } else {
+                svg.buf.push_str(inner);
+            }
+        }
+    };
+
     // Messages — use pre-computed y positions from event_y_positions
     let mut msg_id: u32 = 0;
     let mut auto_num = AutoState::default();
@@ -12151,6 +12441,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         };
         let msg_y =
             event_y_positions[ev_idx] + teoz_message_y_offset + multi_side_note_arrow_y_adjust;
+        if diagram.teoz {
+            draw_created_head(&mut svg, ev_idx, msg_y);
+        }
         match event {
             Event::Message(msg) => {
                 msg_id += 1;
@@ -12813,32 +13106,41 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let to_existing_depth = to_depth;
                     let activates_target = to_live_depth > to_existing_depth;
                     let target_deactivates_at_start = to_live_depth < to_existing_depth;
-                    let target_shift = if internal_to_x.is_some() {
-                        0.0
-                    } else if msg.from == "[" {
-                        if to_live_depth > 0 {
-                            ACTIVATION_HALF_W
+                    let target_shift =
+                        if internal_to_x.is_some() && !(diagram.teoz && is_create_msg) {
+                            0.0
+                        } else if msg.from == "[" {
+                            if to_live_depth > 0 {
+                                ACTIVATION_HALF_W
+                            } else {
+                                0.0
+                            }
+                        } else if msg.from == "]" {
+                            to_live_depth as f64 * ACTIVATION_HALF_W
+                        } else if diagram.teoz && is_create_msg && to_live_depth > 0 {
+                            // CommunicationTile#drawU adjusts creating posB/posD by
+                            // the same live level as an ordinary endpoint.
+                            if is_right {
+                                (2.0 - to_live_depth as f64) * ACTIVATION_HALF_W
+                            } else {
+                                to_live_depth as f64 * ACTIVATION_HALF_W
+                            }
+                        } else if to_active && !is_create_msg && !target_deactivates_at_start {
+                            if is_right {
+                                let lands_on_depth = if activates_target {
+                                    to_existing_depth
+                                } else {
+                                    to_existing_depth.saturating_sub(1)
+                                };
+                                ACTIVATION_HALF_W * (1.0 - lands_on_depth as f64)
+                            } else if activates_target {
+                                ACTIVATION_HALF_W * (to_existing_depth + 1) as f64
+                            } else {
+                                ACTIVATION_HALF_W * to_existing_depth as f64
+                            }
                         } else {
                             0.0
-                        }
-                    } else if msg.from == "]" {
-                        to_live_depth as f64 * ACTIVATION_HALF_W
-                    } else if to_active && !is_create_msg && !target_deactivates_at_start {
-                        if is_right {
-                            let lands_on_depth = if activates_target {
-                                to_existing_depth
-                            } else {
-                                to_existing_depth.saturating_sub(1)
-                            };
-                            ACTIVATION_HALF_W * (1.0 - lands_on_depth as f64)
-                        } else if activates_target {
-                            ACTIVATION_HALF_W * (to_existing_depth + 1) as f64
-                        } else {
-                            ACTIVATION_HALF_W * to_existing_depth as f64
-                        }
-                    } else {
-                        0.0
-                    };
+                        };
 
                     let to_x = if is_create_msg {
                         let half =
@@ -14782,12 +15084,37 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             Event::Destroy(id) => {
+                if diagram.teoz
+                    && lifecycle_owner[ev_idx]
+                        .is_some_and(|owner| matches!(diagram.events[owner], Event::Message(_)))
+                {
+                    continue;
+                }
                 // Render the X mark on the lifeline at this y position.
                 // PlantUML draws an 18x18 cross in stroke #A80036, stroke-width 2.
                 let cx = center_of(id);
-                let half = 9.0;
-                let y_top = msg_y - half;
-                let y_bot = msg_y + half;
+                let half = DESTROY_CROSS_HALF;
+                // LifeEventTile draws from its origin; the shared ordinate
+                // includes Rose marginY*2, as do message/activation consumers.
+                let owner = lifecycle_owner[ev_idx]
+                    .filter(|&owner| matches!(diagram.events[owner], Event::Message(_)));
+                let y_top = if diagram.teoz {
+                    msg_y - 2.0
+                } else if let Some(owner) = owner {
+                    // DrawableSetInitializer#prepareLiveEvent uses the message
+                    // end level, including a self component's loop height.
+                    msg_y - half
+                        + if matches!(&diagram.events[owner], Event::Message(m) if m.from == m.to) {
+                            SELF_MSG_DROP
+                        } else {
+                            0.0
+                        }
+                } else {
+                    // Standalone LifeDestroy and its close variation share
+                    // the scheduled freeY origin (account bc18300d).
+                    msg_y
+                };
+                let y_bot = y_top + 2.0 * half;
                 write!(
                     svg.buf,
                     r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
@@ -14814,52 +15141,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
 
-        // A created participant's head box is drawn inline, right after the
-        // message that creates it — as bare shape elements (no participant `<g>`
-        // wrapper). The box top sits CREATE_BOX_TOP_OFFSET above the arrow.
-        if let Some((pi, fill_color, draw_control_glyph)) = created_inline.get(&ev_idx) {
-            // The created participant's box occupies the next message-id slot.
+        if !diagram.teoz && created_inline.contains_key(&ev_idx) {
             msg_id += 1;
-            let p = &participants[*pi];
-            let part_uid = format!("part{}", p.decl_idx + 1);
-            let sl = p.source_line;
-            let inline_base_y = msg_y - CREATE_BOX_TOP_OFFSET;
-            let mut scratch = PlantUmlSvg::new();
-            scratch.participant_border = svg.participant_border.clone();
-            scratch.participant_border_thickness = svg.participant_border_thickness.clone();
-            let inline_border = svg.participant_border.clone();
-            let inline_queue_head_offset = if p.kind == ParticipantKind::Queue {
-                CREATE_QUEUE_HEAD_OFFSET
-            } else {
-                queue_head_offset
-            };
-            render_participant_shape(
-                &mut scratch,
-                &part_uid,
-                &p.id,
-                sl,
-                "head",
-                p,
-                inline_base_y,
-                p.box_height,
-                fill_color,
-                &inline_border,
-                participant_inner_pad,
-                inline_queue_head_offset,
-                *draw_control_glyph,
-                false,
-            );
-            // Strip the surrounding `<g class="participant participant-head" ...>`
-            // wrapper: PlantUML draws the created head box as bare shape elements.
-            let inner = scratch.buf.as_str();
-            if let Some(start) = inner.find('>') {
-                let body = inner[start + 1..]
-                    .strip_suffix("</g>")
-                    .unwrap_or(&inner[start + 1..]);
-                svg.buf.push_str(body);
-            } else {
-                svg.buf.push_str(inner);
-            }
+            draw_created_head(&mut svg, ev_idx, msg_y);
         }
     }
 
@@ -15260,6 +15544,46 @@ mod tests {
         );
     }
     use rustuml_parser::diagram::{DiagramMeta, SkinParam};
+
+    #[test]
+    fn teoz_raw_history_keeps_create_neutral_and_parallel_ancestry() {
+        let lines: Vec<String> = "participant A\ncreate B\nA -> B : born\n& A -> B ++ : parallel activation\n& B -> B : recursive sibling\nB -> A : reply\ndestroy B"
+            .lines().map(str::to_owned).collect();
+        let diagram = rustuml_parser::parse::sequence::parse_sequence(&lines).unwrap();
+        let layout = sequence_lifecycle_layout(&diagram.events, diagram.events.len());
+        let history = TeozHistory::new(&diagram.events, &layout.attachment_owner);
+        assert_eq!(history.max_depth("B"), 1);
+        assert_eq!(
+            history.level(
+                &diagram.events,
+                "B",
+                0,
+                TeozHistoryMode::ConsiderFutureDeactivate
+            ),
+            0
+        );
+        // The earlier message sees its later parallel brother's activation.
+        assert_eq!(
+            history.level(
+                &diagram.events,
+                "B",
+                1,
+                TeozHistoryMode::IgnoreFutureDeactivate
+            ),
+            1
+        );
+        assert!(history.same_message(3, 1));
+        assert!(!history.same_message(1, 3));
+        assert_eq!(
+            history.level(
+                &diagram.events,
+                "B",
+                5,
+                TeozHistoryMode::ConsiderFutureDeactivate
+            ),
+            0
+        );
+    }
 
     #[test]
     fn legacy_plantuml_palette_preserves_non_css_values() {
