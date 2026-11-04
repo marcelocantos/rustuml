@@ -1,0 +1,14 @@
+{
+  "before": [
+    "checker36/font_empty_unknown",
+    "checker36/family_slash",
+    "checker36/alias_monospace_padded",
+    "fresh16/font_priority",
+    "fresh16/inner_candidate"
+  ],
+  "after": [
+    "checker36/font_empty_unknown",
+    "checker36/family_slash",
+    "checker36/alias_monospace_padded"
+  ]
+}

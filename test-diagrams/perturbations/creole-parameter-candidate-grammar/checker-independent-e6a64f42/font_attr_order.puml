@@ -1,0 +1,5 @@
+@startuml
+start
+:a<font color=blue size=14 color=red size=12>seed</font>z\na<font size=12 color=red size=14 color=blue>seed</font>z;
+stop
+@enduml

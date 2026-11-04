@@ -1,0 +1,3 @@
+@startuml
+Alder -> Birch : a<size:14><$sprig>seed</size>[[https://example.org birch]]z\na<color:navy><&home></color><$sprig>z\na<font color=~#44aa77>seed</font><$sprig>z
+@enduml

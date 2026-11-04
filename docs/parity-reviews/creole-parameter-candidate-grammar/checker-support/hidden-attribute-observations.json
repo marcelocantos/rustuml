@@ -1,0 +1,314 @@
+[
+  {
+    "id": "checker36/hidden_selection",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue02344aa77"
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "phase": "java",
+    "attribute": "font-family",
+    "value": "color=\ue02344aa77"
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "phase": "java",
+    "attribute": "font-family",
+    "value": "color=\ue02344aa77"
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue02344aa77"
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue02344aa77"
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "phase": "after",
+    "attribute": "font-family",
+    "value": "color=\ue02344aa77"
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "phase": "after",
+    "attribute": "font-family",
+    "value": "color=\ue02344aa77"
+  },
+  {
+    "id": "checker36/back_hidden_invalid",
+    "phase": "before",
+    "attribute": "flood-color",
+    "value": "\ue02344aa77"
+  },
+  {
+    "id": "checker36/parameter_neighbors",
+    "phase": "java",
+    "attribute": "font-family",
+    "value": "color=\ue02344aa77"
+  },
+  {
+    "id": "checker36/parameter_neighbors",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue02344aa77"
+  },
+  {
+    "id": "checker36/parameter_neighbors",
+    "phase": "after",
+    "attribute": "font-family",
+    "value": "color=\ue02344aa77"
+  },
+  {
+    "id": "fresh16/color_rejected",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue023123456"
+  },
+  {
+    "id": "fresh16/color_rejected",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "bl\ue07eue"
+  },
+  {
+    "id": "fresh16/font_fallback",
+    "phase": "java",
+    "attribute": "font-family",
+    "value": "color=\ue023123456"
+  },
+  {
+    "id": "fresh16/font_fallback",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue023123456"
+  },
+  {
+    "id": "fresh16/font_fallback",
+    "phase": "after",
+    "attribute": "font-family",
+    "value": "color=\ue023123456"
+  },
+  {
+    "id": "fresh16/back_rejected",
+    "phase": "before",
+    "attribute": "flood-color",
+    "value": "\ue023123456"
+  },
+  {
+    "id": "fresh16/back_rejected",
+    "phase": "before",
+    "attribute": "flood-color",
+    "value": "re\ue07ed"
+  },
+  {
+    "id": "fresh16/wbs_parameters",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue023123456"
+  },
+  {
+    "id": "fresh16/class_member",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue023123456"
+  },
+  {
+    "id": "checker28/hide_parameter_color",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "\ue023123456"
+  },
+  {
+    "id": "checker28/hide_parameter_color",
+    "phase": "before",
+    "attribute": "fill",
+    "value": "bl\ue07eue"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "href",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "title",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "{http://www.w3.org/1999/xlink}href",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "href",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "title",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "{http://www.w3.org/1999/xlink}href",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "title",
+    "value": "tip\ue05bx\ue05d"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "java",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "tip\ue05bx\ue05d"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "href",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "title",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "{http://www.w3.org/1999/xlink}href",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "href",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "title",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "{http://www.w3.org/1999/xlink}href",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "title",
+    "value": "tip\ue05bx\ue05d"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "before",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "tip\ue05bx\ue05d"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "href",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "title",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "{http://www.w3.org/1999/xlink}href",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "https://example.test/\ue023part"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "href",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "title",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "{http://www.w3.org/1999/xlink}href",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "https://example.test/a\ue07eb"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "title",
+    "value": "tip\ue05bx\ue05d"
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "phase": "after",
+    "attribute": "{http://www.w3.org/1999/xlink}title",
+    "value": "tip\ue05bx\ue05d"
+  }
+]

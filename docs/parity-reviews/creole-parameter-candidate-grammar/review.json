@@ -1,0 +1,761 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-parameter-candidate-grammar",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A838a6cea-7fc2-451c-a6b0-6d978445e767",
+    "model": "gpt-6-astra; high reasoning; Codex harness in T3 Code",
+    "independence": "New independent checker; no earlier involvement in this packet; no children, extra worktrees, local JVM, SSH, new runners, maker/parent edits or shipping",
+    "branch": "review/creole-parameters-independent-e6a64f42"
+  },
+  "account_commit": "c14bea51a7e5797d1ba4f0ce9282f2fde378ad3b",
+  "account_path": "docs/parity-reviews/creole-parameter-candidate-grammar/account.json",
+  "implementation_commit": "8ca73318f584dc29d7d8ab1c91f25a21718ca713",
+  "initial_implementation_commit": "3d92268c4aae5f8bfd3a0e271758b6a8e5442e47",
+  "base_revision": "2608469dace1f680a7e90c0895e44e657f8aaf7f",
+  "base_production": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+  "evidence_tip": "bdfeba117c7af6a527fc66b0acda6d8273fa6d74",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/creole-parameters-independent-e6a64f42 bdfeba117c7af6a527fc66b0acda6d8273fa6d74",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/setup.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/build.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/build_probe.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/audit.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/complete_library.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/initial_diagnostics.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/observations.py",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_all.py",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_replay.py before checker36",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_replay.py after checker36",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_replay.py initial golden-regressions",
+    "Parent existing Monkey Man: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.x45WQ0CO/new --timezone GMT+11:00 -- -pipe -tsvg"
+  ],
+  "perturbations": [
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_zero.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_zero.svg",
+      "axes": [
+        "zero numeric conversion",
+        "activity consumer"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "3e88f044428d570bac6ae6e23392f2595c60a75d989c31d6f214e1c6c68db967",
+      "golden_sha256": "bc422c6379680985c9d316b3e83115a847d51c2e7ec5bbebf9aef68311b0eb96",
+      "reference_valid": false,
+      "intended_validity": "intended_valid",
+      "reference_classification": "runtime_error_svg",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 2
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_signed_decimal.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_signed_decimal.svg",
+      "axes": [
+        "signed and decimal rejection",
+        "state descriptions"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "27f441a7dff635bf07c3392081c5fc25e9b3ffa9e99223e6267071d1a77c36c4",
+      "golden_sha256": "0bc394df53c0c15cb340dcd695b642b6dbd217c3818820b02bfd596d3162c70f",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_space_boundaries.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_space_boundaries.svg",
+      "axes": [
+        "ASCII versus NBSP separator",
+        "leading zero and closing case"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "5b1b7f78614ebb1b13e521632cf0ebb5a1e478f22a17926e6417456cdd0d4409",
+      "golden_sha256": "2d8ad0d7f19b363982dea29d8bce25073f7a7d31f830bbae6c0f57b9ae722031",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_overflow.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/size_overflow.svg",
+      "axes": [
+        "integer overflow",
+        "recognized grammar versus conversion"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "31c74aecb053ecb07ef3bb26c1e18d57a692344fa2ef02d75a19c0719a987286",
+      "golden_sha256": "689880ea862d0d118b4291cc0f9e353cbfa3323cce5ff93582fedb0a5f751866",
+      "reference_valid": false,
+      "intended_validity": "intended_negative",
+      "reference_classification": "runtime_error_svg",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 2
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgb.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgb.svg",
+      "axes": [
+        "short mixed hex",
+        "activity"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "99ac9f51527428f9599e85420fe08779b8f24dd09654c89537046b435faf59be",
+      "golden_sha256": "f82888a1b90ae90b5a1116797501d380320f9aa97a5927d960ade11f497a41b9",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgba.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_rgba.svg",
+      "axes": [
+        "eight digit hex via word alternative",
+        "alpha serialization"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "89d3c5c0c358fdc1279318fcbf659ee4978f903cbfc4abc7a7b76b560e8dae8b",
+      "golden_sha256": "5eafa270781761618304e53fb1b91d4b8ee9768ad3cebe831b6a0394d8f35f57",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_named_alias.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_named_alias.svg",
+      "axes": [
+        "named aliases versus full hex",
+        "note"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "8016b87d091eee5eeb7586f8db46c6b331c0657b69c604362f08a54a6826cab2",
+      "golden_sha256": "b68648f3419d4c33a8d3dd3ebbcc3c8472ef2058b0a0ec1d6605e442ff542aa9",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_invalid_hex.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/color_invalid_hex.svg",
+      "axes": [
+        "word alternative accepts invalid hex",
+        "error contract"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "7cca5dc71695326b747019574b7809660d8c2dbb71f742def8930865e7eae6ed",
+      "golden_sha256": "24c0e8194b90970780c7fddc7f62111bcb9568e122a7dfea7e301be6c05833a6",
+      "reference_valid": true,
+      "intended_validity": "intended_negative",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/hidden_selection.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/hidden_selection.svg",
+      "axes": [
+        "hidden markers nested in bold",
+        "class-member literal fallback"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "b83dec55d3a303b84ecb717663239d093dec42e96060a00308528097574047bb",
+      "golden_sha256": "7f1b7a4d1bce3c459205eaca10ded8f68ef660d8408fa0c5980d597c98bcf83b",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_attr_order.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_attr_order.svg",
+      "axes": [
+        "repeated capture retention both orders",
+        "activity"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "8ff4e59d4c939c69ae1d946b45feb89522a41dba0740314860ec0e389d0c0384",
+      "golden_sha256": "36dafe554ec33b412d8c5e1ef312116181a8546ee79d353b98e70f396c4ad0ed",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_curly_nbsp.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_curly_nbsp.svg",
+      "axes": [
+        "Pattern2 quote class",
+        "NBSP between attributes"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "19bf50694ab160f535d44ca6a6f6222c1477e8dc53e64505bf8067d49db023a6",
+      "golden_sha256": "42d862da47b98d15d77f1483fca473317cb7aefc7c501ed82386f48bbd6cb2ec",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_empty_unknown.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_empty_unknown.svg",
+      "axes": [
+        "empty values and family fallback",
+        "unknown quoted family"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "b6cc59a06013afeac48adfd106d0f3c129feeba2ab5e24050220b6c0fb0ef34e",
+      "golden_sha256": "61dab4ad2f90bc9bf21cdc478f613c27587e1e1773942ecd920905fd9ccad4fc",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 3
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_hidden_precedent.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_hidden_precedent.svg",
+      "axes": [
+        "legitimate hidden family payload",
+        "nested WBS inheritance"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "cb795c815c35bb50fa0d2036c517ad31116de2ca691c5d2c18e37c7d2d4991db",
+      "golden_sha256": "bb0a4dfd1b8c674d29f9ec95b3dd058b69d42e6b88e107f3b685de041496d7c6",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_forms.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_forms.svg",
+      "axes": [
+        "background short/full/alpha/name grammars",
+        "state"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "92c4e79f096baeed9a2829f3bd65e458ce37616cc65890681f727793da263172",
+      "golden_sha256": "0ae682d70569d688fa21453935141b5a2487b023b8f2252bf8ae6ae7439430b0",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_gradient.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_gradient.svg",
+      "axes": [
+        "gradient second operand grammar",
+        "slash versus dash"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "f475b71f60a3bd5c7020f60c6364042077d9a05948b51b16870ebc6f6cf44ec6",
+      "golden_sha256": "840d89d34aa4d911b33e0ed0ffd144a5bc4df7640476e6d5c746dfaacc340d9f",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_hidden_invalid.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/back_hidden_invalid.svg",
+      "axes": [
+        "hidden and empty backgrounds",
+        "nested activity"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "1c9a6a85f8bcb342347eec80df1689b69a5caa128171d9876274b4031c14865b",
+      "golden_sha256": "f854e55360ba36e2700fedd94e8f8636503baa5daf4a8e6b98e1e5fb2803c600",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_grammar.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_grammar.svg",
+      "axes": [
+        "src quoted versus colon",
+        "valid decimal versus invalid scale"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "98bbcd405ed33806cb7c0e0d472b7524dca09ca802e8a4a81df0d7cfd007ec19",
+      "golden_sha256": "469b258056f90f5dae49b4ca6c5231b0459b58eb03ac3ab3f5bd6a1d625a8c61",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_nested.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/image_nested.svg",
+      "axes": [
+        "image nested style",
+        "rejected candidate leaves inner command"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "24df0bbe2842a9c5cc55d52c78c0390fdee9f6728e4ea8fb6ec66dfbe6e348b0",
+      "golden_sha256": "ef7f07d80ea229b091206bbbac954a48caa4914df915486e475427bd448d0812",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_valid.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_valid.svg",
+      "axes": [
+        "prefix color and scale variants",
+        "valid empty lexical result"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "46f5e75469e226e23d3d346a034b3622ca216527b1ee9a16f6edd37297f2d8f3",
+      "golden_sha256": "c7fecdca2e2a080caff42a3294af69cb64fefb21d607dc64e026c3f87838af62",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_invalid.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/icon_invalid.svg",
+      "axes": [
+        "signed scale and hidden color",
+        "invalid suffix"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "ea48215196c93f4485053b98317f20bc82060a88f76e5be0278dc35e974db2df",
+      "golden_sha256": "c3fc9c21bd4e69f6c33c09e1ed423135e9b5b3fa7f1d868fba177fc21f934bb4",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/parameter_neighbors.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/parameter_neighbors.svg",
+      "axes": [
+        "URL sprite icon adjacency",
+        "hidden-family exception isolated"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "5efcbf6b2ff3613f9b2689407553c5c3434361700e6ae2a94993d0ea337c29c8",
+      "golden_sha256": "6ffa3dce8599f057dec6629e22ee0d90d0dba57d189782413f5a1b028384757e",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/wbs_nested_parameters.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/wbs_nested_parameters.svg",
+      "axes": [
+        "nested parameter stack",
+        "WBS sibling topology"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "632ecbeaae0599e4f4bfa83166c0837a23bb052359b9e27b59ea9f1568a41917",
+      "golden_sha256": "a5023341a6ae062e721cf3f1913b982dc2013a2c9a92c819c80cc854b5262d48",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/family_slash.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/family_slash.svg",
+      "axes": [
+        "greedy optional slash capture",
+        "quoted family"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "d1e45ee253be22d50bf3ed180594bb948b057419b81771712a20f2638d551b8b",
+      "golden_sha256": "2a931ddbc6f5d102293a86675bc3c96056e458ab76ba887ebddc5ab1d020ec33",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 3
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/cross_close.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/checker-independent-e6a64f42/cross_close.svg",
+      "axes": [
+        "crossed closing tags",
+        "first bounded capture"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "2c67aa2ed5a480f824cbad8f631ef698d0e9b15de3eaa8f12090f9f187bb041e",
+      "golden_sha256": "d61bf75fba7c84efda7789afedba47baadabb2780d605d9ce2d768cee3ab2006",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_rejected.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_rejected.svg",
+      "axes": [
+        "size_rejected",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "a8910fea862e1e7a8c4d1ec40aa03bb0410466df792638198f3f8e4b4f79173c",
+      "golden_sha256": "706f8626fe04a31908ae390f6f3fd6d977af03f66170e22cecc9aa190b3374f6"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_rejected.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_rejected.svg",
+      "axes": [
+        "color_rejected",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "a68b8eb41d16470b673d0e0141f72323f962b3ff5e3a50ff5be11ca43329a208",
+      "golden_sha256": "649c96af3df2f3d5bfd9e2b3a866d0684cea3b1b60fc3da3413a783654a7e81e"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_forms.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/size_forms.svg",
+      "axes": [
+        "size_forms",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "05562fd38726ef9f69990d20bc5d2f2a093ca89700ff58641a555e296615c9f8",
+      "golden_sha256": "0471711c0fc7c93fe3727e0f55a8dc3335d372d06129eff27ca5640ee49f8069"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_forms.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/color_forms.svg",
+      "axes": [
+        "color_forms",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "35a49c8e56eb48193dcd99bb07f29685b24e1e43ac897351670d5cc36714bd07",
+      "golden_sha256": "b7fb638b5b3b0305233a359077adaf2b0c7cef2841efb1539719e03478b5641c"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_priority.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_priority.svg",
+      "axes": [
+        "font_priority",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "2b6d1e1eaa16883c6d89b3d541cf019cf3b6d4a764dea69b79cd56a2b5cf2db1",
+      "golden_sha256": "ebadb793f661dbbc2ddb0ea4c96caaf91f60cf45832ac3cece1ced0f8c795fe0"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_rejected.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_rejected.svg",
+      "axes": [
+        "font_rejected",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "a6a12f0d904258532378efbd639c93f5cce196cfe32a730573ba4028e0df1542",
+      "golden_sha256": "018f9d148f0abcc45edfab7a3849862f213cb05cc5497a01b3345c8b147cd8fc"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_fallback.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_fallback.svg",
+      "axes": [
+        "font_fallback",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "273397943a4fc952c7fcb60624753b69147b00ac83a7f84faa259b4cb4f16723",
+      "golden_sha256": "40139fa097b8d97c3812b224eebc736cbab2dd223332ec6169233394bf2999d3"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_family.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/font_family.svg",
+      "axes": [
+        "font_family",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "e44089180c9f9942ad16efa5464364994826827943b88f7c228ed82fdef7dfcb",
+      "golden_sha256": "8ce8b37def80a88a154bc81f60f03032cc4714219e73c71dfde383c750d3ff52"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_rejected.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_rejected.svg",
+      "axes": [
+        "back_rejected",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "126d011b45433c3a2f423e2f082476dd2be8a9729315df04440644420a2c8653",
+      "golden_sha256": "b3a2ade5f0edde667319b6ffd689f01bf7eb131cecae293b786aeece1aaeeae3"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_forms.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/back_forms.svg",
+      "axes": [
+        "back_forms",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "24a54bc6eac6354f7dcda78bf1144f803d04d11de23059330ab85ddf52e536e8",
+      "golden_sha256": "152e3eea7d03c4fee639d99646cca8a4f5860abc7590db40c6d2af0d6d688325"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/image_rejected.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/image_rejected.svg",
+      "axes": [
+        "image_rejected",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "2d3d241ce4cb04515a58c9515157334c7367d714239654739b3ee7348c26bad8",
+      "golden_sha256": "e2476b5ffbf407886346590d1ebfc6c1c5d72db1b4798261327125f487448236"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/icon_rejected.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/icon_rejected.svg",
+      "axes": [
+        "icon_rejected",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "56a8d5f58ad6f9399bb3f017164929045402998473d5e452c51518f78669ac47",
+      "golden_sha256": "d5af0b83f4d26ba4f8a83e80d4082ed3630b88a6ec7e7cb003aad2361cb27782"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/sprite_neighbor.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/sprite_neighbor.svg",
+      "axes": [
+        "sprite_neighbor",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "pass",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "6bf8f0df78d021267611992a61859b2d91b2bafda326761fdd2febedcf2016a1",
+      "golden_sha256": "bb61092c9981a0960540e39615a2ef5c6032b2068aab3e53b09323e370c91bbd"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/wbs_parameters.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/wbs_parameters.svg",
+      "axes": [
+        "wbs_parameters",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "7ccb34a66e6b6f4437bcaaa77986d337c2e0c4414a597a9a1f6767ae74e24295",
+      "golden_sha256": "168073513ae67df3486cf4b436cd53d6d2912bd2f79418b1a09dfd82c4b7d353"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/inner_candidate.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/inner_candidate.svg",
+      "axes": [
+        "inner_candidate",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "9c4fd455aabf7b7a83b75f708b1abae1bc44fc960746d9049da892df8dabbf04",
+      "golden_sha256": "7612ed5ef6f59b3bd2143aca079e9f6c005afbe88249df22ce384dfbae0752ef"
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/class_member.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar/maker16/class_member.svg",
+      "axes": [
+        "class_member",
+        "hidden parameter grammar and family consumer"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "origin": "preserved maker16 replay, not fresh checker evidence",
+      "source_sha256": "d486366d798fe1cbdf87c40cca2a8693a95a9106d3bd8f17f201ae188915d027",
+      "golden_sha256": "bbf16939db709bcdaf53300a016752c6a9ca802345866af3a2f36459cca241ca"
+    }
+  ],
+  "findings": [
+    "Source scope verified: only creole.rs differs from production a6e1718c4 to 8ca73318; text_render.rs including the line760 metric consumer, public Style/TextBase APIs, legacy to_svg_tspans prefix, sprite grammar, WBS, class, sequence, parser, fonts/styles, geometry, baselines, comparators, skips and targets are byte-unchanged. The evidence tip has no further production diff.",
+    "Both accounts precede their committed drafts in ancestry and contain no production change. Git cannot prove the absence of an unrecorded earlier draft. The imported rejection patch is byte-identical. Forty-four maker-cited Java files plus four additional checker files match pinned Java 71806a23780b04a5ccde2f8ceb5121edad5eb711.",
+    "Splitter size/color/family/image/icon grammars and CommandCreoleColorAndSizeChange.fontPattern match the anchored Rust candidate patterns. Pattern2 uses ASCII CASE_INSENSITIVE and adds NBSP only for %s; %g includes curly and invisible quotes. FontStyle BACKCOLOR uses the cited Ubrex WORD grammar and gradient separator class. Combined font attributes precede broad family fallback. Repeated attributes retain the final capture of each kind. StripeSimple.modifyStripe consumes one literal character when no candidate matches; Rust clones the iterator and commits only after a recognized command. No fixture-conditioned branch, blanket PUA rejection, or unexplained new layout constant was found. Image size14 is the inherited fallback and is sourced by AtomImg.create monospaced(14).",
+    "Fresh source-guided axes include size zero, signed/decimal/overflow values, ASCII versus NBSP separators, short/full/eight-digit/invalid hex and named aliases, repeated attribute ordering, curly quotes, empty/unknown families, gradient operands, image scale grammar, icon option boundaries, crossed closers, nesting and activity/state/note/class/WBS/sequence consumers. They are source-byte-distinct from every replay and golden input.",
+    "Fresh grammar whole outputs: 0 to10 passes /24 observations, 22 valid references. Whole failures reject the mechanism; bounded lexical gains do not waive them. New valid failures include short hex normalization, RGBA alpha serialization, invalid color fallback, background gradients, quoted-family XML serialization, image-error style inheritance, icon consumers and sequence mixed-size/note geometry.",
+    "Java color_invalid_hex is a valid SEQUENCE: CommandCreoleColorChange catches NoSuchColorException and retains the current color; Rust serializes #GGGGGG. The original intended-negative label remains. Eight-digit Java HColorSet.parseSimpleColor uses RRGGBBAA, not AARRGGBB: #8044aa77 becomes #8044AA opacity0.46667; Rust emits the raw eight digits without opacity. Both cases remain failures.",
+    "Java font-family fallback legitimately keeps hidden U+E023: CharHidder.hide precedes CommandCreoleFontFamilyChange; combined color grammar rejects the marker but Splitter.fontFamilyPattern accepts it; changeFamily preserves it; UFontImpl.getFamily(SVG) returns the full definition after quote/SansSerif normalization. Fresh font_hidden_precedent passes including nested WBS. No hidden markers reach fill/size/background through parameter selection in valid parsed fresh/maker outputs. Existing URL/title hidden values are separately recorded and are not excused by the font-family precedent.",
+    "Valid icon lexical results remain empty: parse_segments returns [] for <&home>, <#blue&home{scale=1.5,color=red}> and <&home*2>. Whole icon_valid fails because downstream icon resolution/geometry differs. The unchanged segments_xml_escaping unit is green; maker iteration1 logs retain the earlier empty-icon barrier regression.",
+    "Three fresh quoted-family cases generate malformed Rust SVG in both baseline and final code: font_empty_unknown, family_slash and alias_monospace_padded. text_render.rs:1727 emits family directly into an XML attribute; Java UFontImpl replaces double quotes with single quotes. These are preexisting output errors, not new process failures and not accepted output.",
+    "size_zero was intended valid but Java emitted IllegalArgumentException from Slot for a zero-length text extent; size_overflow emitted NumberFormatException at CommandCreoleSizeChange.Integer.parseInt. Both exited0 yet are nonpositive runtime-error references. Their source/SVG/stderr pairs remain preserved and executable; no intent label is rewritten.",
+    "Maker residual color_forms is exactly #123 versus #112233 with matching text/geometry. font_family retains Monospaced versus monospace and SansSerif versus sans-serif, plus bud width22.5527 versus21.6738 and baseline106.7344 versus106.4355. These remain whole failures assigned to T14.15, not waivers.",
+    "All 1992 replay observations preserve duplicates and nonpositives: 910 to925 passes, zero losses/new process errors/new panics, same32 SVG panics. All3996 baseline/final replay-plus-six SVG byte/exit comparisons reproduce the maker. YAML is semantically equal for1992; this independent replay happens to be1992 byte-equal. Maker archive is1991 byte-equal, with only sprite_multiple server/user HashMap order swapped. Six extra golden models are byte-equal across all three revisions."
+  ],
+  "verdict": "rejected",
+  "whole_output_measurement": {
+    "entries": 24,
+    "valid": 22,
+    "before_pass": 0,
+    "after_pass": 10,
+    "membership": "fresh checker only; preserved maker16 perturbations are replay evidence"
+  },
+  "bounded_support_is_not_acceptance": true,
+  "residue": [
+    "Warning chrome T14.12; stripe classifier T14.13; plain/code registry/reset T14.14 remain explicit failures.",
+    "Sequence mixed-size baselines and note heights are owned by concurrent sequence work; no sibling implementation imported.",
+    "Forced alignment; Unicode/Omega widths; URL/italic/legacy tspan; negative diagnostics remain explicit failures.",
+    "malformed_dot, both shape_direction syntax-error SVGs and Batik-limited math references T14.6.5 remain nonpositive.",
+    "Java argv is derived from wrapper construction, not process-traced. Historical font and Graphviz environment equivalence remains unproved.",
+    "Broad gate results precede checker-only registration; guard remains red. No acceptance, no scope waiver, no baseline/comparator/allow-list/target changes."
+  ],
+  "evidence_support": "docs/parity-reviews/creole-parameter-candidate-grammar/checker-support",
+  "broad_gates": "docs/parity-reviews/creole-parameter-candidate-grammar/checker-support/gate-summary.json",
+  "alias_review": "docs/parity-reviews/creole-parameter-candidate-grammar/alias-compatibility/review.json"
+}
