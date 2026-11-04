@@ -3078,7 +3078,28 @@ fn format_autonumber(n: u32, format: &Option<String>) -> String {
     }
 }
 
+// SvgGraphics#getTransformer selects us-ascii. OpenJDK 21.0.5
+// ToStream#writeAttrString/accumDefaultEscape preserves attribute whitespace
+// with references and emits non-ASCII Unicode scalars as decimal references.
+// Source trace: sequence-local-attribute-serialization (account 3b38384b3).
 fn escape_xml(s: &str) -> String {
+    let mut escaped = String::with_capacity(s.len());
+    for ch in s.chars() {
+        match ch {
+            '&' => escaped.push_str("&amp;"),
+            '<' => escaped.push_str("&lt;"),
+            '>' => escaped.push_str("&gt;"),
+            '"' => escaped.push_str("&quot;"),
+            '\n' | '\r' | '\t' => write!(escaped, "&#{};", u32::from(ch)).unwrap(),
+            ch if !ch.is_ascii() => write!(escaped, "&#{};", u32::from(ch)).unwrap(),
+            ch => escaped.push(ch),
+        }
+    }
+    escaped
+}
+
+// Keep the existing text-node consumer separate from attribute serialization.
+fn escape_xml_text(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
@@ -3106,14 +3127,14 @@ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning
             escape_xml(text_length),
             fmt_coord(warning.text.x),
             fmt_coord(warning.text.y),
-            escape_xml(&warning.text.text),
+            escape_xml_text(&warning.text.text),
         ),
         None => write!(
             svg,
             r##"<text fill="#000000" font-family="monospace" font-size="10" x="{}" y="{}">{}</text>"##,
             fmt_coord(warning.text.x),
             fmt_coord(warning.text.y),
-            escape_xml(&warning.text.text),
+            escape_xml_text(&warning.text.text),
         ),
     }
     .unwrap();
@@ -4708,7 +4729,7 @@ impl PlantUmlSvg {
         // spanning [seg_top, seg_bottom]. The rect keeps the original `rect_x`.
         let emit_segment = |this: &mut Self, seg_top: f64, seg_bottom: f64| {
             this.buf.push_str("<g>");
-            write!(this.buf, "<title>{}</title>", escape_xml(title)).unwrap();
+            write!(this.buf, "<title>{}</title>", escape_xml_text(title)).unwrap();
             if this.handwritten {
                 let points = handwritten_rect_points(
                     rect_x,
@@ -12666,7 +12687,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let close_up = i == 0;
             let close_down = i == n - 1;
             svg.buf.push_str("<g>");
-            write!(svg.buf, "<title>{}</title>", escape_xml(title)).unwrap();
+            write!(svg.buf, "<title>{}</title>", escape_xml_text(title)).unwrap();
             // DrawableSet#clipAndTranslate2 clips the complete component pass.
             // DriverRectangleSvg#draw trims rectangles but preserves their groups.
             let bottom = if has_newpage {
@@ -16247,6 +16268,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn sequence_attributes_preserve_xml_whitespace_and_unicode_scalars() {
+        assert_eq!(
+            super::escape_xml("&<>\"'\n\r\té枝😀"),
+            "&amp;&lt;&gt;&quot;'&#10;&#13;&#9;&#233;&#26525;&#128512;"
+        );
+        assert_eq!(super::escape_xml("&#10;"), "&amp;#10;");
+        assert_eq!(super::escape_xml_text("a\nb\té"), "a\nb\té");
+    }
+
     use super::*;
 
     fn text_baseline(svg: &str, label: &str) -> f64 {
