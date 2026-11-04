@@ -1,0 +1,8 @@
+@startuml
+!$h=%substr("🚀",0,1)
+!$l=%substr("🚀",1,1)
+!$a=%strpos(%lower("AB"+$h)+%upper($l+"ß"),"🚀")
+!$b=%strlen(%lower($h)+%upper($l))
+!$c=%strlen(%upper("ß"+$h)+%lower($l))
+class "$a/$b/$c" as Units
+@enduml

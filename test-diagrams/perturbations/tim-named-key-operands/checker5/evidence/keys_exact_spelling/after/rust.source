@@ -1,0 +1,3 @@
+@startuml
+class "first/violet/first/blue" as Spelling
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+!$n=0
+!startsub piece
+!$n=$n+3
+!endsub0
+!$n=$n+4
+!endsub;tail
+!includesub piece
+class "$n" as Kept
+@enduml

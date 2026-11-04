@@ -1,0 +1,20 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "68px"), ("preserveAspectRatio", "none"), ("style", "width:145px;height:68px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 145 68"), ("width", "145px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "68px"), ("preserveAspectRatio", "none"), ("style", "width:134px;height:68px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 134 68"), ("width", "134px"), ("zoomAndPan", "magnify")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "125.1807"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "114.7148"), ("x", "7"), ("y", "7")]
+  [7] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "93.1807"), ("x", "36"), ("y", "28.291")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "82.7148"), ("x", "36"), ("y", "28.291")]
+  [7] <text> text mismatch:
+    expected: Some("first/plum/$a")
+    actual:   Some("first/last/$a")
+  [8] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "131.1807"), ("y1", "39"), ("y2", "39")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "120.7148"), ("y1", "39"), ("y2", "39")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "131.1807"), ("y1", "47"), ("y2", "47")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "120.7148"), ("y1", "47"), ("y2", "47")]
+

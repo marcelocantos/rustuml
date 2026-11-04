@@ -1,0 +1,10 @@
+@startuml
+!definelong LINES()
+first
+second
+!enddefinelong
+!$p="prefix"
+note as N
+$p LINES()
+end note
+@enduml

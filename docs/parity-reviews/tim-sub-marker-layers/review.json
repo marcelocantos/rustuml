@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-sub-marker-layers",
+  "reviewer": {
+    "task_id": "t3-04b6729a-independent-TIM-checker5",
+    "thread_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ad979fae3-777e-4583-b22b-5ed91f03f235",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no production edits; no children"
+  },
+  "account_commit": "6d46a483aad389d4535e1ba24822fdd116baf517",
+  "implementation_commit": "92647b126f6dc1c83ebdc6213d0c2c0a5b3211b6",
+  "tested_revision": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+  "baseline_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "prior_rejection": "0d30ae99e85195f595e21ca0a80be85f26473ee9",
+  "evidence_import": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_locations": [
+    "text/TLineType.java:simpleKeyword,ENDSUB",
+    "tim/iterator/CodeIteratorSub.java:peek",
+    "preproc/Sub.java:fromFile",
+    "preproc/UncommentReadLine.java:readLine",
+    "tim/TContext.java:buildCodeIterator"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "commands": [
+    "CARGO_TARGET_DIR=<private-cache>/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact before",
+    "CARGO_TARGET_DIR=<private-cache>/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact candidate",
+    "uv run --no-project python <private-cache>/replay.py <fixed cohort>; before and after -pipe and --yaml -pipe; unchanged compare_svg_strict",
+    "Parent relay: /Users/marcelo/rustuml-reference/bin/reference --cwd <worker>/<new|supplement> --timezone GMT+11:00 -- -pipe -tsvg; unchanged SourceProbe.java; exact argv/streams captured per case",
+    "uv run --no-project python <private-cache>/gates.py; exact candidate main tiers once; full command/status manifest in checker5-support/gates.json"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.svg",
+      "axes": [
+        "suffix punctuation",
+        "identifier continuation"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "dd14f54b576144132e68a079a0aaf9d0116c672aef5439a96978d0744dc9ad61",
+      "golden_sha256": "704b091f9ac3dff61a9dad571f6fa626b32da57373241c9c6cdb3d0c89eb70a6",
+      "evidence": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/evidence/sub_suffix_continuation",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "parser handoff residual",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.svg",
+      "axes": [
+        "repeated selection",
+        "selected-body comments"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "c1b0c436b890f664c67109ec006aca2ca40bc62dc5ebe80681494e7f412aed54",
+      "golden_sha256": "fdaca94b7884486f74f15812c8771ef2a606a6988c57b20886f2b916c521f0de",
+      "evidence": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/evidence/sub_repeated_comments",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_raw_tail_error.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_raw_tail_error.svg",
+      "axes": [
+        "invalid marker after selected",
+        "raw comment"
+      ],
+      "result": "pass",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 1,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "7fc644ae51146ee08cbaa56385dca44e12abd187d6628bff43b73b851b1af804",
+      "golden_sha256": "b5b71f43c4700673da37966d256d1a55c9d06b4f281c55ae952593d108d5f6ad",
+      "evidence": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/evidence/sub_raw_tail_error",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_local_nested.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_local_nested.svg",
+      "axes": [
+        "local marker validation",
+        "nested block"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "80a8ee3abc683ed5eb6c235ed49d5f1aea2f6c41194a927e64bca782c07c520c",
+      "golden_sha256": "e485e307ffd70f17662b4bae284c5a1f3cd94d2819264a2eb5fd6d0d2072c654",
+      "evidence": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/evidence/sub_local_nested",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_valid.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_valid.svg",
+      "axes": [
+        "local punctuation suffix",
+        "two block names and replay"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "45c1340f7fde956cd6b841f594e77e8c66cf87c280f59a47a8dd9fafdc18dae8",
+      "golden_sha256": "05e01de570f6a0b18b10bc24ae6d34928d1949171d6edffa4354ff8a991cbe42",
+      "evidence": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/evidence/sub_suffix_valid",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    }
+  ],
+  "findings": [
+    "REJECT: sub_local_nested is Java-negative Cannot nest sub at the outer declaration; Rust exits0 with an empty UML source body. CodeIteratorSub.peek rejects STARTSUB while collecting a local body. Rust collecting_sub buffers the nested marker, then recursively reinterprets it during replay, leaving collection active and swallowing the following model. Add local structural validation while collecting, before replay; keep external Sub.fromFile selection rules separate.",
+    "SUPPORTED: sub_suffix_valid closes local blocks on punctuation suffixes and retains class14 after two definitions and two replays. sub_repeated_comments selects repeated external blocks, removes comments only during execution and retains class7. sub_raw_tail_error finds Bad sub name inside a raw comment after a selected block, before executing its content. The local suffix/raw external marker correction itself survives these controls.",
+    "sub_suffix_continuation was intended as a valid boundary control but Java emits a syntax-error SVG because !endsub0 is plain diagram text. Both evaluated sources retain that text twice and class14; Rust CLI accepts it. It is kept as an invalid reference and parser-handoff limitation, not recategorized as a valid positive or blamed on the corrected end-marker boundary. No reader policy or parser fix was made."
+  ],
+  "next_causal_repair": "Reject nested local STARTSUB while buffering; do not enter recursive sub collection during replay. Preserve external raw-marker validation order.",
+  "verdict": "rejected",
+  "bounded_mechanism_observation": "falsified by fresh in-scope counterexample",
+  "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/checker5-support/README.md",
+  "scope": "Only exact1703a272 versus exactee0e4c72. No whole-TIM or combined candidate acceptance. Earlier rejected records and every old reference remain immutable. The mandatory standing perturbation gate is red; negative error references remain failures there, even when rejection behavior is correct. No comparator, baseline, skip rule, reader, date, parser, renderer, target or shipping change."
+}

@@ -1,0 +1,13 @@
+@startuml
+!define FLAG bright
+!definelong MARK(x)
+ [x]
+!enddefinelong
+!$v="MARK(cloud)"
+class Ledger {
+   MARK(sky)
+}
+note as N
+  $v / MARK(rain) / MARK / north\nFLAG / preFLAG
+end note
+@enduml

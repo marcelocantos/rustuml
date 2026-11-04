@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-named-key-operands",
+  "reviewer": {
+    "task_id": "t3-04b6729a-independent-TIM-checker5",
+    "thread_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ad979fae3-777e-4583-b22b-5ed91f03f235",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no production edits; no children"
+  },
+  "account_commit": "6d46a483aad389d4535e1ba24822fdd116baf517",
+  "implementation_commit": "92647b126f6dc1c83ebdc6213d0c2c0a5b3211b6",
+  "tested_revision": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+  "baseline_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "prior_rejection": "0d30ae99e85195f595e21ca0a80be85f26473ee9",
+  "evidence_import": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_locations": [
+    "tim/expression/ShuntingYard.java:constructor",
+    "tim/expression/ReversePolishInterpretor.java:AFFECTATION",
+    "tim/EaterFunctionCall.java:analyze"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "commands": [
+    "CARGO_TARGET_DIR=<private-cache>/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact before",
+    "CARGO_TARGET_DIR=<private-cache>/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact candidate",
+    "uv run --no-project python <private-cache>/replay.py <fixed cohort>; before and after -pipe and --yaml -pipe; unchanged compare_svg_strict",
+    "Parent relay: /Users/marcelo/rustuml-reference/bin/reference --cwd <worker>/<new|supplement> --timezone GMT+11:00 -- -pipe -tsvg; unchanged SourceProbe.java; exact argv/streams captured per case",
+    "uv run --no-project python <private-cache>/gates.py; exact candidate main tiers once; full command/status manifest in checker5-support/gates.json"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_exact_spelling.puml",
+      "golden": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_exact_spelling.svg",
+      "axes": [
+        "key value lacks dollar",
+        "plain versus RPN"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 1,
+      "source_sha256": "c75c58c5344d258bac6b6472d8420cc6cce96144bef1492e4619c65f314bb125",
+      "golden_sha256": "f2dd2de56b53d7f842473669f8352af6f2050e451cbef083333126bb01caed72",
+      "evidence": "test-diagrams/perturbations/tim-named-key-operands/checker5/evidence/keys_exact_spelling",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_local_snapshot.puml",
+      "golden": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_local_snapshot.svg",
+      "axes": [
+        "local/global keys",
+        "later mutation"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "2ab0c8dc2a2532d9208bc5361931f5b897521423d5056d97d66cc8ec9d1e1f60",
+      "golden_sha256": "012644fc29b6a0113cc04b3c83b43aad1cde059724518e374a37dc789fd440b0",
+      "evidence": "test-diagrams/perturbations/tim-named-key-operands/checker5/evidence/keys_local_snapshot",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_duplicate.puml",
+      "golden": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_duplicate.svg",
+      "axes": [
+        "duplicate key",
+        "RPN argument counting"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": false,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 3,
+      "source_sha256": "9204ef98ccf27667060a6b0fa6c4144726688b39a6ae877ff04c8f01b7f7b028",
+      "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence": "test-diagrams/perturbations/tim-named-key-operands/checker5/evidence/keys_duplicate",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 1,
+      "java_probe_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_nested_call.puml",
+      "golden": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_nested_call.svg",
+      "axes": [
+        "nested call inside named argument",
+        "RPN named map lifetime"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "d6672b13889b9f977181200b677e2effc3cd8eff992dc00fe81d28a8aa3d39c0",
+      "golden_sha256": "c036c026fb41d7191dab46af40a649161fbe7ac0413196d77fe93b24ca82b31c",
+      "evidence": "test-diagrams/perturbations/tim-named-key-operands/checker5/evidence/keys_nested_call",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    }
+  ],
+  "findings": [
+    "REJECT NEW LOST PASS: keys_exact_spelling is valid. Java and independently rebuilt before output first/last/first/blue; candidate outputs first/violet/first/blue. ShuntingYard snapshots $key to string b, AFFECTATION retains exactly b, and TFunctionImpl.getNewMemory compares it with literal parameter $b. Rust execute_expression trims all leading dollars, conflating b and $b. Preserve the exact prepared key namespace; only translate internal identifiers when an exact source-language name matches.",
+    "REJECT: keys_duplicate and keys_nested_call are Java-negative but Rust accepts both. ReversePolishInterpretor owns a named map across the RPN expression; nb is syntactic count minus distinct named.size(), and function execution clears that map. Duplicate keys change stack coverage, and a previously named argument affects a nested zero-argument call. Rust recursive Expression::Call uses a separate map and counts positional AST children, so it does not implement this data flow. Model the actual map/stack lifetime or explicitly narrow the claimed invariant before a new corrective account.",
+    "keys_local_snapshot agrees: local/default key $b is prepared before the later global mutation in $change; the plain-call key remains literal. Prior checker named_global_snapshot and maker global/local controls also match. The key snapshot improvement is real, but exact key identity and nested/duplicate-key behavior falsify the broader current claim."
+  ],
+  "next_causal_repair": "Keep exact prepared key spelling and faithfully model RPN named-map/stack lifetime and distinct-key argument counting.",
+  "verdict": "rejected",
+  "bounded_mechanism_observation": "falsified by fresh in-scope counterexample",
+  "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/checker5-support/README.md",
+  "scope": "Only exact1703a272 versus exactee0e4c72. No whole-TIM or combined candidate acceptance. Earlier rejected records and every old reference remain immutable. The mandatory standing perturbation gate is red; negative error references remain failures there, even when rejection behavior is correct. No comparator, baseline, skip rule, reader, date, parser, renderer, target or shipping change."
+}

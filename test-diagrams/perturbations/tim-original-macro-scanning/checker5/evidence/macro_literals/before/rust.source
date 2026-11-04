@@ -1,0 +1,8 @@
+@startuml
+class Ledger {
+ [sky]
+}
+note as N
+ [cloud] / MARK(rain) / MARK / north\nFLAG / preFLAG
+end note
+@enduml

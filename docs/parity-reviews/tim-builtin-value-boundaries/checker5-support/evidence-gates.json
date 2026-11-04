@@ -1,0 +1,22 @@
+{
+  "standing_with_checker5": {
+    "exit": 101,
+    "total": 1576,
+    "passed": 572,
+    "failed": 1004,
+    "log": "logs/standing-with-checker5.log"
+  },
+  "guards_with_checker5": {
+    "exit": 101,
+    "passed": 4,
+    "failed": 2,
+    "log": "logs/guards-with-checker5.log"
+  },
+  "reason": "Only standing/guards repeated after new evidence was added; production and both main tiers unchanged and not rerun.",
+  "final_staged_diff_check": {
+    "command": "git diff --cached --check",
+    "exit": 2,
+    "log": "final-diff-check.txt",
+    "reason": "Eleven exact captured comparison.stdout streams end with blank lines; raw streams deliberately preserved."
+  }
+}

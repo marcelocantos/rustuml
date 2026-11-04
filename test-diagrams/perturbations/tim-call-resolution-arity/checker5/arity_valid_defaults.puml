@@ -1,0 +1,8 @@
+@startuml
+!function $mix($a,$b="end")
+!return $a+"/"+$b
+!endfunction
+!$a=$mix("fir")
+!$b=%substr("quartz",2,2)
+class "$a/$b/$mix($a="ash")" as Valid
+@enduml

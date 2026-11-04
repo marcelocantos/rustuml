@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "one" as Residue
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Residue
+  entities:
+  - id: Residue
+    label: one
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

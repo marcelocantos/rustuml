@@ -1,0 +1,3 @@
+@startuml
+class "?" as Residue
+@enduml

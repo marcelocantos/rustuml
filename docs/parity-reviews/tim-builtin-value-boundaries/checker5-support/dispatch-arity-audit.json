@@ -1,0 +1,332 @@
+[
+  {
+    "name": "true",
+    "java": [
+      {
+        "java": "tim/builtin/AlwaysTrue.java",
+        "canCover": "return nbArg == 0;",
+        "sha256": "c2ebd955cdf733f5e0c439d8195038c78c5cc886515f27831bc7b952cfc2ed27"
+      }
+    ]
+  },
+  {
+    "name": "false",
+    "java": [
+      {
+        "java": "tim/builtin/AlwaysFalse.java",
+        "canCover": "return nbArg == 0;",
+        "sha256": "c10af7ff4ba9e18434f87fad93e270c7b9559f86d52395720874f8637ddec16c"
+      }
+    ]
+  },
+  {
+    "name": "newline",
+    "java": [
+      {
+        "java": "tim/builtin/Newline.java",
+        "canCover": "return nbArg == 0;",
+        "sha256": "6f330331647d4e41690f1b24c31ef7aad1b15a87c4e7695fc3f6b08723eb6809"
+      }
+    ]
+  },
+  {
+    "name": "tab",
+    "java": [
+      {
+        "java": "tim/builtin/Tabulation.java",
+        "canCover": "return nbArg == 0;",
+        "sha256": "a28943b8dc02e821582ea99431cb020bb3dfe5d7a0057a7c886885a82b424e1f"
+      }
+    ]
+  },
+  {
+    "name": "filename",
+    "java": [
+      {
+        "java": "tim/builtin/Filename.java",
+        "canCover": "return nbArg == 0;",
+        "sha256": "1715d15eeae54258b53be521a4bce0ee9f9c9ecdaf0da23b952e4d194a8dc534"
+      }
+    ]
+  },
+  {
+    "name": "dirpath",
+    "java": [
+      {
+        "java": "tim/builtin/Dirpath.java",
+        "canCover": "return nbArg == 0;",
+        "sha256": "87cb73f123345a799fe71d1c68049a021ae1b4317f1c709d0bb5f9eda13610f0"
+      }
+    ]
+  },
+  {
+    "name": "upper",
+    "java": [
+      {
+        "java": "tim/builtin/Upper.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "685f50cd06d9e3227fef646cc6523d491fc6dd025abe07db34cacc12cb32e0a3"
+      }
+    ]
+  },
+  {
+    "name": "lower",
+    "java": [
+      {
+        "java": "tim/builtin/Lower.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "cf890aad8de1c08fd85aaff5aba81e9b6752caba5c32c39f5bd0dc83cced4490"
+      }
+    ]
+  },
+  {
+    "name": "chr",
+    "java": [
+      {
+        "java": "tim/builtin/Chr.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "e381406c7be418c7222dedc6ce78812d6524312cf6acd1af13a425d60fb1b643"
+      }
+    ]
+  },
+  {
+    "name": "boolval",
+    "java": [
+      {
+        "java": "tim/builtin/BoolVal.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "bc6c805e00603e4b81b204470aabd0967108283912fdd0d883929aaea718a3f4"
+      }
+    ]
+  },
+  {
+    "name": "strlen",
+    "java": [
+      {
+        "java": "tim/builtin/Strlen.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "f1e83b78e4fec55d174dee415ce2b54a6839a395abc59ac58861f8cc15b1e246"
+      }
+    ]
+  },
+  {
+    "name": "string",
+    "java": [
+      {
+        "java": "tim/builtin/StringFunction.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "a0d8637844b0a1fed0762a085dde4eb3da37050ec40166a2d24369136c941488"
+      }
+    ]
+  },
+  {
+    "name": "dec2hex",
+    "java": [
+      {
+        "java": "tim/builtin/Dec2hex.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "ef79ed247871c041c810512678997e3d434ff3205fec308b5e6961f2a65e195e"
+      }
+    ]
+  },
+  {
+    "name": "not",
+    "java": [
+      {
+        "java": "tim/builtin/LogicalNot.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "baad29375db366e111f7031de12fa39d20abc4f8f7f82c33ae744009ec95e445"
+      }
+    ]
+  },
+  {
+    "name": "get_variable_value",
+    "java": [
+      {
+        "java": "tim/builtin/GetVariableValue.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "df4e0a1012d686aeae9db691cde276f36da7aa81365d8267e3f0589792b55cd1"
+      }
+    ]
+  },
+  {
+    "name": "getenv",
+    "java": [
+      {
+        "java": "tim/builtin/Getenv.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "3af4d3d2fd6967446e464d1329113549a87a383fb396986cfe442d3adff9e784"
+      }
+    ]
+  },
+  {
+    "name": "str2json",
+    "java": [
+      {
+        "java": "tim/builtin/Str2Json.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "1a2104aa1fd536cdd494590e9fbb5f7ebc69f87ebe6bd78e222c72e28053cf99"
+      }
+    ]
+  },
+  {
+    "name": "size",
+    "java": [
+      {
+        "java": "tim/builtin/Size.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "3137c6c98f04f7fd259aa8edb6cd9813bdd7400a3a7ef8a50e3b5716d4438520"
+      }
+    ]
+  },
+  {
+    "name": "intval",
+    "java": [
+      {
+        "java": "tim/builtin/IntVal.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "bbb54b1b693e2cc5c68b570e8f02e8beca7511fb548b3d8a0d0fc8890e795c32"
+      }
+    ]
+  },
+  {
+    "name": "hex2dec",
+    "java": [
+      {
+        "java": "tim/builtin/Hex2dec.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "f74b54e723ca1da4e6a29d4bb8d3f9b640a05cbc0c9bd4da2231de5bee291486"
+      }
+    ]
+  },
+  {
+    "name": "is_dark",
+    "java": [
+      {
+        "java": "tim/builtin/IsDark.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "4ac345318ab354fcd3e0a4adc1f6f8668d44e25119c01b3aa4d283aac77dd7f5"
+      }
+    ]
+  },
+  {
+    "name": "is_light",
+    "java": [
+      {
+        "java": "tim/builtin/IsLight.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "8eafcb23647ba044a819f6af32fd69ffb8eab53ff58e5f3d27cf53042e44ca34"
+      }
+    ]
+  },
+  {
+    "name": "variable_exists",
+    "java": [
+      {
+        "java": "tim/builtin/VariableExists.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "b0627688f7fce6ef6de8fbb2f2d8cf652c55e57f301a035636643ca99b1b9871"
+      }
+    ]
+  },
+  {
+    "name": "function_exists",
+    "java": [
+      {
+        "java": "tim/builtin/FunctionExists.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "f5e30acf6c4008a26f66ed6b1c14daa566e493b3cd17cbe4f1e559c92a8cbe77"
+      }
+    ]
+  },
+  {
+    "name": "file_exists",
+    "java": [
+      {
+        "java": "tim/builtin/FileExists.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "53a3cf5b3bfb52c3227b296272ee754bb699041d92abdf77c4f1dd0c035e64b3"
+      }
+    ]
+  },
+  {
+    "name": "feature",
+    "java": [
+      {
+        "java": "tim/builtin/Feature.java",
+        "canCover": "return nbArg == 1;",
+        "sha256": "2882db98c8eb4e2ea8083dc83056060ff89bc0823e08557eef38ba3fc8fa8619"
+      }
+    ]
+  },
+  {
+    "name": "strpos",
+    "java": [
+      {
+        "java": "tim/builtin/Strpos.java",
+        "canCover": "return nbArg == 2;",
+        "sha256": "066ae4b23f6879bb0499996abf8d49834f6a1e4a93249d522e31feba4c5516a7"
+      }
+    ]
+  },
+  {
+    "name": "set_variable_value",
+    "java": [
+      {
+        "java": "tim/builtin/SetVariableValue.java",
+        "canCover": "return nbArg == 2;",
+        "sha256": "4f41026b7218b639e5b86e883d879bfa816c1dfb7772756c2d031f3da97de27e"
+      }
+    ]
+  },
+  {
+    "name": "darken",
+    "java": [
+      {
+        "java": "tim/builtin/Darken.java",
+        "canCover": "return nbArg == 2;",
+        "sha256": "e27c2e87ae6c267370bd70f1d97593a3d3e395145ead2f8de42c8ca27e9a6d00"
+      }
+    ]
+  },
+  {
+    "name": "lighten",
+    "java": [
+      {
+        "java": "tim/builtin/Lighten.java",
+        "canCover": "return nbArg == 2;",
+        "sha256": "f8ad8b4269a3fe5c551c5722d3861bf6b8328e5358d99139fb420da554cd02ed"
+      }
+    ]
+  },
+  {
+    "name": "substr",
+    "java": [
+      {
+        "java": "tim/builtin/Substr.java",
+        "canCover": "return nbArg == 2 || nbArg == 3;",
+        "sha256": "d7865d9f9c06da910c2bcfddb30d8d9d66e1a3c38882f044999039c9773c671a"
+      }
+    ]
+  },
+  {
+    "name": "date",
+    "java": [
+      {
+        "java": "tim/builtin/DateFunction.java",
+        "canCover": "return nbArg == 0 || nbArg == 1 || nbArg == 2;",
+        "sha256": "9e98290027e6f93e31fbc5818ffa8b8e42c4c1a493bed76852e489cb1d57bb05"
+      }
+    ]
+  },
+  {
+    "name": "hsl_color",
+    "java": [
+      {
+        "java": "tim/builtin/HslColor.java",
+        "canCover": "return nbArg == 3 || nbArg == 4;",
+        "sha256": "46714d24741db0cc9354d6fc4f60a26871f975135d22aa28570e14103c43b317"
+      }
+    ]
+  }
+]

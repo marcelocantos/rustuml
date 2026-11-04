@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "docs/parity-reviews/tim-typed-values-and-binding/checker3-support/probe.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/deps",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/probe"
+  ],
+  "exit": 0,
+  "stderr": ""
+}
