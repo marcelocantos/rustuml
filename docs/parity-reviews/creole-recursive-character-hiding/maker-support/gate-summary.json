@@ -1,0 +1,88 @@
+{
+  "statuses": {
+    "library": 101,
+    "cli": 0,
+    "main-product": 101,
+    "main-assisted": 101,
+    "standing": 101,
+    "guards": 101,
+    "clippy": 101,
+    "format": 1,
+    "touched-format": 0,
+    "diff": 0
+  },
+  "layout": 41,
+  "math": 10,
+  "oracle": 31,
+  "parser": 624,
+  "cli_pipe": 15,
+  "renderer": {
+    "passed": 784,
+    "total": 786,
+    "failed": [
+      "class::tests::plain_theme_uses_legacy_class_icon_and_font_defaults",
+      "filter_registry::tests::parser_source_identity_matches_java_shadow_id_after_initial_blanks"
+    ]
+  },
+  "main_product_library": {
+    "passed": 11179,
+    "eligible": 11251
+  },
+  "main_assisted_library": {
+    "passed": 10497,
+    "eligible": 11251,
+    "total": 12550,
+    "skipped": 1299
+  },
+  "standing": {
+    "entries": 1816,
+    "harness_pass": 752,
+    "matching_env_cli_pass": 782,
+    "before_cli_pass": 764,
+    "unmapped": [],
+    "discrepancies": [
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_nested.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_return_include.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_selected.puml",
+      "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml"
+    ]
+  },
+  "guards": {
+    "passed": 4,
+    "total": 6,
+    "failed": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ]
+  },
+  "clippy": "Unchanged parse/component.rs:72 dead code",
+  "format": "Unchanged parser/render class.rs",
+  "touched_format": "pass",
+  "independent_acceptance": "Not authored by maker; NEW independent checker required"
+}

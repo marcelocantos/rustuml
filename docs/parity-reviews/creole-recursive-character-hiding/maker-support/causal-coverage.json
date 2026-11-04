@@ -1,0 +1,42 @@
+[
+  {
+    "mechanism": "creole-recursive-character-hiding",
+    "preaccount": "5d039c21c9374ee91904fe4da430c22ff6e2c4f3",
+    "java": "StripeSimple.analyzeAndAdd -> CharHidder.hide at each recursion -> Command matching/capture -> AtomText constructor unhide",
+    "rust": "walk_segments applies hide_characters; take_style_delimiter and walk_style_tag consume hidden stream; push_literal restores hidden characters before XML escaping",
+    "dataflow": "One source-defined representation through selection and recursion replaces both scanner escape skipping and separate tilde rendering arm. Escape consumes one following character; backslash-tilde hides only tilde. Unicode boundaries remain Rust char boundaries. Source PUA range follows Java.",
+    "controls": [
+      "checker30/html_escape_pairs",
+      "checker30/delimiter_escapes",
+      "supplement8/s_delimiter_escape_overlap",
+      "supplement8/s_html_bold_backslash",
+      "supplement8/s_display_escapes",
+      "supplement8/s_leaf_escapes",
+      "fresh12/html_escape_stream",
+      "fresh12/overlapping_openers",
+      "fresh12/wave_tilde_pairs",
+      "fresh12/recursive_hiding",
+      "fresh12/wbs_hidden_leaf",
+      "fresh12/wbs_escape_lines"
+    ],
+    "residue": "literal_neighbors retains only Unicode metrics difference; URL/legacy APIs, extended styles and other consumer dependencies not claimed"
+  },
+  {
+    "mechanism": "creole-parameter-command-flush",
+    "preaccount": "5d039c21c9374ee91904fe4da430c22ff6e2c4f3",
+    "java": "StripeSimple.modifyStripe addPending around every command; size/color execute recursive analyzeAndAdd and restore font",
+    "rust": "handle_tag size/color use existing private empty barriers before/after recursion; parse_segments_inner removes barriers or projects base-style space if entire stripe atomless",
+    "dataflow": "No new drawable padding around commands. Equal-style q/r become distinct segments; empty actual stripes still restore base style. WBS display measurement/paint and leaf arithmetic unchanged.",
+    "controls": [
+      "checker30/html_parameters",
+      "supplement8/s_display_commands",
+      "supplement8/s_leaf_commands",
+      "fresh12/empty_parameter_runs",
+      "fresh12/consumed_parameter_runs",
+      "fresh12/wbs_line_commands",
+      "fresh12/note_commands",
+      "fresh12/activity_commands"
+    ],
+    "residue": "html_parameters last line baseline remains sequence-owned; whole failure retained"
+  }
+]

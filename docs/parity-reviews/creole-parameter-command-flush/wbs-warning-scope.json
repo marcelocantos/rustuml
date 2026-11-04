@@ -16,12 +16,15 @@
   "scope_proposal": "Separate shared warning metadata with backward-compatible empty serialization, source-directed warning collection at parse/wbs.rs old-order selection, and renderer-wide warning block composition before existing title/frame decorations. Requires ownership of diagram/mod.rs and shared decoration/dispatch module after exact tracing by owner. Do not synthesize warning from label/source or add WBS coordinate offsets. Existing four owned files alone do not provide the common model/composition boundary.",
   "retained_failures": [
     "checker30/shape_colors_old",
-    "supplement8/s_shape_color_literals",
     "new15/wbs_shape_color"
   ],
   "invariants": [
     "New-order shape/color parsing and whitespace literal labels remain independent",
     "Existing Box serialization omission/default and None representation unchanged",
     "No geometry compensation or WBS-only SVG surgery"
-  ]
+  ],
+  "passing_neighbor_controls": [
+    "supplement8/s_shape_color_literals"
+  ],
+  "evidence_correction": "The whitespace-literal control was initially listed with failures; actual replay confirms it passes before and after. Adjacent old-order syntax, not a whitespace-delimited literal underscore, triggers the warning."
 }

@@ -1,0 +1,6 @@
+@startuml
+start
+:P<size:13></size>Q;
+:P~***elm**Q;
+stop
+@enduml
