@@ -1,0 +1,52 @@
+[
+  {
+    "exit": 1,
+    "operation": "Initial maker file reads at prepared checkout head9e0f2cca",
+    "resolution": "Switched this clean isolated checkout to exact candidate branch before review/build."
+  },
+  {
+    "exit": 2,
+    "operation": "Exploratory Java path lookups CommunicationTileNote.java, creole/atom/AtomText.java, AtomUrl.java",
+    "resolution": "Located actual CommunicationTileSelfNoteRight, legacy/AtomText and legacy/AtomTextUtils by source search; no Java execution."
+  },
+  {
+    "exit": 1,
+    "operation": "Read checker-b9c6/verify.py",
+    "resolution": "Located audit.py; no evidence fabricated."
+  },
+  {
+    "exit": 1,
+    "operation": "First followup importer",
+    "resolution": "Strict membership assertion caught relay name lacking .puml. Switched dictionary key to exact remote_name; all hashes and membership then verified."
+  },
+  {
+    "exit": 1,
+    "operation": "First followup measurement",
+    "resolution": "Manifest absent after importer assertion. Empty output directory retained."
+  },
+  {
+    "exit": 1,
+    "operation": "Second followup measurement",
+    "resolution": "Existing empty output directory refused; used distinct followup-before-complete."
+  },
+  {
+    "exit": 101,
+    "operation": "First main tiers and guards",
+    "resolution": "Empty prepared golden submodule measured zero main cases; restored exact pinned local archive and reran only affected tiers/guards."
+  },
+  {
+    "exit": 200,
+    "operation": "Java original color_primitives_0 and1",
+    "resolution": "Invalid references preserved with error SVGs and raw streams; excluded from positive passes. Corrected grammar followups independently captured."
+  },
+  {
+    "exit": "all captured",
+    "operation": "Comparator mismatches/invalids, library panic, standing gates",
+    "resolution": "Every per-case exit/stdout/stderr in cli-replays.tar.gz; every gate exit in commands.json and logs. Diagnostic invalid empty TIM panic101 is not a product CLI panic."
+  },
+  {
+    "exit": 2,
+    "operation": "git diff --cached --check on raw production.diff (authoring wrapper exit1)",
+    "resolution": "Unified diff context blank lines appear as trailing whitespace when embedded in another diff. Preserved exact raw diff bytes in production.diff.gz, then reran whitespace check. No source or evidence normalization."
+  }
+]

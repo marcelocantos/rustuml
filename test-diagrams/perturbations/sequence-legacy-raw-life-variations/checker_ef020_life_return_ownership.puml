@@ -1,0 +1,10 @@
+@startuml
+participant Egret
+participant Robin
+Robin -> Robin : seed
+deactivate Egret
+Robin -> Egret ++ : own
+Egret -> Egret ++ : nested
+return inner
+return outer
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+<style>
+root {
+ LineColor purple
+}
+sequenceDiagram {
+ lifeLine {
+ LineColor orange
+ }
+}
+</style>
+Wagtail -> Thrush ++ : start
+Thrush -> Thrush ++ : nested
+return inner
+return end
+@enduml

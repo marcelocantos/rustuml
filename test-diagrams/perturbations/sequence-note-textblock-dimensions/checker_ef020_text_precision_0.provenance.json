@@ -1,0 +1,34 @@
+{
+  "name": "text_precision_0.puml",
+  "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_precision_0.puml",
+  "source_sha256": "8edc2eb0ec7dd0e75744641d7ffeab8cda03196b3cb0ecf25bbc9cc1f9913228",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.8JAk8GsI",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.8JAk8GsI",
+  "timezone": "GMT+11:00",
+  "timed_out": false,
+  "elapsed_seconds": 1.1221379170019645,
+  "stdout_sha256": "b91073550ea80ad2c60e9f1ff7489b86d1bb6b7d9ca4aaefa4b33dcdc4bb92b2",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ]
+}

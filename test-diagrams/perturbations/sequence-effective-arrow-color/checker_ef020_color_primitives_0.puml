@@ -1,0 +1,7 @@
+@startuml
+Tern -[#2468ac80]> Pip : filled
+Tern -[#2468ac01]o> Pip : circle
+Pip -[#2468acfe]>> Pip : open self
+Tern -[#transparent]x Pip : cross
+Tern -[#a]> Pip : gray
+@enduml

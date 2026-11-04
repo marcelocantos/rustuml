@@ -1,0 +1,9 @@
+{
+  "revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "target": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/before-target",
+  "files": {
+    "compare_cli": "05ce0a27d1424397bf7ecf0aa3e0cfac01529f69724580d8fb97e0594738781d",
+    "diff_one": "0b8b0bf9c7b771950807a4e8ea96ae0ab1f4036f38d6c82715979bf24899509a",
+    "rustuml": "e0f6294c6c1c5878af61dbe7990e45dfae271d5679e6bc91da73bfe7924ea228"
+  }
+}

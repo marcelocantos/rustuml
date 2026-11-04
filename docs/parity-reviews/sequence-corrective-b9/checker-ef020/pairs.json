@@ -1,0 +1,1369 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.svg",
+    "axes": [
+      "inline newline/tab/backslash",
+      "engine/font/style"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_0.puml",
+    "source_sha256": "5dbdd932f7776d4e1763a4ef32d091649d7e5c142ebee36d4294ee02cf8a2a34",
+    "golden_sha256": "441ac4c3c835a00d12217ffcda0151fc6aab10ea1748d9cc9cc8a22c82d3a883",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.before.rust.svg",
+        "svg_sha256": "b21eb8960a083bf895ccfd9720909d6b9df60d344349e6baed1e604eea1f87a6"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.after.rust.svg",
+        "svg_sha256": "c96caf365b3a8bbb3df746fc5c59ac37fcb01ee573631e130bb810fb1f924149"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.svg",
+    "axes": [
+      "block literal escape",
+      "engine/font/style"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_0.puml",
+    "source_sha256": "ac73fffb083394d9341ef53c5c2bd006a4b64809517607c720e2660c3930c81f",
+    "golden_sha256": "de36d35230a6ecaf43453ef00e410420b58afdb399a12ef25a45049bb9ca1093",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.before.rust.svg",
+        "svg_sha256": "9f80e825f2c7d59fd4587c6cc8c75b4a7f5fb1c1c1a4ee206e38d61685696182"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.after.rust.svg",
+        "svg_sha256": "9f80e825f2c7d59fd4587c6cc8c75b4a7f5fb1c1c1a4ee206e38d61685696182"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.svg",
+    "axes": [
+      "natural right/left alignment",
+      "engine/unequal lines"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_0.puml",
+    "source_sha256": "ba4ef8a15bdbf62e5686096fe125ceaabf7b962e06eb983b94453a1006a8903d",
+    "golden_sha256": "ebeb17aaa9ecea724f6d84346f832eb22c98caac43945695b49733d423a75706",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.before.rust.svg",
+        "svg_sha256": "c8ce3c17440dac1e481d4fb837996b943a24f2cf0196598007b20b39a1974c93"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.after.rust.svg",
+        "svg_sha256": "c8ce3c17440dac1e481d4fb837996b943a24f2cf0196598007b20b39a1974c93"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.svg",
+    "axes": [
+      "alpha 01/80/fe/no-paint/grayscale",
+      "line/polygon/ellipse/path/self/cross"
+    ],
+    "result": "fail",
+    "reference_valid": false,
+    "fresh": true,
+    "mechanism": "sequence-effective-arrow-color",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_0.puml",
+    "source_sha256": "25e641cec188dec27b03e7f2d0352b69339ce0ea6db36babac1b5855a944f307",
+    "golden_sha256": "581918a8bf242cb5ebce26d6e2e30999914278fb3f7c414b39f2c8d7e8b80ecd",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 2,
+        "product_library_exit": 2,
+        "assisted_library_exit": 2,
+        "cli_equals_library": false,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.before.rust.svg",
+        "svg_sha256": "046b94ce1d4c54841560d4ed9265696e53c53ab4c04f0e5a03c92f1a7375b6c6"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 2,
+        "product_library_exit": 2,
+        "assisted_library_exit": 2,
+        "cli_equals_library": false,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.after.rust.svg",
+        "svg_sha256": "af6635db3154e493863fbf53e6645f9361577fd28b84ca224989681cad47073c"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.svg",
+    "axes": [
+      "return/external/self",
+      "registered/alpha zero/opaque"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-arrow-color",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_0.puml",
+    "source_sha256": "5cbc767edc78af51c79138fc36ff7f6bc29512695674ad166086e9a11e944d4f",
+    "golden_sha256": "51e06a29d1d3877d810763f401540feedf7c5fadd075aa0f0a4950e1534b40d2",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.before.rust.svg",
+        "svg_sha256": "a33fa74fff51609461c726373a63e3bba802b0cdd74fe1a3f89f7a2f542bba8e"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.after.rust.svg",
+        "svg_sha256": "30cfa4f2ae6e0b8c7d92da7b1f9da90cbf5c7fbabc055495456290c0ea1fe7f2"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.svg",
+    "axes": [
+      "scoped sibling inheritance",
+      "note component/block alignment/shadow"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-note-activation-style",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_siblings_0.puml",
+    "source_sha256": "02d4f2e3225692ea335272bd6c1d2ff88a93364fa9239276ce20834a32c8c2a1",
+    "golden_sha256": "8af0eb33b5ed5227fa96bb5984fd0e591ece3f31ce7e84910398a0fe34bd1417",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.before.rust.svg",
+        "svg_sha256": "9addb9dfefcde7bad00e30057aa1201fa9210c529fee8beaaa8590e0d9a52430"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.after.rust.svg",
+        "svg_sha256": "c1074d4ce37757c8d447b73821046af2147e655bcaacb9777a34f22ac06824ba"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.svg",
+    "axes": [
+      "root vs sibling inheritance",
+      "engine/nesting"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-note-activation-style",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_root_0.puml",
+    "source_sha256": "52c5b67e5e48b1b99079bb54634cd786b1b29973ba1e2813f5c420c64c5288b9",
+    "golden_sha256": "aaea779e5ed27c9493c9e5bd22fa380988cb5398ab9e762afea5d931f5d4c951",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.before.rust.svg",
+        "svg_sha256": "366ceec2a44590466ba0fa6e8425e4929b574fd598e917f48096372a6b090532"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.after.rust.svg",
+        "svg_sha256": "d087c0c4a1b5b9bd7c36f7628ecbcb4d6fb90ab94128e6ee913bb31bb3cb99e9"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.svg",
+    "axes": [
+      "fractional full line widths/mixed height",
+      "engine/alignment/multiline"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-textblock-dimensions",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_precision_0.puml",
+    "source_sha256": "8edc2eb0ec7dd0e75744641d7ffeab8cda03196b3cb0ecf25bbc9cc1f9913228",
+    "golden_sha256": "b91073550ea80ad2c60e9f1ff7489b86d1bb6b7d9ca4aaefa4b33dcdc4bb92b2",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.before.rust.svg",
+        "svg_sha256": "ca9e0f129fca4685d2753e92b0ac44f4f36074169e97f4d502a1837dd9e11edc"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.after.rust.svg",
+        "svg_sha256": "a70a2c3007ef97eac9fc514df420cf5cdc00525bb5d036efd2964871f386f108"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.svg",
+    "axes": [
+      "theme preferred allocation",
+      "engine/self note/multiline"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-textblock-dimensions",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_theme_self_0.puml",
+    "source_sha256": "f86414b2d29082a4ffab0901f005e3ab8acfc3382db41946073fc259d4f2e96d",
+    "golden_sha256": "10c48509e1598c989bebac70aef4e60b42ebd38cbf169dfe38d89d83bc4f4483",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.before.rust.svg",
+        "svg_sha256": "4cc51994e0d6204ecc612469018f7fe4dbbc040abbd6be8091a931e06fec3c19"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.after.rust.svg",
+        "svg_sha256": "a903e934e0afb20d4b9a8018204c459f1d451c20f14e9a9120edf9ca6bca2a83"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.svg",
+    "axes": [
+      "inline newline/tab/backslash",
+      "engine/font/style"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_1.puml",
+    "source_sha256": "d62003d3da9789ef92868694edf97bfa6964e7354ae1ac10f869ca994fbb2985",
+    "golden_sha256": "4955c04c98f3884dd6510ad3f76df2859ae6b54ca1832fa99b8400a4bef8002b",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.before.rust.svg",
+        "svg_sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.after.rust.svg",
+        "svg_sha256": "c7a1ca88491a6a31bc5510c22b2393b7e6131c2bd3680776ec2f8a12de86b5ae"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.svg",
+    "axes": [
+      "block literal escape",
+      "engine/font/style"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_1.puml",
+    "source_sha256": "96cbcde643f9f9c39c838447b771534a0da490ba5f09a19bac7963a48d1a7d83",
+    "golden_sha256": "cf4eb168cc5832d0ffd0cc28a47f472310080d73d7c7c3764bcb6ecc15ad7268",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.before.rust.svg",
+        "svg_sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.after.rust.svg",
+        "svg_sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.svg",
+    "axes": [
+      "natural right/left alignment",
+      "engine/unequal lines"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_1.puml",
+    "source_sha256": "223ff201b91ee082b0213bdbc6445c8e6ade925b357b630572b0f9aecf7c5b8b",
+    "golden_sha256": "e252120f6915aa64456f9c4a288cfd570d4d6279b642f7c903a99a4400609dfb",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.before.rust.svg",
+        "svg_sha256": "e9f485268674ec7b873c10b0706898bac58231633e129e3be49b82f6c2890383"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.after.rust.svg",
+        "svg_sha256": "e9f485268674ec7b873c10b0706898bac58231633e129e3be49b82f6c2890383"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.svg",
+    "axes": [
+      "alpha 01/80/fe/no-paint/grayscale",
+      "line/polygon/ellipse/path/self/cross"
+    ],
+    "result": "fail",
+    "reference_valid": false,
+    "fresh": true,
+    "mechanism": "sequence-effective-arrow-color",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_1.puml",
+    "source_sha256": "6f3820f5da23f35a288e229546c0c6663e69abed78ae1c29f96fe7f6a7c0fd33",
+    "golden_sha256": "7f0ece0b30813b3d24433a74dc82f5c3ea973ffb925aba00b6a52cba324b3f57",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 2,
+        "product_library_exit": 2,
+        "assisted_library_exit": 2,
+        "cli_equals_library": false,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.before.rust.svg",
+        "svg_sha256": "1762d4bb0861106284141912e15b44e953827fe56f5240c1bcb1ea4f424dbce3"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 2,
+        "product_library_exit": 2,
+        "assisted_library_exit": 2,
+        "cli_equals_library": false,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.after.rust.svg",
+        "svg_sha256": "970776bca20fd3e06b9a75a1ce322f0d79804d6e2bf3f8ff7dba83ad398c3332"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.svg",
+    "axes": [
+      "return/external/self",
+      "registered/alpha zero/opaque"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-arrow-color",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_1.puml",
+    "source_sha256": "6661d9871ffff9f5e61a7fd887789881e4a424a844d7199d028e96beadb72c0a",
+    "golden_sha256": "db83795dc488232e16ad4fec5ab0bcc2a2dca26052a983fa5bd84c235d566f0d",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.before.rust.svg",
+        "svg_sha256": "8921a942641b8db42206c7be09e4412ffd1ad73285c323209bec3891f51970a7"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.after.rust.svg",
+        "svg_sha256": "e5381ffb0a99c1d96e27efd1ccfcc9dbc4ccf8f0d41b946af931ac1fc6c96399"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.svg",
+    "axes": [
+      "scoped sibling inheritance",
+      "note component/block alignment/shadow"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-note-activation-style",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_siblings_1.puml",
+    "source_sha256": "1a4b33372002e9f5aba82df02888c41854de7bfc2ad24638370d006df6e5b80c",
+    "golden_sha256": "20be5a60985995aab24508ae1169eb463867e4cfee7a05613649cdb742ea2758",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.before.rust.svg",
+        "svg_sha256": "d4e7f16ddc1cf5cd541af4161bc4c5f8536d33910b74eb37cd9cb2c6b509671c"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.after.rust.svg",
+        "svg_sha256": "ee2ad3f586a58ae35e72404703a9f754a2b83e51dfbad085fc0f4f6811cdeaf8"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.svg",
+    "axes": [
+      "root vs sibling inheritance",
+      "engine/nesting"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-note-activation-style",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_root_1.puml",
+    "source_sha256": "e8439ac2560c421ccfa0a610d3e38a58c1da39dfa68e5c09cfecda3854ab4bb5",
+    "golden_sha256": "cb965d89ca412657ba45ee78b208334d1492d2027177d856b2e23cbdb68f9485",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.before.rust.svg",
+        "svg_sha256": "aa4c770bcda9b1c461e015668dca6698565e9b4cb596f1c4b3d9f4451678ee65"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.after.rust.svg",
+        "svg_sha256": "aa9bfbda63264b5a4ab04d12d580fbfdbe061132d730b3719fbd5e3114631a3d"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.svg",
+    "axes": [
+      "fractional full line widths/mixed height",
+      "engine/alignment/multiline"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-textblock-dimensions",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_precision_1.puml",
+    "source_sha256": "7c65994116f7768d6cbe74dd65537087c4d48eab53e29bfb3fa70128a04dc52f",
+    "golden_sha256": "f34ba9527ce07658c8514fa612f4e0774cd82dcedd0d5620b1f220be8d574893",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.before.rust.svg",
+        "svg_sha256": "f8de48d52c4db9eca960ba84048bf86ee2ef115a876aef35fe5e19dd6c931d3c"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.after.rust.svg",
+        "svg_sha256": "fd5b2e4ab2cef9254290b1c1d63d171720e15f610de5df562e5430d329df7755"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.svg",
+    "axes": [
+      "theme preferred allocation",
+      "engine/self note/multiline"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-textblock-dimensions",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_theme_self_1.puml",
+    "source_sha256": "6df1e1a9de826ec7b991b73d6e7b01cc419a32f1ddcc6af327bdcaba98e827a7",
+    "golden_sha256": "efc6db175e35e2ba1e0f57398f7a9416b96e1f2903ae07be8613b05631f5b511",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.before.rust.svg",
+        "svg_sha256": "b74819c62c8949ddec33d4c69acfe42674991e506fc22bc7c7f38819d17c6a84"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.after.rust.svg",
+        "svg_sha256": "7e34bba76eed034e874ab311c28a6a6950c873cd49d4d7eae5604f15137036d5"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.svg",
+    "axes": [
+      "two unmatched closes/nested opens",
+      "zero/one/two explicit closing events"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_0.puml",
+    "source_sha256": "106cb0e577b78ba8dae451e952230f1c988a140f0d63a797b8c28d96b7be26f6",
+    "golden_sha256": "62ff912679733ff8ac5e18c1b75d40974955dbb66fd366619a7b49e1e2d9379c",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.before.rust.svg",
+        "svg_sha256": "9aadb404124191b60ceea97bfaf78c5f1fe6fbe16bcf94e32afcad0b69ee5500"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.after.rust.svg",
+        "svg_sha256": "562759594ac4ebda5829a3daa35091c5818f623077e0b3232735d3d9a7439990"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.svg",
+    "axes": [
+      "two unmatched closes/nested opens",
+      "zero/one/two explicit closing events"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_1.puml",
+    "source_sha256": "af029656ff6a1284e31f75aaf71c0adcd903fc1dbd6d9e8045f540a2ffe604ea",
+    "golden_sha256": "7ce71694f82e530b47f82d6160f5f95468f9cd84e665b4d837f3f5d8d1fecfef",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.before.rust.svg",
+        "svg_sha256": "88f7c0c9ebe556f2e92567ab50549bccd0ed6bfdde72f3c417351518357582f8"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.after.rust.svg",
+        "svg_sha256": "b826de26eaa90be6182d89a7ea12eb05c72d85958c4071e344faa0aa057b07ce"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.svg",
+    "axes": [
+      "two unmatched closes/nested opens",
+      "zero/one/two explicit closing events"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_2.puml",
+    "source_sha256": "2cf40c2aa5ce0b62b05293a9c12c8e0e658617146c280c1c6e3e7d545ef3be15",
+    "golden_sha256": "91fe9fc69e7720c247f648e9876fa91893791108f4ac26b6439d7cdb3859d377",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.before.rust.svg",
+        "svg_sha256": "264e7af7789a58760345d4b285ae4ebf92a4c4ef1c96b1ea6609be5fa82c5c8f"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.after.rust.svg",
+        "svg_sha256": "264e7af7789a58760345d4b285ae4ebf92a4c4ef1c96b1ea6609be5fa82c5c8f"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.svg",
+    "axes": [
+      "raw close versus command stack",
+      "reverse declarations/nested returns"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_return_ownership.puml",
+    "source_sha256": "f116fd5a738700075f7bde853347d60396e703c10588fc2f085c70b622f29032",
+    "golden_sha256": "e94af5f4e27d5ade1746a7e3a4171509158fa323ed5b38945138ff07381f62d6",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.before.rust.svg",
+        "svg_sha256": "1f66fb4a06c8d40771907dab4ebde9a79c9a53cb156ab2738abcea5aea2b4d1b"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.after.rust.svg",
+        "svg_sha256": "1f66fb4a06c8d40771907dab4ebde9a79c9a53cb156ab2738abcea5aea2b4d1b"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.svg",
+    "axes": [
+      "self/standalone note/ordinary predecessor",
+      "parallel lifecycles/contact/paint order"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_0.puml",
+    "source_sha256": "8f62dd2df487ff6bbc119c1d6a6881200d62c599e902b0ddaa1eb1a9236b99e0",
+    "golden_sha256": "32a04384451066435b9e4c271d12d661c14c6d564495631ff502e99f540c8e16",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.before.rust.svg",
+        "svg_sha256": "51b124d69f72e25d522e33c568d58d808c8cf98968139a1129837feb0cb89cfd"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.after.rust.svg",
+        "svg_sha256": "fd7b5424773cc05acdd8b0a101b54ff4bef14ddd28d23c1f7916f4f8457c1f95"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.svg",
+    "axes": [
+      "self/standalone note/ordinary predecessor",
+      "parallel lifecycles/contact/paint order"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_1.puml",
+    "source_sha256": "bfd1795b9a0da6f13a3f62dde440ccff012621b42f1c3bf1025ec2d3c9281080",
+    "golden_sha256": "894cce8dac63853deae55df83c8f2874648cf6d83c8817d4c06bcfb0928cc9b8",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.before.rust.svg",
+        "svg_sha256": "a2e0a1b41f4ea4e7caf920ae509e3becff89d3a97e68306868a0ccbb3a1af3ed"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.after.rust.svg",
+        "svg_sha256": "a3a04d974cd53c8e6c10fbf73e10d59ae44aefb707f2df3bf74fbb8d19c27b53"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.svg",
+    "axes": [
+      "self/standalone note/ordinary predecessor",
+      "parallel lifecycles/contact/paint order"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_2.puml",
+    "source_sha256": "19797a4be41b6cba5b6ed849c990c0b31273fb304fb1e077cdeee21033afa0b2",
+    "golden_sha256": "b42ff087d26c7bca48f75e6f542a541be13b8b68731c620855e87adab5041eb5",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.before.rust.svg",
+        "svg_sha256": "851abcc228aefab41c11c34b9a8ed6526de7375b0c7b27ac11134ff80db8217d"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.after.rust.svg",
+        "svg_sha256": "9d31e30826017b51d50e8bdec14fc0c7afc9598cc915c73214f75db78c37d129"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.svg",
+    "axes": [
+      "creation in parallel level",
+      "destruction/activation order"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_create_order.puml",
+    "source_sha256": "ff67a6c858b1b54711d4cb08320bd05f0d18193f1c756ffeddeda64d6c9ac313",
+    "golden_sha256": "325003517735fc359fe4c9f64b2c02e3030692f523ed5821998d8cc238dc5826",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.before.rust.svg",
+        "svg_sha256": "569acca800186f8669c2df0bae206824631d219c3649f935ac70aca47f5bb105"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.after.rust.svg",
+        "svg_sha256": "7720e4656ebfcf55288e1835d89301d57ec356986a074dfc37f795c0d3cb3127"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.svg",
+    "axes": [
+      "digit/dot extraction -0px",
+      "engine/scoped override/global false"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_0.puml",
+    "source_sha256": "df292b60bdad843d03af99382c582a7c583609a92afd714a74837831b8781915",
+    "golden_sha256": "f6724d4b1b8c3c1e29d051260885d021d8b5fd646360b0d5d9820a014f39c1f1",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.before.rust.svg",
+        "svg_sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.after.rust.svg",
+        "svg_sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.svg",
+    "axes": [
+      "digit/dot extraction .5px",
+      "engine/scoped override/global false"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_1.puml",
+    "source_sha256": "2b436b24460ee1b089ad4c04df753bf70d6407f70554687e8a706d55fabb295d",
+    "golden_sha256": "1aac123f77ac61782c9229eedfab22fe4d42ff4c65ce892524f11e48954378a8",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.before.rust.svg",
+        "svg_sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.after.rust.svg",
+        "svg_sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.svg",
+    "axes": [
+      "digit/dot extraction 1e2",
+      "engine/scoped override/global false"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_2.puml",
+    "source_sha256": "fd61353d1c3cb15413f902c3bed42b3d2d8a11f2c0c5bcd8bfcfd474f4cd7989",
+    "golden_sha256": "7e587dff09ace4b1d57bafc64a01516e451879b22be709b78c44f828975f7720",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.before.rust.svg",
+        "svg_sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.after.rust.svg",
+        "svg_sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.svg",
+    "axes": [
+      "digit/dot extraction 1..2",
+      "engine/scoped override/global false"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_3.puml",
+    "source_sha256": "791cd0df665e9da265dcdf77ad20c354f798bd5b110234d0a9b07ee36933c3df",
+    "golden_sha256": "05be3711b9f4eb90f97f4a9bbb31f4133d7a368114ff6c00a9760bf2c086a815",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.before.rust.svg",
+        "svg_sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.after.rust.svg",
+        "svg_sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.svg",
+    "axes": [
+      "digit/dot extraction false",
+      "engine/scoped override/global false"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_4.puml",
+    "source_sha256": "74ef5c005b511826bd1926ad8a3c258391f463fccb177ccbaa3b4d611b14116e",
+    "golden_sha256": "7aee4c704d00b2e232923bbb995eda7380a458f54b30c7235ac8a594615ccf3a",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.before.rust.svg",
+        "svg_sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.after.rust.svg",
+        "svg_sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.svg",
+    "axes": [
+      "digit/dot extraction .",
+      "engine/scoped override/global false"
+    ],
+    "result": "pass",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_5.puml",
+    "source_sha256": "5561272e8efc5965857b299963e24a7ce88892574d0bf1e724ab64d75a62b80d",
+    "golden_sha256": "1a22b70855163347ac31916bae541941d8653f0d46a034970026e995b158be1b",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.before.rust.svg",
+        "svg_sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "product_library_exit": 0,
+        "assisted_library_exit": 0,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.after.rust.svg",
+        "svg_sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.svg",
+    "axes": [
+      "root numeric versus scoped default",
+      "multiline/global inheritance"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_global_scope.puml",
+    "source_sha256": "7fe10f6e9e610764878f583c5f94b96431d742bfad40d6f633da89b4c5f720c5",
+    "golden_sha256": "058b005ad93941e80b2e19d4a77262ca89421bff84cf83c115bcfad93cd00ce0",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.before.rust.svg",
+        "svg_sha256": "fc7a4d0558ca94abd9e5a85c5987eef5eaf43c0448b11c91f7b3959fc391c8b6"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.after.rust.svg",
+        "svg_sha256": "bb53da809f325663449fb3b7bb696fb1591f4c80deb35b671e7de0fa38630552"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.svg",
+    "axes": [
+      "alpha 01/80/fe/no-paint/grayscale",
+      "line/polygon/ellipse/path/self/cross",
+      "CommandArrow ARROW_DRESSING2 orders head before o; original invalid input retained"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-arrow-color",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_valid_0.puml",
+    "source_sha256": "9c71231256da076137c2434f9430b910649b84d6616d59cf32f5a49815a94887",
+    "golden_sha256": "71fb27c070420edeec188c5ef8efc03ae4e9f4a53523e61f3801805c35b75d9c",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.before.rust.svg",
+        "svg_sha256": "046b94ce1d4c54841560d4ed9265696e53c53ab4c04f0e5a03c92f1a7375b6c6"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.after.rust.svg",
+        "svg_sha256": "af6635db3154e493863fbf53e6645f9361577fd28b84ca224989681cad47073c"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.svg",
+    "axes": [
+      "raw link boundary versus following inline escape",
+      "engine/escaped backslash"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_raw_link_0.puml",
+    "source_sha256": "dc498ef992347c39bd3232ca2b66e77ce7a4fa7569b52778b6f8e38c1293e327",
+    "golden_sha256": "ae81dcd1a9701a944ff996f198c907c428aa21bb64e62fe03453b90f23b8681f",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.before.rust.svg",
+        "svg_sha256": "b3c2d47675a2f3142361cfe0584dfaef39542f6fefb1fb2ef1dad303d5d53a26"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.after.rust.svg",
+        "svg_sha256": "45e734cd17efa48761aecbd885e7897d3acc03b064f8089e7e0cd41d42a64d89"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.svg",
+    "axes": [
+      "alpha 01/80/fe/no-paint/grayscale",
+      "line/polygon/ellipse/path/self/cross",
+      "CommandArrow ARROW_DRESSING2 orders head before o; original invalid input retained"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-effective-arrow-color",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_valid_1.puml",
+    "source_sha256": "31029767868ac9dbf7ec0e45f78c6da4134cacb6200edc724d1e040da659df5f",
+    "golden_sha256": "cfffd59e02bc2cbf05b5bb0ca88ffec0f5db72102b3e7ca94a535b2882474ede",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.before.rust.svg",
+        "svg_sha256": "1762d4bb0861106284141912e15b44e953827fe56f5240c1bcb1ea4f424dbce3"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.after.rust.svg",
+        "svg_sha256": "970776bca20fd3e06b9a75a1ce322f0d79804d6e2bf3f8ff7dba83ad398c3332"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.svg",
+    "axes": [
+      "raw link boundary versus following inline escape",
+      "engine/escaped backslash"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": true,
+    "mechanism": "sequence-note-display-normalization",
+    "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_raw_link_1.puml",
+    "source_sha256": "023ba5518975221d1e03cc91162c9614eed430d365abae70e6503cc3203e6a5d",
+    "golden_sha256": "0e5f066abfa2881fd7f8e7f6da86138dd4a19205ab0f15bb8ee69f678555b42a",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.before.rust.svg",
+        "svg_sha256": "2bf5ffa61cf900ef4c00eb8c8898cd2fa8885d46c7c13d7707575abf48dd49f0"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.after.rust.svg",
+        "svg_sha256": "28cf802cec0c7d5c25635943a64f84d0ea8c530dec0c7650b41b23ba50159857"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.svg",
+    "axes": [
+      "cerulean complete self preferred width",
+      "legacy versus Teoz participant and canvas envelope"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": false,
+    "mechanism": "sequence-note-textblock-dimensions",
+    "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1/docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_0.puml",
+    "source_sha256": "8880e7a9bb81beda17b67f23d65ec78dcbbc838e7e00ad718757dc096a22b3d9",
+    "golden_sha256": "2771e13300835af9f871983b046e3100c067e9fc35ff21c08a80f2692dcb9e1f",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.before.rust.svg",
+        "svg_sha256": "939d582a49bb7dfe24c8bc228ab7cea29aa0de6ef9a3a097118abca4b35cc74b"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.after.rust.svg",
+        "svg_sha256": "e2cdccb11a1b1104f136a2f3fd3f2f57c5d86f4956d1c87c14539ce29abefcb7"
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.svg",
+    "axes": [
+      "cerulean complete self preferred width",
+      "legacy versus Teoz participant and canvas envelope"
+    ],
+    "result": "fail",
+    "reference_valid": true,
+    "fresh": false,
+    "mechanism": "sequence-note-textblock-dimensions",
+    "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1/docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_1.puml",
+    "source_sha256": "04375eefcf83339e53d38bf39e9130a87683095241f842cd02c0c9cb827ba0e6",
+    "golden_sha256": "11ac0887a4c1741382b126920cb1b8f62ac386471c13b6cc131ea905fa718486",
+    "measurements": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.before.rust.svg",
+        "svg_sha256": "297072582c362ff52fd85cc1bfc2e99a5558ae270b1f6557eb9ebbe10c3727e6"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 1,
+        "product_library_exit": 1,
+        "assisted_library_exit": 1,
+        "cli_equals_library": true,
+        "svg": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.after.rust.svg",
+        "svg_sha256": "e5e03dc3e21e29042020fe2242cbf5b3e6c666bf55899d3aa005954d1a466af3"
+      }
+    }
+  }
+]

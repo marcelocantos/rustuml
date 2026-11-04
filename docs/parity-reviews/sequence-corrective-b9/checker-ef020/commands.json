@@ -1,0 +1,419 @@
+[
+  {
+    "argv": [
+      "git",
+      "switch",
+      "--detach",
+      "5358314a0180cf760584c79bb5efd4ec1ae6320b"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "log": "before-switch.log"
+  },
+  {
+    "argv": [
+      "cargo",
+      "build",
+      "--locked",
+      "--release",
+      "-p",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--bin",
+      "rustuml",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "log": "before-build.log"
+  },
+  {
+    "argv": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/compare_cli.rs",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/before-target/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/before-target/release/deps",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/before-bin/compare_cli"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "log": "before-comparator.log"
+  },
+  {
+    "argv": [
+      "git",
+      "switch",
+      "review/sequence-corrective-efc2e922-independent"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "log": "after-switch.log"
+  },
+  {
+    "argv": [
+      "cargo",
+      "build",
+      "--locked",
+      "--release",
+      "-p",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--bin",
+      "rustuml",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "log": "after-build.log"
+  },
+  {
+    "argv": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/compare_cli.rs",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target/release/deps",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-bin/compare_cli"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "log": "after-comparator.log"
+  },
+  {
+    "name": "cohort-before",
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "docs/parity-reviews/sequence-corrective-b9/maker-results/all-inputs.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/before-bin",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/cohort-before"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "cohort-after",
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "docs/parity-reviews/sequence-corrective-b9/maker-results/all-inputs.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-bin",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/cohort-after"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "units",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--lib",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "main",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--test",
+      "parity_perturbations",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 101,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "fmt-owned",
+    "argv": [
+      "rustfmt",
+      "--check",
+      "--edition",
+      "2024",
+      "crates/rustuml-parser/src/parse/sequence.rs",
+      "crates/rustuml-render/src/sequence.rs"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "fmt-workspace",
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 1,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "clippy",
+    "argv": [
+      "cargo",
+      "clippy",
+      "--locked",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 101,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "clippy-render",
+    "argv": [
+      "cargo",
+      "clippy",
+      "--locked",
+      "-p",
+      "rustuml-render",
+      "--no-deps",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 101,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    }
+  },
+  {
+    "name": "main-with-corpus",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "log": "main-with-corpus.log.gz",
+    "reason": "Only setup-affected tiers rerun after exact pinned corpus materialization."
+  },
+  {
+    "name": "fresh-before",
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/fresh-manifest.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/before-bin",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/fresh-before"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0
+  },
+  {
+    "name": "fresh-after",
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/fresh-manifest.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-bin",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/fresh-after"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0
+  },
+  {
+    "name": "followup-before-complete",
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/followup-manifest.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/before-bin",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/followup-before-complete"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0
+  },
+  {
+    "name": "followup-after",
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/followup-manifest.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-bin",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/followup-after"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "exit": 0
+  },
+  {
+    "name": "final-registration",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "parity_perturbations",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-ef020aa1",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/after-target",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "reason": "New evidence pairs and reviews registered; no broad main/unit rerun."
+  }
+]

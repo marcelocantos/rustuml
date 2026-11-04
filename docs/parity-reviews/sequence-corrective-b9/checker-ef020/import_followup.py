@@ -1,0 +1,10 @@
+# Copyright 2026 Marcelo Cantos
+# SPDX-License-Identifier: Apache-2.0
+import pathlib,json,base64,hashlib,gzip,collections
+c=pathlib.Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();manifest=json.loads((c/'reference-followup-manifest.json').read_text());transport=json.loads((c/'reference-followup-transport.json').read_text());compressed=(c/'reference-followup-results.json.gz').read_bytes();assert sha(compressed)==transport['sha256'];assert base64.b64decode(transport['data'],validate=True)==compressed;assert gzip.decompress(compressed)==(c/'reference-followup-results.json').read_bytes();a=json.loads(gzip.decompress(compressed));env=a['environment'];assert env['manifest_sha256']==sha((c/'reference-followup-manifest.json').read_bytes());assert env['jar_sha256']==manifest['jar_sha256'];assert env['headless'];items={x['remote_name']:x for x in a['results']};assert set(items)=={x['remote_name'] for x in manifest['cases']};rows=[]
+for q in manifest['cases']:
+ x=items[q['remote_name']];p=pathlib.Path(q['source']);assert sha(p.read_bytes())==q['source_sha256']==x['source_sha256'];assert not x['timed_out'];assert x['timezone']==q['timezone'];assert x['argv']==[x['cwd'] if v==q['cwd'] else v for v in q['invocation']];assert '-Djava.awt.headless=true' in x['java_argv'];assert x['cwd'].startswith('/Users/marcelo/rustuml-reference/scratch/worker.');
+ for key,ext in [('stdout','.svg'),('stderr','.stderr')]:
+  b=base64.b64decode(x[key+'_base64'],validate=True);assert sha(b)==x[key+'_sha256'];p.with_suffix(ext).write_bytes(b)
+ p.with_suffix('.provenance.json').write_text(json.dumps({k:v for k,v in x.items() if not k.endswith('_base64')},indent=2)+'\n');rows.append(dict(source=str(p),golden=str(p.with_suffix('.svg')),cohort='fresh4',mechanism=q['mechanism'],axes=q['axes'],java_exit=x['exit_code']))
+(c/'followup-manifest.json').write_text(json.dumps(rows,indent=2)+'\n');print('Validated',len(rows),'raw exits',dict(collections.Counter(x['exit_code'] for x in items.values())),'archive sha256',sha(compressed))

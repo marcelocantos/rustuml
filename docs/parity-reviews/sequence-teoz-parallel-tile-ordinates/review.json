@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-parallel-tile-ordinates",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A253dfb72-0e49-40b9-b53c-b6160ecef3bf",
+    "model": "gpt-6-astra / high reasoning / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+  "implementation_commit": "8d668d3fbc67101bb715662442d75aec3773dae9",
+  "implementation_commits": [
+    "7e074830c99a898316a5b0448b0c0810d3df8fde",
+    "8d668d3fbc67101bb715662442d75aec3773dae9"
+  ],
+  "tested_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_revision": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "before_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (exact substituted argv, source hashes, streams and environment preserved in checker-ef020 raw relay archives)",
+    "cargo build --locked --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (fresh distinct private targets at exact before/candidate)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT",
+    "cargo test --locked --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "See docs/parity-reviews/sequence-corrective-b9/checker-ef020/commands.json for all exact local commands, cwd, environment and exits."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.svg",
+      "axes": [
+        "self/standalone note/ordinary predecessor",
+        "parallel lifecycles/contact/paint order"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-teoz-parallel-tile-ordinates",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_0.puml",
+      "source_sha256": "8f62dd2df487ff6bbc119c1d6a6881200d62c599e902b0ddaa1eb1a9236b99e0",
+      "golden_sha256": "32a04384451066435b9e4c271d12d661c14c6d564495631ff502e99f540c8e16",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.before.rust.svg",
+          "svg_sha256": "51b124d69f72e25d522e33c568d58d808c8cf98968139a1129837feb0cb89cfd"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.after.rust.svg",
+          "svg_sha256": "fd7b5424773cc05acdd8b0a101b54ff4bef14ddd28d23c1f7916f4f8457c1f95"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.svg",
+      "axes": [
+        "self/standalone note/ordinary predecessor",
+        "parallel lifecycles/contact/paint order"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-teoz-parallel-tile-ordinates",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_1.puml",
+      "source_sha256": "bfd1795b9a0da6f13a3f62dde440ccff012621b42f1c3bf1025ec2d3c9281080",
+      "golden_sha256": "894cce8dac63853deae55df83c8f2874648cf6d83c8817d4c06bcfb0928cc9b8",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.before.rust.svg",
+          "svg_sha256": "a2e0a1b41f4ea4e7caf920ae509e3becff89d3a97e68306868a0ccbb3a1af3ed"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.after.rust.svg",
+          "svg_sha256": "a3a04d974cd53c8e6c10fbf73e10d59ae44aefb707f2df3bf74fbb8d19c27b53"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.svg",
+      "axes": [
+        "self/standalone note/ordinary predecessor",
+        "parallel lifecycles/contact/paint order"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-teoz-parallel-tile-ordinates",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_2.puml",
+      "source_sha256": "19797a4be41b6cba5b6ed849c990c0b31273fb304fb1e077cdeee21033afa0b2",
+      "golden_sha256": "b42ff087d26c7bca48f75e6f542a541be13b8b68731c620855e87adab5041eb5",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.before.rust.svg",
+          "svg_sha256": "851abcc228aefab41c11c34b9a8ed6526de7375b0c7b27ac11134ff80db8217d"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.after.rust.svg",
+          "svg_sha256": "9d31e30826017b51d50e8bdec14fc0c7afc9598cc915c73214f75db78c37d129"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.svg",
+      "axes": [
+        "creation in parallel level",
+        "destruction/activation order"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-teoz-parallel-tile-ordinates",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_create_order.puml",
+      "source_sha256": "ff67a6c858b1b54711d4cb08320bd05f0d18193f1c756ffeddeda64d6c9ac313",
+      "golden_sha256": "325003517735fc359fe4c9f64b2c02e3030692f523ed5821998d8cc238dc5826",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.before.rust.svg",
+          "svg_sha256": "569acca800186f8669c2df0bae206824631d219c3649f935ac70aca47f5bb105"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.after.rust.svg",
+          "svg_sha256": "7720e4656ebfcf55288e1835d89301d57ec356986a074dfc37f795c0d3cb3127"
+        }
+      }
+    }
+  ],
+  "findings": [
+    "teoz-contacts-order-supported: Self contact minus callback is source-derived13/2-4; ordinary contact equals its arrow ordinate, standalone notes use half their complete preferred height. Graphical predecessor plus life suffix captures and per-level bar/destroy sequence follow named Java methods. Fresh multiline self/ordinary/standalone-note chains with nested activation/destruction and a creation in the parallel level all match. Existing focused parallel controls and self-cross/destroy cohorts retain matches; those old bounded acceptances themselves remain attached to5358314a only. Causal next step: No counterexample in this bounded contact/history/paint-order cluster; theme preferred-component and other deferred layout failures remain separate active dependencies, not whole-Teoz acceptance."
+  ],
+  "source_audit": [
+    {
+      "id": "teoz-contacts-order-supported",
+      "mechanisms": [
+        "sequence-teoz-parallel-tile-ordinates"
+      ],
+      "sources": [
+        "teoz_contact_0",
+        "teoz_contact_1",
+        "teoz_contact_2",
+        "teoz_create_order"
+      ],
+      "java": [
+        "sequencediagram.teoz.TileParallel#getContactPointRelative/#getZZZ/#drawU",
+        "sequencediagram.teoz.GroupingTile#moveRecentParallelTilesToPending",
+        "sequencediagram.teoz.NoteTile#getContactPointRelative",
+        "skin.rose.ComponentRoseSelfArrow#getYPoint/#getStartPoint",
+        "skin.rose.AbstractComponentRoseArrow#getPaddingY",
+        "sequencediagram.teoz.LiveBoxes#drawOneLevel"
+      ],
+      "rust": [
+        "crates/rustuml-render/src/sequence.rs::parallel_contact/parallel_members (7978-8030,8178-8215)",
+        "crates/rustuml-render/src/sequence.rs::TeozLifePaintOperation/TeozHistory::segments and operation painter"
+      ],
+      "diagnosis": "Self contact minus callback is source-derived13/2-4; ordinary contact equals its arrow ordinate, standalone notes use half their complete preferred height. Graphical predecessor plus life suffix captures and per-level bar/destroy sequence follow named Java methods. Fresh multiline self/ordinary/standalone-note chains with nested activation/destruction and a creation in the parallel level all match. Existing focused parallel controls and self-cross/destroy cohorts retain matches; those old bounded acceptances themselves remain attached to5358314a only.",
+      "next_repair": "No counterexample in this bounded contact/history/paint-order cluster; theme preferred-component and other deferred layout failures remain separate active dependencies, not whole-Teoz acceptance."
+    }
+  ],
+  "verdict": "accepted",
+  "verdict_scope": "Independent bounded source/control observation on exact candidate only. This is not whole-sequence acceptance, a shipping recommendation, a waiver of dependencies or standing red gates, or transfer of old5358314a self-cross/destroy acceptance.",
+  "residue": [
+    "Existing557 retained mismatches, fonts/deferred layout and12 accepted negative references remain active.",
+    "Parent-only326 sources were not measured in this replay.",
+    "Remote font/dot equivalence is scoped to captured environment and these sequence cases.",
+    "Scoped shadow scalar conversion and activation sibling fallback are locally supported even where complete-output dependencies reject the requested mechanism acceptance."
+  ],
+  "evidence": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/README.md"
+}
