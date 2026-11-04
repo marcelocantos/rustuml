@@ -5185,12 +5185,18 @@ fn render_plantuml_svg(
         } else {
             0.0
         };
-        let shadow_extra = entity_shadow_extent(
-            diagram,
-            &diagram.entities[i],
-            &dims[i],
-            class_shadow_filter_id.is_some(),
-        );
+        // EntityImageDegenerated.calculateDimension uses the original preferred
+        // image size; only SvekResult measures the painted LimitFinder union.
+        let shadow_extra = if uses_degenerated_entity {
+            (0.0, 0.0)
+        } else {
+            entity_shadow_extent(
+                diagram,
+                &diagram.entities[i],
+                &dims[i],
+                class_shadow_filter_id.is_some(),
+            )
+        };
         body_max_x = body_max_x.max(x + dims[i].width + generic_right.max(shadow_extra.0));
         body_top = body_top.min(*y);
         body_bottom = body_bottom.max(y + dims[i].height + shadow_extra.1);
@@ -5368,12 +5374,18 @@ fn render_plantuml_svg(
             } else {
                 0.0
             };
-            let shadow_extra = entity_shadow_extent(
-                diagram,
-                &diagram.entities[i],
-                &dims[i],
-                class_shadow_filter_id.is_some(),
-            );
+            // EntityImageDegenerated.calculateDimension uses the original preferred
+            // image size; only SvekResult measures the painted LimitFinder union.
+            let shadow_extra = if uses_degenerated_entity {
+                (0.0, 0.0)
+            } else {
+                entity_shadow_extent(
+                    diagram,
+                    &diagram.entities[i],
+                    &dims[i],
+                    class_shadow_filter_id.is_some(),
+                )
+            };
             max_x = max_x.max(x + dims[i].width + generic_right.max(shadow_extra.0));
             max_y = max_y.max(y + dims[i].height + shadow_extra.1);
             let entity = &diagram.entities[i];
