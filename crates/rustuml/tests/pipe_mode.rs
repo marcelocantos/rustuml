@@ -370,6 +370,76 @@ fn pipe_multiple_invocations_do_not_hang() {
     }
 }
 
+// The exact declaration emitted by the retained 26 Graphviz DOT SVGs.
+const STANDARD_SVG_DOCTYPE: &str = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
+
+fn parse_cli_svg(svg: &str) -> Result<bool, String> {
+    let xml_space = |ch: char| matches!(ch, ' ' | '\t' | '\r' | '\n');
+    let mut prolog = svg;
+    if let Some(tail) = prolog.strip_prefix("<?xml")
+        && tail.starts_with(xml_space)
+    {
+        let (_, rest) = tail
+            .split_once("?>")
+            .ok_or("unterminated XML declaration")?;
+        prolog = rest;
+    }
+    prolog = prolog.trim_start_matches(xml_space);
+    let has_doctype = prolog.starts_with("<!DOCTYPE");
+    if has_doctype {
+        let end = prolog.find('>').ok_or("unterminated DOCTYPE")?;
+        let declaration = &prolog[..=end];
+        if declaration.contains('[') || declaration != STANDARD_SVG_DOCTYPE {
+            return Err("unapproved DOCTYPE bytes or internal subset".to_string());
+        }
+    }
+    // roxmltree 0.20 src/parse.rs:315–345: DTD rejection is an optional
+    // policy. Enable it only for the real, approved prolog declaration.
+    // A comment/PI decoy leaves DTD parsing disabled. All other options
+    // and entity-expansion limits stay default; no external I/O is installed.
+    roxmltree::Document::parse_with_options(
+        svg,
+        roxmltree::ParsingOptions {
+            allow_dtd: has_doctype,
+            ..Default::default()
+        },
+    )
+    .map_err(|error| error.to_string())?;
+    Ok(has_doctype)
+}
+
+#[test]
+fn svg_doctype_guard_rejects_comment_decoy_and_internal_subset() {
+    // Exact held-out checker document: the first DOCTYPE text is a comment.
+    let checker = r#"<!--<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">--><!DOCTYPE svg [<!ENTITY checker "unapproved-internal-entity">]><svg xmlns="http://www.w3.org/2000/svg"><text>&checker;</text></svg>"#;
+    assert!(parse_cli_svg(checker).is_err());
+    assert!(parse_cli_svg(r#"<!DOCTYPE svg [<!ENTITY x "value">]><svg>&x;</svg>"#).is_err());
+    for prefix in ["", "<?xml version=\"1.0\"?>\n", "\n\t"] {
+        assert_eq!(
+            parse_cli_svg(&format!("{prefix}{STANDARD_SVG_DOCTYPE}<svg/>")),
+            Ok(true)
+        );
+    }
+    for prefix in ["<!--decoy-->", "<?instruction value?>"] {
+        assert!(parse_cli_svg(&format!("{prefix}{STANDARD_SVG_DOCTYPE}<svg/>")).is_err());
+    }
+    assert!(
+        parse_cli_svg(&format!(
+            "{}<svg/>",
+            STANDARD_SVG_DOCTYPE.replace("\n ", " ")
+        ))
+        .is_err()
+    );
+    assert!(
+        parse_cli_svg(&format!(
+            "{}<svg/>",
+            STANDARD_SVG_DOCTYPE.replace("svg11.dtd", "other.dtd")
+        ))
+        .is_err()
+    );
+    assert_eq!(parse_cli_svg("<!--DOCTYPE-like text--><svg/>"), Ok(false));
+}
+
 /// Every emitted SVG is parsed, including negative/error cases. T14.20 owns
 /// Java's render/export exception contract; these seven existing malformed
 /// outputs stay visible and ratchet in both directions, keyed to source bytes.
@@ -485,28 +555,18 @@ fn every_cli_golden_and_registered_perturbation_svg_is_strict_xml() {
                     match std::str::from_utf8(&output.stdout) {
                         Err(error) => Some(error.to_string()),
                         Ok(svg) => {
-                            if let Some(start) = svg.find("<!DOCTYPE") {
-                                let declaration = svg[start..].split_once('>').map(|(d, _)| {
-                                    format!("{d}>").split_whitespace().collect::<Vec<_>>().join(" ")
-                                });
-                                let standard = r#"<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">"#;
-                                if declaration.as_deref() != Some(standard)
-                                    || !source.windows(b"@startdot".len()).any(|w| w == b"@startdot")
-                                {
-                                    failures.push(format!("unexpected DTD in {relative}: {declaration:?}"));
-                                } else {
-                                    standard_dot_doctypes.fetch_add(1, Ordering::Relaxed);
+                            match parse_cli_svg(svg) {
+                                Ok(has_doctype) => {
+                                    if has_doctype {
+                                        if !source.windows(b"@startdot".len()).any(|w| w == b"@startdot") {
+                                            failures.push(format!("unexpected DOT declaration in {relative}"));
+                                        }
+                                        standard_dot_doctypes.fetch_add(1, Ordering::Relaxed);
+                                    }
+                                    None
                                 }
+                                Err(error) => Some(error),
                             }
-                            // roxmltree 0.20 src/parse.rs:315–345: rejecting DTDs
-                            // is an optional security policy, not XML well-formedness.
-                            // Parse the standard DOT SVG DOCTYPE; all other options
-                            // and internal entity-expansion limits stay at defaults.
-                            // No external DTD/entity resolver or I/O is installed.
-                            roxmltree::Document::parse_with_options(svg, roxmltree::ParsingOptions {
-                                allow_dtd: true,
-                                ..Default::default()
-                            }).err().map(|e| e.to_string())
                         },
                     }
                 };
