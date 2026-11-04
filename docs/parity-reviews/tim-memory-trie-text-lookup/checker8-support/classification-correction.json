@@ -1,0 +1,8 @@
+{
+  "case": "duplicate_negative",
+  "reason": "Java error SVG includes welcome text; nonzero Java exit 200 and ERROR stderr take precedence. Original intended syntax negative preserved. Initial classifier artifact retained; no product/reference rerun.",
+  "initial": "welcome_truncation",
+  "corrected": "syntax_negative",
+  "java_source": "@startuml\\n!$v=$join($x=\"bad\")\\n",
+  "direct_source_error": "Unknown built-in function $join"
+}

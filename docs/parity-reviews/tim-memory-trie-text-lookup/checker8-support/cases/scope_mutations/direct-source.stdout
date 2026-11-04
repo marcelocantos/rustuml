@@ -1,0 +1,3 @@
+@startuml
+class "global / local-long / stemmX" as Scopes
+@enduml

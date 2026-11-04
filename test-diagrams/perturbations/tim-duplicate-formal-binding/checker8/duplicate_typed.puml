@@ -1,0 +1,7 @@
+@startuml
+!procedure $show(x="one",$middle=3,x="last")
+!$sum=x+2
+class "$sum / $middle" as TypedFresh
+!endprocedure
+$show(x=%str2json('"009"'),"position")
+@enduml

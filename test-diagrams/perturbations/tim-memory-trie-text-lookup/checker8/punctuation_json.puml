@@ -1,0 +1,7 @@
+@startuml
+!$j={"leaf":"from-object"}
+!$x=%set_variable_value("$j.leaf","stored-dot")
+!$x=%set_variable_value("[oak]","square")
+!$x=%set_variable_value("two words","spaced")
+class "$j.leaf / $j[leaf] / [oak] / two words" as KeyPaths
+@enduml

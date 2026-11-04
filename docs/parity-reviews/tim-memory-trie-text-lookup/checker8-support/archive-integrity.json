@@ -1,0 +1,15 @@
+{
+  "files": 31516,
+  "sha256": "6f5610fe3ad92741ea126d4a38d889fd5ff5b12546e2396370f5336b40b812a9",
+  "excluded": [
+    "__pycache__",
+    "after-rustuml",
+    "before-rustuml",
+    "probe",
+    "source-probe",
+    "standing-slice",
+    "target-after",
+    "target-before"
+  ],
+  "private_cache": "/Users/marcelo/Library/Caches/rustuml-tim8-checker"
+}

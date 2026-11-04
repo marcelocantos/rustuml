@@ -1,0 +1,10 @@
+@startuml
+!$n=0
+!procedure $run()
+!include outer.iuml
+!$n=$n+10
+class "caller $n" as CallerFresh
+!endprocedure
+$run()
+class "tail $n" as TailFresh
+@enduml

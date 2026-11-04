@@ -1,0 +1,68 @@
+{
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A78227ae1-6e7a-4609-acf0-9f2049302acc",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness through T3 Code; exec_command/rustc/cargo/Python; parent Monkey Man relay only",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+    "branch": "review/tim8-faf4634-independent-20261104",
+    "independence": "This task implemented none of the candidate; no children, Java/javac, own SSH, production edits, target edits or shipping."
+  },
+  "candidate": "faf463445591a53f17d25c5c16611f8e626ef93d",
+  "classification": "Reference comparable (oracle-first class 2 reduced to machine comparator/source diagnostics). Verification setup and process provenance are the dominant costs. Shipped CLI decides SVG claims; direct source and library diagnostics are separate.",
+  "read_scope": [
+    "AGENTS.md",
+    "docs/parity-reviews/README.md",
+    "entire crates/rustuml-parser/src/preprocess/mod.rs (5759 lines)",
+    "docs/parity-reviews/tim-memory-trie-text-lookup/maker-support/README.md",
+    "oracle-first SKILL.md",
+    "Rust/Python companions",
+    "Java sources hashed in integrity.json"
+  ],
+  "trie": [
+    "Java TrieImpl.add appends a NUL sentinel; Rust NameTrie.terminal represents that edge. Traversal returns the current terminal at EOF, a missing child, or a dead child. It never saves a prior terminal. Rust child.children.is_empty() && terminal.is_none() is equivalent to Java child.brothers.size()==0 for admitted non-NUL representable keys.",
+    "Both remove operations clear only the terminal sentinel and retain all path nodes. A removed leaf is a dead child, so its parent may still match; a retained internal path can prevent backtracking. Fresh terminal_history challenges removed leaf/internal path/reinsertion; original maker prefix_paths and removal_paths are retained and rerun. ASCII boundaries can mask some retained-node differences, so these controls do not independently prove every trie-state distinction.",
+    "TMemoryGlobal and automatic TMemoryLocal locals construct eager tries. Override/argument map starts without a trie and is indexed on first variablesNames3. VariableMemory::names and LocalMemory::default implement that distinction. Fresh lazy_before/lazy_after exercise scan timing, but ordinary identifier boundaries can make the outputs coincide; the maker unit-state probes are supplementary model evidence, not shipped-path completeness.",
+    "All production mutation sites were audited: set_var (override/existing global/automatic local), set_local_var, remove_var (override/global/local), try_define, explicit global assignment, formal binding, foreach global binding, and SetVariableValue GLOBAL. They route through VariableMemory insert/remove. The values field is private and directly accessed only by its wrapper. Each function frame reads only its own overrides/locals plus global; sibling function calls fork from global.",
+    "variable_name_at asks global, override and automatic-local tries, chooses the longest returned prefix before the right boundary, then get_var chooses override/global/local value precedence. Length ordering is identical in UTF-8 and UTF-16 for prefixes of the same valid string. Tied prefixes have the same key. Fresh punctuation_json verifies that a stored $j.leaf key beats JSON member syntax, while $j[leaf] still traverses JSON.",
+    "VariableManager boundaries use original input positions, literal backslash-n exception and dollar-left-boundary exception. Rust scans original offsets and never rescans appended values. concat_original checks generated ## output, raw stored function-looking text and function priority, including a stored read() key. Java also removes ## from accumulated result, not merely from original text; this is intentional.",
+    "Sprite-markup shortcut removal lets original stored names substitute inside markup while inserted literals remain unscanned. Fresh markup_literal has exact evaluated source but strict SVG failure (13 Java versus 10 Rust elements). This reproduces existing maker markup_scan renderer ownership; no source-equivalence waiver applies.",
+    "NUL rejection now prevents SetVariableValue insertion and propagates the existing fatal channel. Java mutates its value map before TrieImpl.add rejects NUL; execution aborts, so subsequent source effects do not observe the map. No claim is made about post-fatal internal memory introspection."
+  ],
+  "binding": [
+    "Eater.eatDeclareFunction stores an ordered argument list and evaluates each default at declaration. TFunctionImpl signature carries distinct names but preserves full declared arity; getNewMemory iterates the ordered list and overwrites the exact map key on each occurrence.",
+    "Java namedArguments.containsKey/get is non-consuming. Rust named.get(...).cloned() matches it, retaining TValue kind (including numeric-looking strings and JSON); only or_else(positional.next) advances the positional cursor. Captured default clones remain the final fallback. No selection, arity or named-map-lifetime changes were introduced by TIM8.",
+    "Fresh duplicate_typed, duplicate_positions, duplicate_effect_order and duplicate_required all match source and strict CLI SVG. They vary JSON/string/integer values, named/positional/default paths, repeated named RHS effects, bare/dollar identity, formal ordering and required duplicate formals. All four failed SVG before and pass after.",
+    "EaterFunctionCall evaluates named RHS arguments in order into one map; duplicate argument names still execute each RHS once before final overwrite. RPN has a separate expression-wide named map and subtracts distinct key count before canCover(empty names). Fresh duplicate_negative intentionally triggers that existing required-arity boundary: Java exit 200 and Rust exit 1 reject it. It is not a positive reference and error-output/source parity is not established.",
+    "Java negative SVG includes welcome text as a background to its diagnostic. The initial checker classifier called that welcome; it was corrected using exit 200/ERROR stderr, retaining the initial classifier, initial result and correction record without rerunning product or reference."
+  ],
+  "iterator": [
+    "TContext.buildCodeIterator orders comments -> CodeIteratorSub -> return/procedure collectors -> conditional -> legacy define -> while -> foreach -> assignment. An empty replay installed in CodeIteratorSub.peek returns null; executeLines does not call next, so the replay never clears and the whole current iterator ends.",
+    "Rust collects sub before function/loop/condition execution, sets iterator_stopped on an empty collected vector, and checks it at top-level, buffered function and loop boundaries. process_lines/process_buffered_lines save and restore the outer stop value for nested executeLines lifetimes. Replay inside the current iterator uses process_buffered_line directly. Nonempty replay and original source origins remain in that iterator.",
+    "Fresh empty_false and empty_loop prove that inactive conditional/zero-iteration loop context does not bypass the upstream empty collector. Exact source is the executed prefix with no end tag and no Tail. Both Java results are welcome; Rust still chooses Class. These are whole-product failures despite exact source.",
+    "Fresh empty_two supplies two model lines before a comment-only empty collector. It is a positive CLASS reference and now matches CLI SVG as well as source. Fresh blank_replay distinguishes one blank line from an empty iterator and exercises includesub replay; it passes.",
+    "Fresh empty_nested calls an include inside a procedure; the included outer file calls a second include with an empty sub, then resumes its own effects and returns to the procedure and outer caller. empty_return_include resumes a return function after its included iterator stops. empty_selected tests a genuinely empty selected external body without treating it as a collected-sub terminator. All three pass CLI SVG with requested cwd/resources.",
+    "The unchanged standing harness passes None for include base and runs from its crate directory. The focused unchanged-algorithm slice gets 13/20 rather than CLI 16/20: three extra failures are empty_nested, empty_return_include and empty_selected with unresolved include resources. Resources and failures are committed; no harness/cwd policy was edited or waived.",
+    "Existing maker empty_include remains a valid whole-product failure: evaluated source is exact and source_line 0 correctly comes from included Java origin; renderer class.rs uses entity_index+1 for zero. Existing welcome factory selection remains a separate parse/PSystemBuilder ownership issue. No artificial end tags, reader normalization or renderer edits were made."
+  ],
+  "known_unproved_limits": [
+    "Rust regex Unicode letter tables are not certified identical to the pinned JDK Character.isLetter version. The valid astral_offsets control exercises full surrogate pairs only. Unicode-version/property coverage is not established by these few cases.",
+    "General isolated-surrogate text/name projection remains unproved: UTF-16 TValue units can survive intermediate expressions but name/display conversion uses lossy UTF-8 projection. This known boundary is not reclassified as a new TIM8 mechanism defect, nor certified silently.",
+    "Function discovery retains its pre-existing scanner and Unicode predicates, unlike the new stored-name variable trie. Universal function-name trie/Unicode boundary parity is not certified. Tests establish priority only on the specific admitted ASCII function controls.",
+    "JSON member Character.isJavaIdentifierPart versus Rust token classification, signature tree-bin/JVM iteration, legacy function syntax and occupancy, Unicode IntVal, raw-reader GET-versus-pipe semantics, renderer error pages/origins/class/style/sequence geometry and environment-dependent builtin behavior remain outside this corrective acceptance claim.",
+    "No global environment equivalence: reference captured Java 21.0.5/Graphviz 12.2.0 en_AU UTF-8 GMT+11, while historical origins differ. The wrapper/JAR/resources and each recorded process contract were verified only within their stated scope."
+  ],
+  "source_derived_next_steps": {
+    "tim-memory-trie-text-lookup": [
+      "Resolve unresolved sprite marker projection in the downstream Creole/sprite renderer, using fresh markup_literal and preserved maker markup_scan; do not rescan inserted values.",
+      "Keep original boundary predicates and trie history independent. Any future Unicode acceptance requires pinned Character property/version evidence and explicit surrogate-domain contract, not ASCII sample inference."
+    ],
+    "tim-duplicate-formal-binding": [
+      "Retain non-consuming typed get and positional cursor semantics. No valid binding regression or new binding defect was found.",
+      "Preserve duplicate_negative as a negative/error-output boundary: both reject, but Java retains the failing line in diagnostic source and produces an error SVG; Rust exits without matching that output. No builtin/signature expansion was attempted."
+    ],
+    "tim-empty-sub-iterator-termination": [
+      "Route the already-exact stopped evaluated source through equivalent PSystemBuilder/PSystemWelcomeFactory selection (two total source lines), without manufacturing end tags/comments.",
+      "Correct downstream class source-line zero handling for preserved empty_include. Resolve standing include-base/environment ownership separately, preserving all current failures and resource hierarchy."
+    ]
+  }
+}

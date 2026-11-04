@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-tim8-checker/source_probe.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after/release/deps",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-tim8-checker/source-probe"
+  ],
+  "exit": 0
+}

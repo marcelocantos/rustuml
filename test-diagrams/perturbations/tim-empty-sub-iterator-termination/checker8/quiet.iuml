@@ -1,0 +1,5 @@
+!$n=$n+1
+!startsub quiet
+!endsub
+!$n=999
+!$bad=%intval("unreachable")

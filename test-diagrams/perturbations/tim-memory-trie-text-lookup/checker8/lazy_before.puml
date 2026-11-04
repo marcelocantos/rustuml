@@ -1,0 +1,8 @@
+@startuml
+!ab="root"
+!procedure $draw(a="short",abcd="long")
+!undef abcd
+class "a / ab / abc / abcd" as Lazy
+!endprocedure
+$draw()
+@enduml

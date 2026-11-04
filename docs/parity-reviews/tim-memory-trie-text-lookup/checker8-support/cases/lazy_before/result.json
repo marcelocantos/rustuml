@@ -1,0 +1,159 @@
+{
+  "row": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_before.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "override index before first text scan",
+      "global fallback versus local retained prefix"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  "classification": "positive_reference",
+  "reference_valid": true,
+  "java_svg_exit": 0,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "factory": "CLASS",
+  "reference_comparator_exit": 0,
+  "source_sha256": "08011acbea0fbf94cd03f6da02819044db3585757614c864c532a3fb4b64a4b6",
+  "golden_sha256": "3f3d349c88b1a30484fbe8fbf47e781593a9f0a5babf03e295046b69a2109d47",
+  "java_source_sha256": "153ecb3bc4f01034fef9ff271d0ce0e3c62344049007c488e5bc403078de3bda",
+  "phases": {
+    "before": {
+      "id": "fresh20/lazy_before",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.011189541008207016,
+        "stdout_sha256": "c745b1d80cac531d064e77a626be490507b6eb9bcc7d095cace5a0cc75937648",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.01165687499451451,
+        "stdout_sha256": "8e492522979bb07b35d5cf243bf1b6ed7d7fb04b4e6da014b792515118ad169d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/lazy_before/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay/before/fresh20/lazy_before/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+        "exit": 0,
+        "seconds": 0.003942332987207919,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"short / root / abc / abcd\" as Lazy\n@enduml\n"
+      },
+      "exact_source": true
+    },
+    "after": {
+      "id": "fresh20/lazy_before",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.010059416003059596,
+        "stdout_sha256": "c745b1d80cac531d064e77a626be490507b6eb9bcc7d095cace5a0cc75937648",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.010155333002330735,
+        "stdout_sha256": "8e492522979bb07b35d5cf243bf1b6ed7d7fb04b4e6da014b792515118ad169d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/lazy_before/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay/after/fresh20/lazy_before/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+        "exit": 0,
+        "seconds": 0.004089084002771415,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": true,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"short / root / abc / abcd\" as Lazy\n@enduml\n"
+      },
+      "exact_source": true
+    }
+  },
+  "direct_source": {
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/source-probe",
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_before.puml",
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+    "exit": 0,
+    "seconds": 0.006415584008209407,
+    "stdout_sha256": "153ecb3bc4f01034fef9ff271d0ce0e3c62344049007c488e5bc403078de3bda",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "direct_source_equal": true
+}

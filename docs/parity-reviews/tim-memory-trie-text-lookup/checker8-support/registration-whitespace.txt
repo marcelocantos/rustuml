@@ -1,0 +1,14 @@
+docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/blank_replay/direct-source.stdout:2: trailing whitespace.
++ 
+docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/blank_replay/direct-source.stdout:3: trailing whitespace.
++ 
+docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/blank_replay/java.source.stdout:2: trailing whitespace.
++ 
+docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/blank_replay/java.source.stdout:3: trailing whitespace.
++ 
+docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/logs/cli.log:32: new blank line at EOF.
+docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/logs/parser.log:650: new blank line at EOF.
+docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/prepare.py:112: trailing whitespace.
++ 
+test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/blank_replay.puml:3: trailing whitespace.
++ 

@@ -1,0 +1,12 @@
+@startuml
+!procedure $leaf()
+!$x=%set_variable_value("stem","global")
+!endprocedure
+!procedure $outer(stem="argument")
+!stemmed="local-long"
+$leaf()
+!undef stem
+class "stem / stemmed / stemmX" as Scopes
+!endprocedure
+$outer()
+@enduml

@@ -1,0 +1,3 @@
+!include quiet.iuml
+!$n=$n+2
+class "outer $n" as OuterFresh

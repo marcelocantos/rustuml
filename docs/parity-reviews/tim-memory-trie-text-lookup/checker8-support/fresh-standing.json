@@ -1,0 +1,342 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/terminal_history.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/terminal_history.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/terminal_history/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.43303891700634267,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_before.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_before.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/lazy_before/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.010829542006831616,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_after.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_after.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/lazy_after/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.01361108299170155,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/punctuation_json.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/punctuation_json.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/punctuation_json/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.011024084000382572,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/concat_original.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/concat_original.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/concat_original/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.010886250005569309,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/scope_mutations.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/scope_mutations.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/scope_mutations/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.018672334001166746,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/astral_offsets.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/astral_offsets.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/astral_offsets/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.013777416010270827,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/markup_literal.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/markup_literal.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/markup_literal/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 1,
+      "seconds": 0.01096174999838695,
+      "stdout_sha256": "c35ba2e727b960d5394ea4789d2c5de777a4c7eab62c4b3dcd29ef278d2b4a7f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": false,
+    "cli_match": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_typed.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_typed.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/duplicate_typed/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.010825332996319048,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_positions.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_positions.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/duplicate_positions/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.010902207999606617,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_effect_order.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_effect_order.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/duplicate_effect_order/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.01097295900399331,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_required.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_required.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/duplicate_required/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.011406833000364713,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_negative.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_negative.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/duplicate_negative/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 2,
+      "seconds": 0.004805625008884817,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d2d799db8c9edeaea5bd92a87f3163c5d2107685d7614deccc5bda1ac0dd55b8"
+    },
+    "pass_status": false,
+    "cli_match": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_false.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_false.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_false/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 2,
+      "seconds": 0.005325207996065728,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d2d799db8c9edeaea5bd92a87f3163c5d2107685d7614deccc5bda1ac0dd55b8"
+    },
+    "pass_status": false,
+    "cli_match": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_two.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_two.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_two/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.01072054098767694,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/blank_replay.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/blank_replay.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/blank_replay/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 0,
+      "seconds": 0.010961833002511412,
+      "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": true,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_nested.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_nested.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_nested/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 1,
+      "seconds": 0.01200020799296908,
+      "stdout_sha256": "40e3241e841547b74eef0db33992f959dac8175a18c4184d1678bda2a7fa56b0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": false,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_return_include.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_return_include.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_return_include/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 1,
+      "seconds": 0.011197542000445537,
+      "stdout_sha256": "d9bcbd414243d1a7e6734d14842bf8426483813d275378408cc893a85aaeb78b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pass_status": false,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_selected.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_selected.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_selected/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 3,
+      "seconds": 0.007283625003765337,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "eb29a5c02af2bf7937c6dd06683a5a6b695701b0bc10e7f27e288810468fb0e9"
+    },
+    "pass_status": false,
+    "cli_match": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_loop.puml",
+    "call": {
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/standing-slice",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_loop.puml",
+        "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_loop/java.svg.stdout"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/crates/rustuml-oracle",
+      "exit": 2,
+      "seconds": 0.004850458004511893,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d2d799db8c9edeaea5bd92a87f3163c5d2107685d7614deccc5bda1ac0dd55b8"
+    },
+    "pass_status": false,
+    "cli_match": false
+  }
+]

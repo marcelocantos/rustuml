@@ -1,0 +1,3 @@
+@startuml
+class "twig / twig / $b / branch / xread() / \ntwig" as Scan
+@enduml

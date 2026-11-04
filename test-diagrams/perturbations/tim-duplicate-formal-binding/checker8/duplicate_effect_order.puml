@@ -1,0 +1,11 @@
+@startuml
+!$n=0
+!function $tick($d)
+!$n=$n*10+$d
+!return $d
+!endfunction
+!procedure $show(x=0,$x=1,x=2,$tail=3)
+class "x / $x / $tail / $n" as EffectsFresh
+!endprocedure
+$show(x=$tick(4),x=$tick(5),$x=$tick(6),"tail")
+@enduml

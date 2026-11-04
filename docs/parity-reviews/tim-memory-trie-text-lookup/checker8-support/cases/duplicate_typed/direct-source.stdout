@@ -1,0 +1,3 @@
+@startuml
+class "0092 / position" as TypedFresh
+@enduml
