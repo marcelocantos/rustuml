@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-quark-modifier-lifecycle",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "d45793fbc6f0cd8170fee40107296e2de6637761",
+  "java_locations": [
+    "command/note/CommandFactoryNoteOnEntity#getRegexConcatSingleLine,getRegexConcatMultiLine,executeInternal",
+    "command/note/CommandFactoryNote#executeInternal",
+    "abel/CucaDiagram#reallyCreateLeaf,eventuallyBuildPhantomGroups",
+    "svek/GraphvizImageBuilder#isOpalisable",
+    "svek/Bibliotekon#getNode"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs#Note",
+    "crates/rustuml-parser/src/parse/class.rs#push_note,try_note,try_package",
+    "crates/rustuml-render/src/class.rs#attached-note layout and emission"
+  ],
+  "invariant": "Note commands own their complete modifier grammar and body, retain metadata, and resolve all existing quark data including named notes. Leaf allocation precedes phantom parent allocation; explicit group declarations replace phantom source identity. Layout endpoints must resolve semantic note/group identities to their actual node ids, and Opale requires a real non-note peer image.",
+  "causal_divergence": "The consuming trial omits note tags/stereotypes/URLs, excludes notes from target lookup, assigns phantom package UIDs before note UIDs, and preserves phantom source location after explicit reopening. Attached-note edges use semantic ids directly although named notes and empty groups have synthetic layout ids; render eligibility only rejects clusters, rather than also note peers.",
+  "planned_change": "Unify attached single/multiline note start recognition with ordered modifier parsing; retain stereotype/tag/URL metadata in Note. Extend quark target lookup to registered named notes. Allocate named-note UID before materializing phantom groups and update source line on phantom conversion. Resolve layout endpoints through existing relationship_layout_id in construction and lookup; prevent Opale for note peers. Apply note stereotype style and URL using existing renderer entrypoints. Preserve unknown-target errors and full-body ownership.",
+  "perturbation_axes": [
+    "Brace/end-note and single-line syntax crossed with tags/stereotype/color/URL modifiers and command-looking bodies",
+    "Named-note/group targets, qualified aliases and explicit namespace reopening crossed with declaration order and note positions"
+  ],
+  "verification_plan": "Preserved checker3c stereo_brace,note_peer,qualified_reopen,empty_peer plus previous note matrix through real CLI and unchanged comparator; model retention tests and staged fresh source controls. Geometry residuals remain failures, not waived."
+}
