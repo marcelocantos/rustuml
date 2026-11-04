@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "base_revision": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rejection": "4931481fd495ffff9da55a0c7514f43a487b087e",
+  "import_commit": "2ed88eb55ec5f0974ec2830deccfcc401f6d9885",
+  "mechanism": "state rectangle shared fill serialization",
+  "java_locations": [
+    "svek/image/EntityImageState.java:99\u2013118 and EntityImageStateEmptyDescription.java:62\u201375 applyColor then draw getShape",
+    "klimt/drawing/svg/DriverRectangleSvg.java:82\u201395 applyFillColor \u2192 HColor.toSvg / transparentFillBehavior",
+    "HColorSet.parseSimpleColor RRGGBBAA \u2192 XColor.toSvg \u2192 SvgGraphics.setFillColor/fillMe:891\u2013898"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs:7323 and7403 direct state-body rectangle fill",
+    "crates/rustuml-render/src/svg.rs::fill_attributes"
+  ],
+  "invariant": "Both empty-description and ordinary state-body rectangles use the same role-aware fill serialization as shared SvgBuilder: uppercase RGB, partial alpha/255 at5decimals, opaque omits opacity, zero alpha fill none. Shape geometry, order and stroke unchanged.",
+  "causal_divergence": "The two direct state rect writers call escape_attribute on raw fill_color, bypassing already-portable fill_attributes. Escaping cannot decode RRGGBBAA.",
+  "planned_change": "Expose existing private fill_attributes as pub(crate), replace only the two state rect fill attribute producers with it. Preserve every coordinate, style/stroke, branch and other SVG attribute.",
+  "production_files": [
+    "crates/rustuml-render/src/svg.rs",
+    "crates/rustuml-render/src/state.rs"
+  ],
+  "perturbation_axes": [
+    "empty-description versus ordinary/description body branches",
+    "alpha01/80/fe/ff/00 and uppercase/lowercase RGB"
+  ],
+  "verification": "Retained shape_alpha plus exact4 fresh state sources; full golden actualCLI/retained/checker87, unchanged comparator and semantic YAML. No per-family layout compensation."
+}
