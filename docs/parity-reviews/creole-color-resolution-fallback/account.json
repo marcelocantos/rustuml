@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "base_revision": "bdfeba117c7af6a527fc66b0acda6d8273fa6d74",
+  "imported_rejection": "f6c84a6215e734955890f6058c309423cf228f1d",
+  "import_commit": "756f7a41db41a373e97aa7714cab22b634721354",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "creole-color-resolution-fallback",
+  "java_locations": [
+    "klimt/creole/command/CommandCreoleColorChange.java:80-98 executeAndGetRemaining catches NoSuchColorException and analyzes body with fc1",
+    "klimt/creole/command/CommandCreoleStyle.java:82-88 getExtendedColor calls getColorOrWhite; executeAndGetRemaining applies AddStyle then restores fc1",
+    "klimt/color/HColorSet.java:55-73 getColorOrWhite/getColor; :75-155 parseColor/parseSimpleColor; ColorTrieNode.java:52-210 named registry and getColor",
+    "klimt/creole/command/CommandCreoleColorAndSizeChange.java:82-105 throws NoSuchColorRuntimeException; no inherited-color fallback"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::parameter_command lexical eligibility remains unchanged",
+    "crates/rustuml-render/src/creole.rs::handle_tag Color copies invalid fill, Background copies invalid background",
+    "crates/rustuml-render/src/text_render.rs::normalize_color reuses existing named lookup but does not validate raw hex; not edited"
+  ],
+  "invariant": "A syntactically selected command must still resolve its color. Invalid color command consumes its body and keeps current color; invalid BACKCOLOR becomes white. Grammar selection, command barriers and recursion remain independent. Combined font attributes have a distinct throwing contract and must not acquire an invented fallback.",
+  "causal_divergence": "Prefix eligibility was repaired, but selected colors are still copied verbatim without HColorSet resolution. #GGGGGG is a legal candidate through the word alternative and an invalid color. Unknown background names must resolve to white rather than an invalid filter color.",
+  "planned_change": "Only creole.rs: add a private color-resolvability predicate reflecting HColorSet hex lengths/digits, special names, ColorTrieNode named colors and supported gradient operand validity. Reuse existing text_render::normalize_color only as its read-only named lookup; explicitly account for Java Archimate names and Rust-only RebeccaPurple. Do not normalize or serialize valid colors, repair gradients/alpha/short hex, edit shared registries or alter parameter grammar. Color mutates fill only on resolution success; Background chooses captured value or white. Keep combined-font throwing negative as explicit scope handoff if existing infallible public parse API cannot reproduce it without error-contract expansion.",
+  "perturbation_axes": [
+    "valid/invalid hex and named colors, Java special/Archimate names and Rust-only name",
+    "plain/colored nesting, closed/EOL/consumed-empty bodies",
+    "color versus BACKCOLOR versus combined-font throwing path",
+    "note/activity/state/WBS/class/sequence consumers"
+  ],
+  "verification": "Preserve2034 prior observations including1992+sixgoldens+checker36(34valid); before/after actual CLI SVG+YAML, unchanged comparator; compact parent relay and independent classifications. Record losses/errors/panics and map order separately. Broad gates once stable and compare exact library failure-name files. No self-review."
+}

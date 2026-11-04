@@ -1,0 +1,8 @@
+{
+  "status": "scope stop; no production alpha draft",
+  "target": "T14.15 (parent owned)",
+  "java_parse": "HColorSet.parseSimpleColor:145-153 reads R,G,B,A bytes in that order into XColor",
+  "java_serialization": "SvgGraphics.fillMe:891-898 splits encoded eight-digit RGB+alpha into fill first6hex and fill-opacity alpha/255 formatted five decimals; example8044aa77 -> #8044AA,0.46667",
+  "rust": "creole.rs Style:812-840 has no opacity field; text_render.rs::normalize_color passes raw # text, write_text_element:1657-1727 emits fill without opacity",
+  "scope": "Requires shared color serialization and likely additive style/API plumbing; forbidden here. Do not inject attributes into fill or alter valid eight-digit selection. Short hex and logical-family/alias/gradient obligations remain owned separately."
+}
