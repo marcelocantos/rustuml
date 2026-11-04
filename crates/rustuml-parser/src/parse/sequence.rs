@@ -18,13 +18,10 @@ use crate::diagram::sequence::*;
 // RegexLeaf.spaceOneOrMore/spaceZeroOrMore and sequence command factories all
 // use this class. Keep negation consistent for command token boundaries.
 fn sequence_regex(pattern: &str) -> Result<Regex, regex::Error> {
-    const JAVA_SPACE: &str = r"[\x09-\x0d \u{00a0}]";
-    const JAVA_NON_SPACE: &str = r"[^\x09-\x0d \u{00a0}]";
-    Regex::new(
-        &pattern
-            .replace("[^%s]", JAVA_NON_SPACE)
-            .replace("[%s]", JAVA_SPACE),
-    )
+    // Pattern2 transforms the token, not a complete bracket expression: this
+    // must also work in composite classes such as [^%s:] used for color tokens.
+    const JAVA_SPACE_CONTENTS: &str = r"\x09-\x0d \u{00a0}";
+    Regex::new(&pattern.replace("%s", JAVA_SPACE_CONTENTS))
 }
 
 // RegexConcat#foxRegex includes only direct RegexLeaf children. A mandatory
@@ -2852,6 +2849,30 @@ Gate -> Mail: enqueue"#
             assert!(!non_whitespace.is_match(&character.to_string()));
         }
     }
+    #[test]
+    fn pattern2_whitespace_composes_with_other_class_members() {
+        let positive = sequence_regex(r"^[%s:]$").unwrap();
+        let negative = sequence_regex(r"^[^%s:]$").unwrap();
+        for c in [' ', '\t', '\u{000b}', '\u{000c}', '\u{00a0}', ':'] {
+            assert!(positive.is_match(&c.to_string()));
+            assert!(!negative.is_match(&c.to_string()));
+        }
+        assert!(negative.is_match("x"));
+        for shape in ["note", "rnote", "hnote"] {
+            for target in ["over Birch", "right", "across"] {
+                for separator in ["", " ", "\t", "\u{00a0}"] {
+                    let diagram = parse(&format!(
+                        "Birch -> Elm: seed\n{shape} {target} #pink{separator}: body"
+                    ));
+                    let Some(Event::Note(note)) = diagram.events.last() else {
+                        panic!("missing note")
+                    };
+                    assert_eq!(note.color.as_deref(), Some("#pink"));
+                }
+            }
+        }
+    }
+
     #[test]
     fn command_entry_whitespace_follows_java_composition() {
         for gap in [' ', '\t', '\u{000c}', '\u{00a0}', '\u{000b}'] {
