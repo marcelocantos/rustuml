@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-degenerated-preferred-shadow-envelope",
+  "status": "maker correction plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "82ace8b93921f3e0702685cc1d61671304260e57",
+  "java_locations": [
+    "svek/GraphvizImageBuilder#buildImage degenerated selection",
+    "svek/EntityImageDegenerated#calculateDimension",
+    "svek/SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_plantuml_svg,entity_shadow_extent"
+  ],
+  "invariant": "A degenerated single unlinked image uses preferred dimensions plus its wrapper border. Only SvekResult measures the primitive shadow frontier with LimitFinder.",
+  "causal_divergence": "The new primitive shadow maxima were applied to both paths. The main product tier found one regression: class_skinparam_shadowing gained five canvas pixels in each dimension, although its EntityImageDegenerated wrapper does not measure painted shadow.",
+  "planned_change": "Keep per-primitive shadow extents confined to the non-degenerated SvekResult path; singleton preferred dimensions remain unchanged. Preserve actor/mixed graph repairs.",
+  "perturbation_axes": [
+    "Single unlinked class versus linked pair",
+    "Shadow enabled/disabled and member count"
+  ],
+  "verification_plan": "Reproduce class_skinparam_shadowing through actual CLI, rerun changed-tree main tiers and heldouts; preserve previous failing run. Native safety code unchanged."
+}
