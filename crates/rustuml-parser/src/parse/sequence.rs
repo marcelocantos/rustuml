@@ -638,8 +638,14 @@ impl SeqParser {
     }
 
     fn try_participant_decl(&mut self, line: &str) -> bool {
+        self.try_participant_decl_in_command(line, line)
+    }
+
+    fn try_participant_decl_in_command(&mut self, line: &str, full_command: &str) -> bool {
         // CommandParticipantA/A2/A3/A4#getRegexConcat: direct spaceOneOrMore leaf.
-        if !has_fox_space(line) {
+        // CommandParticipant#getRegexType includes `create` in the SAME command;
+        // keep its full-line signature when parsing only the declaration tail.
+        if !has_fox_space(full_command) {
             return false;
         }
         let (url, clean_line) = super::extract_link_url(line);
@@ -1296,7 +1302,7 @@ impl SeqParser {
             "create" => {
                 // Register with the declared kind/alias/label if a full declaration
                 // was given; otherwise ensure a plain participant exists.
-                if !self.try_participant_decl(rest) {
+                if !self.try_participant_decl_in_command(rest, line) {
                     self.ensure_participant(&id);
                 }
                 self.events.push(Event::Create(id));
@@ -2893,6 +2899,17 @@ Gate -> Mail: enqueue"#
         for shape in ["note", "rnote", "hnote"] {
             let mut parser = SeqParser::new();
             assert!(parser.try_note(&format!("{shape} accross: body")).is_err());
+        }
+    }
+
+    #[test]
+    fn created_participant_signature_uses_the_complete_command() {
+        for declaration in ["create actor\u{000b}Willow", "create\u{000b}actor Willow"] {
+            let diagram = parse(&format!(
+                "participant Birch\n{declaration}\nBirch -> Willow: born"
+            ));
+            assert_eq!(diagram.participants[1].kind, ParticipantKind::Actor);
+            assert!(matches!(&diagram.events[0], Event::Create(id) if id == "Willow"));
         }
     }
 
