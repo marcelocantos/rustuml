@@ -1,0 +1,80 @@
+{
+  "entries": 2549,
+  "yaml_by_cohort": {
+    "frozen2371": {
+      "entries": 2371,
+      "stdout_equal": 2371,
+      "before_exits": {
+        "0": 2291,
+        "101": 19,
+        "1": 61
+      },
+      "after_exits": {
+        "0": 2291,
+        "101": 19,
+        "1": 61
+      }
+    },
+    "checker148": {
+      "entries": 148,
+      "stdout_equal": 142,
+      "before_exits": {
+        "0": 142,
+        "1": 6
+      },
+      "after_exits": {
+        "0": 136,
+        "1": 12
+      }
+    },
+    "maker30": {
+      "entries": 30,
+      "stdout_equal": 22,
+      "before_exits": {
+        "0": 30
+      },
+      "after_exits": {
+        "0": 24,
+        "1": 6
+      }
+    }
+  },
+  "yaml_existing_panics": [
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review2_external_live_depth_autonumber.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_four_way_combined.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_left_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_right_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_left_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_right_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review4_autonumber_literal_angle_formats.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_left_depth_repeat.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_right_depth_repeat.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_prefix_suffix_resume.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_styled_hash_resume.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_mixed_required_field.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_spatial_reverse_order.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_right_divider_intervening.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_legacy.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_teoz.puml",
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_legacy.puml",
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_teoz.puml"
+  ],
+  "changed_ascii": [
+    "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+    "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_em_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_em_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_narrow_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_narrow_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_teoz.puml"
+  ],
+  "note": "Frozen2371 full YAML stdout is byte-identical. Fourteen additional output/status changes:12 restored negative rejections plus2 invalid whitespace messages dropped while CLI still succeeds (T14.17). Teoz effective shapes are renderer-local; requested AST/YAML shapes retained. Nineteen existing CLI nested-enum YAML serialization panics remain; process IDs change stderr. Separate checker-proven pre-existing state minty YAML deserialization panic is not rerun or conflated. No ASCII parity claim."
+}

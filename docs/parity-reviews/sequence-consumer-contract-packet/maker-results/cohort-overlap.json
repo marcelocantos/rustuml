@@ -1,0 +1,31 @@
+{
+  "entries": 2549,
+  "unique_paths": 2549,
+  "unique_source_bytes": 2501,
+  "duplicate_entries": 48,
+  "cohorts": {
+    "frozen2371": {
+      "entries": 2371,
+      "unique_sources": 2323,
+      "overlap_prior_bytes": 0
+    },
+    "checker148": {
+      "entries": 148,
+      "unique_sources": 148,
+      "overlap_prior_bytes": 0
+    },
+    "maker30": {
+      "entries": 30,
+      "unique_sources": 30,
+      "overlap_prior_bytes": 0
+    }
+  },
+  "parent1449": {
+    "overlap_paths": 1123,
+    "parent_only_paths_not_replayed": 326,
+    "overlap_unique_bytes": 1097,
+    "parent_only_unique_bytes": 278,
+    "provenance": "Historical independently recorded overlap, not a new parent inventory or additive denominator."
+  },
+  "note": "2371+148+30=2549; duplicates and nonpositive sources retained."
+}

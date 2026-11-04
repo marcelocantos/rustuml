@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition bottom
+queue "Wide Birch\n<size:18>Second</size>" as B <<role>>
+skinparam stereotypePosition top
+queue "Elm" as E <<broad role>>
+B -> E: notify
+@enduml

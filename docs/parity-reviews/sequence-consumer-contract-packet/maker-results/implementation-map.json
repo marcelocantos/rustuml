@@ -1,0 +1,29 @@
+{
+  "mechanisms": [
+    {
+      "mechanism": "sequence-pattern2-whitespace",
+      "account_commit": "0b512262aaf4bcf0c0ab144b9f28c0719f329e4c",
+      "implementation_commit": "df9078e2e162752328ffa52ebb28f227e56bc8f6"
+    },
+    {
+      "mechanism": "sequence-all-participant-display-consumers",
+      "account_commit": "0b512262aaf4bcf0c0ab144b9f28c0719f329e4c",
+      "implementation_commit": "f4b3db075f61e2a5444777a305ab9bb64fd3685d"
+    },
+    {
+      "mechanism": "sequence-teoz-self-note-component",
+      "account_commit": "0b512262aaf4bcf0c0ab144b9f28c0719f329e4c",
+      "implementation_commit": "47fb7bd3a27d62ed80cdca112721be7ca61fc2e6"
+    },
+    {
+      "mechanism": "sequence-note-over-command-domain",
+      "account_commit": "0b512262aaf4bcf0c0ab144b9f28c0719f329e4c",
+      "implementation_commit": "d491d4bda47faf90d4751484d45aa1387fb1b290"
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ownership": "Only owned parse/sequence.rs and render/sequence.rs changed. No model fields or ASCII fixture/renderer edit. No parse/mod, global unconsumed handling or shared text/style/font edit."
+}
