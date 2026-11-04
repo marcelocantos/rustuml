@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+  "source_sha256": "6e9783bcf61eb0ad45168e947c73439129cba3f8f222e3ef74dd7ff1a59d21f5",
+  "exit_code": 200,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1533239169948502,
+  "stdout_sha256": "6321988b085807e07bad3af3c4f366309772c192293cdf444824ada50b9cb4e8",
+  "stderr_sha256": "3a70da2f2545b98560fd25ac62cfe89c0ce393546d86b8ba63ca249cd4d0fee2"
+}

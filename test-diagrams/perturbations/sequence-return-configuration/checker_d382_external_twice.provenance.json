@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.puml",
+  "source_sha256": "f1c3ce0bc9462c552c80887a65e0db794680b2677ed7ddf01ab7e210858c1fb8",
+  "exit_code": 200,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1564257919962984,
+  "stdout_sha256": "99746e4d19cdb0b08d4928f5e7984069e5e8ea497c1d68147ba0f1e2e0176553",
+  "stderr_sha256": "0522547239fa5abd278a35779a7657554f10fc83f0fe5b1d35a7e80459f2381a"
+}

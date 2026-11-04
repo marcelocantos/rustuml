@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+skinparam padding 1
+skinparam shadowing true
+participant A
+participant "Wider end" as B
+group sampled
+note over A,B: x
+A -> B : A constraint far wider than both participant heads combined
+end
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+!pragma teoz true
+participant S
+participant T
+activate S #lightblue
+S -> T ++ : enter
+T -> T ++ : recursion
+T -> T ++ : recursion
+group bracket
+T -> S : inside
+end
+deactivate T
+deactivate T
+T -> S : after closes
+activate T #pink
+T -> T : reopened
+deactivate T
+@enduml

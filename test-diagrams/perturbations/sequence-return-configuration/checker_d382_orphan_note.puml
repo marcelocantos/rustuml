@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant A
+note over A: no owner
+return #purple orphan
+@enduml

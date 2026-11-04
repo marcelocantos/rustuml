@@ -1,0 +1,13 @@
+@startuml
+skinparam shadowing true
+skinparam padding 4
+participant "Wide sentinel" as S
+participant P
+participant "Storage" as T
+group envelope
+note over S,T: n
+S -> P : short
+...  longer wait ...
+P <- T : reverse
+end
+@enduml

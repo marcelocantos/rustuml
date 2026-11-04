@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant A
+create B
+A -> B ++ : make
+B -> B : run
+destroy B
+A -> A : done
+@enduml

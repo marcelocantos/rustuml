@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested0.puml",
+  "source_sha256": "b7d10b6ba9b83dde8c119e9e48ccaca3e273d805c1d9789072cbdc7d1a181018",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1608876249956666,
+  "stdout_sha256": "dc4a59af5111546d7f7ddf6ba2111962fdb0a6467b3305df11d2e66e5f3f7ee9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

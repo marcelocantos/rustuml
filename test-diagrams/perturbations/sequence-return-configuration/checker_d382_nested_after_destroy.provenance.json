@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_nested_after_destroy.puml",
+  "source_sha256": "e964a455fcd6f5cf97c062cc3007ab95a912a72ede2b100618eb6b74d525d575",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1314355000067735,
+  "stdout_sha256": "090dec8b632a18386fbd829e3d9965c8c5a62b13d21a0839f5b9618234feb480",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

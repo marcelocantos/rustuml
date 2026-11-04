@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+skinparam shadowing true
+actor A
+database B
+group kinds
+note over A,B: span
+A -> B : body
+end
+@enduml

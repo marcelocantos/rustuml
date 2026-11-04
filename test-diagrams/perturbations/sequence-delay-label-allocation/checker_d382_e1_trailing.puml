@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+skinparam padding 3
+participant A
+participant "Wider head" as B
+group delay window
+A -> B : before
+...lag    ...
+B -> A : after
+end
+@enduml

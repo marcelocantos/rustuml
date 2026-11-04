@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-page-textblock-composition",
+  "account_commit": "37e9e23f2c095356261999d64fe747e39c537d39",
+  "previous_review": "docs/parity-reviews/sequence-page-textblock-composition/review.json",
+  "previous_review_commit": "704b80d0c31def61e0ccd6ff78565b017fd675a0",
+  "previous_implementation_commit": "48716e0f3eb67cd6e492059e484cd13af5425afe",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.svg",
+      "source_sha256": "eac705a19ee2b617769a60f30250243ded6475ba3075fba9759640744376f48d",
+      "golden_sha256": "803d1214e46e2776f295dda2945c9db94496688b02c60cc64f20a23d52bc1f1f",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.svg",
+      "source_sha256": "2f105172e6e5286477b2e91ee0a29efa2bacf8ca8a58e945dc856f29175a48f7",
+      "golden_sha256": "a338f7dde4459ffbb345fbb847e3d60d3b0d984248d00756f1535a74d0049330",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.svg",
+      "source_sha256": "52aca32320cf0f57e5bd99335a5e2de29863955e7dc72a32f297c6d3bb9b829a",
+      "golden_sha256": "870822c27f60b44dd61cf18cfa8520b9bc5227ae44f2de1309edd7040f1bd30a",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.svg",
+      "source_sha256": "efca7917c8b51dddaf8427caebc6b32e76c51c70c1eb08d2e385e0c56d9a3207",
+      "golden_sha256": "e6f52120e6be4bf61552e4c3ef05374a93eaa109f989ecdbf4cf5456d68b4812",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.svg",
+      "source_sha256": "91dacd406dcf7182c49dc6cf93b14d766cb25f4761188801bd17183e181a3d5a",
+      "golden_sha256": "4d4b25db3ce9171168c12e5311a5c4e6dac464370503ff8ff294279f8c86722d",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.svg",
+      "source_sha256": "4913360533250c3d4ebc65032312bb0bdf1ef92026a48a76138fdbd481eb8c79",
+      "golden_sha256": "e1efe7d72b44f5c8e26984b84cc0ad278f7fad7dbe14a571c7cb630c6ecce658",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.svg",
+      "source_sha256": "1374e243385192cdabc7985708f5511ee2d8523f8ab79865e1d1af9a1c87a377",
+      "golden_sha256": "6f2a26332d95c4fbc158e53162571b7b9905c1b359cc5a856221c535e7267946",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.svg",
+      "source_sha256": "3f1094030d2c99513e5b01726f67aa4a4a80062406fa166191888ec2a54f9ede",
+      "golden_sha256": "d5637ddfa5ae68fc0926a4fad258adc2fd663b0306a43c33ced7318f8e5c1f31",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.svg",
+      "source_sha256": "5cc8ed5d3b5c11ee74e01b6aad66a92f91bd581809a1eb185bc5ca8084109698",
+      "golden_sha256": "2a178ca00bd33dbbbfa61093a8454c5321e15a2ed828a657bc90f337a9d0f319",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.svg",
+      "source_sha256": "4b8bbf395982fce6f4165f80dbe8d8c1f5136db5bc18e8c68c2f284095cee053",
+      "golden_sha256": "321f9b44f2693b7833cc192f08ed6e94ba60bf6d9b0920dae24eee9105037bf9",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.svg",
+      "source_sha256": "4b4cf1e196c25a649179689d817adb7c75d862d5d10a698730356e4078ed787f",
+      "golden_sha256": "5b90ad0ae07fd7a7a61bb5fa3a006ce30afb1ee527b7a4712ce3dc4fb8859227",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.svg",
+      "source_sha256": "9b21cb8cbcb87039e9a4c653a8475ab20044b2367af66e90c617d40ff2fc20d2",
+      "golden_sha256": "e62ae79efd837ab2e0ebd964882cc53f205ef37e19544d9e397f978b81d75c69",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    }
+  ],
+  "fresh_cross_mechanism_evidence": [
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.svg",
+      "source_sha256": "f1886ddb5f9e8171d28bb052e98a95fc0a000dd8178b9ca8270754e44996172c",
+      "golden_sha256": "352b2dce5b3d7e93e52256046a5841f7014479c930a85b84c034691b58f9c918",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.svg",
+      "source_sha256": "241ee45621b41b5ec06357c29add2a1e963faeadefb4c0010d98e546006335de",
+      "golden_sha256": "662f81d2706628d1d1fa4e237ae9e90fc8e54dda6cb1b2f8646bef22ecc10dab",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.svg",
+      "source_sha256": "38c70597d23a75b1e081f487ce5fb648b21cb3d8cd09223419ec47e81284d5ba",
+      "golden_sha256": "da9e2365f90df2b6b5159acb0c89c58e0f57d2d8ef6157b316f20d69827d685f",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.svg",
+      "source_sha256": "7c37855173b60a1f8309927119603c04307e46cfd04f27bc57f5621eb80d4d7d",
+      "golden_sha256": "29777858b36ac3a97e5fb4d61e387b6d19dbd2c40314689e1a2d9f094a30069c",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_top_legend.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_top_legend.svg",
+      "source_sha256": "6f77aa690b39bc0051020d6534e2268336d613337a49ba0a01e9f278e6ff2c79",
+      "golden_sha256": "5fb86cf8c15ba3b2c45ef7f4c0d995a4b9f0ee308da00011e9fb270acfc4bfcb",
+      "axes": [
+        "source-guided edge control",
+        "top_legend"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_styled_caption.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_styled_caption.svg",
+      "source_sha256": "2d72448c93d874e925dc49eb9fd75681e084fadd90170e5194cb7225a689bab1",
+      "golden_sha256": "152d4f71dcf4107c1a95ef53fe67a8f8a551df2cad0b940b7e61d3e15e676a89",
+      "axes": [
+        "source-guided edge control",
+        "styled_caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "findings": [
+    "The original primary valid inputs now match. New cross-mechanism controls exercise the changed consumers on at least two independent axes; linked valid failures remain binding to whole-source closure. This does not imply every isolated equation is wrong.",
+    "All six fresh cases fail. In combined wrappers, valid legend left is absent from Rust (41 versus38 elements,262px versus211px legacy). Top legend is painted in the wrong wrapper position. Styled caption FontSize20/Margin6/Padding3 produces197px height versus167px. Both newpage engines fail. Use the parsed full legend placement and resolved styled TextBlocks through the wrapper chain; do not compensate by fixed page offsets.",
+    "Historic review.json and every retained input/reference are unchanged. New record describes candidate0fb4e14b only. Cross-linked sources are counted once in the68-case fresh matrix, not copied into additional directories."
+  ],
+  "verdict": "rejected"
+}

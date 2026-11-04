@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-teoz-real-bound-capture",
+  "account_commit": "a5a826c28d39e4a1ac01348390c3c4f3bfa2cc48",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide0.svg",
+      "source_sha256": "9c58683574a482b675b48ca2a76b554ed145e4f461ae7d0086f7c3ebfe149c5c",
+      "golden_sha256": "676cc0480d2e34b5df4e204757f5fb529358d6b1f000e390fc40a5c5b9da7c57",
+      "axes": [
+        "asymmetric participant declaration order",
+        "constraint expansion after captured bounds"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide1.svg",
+      "source_sha256": "28ac7d4d8776f600e60b84295d1ca69e555dad408a0fbde3c384fd5bd4a01ca7",
+      "golden_sha256": "1cbfb80abc112a9ea6e965c1b1ee59f481b07ecfcbe0666cff843c589991e23b",
+      "axes": [
+        "asymmetric participant declaration order",
+        "constraint expansion after captured bounds"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide0.svg",
+      "source_sha256": "48df28ed1685976cdbac8c9b62189d0672088072a1592f171a83083fc81aa0fa",
+      "golden_sha256": "f15ed873bfc51959804bd5939a8268d6b90b623ca8fbb27e2ac431dcd66831f9",
+      "axes": [
+        "asymmetric participant declaration order",
+        "constraint expansion after captured bounds"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide1.svg",
+      "source_sha256": "a5c22ca1192be940ecfcf2501aa850c5cb93cf5292f33f4cfe872ebb8db39a12",
+      "golden_sha256": "c5e934b38d763eb91a7a17a44186a21e7b23d8e7560f59518ccdc052cdb6c89b",
+      "axes": [
+        "asymmetric participant declaration order",
+        "constraint expansion after captured bounds"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_box_before_note.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_box_before_note.svg",
+      "source_sha256": "eaf795f0e04847fcb4fdf53f3fee4726c5f622fb954bb23f3399521d7a9e1b64",
+      "golden_sha256": "82c529e7ee39bc8d1f703ea9cbe941ab48cf9f896b56cc48231e2d252d6b95e5",
+      "axes": [
+        "englober margins before Real compile",
+        "span allocation versus later arrow expansion"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-teoz-real-bound-capture",
+    "java_files": [
+      "sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java",
+      "sequencediagram/teoz/NoteTile.java",
+      "sequencediagram/teoz/GroupingTile.java",
+      "real/RealImpl.java",
+      "real/RealDelta.java"
+    ],
+    "rust_locations": [
+      "sequence.rs:9290-9326"
+    ],
+    "source_supported": "createMainTile constructs contiguous preferred heads before PlayingSpace captures Real bounds, then adds constraints and compiles. NoteTile converts currently sampled width into addFixed while centers remain Real references; drawU samples width again. Rust initial preferred-width prefix versus final head span is a plausible phase-preserving model.",
+    "adversarial_boundary": "This derivation is checked against asymmetric head order and wide later arrows, plus englober margin interaction. It does not validate arbitrary Real dependency graphs or all note shapes."
+  },
+  "findings": [
+    "createMainTile constructs contiguous preferred heads before PlayingSpace captures Real bounds, then adds constraints and compiles. NoteTile converts currently sampled width into addFixed while centers remain Real references; drawU samples width again. Rust initial preferred-width prefix versus final head span is a plausible phase-preserving model.",
+    "All five direct folded-note tests match across asymmetric head order, later wide arrows and an earlier englober. This supports the captured initial-width/live-center mechanism. It does not establish the unqualified NoteTile invariant: the cross-linked fresh hexagonal group case fails and bypasses the shared geometry phase helper, while Java NoteTile supplies bounds for all styles. Reject the broad mechanism claim; the narrow folded-note phase algebra is supported, not disproved. Preserve that algebra while completing other note component paths.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected",
+  "fresh_cross_mechanism_evidence": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_hex_note.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_hex_note.svg",
+      "source_sha256": "788e6e16d66258a865f88692206305899b248db46a149d2653c020ea47e2c987",
+      "golden_sha256": "6f3043994ef4ab3611b9949c11cddbbc3aa81bfb6f90f0a7b327f06c0d0273cc",
+      "axes": [
+        "source-guided edge control",
+        "hex_note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ]
+}

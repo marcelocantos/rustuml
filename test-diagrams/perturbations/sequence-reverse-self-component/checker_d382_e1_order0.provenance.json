@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order0.puml",
+  "source_sha256": "712ba9f75c8d20cb80890a7eb7ce31a737d156c312f212d2f99143c2f21c9004",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1531742080114782,
+  "stdout_sha256": "48ff7b2c9cc6d4d69d66a93ead1a16b7f6d1304f48acc2ea9cc92c6486d6eaa4",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
