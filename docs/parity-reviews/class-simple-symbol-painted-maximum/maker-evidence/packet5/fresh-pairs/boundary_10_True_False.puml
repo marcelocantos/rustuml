@@ -1,0 +1,15 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+boundary {
+FontSize 10
+LineColor #425566
+LineThickness 2
+BackgroundColor #DDEEFF
+}
+</style>
+class Anchor
+boundary "Archive vestibule" as Gate
+Anchor --> Gate
+@enduml

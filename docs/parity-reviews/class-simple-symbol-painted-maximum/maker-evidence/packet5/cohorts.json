@@ -1,0 +1,160 @@
+{
+  "original810": {
+    "entries": 810,
+    "before": {
+      "mismatch": 250,
+      "pass": 553,
+      "invalid_reference": 7
+    },
+    "after": {
+      "mismatch": 250,
+      "pass": 553,
+      "invalid_reference": 7
+    }
+  },
+  "current955": {
+    "entries": 955,
+    "before": {
+      "mismatch": 329,
+      "pass": 610,
+      "invalid_reference": 9,
+      "process_error": 7
+    },
+    "after": {
+      "mismatch": 329,
+      "pass": 610,
+      "invalid_reference": 9,
+      "process_error": 7
+    }
+  },
+  "class23": {
+    "entries": 23,
+    "before": {
+      "pass": 23
+    },
+    "after": {
+      "pass": 23
+    }
+  },
+  "maker62": {
+    "entries": 62,
+    "before": {
+      "pass": 62
+    },
+    "after": {
+      "pass": 62
+    }
+  },
+  "checker139": {
+    "entries": 139,
+    "before": {
+      "pass": 124,
+      "invalid_reference": 4,
+      "mismatch": 11
+    },
+    "after": {
+      "pass": 124,
+      "invalid_reference": 4,
+      "mismatch": 11
+    }
+  },
+  "frozen1192": {
+    "entries": 1192,
+    "before": {
+      "mismatch": 341,
+      "pass": 821,
+      "invalid_reference": 13,
+      "process_error": 17
+    },
+    "after": {
+      "mismatch": 341,
+      "pass": 821,
+      "invalid_reference": 13,
+      "process_error": 17
+    }
+  },
+  "combined1449": {
+    "entries": 1449,
+    "before": {
+      "mismatch": 518,
+      "pass": 838,
+      "invalid_reference": 33,
+      "process_error": 60
+    },
+    "after": {
+      "mismatch": 518,
+      "pass": 838,
+      "invalid_reference": 33,
+      "process_error": 60
+    }
+  },
+  "checker62": {
+    "entries": 62,
+    "before": {
+      "pass": 47,
+      "mismatch": 13,
+      "invalid_reference": 2
+    },
+    "after": {
+      "pass": 47,
+      "mismatch": 13,
+      "invalid_reference": 2
+    }
+  },
+  "maker48": {
+    "entries": 48,
+    "before": {
+      "pass": 45,
+      "mismatch": 3
+    },
+    "after": {
+      "pass": 45,
+      "mismatch": 3
+    }
+  },
+  "combined1559": {
+    "entries": 1559,
+    "before": {
+      "mismatch": 534,
+      "pass": 930,
+      "invalid_reference": 35,
+      "process_error": 60
+    },
+    "after": {
+      "mismatch": 534,
+      "pass": 930,
+      "invalid_reference": 35,
+      "process_error": 60
+    }
+  },
+  "maker36": {
+    "entries": 36,
+    "before": {
+      "pass": 28,
+      "mismatch": 8
+    },
+    "after": {
+      "pass": 32,
+      "mismatch": 4
+    }
+  },
+  "fresh20": {
+    "entries": 20,
+    "before": {
+      "pass": 6,
+      "mismatch": 14
+    },
+    "after": {
+      "pass": 16,
+      "mismatch": 4
+    }
+  },
+  "overlap": {
+    "1559_unique_source_hashes": 1485,
+    "36_unique_source_hashes": 36,
+    "20_unique_source_hashes": 20,
+    "1559_and_36_shared_source_hashes": 0,
+    "fresh20_shared_with_preserved": 0,
+    "interpretation": "1559 retains explicit duplicate entries. Cohort rows overlap internally (e.g. original810 is within955/1192/1449/1559); maker36 and fresh20 have no identical source bytes in1559 or each other."
+  }
+}

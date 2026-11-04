@@ -1,0 +1,13 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "223px"), ("preserveAspectRatio", "none"), ("style", "width:372px;height:223px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 372 223"), ("width", "372px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "223px"), ("preserveAspectRatio", "none"), ("style", "width:369px;height:223px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 369 223"), ("width", "369px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M210.57,93.57 L308.3874,93.57 A3.75,3.75 0 0 1 310.8874,96.07 L317.8874,116.0583 L354.57,116.0583 A2.5,2.5 0 0 1 357.07,118.5583 L357.07,206.07 A2.5,2.5 0 0 1 354.57,208.57 L210.57,208.57 A2.5,2.5 0 0 1 208.07,206.07 L208.07,96.07 A2.5,2.5 0 0 1 210.57,93.57"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M210.5713,93.57 L308.3887,93.57 A3.75,3.75 0 0 1 310.8887,96.07 L317.8887,116.0583 L351.5713,116.0583 A2.5,2.5 0 0 1 354.0713,118.5583 L354.0713,206.07 A2.5,2.5 0 0 1 351.5713,208.57 L210.5713,208.57 A2.5,2.5 0 0 1 208.0713,206.07 L208.0713,96.07 A2.5,2.5 0 0 1 210.5713,93.57"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [14] tag mismatch: expected <g>, got <a>
+  [15] tag mismatch: expected <a>, got <g>
+  [21] <path> attr mismatch:
+    expected: [("d", "M111.35,140.08 C147.33,97.34 236.2,6 308.57,47.57 C318.995,53.5575 326.6725,62.6325 332.3123,73.0886 C335.1323,78.3166 337.4428,83.89 339.3326,89.5953 C339.5688,90.3084 339.7985,91.0236 340.0217,91.7405 C340.1334,92.0989 340.2434,92.4578 340.3518,92.817 C340.4061,92.9966 340.4599,115.6646 340.5133,115.8443"), ("fill", "none"), ("id", "GMN4-Room"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+    actual:   [("d", "M111.35,140.08 C147.33,97.34 236.2,6 308.57,47.57 C319.505,53.85 327.3581,63.5531 332.9772,74.6914 C335.7867,80.2605 338.0377,86.1885 339.8362,92.2267 C339.9486,92.6041 340.0593,115.4702 340.1681,115.8484"), ("fill", "none"), ("id", "GMN4-Room"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+

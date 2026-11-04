@@ -1,0 +1,64 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: svglinktarget
+      value: _blank
+    source: |
+      @startuml
+      skinparam svgLinkTarget _blank
+      package "Archive room" as Room {
+      class Ledger
+      }
+      note bottom of Room $audit <<memo>> #LightYellow [[https://example.org/records?view=recent&sort=id{Open records}]]
+      component is prose here
+      class remains prose too
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Room
+  - !Entity Room.Ledger
+  - !Note 0
+  entities:
+  - id: Room.Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Room
+    kind: Package
+    color: null
+    entities:
+    - Room.Ledger
+    source_line: 2
+    stereotypes: []
+    display_name: Archive room
+  notes:
+  - lines:
+    - component is prose here
+    - class remains prose too
+    target: Room
+    position: Bottom
+    alias: null
+    stereotypes:
+    - memo
+    tags:
+    - audit
+    url: https://example.org/records?view=recent&sort=id
+    url_tooltip: Open records
+    color: '#LightYellow'
+    source_line: 6
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

@@ -1,0 +1,242 @@
+[
+  {
+    "name": "boundary_10_False_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_False.puml",
+    "source_sha256": "881b68b7cb46e5ce992dd4da38086e1a4f7f3cedc253d2c0bdd422e776f7b914",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "boundary_10_False_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_True.puml",
+    "source_sha256": "89e410c19aa98ff32b9c361c65c28875717d2f820541e39858e6a988a77818b6",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "boundary_10_True_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_False.puml",
+    "source_sha256": "aa7bfb8bc415b84fda51f50576f3ca5723bb40c47aebd8a330ab9ddb0926fa32",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "boundary_10_True_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_True.puml",
+    "source_sha256": "e0efbc9368f0dbf4b587779f09b2b03e0aedd606764d1f49ab129780fe40c61a",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "boundary_22_False_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_False.puml",
+    "source_sha256": "a01d9b62eb1d2d82ede509ad6e8b68364fd73d35aa68fdaad997ea7fdf2bcf45",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "boundary_22_False_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_True.puml",
+    "source_sha256": "aef950fc0e4604bdbd39bf8182b128350b565acf514e24de34d9e2a59411f208",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "boundary_22_True_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_False.puml",
+    "source_sha256": "02a13ade144374236cbc4315d9405d74373af98a6cddf808f646a850b03119e9",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "boundary_22_True_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_True.puml",
+    "source_sha256": "a79715c0cc4ef2feed42a31283b3364f63d410c95e1655c73199bb5980b20b2a",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "label/stereotype",
+      "rank direction",
+      "line/fill style"
+    ]
+  },
+  {
+    "name": "actor_10_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_False.puml",
+    "source_sha256": "28badb61dc85af0b30c92fa1eba535d3016555eb4c0bc67f1ec77b75cdf5fece",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "shadow",
+      "multiline label",
+      "stroke"
+    ]
+  },
+  {
+    "name": "actor_10_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_True.puml",
+    "source_sha256": "b0b168d22ede5d882062c3818c42f3f75a39d219a2f728e1e2202ac695a9873c",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "shadow",
+      "multiline label",
+      "stroke"
+    ]
+  },
+  {
+    "name": "actor_22_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_False.puml",
+    "source_sha256": "bc9cd1cc9fc63f0c813559055d2a956be37134d05fb0e56d79c349b54761bb74",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "shadow",
+      "multiline label",
+      "stroke"
+    ]
+  },
+  {
+    "name": "actor_22_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_True.puml",
+    "source_sha256": "18e58b84f4ad608f18839b24d2ae65c663fa84cd26fa56388a6f7b07a0ee59b3",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "font size",
+      "shadow",
+      "multiline label",
+      "stroke"
+    ]
+  },
+  {
+    "name": "note_top_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_False.puml",
+    "source_sha256": "d53630529b30854f2545e09a124c1d79d456065f1b53914c2c33670509af2654",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  },
+  {
+    "name": "note_top_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_True.puml",
+    "source_sha256": "58864a7097a66cf735edeb2f99f1901a1eb2a712cdc9dab647b8d84a410dbf5f",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  },
+  {
+    "name": "note_right_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_False.puml",
+    "source_sha256": "9c10b3f61159e4495a54ad8ca4dce4a8a7b316877a49768f60e0f38ab525a8f3",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  },
+  {
+    "name": "note_right_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_True.puml",
+    "source_sha256": "6c5ac2fd5d96f94a9e3d36bcf9210eb5a758e81739eda092c50ea3b3e9cb460e",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  },
+  {
+    "name": "note_bottom_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_False.puml",
+    "source_sha256": "feff7685fe6fb6d5dc9b217daf6e6df8d4b29a362cc9d8dbc4caa68a1ad7c025",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  },
+  {
+    "name": "note_bottom_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_True.puml",
+    "source_sha256": "0cbd2e9ab9547fe1950068ecd36e72cb98a437eba41f632e63ba552b8f1b06f5",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  },
+  {
+    "name": "note_left_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_False.puml",
+    "source_sha256": "a21e7fece5e350eb39a0d10d15910181cd7e7e5c82dde935fa558c74ed22bc75",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  },
+  {
+    "name": "note_left_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_True.puml",
+    "source_sha256": "b3ca1cfb25ef24b42d9d7e2f30710e37b0b3b797952874748355379a605881d4",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "position",
+      "brace/end-note",
+      "leaf/group target",
+      "URL tooltip and target"
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "remote_argv_private_cwd_headless_timezone_checks": 20,
+  "reference_exit_zero_no_timeouts_empty_stderr": 20,
+  "preserved_source_reference_hash_pairs_unchanged": 1559,
+  "earlier_evidence_manifests_unchanged": [
+    "recovery4",
+    "recovery4-remote36"
+  ],
+  "local_jvm_guard_attempt_markers": 0
+}

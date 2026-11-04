@@ -1,0 +1,49 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: svglinktarget
+      value: _blank
+    source: |
+      @startuml
+      skinparam svgLinkTarget _blank
+      class Ledger
+      note bottom of Ledger $audit <<memo>> #LightYellow [[https://example.org/records?view=recent&sort=id{Open records}]] {
+      component is prose here
+      class remains prose too
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Ledger
+  - !Note 0
+  entities:
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - component is prose here
+    - class remains prose too
+    target: Ledger
+    position: Bottom
+    alias: null
+    stereotypes:
+    - memo
+    tags:
+    - audit
+    url: https://example.org/records?view=recent&sort=id
+    url_tooltip: Open records
+    color: '#LightYellow'
+    source_line: 4
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

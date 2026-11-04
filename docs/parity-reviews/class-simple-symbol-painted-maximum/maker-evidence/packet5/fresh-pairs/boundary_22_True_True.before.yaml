@@ -1,0 +1,99 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - boundary
+        property: fontsize
+        value: '22'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: linecolor
+        value: '#425566'
+        source_line: 3
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: linethickness
+        value: '2'
+        source_line: 3
+        epoch: 2
+        priority: 2
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: backgroundcolor
+        value: '#DDEEFF'
+        source_line: 3
+        epoch: 3
+        priority: 3
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      left to right direction
+      <style>
+      boundary {
+      FontSize 22
+      LineColor #425566
+      LineThickness 2
+      BackgroundColor #DDEEFF
+      }
+      </style>
+      class Anchor
+      boundary "Relay desk\nQueue records" as Gate <<perimeter>>
+      Anchor --> Gate
+      @enduml
+  direction: LeftToRight
+  uid_events:
+  - !Entity Anchor
+  - !Entity Gate
+  - !Relationship 0
+  entities:
+  - id: Anchor
+    label: Anchor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 11
+  - id: Gate
+    label: Relay desk\nQueue records
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - perimeter
+    source_line: 12
+  relationships:
+  - from: Anchor
+    to: Gate
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 13
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

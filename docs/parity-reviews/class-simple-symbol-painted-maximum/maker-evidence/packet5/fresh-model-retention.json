@@ -1,0 +1,202 @@
+[
+  {
+    "source": "actor_10_False.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "actor_10_True.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "actor_22_False.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "actor_22_True.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_10_False_False.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_10_False_True.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_10_True_False.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_10_True_True.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_22_False_False.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_22_False_True.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_22_True_False.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "boundary_22_True_True.puml",
+    "counts": {
+      "entities": 2,
+      "notes": 0,
+      "packages": 0,
+      "relationships": 1
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_bottom_False.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 1,
+      "relationships": 0
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_bottom_True.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 0,
+      "relationships": 0
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_left_False.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 0,
+      "relationships": 0
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_left_True.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 1,
+      "relationships": 0
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_right_False.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 0,
+      "relationships": 0
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_right_True.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 1,
+      "relationships": 0
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_top_False.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 1,
+      "relationships": 0
+    },
+    "model_retained": true
+  },
+  {
+    "source": "note_top_True.puml",
+    "counts": {
+      "entities": 1,
+      "notes": 1,
+      "packages": 0,
+      "relationships": 0
+    },
+    "model_retained": true
+  }
+]

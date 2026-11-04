@@ -1,0 +1,1623 @@
+{
+  "revision": "96a4bde220eddbc3faf135cad6d13f338b7d7ed5",
+  "before_binary_sha256": "8644f0d90cd68e15dc2d1975a62cf3deaf74fc3d4fafe97898379d308925dc7f",
+  "after_binary_sha256": "91279f8a2ff0a5125a57a12507cc4e6f1e269cb1256ef48622d0703558fd9db6",
+  "environment": {
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+  },
+  "reference_environment": {
+    "batch": "class20",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.OAeKKbU4",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "73030d7e7e58583614562a6a02b3d674bbab4e007886ed086ffa39efa9f4e586",
+    "generated_input_inventory_sha256": "443e910c6c096436b789c75cde41052c8295d586e84312cc780ab742a60796c7",
+    "timeout_seconds": 60,
+    "classification_performed": false
+  },
+  "counts": {
+    "before": {
+      "pass": 6,
+      "mismatch": 14
+    },
+    "after": {
+      "pass": 16,
+      "mismatch": 4
+    }
+  },
+  "results": [
+    {
+      "name": "boundary_10_False_False.puml",
+      "source_sha256": "881b68b7cb46e5ce992dd4da38086e1a4f7f3cedc253d2c0bdd422e776f7b914",
+      "reference_sha256": "a81b7ef30a56e47758ef9b1722e71fd2d45abc1a82be6dfe4959dc49a8a6017c",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "0aae0e0bd757fe7986963166560ee9d3312dbd3c00ef59b7ea8fcc4b9d092342"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "fd4e277d258feabf4bbf5c12cbe6c707c8405e48dad3cc759f17bb0c80732b50"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_False.before.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "0aae0e0bd757fe7986963166560ee9d3312dbd3c00ef59b7ea8fcc4b9d092342"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "fd4e277d258feabf4bbf5c12cbe6c707c8405e48dad3cc759f17bb0c80732b50"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "boundary_10_False_True.puml",
+      "source_sha256": "89e410c19aa98ff32b9c361c65c28875717d2f820541e39858e6a988a77818b6",
+      "reference_sha256": "7b6db438f700c27ca1d31c5a3aa90d5387323863ee4c2c7b2ab50cea5221e9f5",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "684704c3f50331b3a61335be7bff2ebebf097fa591928607d44c09ce1c45ede9"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "c2d3679b01dc74ba52a516467f052f385eaebd9f751871824726407c2580cf34"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_True.before.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "ae775d7321b853b4db749ad328597cc5732ea8c3d38def9518ea761711c50923"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "c2d3679b01dc74ba52a516467f052f385eaebd9f751871824726407c2580cf34"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_False_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "boundary_10_True_False.puml",
+      "source_sha256": "aa7bfb8bc415b84fda51f50576f3ca5723bb40c47aebd8a330ab9ddb0926fa32",
+      "reference_sha256": "e6e2d6ade8fa83160ab0f3377e3b4b60592100fac0ac76e17983bc2212a2c902",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "8954d95072dd3965a203de2a7c9cafe9931e05151575e224dea13692075e598d"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "bf7c0ec711fd0d9a616ad592b3e1bce2a364f45ba42b9591acdd416b0751e985"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_False.before.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "8954d95072dd3965a203de2a7c9cafe9931e05151575e224dea13692075e598d"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "bf7c0ec711fd0d9a616ad592b3e1bce2a364f45ba42b9591acdd416b0751e985"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "boundary_10_True_True.puml",
+      "source_sha256": "e0efbc9368f0dbf4b587779f09b2b03e0aedd606764d1f49ab129780fe40c61a",
+      "reference_sha256": "f6d576fd120b2491f89a6e6faf64caa027921d904568499d4966bf828a0d3ee7",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "907db84f770e30f00e89dc5f7f19240bcab3f0ae88c059480afb7c9e0478e90c"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "ff9dc1a01c99600cec29aa25fc683b92d1a6de7b6a5ccca7591a70907741f815"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_True.before.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "907db84f770e30f00e89dc5f7f19240bcab3f0ae88c059480afb7c9e0478e90c"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_10_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "ff9dc1a01c99600cec29aa25fc683b92d1a6de7b6a5ccca7591a70907741f815"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_10_True_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "boundary_22_False_False.puml",
+      "source_sha256": "a01d9b62eb1d2d82ede509ad6e8b68364fd73d35aa68fdaad997ea7fdf2bcf45",
+      "reference_sha256": "3fc595678e77a2caf800337e8b5a0271d40260f303ea2511c7e8f0155e1260a8",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "114121d3992590fb5dfbaeb2aea3ed955fe373864165018a53840b7cd7e49fc5"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "dc8ec7b9eb3c73d1526ecb21bc699fc0d1d05ed3a209ff51d94edcbe70a44d53"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_False.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"184px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:202px;height:184px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 202 184\"), (\"width\", \"202px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"187px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:202px;height:187px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 202 187\"), (\"width\", \"202px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "2a30deed4f603ce3cce3781d6c0e2cfd6e6dc07b3d623063e17c78fc638c0b57"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "dc8ec7b9eb3c73d1526ecb21bc699fc0d1d05ed3a209ff51d94edcbe70a44d53"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "boundary_22_False_True.puml",
+      "source_sha256": "aef950fc0e4604bdbd39bf8182b128350b565acf514e24de34d9e2a59411f208",
+      "reference_sha256": "a9e8439e3ee6fb360eadd5eec22c5d2c72aa64af2f77fca7f1930ef0e6b46cb7",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "bba63156ec0c5f56eed4ed71e045844b8044578a6d003122f54b205b74ceeb10"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "0d8ffb8117099e6fd4dfd0d5a3c56d03c060529b5d71aa95807b848ac42e6648"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_True.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"236px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:176px;height:236px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 176 236\"), (\"width\", \"176px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"239px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:176px;height:239px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 176 239\"), (\"width\", \"176px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5eff45e37a6a611e21a16c84b0b5deae3b46c09b22563bd5259c1a6d8ae20230"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_False_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "0d8ffb8117099e6fd4dfd0d5a3c56d03c060529b5d71aa95807b848ac42e6648"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_False_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "boundary_22_True_False.puml",
+      "source_sha256": "02a13ade144374236cbc4315d9405d74373af98a6cddf808f646a850b03119e9",
+      "reference_sha256": "bc48bf1604caa264405113253f7e4530a51d21f3dd0e2529eeb9d9f9e24bfaa3",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "eb7d9d360b2db31633a8152b5df696be1e4f86bb19cd879a856b3a75f0d44a99"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7bbfc8493ca3dfae6e141f994be175b889b50510d688e57c0ca3c081c751566b"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_False.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"71px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:344px;height:71px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 344 71\"), (\"width\", \"344px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"74px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:344px;height:74px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 344 74\"), (\"width\", \"344px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "545f6eaf6fb1a8198f435fec1bd8e721b90604e3457d70aab1499f946e02fab1"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7bbfc8493ca3dfae6e141f994be175b889b50510d688e57c0ca3c081c751566b"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "boundary_22_True_True.puml",
+      "source_sha256": "a79715c0cc4ef2feed42a31283b3364f63d410c95e1655c73199bb5980b20b2a",
+      "reference_sha256": "8aa733092c3280164486916660639fca050f9574143fcdd097cbd2629172aa0e",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "label/stereotype",
+        "rank direction",
+        "line/fill style"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "aee5ba7a6600f4ee3e10192999fda0a5b74681bb0a7adf9fbd8c51ef14b997df"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "2e1f59537a13e9e94ebfc2c24cc7ffe553532479378a3494fb314831a24b0435"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_True.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"130px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:318px;height:130px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 318 130\"), (\"width\", \"318px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"133px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:318px;height:133px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 318 133\"), (\"width\", \"318px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "e3adbdbe40631d7a7817b71a07f00055772575b4ff6bdc049cccfa58fd8e6a28"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/boundary_22_True_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "2e1f59537a13e9e94ebfc2c24cc7ffe553532479378a3494fb314831a24b0435"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/boundary_22_True_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "actor_10_False.puml",
+      "source_sha256": "28badb61dc85af0b30c92fa1eba535d3016555eb4c0bc67f1ec77b75cdf5fece",
+      "reference_sha256": "325ca07677eb17ee484e9fb94b4e2f5a11d6bb41ac45e6e927f53dadfe747360",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "shadow",
+        "multiline label",
+        "stroke"
+      ],
+      "before": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7cc8947aca1784ef7210316a7eeb69ac9fed5c51368a8cdfd6d64b1849f41595"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "8f992b9bd06d25c523dc735d05edfed42e7a7eef82ced0ced3378963f3e89d94"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_False.before.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7cc8947aca1784ef7210316a7eeb69ac9fed5c51368a8cdfd6d64b1849f41595"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "8f992b9bd06d25c523dc735d05edfed42e7a7eef82ced0ced3378963f3e89d94"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "actor_10_True.puml",
+      "source_sha256": "b0b168d22ede5d882062c3818c42f3f75a39d219a2f728e1e2202ac695a9873c",
+      "reference_sha256": "ba0bf8e475cf817d5054ea8917b160926b344cd42a330ada400790a71c612208",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "shadow",
+        "multiline label",
+        "stroke"
+      ],
+      "before": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "6ef2cd1ddf10d837509c3e2ecb5f2a9912952e48273960541bcf94146d83f086"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "b95e866da8d7664105ec22ec3a3e0b9cd83b6a86bf59864a47f7c1455217b992"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_True.before.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "6ef2cd1ddf10d837509c3e2ecb5f2a9912952e48273960541bcf94146d83f086"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_10_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "b95e866da8d7664105ec22ec3a3e0b9cd83b6a86bf59864a47f7c1455217b992"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_10_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "actor_22_False.puml",
+      "source_sha256": "bc9cd1cc9fc63f0c813559055d2a956be37134d05fb0e56d79c349b54761bb74",
+      "reference_sha256": "2acf946c1568dbe0e8bea8375dddace1a030bdcbae2c731f203266bdc5fdd956",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "shadow",
+        "multiline label",
+        "stroke"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7278b5996c0b7363640c9e85691b6a7316e55e3662276bd910f997bbf093019d"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "d498d1709a748ff957ec2864fa516a1fab31cf2a2a8ff47bb4944e3f6b5d6822"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_False.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"161px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:293px;height:161px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 293 161\"), (\"width\", \"293px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"164px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:293px;height:164px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 293 164\"), (\"width\", \"293px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "0ef63835819178c2e9222c4890d781f5094df85631dbdedf7d0826745d8c533b"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "d498d1709a748ff957ec2864fa516a1fab31cf2a2a8ff47bb4944e3f6b5d6822"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "actor_22_True.puml",
+      "source_sha256": "18e58b84f4ad608f18839b24d2ae65c663fa84cd26fa56388a6f7b07a0ee59b3",
+      "reference_sha256": "88a89f3e105717602acd2b2708314fd5cec6ff2b2313a515dde145f522eee8f0",
+      "reference_xml_error": null,
+      "axes": [
+        "font size",
+        "shadow",
+        "multiline label",
+        "stroke"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "e75a0a490ae1c39d4baba56365f3c6dc17c6af2ce1146d0f00c9b6e933098d14"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "8dab641cdb14d25d23f19cfccbc289462c230d73524fe17f622f7b9a34679eba"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_True.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"164px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:298px;height:164px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 298 164\"), (\"width\", \"298px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"167px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:298px;height:167px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 298 167\"), (\"width\", \"298px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "ee5609a632a20bdd4b80f78bfbd54c924ffbd3dbb1440d1916f54efab319dfac"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/actor_22_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "8dab641cdb14d25d23f19cfccbc289462c230d73524fe17f622f7b9a34679eba"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/actor_22_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_top_False.puml",
+      "source_sha256": "d53630529b30854f2545e09a124c1d79d456065f1b53914c2c33670509af2654",
+      "reference_sha256": "97797cc7356c6f2cd86d2900381a29d1c0fd88a7dd36be9c3eab466addb0f821",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7995da085f6cc1d3502ea25ea402ba1cfa6d6a5d4fdf64566d884fa9c8f1d717"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "150269f756b444f36c8ba6871a5bd90895a2b64bb4a6332a84fba5d6d4439ded"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_False.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M8.5,70.62 L106.3174,70.62 A3.75,3.75 0 0 1 108.8174,73.12 L115.8174,93.1083 L152.5,93.1083 A2.5,2.5 0 0 1 155,95.6083 L155,183.12 A2.5,2.5 0 0 1 152.5,185.62 L8.5,185.62 A2.5,2.5 0 0 1 6,183.12 L6,73.12 A2.5,2.5 0 0 1 8.5,70.62\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M8.5,70.6211 L106.3174,70.6211 A3.75,3.75 0 0 1 108.8174,73.1211 L115.8174,93.1094 L149.5,93.1094 A2.5,2.5 0 0 1 152,95.6094 L152,183.1211 A2.5,2.5 0 0 1 149.5,185.6211 L8.5,185.6211 A2.5,2.5 0 0 1 6,183.1211 L6,73.1211 A2.5,2.5 0 0 1 8.5,70.6211\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [14] tag mismatch: expected <g>, got <a>\n  [15] tag mismatch: expected <a>, got <g>\n  [16] <path> attr mismatch:\n    expected: [(\"d\", \"M55.93,6 L55.93,46.6211 L234.0726,46.6211 L234.0726,16 L224.0726,6 L55.93,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M54.93,6 L54.93,46.6211 L233.0725,46.6211 L233.0725,16 L223.0725,6 L54.93,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [17] <path> attr mismatch:\n    expected: [(\"d\", \"M224.0726,6 L224.0726,16 L234.0726,16 L224.0726,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"d\", \"M223.0725,6 L223.0725,16 L233.0725,16 L223.0725,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"61.93\"), (\"y\", \"23.5684\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"60.93\"), (\"y\", \"23.5684\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"61.93\"), (\"y\", \"38.8789\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"60.93\"), (\"y\", \"38.8789\")]\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M145,47.1 C145,50.73 145,54.7122 145,58.9172 C145,61.0197 145,63.1779 145,65.3756 C145,66.4745 145,67.5832 145,68.6999 C145,69.2582 145,92.3067 145,92.8687\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M144,47.11 C144,50.9237 144,55.1264 144,59.5679 C144,61.7886 144,64.069 144,66.3903 C144,67.551 144,68.7219 144,69.9007 C144,70.0481 144,92.6838 144,92.8314\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "2693ec3ba7b9d73f09508c92cd8c6b3ee5b0bc52d3c9fef80769178e476a6563"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "150269f756b444f36c8ba6871a5bd90895a2b64bb4a6332a84fba5d6d4439ded"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_False.after.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M8.5,70.62 L106.3174,70.62 A3.75,3.75 0 0 1 108.8174,73.12 L115.8174,93.1083 L152.5,93.1083 A2.5,2.5 0 0 1 155,95.6083 L155,183.12 A2.5,2.5 0 0 1 152.5,185.62 L8.5,185.62 A2.5,2.5 0 0 1 6,183.12 L6,73.12 A2.5,2.5 0 0 1 8.5,70.62\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M8.5,70.6211 L106.3174,70.6211 A3.75,3.75 0 0 1 108.8174,73.1211 L115.8174,93.1094 L149.5,93.1094 A2.5,2.5 0 0 1 152,95.6094 L152,183.1211 A2.5,2.5 0 0 1 149.5,185.6211 L8.5,185.6211 A2.5,2.5 0 0 1 6,183.1211 L6,73.1211 A2.5,2.5 0 0 1 8.5,70.6211\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [16] <path> attr mismatch:\n    expected: [(\"d\", \"M55.93,6 L55.93,46.6211 L234.0726,46.6211 L234.0726,16 L224.0726,6 L55.93,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M54.93,6 L54.93,46.6211 L233.0725,46.6211 L233.0725,16 L223.0725,6 L54.93,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [17] <path> attr mismatch:\n    expected: [(\"d\", \"M224.0726,6 L224.0726,16 L234.0726,16 L224.0726,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"d\", \"M223.0725,6 L223.0725,16 L233.0725,16 L223.0725,6\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"61.93\"), (\"y\", \"23.5684\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"60.93\"), (\"y\", \"23.5684\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"61.93\"), (\"y\", \"38.8789\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"60.93\"), (\"y\", \"38.8789\")]\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M145,47.1 C145,50.73 145,54.7122 145,58.9172 C145,61.0197 145,63.1779 145,65.3756 C145,66.4745 145,67.5832 145,68.6999 C145,69.2582 145,92.3067 145,92.8687\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M144,47.11 C144,50.9237 144,55.1264 144,59.5679 C144,61.7886 144,64.069 144,66.3903 C144,67.551 144,68.7219 144,69.9007 C144,70.0481 144,92.6838 144,92.8314\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_top_True.puml",
+      "source_sha256": "58864a7097a66cf735edeb2f99f1901a1eb2a712cdc9dab647b8d84a410dbf5f",
+      "reference_sha256": "063ec404bc0c9258761e443cd96165375dc1dacca34bd1b6b6961b2c2508e404",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "e4eb9e2aaa6054c83d3cc14c73b903a3e7e279828d35f92e8dd064ca98b1c4bd"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5a0f8b8e560698aaf4f322f009e1a5501eb81338971ea6d7e57d437bc79278a5"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_True.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [10] tag mismatch: expected <g>, got <a>\n  [11] tag mismatch: expected <a>, got <g>\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "423ced399d84fad73c6e85268464e063ec08f653c989e15d40addec5af71fd9e"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_top_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5a0f8b8e560698aaf4f322f009e1a5501eb81338971ea6d7e57d437bc79278a5"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_top_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_right_False.puml",
+      "source_sha256": "9c10b3f61159e4495a54ad8ca4dce4a8a7b316877a49768f60e0f38ab525a8f3",
+      "reference_sha256": "810c6ed553775ea0bf1b388bf0384ec028282483a3718a0afc01b013f5a3be79",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "296db261dc9a88d88dadccb12dea96f93fade7334f6772559cadaae39b7f6049"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "22001089f88e8d63b2d8fb1b4713f328233dd910ce195c928e12e47baf21ef54"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_False.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [10] tag mismatch: expected <g>, got <a>\n  [11] tag mismatch: expected <a>, got <g>\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "1088c355c388950097f38f4df7e4510cddfb455279b5962c44a5027a547045e8"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "22001089f88e8d63b2d8fb1b4713f328233dd910ce195c928e12e47baf21ef54"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_right_True.puml",
+      "source_sha256": "6c5ac2fd5d96f94a9e3d36bcf9210eb5a758e81739eda092c50ea3b3e9cb460e",
+      "reference_sha256": "ab51debbd36b1cba6dcf8c0f3b70c285a4570d95f8edea329cfbf76759996070",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "be4a88bc87561fbad406041e90c57ca4a18b808f32472492bca800ae3049463d"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "62ad1773a16b64959979dd21ec72d2fe91fbefede4abf8a81fa01079860e1e85"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_True.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"136px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:375px;height:136px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 375 136\"), (\"width\", \"375px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"136px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:372px;height:136px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 372 136\"), (\"width\", \"372px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L152.5,28.4883 A2.5,2.5 0 0 1 155,30.9883 L155,118.5 A2.5,2.5 0 0 1 152.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L149.5,28.4883 A2.5,2.5 0 0 1 152,30.9883 L152,118.5 A2.5,2.5 0 0 1 149.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [14] tag mismatch: expected <g>, got <a>\n  [15] tag mismatch: expected <a>, got <g>\n  [16] <path> attr mismatch:\n    expected: [(\"d\", \"M181.93,52.69 L181.93,93.3111 L360.0726,93.3111 L360.0726,62.69 L350.0726,52.69 L181.93,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M178.93,52.69 L178.93,93.3111 L357.0725,93.3111 L357.0725,62.69 L347.0725,52.69 L178.93,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [17] <path> attr mismatch:\n    expected: [(\"d\", \"M350.0726,52.69 L350.0726,62.69 L360.0726,62.69 L350.0726,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"d\", \"M347.0725,52.69 L347.0725,62.69 L357.0725,62.69 L347.0725,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"187.93\"), (\"y\", \"70.2584\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"184.93\"), (\"y\", \"70.2584\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"187.93\"), (\"y\", \"85.5689\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"184.93\"), (\"y\", \"85.5689\")]\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M155.0097,73 C155.0551,73 155.1005,73 155.146,73 C155.3276,73 155.5093,73 155.6909,73 C158.5975,73 161.5038,73 164.41,73 C170.2225,73 176.035,73 181.85,73\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M152.1082,73 C152.1528,73 152.1974,73 152.242,73 C152.3313,73 152.4205,73 152.5097,73 C152.6881,73 152.8666,73 153.045,73 C155.9,73 158.755,73 161.61,73 C167.32,73 173.03,73 178.74,73\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "bd4f1dc4402cbbb7bb4ae6e6c39bd79303fdf615c77fcd3257ed0f495b581c42"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_right_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "62ad1773a16b64959979dd21ec72d2fe91fbefede4abf8a81fa01079860e1e85"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_right_True.after.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"136px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:375px;height:136px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 375 136\"), (\"width\", \"375px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"136px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:372px;height:136px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 372 136\"), (\"width\", \"372px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L152.5,28.4883 A2.5,2.5 0 0 1 155,30.9883 L155,118.5 A2.5,2.5 0 0 1 152.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L149.5,28.4883 A2.5,2.5 0 0 1 152,30.9883 L152,118.5 A2.5,2.5 0 0 1 149.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [16] <path> attr mismatch:\n    expected: [(\"d\", \"M181.93,52.69 L181.93,93.3111 L360.0726,93.3111 L360.0726,62.69 L350.0726,52.69 L181.93,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M178.93,52.69 L178.93,93.3111 L357.0725,93.3111 L357.0725,62.69 L347.0725,52.69 L178.93,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [17] <path> attr mismatch:\n    expected: [(\"d\", \"M350.0726,52.69 L350.0726,62.69 L360.0726,62.69 L350.0726,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"d\", \"M347.0725,52.69 L347.0725,62.69 L357.0725,62.69 L347.0725,52.69\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"187.93\"), (\"y\", \"70.2584\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"184.93\"), (\"y\", \"70.2584\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"187.93\"), (\"y\", \"85.5689\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"184.93\"), (\"y\", \"85.5689\")]\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M155.0097,73 C155.0551,73 155.1005,73 155.146,73 C155.3276,73 155.5093,73 155.6909,73 C158.5975,73 161.5038,73 164.41,73 C170.2225,73 176.035,73 181.85,73\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M152.1082,73 C152.1528,73 152.1974,73 152.242,73 C152.3313,73 152.4205,73 152.5097,73 C152.6881,73 152.8666,73 153.045,73 C155.9,73 158.755,73 161.61,73 C167.32,73 173.03,73 178.74,73\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_bottom_False.puml",
+      "source_sha256": "feff7685fe6fb6d5dc9b217daf6e6df8d4b29a362cc9d8dbc4caa68a1ad7c025",
+      "reference_sha256": "2d349d37ee02b732f5ff8490b7b3db96d9f32cc204fdff4d5d4721eed5e97658",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "42cc56290a2b1abdee750b1de61ccf5218f734b861eed7357cb9273f450955b4"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5219ddb0404285b408f28cedd6230c267ee1035ead1d9e2e79d8f3d3caeeb4a3"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_False.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L152.5,28.4883 A2.5,2.5 0 0 1 155,30.9883 L155,118.5 A2.5,2.5 0 0 1 152.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L149.5,28.4883 A2.5,2.5 0 0 1 152,30.9883 L152,118.5 A2.5,2.5 0 0 1 149.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [14] tag mismatch: expected <g>, got <a>\n  [15] tag mismatch: expected <a>, got <g>\n  [16] <path> attr mismatch:\n    expected: [(\"d\", \"M55.93,157 L55.93,197.6211 L234.0726,197.6211 L234.0726,167 L224.0726,157 L55.93,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M54.93,157 L54.93,197.6211 L233.0725,197.6211 L233.0725,167 L223.0725,157 L54.93,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [17] <path> attr mismatch:\n    expected: [(\"d\", \"M224.0726,157 L224.0726,167 L234.0726,167 L224.0726,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"d\", \"M223.0725,157 L223.0725,167 L233.0725,167 L223.0725,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"61.93\"), (\"y\", \"174.5684\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"60.93\"), (\"y\", \"174.5684\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"61.93\"), (\"y\", \"189.8789\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"60.93\"), (\"y\", \"189.8789\")]\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M145,121.2418 C145,125.4461 145,129.6859 145,133.8469 C145,142.1688 145,150.175 145,156.95\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M144,121.2696 C144,121.4099 144,121.5501 144,121.6905 C144,122.813 144,123.9378 144,125.0627 C144,127.3124 144,129.5624 144,131.7952 C144,140.7262 144,149.3825 144,156.65\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "e344240c2e29f9b671a1cc892e0a360920f9302fe7aedc30b498d80a9b55a3a3"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5219ddb0404285b408f28cedd6230c267ee1035ead1d9e2e79d8f3d3caeeb4a3"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_False.after.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L152.5,28.4883 A2.5,2.5 0 0 1 155,30.9883 L155,118.5 A2.5,2.5 0 0 1 152.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L149.5,28.4883 A2.5,2.5 0 0 1 152,30.9883 L152,118.5 A2.5,2.5 0 0 1 149.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [16] <path> attr mismatch:\n    expected: [(\"d\", \"M55.93,157 L55.93,197.6211 L234.0726,197.6211 L234.0726,167 L224.0726,157 L55.93,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M54.93,157 L54.93,197.6211 L233.0725,197.6211 L233.0725,167 L223.0725,157 L54.93,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [17] <path> attr mismatch:\n    expected: [(\"d\", \"M224.0726,157 L224.0726,167 L234.0726,167 L224.0726,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"d\", \"M223.0725,157 L223.0725,167 L233.0725,167 L223.0725,157\"), (\"fill\", \"#FFFFE0\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"61.93\"), (\"y\", \"174.5684\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"157.1426\"), (\"x\", \"60.93\"), (\"y\", \"174.5684\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"61.93\"), (\"y\", \"189.8789\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"149.7095\"), (\"x\", \"60.93\"), (\"y\", \"189.8789\")]\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M145,121.2418 C145,125.4461 145,129.6859 145,133.8469 C145,142.1688 145,150.175 145,156.95\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M144,121.2696 C144,121.4099 144,121.5501 144,121.6905 C144,122.813 144,123.9378 144,125.0627 C144,127.3124 144,129.5624 144,131.7952 C144,140.7262 144,149.3825 144,156.65\"), (\"fill\", \"none\"), (\"id\", \"Room-GMN4\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_bottom_True.puml",
+      "source_sha256": "0cbd2e9ab9547fe1950068ecd36e72cb98a437eba41f632e63ba552b8f1b06f5",
+      "reference_sha256": "8425128e99da79516e647ee94582cf80142ab9874489203426dedf17301ae509",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5229faae7d48447b52b46922808fc274bee398f3600c07ec9632be35f9f885d2"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5e8d3365923d8efa16e382cd72df0b9ae1d5f63e26ac26bb900ac8ece1bccf17"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_True.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [10] tag mismatch: expected <g>, got <a>\n  [11] tag mismatch: expected <a>, got <g>\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "f684489ff0b60a8c429af523c6727f395218b170f4d25bdec9f313232dbae2be"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_bottom_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "5e8d3365923d8efa16e382cd72df0b9ae1d5f63e26ac26bb900ac8ece1bccf17"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_bottom_True.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_left_False.puml",
+      "source_sha256": "a21e7fece5e350eb39a0d10d15910181cd7e7e5c82dde935fa558c74ed22bc75",
+      "reference_sha256": "2e3ba08c0ae61b8e053dcda5910c17bb8333215aa547914bdbab4c71c73ab831",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "621f572ebf10c03a636b8aeb99e5e814ce0cd27a509a0915b19115a8166451ec"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "47b4ccbf11bffe97d0ba52210c4394b792fac1d0109a1179b38801be2ad09fb7"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_False.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [10] tag mismatch: expected <g>, got <a>\n  [11] tag mismatch: expected <a>, got <g>\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "pass",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "20cba873a85fd034f7331c3a431d9ec3f96472f406161ccab937660cf32bbf4c"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_False.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "47b4ccbf11bffe97d0ba52210c4394b792fac1d0109a1179b38801be2ad09fb7"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_False.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_False.after.svg"
+        ],
+        "comparison_exit": 0,
+        "comparison_stdout": "SVGs are structurally equivalent\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    },
+    {
+      "name": "note_left_True.puml",
+      "source_sha256": "b3ca1cfb25ef24b42d9d7e2f30710e37b0b3b797952874748355379a605881d4",
+      "reference_sha256": "a6eb6c57ca967685e71d18ca7e2f99542da3a34660254399da377d711c9f35f0",
+      "reference_xml_error": null,
+      "axes": [
+        "position",
+        "brace/end-note",
+        "leaf/group target",
+        "URL tooltip and target"
+      ],
+      "before": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "3c0a13145250cb2677438155fc022d2d8b08fd11dd54b219caa1a24e328e9e0b"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff4/corrected-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7654c90bf64b3badab47cccd8d98b6f961651423beffe991cc7d0ca8e972c1c1"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_True.before.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"223px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:372px;height:223px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 372 223\"), (\"width\", \"372px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"223px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:369px;height:223px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 369 223\"), (\"width\", \"369px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M210.57,93.57 L308.3874,93.57 A3.75,3.75 0 0 1 310.8874,96.07 L317.8874,116.0583 L354.57,116.0583 A2.5,2.5 0 0 1 357.07,118.5583 L357.07,206.07 A2.5,2.5 0 0 1 354.57,208.57 L210.57,208.57 A2.5,2.5 0 0 1 208.07,206.07 L208.07,96.07 A2.5,2.5 0 0 1 210.57,93.57\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M210.5713,93.57 L308.3887,93.57 A3.75,3.75 0 0 1 310.8887,96.07 L317.8887,116.0583 L351.5713,116.0583 A2.5,2.5 0 0 1 354.0713,118.5583 L354.0713,206.07 A2.5,2.5 0 0 1 351.5713,208.57 L210.5713,208.57 A2.5,2.5 0 0 1 208.0713,206.07 L208.0713,96.07 A2.5,2.5 0 0 1 210.5713,93.57\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [14] tag mismatch: expected <g>, got <a>\n  [15] tag mismatch: expected <a>, got <g>\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M111.35,140.08 C147.33,97.34 236.2,6 308.57,47.57 C318.995,53.5575 326.6725,62.6325 332.3123,73.0886 C335.1323,78.3166 337.4428,83.89 339.3326,89.5953 C339.5688,90.3084 339.7985,91.0236 340.0217,91.7405 C340.1334,92.0989 340.2434,92.4578 340.3518,92.817 C340.4061,92.9966 340.4599,115.6646 340.5133,115.8443\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M111.35,140.08 C147.33,97.34 236.2,6 308.57,47.57 C319.505,53.85 327.3581,63.5531 332.9772,74.6914 C335.7867,80.2605 338.0377,86.1885 339.8362,92.2267 C339.9486,92.6041 340.0593,115.4702 340.1681,115.8484\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "after": {
+        "status": "mismatch",
+        "runs": [
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "-tsvg",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "daae9f6177544e7867cb9778abc368360c09039c70bc129767cc21bbd946a234"
+          },
+          {
+            "command": [
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/final-rustuml",
+              "--yaml",
+              "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-sources/note_left_True.puml"
+            ],
+            "exit": 0,
+            "stderr": "",
+            "stdout_sha256": "7654c90bf64b3badab47cccd8d98b6f961651423beffe991cc7d0ca8e972c1c1"
+          }
+        ],
+        "comparison_command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_True.svg",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff5/fresh-pairs/note_left_True.after.svg"
+        ],
+        "comparison_exit": 1,
+        "comparison_stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"223px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:372px;height:223px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 372 223\"), (\"width\", \"372px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"223px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:369px;height:223px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 369 223\"), (\"width\", \"369px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <path> attr mismatch:\n    expected: [(\"d\", \"M210.57,93.57 L308.3874,93.57 A3.75,3.75 0 0 1 310.8874,96.07 L317.8874,116.0583 L354.57,116.0583 A2.5,2.5 0 0 1 357.07,118.5583 L357.07,206.07 A2.5,2.5 0 0 1 354.57,208.57 L210.57,208.57 A2.5,2.5 0 0 1 208.07,206.07 L208.07,96.07 A2.5,2.5 0 0 1 210.57,93.57\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n    actual:   [(\"d\", \"M210.5713,93.57 L308.3887,93.57 A3.75,3.75 0 0 1 310.8887,96.07 L317.8887,116.0583 L351.5713,116.0583 A2.5,2.5 0 0 1 354.0713,118.5583 L354.0713,206.07 A2.5,2.5 0 0 1 351.5713,208.57 L210.5713,208.57 A2.5,2.5 0 0 1 208.0713,206.07 L208.0713,96.07 A2.5,2.5 0 0 1 210.5713,93.57\"), (\"fill\", \"none\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\")]\n  [21] <path> attr mismatch:\n    expected: [(\"d\", \"M111.35,140.08 C147.33,97.34 236.2,6 308.57,47.57 C318.995,53.5575 326.6725,62.6325 332.3123,73.0886 C335.1323,78.3166 337.4428,83.89 339.3326,89.5953 C339.5688,90.3084 339.7985,91.0236 340.0217,91.7405 C340.1334,92.0989 340.2434,92.4578 340.3518,92.817 C340.4061,92.9966 340.4599,115.6646 340.5133,115.8443\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n    actual:   [(\"d\", \"M111.35,140.08 C147.33,97.34 236.2,6 308.57,47.57 C319.505,53.85 327.3581,63.5531 332.9772,74.6914 C335.7867,80.2605 338.0377,86.1885 339.8362,92.2267 C339.9486,92.6041 340.0593,115.4702 340.1681,115.8484\"), (\"fill\", \"none\"), (\"id\", \"GMN4-Room\"), (\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\")]\n\n",
+        "comparison_stderr": ""
+      },
+      "model_bytes_unchanged": true
+    }
+  ]
+}

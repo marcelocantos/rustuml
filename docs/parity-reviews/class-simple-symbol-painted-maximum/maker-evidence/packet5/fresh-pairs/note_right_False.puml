@@ -1,0 +1,8 @@
+@startuml
+skinparam svgLinkTarget _blank
+class Ledger
+note right of Ledger $audit <<memo>> #LightYellow [[https://example.org/records?view=recent&sort=id{Open records}]]
+component is prose here
+class remains prose too
+end note
+@enduml

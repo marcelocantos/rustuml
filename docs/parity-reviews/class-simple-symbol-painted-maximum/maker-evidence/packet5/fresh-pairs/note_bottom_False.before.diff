@@ -1,0 +1,22 @@
+SVG structural differences:
+  [4] <path> attr mismatch:
+    expected: [("d", "M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L152.5,28.4883 A2.5,2.5 0 0 1 155,30.9883 L155,118.5 A2.5,2.5 0 0 1 152.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,6 L106.3174,6 A3.75,3.75 0 0 1 108.8174,8.5 L115.8174,28.4883 L149.5,28.4883 A2.5,2.5 0 0 1 152,30.9883 L152,118.5 A2.5,2.5 0 0 1 149.5,121 L8.5,121 A2.5,2.5 0 0 1 6,118.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [14] tag mismatch: expected <g>, got <a>
+  [15] tag mismatch: expected <a>, got <g>
+  [16] <path> attr mismatch:
+    expected: [("d", "M55.93,157 L55.93,197.6211 L234.0726,197.6211 L234.0726,167 L224.0726,157 L55.93,157"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M54.93,157 L54.93,197.6211 L233.0725,197.6211 L233.0725,167 L223.0725,157 L54.93,157"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [17] <path> attr mismatch:
+    expected: [("d", "M224.0726,157 L224.0726,167 L234.0726,167 L224.0726,157"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M223.0725,157 L223.0725,167 L233.0725,167 L223.0725,157"), ("fill", "#FFFFE0"), ("style", "stroke:#181818;stroke-width:1;")]
+  [18] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "157.1426"), ("x", "61.93"), ("y", "174.5684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "157.1426"), ("x", "60.93"), ("y", "174.5684")]
+  [19] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "149.7095"), ("x", "61.93"), ("y", "189.8789")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "149.7095"), ("x", "60.93"), ("y", "189.8789")]
+  [21] <path> attr mismatch:
+    expected: [("d", "M145,121.2418 C145,125.4461 145,129.6859 145,133.8469 C145,142.1688 145,150.175 145,156.95"), ("fill", "none"), ("id", "Room-GMN4"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+    actual:   [("d", "M144,121.2696 C144,121.4099 144,121.5501 144,121.6905 C144,122.813 144,123.9378 144,125.0627 C144,127.3124 144,129.5624 144,131.7952 C144,140.7262 144,149.3825 144,156.65"), ("fill", "none"), ("id", "Room-GMN4"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+

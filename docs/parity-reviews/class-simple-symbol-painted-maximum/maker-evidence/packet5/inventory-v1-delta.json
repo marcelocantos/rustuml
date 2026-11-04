@@ -1,0 +1,17 @@
+{
+  "status_changes": [],
+  "ast_changes": [],
+  "identical_ast_captures": 1559,
+  "before_counts": {
+    "mismatch": 534,
+    "pass": 930,
+    "invalid_reference": 35,
+    "process_error": 60
+  },
+  "after_counts": {
+    "mismatch": 534,
+    "pass": 930,
+    "invalid_reference": 35,
+    "process_error": 60
+  }
+}

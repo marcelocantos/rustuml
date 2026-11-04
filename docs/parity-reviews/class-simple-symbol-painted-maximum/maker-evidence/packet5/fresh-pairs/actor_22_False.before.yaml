@@ -1,0 +1,92 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: shadowing
+      value: 'false'
+    style_program:
+      declarations:
+      - selector:
+        - root
+        property: shadowing
+        value: '0'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+      - selector:
+        - actor
+        property: fontsize
+        value: '22'
+        source_line: 4
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        property: linethickness
+        value: '2'
+        source_line: 4
+        epoch: 2
+        priority: 2
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      left to right direction
+      skinparam shadowing false
+      <style>
+      actor {
+      FontSize 22
+      LineThickness 2
+      }
+      </style>
+      class Cabinet
+      actor "Duty officer\nRegistration" as Clerk <<custodian>>
+      Clerk --> Cabinet
+      @enduml
+  direction: LeftToRight
+  uid_events:
+  - !Entity Cabinet
+  - !Entity Clerk
+  - !Relationship 0
+  entities:
+  - id: Cabinet
+    label: Cabinet
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 10
+  - id: Clerk
+    label: Duty officer\nRegistration
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - custodian
+    source_line: 11
+  relationships:
+  - from: Clerk
+    to: Cabinet
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 12
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

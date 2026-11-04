@@ -1,0 +1,10 @@
+@startuml
+skinparam svgLinkTarget _blank
+package "Archive room" as Room {
+class Ledger
+}
+note left of Room $audit <<memo>> #LightYellow [[https://example.org/records?view=recent&sort=id{Open records}]] {
+component is prose here
+class remains prose too
+}
+@enduml

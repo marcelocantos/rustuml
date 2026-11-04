@@ -1,0 +1,34 @@
+{
+  "kind": "maker measurements; no acceptance attestation",
+  "base_commit": "c1a38ada817d820ca8f57b1e8db0d9048e9657eb",
+  "accounts": {
+    "painted_maximum": "3790f114c79f2d19fdf91e46b84f1f79d85f6677",
+    "note_url_group": "41d9a803623d00f1263eaaaa08ac56ab51a5eac0"
+  },
+  "production_commit": "96a4bde220eddbc3faf135cad6d13f338b7d7ed5",
+  "production_files": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "source_sha256": "8a66398678ea27457ed107600386502cfb933abebe67c91d7d421dc7cabec36f",
+  "parser_changes": false,
+  "native_changes_or_fault_injection_or_review": false,
+  "local_java_or_ssh_launches": 0,
+  "reference_input_gzip_sha256": "73030d7e7e58583614562a6a02b3d674bbab4e007886ed086ffa39efa9f4e586",
+  "reference_output_gzip_sha256": "8ce0ccae44313a8209408f46baa615f0482c719209bfe368e2c4d8ef7344fc56",
+  "comparator_binary_sha256": "0e368102f36bfbc59efe141286df5935b785535db6c0cf537bdbadc9350f21cd",
+  "comparator_source_sha256": "523e1750b056f05293b101b59ae9bb4a2aac8ffbe670eabf7cc6a13bbfaba033",
+  "cache": "/Users/marcelo/Library/Caches/rustuml-class-cff5",
+  "cargo_target": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+  "cargo_jobs": 4,
+  "binary_provenance": "Preserved1559 and36 replay used v1 executable built after all production edits, before adding the two cfg(test) tests. Only test additions and the test attribute lookup changed afterward. Final gates ran at96a4bde; final rebuild has a different binary SHA and was used for fresh20. Both hashes retained, not asserted byte-identical. Broad gates not repeated after reference arrival because production stayed unchanged.",
+  "instrument_failures": [
+    {
+      "file": "focused-bounds.log",
+      "failure": "New test searched y= without a separating space and matched font-family; ParseFloatError. Corrected test lookup to space+y; production unchanged. focused-bounds-v2.log passes."
+    },
+    {
+      "directory": "fresh-pairs-permission-failure",
+      "failure": "First fresh replay stopped before launching final binary because copying it omitted execute permission. Preserve completed first baseline capture; chmod restored permission, then replay completed. No product failure or reference change."
+    }
+  ]
+}

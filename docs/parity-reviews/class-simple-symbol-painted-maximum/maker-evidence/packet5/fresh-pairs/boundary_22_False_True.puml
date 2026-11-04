@@ -1,0 +1,15 @@
+@startuml
+allowmixing
+top to bottom direction
+<style>
+boundary {
+FontSize 22
+LineColor #425566
+LineThickness 2
+BackgroundColor #DDEEFF
+}
+</style>
+class Anchor
+boundary "Relay desk\nQueue records" as Gate <<perimeter>>
+Anchor --> Gate
+@enduml
