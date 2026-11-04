@@ -492,8 +492,8 @@ fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
 // patterns. A declaration owns its body until that command's terminator.
 #[derive(Clone, Copy)]
 enum SpriteBlockKind {
-    Pixel { output_start: usize },
-    Svg { output_start: usize },
+    Pixel { pending_lines: usize },
+    Svg { pending_lines: usize },
 }
 
 struct PreprocessContext {
@@ -804,17 +804,31 @@ impl PreprocessContext {
             // StringUtils#trin, as used by Trim.BOTH; do not broaden the end
             // condition to Unicode trimming or a substring search.
             let body = line.trim_matches([' ', '\t', '\r', '\n', '\0']);
-            let (ended, output_start) = match kind {
-                SpriteBlockKind::Pixel { output_start } => (PIXEL_END.is_match(body), output_start),
-                SpriteBlockKind::Svg { output_start } => (SVG_END.is_match(body), output_start),
+            let (ended, pending_lines) = match kind {
+                SpriteBlockKind::Pixel { pending_lines } => {
+                    (PIXEL_END.is_match(body), pending_lines)
+                }
+                SpriteBlockKind::Svg { pending_lines } => (SVG_END.is_match(body), pending_lines),
             };
             if ended {
                 self.in_sprite_block = None;
                 self.current_sprite_name = None;
                 // CommandMultilines2#isValid is OK only after END. Until then,
                 // retain the incomplete command for downstream syntax admission.
-                for pending in &mut output[output_start..] {
-                    pending.clear();
+                // Include expansion can append a child output Vec to its caller.
+                // The command owns the pending suffix, not an absolute Vec index.
+                if let Some(start) = output.len().checked_sub(pending_lines) {
+                    for pending in &mut output[start..] {
+                        pending.clear();
+                    }
+                } else {
+                    // A caller that discarded pending output cannot complete the
+                    // command here; preserve the terminator and report the residue.
+                    eprintln!(
+                        "warning: sprite completion lost its pending source span; command remains unsupported"
+                    );
+                    output.push(line.to_owned());
+                    return;
                 }
             } else if let SpriteBlockKind::Pixel { .. } = kind
                 && let Some(name) = self.current_sprite_name.as_ref()
@@ -824,6 +838,16 @@ impl PreprocessContext {
             {
                 sprite.rows.push(trimmed.to_string());
                 sprite.height = sprite.rows.len() as u32;
+            }
+            if !ended {
+                self.in_sprite_block = Some(match kind {
+                    SpriteBlockKind::Pixel { .. } => SpriteBlockKind::Pixel {
+                        pending_lines: pending_lines + 1,
+                    },
+                    SpriteBlockKind::Svg { .. } => SpriteBlockKind::Svg {
+                        pending_lines: pending_lines + 1,
+                    },
+                });
             }
             // Completed commands keep one placeholder per owned source line.
             // Incomplete commands keep their source; they are not silent blanks.
@@ -950,9 +974,7 @@ impl PreprocessContext {
                 },
             );
             self.current_sprite_name = Some(name);
-            self.in_sprite_block = Some(SpriteBlockKind::Pixel {
-                output_start: output.len(),
-            });
+            self.in_sprite_block = Some(SpriteBlockKind::Pixel { pending_lines: 1 });
             output.push(line_no_comment.clone());
             return;
         }
@@ -960,9 +982,7 @@ impl PreprocessContext {
             // CommandSpriteSvg precedes CommandSpriteSvgMultiline: a complete
             // inline SVG never opens a body that could consume later commands.
             if !caps[2].to_ascii_lowercase().ends_with("</svg>") {
-                self.in_sprite_block = Some(SpriteBlockKind::Svg {
-                    output_start: output.len(),
-                });
+                self.in_sprite_block = Some(SpriteBlockKind::Svg { pending_lines: 1 });
             }
             eprintln!(
                 "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"

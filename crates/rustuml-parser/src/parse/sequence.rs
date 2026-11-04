@@ -2983,6 +2983,43 @@ mod tests {
     }
 
     #[test]
+    fn sprite_completion_keeps_commands_before_an_included_opening() {
+        let nonce = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let directory = std::env::temp_dir().join(format!(
+            "rustuml-sprite-span-{}-{nonce}",
+            std::process::id()
+        ));
+        std::fs::create_dir(&directory).unwrap();
+        for (header, body, end) in [
+            (
+                "sprite $s <svg width=\"2\" height=\"2\">",
+                "<rect width=\"2\" height=\"2\"/>",
+                "</svg>",
+            ),
+            ("sprite $s [2x2/16] {", "FF", "}"),
+        ] {
+            std::fs::write(
+                directory.join("opening.puml"),
+                format!("{header}\n{body}\n"),
+            )
+            .unwrap();
+            let input = format!(
+                "@startuml\nparticipant North\nparticipant South\n!include opening.puml\n{end}\nNorth -> South: retained\n@enduml"
+            );
+            let pre = crate::preprocess::preprocess_full(&input, Some(directory.clone()));
+            let diagram = parse_sequence(&pre.lines).unwrap();
+            assert_eq!(diagram.participants.len(), 2);
+            assert!(pre.lines.iter().any(|line| line == "participant North"));
+            assert!(pre.lines.iter().any(|line| line == "participant South"));
+            assert_eq!(diagram.events.len(), 1);
+        }
+        std::fs::remove_dir_all(directory).unwrap();
+    }
+
+    #[test]
     fn incomplete_sprite_blocks_remain_syntax_errors() {
         for header in [
             "sprite $mark <svg width=\"2\" height=\"2\">",
