@@ -6814,6 +6814,32 @@ fn render_participant_shape(
     svg.participant_font_size = outer_font_size;
 }
 
+/// CommunicationTileSelfNoteLeft/Right#getComponent deliberately selects NOTE,
+/// independent of NoteStyle. Materialize that component choice before any size,
+/// constraints, scheduling or paint; leave the source model untouched.
+fn teoz_self_note_components(events: &[Event]) -> Option<Vec<Event>> {
+    let mut normalized: Option<Vec<Event>> = None;
+    let mut self_message = false;
+    for (index, event) in events.iter().enumerate() {
+        match event {
+            Event::Message(message) => self_message = message.from == message.to,
+            Event::Note(note)
+                if self_message
+                    && note.on_message
+                    && matches!(note.position, NotePosition::Left | NotePosition::Right)
+                    && note.shape != NoteShape::Note =>
+            {
+                let events = normalized.get_or_insert_with(|| events.to_vec());
+                if let Event::Note(note) = &mut events[index] {
+                    note.shape = NoteShape::Note;
+                }
+            }
+            _ => {}
+        }
+    }
+    normalized
+}
+
 /// Render a sequence diagram with an optional oracle layout.
 ///
 /// When the oracle's `root_g_inner_xml` is populated, the renderer replays
@@ -6845,6 +6871,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .iter()
         .any(|event| matches!(event, Event::Return(_)))
         && let Ok(events) = resolve_sequence_returns(&diagram.events)
+    {
+        let normalized = SequenceDiagram {
+            events,
+            ..diagram.clone()
+        };
+        return render(&normalized, _theme, oracle);
+    }
+    // Teoz selects a folded component for self-note tiles; legacy retains the
+    // requested shape. Return commands have already become messages above.
+    if diagram.teoz
+        && let Some(events) = teoz_self_note_components(&diagram.events)
     {
         let normalized = SequenceDiagram {
             events,
@@ -16948,6 +16985,34 @@ mod tests {
                 assert!(!render(&hidden, &Theme::default(), None).contains("«tag»"));
             }
         }
+    }
+
+    #[test]
+    fn teoz_self_note_component_selection_preserves_source_model() {
+        let source = "@startuml\nBirch -> Birch: self\nrnote left: first\nhnote right: second\nBirch -> Elm: ordinary\nhnote right: third\n@enduml";
+        let rustuml_parser::diagram::Diagram::Sequence(diagram) =
+            rustuml_parser::parse::parse_auto(source).unwrap()
+        else {
+            panic!("sequence")
+        };
+        let original = format!("{diagram:?}");
+        let events = teoz_self_note_components(&diagram.events).unwrap();
+        let shapes: Vec<_> = events
+            .iter()
+            .filter_map(|event| {
+                if let Event::Note(note) = event {
+                    Some(note.shape)
+                } else {
+                    None
+                }
+            })
+            .collect();
+        assert_eq!(
+            shapes,
+            [NoteShape::Note, NoteShape::Note, NoteShape::Hexagonal]
+        );
+        assert_eq!(format!("{diagram:?}"), original);
+        assert!(teoz_self_note_components(&events).is_none());
     }
 
     fn simple_diagram() -> SequenceDiagram {
