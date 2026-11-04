@@ -441,7 +441,7 @@ fn svg_doctype_guard_rejects_comment_decoy_and_internal_subset() {
 }
 
 /// Every emitted SVG is parsed, including negative/error cases. T14.20 owns
-/// Java's render/export exception contract; these seven existing malformed
+/// Java's render/export exception contract (T14.21 also owns syntax errors); these fourteen malformed
 /// outputs stay visible and ratchet in both directions, keyed to source bytes.
 #[test]
 fn every_cli_golden_and_registered_perturbation_svg_is_strict_xml() {
@@ -492,6 +492,48 @@ fn every_cli_golden_and_registered_perturbation_svg_is_strict_xml() {
             "0ad00c5109c7a76ed425ba4f2a545c34818c5020657c6165d130eb9a4a04e35c",
             "T14.20",
             "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+            "df47ce2f69adeee777f31f890dfc593c147affcfc1426c24ca029791161a844b",
+            "T14.20",
+            "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+            "aab33e667d509ea2d8063d3897d5f4e5d507e2358db71457551292d382b81ad9",
+            "T14.20",
+            "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+            "6772e182b9660b497dfff524975f8b73aae367bd4c56369896186f72aa5c7b10",
+            "T14.21",
+            "Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+            "c161d04190ebe1dea4bd67347aad21cf6f84acc8d12f06cff90647c6326b9d75",
+            "T14.20",
+            "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+            "5e86638d8f970a1cab17650001a91007e317e4593c81180939480174504a7a47",
+            "T14.21",
+            "Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml",
+            "61a5e45d66cfa42679026c35e7ba22a46a41bb89022c79ab824e81d9c20a6099",
+            "T14.21",
+            "Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+            "581ce90669640ed9f818dca58a00ae6df33b7233415406216ba1fabccdfb4f3f",
+            "T14.20",
+            "Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text",
         ),
     ];
 
