@@ -523,6 +523,7 @@ mod tests {
 
     fn simple_message(from: &str, to: &str, label: &str) -> Event {
         Event::Message(Message {
+            parallel: false,
             from: from.to_string(),
             to: to.to_string(),
             label: label.to_string(),
@@ -544,6 +545,7 @@ mod tests {
 
     fn reply_message(from: &str, to: &str, label: &str) -> Event {
         Event::Message(Message {
+            parallel: false,
             from: from.to_string(),
             to: to.to_string(),
             label: label.to_string(),

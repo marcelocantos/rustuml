@@ -115,6 +115,9 @@ pub enum AutonumberCmd {
 /// A message arrow between participants.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
+    /// CommandArrow PARALLEL, retained for Teoz tile and history identity.
+    #[serde(default)]
+    pub parallel: bool,
     pub from: String,
     pub to: String,
     pub label: String,
@@ -282,6 +285,9 @@ pub struct Ref {
 /// A return message (shorthand for dotted reply).
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReturnMessage {
+    /// CommandReturn PARALLEL, applied to internal reverse messages.
+    #[serde(default)]
+    pub parallel: bool,
     pub label: String,
     /// Optional CommandReturn arrow-configuration color override.
     #[serde(default)]
@@ -297,4 +303,112 @@ pub struct AutoNumber {
     pub start: u32,
     pub step: u32,
     pub format: Option<String>,
+}
+
+/// Resolve command-generated messages before drawing. Source activation ownership
+/// is independent of accepted graphical life variations (account ea313c62).
+/// Java SequenceDiagram#activate pushes on ACTIVATE, pops on DEACTIVATE, and
+/// leaves the stack intact on DESTROY. CommandReturn reads that exact stack.
+pub fn resolve_sequence_returns(events: &[Event]) -> Result<Vec<Event>, (usize, String)> {
+    use std::collections::{HashMap, HashSet};
+    let mut result: Vec<Event> = Vec::with_capacity(events.len());
+    let mut owner = None;
+    let mut stack: Vec<usize> = Vec::new();
+    let mut closed: HashMap<usize, HashSet<String>> = HashMap::new();
+    for event in events {
+        let event = if let Event::Return(ret) = event {
+            let context = stack.last().copied().or_else(|| {
+                owner.filter(|&index| {
+                    matches!(&result[index], Event::Message(m)
+                    if !matches!(m.from.as_str(), "[" | "]") && !matches!(m.to.as_str(), "[" | "]"))
+                })
+            });
+            let Some(context) = context else {
+                return Err((ret.source_line, "Nowhere to return to.".to_owned()));
+            };
+            let Event::Message(call) = &result[context] else {
+                unreachable!()
+            };
+            let mut arrow = call.arrow.clone();
+            arrow.line = LineStyle::Dotted;
+            if let Some(color) = &ret.color {
+                arrow.color = Some(color.clone());
+            }
+            Event::Message(Message {
+                // CommandReturn does not apply PARALLEL to MessageExo.
+                parallel: ret.parallel
+                    && !matches!(call.from.as_str(), "[" | "]")
+                    && !matches!(call.to.as_str(), "[" | "]"),
+                from: call.to.clone(),
+                to: call.from.clone(),
+                label: ret.label.clone(),
+                arrow,
+                activation: (!stack.is_empty()).then_some(ActivationChange::Deactivate),
+                activation_color: None,
+                source_line: ret.source_line,
+            })
+        } else {
+            event.clone()
+        };
+        let life = match &event {
+            Event::Message(m) => {
+                owner = Some(result.len());
+                m.activation.map(|change| {
+                    let id = if matches!(m.from.as_str(), "[" | "]") {
+                        &m.to
+                    } else if matches!(m.to.as_str(), "[" | "]")
+                        || change == ActivationChange::Deactivate
+                    {
+                        &m.from
+                    } else {
+                        &m.to
+                    };
+                    (id.clone(), change)
+                })
+            }
+            Event::Activate(id, _) => Some((id.clone(), ActivationChange::Activate)),
+            Event::Deactivate(id) => Some((id.clone(), ActivationChange::Deactivate)),
+            Event::Destroy(id) => Some((id.clone(), ActivationChange::Destroy)),
+            // SequenceDiagram#grouping replaces lastEventWithDeactivate with END.
+            Event::GroupEnd => {
+                owner = None;
+                None
+            }
+            _ => None,
+        };
+        result.push(event);
+        if let Some((id, change)) = life {
+            if change == ActivationChange::Activate {
+                if let Some(index) = owner {
+                    stack.push(index);
+                }
+            } else if change == ActivationChange::Deactivate {
+                stack.pop();
+            }
+            if let Some(index) = owner {
+                let Event::Message(message) = &result[index] else {
+                    unreachable!()
+                };
+                // AbstractMessage#addLifeEvent excludes another participant's
+                // transition only for a self message; notes do not reset owner.
+                if message.from == message.to && message.from != id {
+                    continue;
+                }
+                let forbidden = closed.entry(index).or_default();
+                if change == ActivationChange::Activate && forbidden.contains(&id) {
+                    return Err((
+                        message.source_line,
+                        format!("Activate/Deactivate already done on {id}"),
+                    ));
+                }
+                if matches!(
+                    change,
+                    ActivationChange::Deactivate | ActivationChange::Destroy
+                ) {
+                    forbidden.insert(id);
+                }
+            }
+        }
+    }
+    Ok(result)
 }

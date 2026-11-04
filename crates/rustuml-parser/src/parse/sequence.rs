@@ -63,52 +63,193 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     Ok(parser.finish())
 }
 
-// Account f785ee82. SequenceDiagram#addMessage/#activate/#grouping and
-// CommandReturn#executeArg operate on source history, before drawable layout.
-// bool distinguishes internal Message (valid fallback) from MessageExo (stack
-// destination only). Notes preserve this owner; END replaces it with a leaf.
+// CommandReturn#executeArg calls HColorSet#getColor; an unknown name is a
+// command error, not label text or an SVG color. Account ea313c62.
 fn validate_return_destinations(events: &[Event]) -> Result<(), ParseError> {
-    let mut last_message = None;
-    let mut activation_stack = Vec::new();
     for event in events {
-        match event {
-            Event::Message(message) => {
-                let internal = !matches!(message.from.as_str(), "[" | "]")
-                    && !matches!(message.to.as_str(), "[" | "]");
-                last_message = Some(internal);
-                match message.activation {
-                    Some(ActivationChange::Activate) => activation_stack.push(internal),
-                    Some(ActivationChange::Deactivate) => {
-                        activation_stack.pop();
-                    }
-                    _ => {}
-                }
-            }
-            Event::Activate(_, _) => {
-                if let Some(internal) = last_message {
-                    activation_stack.push(internal);
-                }
-            }
-            Event::Deactivate(_) => {
-                activation_stack.pop();
-            }
-            Event::GroupEnd => last_message = None,
-            Event::Return(ret) => {
-                let destination = activation_stack
-                    .pop()
-                    .or_else(|| last_message.filter(|internal| *internal));
-                let Some(internal) = destination else {
-                    return Err(ParseError {
-                        line: ret.source_line,
-                        message: "Nowhere to return to.".to_owned(),
-                    });
-                };
-                last_message = Some(internal);
-            }
-            _ => {}
+        if let Event::Return(ret) = event
+            && let Some(color) = &ret.color
+            && !valid_return_color(color)
+        {
+            return Err(ParseError {
+                line: ret.source_line,
+                message: "No such color".to_owned(),
+            });
         }
     }
-    Ok(())
+    resolve_sequence_returns(events)
+        .map(|_| ())
+        .map_err(|(line, message)| ParseError { line, message })
+}
+
+fn valid_return_color(color: &str) -> bool {
+    let color = color.strip_prefix('#').unwrap_or(color);
+    // HColorSet#parseSimpleColor accepts 1/3/6/8 hexadecimal digits.
+    if matches!(color.len(), 1 | 3 | 6 | 8) && color.bytes().all(|b| b.is_ascii_hexdigit()) {
+        return true;
+    }
+    // ColorTrieNode's registered names, case-insensitive, plus HColorSet's
+    // transparent/background/automatic symbolic colors. Pinned Java 71806a23.
+    matches!(
+        color.to_ascii_lowercase().as_str(),
+        "aliceblue"
+            | "antiquewhite"
+            | "application"
+            | "aqua"
+            | "aquamarine"
+            | "automatic"
+            | "azure"
+            | "background"
+            | "beige"
+            | "bisque"
+            | "black"
+            | "blanchedalmond"
+            | "blue"
+            | "blueviolet"
+            | "brown"
+            | "burlywood"
+            | "business"
+            | "cadetblue"
+            | "chartreuse"
+            | "chocolate"
+            | "coral"
+            | "cornflowerblue"
+            | "cornsilk"
+            | "crimson"
+            | "cyan"
+            | "darkblue"
+            | "darkcyan"
+            | "darkgoldenrod"
+            | "darkgray"
+            | "darkgreen"
+            | "darkgrey"
+            | "darkkhaki"
+            | "darkmagenta"
+            | "darkolivegreen"
+            | "darkorange"
+            | "darkorchid"
+            | "darkred"
+            | "darksalmon"
+            | "darkseagreen"
+            | "darkslateblue"
+            | "darkslategray"
+            | "darkslategrey"
+            | "darkturquoise"
+            | "darkviolet"
+            | "deeppink"
+            | "deepskyblue"
+            | "dimgray"
+            | "dimgrey"
+            | "dodgerblue"
+            | "firebrick"
+            | "floralwhite"
+            | "forestgreen"
+            | "fuchsia"
+            | "gainsboro"
+            | "ghostwhite"
+            | "gold"
+            | "goldenrod"
+            | "gray"
+            | "green"
+            | "greenyellow"
+            | "grey"
+            | "honeydew"
+            | "hotpink"
+            | "implementation"
+            | "indianred"
+            | "indigo"
+            | "ivory"
+            | "khaki"
+            | "lavender"
+            | "lavenderblush"
+            | "lawngreen"
+            | "lemonchiffon"
+            | "lightblue"
+            | "lightcoral"
+            | "lightcyan"
+            | "lightgoldenrodyellow"
+            | "lightgray"
+            | "lightgreen"
+            | "lightgrey"
+            | "lightpink"
+            | "lightsalmon"
+            | "lightseagreen"
+            | "lightskyblue"
+            | "lightslategray"
+            | "lightslategrey"
+            | "lightsteelblue"
+            | "lightyellow"
+            | "lime"
+            | "limegreen"
+            | "linen"
+            | "magenta"
+            | "maroon"
+            | "mediumaquamarine"
+            | "mediumblue"
+            | "mediumorchid"
+            | "mediumpurple"
+            | "mediumseagreen"
+            | "mediumslateblue"
+            | "mediumspringgreen"
+            | "mediumturquoise"
+            | "mediumvioletred"
+            | "midnightblue"
+            | "mintcream"
+            | "mistyrose"
+            | "moccasin"
+            | "motivation"
+            | "navajowhite"
+            | "navy"
+            | "oldlace"
+            | "olive"
+            | "olivedrab"
+            | "orange"
+            | "orangered"
+            | "orchid"
+            | "palegoldenrod"
+            | "palegreen"
+            | "paleturquoise"
+            | "palevioletred"
+            | "papayawhip"
+            | "peachpuff"
+            | "peru"
+            | "physical"
+            | "pink"
+            | "plum"
+            | "powderblue"
+            | "purple"
+            | "red"
+            | "rosybrown"
+            | "royalblue"
+            | "saddlebrown"
+            | "salmon"
+            | "sandybrown"
+            | "seagreen"
+            | "seashell"
+            | "sienna"
+            | "silver"
+            | "skyblue"
+            | "slateblue"
+            | "slategray"
+            | "slategrey"
+            | "snow"
+            | "springgreen"
+            | "steelblue"
+            | "strategy"
+            | "tan"
+            | "teal"
+            | "technology"
+            | "thistle"
+            | "tomato"
+            | "transparent"
+            | "turquoise"
+            | "violet"
+            | "wheat"
+            | "white"
+            | "whitesmoke"
+            | "yellow"
+            | "yellowgreen"
+    )
 }
 
 struct SeqParser {
@@ -433,6 +574,9 @@ impl SeqParser {
     }
 
     fn try_message(&mut self, line: &str) -> bool {
+        // CommandArrow#getRegexConcat PARALLEL precedes the first participant.
+        let parallel = line.starts_with('&');
+        let line = line.strip_prefix('&').unwrap_or(line).trim_start();
         if let Some(caps) = MESSAGE_RE.captures(line) {
             // Strip surrounding quotes from quoted participant names.
             let unquote = |s: &str| -> String {
@@ -470,6 +614,7 @@ impl SeqParser {
 
             self.last_message = Some((from_id.clone(), to_id.clone()));
             self.events.push(Event::Message(Message {
+                parallel,
                 from: from_id,
                 to: to_id,
                 label,
@@ -512,6 +657,7 @@ impl SeqParser {
             .map(|m| parse_activation(m.as_str()))
             .or_else(|| self.autoactivation_for(&arrow));
         self.events.push(Event::Message(Message {
+            parallel: false,
             from,
             to,
             label: message_label(line, caps.get(6)),
@@ -918,6 +1064,8 @@ impl SeqParser {
     }
 
     fn try_return(&mut self, line: &str) -> bool {
+        let parallel = line.starts_with('&');
+        let line = line.strip_prefix('&').unwrap_or(line).trim_start();
         if let Some(rest) = line.strip_prefix("return") {
             // CommandReturn#getRegexConcat captures COLOR only when #\w+
             // is followed by whitespace; a terminal #word remains label text.
@@ -930,6 +1078,7 @@ impl SeqParser {
                 (None, rest.to_owned())
             };
             self.events.push(Event::Return(ReturnMessage {
+                parallel,
                 label,
                 color,
                 source_line: self.current_line,
@@ -1903,6 +2052,63 @@ mod tests {
         assert!(matches!(d.events[1], Event::Return(_)));
         if let Event::Return(r) = &d.events[1] {
             assert_eq!(r.label, "response");
+        }
+    }
+
+    #[test]
+    fn command_history_preserves_parallel_return_and_destroy_stack() {
+        let d = parse(
+            "A -> B ++ : enter\nB -> C ++ : nested\ndestroy C\n& return #blue first\nreturn #red next",
+        );
+        let resolved = resolve_sequence_returns(&d.events).unwrap();
+        let Event::Message(first) = &resolved[3] else {
+            panic!("return lowered")
+        };
+        assert_eq!((&*first.from, &*first.to, first.parallel), ("C", "B", true));
+        let Event::Message(next) = &resolved[4] else {
+            panic!("return lowered")
+        };
+        assert_eq!((&*next.from, &*next.to, next.parallel), ("B", "A", false));
+        let d = parse("A -> B : enter\n& A -> C : sibling");
+        assert!(matches!(&d.events[1], Event::Message(m) if m.parallel));
+    }
+
+    #[test]
+    fn command_life_transitions_and_return_colors_are_validated() {
+        for call in ["A -> B", "B -> B"] {
+            for close in ["deactivate B", "destroy B"] {
+                let lines: Vec<String> =
+                    format!("A -> B ++ : begin\n{call} : row\n{close}\nactivate B")
+                        .lines()
+                        .map(str::to_owned)
+                        .collect();
+                assert!(
+                    parse_sequence(&lines)
+                        .unwrap_err()
+                        .message
+                        .contains("already done")
+                );
+            }
+        }
+        // A self message ignores another participant's flags, per addLifeEvent.
+        parse("A -> B : begin\nB -> B : row\ndeactivate A\nactivate A");
+        for color in [
+            "#f",
+            "#123",
+            "#123abc",
+            "#123abc80",
+            "#BlueViolet",
+            "#transparent",
+        ] {
+            assert!(valid_return_color(color));
+        }
+        for color in ["#12", "#12345", "#noSuchColor819", "#red_foo"] {
+            assert!(!valid_return_color(color));
+            let lines: Vec<String> = format!("A -> B : enter\nreturn {color} done")
+                .lines()
+                .map(str::to_owned)
+                .collect();
+            assert_eq!(parse_sequence(&lines).unwrap_err().message, "No such color");
         }
     }
 

@@ -6434,6 +6434,20 @@ pub fn render_with_oracle(
 /// source — currently the captured `<defs>` (gradient/filter definitions whose
 /// ids are PlantUML hashes); the layout itself is computed from scratch.
 pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleLayout>) -> String {
+    // CommandReturn creates real messages before either graphical engine runs.
+    // Use source command history, not accepted paint variations (ea313c62).
+    if diagram
+        .events
+        .iter()
+        .any(|event| matches!(event, Event::Return(_)))
+        && let Ok(events) = resolve_sequence_returns(&diagram.events)
+    {
+        let normalized = SequenceDiagram {
+            events,
+            ..diagram.clone()
+        };
+        return render(&normalized, _theme, oracle);
+    }
     // Per-diagram skinparam overrides relevant to sequence arrow rendering.
     // These are read directly from the parser's skinparam list (rather than
     // the cascading `Theme`) so any value-less default tracks PlantUML's
@@ -8052,42 +8066,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let horizontal_life_lines = horizontal_life_lines_storage
         .as_ref()
         .unwrap_or(&life_lines);
-
-    // CommandReturn#executeArg materializes a Message, including self returns.
-    // Resolve ownership first, then feed those events through the existing
-    // message geometry. In particular, MessageArrow samples both live segments
-    // for constraints and endpoints; a separate return path loses their depth.
-    // CommandReturn also reverses MessageExo; normalized boundary endpoints
-    // preserve its real participant. Teoz uses its own endpoint/history model
-    // after lowering, while sharing the parser's return ownership.
-    // Keep source identity/event indices; this is a render-local model. Every
-    // restart replaces at least one Return, so this lowering cannot cycle.
-    let mut lowered = None;
-    for (index, event) in diagram.events.iter().enumerate() {
-        if let Event::Return(ret) = event
-            && let Some(context) = horizontal_life_lines.return_context(index)
-        {
-            let normalized = lowered.get_or_insert_with(|| diagram.clone());
-            let mut arrow = context.arrow.clone();
-            arrow.line = LineStyle::Dotted;
-            // CommandReturn#executeArg withColor, account f785ee82.
-            if let Some(color) = &ret.color {
-                arrow.color = Some(color.clone());
-            }
-            normalized.events[index] = Event::Message(Message {
-                from: context.from.clone(),
-                to: context.to.clone(),
-                label: ret.label.clone(),
-                arrow,
-                activation: context.deactivate.then_some(ActivationChange::Deactivate),
-                activation_color: None,
-                source_line: ret.source_line,
-            });
-        }
-    }
-    if let Some(normalized) = lowered {
-        return render(&normalized, _theme, oracle);
-    }
 
     // -----------------------------------------------------------------------
     // Phase 2: Compute required gap between adjacent participant pairs
@@ -15227,6 +15205,7 @@ mod tests {
                 },
             ],
             events: vec![Event::Message(Message {
+                parallel: false,
                 from: "Alice".into(),
                 to: "Bob".into(),
                 label: "hello".into(),
