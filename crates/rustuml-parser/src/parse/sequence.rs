@@ -276,6 +276,25 @@ impl RegisteredSequenceCommand {
         }
     }
 
+    // CODE capture position in CommandParticipantA/A2/A3/A4#getRegexConcat.
+    // Match the already selected command's prefix, then project its byte range
+    // onto the original (case-preserving) input. ASCII folding preserves offsets.
+    fn participant_code<'a>(&self, text: &'a str, color: Option<&str>) -> Option<&'a str> {
+        let code_index = match self.class {
+            "CommandParticipantA" | "CommandParticipantA3" => 4,
+            "CommandParticipantA2" | "CommandParticipantA4" => 3,
+            _ => return None,
+        };
+        let RegisteredPattern::Color { prefix, .. } = &self.pattern else {
+            return None;
+        };
+        let prefix_text = &text[..text.len() - color.map_or(0, str::len)];
+        let folded = prefix_text.to_ascii_lowercase();
+        let caps = prefix.captures(&folded)?;
+        let code = caps.get(code_index)?;
+        Some(&text[code.range()])
+    }
+
     fn validate_colors(
         &self,
         line: &str,
@@ -285,6 +304,27 @@ impl RegisteredSequenceCommand {
         let bad = |_color: &str| ParseError {
             line: source_line,
             message: "No such color".to_string(),
+        };
+        // CommandParticipantMultilines#executeNow never reads its COLOR
+        // capture. Single-line CommandParticipant#executeArg instead passes the
+        // entire token to HColorSet#getColor, not to Colors.
+        let token = if self.class == "CommandParticipantMultilines" {
+            None
+        } else if matches!(
+            self.class,
+            "CommandParticipantA"
+                | "CommandParticipantA2"
+                | "CommandParticipantA3"
+                | "CommandParticipantA4"
+        ) {
+            if let Some(token) = token
+                && !valid_sequence_color(token)
+            {
+                return Err(bad(token));
+            }
+            None
+        } else {
+            token
         };
         if let Some(token) = token {
             // Colors#Colors removes '#' and splits ';'. Dotted line styles
@@ -1050,8 +1090,19 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
                 message: format!("Syntax error: no registered sequence command accepts {text:?}"),
             });
         };
-        command.validate_colors(&folded, color, source_line)?;
-        if color.is_some_and(|token| token.contains([':', ';', '/', '\\', '|'])) {
+        // CommandParticipant#executeArg returns before color/stereotype/create
+        // execution when CODE already exists. CommandActivate's separate create
+        // path does not take this return and retains repeated creation events.
+        let existing_participant = command
+            .participant_code(text, color)
+            .is_some_and(|code| parser.participant_ids.iter().any(|id| id == code));
+        if !existing_participant {
+            command.validate_colors(&folded, color, source_line)?;
+        }
+        if !existing_participant
+            && command.class != "CommandParticipantMultilines"
+            && color.is_some_and(|token| token.contains([':', ';', '/', '\\', '|', '-']))
+        {
             eprintln!(
                 "warning: sequence command {} has an execution-valid composite/gradient color; complete style materialization remains unsupported at line {source_line}",
                 command.class
@@ -1062,7 +1113,7 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
                 "warning: sequence command {} is recognized but unimplemented at line {source_line}: {text}",
                 command.class
             );
-        } else if command.class != "CommandNope" {
+        } else if command.class != "CommandNope" && !existing_participant {
             let supported = parser.apply_registered(command.class, source_line, text)?;
             if !supported {
                 eprintln!(
@@ -1530,7 +1581,50 @@ impl SeqParser {
             | "CommandParticipantA2"
             | "CommandParticipantA3"
             | "CommandParticipantA4" => {
-                self.try_create_destroy(line) || self.try_participant_decl(line)
+                // CommandParticipant#getRegexType includes typed CREATE and
+                // bare CREATE declarations with options; only a complete
+                // declaration can create a new participant and creation event.
+                static CREATE: LazyLock<Regex> =
+                    LazyLock::new(|| sequence_regex(r"^(?i-u:create)[%s]+(.*)$").unwrap());
+                if let Some(caps) = CREATE.captures(line) {
+                    let tail = &caps[1];
+                    let declaration = if [
+                        "participant",
+                        "actor",
+                        "boundary",
+                        "control",
+                        "entity",
+                        "database",
+                        "collections",
+                        "queue",
+                    ]
+                    .iter()
+                    .any(|kind| {
+                        tail.get(..kind.len())
+                            .is_some_and(|prefix| prefix.eq_ignore_ascii_case(kind))
+                            && tail[kind.len()..].starts_with(|c: char| {
+                                matches!(
+                                    c,
+                                    ' ' | '\t' | '\r' | '\n' | '\u{000b}' | '\u{000c}' | '\u{00a0}'
+                                )
+                            })
+                    }) {
+                        tail.to_owned()
+                    } else {
+                        format!("participant {tail}")
+                    };
+                    let before = self.participants.len();
+                    if self.try_participant_decl_in_command(&declaration, line) {
+                        if let Some(participant) = self.participants.get(before) {
+                            self.events.push(Event::Create(participant.id.clone()));
+                        }
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    self.try_participant_decl(line)
+                }
             }
             "CommandArrow" => self.try_message(line),
             "CommandExoArrowLeft" | "CommandExoArrowRight" => self.try_external_message(line),
@@ -1741,15 +1835,28 @@ impl SeqParser {
         //   3. keyword Label as alias         <<stereotype>>  (both unquoted)
         //   4. keyword SimpleName             <<stereotype>>
         //   5. keyword "Long Label"           <<stereotype>>  (no alias; id = label)
+        // CommandParticipantA/A2/A3/A4: complete identity, optional touching
+        // stereotype, then ORDER, URL (extracted above), COLOR and end-of-line.
+        // Negative order is admitted but cannot be represented by usize. Keep
+        // the supported declaration fields and report the ordering residue.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             sequence_regex(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)[%s]+(?:"([^"]+)"[%s]+as[%s]+(\w+)|(\w+)[%s]+as[%s]+"([^"]+)"|(\w+)[%s]+as[%s]+(\w+)|"([^"]+)"|(\w+))(?:[%s]+<<([^>]+)>>)?(?:[%s]+(#[^%s]+))?(?:[%s]+order[%s]+(\d+))?"#,
+                r#"^(?i-u:(participant|actor|boundary|control|entity|database|collections|queue))[%s]+(?:"([^"]+)"[%s]+(?i-u:as)[%s]+([\p{L}\p{N}_.@]+)|([\p{L}\p{N}_.@]+)[%s]+(?i-u:as)[%s]+"([^"]+)"|([\p{L}\p{N}_.@]+)[%s]+(?i-u:as)[%s]+([\p{L}\p{N}_.@]+)|"([^"]+)"|([\p{L}\p{N}_.@]+))[%s]*(?:<<(.+?)>>)?[%s]*(?:(?i-u:order)[%s]+(?P<order>-?[0-9]{1,7}))?[%s]*(?P<color>#[^%s]+)?$"#,
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let kind = parse_participant_kind(&caps[1]);
+            if caps
+                .name("order")
+                .is_some_and(|m| m.as_str().starts_with('-'))
+            {
+                eprintln!(
+                    "warning: sequence participant signed order is recognized but unsupported; retaining declaration fields with fallback order at line {}",
+                    self.current_line
+                );
+            }
+            let kind = parse_participant_kind(&caps[1].to_ascii_lowercase());
             // `quoted` tracks whether the display text came from a `"..."` form.
             // PlantUML's grammar matches the stereotype (`STEREO`) only OUTSIDE the
             // quoted display string (`FULL` = `[%g]([^%g]+)[%g]`), so a `<<...>>`
@@ -1801,14 +1908,16 @@ impl SeqParser {
                     .find(|param| param.key.eq_ignore_ascii_case("stereotypePosition"))
                     .is_some_and(|param| param.value.eq_ignore_ascii_case("bottom"));
 
-            let color = caps.get(11).map(|m| m.as_str().to_string());
+            let color = caps.name("color").map(|m| m.as_str().to_string());
 
             // Explicit `order N` sets the layout sort key; otherwise it defaults
             // to the declaration index. Implicit participants (created by a
             // message) also default to their declaration index, so a participant
             // declared with a large `order N` can be positioned to the right of a
             // later, implicitly-created one (matching Java PlantUML).
-            let explicit_order = caps.get(12).and_then(|m| m.as_str().parse::<usize>().ok());
+            let explicit_order = caps
+                .name("order")
+                .and_then(|m| m.as_str().parse::<usize>().ok());
 
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
@@ -2848,6 +2957,109 @@ fn note_text_from_lines(lines: &[String]) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn sprite_blocks_own_only_their_command_body() {
+        for keyword in ["sprite ", "SPRITE\t", "SpRiTe\u{00a0}"] {
+            for (body, pixel) in [
+                (
+                    "$mark <svg width=\"2\" height=\"2\">\n}\n<rect width=\"2\" height=\"2\"/>\n</svg>",
+                    false,
+                ),
+                ("$mark <svg width=\"2\" height=\"2\"></svg>", false),
+                ("$mark [2x2/16] {\nFF\n00\n}", true),
+                ("$mark [2x2/16] {\nFF\n00\nEND SPRITE", true),
+                ("$mark [2x2/16] {\nFF\n00\nendsprite", true),
+            ] {
+                let source = format!("@startuml\n{keyword}{body}\nA -> B: retained\n@enduml");
+                let pre = crate::preprocess::preprocess_full(&source, None);
+                let diagram = parse_sequence(&pre.lines).unwrap();
+                assert_eq!(diagram.events.len(), 1, "{source}");
+                assert_eq!(pre.sprites.contains_key("mark"), pixel);
+                if pixel {
+                    assert_eq!(pre.sprites["mark"].rows, ["FF", "00"]);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn incomplete_sprite_blocks_remain_syntax_errors() {
+        for header in [
+            "sprite $mark <svg width=\"2\" height=\"2\">",
+            "sprite $mark [2x2/16] {",
+        ] {
+            let source =
+                format!("@startuml\nparticipant A\nparticipant B\n{header}\nFF\nA -> B\n@enduml");
+            let pre = crate::preprocess::preprocess_full(&source, None);
+            assert!(parse_sequence(&pre.lines).is_err());
+        }
+    }
+
+    #[test]
+    fn complete_participant_declarations_preserve_identity_and_options() {
+        let d = parse(
+            "participant \"Tall tower\" as Top.Node<<edge>> order 7#Wheat\nqueue @Port as \"Mail room\"<<service>>#Olive\nA -> B",
+        );
+        assert_eq!(d.participants[0].id, "Top.Node");
+        assert_eq!(d.participants[0].label, "Tall tower");
+        assert_eq!(d.participants[0].stereotype.as_deref(), Some("edge"));
+        assert_eq!(d.participants[0].order, Some(7));
+        assert_eq!(d.participants[0].color.as_deref(), Some("#Wheat"));
+        assert_eq!(d.participants[1].id, "@Port");
+        assert_eq!(d.participants[1].label, "Mail room");
+        // Unsupported signed order must not erase the complete declaration.
+        let d = parse("participant West order -7\nA -> B");
+        assert_eq!(d.participants[0].id, "West");
+        let mut parser = SeqParser::new();
+        assert!(!parser.try_participant_decl("participant West unsupported"));
+        assert!(parser.participants.is_empty());
+    }
+
+    #[test]
+    fn command_specific_color_execution_respects_early_and_unused_paths() {
+        for color in [
+            "#back:Wheat;line:Olive",
+            "#line.dotted",
+            "#shadowing:true",
+            "#text:application",
+        ] {
+            assert!(
+                parse_sequence(&[format!("participant West {color}")]).is_err(),
+                "{color}"
+            );
+        }
+        for separator in ['-', '/', '\\', '|'] {
+            assert!(parse_sequence(&[format!("participant West #Wheat{separator}Olive")]).is_ok());
+        }
+        for declaration in [
+            "participant West #NotAColour",
+            "participant West as \"Another label\" #NotAColour",
+            "participant \"Another label\" as West #NotAColour",
+            "participant Else as West #NotAColour",
+            "participant \"West\" #NotAColour",
+        ] {
+            let d = parse_sequence(&["participant West".into(), declaration.into()]).unwrap();
+            assert_eq!(d.participants.len(), 1);
+            assert_eq!(d.participants[0].label, "West");
+        }
+        assert!(
+            parse_sequence(&[
+                "participant West #NotAColour [".into(),
+                "Label".into(),
+                "]".into()
+            ])
+            .is_ok()
+        );
+        assert!(
+            parse_sequence(&[
+                "box #back:Wheat;line:Olive".into(),
+                "participant West".into(),
+                "end box".into()
+            ])
+            .is_ok()
+        );
+    }
+
     #[test]
     fn registered_sequence_commands_separate_syntax_and_execution_residue() {
         assert_eq!(super::REGISTERED_SEQUENCE_COMMANDS.len(), 81);

@@ -488,6 +488,14 @@ fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
 // Core context
 // ---------------------------------------------------------------------------
 
+// CommandSpriteSvgMultiline and CommandFactorySprite have different END
+// patterns. A declaration owns its body until that command's terminator.
+#[derive(Clone, Copy)]
+enum SpriteBlockKind {
+    Pixel { output_start: usize },
+    Svg { output_start: usize },
+}
+
 struct PreprocessContext {
     /// `!$var = value` style variables.
     defines: HashMap<String, String>,
@@ -497,7 +505,7 @@ struct PreprocessContext {
     definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
-    in_sprite_block: bool,
+    in_sprite_block: Option<SpriteBlockKind>,
     /// The name of the sprite currently being collected (if any).
     current_sprite_name: Option<String>,
     /// Sprite definitions parsed from `sprite $name { ... }` blocks.
@@ -625,7 +633,7 @@ impl PreprocessContext {
             definelong_macros: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
-            in_sprite_block: false,
+            in_sprite_block: None,
             current_sprite_name: None,
             sprites: HashMap::new(),
             archimate_enabled: false,
@@ -783,24 +791,47 @@ impl PreprocessContext {
     fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
         let trimmed = line.trim();
 
-        // Collect sprite pixel-data blocks. Emit empty placeholder lines so
-        // downstream parsers preserve original source line numbers (PlantUML's
-        // `data-source-line` attribute matches the user's editor view).
-        if self.in_sprite_block {
-            if trimmed == "}" {
-                self.in_sprite_block = false;
+        // CommandMultilines2#isValid uses END.matcher(trimmed).matches().
+        // SVG END is (.*</svg>)$; pixel END is ^end[%s]?sprite|\}$.
+        // Pattern2 is ASCII case-insensitive; %s is Java whitespace plus NBSP.
+        if let Some(kind) = self.in_sprite_block {
+            static PIXEL_END: LazyLock<Regex> = LazyLock::new(|| {
+                Regex::new(r"\A(?:(?i-u:end)[\x09-\x0d \u{00a0}]?(?i-u:sprite)|\})\z").unwrap()
+            });
+            static SVG_END: LazyLock<Regex> = LazyLock::new(|| {
+                Regex::new(r"\A[^\r\n\u{0085}\u{2028}\u{2029}]*(?i-u:</svg>)\z").unwrap()
+            });
+            // StringUtils#trin, as used by Trim.BOTH; do not broaden the end
+            // condition to Unicode trimming or a substring search.
+            let body = line.trim_matches([' ', '\t', '\r', '\n', '\0']);
+            let (ended, output_start) = match kind {
+                SpriteBlockKind::Pixel { output_start } => (PIXEL_END.is_match(body), output_start),
+                SpriteBlockKind::Svg { output_start } => (SVG_END.is_match(body), output_start),
+            };
+            if ended {
+                self.in_sprite_block = None;
                 self.current_sprite_name = None;
-            } else if let Some(name) = self.current_sprite_name.clone() {
-                // Accumulate pixel row into the sprite definition.
-                if let Some(sprite) = self.sprites.get_mut(&name) {
-                    // Only accept lines that look like hex pixel data.
-                    if !trimmed.is_empty() && trimmed.chars().all(|c| c.is_ascii_hexdigit()) {
-                        sprite.rows.push(trimmed.to_string());
-                        sprite.height = sprite.rows.len() as u32;
-                    }
+                // CommandMultilines2#isValid is OK only after END. Until then,
+                // retain the incomplete command for downstream syntax admission.
+                for pending in &mut output[output_start..] {
+                    pending.clear();
                 }
+            } else if let SpriteBlockKind::Pixel { .. } = kind
+                && let Some(name) = self.current_sprite_name.as_ref()
+                && let Some(sprite) = self.sprites.get_mut(name)
+                && !trimmed.is_empty()
+                && trimmed.chars().all(|c| c.is_ascii_hexdigit())
+            {
+                sprite.rows.push(trimmed.to_string());
+                sprite.height = sprite.rows.len() as u32;
             }
-            output.push(String::new());
+            // Completed commands keep one placeholder per owned source line.
+            // Incomplete commands keep their source; they are not silent blanks.
+            output.push(if ended {
+                String::new()
+            } else {
+                line.to_owned()
+            });
             return;
         }
 
@@ -870,35 +901,87 @@ impl PreprocessContext {
             return;
         }
 
-        // Parse sprite definitions: `sprite $name [WxH/Z] {`
-        if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
-            if trimmed.ends_with('{') {
-                // Parse: sprite $name [WxH/Z] {
-                let rest = trimmed["sprite ".len()..].trim_start();
-                // Strip leading $ if present.
-                let rest = rest.strip_prefix('$').unwrap_or(rest);
-                // Name is the first word (up to whitespace, '[', or '{').
-                let name: String = rest
-                    .chars()
-                    .take_while(|c| c.is_alphanumeric() || *c == '_')
-                    .collect();
-                // Try to parse [WxH/Z] dimensions if present.
-                let (width, height) = parse_sprite_dimensions(rest);
-                if !name.is_empty() {
-                    self.sprites.insert(
-                        name.clone(),
-                        SpriteData {
-                            width,
-                            height,
-                            rows: Vec::new(),
-                        },
-                    );
-                    self.current_sprite_name = Some(name);
-                }
-                self.in_sprite_block = true;
+        // CommandFactorySprite#multiline and CommandSpriteSvg[Multiline]
+        // #getRegexConcat: consume complete declarations before family parsing.
+        // Keep unsupported sprite materialization visible, but never expose its
+        // body as diagram commands. These are command patterns, not a prefix skip.
+        static SPRITE_PIXEL: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"\A(?i-u:sprite)[\x09-\x0d \u{00a0}]+\$?([-.\p{L}\p{N}_]+)[\x09-\x0d \u{00a0}]*(?:\[([0-9]+)(?i-u:x)([0-9]+)/(?:([0-9]+)(?i-u:z)?|(?i-u:color))\])?[\x09-\x0d \u{00a0}]*\{\z").unwrap()
+        });
+        static SPRITE_SVG: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"\A(?i-u:sprite)[\x09-\x0d \u{00a0}]+\$?([-\p{L}\p{N}_]+)[\x09-\x0d \u{00a0}]+((?i-u:<svg)(?-u:\b)[^\r\n\u{0085}\u{2028}\u{2029}]*)\z").unwrap()
+        });
+        // Other single-line sprite commands remain unsupported. Match their
+        // registered grammar (CommandFactorySprite#singleLine, CommandSprite
+        // Stdlib/StdlibSvg/File#getRegexConcat), independent of case/separators.
+        static SPRITE_SINGLE: LazyLock<Vec<Regex>> = LazyLock::new(|| {
+            [
+                r"sprite%s+\$?([-.%pLN_]+)%s*(?:\[([0-9]+)x([0-9]+)/(?:([0-9]+)z|color)\])?%s+([-_A-Za-z0-9]+)",
+                r"sprite%s+\$([-%pLN_]+)%s*#([^#]+)#([^%S]+)",
+                r"sprite%s+\$?([-%pLN_]+)%s*:([^:]+):([^%S]+)",
+                r#"sprite%s+\$?([-%pLN_]+)%s+([^<>"“”\u{e121}#]*)"#,
+            ]
+            .iter()
+            .map(|pattern| {
+                let pattern = pattern
+                    .replace("%s", r"[\x09-\x0d \u{00a0}]")
+                    .replace("%S", r"\x09-\x0d \u{00a0}")
+                    .replace("%pLN", r"\p{L}\p{N}");
+                // ASCII case folding of the input preserves Unicode names.
+                Regex::new(&format!(r"\A(?:{pattern})\z")).unwrap()
+            })
+            .collect()
+        });
+        // RegexConcat's required space signature is checked over the whole
+        // command; FoxSignature omits VT even though Pattern2 %s includes it.
+        let sprite_line = line_no_comment.trim_matches([' ', '\t', '\r', '\n', '\0']);
+        let sprite_space = sprite_line
+            .chars()
+            .any(|c| matches!(c, ' ' | '\t' | '\r' | '\n' | '\u{000c}' | '\u{00a0}'));
+        if sprite_space && let Some(caps) = SPRITE_PIXEL.captures(sprite_line) {
+            let name = caps[1].to_string();
+            let (width, height) = parse_sprite_dimensions(&sprite_line.to_ascii_lowercase());
+            self.sprites.insert(
+                name.clone(),
+                SpriteData {
+                    width,
+                    height,
+                    rows: Vec::new(),
+                },
+            );
+            self.current_sprite_name = Some(name);
+            self.in_sprite_block = Some(SpriteBlockKind::Pixel {
+                output_start: output.len(),
+            });
+            output.push(line_no_comment.clone());
+            return;
+        }
+        if sprite_space && let Some(caps) = SPRITE_SVG.captures(sprite_line) {
+            // CommandSpriteSvg precedes CommandSpriteSvgMultiline: a complete
+            // inline SVG never opens a body that could consume later commands.
+            if !caps[2].to_ascii_lowercase().ends_with("</svg>") {
+                self.in_sprite_block = Some(SpriteBlockKind::Svg {
+                    output_start: output.len(),
+                });
             }
-            // Emit a placeholder for the `sprite $name {` opening line so
-            // downstream source-line numbers stay aligned (see block above).
+            eprintln!(
+                "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
+            );
+            output.push(if self.in_sprite_block.is_some() {
+                line_no_comment.clone()
+            } else {
+                String::new()
+            });
+            return;
+        }
+        if sprite_space
+            && SPRITE_SINGLE
+                .iter()
+                .any(|re| re.is_match(&sprite_line.to_ascii_lowercase()))
+        {
+            eprintln!(
+                "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
+            );
             output.push(String::new());
             return;
         }
