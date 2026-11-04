@@ -1,0 +1,6 @@
+@startuml
+!theme cerulean
+!$tag = "maple"
+!dump_memory
+class AshLedger
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+!$out=""
+!foreach $entry in ["a","b"]
+!foreach $entry in [1,2]
+!$out=$out+$entry
+!endfor
+!$out=$out+$entry
+!endfor
+!foreach $entry in []
+!$out="unexpected"
+!endfor
+class "$out / $entry" as Nested
+@enduml

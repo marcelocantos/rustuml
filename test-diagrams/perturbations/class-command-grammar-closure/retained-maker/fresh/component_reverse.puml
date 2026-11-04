@@ -1,0 +1,6 @@
+@startuml
+allowmixing
+component "Egress" as Out
+class Batch
+Out <-- Batch
+@enduml

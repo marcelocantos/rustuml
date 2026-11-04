@@ -1,0 +1,5 @@
+@startuml
+class Peer
+note "Annotation with width" as N
+N .. Peer
+@enduml

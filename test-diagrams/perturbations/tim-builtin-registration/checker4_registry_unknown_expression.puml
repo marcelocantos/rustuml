@@ -1,0 +1,5 @@
+@startuml
+!$v=%fresh_unregistered(2)
+!$later=%date("Q",0)
+class After
+@enduml

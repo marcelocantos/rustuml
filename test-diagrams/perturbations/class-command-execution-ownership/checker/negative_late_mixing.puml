@@ -1,0 +1,7 @@
+@startuml
+package G {
+class X
+component C
+allowmixing
+}
+@enduml

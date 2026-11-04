@@ -1,0 +1,7 @@
+@startuml
+!theme minty
+struct "Early declaration" as Earlier
+!theme cerulean
+struct "Late" as Later
+Earlier --> Later
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node "Wide as [component]" as Remote.Group {
+class First
+}
+node Remote.Group {
+class Second
+First --> Second
+}
+@enduml

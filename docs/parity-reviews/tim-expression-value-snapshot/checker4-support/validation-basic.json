@@ -1,0 +1,52 @@
+[
+  {
+    "name": "parser",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-parser",
+      "--lib"
+    ],
+    "exit": 0,
+    "seconds": 10.25468111038208
+  },
+  {
+    "name": "cli",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode"
+    ],
+    "exit": 0,
+    "seconds": 24.820462942123413
+  },
+  {
+    "name": "format",
+    "command": [
+      "rustfmt",
+      "--edition",
+      "2024",
+      "--check",
+      "crates/rustuml-parser/src/preprocess/mod.rs"
+    ],
+    "exit": 0,
+    "seconds": 0.051798105239868164
+  },
+  {
+    "name": "clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 101,
+    "seconds": 10.090573787689209
+  }
+]

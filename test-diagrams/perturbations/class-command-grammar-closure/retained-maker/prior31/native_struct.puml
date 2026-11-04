@@ -1,0 +1,7 @@
+@startuml
+folder "Observation Types" {
+struct "Water Reading" as Water {
+value : Decimal
+}
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+package "Origin" as O {
+class Start
+}
+package "Destination" as D {
+class Finish
+}
+O )--( D
+@enduml

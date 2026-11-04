@@ -1,0 +1,8 @@
+@startuml
+skinparam classAttributeIconSize 0
+node Group {
++record "Public declaration" as R
+~protocol P
+R --> P
+}
+@enduml

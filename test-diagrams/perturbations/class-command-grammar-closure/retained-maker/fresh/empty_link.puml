@@ -1,0 +1,4 @@
+@startuml
+package "Manual" as M [[https://example.org/manual{Read manual}]] {
+}
+@enduml

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "perturbations",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 3.307279109954834
+  },
+  {
+    "name": "guards",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 2.218997001647949
+  }
+]

@@ -1,0 +1,5 @@
+@startuml
+package "Core Yard" <<Alpha>> as Ignored $one <<Beta>> <<Gamma>> [[https://example.org/core{Core docs}]] #Wheat {
+class Sample
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+actor "Harvest Supervisor" as Parent
+actor "Harvest Operator" as Child
+Parent <|-- Child
+@enduml

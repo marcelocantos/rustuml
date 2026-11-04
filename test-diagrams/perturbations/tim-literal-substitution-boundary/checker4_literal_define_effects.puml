@@ -1,0 +1,11 @@
+@startuml
+!$n=0
+!function $next()
+!$n=$n+1
+!return "LATER"
+!endfunction
+!define STORED $next()
+!define LATER cedar
+!$v="STORED"
+class "STORED / $v / $n" as Capture
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean
+record "Early declaration" as Earlier
+!theme minty
+record "Late" as Later
+Earlier --> Later
+@enduml

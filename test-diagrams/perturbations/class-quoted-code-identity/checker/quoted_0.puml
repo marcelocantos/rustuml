@@ -1,0 +1,8 @@
+@startuml
+package "Identity scope" {
+class "Air Probe"
+class Peer
+"Air Probe" --> Peer
+note right of "Air Probe" : audit
+}
+@enduml

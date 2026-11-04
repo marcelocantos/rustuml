@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-foreach-json-binding",
+  "reviewer": {
+    "task_id": "t3-cb14b5f3-fresh-independent-TIM-checker4",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no implementation/no children"
+  },
+  "account_commit": "3020a0aaffba609cf48859ba3d65d21e7000a082",
+  "implementation_commit": "6c550246b458eb5f37539713510dc7d919843421",
+  "tested_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "baseline_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd <private-worker>/<row.cwd> --timezone GMT+11:00 -- -pipe -tsvg (exact raw source on stdin; actual argv/env captured per row)",
+    "Pinned remote wrapper --probe <private-worker>/SourceProbe.java --classpath <private-worker> -- <source> <cwd> (supplemental; no local Java)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate.py candidate",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate_supplement.py candidate",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle",
+    "cargo test -p rustuml-oracle --release --test golden_pairs",
+    "cargo test -p rustuml-oracle --release --test parity_perturbations",
+    "cargo test -p rustuml-oracle --release --test harness_guards"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_shadow_sibling.puml",
+      "golden": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_shadow_sibling.svg",
+      "axes": [
+        "parameter override versus global iteration",
+        "sibling visibility and element type"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_object_rebind.puml",
+      "golden": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_object_rebind.svg",
+      "axes": [
+        "insertion order",
+        "collection rebinding during iteration"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_nested_same_name.puml",
+      "golden": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_nested_same_name.svg",
+      "axes": [
+        "nested same binding",
+        "empty collection preservation"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml",
+      "golden": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.svg",
+      "axes": [
+        "JSON scalar kind",
+        "error versus empty iteration"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "java_exit": 1,
+      "rust_cli_exit": 0,
+      "source_equal": false
+    }
+  ],
+  "java_locations": [
+    "tim/EaterForeach.java:analyze",
+    "tim/ExecutionContextForeach.java:currentValue",
+    "tim/iterator/CodeIteratorForeach.java:setLoopVariable",
+    "tim/TMemoryLocal.java:putVariable"
+  ],
+  "findings": [
+    "REJECT: checker4_foreach_scalar_error passes a JSON scalar number. Java EaterForeach.size throws IllegalArgumentException; Rust try_foreach falls through to an empty values vector and emits class After. Unsupported collection kind is not the same as an empty collection.",
+    "Supported: checker4_foreach_shadow_sibling matches parameter override versus global loop publication and sibling visibility with string/numeric JSON elements. checker4_foreach_object_rebind preserves insertion order and collection snapshot while rebinding the source object. checker4_foreach_nested_same_name matches nested shared-name publication and last binding after empty iteration. All three exact source/SVGs agree.",
+    "No new valid CLI error occurs on this fresh collection matrix. Negative scalar acceptance and the red standing gates prevent packet acceptance; do not weaken collection validation or count rejection controls as successful render parity."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/README.md",
+  "scope": "This record does not overwrite or re-attest older reviews. Invalid/error reference outputs remain failing pairs in the unchanged standing oracle. Narrow supported observations are separate from packet acceptance."
+}

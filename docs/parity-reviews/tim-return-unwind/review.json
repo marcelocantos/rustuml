@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-return-unwind",
+  "reviewer": {
+    "task_id": "t3-cb14b5f3-fresh-independent-TIM-checker4",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no implementation/no children"
+  },
+  "account_commit": "8765ccc2ea4c2574fe90d25c2ba9921ad520682e",
+  "implementation_commit": "6c550246b458eb5f37539713510dc7d919843421",
+  "tested_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "baseline_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd <private-worker>/<row.cwd> --timezone GMT+11:00 -- -pipe -tsvg (exact raw source on stdin; actual argv/env captured per row)",
+    "Pinned remote wrapper --probe <private-worker>/SourceProbe.java --classpath <private-worker> -- <source> <cwd> (supplemental; no local Java)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate.py candidate",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/evaluate_supplement.py candidate",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle",
+    "cargo test -p rustuml-oracle --release --test golden_pairs",
+    "cargo test -p rustuml-oracle --release --test parity_perturbations",
+    "cargo test -p rustuml-oracle --release --test harness_guards"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-return-unwind/checker4_return_sibling_nested.puml",
+      "golden": "test-diagrams/perturbations/tim-return-unwind/checker4_return_sibling_nested.svg",
+      "axes": [
+        "nested foreach/while/conditional",
+        "sibling invocation state restore"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-return-unwind/checker4_return_condition_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-return-unwind/checker4_return_condition_effect.svg",
+      "axes": [
+        "condition side effect",
+        "post-return cancellation"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml",
+      "golden": "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.svg",
+      "axes": [
+        "argument failure versus procedure-kind failure",
+        "later statement cancellation"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "java_exit": 1,
+      "rust_cli_exit": 1,
+      "source_equal": false
+    }
+  ],
+  "java_locations": [
+    "tim/TContext.java:executeLines",
+    "tim/TFunctionImpl.java:executeReturnFunction",
+    "tim/iterator/CodeIteratorWhile.java",
+    "tim/iterator/CodeIteratorForeach.java"
+  ],
+  "findings": [
+    "No fresh falsifier of immediate loop-return unwinding on the bounded matrix: checker4_return_sibling_nested and checker4_return_condition_effect match exact source/SVG through nested foreach/while/if, repeated sibling calls, global last-bound value and condition side effects. Existing checker3 loop-return controls also pass after the correction.",
+    "checker4_procedure_argument_error is negative in both runtimes: substring argument failure occurs before entering the procedure and before later date error. Original checker3 procedure-as-expression and retained maker procedure_value_error reject; this is status/first-error evidence, not a positive SVG pass.",
+    "Packet acceptance remains REJECTED: required perturbation/main/guard gates are red and the coupled typed/operand/substitution mechanisms have applicable counterexamples. This record supports only the named unwind paths, does not certify all function grammar, and grants no waiver for renderer dependencies or the documented Java-negative no-return extension."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/README.md",
+  "scope": "This record does not overwrite or re-attest older reviews. Invalid/error reference outputs remain failing pairs in the unchanged standing oracle. Narrow supported observations are separate from packet acceptance."
+}

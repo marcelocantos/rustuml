@@ -1,0 +1,7 @@
+@startuml
+package Lab {
+class "A long endpoint" as A
+class B
+A --( B
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant Elm
+participant Cobalt
+participant Slate
+Elm -> Cobalt : <back:#90EE90>verify 63</back>
+Cobalt -> Slate : <back:lightgreen>handoff</back>
+Slate --> Elm : <back:gold>complete</back>
+@enduml

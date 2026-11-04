@@ -1,0 +1,7 @@
+@startuml
+node "Empty endpoint" as E [[https://example.test/resource{A tooltip}]] {
+}
+node "Other endpoint" as F {
+}
+E --> F
+@enduml

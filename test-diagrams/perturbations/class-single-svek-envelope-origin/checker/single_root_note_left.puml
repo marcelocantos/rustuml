@@ -1,0 +1,6 @@
+@startuml
+frame Envelope {
+class Item
+}
+note left of Envelope.Item : root annotation
+@enduml

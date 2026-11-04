@@ -1,0 +1,5 @@
+@startuml
+package "Link Yard" as Yard $one <<Public>> $two [[https://example.org/yard{Yard manual}]] {
+class Gate
+}
+@enduml

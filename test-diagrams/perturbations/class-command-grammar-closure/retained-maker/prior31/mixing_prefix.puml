@@ -1,0 +1,7 @@
+@startuml
+rectangle "Observation Zone" {
+class Reading
+mix_component "Input as [Port]" as Input
+Reading --> Input
+}
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+skinparam svgLinkTarget _blank
+node "Outer node" as O [[https://example.test/outer{Outer tooltip}]] {
+rectangle "Inner" as I [[https://example.test/inner{Inner tooltip}]] {
+class Leaf
+}
+}
+class Peer
+O.I.Leaf --> Peer
+@enduml

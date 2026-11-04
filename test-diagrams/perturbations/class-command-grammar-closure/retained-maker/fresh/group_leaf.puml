@@ -1,0 +1,7 @@
+@startuml
+package "Store" as S {
+class Item
+}
+class Consumer
+S --( Consumer
+@enduml

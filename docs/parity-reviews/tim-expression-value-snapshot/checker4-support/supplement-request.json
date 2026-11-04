@@ -1,0 +1,59 @@
+{
+  "manifest_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/supplement-manifest.json",
+  "manifest_sha256": "39af001e697e8f4e17b9423b6fc6f746cae098bf33ad191bc74942c38ee93087",
+  "case_count": 2,
+  "resources": [
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/supplement-stage/SourceProbe.java",
+      "remote_relative_path": "SourceProbe.java",
+      "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+      "bytes": 689
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/supplement-stage/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml",
+      "sha256": "53601e626107b0ab60492b254a26ecb2ed4e3d67ffb630621d31c5f83779edb2",
+      "bytes": 51
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/supplement-stage/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_named_global_snapshot.puml",
+      "remote_relative_path": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_named_global_snapshot.puml",
+      "sha256": "0549511aa55d346d9e9b08e8079af4fb80c7f9c94d0ab96776f7e850de0ca547",
+      "bytes": 161
+    }
+  ],
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "source_mode": "Exact stdin bytes; no trimming; -pipe -tsvg",
+  "svg_argv": [
+    "reference",
+    "--cwd",
+    "<remote>/<row.cwd>",
+    "--timezone",
+    "<row.zone>",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "probe_argv": [
+    "reference",
+    "--cwd",
+    "<remote>/<row.cwd>",
+    "--timezone",
+    "<row.zone>",
+    "--probe",
+    "<remote>/SourceProbe.java",
+    "--classpath",
+    "<remote>",
+    "--",
+    "<remote>/<row.source>",
+    "<remote>/<row.cwd>"
+  ],
+  "environment": "Per-case row.env overrides are benign synthetic controls; otherwise pinned runner environment. Do not expose ambient environment.",
+  "result_requirements": [
+    "raw stdout/stderr base64 and status per SVG/probe command",
+    "actual argv/cwd/env overrides, input SHA256",
+    "whole bundle and resource checksum validation"
+  ]
+}

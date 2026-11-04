@@ -1,0 +1,4 @@
+@startuml
+Orchid -> Copper : unpack parcel
+Copper --> Orchid : receipt 27
+@enduml

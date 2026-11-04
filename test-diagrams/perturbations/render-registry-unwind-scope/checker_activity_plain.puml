@@ -1,0 +1,6 @@
+@startuml
+start
+:Archive plum;
+:Release crate;
+stop
+@enduml

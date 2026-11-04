@@ -1,0 +1,5 @@
+@startuml
+node "N" as Host <<Extremely wide stereotype label>> {
+class Leaf
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant Tern
+participant Willow
+Willow -> Tern : <back:plum>reserve ticket</back>
+Tern --> Willow : <back:#FFE4B5>confirm</back>
+@enduml

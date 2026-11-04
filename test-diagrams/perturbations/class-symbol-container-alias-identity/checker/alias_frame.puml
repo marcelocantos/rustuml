@@ -1,0 +1,9 @@
+@startuml
+frame Port as "Windward Harbor" {
+class Inside
+}
+frame Port {
+class Next
+Inside --> Next
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
++package "Visible package" as P <<domain>> {
+class Payload
+}
+@enduml

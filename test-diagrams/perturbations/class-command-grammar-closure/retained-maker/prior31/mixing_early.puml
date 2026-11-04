@@ -1,0 +1,8 @@
+@startuml
+allow_mixing
+node "Observation Zone" {
+class Reading
+CoMpOnEnT	Input
+Input --> Reading
+}
+@enduml
