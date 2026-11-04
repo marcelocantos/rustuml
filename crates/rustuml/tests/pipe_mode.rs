@@ -371,7 +371,7 @@ fn pipe_multiple_invocations_do_not_hang() {
 }
 
 /// Every emitted SVG is parsed, including negative/error cases. T14.20 owns
-/// Java's render/export exception contract; these three existing malformed
+/// Java's render/export exception contract; these seven existing malformed
 /// outputs stay visible and ratchet in both directions, keyed to source bytes.
 #[test]
 fn every_cli_golden_and_registered_perturbation_svg_is_strict_xml() {
@@ -398,6 +398,30 @@ fn every_cli_golden_and_registered_perturbation_svg_is_strict_xml() {
             "a5d5b51b19d68f8bfa2923e709b8f611a3f88a28e6ad6c0b5efc3226fae40ce6",
             "T14.20",
             "U+001B tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml",
+            "f8e49aa31c65047de872fe145933815200748337bf7a7a155bfe218a49288d68",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml",
+            "9db5169301ad8914aef80e6e181f446f978432ede32353a9ac004269ff93c462",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml",
+            "e563876518e6b3ad61d820de64242456ee01aa8c9d2f53f1ab14570b91b180b0",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml",
+            "0ad00c5109c7a76ed425ba4f2a545c34818c5020657c6165d130eb9a4a04e35c",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
         ),
     ];
 
