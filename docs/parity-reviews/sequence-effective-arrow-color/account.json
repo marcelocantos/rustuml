@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "checker_evidence": "68c8b95ef1087b5daa83d16b7e8e83670d5ca10f",
+  "baseline": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "mechanism": "sequence-effective-arrow-color",
+  "java_locations": [
+    "klimt.color.HColorSet#parseColor/#parseSimpleColor",
+    "sequencediagram.command.CommandReturn#executeArg",
+    "klimt.drawing.svg.SvgGraphics#setFillColor/#addFill",
+    "#manageStrokeColor"
+  ],
+  "invariant": "Every accepted sequence arrow color retains its RGB/alpha/no-paint meaning through arrow configuration and primitive paint.",
+  "causal_divergence": "Return validation accepts the Java domain but a narrower string-to-CSS conversion loses transparent, gray nibble and alpha semantics.",
+  "planned_change": "Materialize effective sequence arrow colors, retaining no-paint and fill opacity separately from RGB stroke. Reuse existing named color contracts without changing shared callers or narrowing accepted grammar.",
+  "perturbation_axes": [
+    "internal/self/external topology and engine",
+    "transparent/gray/alpha/named domain and arrow head kind"
+  ]
+}
