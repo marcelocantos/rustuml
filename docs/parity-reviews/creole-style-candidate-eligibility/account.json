@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "imported_rejection": "521fe226d428c01128f4379bb7342584772924d7",
+  "import_commit": "dc796484a0a1ef723b8030ef0fd767da2708533d",
+  "verification": "Private before/after CLI -pipe plus --yaml -pipe, unchanged strict comparator, exact six retained memberships1730+18+50+38+15+26, including all nonpositives and32panics. Fresh reference via parent existing runner only; all raw outcomes preserved. Broad gates once stable. No self-review, baseline/contract changes or old evidence edits.",
+  "mechanism": "creole-style-candidate-eligibility",
+  "java_locations": [
+    "klimt/creole/legacy/CommandCreoleBuilder#constructor: createLegacy before createLegacyEol for BOLD,ITALIC,UNDERLINE,STRIKE,WAVE,BACKCOLOR",
+    "klimt/creole/legacy/StripeSimple#searchCommand/modifyStripe/addPending",
+    "klimt/creole/command/CommandCreoleStyle#matchingSize/executeAndGetRemaining/createLegacy/createLegacyEol",
+    "klimt/font/FontStyle#getUbrexActivationPattern/getUbrexDeactivationPattern",
+    "klimt/creole/command/CommandCreoleSizeChange#matchingSize (size group length)",
+    "klimt/creole/command/CommandCreoleColorChange#matchingSize (color group length)",
+    "utils/CharHidder#hide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::handle_tag/walk_with/walk_segments/collect_until_tag",
+    "crates/rustuml-render/src/text_render.rs::line_segments (unchanged actual-line projection)"
+  ],
+  "invariant": "A supported style candidate is eligible only when its captured content has nonzero length. Closed candidate precedes EOL candidate. Rejecting an empty closed candidate leaves the iterator unconsumed so EOL can include the closing tag as styled literal text; if EOL content is also empty the opening tag is literal. Size/color recognition instead depends on their parameter groups and can consume empty bodies. Restored zero-atom actual stripes remain spaces.",
+  "causal_divergence": "Rust commits recognition by tag name then consumes through the first exact closing tag, erasing empty closed style spans and treating closing tags as absent. Java matchingSize returns captured body length and searchCommand continues to EOL on zero. Existing exact close collection also omits supported case/strike alias matching and does not hide escaped closing candidates. Nonempty bodies can be consumed into no atoms, which must remain distinct from genuinely unrecognized closing text.",
+  "planned_change": "Introduce private candidate selection for existing supported HTML style families b/i/u/s/del/strike/w/back. Select the first eligible closed capture using source-defined closing aliases/case and escape ordering, otherwise eligible EOL capture; consume only selected candidate. Restore surrounding style after recursion and preserve command flush boundaries. Keep parameter-driven size/color handling and actual-line space projection; do not add PLAIN/reset, URL/italic, registry or legacy tspan features. Exercise delimiter-style neighbors without broad rewrite.",
+  "perturbation_axes": [
+    "empty/nonempty/consumed-empty bodies and closed versus EOL candidates",
+    "supported bold italic underline strike wave background families and closing alias/case",
+    "nested styles, unknown angle prefixes and escaped opening/closing markup"
+  ]
+}
