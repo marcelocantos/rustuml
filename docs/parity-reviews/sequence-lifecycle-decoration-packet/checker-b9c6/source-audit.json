@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "candidate": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_read_only_source_hashes": {
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/AbstractMessage.java": "797c379c39e7677047cb32223d2460bebb88fa38883cc64852db265ac340f27e",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java": "e929fbe92bf0c987c0e5f0f9f6ae1f87e20a099bffb1a4026a3e2a97b35e2f17",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReturn.java": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java": "db8c1bd54e44ea2e86802952936032c9db59c00dcf858b0987314cfaa2d2c897",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/MessageSelfArrow.java": "c08a18f11cf0b2dbe6fc6436275aeca5717ab7d3d6900c9c32c8a0b3db7a0b3e",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/MessageArrow.java": "ccfaaa99f4cf18bc74d5b311c6e21b08acdab466b9f284e716e24e61e7fb73fa",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LifeDestroy.java": "a7e3c40eafb34fef282b964d07e831239242e12731e2b56c08c535a2910bae04",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LifeLine.java": "ab19690d9fbf098ba3a320b10ca42516d9c36e51543d378a3f3a6e2c36dcbcd4",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ArrowAndNoteBox.java": "843b8beb1b76bed07576f2c46e1564c28f0094263cab0ca42555ef69e4ea3668",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/NoteBox.java": "0fc8ac9975aa0456be00ca1826e134d7654c854bcb336944f0e173ccc9735c6e",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTile.java": "4078e44762bff6f2959a0870ecb0501cb17f6a3e57faa272d82baf1c601f0274",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelf.java": "b0d937e0df4352381839029be07569c65a0333de8ef629ad111a590a8276a8bf",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/GroupingTile.java": "309f74ba94ff1b098a39cb17658d7a04612673d3e82b6a83e01e9c9e80ac39e1",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/TileParallel.java": "b3c570c05b9a116af5fd200e7dc8d3462f9aef7adc22963dfda28b572e3a2542",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LifeEventTile.java": "7b421df8dd2e2ce754425c1fe076ccd8da6c8acaaebf7930e8b72361acb3f503",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LiveBoxes.java": "0c1f7856008b04c90efbbf3addcc0b16deca3ade303a6f779cbc1481982c586d",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/Rose.java": "be607bf6195086d7a1764d7a5e6d08d8d067dbcd73fc67de404e62531aac694f",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseArrow.java": "5c7592a11e5e1164362daf44ea8acfc1014e8f9895296b740c3eda2c10578060",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseSelfArrow.java": "ee42d78cfe425c46e76fb57f5040f16cd92513c058d016bb15d462cce616c7b0",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseDestroy.java": "84cdd90cfc1525d26d435d665a71434cb1fd683c6192d7388e7a0497bfa65e3c",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseParticipant.java": "92d7d7d85bd53c2516064c42c9046dc8e3cff5ab0d34e8ea9e395a05fd2d80bc",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java": "78f64269ceccf430d3e31a6298acc35f2a563f5d699e5db1c86ab8239edf7d49",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseActiveLine.java": "7dcf50c70858075d3f2c0c7eb570eb28e6bab57378b466fe0cb0452c6b2991b9",
+    "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java": "5d5f6ed904384a6706c22a60073b279d030b5892b07a2bb6f08cdd2d27e6880f",
+    "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java": "cdd4b8ae6aaf39eebafb1107bab16184e671e639aafdc77fd925bc1b66597be1",
+    "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29"
+  },
+  "chronology": {
+    "evidence": "audit.json",
+    "accounts_precede_all_implementations": true,
+    "refinements_precede_relevant_implementations": true,
+    "refinements": {
+      "42ec7126f6559d832d7ba5bbb9c293d152ca8afa": "x-- is forward starting CROSSX with reverseDefine=false; <-x is reverse. The erroneous initial hypothesis is retained and explicitly corrected before code.",
+      "09eec925d59a83a461606ca26b7138f903ee999e": "Compare complete ordinary note-event envelope against existing theme/component bounds; remove theme exclusion.",
+      "14228d60539c365b92f96d3051c99cdf05f22e2c": "Note preferred width already includes shadow; carry its domain through final margin, avoiding a second shadow."
+    },
+    "candidate_vs_production_crates_diff": "empty",
+    "ascii_scope": "Exactly two test Message constructors gained parallel:false; no ASCII production behavior changed."
+  },
+  "command_dataflow": [
+    "Message.parallel and ReturnMessage.parallel each use serde(default). Standalone serde-defaults-command.json probe against candidate rlibs proves missing fields deserialize false and true survives roundtrip.",
+    "SequenceDiagram.activate owns activationState independently of graphical variation acceptance; ACTIVATE pushes, DEACTIVATE pops, DESTROY leaves command return ownership intact. AbstractMessage.addLifeEvent rejects same-participant ACTIVATE after a close on the same owning message; a different participant is not forbidden by that check. Rust resolve_sequence_returns carries its separate owner/stack/closed map before painting.",
+    "CommandReturn takes the command stack or internal last message, reverses endpoints and carries arrow configuration; PARALLEL is applied to an internal Message but not MessageExo. Rust preserves this branch. Fresh inbound/external return controls isolate downstream colors from ownership.",
+    "HColorSet accepts 1/3/6/8 hex digits and the exact 157-name/symbol domain checked in color-domain-audit.json. Unknown return colors reject. Valid colors remain a rendering dependency and fail six fresh cases; validation is not color serialization.",
+    "AbstractMessage.isParallelWith is directional ancestry. Rust stores prior parallel message identity, rather than making row membership symmetric. The graphical contact and predecessor composition still fail B9-PARALLEL-CONTACT and B9-PARALLEL-PREDECESSOR."
+  ],
+  "constants_and_branch_provenance": [
+    {
+      "rust": "SELF_CROSS_SPACE=6",
+      "java": "skin.rose.ComponentRoseArrow.spaceCrossX=6",
+      "assessment": "Direct named source constant. Starting/final CROSSX branches are arrow dressing semantics, not fixture direction guesses."
+    },
+    {
+      "rust": "TEOZ_DEACTIVATE_CALLBACK_STAGGER=5",
+      "java": "sequencediagram.teoz.LiveBoxes.addStep",
+      "assessment": "Direct collision increment restricted to DEACTIVATE, not arbitrary row separation."
+    },
+    {
+      "rust": "DESTROY_CROSS_HALF=9; preferred dimension=2*half",
+      "java": "skin.rose.ComponentRoseDestroy.crossSize and getPreferredHeight/getPreferredWidth",
+      "assessment": "Direct 18-unit component allocation. Attached legacy self owner contributes its component end-level loop drop; standalone LifeDestroy starts at freeY."
+    },
+    {
+      "rust": "self cross 2*spaceCrossX; spaceCrossX/2; ARROW_SIZE/2; stroke-width:2; reverse x1+1",
+      "java": "skin.rose.ComponentRoseSelfArrow.drawRightSide/drawLeftSide",
+      "assessment": "Algebraic translations of component local coordinates: both diagonals use solid UStroke.withThickness(2) independent of dotted body. Reverse x1 restores the body endpoint decrement before positioning the decoration. Eight fresh cross controls pass across engines/direction/closing depth; preserved zero/deeper depth and lowered-return controls also retained."
+    },
+    {
+      "rust": "created head +1 + shadow; max(head_height, arrow_height)",
+      "java": "ComponentRoseParticipant.getPreferredHeight = textHeight+deltaShadow+1+getDeltaCollection; CommunicationTile.getPreferredHeight",
+      "assessment": "The one is a source preferred-height term, not a fitted canvas increment. Existing participant box geometry holds collection extras. This is not proof of all participant shapes or styles."
+    },
+    {
+      "rust": "level*ACTIVATION_HALF_W; (level-2)*ACTIVATION_HALF_W; (2-level)*ACTIVATION_HALF_W",
+      "java": "CommunicationTile.LIVE_DELTA_SIZE=5; drawU posB/posD endpoint and created-head placement",
+      "assessment": "Direction and active-depth equations extend to creating endpoints. Zero/nonzero tests distinguish existing activation state. No ladder keyed to specific depth counts."
+    },
+    {
+      "rust": "max(preferred arrow width, actual endpoint span)+note component width+right shift",
+      "java": "graphic.ArrowAndNoteBox.getPreferredWidth; MessageArrow; NoteBox.getRightShift",
+      "assessment": "Right shift samples activation at component start, before arrow-contact activation. Reused twice-padding/arrow-half terms convert existing event ordinate to component start. Display normalization remains a required input and fails escaped multiline."
+    },
+    {
+      "rust": "CENTER margin difference ROSE_NOTE_MARGIN_X2-NOTE_TEXT_X_PAD =15-6",
+      "java": "ComponentRoseNote constructor and AbstractTextualComponent.getTextWidth",
+      "assessment": "Direct source margin difference, not text-dependent tuning. Explicit noteTextAlignment does not reach this value; numeric scoped shadow also fails. Correct equations alone do not satisfy styled note dimensions."
+    },
+    {
+      "rust": "max_message_note_right comparison and one-time shadow correction",
+      "java": "DrawableSetInitializer.prepareMissingSpace; ComponentRoseNote.getPreferredWidth",
+      "assessment": "Dominance is determined by complete graphical event extent, not a theme-name exception. Preferred note width already includes deltaShadow; subtraction at the final margin conversion avoids double counting. Shared activation style and Display input failures remain in scope."
+    },
+    {
+      "rust": "new create/destroy callback consumers reuse -2 ordinate conversion",
+      "java": "Rose component margins and existing Rust teoz_message_y_offset/draw_activation_bar coordinate convention",
+      "assessment": "Inherited coordinate convention, not an independently universal two-pixel law. Adjacent comments attribute Rose marginY*2. Parallel contacts prove the shared ordinate abstraction insufficient; reject scheduling closure rather than treating existing reuse as proof."
+    },
+    {
+      "rust": "Teoz destroy stroke:#A80036;stroke-width:2",
+      "java": "ComponentRoseDestroy draws with merged style.getColorLine/getStroke",
+      "assessment": "Duplicates the existing legacy default, not Java arbitrary-style resolution. Adjacent default-color description is incomplete provenance for styled destruction. Teoz is rejected; legacy acceptance is confined to ordinate/allocation, with style dependency retained."
+    },
+    {
+      "rust": "maximum==0 destroy-only stairs; level-1 destroy indent; neutral CREATE; first relevant event destroy scan",
+      "java": "LiveBoxes.drawBoxes/drawOneLevel/isNextEventADestroy and LifeEventType",
+      "assessment": "Structural source branches, not fixture-shaped cases. Splitting segment and destroy vectors loses Java per-level paint order: B9-DESTROY-ORDER rejects scheduling."
+    },
+    {
+      "rust": "parser hex lengths 1|3|6|8; default false; owner external sentinels [ and ]",
+      "java": "HColorSet.parseSimpleColor; Message/MessageExo; CommandReturn",
+      "assessment": "Language/model constants, checked directly. 157 registered names/symbols match exactly. Boolean defaults are serde compatibility, not alternate ASCII behavior."
+    }
+  ],
+  "fixture_logic_audit": {
+    "scope": "All four production files changed by packet; renderer diff plus parser/model changes, with implementation chronology and refinements.",
+    "new_fixture_label_conditions": false,
+    "new_shipping_golden_reads_or_embeds": false,
+    "new_branch_count_constant_ladders": false,
+    "new_coordinate_keyed_svg_surgery": false,
+    "generic_created_head_group_unwrapping": "Moved pre-existing component wrapper removal; not introduced as a counterexample-specific patch.",
+    "new_metrics_table_or_high_precision_layout_values": false,
+    "limits": "Does not certify unrelated historical renderer code. Default destroy style provenance remains incomplete; known decimal guard remains red."
+  },
+  "findings": "source-findings.json",
+  "dependencies": "Full candidate only; shared color, font, entity, style, note Display, lifecycle geometry and file-reader/cwd dependencies remain active. No extracted or recomposed packet acceptance."
+}

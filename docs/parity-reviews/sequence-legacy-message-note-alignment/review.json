@@ -1,0 +1,267 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-legacy-message-note-alignment",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A185d7cbb-70b4-4f24-9abb-f542386743b4",
+    "model": "gpt-6-astra / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "76972e36bd9abbeb264934bc112dea72314a54c5",
+  "implementation_commit": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+  "implementation_commits": [
+    "41e2ce88aec0c6856d57f0c2322ca097ecd55de4"
+  ],
+  "tested_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "production_revision": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+  "before_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "cargo check -p rustuml-parser -p rustuml-render",
+    "cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one (separate private before/after source and target directories; checks.json)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT (exact invocations in replay-commands.json/fresh-commands.json/supplement-commands.json)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent relay; per-case exact substituted argv in provenance and raw results)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "cargo test --release -p rustuml-oracle --test parity_perturbations -- --nocapture",
+    "rustfmt --check --edition 2024 crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/ascii.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "9a3cbb587337ee24f5bd04262e36518513e93b2db9656b93eabd9fa46928ef29",
+      "golden_sha256": "80a8a515e743cca43e8874e2d2e110b33532886d140cc1baab55abb4c3d0bfdf",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "df1ff506fa2256f06ce3025daa80a368402cb1c0623cf2b1c9410e4b79669118",
+      "golden_sha256": "461aa54c494e4dc5e4031e47610768a9e9d80d2778f09f396e594f13b0343ab5",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "131b2547a8d6dbf7ab08f7bf1e6aee9aa93b3833ae3ff424e389dbb8dd0e7d39",
+      "golden_sha256": "6d059d3327619a60135445e2545750bc274e0c0a4d4568b3784ce0e38e828855",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "57379117ac907a511e6fe24626595d4a3d08b40285733642b8daeedad00eb3f2",
+      "golden_sha256": "c0ab6d75c77a15f5464d4f417bdf5d2d2f7e3c40f7d963d4e5d7268586b8664a",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "b29036bbd5da4e78edb0b4227c9f8ba07bce37333345a64961e37908921ddea8",
+      "golden_sha256": "6b533f572c002c69ac5d06588437e707db05d7a47221b76a9b2e834369ec1f5f",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "b1567484d3e4fd32432eedaac9ac97b34d034ae0a186ad476a526cd7062e2754",
+      "golden_sha256": "7871a67517761181439f0f93d3d0d9281ca8497418fdb9225818c4ec82f50802",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ],
+      "result": "fail",
+      "source_sha256": "cbd8697d21f3e381e96d7332218c66b6e1614b0a09231b2359d8a89cf02563b9",
+      "golden_sha256": "72c131c530b14b3200433b403472c4b698c11e315d564a6333a8dc70c0cd962c",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ],
+      "result": "fail",
+      "source_sha256": "53c1a9117e7d9b28cf66b856f84d651521c5e571b39f2783bf140f969dabc0b3",
+      "golden_sha256": "cc2994dade2ea753720f61ea746bae5639c5327ba00cf8f77c1b4bbeefa67e41",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2_single.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ],
+      "result": "pass",
+      "source_sha256": "4eba3428f8fdfc24d76c182922562eb5542d0c3439fbc4e31b1102abaf2d6583",
+      "golden_sha256": "d895c8e09a98ef8ee07a23a5b3397396328f3aeb665bfec29938782be855da8a",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2_single.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2_single.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ],
+      "result": "fail",
+      "source_sha256": "0316c83984bd74c0a1f8ff1d47f5c40308177b702981a43c542ee2ed8ab16cdc",
+      "golden_sha256": "b808ffa45aa6a0e8b5ea7ddacc490cf153a268c485c0130977184c5ddd9a1583",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.svg",
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ],
+      "result": "fail",
+      "source_sha256": "14ec0d39f60747c4b89022e5d0bece436293441d1e909c02414662e36e6fdd1a",
+      "golden_sha256": "26f7fc1d22a0cfea41ac59cc8811b64679728d8b51e3968ecff9360917cbd057",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.before.svg"
+    }
+  ],
+  "findings": [
+    "B9-NOTE-DISPLAY: Java builds note Display with escaped-newline expansion before measuring the component. Rust stores the inline text verbatim and note_visual_lines splits physical newlines only. The composite receives one long line instead of two, producing width368/height187 versus Java301/203 in the unstyled reverse control. Identical content in block-form multiline passes. This shared Display dependency is inside the claimed note preferred-dimension invariant and cannot disappear merely because the new envelope equation is otherwise correct. Next repair: Normalize note Display line semantics once before shared measurement and painting, with escaped and block forms as separate regression cases. Do not repair only canvas arithmetic or special-case these labels.",
+    "B9-NOTE-ALIGNMENT: The new CENTER margin arithmetic is correct when its input is CENTER, but noteTextAlignment is not consumed: only defaulttextalignment assigns note_text_align. The fresh explicit CENTER single-line case is 9px too narrow with text9px too far left, exactly the lost constructor margin15 versus6; RIGHT preserves the shape but places text7px left. Scoped <style> note Shadowing7 also never reaches the component preferred dimension or filter: Rust has no filter and is7px short in both dimensions in its single-line control. Boolean global shadow's single-line LEFT control passes. Correct equations with missing style inputs do not satisfy the account's styled component claim. Next repair: Resolve the note's effective alignment and numeric shadow through the same style/skinparam inputs used for component paint, then feed those values into preferred dimensions and the complete event envelope. Preserve theme dominance and avoid adding shadow twice.",
+    "B9-THEME-ACTIVATION: After removing escaped multiline note text, the cerulean composite's geometry and theme bounds match. Its two activation rectangles still use Rust's hardcoded #181818 stroke rather than the Java merged activation style #2683B9. This was present before the packet and is a shared style dependency, not a newly introduced envelope regression. Next repair: Carry the effective activation line style into activation_bar_segment; retain the exact theme case and keep the bounded note-envelope evidence distinct from whole styled-sequence acceptance.",
+    "All source accounts and refinements precede their implementation commits; source audit found no fixture-label matching, golden reads in shipping additions, branch-count ladders, or coordinate-keyed output surgery. The moved generic created-head group unwrapping existed before this packet. Constants and remaining style provenance limitations are recorded in source-audit.json.",
+    "Independent1828 CLI replay: before1208 matches/581 valid mismatches/39 invalid; after1232/557/39;24 gains,0 lost passes,0 valid CLI errors/panics/timeouts. Both source/reference and before/after output hashes match archived evidence. Duplicate48 entries retained; frozen955=403 matches/542 mismatches/10 invalid. Nineteen corrected negative rejections are separate from positive matches.",
+    "Main library tiers:11181/11251 product and10497/11251 assisted, sequence1411/1411; units567 parser+783 renderer and13 CLI pass. Both main tiers exit101; guards4/6 exit101; changed-file formatting exits0. Initial main-tier invocation failed setup on the empty submodule before rendering; exact pinned golden archive restored and one populated-corpus run performed. All nonzero test exits retained.",
+    "Standing perturbations after49 fresh additions:637/1240 match,603 fail, exit101. Invalid Java references count as failures in that unchanged positive suite. The six new mechanism reviews do not supersede any historical rejection; fifteen deferred checker mismatches, prior542 failures, remaining negative semantics, shared fonts/styles/entities and cwd dependencies remain active. Parent1449 overlaps1123 paths;326 parent-only inputs remain unmeasured here."
+  ],
+  "verdict": "rejected",
+  "acceptance_scope": "Rejected at the product path; bounded improvements are not full closure. Shared dependencies remain part of the claim.",
+  "evidence": "docs/parity-reviews/sequence-lifecycle-decoration-packet/checker-b9c6/README.md",
+  "reference_provenance": {
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "timezone": "GMT+11:00",
+    "frontend": "raw pipe; no GET or source normalization",
+    "runtime": "Remote Homebrew Java21.0.5 / Graphviz12.2.0, source-pinned jar differs from historical binary; font/Graphviz equivalence is not universal",
+    "raw_batches": [
+      "reference-results.json.gz",
+      "supplement-results.json.gz"
+    ]
+  },
+  "historical_reviews_unchanged": true
+}

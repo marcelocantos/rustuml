@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : enter
+Birch -> Cedar : An extraordinarily long reverse message forces preferred width
+note right : narrow
+return after
+@enduml

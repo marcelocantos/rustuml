@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-life-event-scheduling",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A185d7cbb-70b4-4f24-9abb-f542386743b4",
+    "model": "gpt-6-astra / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+  "implementation_commit": "19074587f391b3b0bd5306cdce116fb564d06f97",
+  "implementation_commits": [
+    "19074587f391b3b0bd5306cdce116fb564d06f97"
+  ],
+  "tested_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "production_revision": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+  "before_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "cargo check -p rustuml-parser -p rustuml-render",
+    "cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one (separate private before/after source and target directories; checks.json)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT (exact invocations in replay-commands.json/fresh-commands.json/supplement-commands.json)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent relay; per-case exact substituted argv in provenance and raw results)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "cargo test --release -p rustuml-oracle --test parity_perturbations -- --nocapture",
+    "rustfmt --check --edition 2024 crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/ascii.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.svg",
+      "axes": [
+        "parallel history crosses standalone note",
+        "deactivate callback",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "836a5408eea3d1ff7821a5fc1a0c3e34da5fe76aef0a9a857a4f164fc9292b1b",
+      "golden_sha256": "1646f8c80a6c2fb6cdbe2f4fd4e12fcd98ec8088ce0fb6982c14091636fdab9e",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.svg",
+      "axes": [
+        "parallel contact maximum",
+        "self multiline and nested close",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "d5058b46592519d817259effcb0c3186f55e46ae18371c476d55850589717d3c",
+      "golden_sha256": "f1dd4b8f6f76a7b84b9147608784736184d481e6f241c4d1888ca891b1b4dea8",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_forward.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_forward.svg",
+      "axes": [
+        "create arrow taller than head",
+        "destroy nested activation",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "880c1eb7654bc3cb6c4c28ae582265283a4fb6e9b60fa1c228e5ed322af7d831",
+      "golden_sha256": "0a80f44e7c69f9cfa890d72572658bbcba1fbacff7c64283c8a7de0e78e88386",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_forward.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_forward.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.svg",
+      "axes": [
+        "reverse creation direction",
+        "return before destroy",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "3134c2e9145646f3a01115226f0b9add84b61c5214c62770676e38bf4a6b2750",
+      "golden_sha256": "d3a97dbd23abfcf4b1c26cc7ea4e1d0038f884c408d4b9b91510696b6856de99",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_create.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_create.svg",
+      "axes": [
+        "CREATE in parallel suffix",
+        "creation and destruction attachment",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "e4d96f1f1fad12fb0098ee3a7503991dd8dc1c66ffa5d63e8f0c697638fddc04",
+      "golden_sha256": "e13ae5c14b31ffc94ae0c6e509fdb3b9d134fc85c56d1868fe4a235a97c89eb8",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_create.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_create.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_standalone_destroy.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_standalone_destroy.svg",
+      "axes": [
+        "standalone destroy after group END",
+        "depth two",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "4a3bbd2d376bf6cb095717390c2ca5ec585eb8108c8ad2b3be700563a692579e",
+      "golden_sha256": "7aa12a79ec6b27ca1d8205f66ada08dd5c7f2978754b28d67838f08bc8936967",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_standalone_destroy.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_standalone_destroy.before.svg"
+    }
+  ],
+  "findings": [
+    "B9-PARALLEL-CONTACT: Rust uses event_y_positions (message stroke/callback ordinate) as the common parallel contact for all message kinds. Java aligns component getYPoint, which for a self component is text height plus half of the 13-unit loop plus paddingX, whereas ordinary arrows use text height plus paddingY. These are separate from the self callback's activation-dependent p1/p2. The fresh chain and multiline controls leave ordinary messages and their activation starts 2.5 units too high while the self component matches. This is not a label-metric discrepancy. Next repair: Represent tile contact, drawing origin, callback ordinates and extent below contact separately, and compose their maxima exactly as TileParallel; do not add a case-specific 2.5 offset.",
+    "B9-PARALLEL-PREDECESSOR: Java's first parallel tile captures the preceding graphical tile plus trailing life tiles, even when that predecessor is a standalone note. Rust clears parallel_members on the note and therefore serializes the following & message. The fresh case is 225px high versus Java 199px, with deactivation delayed along with the message. Command parallel ancestry is retained but graphical parallel composition is not. Next repair: Compose the immediate prior tile (including NoteTile) and suffix LifeEventTiles, without treating a standalone note as a barrier to parallel layout. Preserve the distinct rule that notes can reset stairs paint state.",
+    "B9-DESTROY-ORDER: The created participant's nested return/destroy case has matching coordinates and colors but wrong primitive order. Java draws a level's closing destroy immediately after that level's bar before traversing the next level. Rust stores segments and destroys in separate vectors and emits all bars before any cross. Expected outer bar, two destroy strokes, inner bar becomes outer bar, inner bar, two destroy strokes. The strict comparator correctly rejects order, which can affect overlap in other inputs. Next repair: Return an ordered draw stream or preserve per-level close-decoration attachment through materialization; do not post-sort the generated SVG.",
+    "All source accounts and refinements precede their implementation commits; source audit found no fixture-label matching, golden reads in shipping additions, branch-count ladders, or coordinate-keyed output surgery. The moved generic created-head group unwrapping existed before this packet. Constants and remaining style provenance limitations are recorded in source-audit.json.",
+    "Independent1828 CLI replay: before1208 matches/581 valid mismatches/39 invalid; after1232/557/39;24 gains,0 lost passes,0 valid CLI errors/panics/timeouts. Both source/reference and before/after output hashes match archived evidence. Duplicate48 entries retained; frozen955=403 matches/542 mismatches/10 invalid. Nineteen corrected negative rejections are separate from positive matches.",
+    "Main library tiers:11181/11251 product and10497/11251 assisted, sequence1411/1411; units567 parser+783 renderer and13 CLI pass. Both main tiers exit101; guards4/6 exit101; changed-file formatting exits0. Initial main-tier invocation failed setup on the empty submodule before rendering; exact pinned golden archive restored and one populated-corpus run performed. All nonzero test exits retained.",
+    "Standing perturbations after49 fresh additions:637/1240 match,603 fail, exit101. Invalid Java references count as failures in that unchanged positive suite. The six new mechanism reviews do not supersede any historical rejection; fifteen deferred checker mismatches, prior542 failures, remaining negative semantics, shared fonts/styles/entities and cwd dependencies remain active. Parent1449 overlaps1123 paths;326 parent-only inputs remain unmeasured here."
+  ],
+  "verdict": "rejected",
+  "acceptance_scope": "Rejected at the product path; bounded improvements are not full closure. Shared dependencies remain part of the claim.",
+  "evidence": "docs/parity-reviews/sequence-lifecycle-decoration-packet/checker-b9c6/README.md",
+  "reference_provenance": {
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "timezone": "GMT+11:00",
+    "frontend": "raw pipe; no GET or source normalization",
+    "runtime": "Remote Homebrew Java21.0.5 / Graphviz12.2.0, source-pinned jar differs from historical binary; font/Graphviz equivalence is not universal",
+    "raw_batches": [
+      "reference-results.json.gz",
+      "supplement-results.json.gz"
+    ]
+  },
+  "historical_reviews_unchanged": true
+}

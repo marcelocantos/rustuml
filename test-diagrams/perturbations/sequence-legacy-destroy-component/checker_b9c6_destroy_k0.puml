@@ -1,0 +1,7 @@
+@startuml
+Cedar -> Birch ++ : begin
+Birch -> Birch ++ : nested
+Birch -> Birch : self
+destroy Birch
+Cedar -> Birch : after
+@enduml

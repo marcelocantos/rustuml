@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Birch
+participant Maple
+Cedar -> Birch ++ : first
+& Birch -> Maple ++ : second
+& Maple -> Maple ++ : third
+destroy Maple
+& return #DarkSlateGrey inner
+return middle
+return outer
+@enduml

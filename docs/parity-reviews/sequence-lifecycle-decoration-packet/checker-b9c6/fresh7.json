@@ -1,0 +1,82 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0",
+      "single-line control isolates escaped-note dependency"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0",
+      "single-line control isolates escaped-note dependency"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2_single.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2_single.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0",
+      "single-line control isolates escaped-note dependency"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0",
+      "single-line control isolates escaped-note dependency"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0",
+      "single-line control isolates escaped-note dependency"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_escaped.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_escaped.svg",
+    "cohort": "sequence-legacy-message-note-envelope",
+    "axes": [
+      "multiline via escaped Display versus block",
+      "reverse arrow and active endpoint"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_block.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_block.svg",
+    "cohort": "sequence-legacy-message-note-envelope",
+    "axes": [
+      "multiline via escaped Display versus block",
+      "reverse arrow and active endpoint"
+    ],
+    "java_exit": 0
+  }
+]

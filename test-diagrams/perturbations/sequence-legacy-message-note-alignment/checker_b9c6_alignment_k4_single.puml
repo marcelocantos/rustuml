@@ -1,0 +1,16 @@
+@startuml
+<style>
+sequenceDiagram {
+ note {
+  HorizontalAlignment center
+  Shadowing 7
+ }
+}
+</style>
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : begin
+Cedar -> Birch ++ : body
+note right : a much longer single line
+return after
+@enduml

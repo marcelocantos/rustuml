@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+create Birch
+Cedar -> Birch ++ : born
+Birch -> Birch : self
+destroy Birch
+Cedar -> Birch : after
+@enduml
