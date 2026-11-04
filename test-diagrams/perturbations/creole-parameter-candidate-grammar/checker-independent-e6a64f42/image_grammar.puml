@@ -1,0 +1,3 @@
+@startuml
+Alder -> Birch : a<img src="checker-absent871.png">z\na<img:checker-absent871.png{scale=1.25}>z\na<img:checker-absent871.png{scale=+2}>z\na<img:checker-absent871.png{scale=}>z
+@enduml

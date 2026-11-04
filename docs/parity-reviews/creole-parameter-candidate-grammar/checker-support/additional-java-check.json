@@ -1,0 +1,22 @@
+[
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomImg.java",
+    "sha256": "ea8ddb76a981fe1fcf4d0d0e1c369dd6c401355a2bac25e5e864e2e2fa1325df",
+    "matches_pin": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/compress/Slot.java",
+    "sha256": "0e02341ccaa096b2ace40414cb684234fa58c37902718b6afddecbf7781ed7fd",
+    "matches_pin": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/compress/SlotFinder.java",
+    "sha256": "5113341ca5f5178d33682d3fd6653bcc12e512bf8c1585e50c508595dae6cdba",
+    "matches_pin": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleOpenIcon.java",
+    "sha256": "7bf9ce025c929fe800c717ead7c621022e52d646d548035f8570f9f8de960330",
+    "matches_pin": true
+  }
+]

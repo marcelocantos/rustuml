@@ -1,0 +1,8 @@
+@startuml
+participant Alder
+note right of Alder
+a<size:	014 >b</SIZE>z
+a<size 14>b</size>z
+a<size: 14 >b</size>z
+end note
+@enduml

@@ -1,0 +1,22 @@
+{
+  "production_files": [
+    "crates/rustuml-render/src/creole.rs"
+  ],
+  "legacy_prefix_byte_equal": true,
+  "public_signatures_equal": true,
+  "sprite_grammar_equal": true,
+  "account_ancestry": [
+    {
+      "account": "c14bea51a7e5797d1ba4f0ce9282f2fde378ad3b",
+      "draft": "3d92268c4aae5f8bfd3a0e271758b6a8e5442e47",
+      "precedes": true
+    },
+    {
+      "account": "5652ec397eab87fb9449beefb7e2368179ae1919",
+      "draft": "8ca73318f584dc29d7d8ab1c91f25a21718ca713",
+      "precedes": true
+    }
+  ],
+  "import_patch_byte_equal": true,
+  "golden_pin": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+}
