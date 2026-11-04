@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-unresolved-sprite-command",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.klimt.creole.command.Splitter#spritePattern/scaleOrColor",
+    "net.sourceforge.plantuml.klimt.sprite.SpriteUtils#SPRITE_NAME",
+    "net.sourceforge.plantuml.regex.Pattern2#compileInternal",
+    "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleSprite#matchingSize/executeAndGetRemaining",
+    "net.sourceforge.plantuml.klimt.creole.legacy.StripeSimple#modifyStripe/addPending/addSprite/getAtoms",
+    "net.sourceforge.plantuml.skin.SkinParam#getSprite",
+    "net.sourceforge.plantuml.klimt.creole.command.CommandCreoleSizeChange#executeAndGetRemaining",
+    "net.sourceforge.plantuml.klimt.creole.legacy.AtomTextUtils#createLegacy",
+    "net.sourceforge.plantuml.klimt.creole.legacy.AtomText#calculateDimensionSlow/drawU",
+    "net.sourceforge.plantuml.klimt.creole.SheetBlock1#calculateDimension/drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::parse_segments_inner/walk_segments/handle_tag/push_segment",
+    "crates/rustuml-render/src/text_render.rs::total_width/emit_segments/trim_text_for_emit",
+    "crates/rustuml-render/src/class.rs::note_sprite_line_dimensions/emit_note_sprite_line (read-only consumer)",
+    "crates/rustuml-render/src/svg.rs::text_with_sprites (read-only consumer)"
+  ],
+  "invariant": "At a shared text consumer without a resolved sprite atom, a complete sprite command matching Java grammar is consumed without literal output or sprite dimensions. Its command boundary flushes pending text even when styles match. If the entire stripe has no atoms, Java supplies a single space at the surrounding font configuration; embedded size commands restore the surrounding configuration. Invalid markers, escaped markup and ordinary angle text remain literal. Existing caller-owned resolved sprite paths stay unchanged.",
+  "causal_divergence": "TIM8 already emits the exact evaluated sources and must not rescan inserted values. Rust shared segment parsing treats sprite commands as unknown HTML and emits literal tokens, and its style-only coalescing would merge adjacent text if tokens were merely deleted. The existing sprite-aware note/deployment consumers resolve their own images before passing remaining text into the shared parser. Shared APIs have no sprite registry; defined class-label sprite rendering is already unsupported and remains a separately measured dependency. The class generic extraction in this exact TIM8 base independently misses a trailing quoted-display generic; no shared change can create that class object.",
+  "planned_change": "Recognize the pinned Java sprite token grammar in the existing shared Creole segment parser. Insert a private empty segment barrier at consumed unresolved commands so push_segment cannot coalesce across their boundary; remove barriers at final projection and supply the Java single-space fallback when consumption leaves no text atoms. Retain the public Segment/Style/TextBase APIs, sprite-aware caller code, TIM, metrics, fonts and styles. Add focused shared-token/emission tests. Do not tune coordinates, rewrite retained inputs, add registry infrastructure, or fix class consumer ownership.",
+  "perturbation_axes": [
+    "missing versus defined sprite names and ASCII/Unicode grammar",
+    "leading/middle/consecutive tokens, punctuation and spaces",
+    "bold/size wrappers, empty stripes and multiple lines",
+    "class label versus note and sequence consumers",
+    "escaped markup, URLs, plain angle text and invalid syntax"
+  ],
+  "base_revision": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+  "verification": "Actual source-only CLI SVG through unchanged strict comparator and CLI YAML plus exact evaluated-source diagnostics, privately built before/after targets with jobs<=4. Retained markup_scan and markup_literal remain whole-output obligations; no combined class integration claim. Fresh immutable 18-case reference request verified independently, 17 valid and 1 syntax negative; baseline fresh CLI 3/17. No checker attestation is authored by maker."
+}
