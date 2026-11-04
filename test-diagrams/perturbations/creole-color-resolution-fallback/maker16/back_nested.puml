@@ -1,0 +1,5 @@
+@startuml
+start
+:q<back:blue>a<back:NoSuchTone>elm</back>b</back>r\nq<color:navy><back:NoSuchTone>elm</back>r</color>;
+stop
+@enduml

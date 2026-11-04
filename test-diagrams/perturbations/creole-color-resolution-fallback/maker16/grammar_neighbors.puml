@@ -1,0 +1,3 @@
+@startuml
+Elm -> Cedar : q<color:~#123456>elm</color>r\nq<back:>elm</back>r\nq<color:NoSuchTone><$twig>elm</color>r
+@enduml
