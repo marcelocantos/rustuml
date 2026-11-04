@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CommandCreoleBuilder.java",
+    "sha256": "dad36e8983d828c8949e2ffeec0acc52ca2fa450deeef3d55abec313ceb22ea1",
+    "pinned_equal": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/WBSDiagram.java",
+    "sha256": "b82120c107e58caa1387688c63bbb3983e4d4888a7cdfb461177e6b95f0cedad",
+    "pinned_equal": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/CommandWBSItemOld.java",
+    "sha256": "9435b5e715d1da00ebeebb7f37ad195d4b9531907405ad3b92373a6fd1d8a9b0",
+    "pinned_equal": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/mindmap/IdeaShape.java",
+    "sha256": "7a049afa035b4e60878421a76d1a8f99a712c627896378a2a2dae8f06235d63c",
+    "pinned_equal": true
+  }
+]

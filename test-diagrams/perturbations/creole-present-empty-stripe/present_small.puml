@@ -1,0 +1,4 @@
+@startuml
+skinparam sequenceMessageFontSize 7
+Juniper -> Willow : \n<$seed>\n<size:30></size>\nZ
+@enduml

@@ -1,0 +1,260 @@
+[
+  {
+    "id": "maker2/0001-markup_scan",
+    "source": "@startuml\n!$label=\"word\"\n!$x=%set_variable_value(\"space key\",\"value\")\n!$text=\"<$label> / <space key> / <$missing>\"\nclass \"$text\" as Markup\n@enduml\n",
+    "source_sha256": "67aa925700a243ab0f25477d76ad760ddf05f56ee675d0c5af5a604dac654f21",
+    "java_reference": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/maker2/0001-markup_scan/java.svg",
+    "java_sha256": "b05676c6f2162081804d839c38a6de96a70e10219ce84ad42eac8853042b80a1",
+    "before_result": {
+      "id": "maker2/0001-markup_scan",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/supplement",
+        "exit": 0,
+        "seconds": 0.010875583000597544,
+        "stdout_sha256": "beed33dc816a6772b613805748b2b59f92d610c6268fe3b41b472f4a33e36163",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/supplement",
+        "exit": 0,
+        "seconds": 0.011197707994142547,
+        "stdout_sha256": "087138b69d3cbdb4df2df5c52af6077bdf97818b30221888aace97e703679f8a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/maker2/0001-markup_scan/java.svg",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/replay/before/maker2/0001-markup_scan/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-e09eee52",
+        "exit": 1,
+        "seconds": 0.004240499998559244,
+        "stdout_sha256": "0c445dee24607be9185de551efe9597b1af1365e3c02cc662818e4ca1d3ce697",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"<$label> / <space key> / <$missing>\" as Markup\n@enduml\n"
+      },
+      "exact_source": true
+    },
+    "after_result": {
+      "id": "maker2/0001-markup_scan",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/supplement",
+        "exit": 0,
+        "seconds": 0.014022499992279336,
+        "stdout_sha256": "beed33dc816a6772b613805748b2b59f92d610c6268fe3b41b472f4a33e36163",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/supplement",
+        "exit": 0,
+        "seconds": 0.011171500009368174,
+        "stdout_sha256": "087138b69d3cbdb4df2df5c52af6077bdf97818b30221888aace97e703679f8a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/maker2/0001-markup_scan/java.svg",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/replay/after/maker2/0001-markup_scan/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-e09eee52",
+        "exit": 1,
+        "seconds": 0.004408916007378139,
+        "stdout_sha256": "0c445dee24607be9185de551efe9597b1af1365e3c02cc662818e4ca1d3ce697",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"<$label> / <space key> / <$missing>\" as Markup\n@enduml\n"
+      },
+      "exact_source": true
+    },
+    "svg_byte_identical": true,
+    "yaml_byte_identical": true,
+    "before_yaml": "type: Class\ndiagram:\n  meta:\n    source: |\n      @startuml\n      class \"<$label> / <space key> / <$missing>\" as Markup\n      @enduml\n  direction: TopToBottom\n  uid_events:\n  - !Entity Markup\n  entities:\n  - id: Markup\n    label: <$label> / <space key> / <$missing>\n    explicit_alias: true\n    kind: Class\n    members: []\n    stereotypes: []\n    source_line: 4\n  relationships: []\n  packages: []\n  notes: []\n  hide_show: []\n",
+    "after_yaml": "type: Class\ndiagram:\n  meta:\n    source: |\n      @startuml\n      class \"<$label> / <space key> / <$missing>\" as Markup\n      @enduml\n  direction: TopToBottom\n  uid_events:\n  - !Entity Markup\n  entities:\n  - id: Markup\n    label: <$label> / <space key> / <$missing>\n    explicit_alias: true\n    kind: Class\n    members: []\n    stereotypes: []\n    source_line: 4\n  relationships: []\n  packages: []\n  notes: []\n  hide_show: []\n"
+  },
+  {
+    "id": "checker8/markup_literal",
+    "source": "@startuml\n!$tag=\"label\"\n!literal=\"<$tag>\"\nclass \"<$tag> / literal / <$unknown>\" as MarkupFresh\n@enduml\n",
+    "source_sha256": "13fb51be7481e3f896b172ae1f279ce0a3d5c7c1f4d264765bdc3e0cf5397f30",
+    "java_reference": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/checker8/markup_literal/java.svg.stdout",
+    "java_sha256": "19e486fa07b280da8ef3f30bdf1cce34f2bbd87775f84de483688e67566c9a7b",
+    "before_result": {
+      "id": "checker8/markup_literal",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.011308208006084897,
+        "stdout_sha256": "cfacf4ddec2b4c3ff3e751a29ddb0aaf590a56241638fe4c8f966b33fda804e2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.010446624990436248,
+        "stdout_sha256": "4589204049cad3b2139f1fddde33bd5da8e7321c724a4c1d27be27b952147ee2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/checker8/markup_literal/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/replay/before/checker8/markup_literal/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-e09eee52",
+        "exit": 1,
+        "seconds": 0.004164666999713518,
+        "stdout_sha256": "97e25ef02fef4e6d267d4cfa921cfb515563ae7040c28a703b316425e8a8b678",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"<label> / <$tag> / <$unknown>\" as MarkupFresh\n@enduml\n"
+      },
+      "exact_source": true
+    },
+    "after_result": {
+      "id": "checker8/markup_literal",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.012176207994343713,
+        "stdout_sha256": "cfacf4ddec2b4c3ff3e751a29ddb0aaf590a56241638fe4c8f966b33fda804e2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.01192175000323914,
+        "stdout_sha256": "4589204049cad3b2139f1fddde33bd5da8e7321c724a4c1d27be27b952147ee2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/checker8/markup_literal/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/replay/after/checker8/markup_literal/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-e09eee52",
+        "exit": 1,
+        "seconds": 0.0055301670072367415,
+        "stdout_sha256": "97e25ef02fef4e6d267d4cfa921cfb515563ae7040c28a703b316425e8a8b678",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": false,
+      "reference_factory": "CLASS",
+      "reference_valid": true,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass \"<label> / <$tag> / <$unknown>\" as MarkupFresh\n@enduml\n"
+      },
+      "exact_source": true
+    },
+    "svg_byte_identical": true,
+    "yaml_byte_identical": true,
+    "before_yaml": "type: Class\ndiagram:\n  meta:\n    source: |\n      @startuml\n      class \"<label> / <$tag> / <$unknown>\" as MarkupFresh\n      @enduml\n  direction: TopToBottom\n  uid_events:\n  - !Entity MarkupFresh\n  entities:\n  - id: MarkupFresh\n    label: <label> / <$tag> / <$unknown>\n    explicit_alias: true\n    kind: Class\n    members: []\n    stereotypes: []\n    source_line: 3\n  relationships: []\n  packages: []\n  notes: []\n  hide_show: []\n",
+    "after_yaml": "type: Class\ndiagram:\n  meta:\n    source: |\n      @startuml\n      class \"<label> / <$tag> / <$unknown>\" as MarkupFresh\n      @enduml\n  direction: TopToBottom\n  uid_events:\n  - !Entity MarkupFresh\n  entities:\n  - id: MarkupFresh\n    label: <label> / <$tag> / <$unknown>\n    explicit_alias: true\n    kind: Class\n    members: []\n    stereotypes: []\n    source_line: 3\n  relationships: []\n  packages: []\n  notes: []\n  hide_show: []\n"
+  }
+]
