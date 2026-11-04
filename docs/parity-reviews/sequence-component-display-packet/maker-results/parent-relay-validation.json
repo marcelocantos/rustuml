@@ -1,0 +1,24 @@
+{
+  "validated": true,
+  "calls": 20,
+  "sources": 20,
+  "timeouts": 0,
+  "result_gzip_sha256": "fea5c30e9ab500514ac22273e1ca2b4e70f3b2548c03c805943c7c068e664b8e",
+  "transport_sha256": "fef84f97afdb1eca075b69124b9eb66b38d9e22b51fde08ff5101cb2a8e77180",
+  "manifest_sha256": "0aa40292fe2eb910a2ed30651cdf859127e067a6759b9d8296f9cd245ae68907",
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.P1SfmUju",
+  "checks": [
+    "immutable sources",
+    "membership",
+    "streams",
+    "argv/cwd/timezone/env",
+    "pinned environment",
+    "derived Java argv"
+  ],
+  "java_argv_provenance": "Unchanged wrapper execve construction and exact invocation arguments",
+  "exit_statuses": {
+    "0": 18,
+    "200": 2
+  },
+  "classification": "Semantic validity remains maker responsibility."
+}

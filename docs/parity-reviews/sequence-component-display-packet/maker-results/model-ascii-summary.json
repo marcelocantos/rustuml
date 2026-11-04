@@ -1,0 +1,20 @@
+{
+  "entries": 62,
+  "changed_ascii": [
+    "test-diagrams/perturbations/sequence-resolved-head-alignment/checker_672_head_participant_legacy.puml",
+    "test-diagrams/perturbations/sequence-resolved-head-alignment/checker_672_head_participant_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_multiline_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_multiline_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/queue_display_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/queue_display_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/queue_stereotype_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/queue_stereotype_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/head_display_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/head_display_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/unclosed_note_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/unclosed_note_teoz.puml"
+  ],
+  "note": "Actual CLI -ttxt outputs change on14 label-normalization/negative cases; renderer not edited. No ASCII parity/invariance claim. Raw models/status/stdout/stderr retained."
+}

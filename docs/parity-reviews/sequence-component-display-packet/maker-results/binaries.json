@@ -1,0 +1,48 @@
+{
+  "before": {
+    "revision": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+    "binaries": {
+      "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+      "diff_one": "75533aeb769408614c74b89bbf605138bea94b6103c59b88c61897524ba75cd7",
+      "rustuml": "fa741017460fed6284cb8f0154aa7713acf64afe9eba2bfbbbcefe27eee0007e"
+    },
+    "source_files": {
+      "crates/rustuml-parser/src/parse/mod.rs": "283e4ccf6f7b5f31bfd73cef8b0a64965f9bdf369613cb321bae20c413f9b0f4",
+      "crates/rustuml-parser/src/diagram/sequence.rs": "6712e54a3193ff8107791f64ea306ce7ef24215cb430ed21e231774c20ca857a",
+      "crates/rustuml-parser/src/parse/sequence.rs": "6a304f6579fc745d3a83a1122a650b1741a53326ae35f0d0eba42e4766b0022d",
+      "crates/rustuml-render/src/sequence.rs": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706",
+      "crates/rustuml-render/src/ascii.rs": "d71b79c9ae4c47e523e6c17987293c964cbf6973117b406924ddd884055706aa"
+    },
+    "environment": {
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-repair/target",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    }
+  },
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "after": {
+    "revision": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+    "binaries": {
+      "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+      "diff_one": "c17b027a7a8c3bb01ab1b3f8fcb615b87865c98ee3e89ad228940e8d09ac8ca0",
+      "rustuml": "ffcb3e14b45c0679eafd523561877d908b7237cbc16c7a71c23d7ac37ef51225"
+    },
+    "source_files": {
+      "crates/rustuml-parser/src/parse/mod.rs": "283e4ccf6f7b5f31bfd73cef8b0a64965f9bdf369613cb321bae20c413f9b0f4",
+      "crates/rustuml-parser/src/diagram/sequence.rs": "3a15a1c0a678786ba03f78ef01cb5a8f134a285d778f212c29e00b8d1bf6f769",
+      "crates/rustuml-parser/src/parse/sequence.rs": "5a0730698e7bc79cc308ed7dba5c9edabf13cb64f4d30b6bd52c79015a260749",
+      "crates/rustuml-render/src/sequence.rs": "28b9f0242ca5b72ea34028f9113909ebce5e2e272c6c2d22552da11131ba4fea",
+      "crates/rustuml-render/src/ascii.rs": "d71b79c9ae4c47e523e6c17987293c964cbf6973117b406924ddd884055706aa"
+    },
+    "environment": {
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-repair/target",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    }
+  },
+  "binding": "Before binaries retain prior clean b4f37ab5 source binding, byte-identical production to baseline672cd8f. Final binaries built from clean a4c3c357. Intermediate display-bin captures retained without a complete simultaneous source snapshot; no exact-source revision claim for that draft."
+}

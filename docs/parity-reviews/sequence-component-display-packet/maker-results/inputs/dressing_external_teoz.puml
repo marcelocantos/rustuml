@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Harbor
+[<-o Harbor: reverse border
+Harbor o/--]: upper border
+[->>o Harbor ++: open entry
+Harbor o\\--] --: thin exit
+@enduml

@@ -1,0 +1,74 @@
+{
+  "accounts": [
+    {
+      "mechanism": "sequence-dressing-owned-parts",
+      "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+      "implementation_commits": [
+        "83a496134c763817ce5898758f917fe5c754dadc"
+      ]
+    },
+    {
+      "mechanism": "sequence-created-image-event-ownership",
+      "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+      "implementation_commits": [
+        "cf3eafb293de2f01699399321d2220c4de9eb28c"
+      ]
+    },
+    {
+      "mechanism": "sequence-complete-participant-display",
+      "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+      "implementation_commits": [
+        "cf3eafb293de2f01699399321d2220c4de9eb28c"
+      ]
+    },
+    {
+      "mechanism": "sequence-empty-rule-title-atom",
+      "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+      "implementation_commits": [
+        "b653a5f8adb43f4a6cb2f0ab3a4aad50c05a2bcf"
+      ]
+    },
+    {
+      "mechanism": "sequence-unclosed-note-command",
+      "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+      "implementation_commits": [
+        "71422f1b957c15ca5d45850c5f260db6b4b15862"
+      ]
+    },
+    {
+      "mechanism": "sequence-self-part-consumer",
+      "account_commit": "c31c4216327952ef019a64d8d9de86a20418f3c8",
+      "implementation_commits": [
+        "cf3eafb293de2f01699399321d2220c4de9eb28c"
+      ]
+    },
+    {
+      "mechanism": "sequence-participant-kind-font-consumer",
+      "account_commit": "9e6a899c153c4816f71f2c93b717f8e1e6a2b05b",
+      "implementation_commits": [
+        "cf3eafb293de2f01699399321d2220c4de9eb28c"
+      ]
+    },
+    {
+      "mechanism": "sequence-head-englober-component-height",
+      "account_commit": "9e6a899c153c4816f71f2c93b717f8e1e6a2b05b",
+      "implementation_commits": [
+        "cf3eafb293de2f01699399321d2220c4de9eb28c"
+      ]
+    },
+    {
+      "mechanism": "sequence-englober-member-composition",
+      "account_commit": "c0ae326fe0ec171784f51a85b6da7afb88d7073a",
+      "implementation_commits": [
+        "a4c3c35794ae1d7117d709134ed22c7191db9db8"
+      ]
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "full_tested_production": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "ownership": "Sequence model/parser/renderer only. No parse/mod, ASCII, class, TIM, shared text/style/font or target edits. Accounts retain original dates; follow-up account is dated2026-11-05."
+}
