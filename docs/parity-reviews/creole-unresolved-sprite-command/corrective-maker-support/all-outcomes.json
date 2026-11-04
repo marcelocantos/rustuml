@@ -1,0 +1,171 @@
+[
+  {
+    "cohort": "retained",
+    "entries": 1730,
+    "distinct_pairs": 1651,
+    "before_svg_exits": {
+      "0": 1605,
+      "1": 93,
+      "101": 32
+    },
+    "after_svg_exits": {
+      "0": 1605,
+      "1": 93,
+      "101": 32
+    },
+    "before_yaml_exits": {
+      "0": 1622,
+      "1": 93,
+      "101": 15
+    },
+    "after_yaml_exits": {
+      "0": 1622,
+      "1": 93,
+      "101": 15
+    },
+    "panics_before": [
+      "collateral/0754-checker_live_stack_2",
+      "collateral/0755-checker_live_stack_3",
+      "collateral/0859-checker_recovery_legacy_r0_w0",
+      "collateral/0860-checker_recovery_legacy_r0_w1",
+      "collateral/0863-checker_recovery_teoz_r0_w0",
+      "collateral/0864-checker_recovery_teoz_r0_w1",
+      "collateral/0873-checker_recovery_legacy_r0_w0",
+      "collateral/0874-checker_recovery_legacy_r0_w1",
+      "collateral/0877-checker_recovery_teoz_r0_w0",
+      "collateral/0878-checker_recovery_teoz_r0_w1",
+      "collateral/0903-checker_recovery_legacy_r0_w0",
+      "collateral/0904-checker_recovery_legacy_r0_w1",
+      "collateral/0907-checker_recovery_teoz_r0_w0",
+      "collateral/0908-checker_recovery_teoz_r0_w1",
+      "collateral/0919-checker_focus_half_bottom_n0_e0",
+      "collateral/0920-checker_focus_half_bottom_n0_e1",
+      "collateral/0921-checker_focus_half_bottom_n1_e0",
+      "collateral/0922-checker_focus_half_bottom_n1_e1",
+      "collateral/0923-checker_focus_half_top_n0_e0",
+      "collateral/0924-checker_focus_half_top_n0_e1",
+      "collateral/0925-checker_focus_half_top_n1_e0",
+      "collateral/0926-checker_focus_half_top_n1_e1",
+      "collateral/0927-checker_recovery_legacy_r0_w0",
+      "collateral/0928-checker_recovery_legacy_r0_w1",
+      "collateral/0931-checker_recovery_teoz_r0_w0",
+      "collateral/0932-checker_recovery_teoz_r0_w1",
+      "collateral/0951-checker_recovery_colored_teoz0",
+      "collateral/0952-checker_recovery_colored_teoz1",
+      "collateral/0953-checker_recovery_legacy_r0_w0",
+      "collateral/0954-checker_recovery_legacy_r0_w1",
+      "collateral/0959-checker_recovery_teoz_r0_w0",
+      "collateral/0960-checker_recovery_teoz_r0_w1"
+    ],
+    "panics_after": [
+      "collateral/0754-checker_live_stack_2",
+      "collateral/0755-checker_live_stack_3",
+      "collateral/0859-checker_recovery_legacy_r0_w0",
+      "collateral/0860-checker_recovery_legacy_r0_w1",
+      "collateral/0863-checker_recovery_teoz_r0_w0",
+      "collateral/0864-checker_recovery_teoz_r0_w1",
+      "collateral/0873-checker_recovery_legacy_r0_w0",
+      "collateral/0874-checker_recovery_legacy_r0_w1",
+      "collateral/0877-checker_recovery_teoz_r0_w0",
+      "collateral/0878-checker_recovery_teoz_r0_w1",
+      "collateral/0903-checker_recovery_legacy_r0_w0",
+      "collateral/0904-checker_recovery_legacy_r0_w1",
+      "collateral/0907-checker_recovery_teoz_r0_w0",
+      "collateral/0908-checker_recovery_teoz_r0_w1",
+      "collateral/0919-checker_focus_half_bottom_n0_e0",
+      "collateral/0920-checker_focus_half_bottom_n0_e1",
+      "collateral/0921-checker_focus_half_bottom_n1_e0",
+      "collateral/0922-checker_focus_half_bottom_n1_e1",
+      "collateral/0923-checker_focus_half_top_n0_e0",
+      "collateral/0924-checker_focus_half_top_n0_e1",
+      "collateral/0925-checker_focus_half_top_n1_e0",
+      "collateral/0926-checker_focus_half_top_n1_e1",
+      "collateral/0927-checker_recovery_legacy_r0_w0",
+      "collateral/0928-checker_recovery_legacy_r0_w1",
+      "collateral/0931-checker_recovery_teoz_r0_w0",
+      "collateral/0932-checker_recovery_teoz_r0_w1",
+      "collateral/0951-checker_recovery_colored_teoz0",
+      "collateral/0952-checker_recovery_colored_teoz1",
+      "collateral/0953-checker_recovery_legacy_r0_w0",
+      "collateral/0954-checker_recovery_legacy_r0_w1",
+      "collateral/0959-checker_recovery_teoz_r0_w0",
+      "collateral/0960-checker_recovery_teoz_r0_w1"
+    ]
+  },
+  {
+    "cohort": "maker18",
+    "entries": 18,
+    "distinct_pairs": 18,
+    "before_svg_exits": {
+      "0": 18
+    },
+    "after_svg_exits": {
+      "0": 18
+    },
+    "before_yaml_exits": {
+      "0": 18
+    },
+    "after_yaml_exits": {
+      "0": 18
+    },
+    "panics_before": [],
+    "panics_after": []
+  },
+  {
+    "cohort": "sprites50",
+    "entries": 50,
+    "distinct_pairs": 50,
+    "before_svg_exits": {
+      "0": 50
+    },
+    "after_svg_exits": {
+      "0": 50
+    },
+    "before_yaml_exits": {
+      "0": 50
+    },
+    "after_yaml_exits": {
+      "0": 50
+    },
+    "panics_before": [],
+    "panics_after": []
+  },
+  {
+    "cohort": "checker38",
+    "entries": 38,
+    "distinct_pairs": 38,
+    "before_svg_exits": {
+      "0": 38
+    },
+    "after_svg_exits": {
+      "0": 38
+    },
+    "before_yaml_exits": {
+      "0": 38
+    },
+    "after_yaml_exits": {
+      "0": 38
+    },
+    "panics_before": [],
+    "panics_after": []
+  },
+  {
+    "cohort": "fresh15",
+    "entries": 15,
+    "distinct_pairs": 15,
+    "before_svg_exits": {
+      "0": 15
+    },
+    "after_svg_exits": {
+      "0": 15
+    },
+    "before_yaml_exits": {
+      "0": 15
+    },
+    "after_yaml_exits": {
+      "0": 15
+    },
+    "panics_before": [],
+    "panics_after": []
+  }
+]

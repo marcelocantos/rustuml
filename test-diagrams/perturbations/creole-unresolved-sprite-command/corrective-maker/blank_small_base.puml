@@ -1,0 +1,4 @@
+@startuml
+skinparam sequenceMessageFontSize 8
+Cedar -> Hazel : top\n\n<$twig>\nend
+@enduml

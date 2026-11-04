@@ -1,0 +1,26 @@
+{
+  "validated": true,
+  "cases": 15,
+  "resources": 15,
+  "calls": 15,
+  "timeouts": 0,
+  "hashes": {
+    "reference-results.json.gz": "fa8edd802079d5837ee1a88ddf016af1b6ec48beabcc965dfcf9dbf4855976df",
+    "reference-transport.json": "b1bc940a74fd9b4b9725a11fa611d25a67f429e9470559184dfbae0dc3ddcfd1"
+  },
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.BoUn49wT",
+  "checks": [
+    "immutable source bytes",
+    "membership",
+    "raw streams",
+    "argv cwd timezone env",
+    "pinned environment",
+    "derived Java argv",
+    "original bundle mapping"
+  ],
+  "java_argv_provenance": "Unchanged pinned wrapper execve construction and exact invocation arguments",
+  "exit_statuses": {
+    "0": 15
+  },
+  "classification": "Not inferred from intent or exit0."
+}

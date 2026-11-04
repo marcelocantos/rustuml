@@ -1,0 +1,3 @@
+@startuml
+Cedar -> Hazel : X<outer~<$twig>>Y ~<$枝> Z
+@enduml
