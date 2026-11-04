@@ -1,0 +1,202 @@
+{
+  "current955": {
+    "entries": 955,
+    "before": {
+      "pass": 583,
+      "mismatch": 356,
+      "process_error": 7,
+      "invalid_reference": 9
+    },
+    "candidate": {
+      "pass": 603,
+      "process_error": 7,
+      "mismatch": 336,
+      "invalid_reference": 9
+    }
+  },
+  "retained237": {
+    "entries": 237,
+    "before": {
+      "mismatch": 73,
+      "pass": 143,
+      "invalid_reference": 4,
+      "process_error": 17
+    },
+    "candidate": {
+      "pass": 211,
+      "invalid_reference": 4,
+      "mismatch": 12,
+      "process_error": 10
+    }
+  },
+  "class23": {
+    "entries": 23,
+    "before": {
+      "pass": 23
+    },
+    "candidate": {
+      "pass": 23
+    }
+  },
+  "sequence41": {
+    "entries": 41,
+    "before": {
+      "mismatch": 22,
+      "pass": 17,
+      "process_error": 2
+    },
+    "candidate": {
+      "mismatch": 22,
+      "pass": 17,
+      "process_error": 2
+    }
+  },
+  "theme33": {
+    "entries": 33,
+    "before": {
+      "pass": 8,
+      "process_error": 2,
+      "mismatch": 22,
+      "invalid_reference": 1
+    },
+    "candidate": {
+      "pass": 8,
+      "process_error": 2,
+      "mismatch": 22,
+      "invalid_reference": 1
+    }
+  },
+  "registry6": {
+    "entries": 6,
+    "before": {
+      "pass": 6
+    },
+    "candidate": {
+      "pass": 6
+    }
+  },
+  "TIM42": {
+    "entries": 42,
+    "before": {
+      "mismatch": 35,
+      "pass": 3,
+      "process_error": 3,
+      "invalid_reference": 1
+    },
+    "candidate": {
+      "mismatch": 35,
+      "pass": 3,
+      "process_error": 3,
+      "invalid_reference": 1
+    }
+  },
+  "original810": {
+    "entries": 810,
+    "before": {
+      "pass": 526,
+      "mismatch": 277,
+      "invalid_reference": 7
+    },
+    "candidate": {
+      "pass": 546,
+      "mismatch": 257,
+      "invalid_reference": 7
+    }
+  },
+  "maker62": {
+    "entries": 62,
+    "before": {
+      "pass": 61,
+      "mismatch": 1
+    },
+    "candidate": {
+      "pass": 62
+    }
+  },
+  "checker139": {
+    "entries": 139,
+    "before": {
+      "mismatch": 48,
+      "pass": 82,
+      "invalid_reference": 4,
+      "process_error": 5
+    },
+    "candidate": {
+      "pass": 124,
+      "invalid_reference": 4,
+      "mismatch": 11
+    }
+  },
+  "frozen1192": {
+    "entries": 1192,
+    "before": {
+      "pass": 726,
+      "mismatch": 429,
+      "process_error": 24,
+      "invalid_reference": 13
+    },
+    "candidate": {
+      "pass": 814,
+      "process_error": 17,
+      "mismatch": 348,
+      "invalid_reference": 13
+    }
+  },
+  "combined1449": {
+    "entries": 1449,
+    "before": {
+      "pass": 743,
+      "invalid_reference": 33,
+      "mismatch": 606,
+      "process_error": 67
+    },
+    "candidate": {
+      "pass": 831,
+      "invalid_reference": 33,
+      "mismatch": 525,
+      "process_error": 60
+    }
+  },
+  "later257": {
+    "entries": 257,
+    "before": {
+      "invalid_reference": 20,
+      "mismatch": 177,
+      "process_error": 43,
+      "pass": 17
+    },
+    "candidate": {
+      "invalid_reference": 20,
+      "mismatch": 177,
+      "process_error": 43,
+      "pass": 17
+    }
+  },
+  "checker62": {
+    "entries": 62,
+    "before": {
+      "process_error": 12,
+      "mismatch": 43,
+      "invalid_reference": 2,
+      "pass": 5
+    },
+    "candidate": {
+      "mismatch": 27,
+      "invalid_reference": 2,
+      "pass": 32,
+      "process_error": 1
+    }
+  },
+  "maker48": {
+    "entries": 48,
+    "before": {
+      "mismatch": 41,
+      "process_error": 4,
+      "pass": 3
+    },
+    "candidate": {
+      "mismatch": 3,
+      "pass": 45
+    }
+  }
+}

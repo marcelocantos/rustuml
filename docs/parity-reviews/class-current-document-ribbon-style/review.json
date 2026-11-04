@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-current-document-ribbon-style",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "1051c34cc9ac39115368720fa8e5ed44ebdbadc5",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_center.puml",
+      "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_center.svg",
+      "axes": [
+        "header/footer font size and inner alignment versus outer command alignment",
+        "multiline unequal labels with nested containers and title/caption siblings"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "61410bb8ccb0560d764181868c464f7e4d8e246cdbdf75abde3654d69beb9fba",
+      "java_sha256": "54fc6ab7384efd7a3fd6dfb1372386b0332bee735f11742b4c0eda40a96dce7e",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_left.puml",
+      "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_left.svg",
+      "axes": [
+        "header/footer font size and inner alignment versus outer command alignment",
+        "multiline unequal labels with nested containers and title/caption siblings"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "48112057ac74f43ba9059f1b839ad25230437db4a882b6d12e1223e72ebd8e2f",
+      "java_sha256": "ee7ff25f9bb795943cdfbd1863e1af303d2e061d6eda569215a10f271f1e3c10",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_right.puml",
+      "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c-retained-maker/chrome_right.svg",
+      "axes": [
+        "header/footer font size and inner alignment versus outer command alignment",
+        "multiline unequal labels with nested containers and title/caption siblings"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "c69bf4f20a81c784a60349810ded6f3e8b03c41fff28e7ae7d23349ec92d0074",
+      "java_sha256": "2f6cadf4296140e7dcf1e2efddb43f66f7d3d0800d156315d08e00d212341b48",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/footer_serif.puml",
+      "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/footer_serif.svg",
+      "axes": [
+        "header/footer font size and inner alignment versus outer command alignment",
+        "multiline unequal labels with nested containers and title/caption siblings"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "26312c2e5162db3fb99c264bd8d93797919bc92bfa7b6a99e216928bbd4ec612",
+      "java_sha256": "3b35032850368dc3c0f0805267af60f2c10528ca1a99dc8a28dfa939c226bc58",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/header_mono.puml",
+      "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/header_mono.svg",
+      "axes": [
+        "header/footer font size and inner alignment versus outer command alignment",
+        "multiline unequal labels with nested containers and title/caption siblings"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "534dcb34e76b522d1af0615bfd84f8db37b6048512aa70108ccfb83583fe6671",
+      "java_sha256": "ba432a8813ef222a73456f849f018b52d588c654223aa1284f3b63195509396c",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/title_italic.puml",
+      "golden": "test-diagrams/perturbations/class-current-document-ribbon-style/checker3c/title_italic.svg",
+      "axes": [
+        "header/footer font size and inner alignment versus outer command alignment",
+        "multiline unequal labels with nested containers and title/caption siblings"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "9822f2d9ce3b44373382b9cd0a1988e5d1046d11a88381682114d2c2f7441d91",
+      "java_sha256": "5de4db7461a68b26480d8b85b00a63745db5b3433f9b28387ea60d7f400bceaf",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "DiagramChromeFactory12026, DisplayPositioned.createRibbon and Style.createTextBlockBordered confirm current document style flow. Rust now reads font/color/alignment for measurement and emission, but all three fresh alternate-font/style examples fail.",
+    "header_mono preserves requested italic/font/color but differs in measured advances, baseline and significant spaces (Java nonbreaking spaces versus Rust spaces). Rust block_height and emitted line_height still use generic metrics while width uses the selected family. Font mapping across remote and origin remains unproven; these failures are retained, not relabeled style passes.",
+    "The three retained cloud chrome maker cases still fail their outlines. They do not license acceptance of the complete mechanism."
+  ],
+  "bounded_repair_guidance": "Use the resolved font/text model consistently for width, height, ascent and Creole whitespace; identify font-environment dependence explicitly and retain cloud frontier failures.",
+  "source_audit": {
+    "java_locations": [
+      "core/DiagramChromeFactory12026#addHeaderAndFooter,addTitle,addCaption",
+      "abel/DisplayPositioned#createRibbon",
+      "style/Style#createTextBlockBordered"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs#DecorationStyle,DecorationLayout"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

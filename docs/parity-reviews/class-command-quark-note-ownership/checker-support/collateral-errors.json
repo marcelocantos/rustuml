@@ -1,0 +1,362 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11663917) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11663922) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665293) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665297) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665333) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665341) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665415) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665419) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665452) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665458) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665730) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665732) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665764) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665766) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665876) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665883) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665908) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665912) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665915) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665923) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665938) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665942) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665945) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665958) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665988) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11665997) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11666193) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11666206) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11666209) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11666230) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11666281) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11666289) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 6: unrecognized class command: !procedure $emit($a = 2, $b = 1)\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 3: unrecognized class command: class \"$b=\"named / second\" as Named\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !function $label($prefix = \"\u00e9,(x)\", $suffix = early)\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 6: unrecognized class command: !procedure $emit($caption = a,b)\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 3: unrecognized class command: class \"$seed + \" suffix\" as Copper\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 4: unrecognized class command: class CobaltRegistry /' suffix\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 7: unrecognized class command: ' [dump] palette=cerulean\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !$key =\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 6: unrecognized class command: !$raw =\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 5: unrecognized class command: class \"%variable_exists((\"$\" +/\" as Copper\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+    "kind": "panic",
+    "before": "process_error",
+    "stderr": "\nthread 'main' (11672023) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 26 is not a char boundary; it is inside '\u00e9' (bytes 25..27 of string)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 1: unrecognized class command: !procedure $unused($v = 2026)\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 4: unrecognized class command: !global parameter = \"updated\"\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "kind": "parse_error",
+    "before": "process_error",
+    "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+  }
+]

@@ -1,0 +1,9 @@
+@startuml
+skinparam classAttributeIconSize 9
+protocol Orchard {
++fruit
+-seed
+#branch()
+~root()
+}
+@enduml

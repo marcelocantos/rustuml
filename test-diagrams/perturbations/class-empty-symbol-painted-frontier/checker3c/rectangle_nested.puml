@@ -1,0 +1,8 @@
+@startuml
+package Bay {
+rectangle "Wide empty enclosure" as Empty {
+}
+class Seed
+Empty --> Seed
+}
+@enduml

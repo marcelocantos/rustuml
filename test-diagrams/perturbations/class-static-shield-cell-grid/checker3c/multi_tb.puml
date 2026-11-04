@@ -1,0 +1,8 @@
+@startuml
+component "Long service name" as S
+interface "I" as I
+interface "Unusually wide contract" as J
+S --> I
+J --> S
+I --> J
+@enduml

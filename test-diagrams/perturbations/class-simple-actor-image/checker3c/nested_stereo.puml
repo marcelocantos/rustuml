@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+class Seed
+package Bay {
+actor "Keeper\nlong second line" as A <<human>>
+}
+A --> Seed
+@enduml

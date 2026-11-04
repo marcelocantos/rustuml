@@ -1,0 +1,6 @@
+@startuml
+node "Wide empty enclosure" as Empty {
+}
+class Seed
+Empty --> Seed
+@enduml

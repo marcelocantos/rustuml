@@ -1,0 +1,5 @@
+@startuml
+record "Mooring light" as Beacon
+class Peer
+Peer --> Beacon
+@enduml

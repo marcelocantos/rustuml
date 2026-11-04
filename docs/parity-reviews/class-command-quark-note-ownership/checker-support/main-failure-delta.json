@@ -1,0 +1,43 @@
+{
+  "no_oracle": {
+    "before_source": "docs/parity-reviews/class-command-quark-note-ownership/maker-evidence/reports/before-no_oracle_failure_names.txt",
+    "before_count": 63,
+    "candidate_count": 63,
+    "new_failures": [],
+    "repaired": []
+  },
+  "assisted": {
+    "before_source": "docs/parity-reviews/class-command-quark-note-ownership/maker-evidence/reports/before-golden_failure_names.txt",
+    "before_count": 754,
+    "candidate_count": 728,
+    "new_failures": [],
+    "repaired": [
+      "component/comp_elem_interface_as_node",
+      "component/comp_lollipop_complex",
+      "component/comp_provided_interface_explicit",
+      "creole/creole_combo_back_yellow_in_component",
+      "edge-cases/edge_component_component_to_interface",
+      "edge-cases/edge_component_interface_to_artifact",
+      "edge-cases/edge_component_interface_to_cloud",
+      "edge-cases/edge_component_interface_to_database",
+      "edge-cases/edge_component_interface_to_node",
+      "edge-cases/edge_theme_cerulean",
+      "edge-cases/edge_theme_cyborg",
+      "preprocessing/preproc_complex_theme_override",
+      "preprocessing/preproc_theme_black_knight_class",
+      "preprocessing/preproc_theme_cerulean-outline_class",
+      "preprocessing/preproc_theme_cerulean_class",
+      "preprocessing/preproc_theme_cyborg_class",
+      "preprocessing/preproc_theme_hacker_class",
+      "preprocessing/preproc_theme_materia_class",
+      "preprocessing/preproc_theme_metal_class",
+      "preprocessing/preproc_theme_minty_class",
+      "preprocessing/preproc_theme_sandstone_class",
+      "preprocessing/preproc_theme_silver_class",
+      "preprocessing/preproc_theme_spacelab_class",
+      "preprocessing/preproc_theme_superhero_class",
+      "preprocessing/preproc_theme_united_class",
+      "rendering/nesting/nesting_component_interfaces"
+    ]
+  }
+}

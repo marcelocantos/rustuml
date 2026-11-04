@@ -1,0 +1,6 @@
+@startuml
+struct Store
+note right of Store {
+entity Phantom
+}
+@enduml

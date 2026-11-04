@@ -1,0 +1,15 @@
+@startuml
+<style>
+header {
+FontSize 16
+HorizontalAlignment left
+}
+</style>
+left header
+Wide ribbon
+
+x
+
+end header
+class Sprout
+@enduml

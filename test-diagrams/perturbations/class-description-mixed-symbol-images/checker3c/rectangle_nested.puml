@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+class Seed
+package Bay {
+rectangle "Long symbol title\nx" as Leaf <<service>>
+}
+Leaf --> Seed
+@enduml

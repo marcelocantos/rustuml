@@ -1,0 +1,222 @@
+[
+  {
+    "name": "fraction_tb",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/fraction_tb.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/fraction_tb.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "fraction_lr",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/fraction_lr.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/fraction_lr.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "minimum",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/minimum.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/minimum.dot"
+        ],
+        "exit": 0,
+        "stderr": "Warning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nWarning: fixed cell size with unspecified width or height\nin label of node a\n"
+      }
+    ]
+  },
+  {
+    "name": "exponent",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/exponent.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/exponent.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "nearmax",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/nearmax.dot"
+        ],
+        "exit": 0,
+        "stderr": "Warning: Not built with libexpat. Table formatting is not available.\nin label of node a\nWarning: node a, port h unrecognized\nWarning: node a, port h unrecognized\nWarning: node a, port h unrecognized\nWarning: node a, port h unrecognized\nWarning: node a, port h unrecognized\n"
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/nearmax.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "row_col_maxima",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/row_col_maxima.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/row_col_maxima.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "preserved_group_lr",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/preserved_group_lr.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/preserved_group_lr.dot"
+        ],
+        "exit": 0,
+        "stderr": "Warning: table size too small for content\nin label of graph cluster6\nWarning: table size too small for content\nin label of graph cluster11\n"
+      }
+    ]
+  },
+  {
+    "name": "preserved_package_target",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/preserved_package_target.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/preserved_package_target.dot"
+        ],
+        "exit": 0,
+        "stderr": "Warning: table size too small for content\nin label of graph cluster6\n"
+      }
+    ]
+  },
+  {
+    "name": "preserved_shield",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/preserved_shield.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/preserved_shield.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "point_default",
+    "runs": [
+      {
+        "command": [
+          "/tmp/rustuml-review-cbd/raw_dot",
+          "/tmp/rustuml-review-cbd/native/point_default.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/opt/homebrew/bin/dot",
+          "-Tplain",
+          "/tmp/rustuml-review-cbd/native/point_default.dot"
+        ],
+        "exit": 0,
+        "stderr": ""
+      }
+    ]
+  }
+]

@@ -1,0 +1,6 @@
+@startuml
+entity Gate {
++int code
+}
+Gate --> Gate
+@enduml

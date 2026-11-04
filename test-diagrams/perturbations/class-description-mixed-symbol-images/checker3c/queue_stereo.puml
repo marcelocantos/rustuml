@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+class Seed
+package Bay {
+queue "Long symbol title\nx" as Leaf <<fifo>>
+}
+Leaf --> Seed
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+skinparam classAttributeIconSize 9
+package Arbor {
+record "Harvest ledger" as Log {
++fruit:int
+-hidden:int
+#branch:int
+~harvest()
+}
+}
+@enduml

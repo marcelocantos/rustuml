@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+skinparam componentStyle rectangle
+class Linden
+component "Telemetry dispatch\nshort" as Relay <<meter>>
+Linden --> Relay
+@enduml

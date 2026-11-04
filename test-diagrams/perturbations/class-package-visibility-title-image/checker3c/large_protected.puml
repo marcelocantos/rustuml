@@ -1,0 +1,8 @@
+@startuml
+skinparam classAttributeIconSize 21
+#package "Archive dock" as D <<service>> {
+class Birch
+class Elm
+Birch --> Elm
+}
+@enduml

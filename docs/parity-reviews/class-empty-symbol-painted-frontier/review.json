@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-symbol-painted-frontier",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "372a84d6abb20df41a3690ba5ee5774b1ed03998",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_cloud.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_cloud.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "d2346f4539328a7ed95db93bb48c71a53786e0f7fef105972260db4e2b3590ed",
+      "java_sha256": "b439868be2e10e5ad1e69df65465443ebb8e031def6037935166dfe7d6a2687b",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_database.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_database.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "d162f30673a6d04d36baf1c6c94efeb176ce938481c5081e23fab2c95dd9962d",
+      "java_sha256": "8496ec1163a93f2aa4f3a45e99bbe77d38bab9feb77dd0775712a42682444331",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_node.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_node.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "456bc345f25e0b6f220449ef9685fb89e382c76cc63db01dc84585f42340eba3",
+      "java_sha256": "fe7281c0dc72645239e7e3454942080ed14f2690589c24c6564ffbca5e9e6e26",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_rectangle.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c-retained-maker/empty_rectangle.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "5bf5a24e279d63192c8844d4d578ee765c53863ebc50bab0e1a1dc7aaa0c9935",
+      "java_sha256": "f7949fb3724086564c06d48b5113922400d33cb3ba34b6ffc44596b60717d74a",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/cloud_unlinked.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/cloud_unlinked.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "3ee3eab43bf27388052d859d77be6003e15769c84c20896d3165cdbec2eb687b",
+      "java_sha256": "a100d7103e976690e1135e959b07083fb30930c28e2a3babdd7d965e09bff75e",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/database_link.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/database_link.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "0179cd31670e7d10ac8b8b70311b93b56524affe8fd4eebb224829cea183e2c2",
+      "java_sha256": "f9fa55dd65d32ff249a1e3c1d3dff8e04716526fc54723841acfee320ca28ae8",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/node_link.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/node_link.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "634ffbcaf63d5c3c4d4e93b3200dd5b87e8bab536fac11ed86652e8cbe6cd3b4",
+      "java_sha256": "6d7ab045d665807225314fbc9b831c7145c4f62dd3ba920bc2dac25db97f4da4",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/rectangle_nested.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-painted-frontier/checker3c/rectangle_nested.svg",
+      "axes": [
+        "empty node/cloud/rectangle/database symbols",
+        "linked/unlinked groups and label lengths"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "d4df87f24ac69dbf7a4c5465025e48db1d677aa2130097e5fbe48d6df4441d48",
+      "java_sha256": "5a61650d3b99d0442d2070c85483d0c7894d7ae4d2c5d797c8862cab2c7a1620",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "Mapping empty package layout slots back to package image roles extends primitive frontier and UEmpty accounting to empty leaves; fresh node/cloud/database controls pass.",
+    "rectangle_nested remains a mismatch: Java emits link id Empty-to-Seed while Rust emits Bay.Empty-to-Seed. The path endpoint also differs by .01, which is within the frozen geometry tolerance; the identifier difference is not. Correct frontier geometry does not waive qualified-name/link serialization residue."
+  ],
+  "bounded_repair_guidance": "Preserve the frontier correction and resolve contextual endpoint serialization using Java model identity, without changing comparator rules.",
+  "source_audit": {
+    "java_locations": [
+      "svek/SvekResult#calculateDimension",
+      "svek/image/EntityImageDescription#drawU",
+      "decoration/symbol/USymbolNode#drawNode",
+      "decoration/symbol/USymbolCloud#drawCloud"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

@@ -1,0 +1,15 @@
+@startuml
+<style>
+footer {
+FontSize 21
+HorizontalAlignment right
+}
+</style>
+right footer
+Wide ribbon
+
+x
+
+end footer
+class Sprout
+@enduml

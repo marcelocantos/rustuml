@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+node Grove {
+class Linden
+queue "Wide dispatch label\nshort" as Relay <<service>>
+Relay --> Linden
+}
+@enduml

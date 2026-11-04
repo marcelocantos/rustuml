@@ -1,0 +1,5 @@
+@startuml
+allowmixing
+class Seed
+boundary "Gate\na much wider second line" as B <<edge>>
+@enduml

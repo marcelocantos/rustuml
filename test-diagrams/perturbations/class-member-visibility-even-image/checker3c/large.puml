@@ -1,0 +1,9 @@
+@startuml
+skinparam classAttributeIconSize 22
+struct Orchard {
++fruit
+-seed
+#branch()
+~root()
+}
+@enduml

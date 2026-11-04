@@ -1,0 +1,6 @@
+@startuml
+skinparam classAttributeIconSize 13
+~package "Archive dock" as D <<service>> {
+class Bud
+}
+@enduml

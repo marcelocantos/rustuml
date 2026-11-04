@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-visibility-title-image",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "de192dc216b6795b6d820c240e82234988d1f39d",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_package.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_package.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "process_error",
+      "source_sha256": "30564b91314d05de2879c67fc8e14c6df9b5b49e70fe347ada86d09a8fa7538b",
+      "java_sha256": "3d4484bdce8669e3055164b09b0af85de1926ac63d0e29ef20d3b1d1138e7988",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_private.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_private.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "process_error",
+      "source_sha256": "521bb09f13c4b7c74d50785f33f10735fdd93a63cfe51a64e53390018bcc678d",
+      "java_sha256": "7afce0102a0ba1d413ad4e3dbfbc9bbc6cb86a092b455a8c104c8b2779af933d",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_protected.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_protected.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "process_error",
+      "source_sha256": "de5b55650215bfa4fccddf3e8c9fff68c2276492f9618b483d81de1b752afc15",
+      "java_sha256": "512a25ff0a6299e490e7a1f4bf81b75f2bb29bf5d490e2c6b75fe3c11b9ea7e1",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_public.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_public.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "process_error",
+      "source_sha256": "dc9d7a31d1afc779b7fcda0f0cc83767315e0b1b616f6e7a76a8a50a35413e05",
+      "java_sha256": "7c67048f85f90e67eb70f81b5344040eced1050b555db229d010bb9b8dc67ab9",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/empty_public.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/empty_public.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "process_error",
+      "source_sha256": "b31ba7c61774f964cc6e9663d726a12f9fc80ef2b39e33506708fc9d93da5266",
+      "java_sha256": "3842ac7b32ce75d41cd9ee8239acf70fd8f8e65ed0e00dba821f1f777f5b20dc",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/large_protected.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/large_protected.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "process_error",
+      "source_sha256": "d6d4f2abd41266b801328de649d144ed87b7683eedf866e62c554b82dfd830bc",
+      "java_sha256": "8862c570ee519356e1cef78bf1d4606324b38e3fd832ac248c92a278a68c0b16",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/stereo_package.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/stereo_package.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "process_error",
+      "source_sha256": "baa49ac93b81ba13c8c82eee5d7cbefc8585d6dcd3d1cdc6a8bbfe7c0f9c1554",
+      "java_sha256": "b0f4a7d6c86644793f59e02dc8308925a904c0fe1c729da05efc3c57c4f201d7",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_node.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_node.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "e0f48e3db4fc9fca67fc084cd2be0100008682debc8765fcc455527467ada26b",
+      "java_sha256": "d69f5cc421b884a0cad2faf63a604fccfb0f51a655fc8dd8c23f5a47d136667f",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_rectangle.puml",
+      "golden": "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_rectangle.svg",
+      "axes": [
+        "all four visibility kinds and custom icon sizes",
+        "short/long group names, stereotype and child topology"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "89919ae48637c85ea3d5c985a27d9cb12862d70bcc6000b53ea9bf497884cba1",
+      "java_sha256": "4401440bf0b222389d78e8a36c17bfb85869706ab82ceea7db7af8da85b4bdb7",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "ClusterHeader.getTitleBlock merges a size+1 visibility image with top margin 4 before the title independently of package symbol choice. Measurement changes follow that source for the exercised default folder titles.",
+    "style_rectangle and style_node preserve visibility in the AST and reserve its width but paint no visibility glyph. render_declaration_visibility is called only in the default Package branch of emit_layout_package_cluster; alternate symbol title paths omit it. All three fresh default-style cases pass, including empty groups and custom icon sizes."
+  ],
+  "bounded_repair_guidance": "Compose one visibility-aware title image and use it for every package symbol, both empty leaf and populated cluster paths.",
+  "source_audit": {
+    "java_locations": [
+      "command/CommandPackage#executeArg",
+      "svek/ClusterHeader#getTitleBlock",
+      "skin/VisibilityModifier#getUBlock,drawInternal"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs#layout_package_clusters,emit_layout_package_cluster,cluster title dimensions"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

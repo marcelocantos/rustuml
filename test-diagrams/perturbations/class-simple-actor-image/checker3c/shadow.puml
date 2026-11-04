@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+skinparam shadowing true
+class Seed
+actor "Shadowed keeper" as A <<human>>
+A --> Seed
+@enduml
