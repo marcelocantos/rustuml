@@ -1,0 +1,50 @@
+[
+  {
+    "name": "create_outer_bit_legacy",
+    "java_exit": 0,
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "intended_valid": true,
+    "observed_valid": true,
+    "error_marker": false,
+    "source_sha256": "53cef15293a39bd16f05c39d552c6e657260b868362c21c59de58218f89822c9",
+    "stdout_sha256": "5f2adaae65ce498ce835ea533fd225c5152e76313d77dafc7318e1c32ede7b46",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "create_outer_bit_teoz",
+    "java_exit": 0,
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "intended_valid": true,
+    "observed_valid": true,
+    "error_marker": false,
+    "source_sha256": "4e11ff44534c01f59ac233b489b475830bb4af1a0000f120d5e5a269d2715fce",
+    "stdout_sha256": "50b8a74c09bfffe690fb2f99e1e6f36a87fac477bb22359321cdc480879e41b1",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "create_inner_bit_legacy",
+    "java_exit": 0,
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "intended_valid": true,
+    "observed_valid": true,
+    "error_marker": false,
+    "source_sha256": "2bf05f534b51d92e7599d5589202f168ea53ff781f7808aa7015e6b54035f122",
+    "stdout_sha256": "15d357830f81ac1873a601f4a49a4ac562bab74ee89c30b3eef393318db5345b",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "create_inner_bit_teoz",
+    "java_exit": 0,
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "intended_valid": true,
+    "observed_valid": true,
+    "error_marker": false,
+    "source_sha256": "41d8e450a257298b5890ab1a2ef011b723556eb3871807484abb5e5bedcdc69c",
+    "stdout_sha256": "7425fb81d886b1e788e23289d7a755da1795b3524ade789c6424a4982dd6c2fd",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "mechanisms": [
+    {
+      "mechanism": "sequence-required-note-identity",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "8cb61e5dce9006a570549de0fd11f2bc9f1dfcc3"
+    },
+    {
+      "mechanism": "sequence-command-fox-space",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "fc3019e363c1e2b8b2f4822261255dc954037d7e"
+    },
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "f48bafbc94af6d0fd3adc777708666407952a585"
+    },
+    {
+      "mechanism": "sequence-command-provenance-correction",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "5dccddca0c94fa2d436afd4a8c6ff0f09f028170"
+    },
+    {
+      "mechanism": "sequence-pattern2-class-composition",
+      "account_commit": "2a0441642b1d84315cb6bfef1d21c9fb4e5d3e08",
+      "implementation_commit": "70bc20cf1efe456fa5dd83e3a726c2796717ce9b"
+    },
+    {
+      "mechanism": "sequence-create-command-signature-scope",
+      "account_commit": "d4fc86b240d2ea0cde6780c0910de2fff01b3c23",
+      "implementation_commit": "b4849a5008ff28c360fefe0176ee6ad073c02fd7"
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ownership": "Only owned parse/sequence.rs production and one renderer comment changed. No model fields or ASCII fixture/renderer edits; no factory/global consumption/shared files.",
+  "provenance_corrections": [
+    "CommandParticipantA and A2/A3/A4 own declaration grammar, not nonexistent CommandParticipant#getRegexConcat.",
+    "DrawableSetInitializer method is prepareParticipant, not createParticipant.",
+    "Literal-space entry gates were Rust-side; Java uses RegexLeaf whitespace.",
+    "CommandReferenceMultilinesOverSeveral uses Pattern2 directly: bypass FoxSignature, unlike single-line CommandReferenceOverSeveral."
+  ]
+}

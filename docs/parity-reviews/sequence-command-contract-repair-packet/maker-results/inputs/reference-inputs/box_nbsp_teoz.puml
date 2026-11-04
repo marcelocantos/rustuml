@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+box "Northern Shore" #pink
+participant N
+end box
+N -> S: cross
+@enduml
