@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "06dedeb975ba3b0ef70bb3b161de1f22d9b991a1",
+  "verification": "Reuse immutable1559+36+20+34 cohorts; focused CLI frozen comparator, fresh parent-relay controls, model retention and invalid negatives; final main tiers/libs/CLI/guards. No local JVM, SSH, native work or checker verdict.",
+  "mechanism": "class-command-url-named-quark",
+  "java_locations": [
+    "classdiagram/command/CommandUrl#getRegexConcat,executeArg",
+    "abel/Quark#getData",
+    "svek/image/EntityImageNote#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#parse_line,resolve_quark_path,push_note",
+    "crates/rustuml-render/src/class.rs named note rendering"
+  ],
+  "invariant": "The consuming CommandUrl resolves an existing entity quark in current context and attaches URL without allocating another entity/UID. Missing or forward targets fail. Named note inline URL syntax remains invalid.",
+  "causal_divergence": "Review541 two valid url of Memo commands fail strict class consumption despite existing Note URL model fields.",
+  "planned_change": "Recognize anchored Java command grammar, resolve existing note/class/group identity and store URL+tooltip using existing model; renderer uses the note-owned entity group. No new anonymous fallback or command dropping.",
+  "perturbation_axes": [
+    "url/of/for/is forms, quoted/qualified and nested aliases",
+    "declaration order, missing targets, inline invalid syntax, note body form and URL tooltip/topurl"
+  ]
+}
