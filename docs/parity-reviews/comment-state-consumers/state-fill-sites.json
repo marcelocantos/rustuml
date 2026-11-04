@@ -1,0 +1,278 @@
+[
+  {
+    "line": 1328,
+    "template": "            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 1358,
+    "template": "            r#\"<path d=\"M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 1388,
+    "template": "        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 1438,
+    "template": "        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 1455,
+    "template": "        r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:{};\"/>\"#,"
+  },
+  {
+    "line": 1600,
+    "template": "        r#\"<polygon fill=\"{}\" points=\"{}\"\"#,"
+  },
+  {
+    "line": 1612,
+    "template": "            r##\"<text fill=\"#000000\" font-family=\"monospace\" font-size=\"10\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{}</text>\"##,"
+  },
+  {
+    "line": 1620,
+    "template": "            r##\"<text fill=\"#000000\" font-family=\"monospace\" font-size=\"10\" x=\"{}\" y=\"{}\">{}</text>\"##,"
+  },
+  {
+    "line": 1632,
+    "template": "        r#\"<polygon fill=\"{}\" points=\"{}\"\"#,"
+  },
+  {
+    "line": 1646,
+    "template": "        r#\"<path d=\"{}\" fill=\"{}\"\"#,"
+  },
+  {
+    "line": 3764,
+    "template": "                    r#\"<g class=\"start_entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\"{default_shadow_attr} rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,"
+  },
+  {
+    "line": 3773,
+    "template": "                    r#\"<g class=\"end_entity\" data-qualified-name=\"{qualified_name}\" data-source-line=\"{source_line}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"none\"{default_shadow_attr} rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\" rx=\"{END_INNER_RADIUS}\" ry=\"{END_INNER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,"
+  },
+  {
+    "line": 3802,
+    "template": "                    r#\"<g class=\"start_entity\" data-qualified-name=\"{}\" data-source-line=\"{}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{fill}\"{default_shadow_attr} rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,"
+  },
+  {
+    "line": 3820,
+    "template": "                    r#\"<g class=\"end_entity\" data-qualified-name=\"{}\" data-source-line=\"{}\" id=\"{}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"none\"{default_shadow_attr} rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/><ellipse cx=\"{}\" cy=\"{}\" fill=\"{fill}\" rx=\"{END_INNER_RADIUS}\" ry=\"{END_INNER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,"
+  },
+  {
+    "line": 3840,
+    "template": "                    r#\"<g class=\"entity\" data-qualified-name=\"{}\" id=\"{}\"><polygon fill=\"{fill}\" points=\"{},{},{},{},{},{},{},{},{},{}\" style=\"stroke:{};stroke-width:0.5;\"/></g>\"#,"
+  },
+  {
+    "line": 3866,
+    "template": "                    r#\"<rect fill=\"{fill}\" height=\"{}\" style=\"stroke:none;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  },
+  {
+    "line": 3888,
+    "template": "                    r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{fill}\" rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 3897,
+    "template": "                    r#\"<text fill=\"{}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{label}</text>\"#,"
+  },
+  {
+    "line": 3946,
+    "template": "                        r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{fill}\" rx=\"{STATE_BORDER_RADIUS}\" ry=\"{STATE_BORDER_RADIUS}\" style=\"stroke:{};stroke-width:1.5;\"/>\"#,"
+  },
+  {
+    "line": 3955,
+    "template": "                        r#\"<rect fill=\"{fill}\" height=\"{}\" style=\"stroke:{};stroke-width:1.5;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  },
+  {
+    "line": 4032,
+    "template": "            r#\"<g class=\"entity\" data-qualified-name=\"{}\" id=\"{}\"><rect fill=\"{fill}\"{shadow_attr} height=\"{}\" rx=\"{STATE_RX}\" ry=\"{STATE_RX}\" style=\"{stroke_style}\" width=\"{}\" x=\"{}\" y=\"{}\"/><line style=\"{stroke_style}\" x1=\"{}\" x2=\"{}\" y1=\"{}\" y2=\"{}\"/>\"#,"
+  },
+  {
+    "line": 4241,
+    "template": "                r#\"<path d=\"{path}\" fill=\"none\" id=\"{path_id}\" style=\"{stroke}\"/>\"#,"
+  },
+  {
+    "line": 4326,
+    "template": "        r#\"<g class=\"entity\" data-qualified-name=\"{}\" id=\"{}\"><rect fill=\"{}\"{shadow_attr} height=\"{}\" rx=\"{STATE_RX}\" ry=\"{STATE_RX}\" style=\"stroke:{};stroke-width:{};\" width=\"{}\" x=\"{}\" y=\"{}\"/><line style=\"stroke:{};stroke-width:{};\" x1=\"{}\" x2=\"{}\" y1=\"{}\" y2=\"{}\"/>\"#,"
+  },
+  {
+    "line": 4390,
+    "template": "            r#\"<rect fill=\"none\"{shadow_attr} height=\"{}\" rx=\"{STATE_RX}\" ry=\"{STATE_RX}\" style=\"{stroke_style}\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  },
+  {
+    "line": 4400,
+    "template": "        r#\"<path d=\"M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}\" fill=\"{}\"/><rect fill=\"none\" height=\"{}\" rx=\"{STATE_RX}\" ry=\"{STATE_RX}\" style=\"{stroke_style}\" width=\"{}\" x=\"{}\" y=\"{}\"/><line style=\"{stroke_style}\" x1=\"{}\" x2=\"{}\" y1=\"{}\" y2=\"{}\"/>\"#,"
+  },
+  {
+    "line": 5476,
+    "template": "            r#\"<rect fill=\"none\"{shadow_attr} height=\"{}\" rx=\"{STATE_RX}\" ry=\"{STATE_RX}\" style=\"stroke:{};stroke-width:{};\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  },
+  {
+    "line": 5488,
+    "template": "        r#\"<path d=\"M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}\" fill=\"{}\"/><rect fill=\"none\" height=\"{}\" rx=\"{STATE_RX}\" ry=\"{STATE_RX}\" style=\"stroke:{};stroke-width:{};\" width=\"{}\" x=\"{}\" y=\"{}\"/><line style=\"stroke:{};stroke-width:{};\" x1=\"{}\" x2=\"{}\" y1=\"{}\" y2=\"{}\"/>\"#,"
+  },
+  {
+    "line": 6768,
+    "template": "            r#\"<rect fill=\"{bg_color}\" height=\"{h}\" style=\"stroke:none;stroke-width:1;\" width=\"{w}\" x=\"0\" y=\"0\"/>\"#, bg_color = crate::svg::escape_attribute(&bg_color),"
+  },
+  {
+    "line": 6782,
+    "template": "            r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"monospace\" font-size=\"10\" x=\"10\" y=\"13\">Please use &apos;!option handwritten true&apos; to enable handwritten</text>\"#,"
+  },
+  {
+    "line": 6958,
+    "template": "                        r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{start_fill}\"{default_shadow_attr} rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{start_stroke};stroke-width:1;\"/>\"#,"
+  },
+  {
+    "line": 6986,
+    "template": "                        r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"none\"{default_shadow_attr} rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{end_stroke};stroke-width:1;\"/>\"#,"
+  },
+  {
+    "line": 6997,
+    "template": "                        r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{end_inner_fill}\" rx=\"{END_INNER_RADIUS}\" ry=\"{END_INNER_RADIUS}\" style=\"stroke:{end_stroke};stroke-width:1;\"/>\"#,"
+  },
+  {
+    "line": 7017,
+    "template": "                r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{STATE_FILL}\" rx=\"{h_radius}\" ry=\"{h_radius}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 7026,
+    "template": "                r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{label}</text>\"#,"
+  },
+  {
+    "line": 7063,
+    "template": "                            r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{fill_color}\" rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/>\"#,"
+  },
+  {
+    "line": 7099,
+    "template": "                            r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"none\" rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/>\"#,"
+  },
+  {
+    "line": 7110,
+    "template": "                            r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{inner_fill}\" rx=\"{END_INNER_RADIUS}\" ry=\"{END_INNER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/>\"#,"
+  },
+  {
+    "line": 7140,
+    "template": "                        r#\"<polygon fill=\"{fill_color}\" points=\"{},{},{},{},{},{},{},{},{},{}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 7167,
+    "template": "                        r#\"<rect fill=\"{BAR_COLOR}\" height=\"{}\" style=\"stroke:none;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  },
+  {
+    "line": 7199,
+    "template": "                        r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{STATE_FILL}\" rx=\"{h_radius}\" ry=\"{h_radius}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 7211,
+    "template": "                        r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">H</text>\"#,"
+  },
+  {
+    "line": 7239,
+    "template": "                        r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{STATE_FILL}\" rx=\"{h_radius}\" ry=\"{h_radius}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 7247,
+    "template": "                        r#\"<text fill=\"{TEXT_COLOR}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">H*</text>\"#,"
+  },
+  {
+    "line": 7504,
+    "template": "                                r#\"<text fill=\"{}\" font-family=\"{fam}\" font-size=\"{}\"{style_attr}{weight_attr} lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{}</text>\"#,"
+  },
+  {
+    "line": 7607,
+    "template": "                                    r#\"<text fill=\"{}\" font-family=\"{fam}\" font-size=\"{}\"{style_attr}{weight_attr} lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{}</text>\"#,"
+  },
+  {
+    "line": 7737,
+    "template": "                        r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,"
+  },
+  {
+    "line": 7905,
+    "template": "            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 7925,
+    "template": "            r#\"<path d=\"M{},{} L{},{} L{},{} L{},{}\" fill=\"{NOTE_FILL}\" style=\"stroke:{STROKE_COLOR};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 8115,
+    "template": "                    r#\"<path d=\"{d}\" fill=\"none\" id=\"{path_id}\" style=\"{link_stroke}\"/>\"#,"
+  },
+  {
+    "line": 8170,
+    "template": "                    r#\"<path d=\"M{},{} C{},{} {},{} {},{}\" fill=\"none\" id=\"{path_id}\" style=\"{link_stroke}\"/>\"#,"
+  },
+  {
+    "line": 8263,
+    "template": "r#\"<!--{svg_comment}--><g class=\"link\" data-entity-1=\"{}\" data-entity-2=\"{}\" data-link-type=\"association\" data-source-line=\"{}\" id=\"{}\"><path d=\"{d}\" fill=\"none\" id=\"{from_attr}-{to_attr}\" style=\"stroke:{};stroke-width:1;stroke-dasharray:7,7;\"/></g>\"#,"
+  },
+  {
+    "line": 8480,
+    "template": "        r#\"<polygon fill=\"{color}\" points=\"{},{},{},{},{},{},{},{},{},{}\" style=\"stroke:{color};stroke-width:{};\"/>\"#,"
+  },
+  {
+    "line": 8814,
+    "template": "            r#\"<path d=\"{}\" fill=\"none\"{path_id_attr} style=\"{path_style}\"/>\"#,"
+  },
+  {
+    "line": 8829,
+    "template": "                r#\"<polygon fill=\"{fill}\" points=\"{points}\" style=\"{poly_style}\"/>\"#,"
+  },
+  {
+    "line": 8869,
+    "template": "                    r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,"
+  },
+  {
+    "line": 8947,
+    "template": "                r#\"<path d=\"{d}\" fill=\"{NOTE_FILL}\" style=\"{style}\"/>\"#,"
+  },
+  {
+    "line": 9023,
+    "template": "        r#\"<path d=\"{}\" fill=\"none\" id=\"{}\" style=\"{path_style}\"/>\"#,"
+  },
+  {
+    "line": 9072,
+    "template": "        r#\"<path d=\"{}\" fill=\"none\" id=\"{}\" style=\"{path_style}\"/>\"#,"
+  },
+  {
+    "line": 9086,
+    "template": "            r#\"<polygon fill=\"{fill}\" points=\"{points}\" style=\"{poly_style}\"/>\"#,"
+  },
+  {
+    "line": 9190,
+    "template": "                r#\"<g class=\"start_entity\" data-qualified-name=\"{qname}\" data-source-line=\"{source_line}\" id=\"{entity_id}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"{PSEUDO_COLOR}\" rx=\"{START_RADIUS}\" ry=\"{START_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,"
+  },
+  {
+    "line": 9199,
+    "template": "                r#\"<g class=\"end_entity\" data-qualified-name=\"{qname}\" data-source-line=\"{source_line}\" id=\"{entity_id}\"><ellipse cx=\"{}\" cy=\"{}\" fill=\"none\" rx=\"{END_OUTER_RADIUS}\" ry=\"{END_OUTER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/><ellipse cx=\"{}\" cy=\"{}\" fill=\"{inner_fill}\" rx=\"{END_INNER_RADIUS}\" ry=\"{END_INNER_RADIUS}\" style=\"stroke:{PSEUDO_COLOR};stroke-width:1;\"/></g>\"#,"
+  },
+  {
+    "line": 9270,
+    "template": "                r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{fill}\" rx=\"{}\" ry=\"{}\" style=\"{style}\"/>\"#,"
+  },
+  {
+    "line": 9316,
+    "template": "                r#\"<ellipse cx=\"{}\" cy=\"{}\" fill=\"{h_fill}\" rx=\"{}\" ry=\"{}\" style=\"stroke:{h_stroke};stroke-width:0.5;\"/>\"#,"
+  },
+  {
+    "line": 9327,
+    "template": "                r#\"<text fill=\"{h_text}\" font-family=\"sans-serif\" font-size=\"{STATE_FONT_SIZE}\" lengthAdjust=\"spacing\" textLength=\"{}\" x=\"{}\" y=\"{}\">{label}</text>\"#,"
+  },
+  {
+    "line": 9352,
+    "template": "                r#\"<g class=\"entity\" data-qualified-name=\"{}\" id=\"{entity_id}\"><polygon fill=\"{fill}\" points=\"{},{},{},{},{},{},{},{},{},{}\" style=\"stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;\"/></g>\"#,"
+  },
+  {
+    "line": 9374,
+    "template": "                r#\"<rect fill=\"{BAR_COLOR}\" height=\"{}\" style=\"stroke:none;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  },
+  {
+    "line": 9396,
+    "template": "            r#\"<g class=\"entity\" data-qualified-name=\"{}\" id=\"{entity_id}\"><rect fill=\"{fill}\" height=\"{}\" rx=\"{rx}\" ry=\"{ry}\" style=\"{style}\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  },
+  {
+    "line": 9848,
+    "template": "                r##\"<path d=\"{d}\" fill=\"{fill}\"/>\"##,"
+  },
+  {
+    "line": 9861,
+    "template": "            r#\"<rect fill=\"none\" height=\"{}\" rx=\"{rx}\" ry=\"{ry}\" style=\"{style}\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"#,"
+  }
+]
