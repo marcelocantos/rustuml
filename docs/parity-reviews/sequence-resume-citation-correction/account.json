@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-resume-citation-correction",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.command.CommandAutonumberResume#getConcat"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_autonumber"
+  ],
+  "invariant": "Adjacent source provenance names an existing pinned Java method; correcting the citation does not retroactively change prior accounts or verdicts.",
+  "causal_divergence": "The current comment and earlier immutable account name getRegexConcat, but CommandAutonumberResume declares private static RegexConcat getConcat.",
+  "planned_change": "Append this correction as new evidence and change only the current adjacent method citation, preserving earlier accounts and reviews byte-for-byte.",
+  "perturbation_axes": [
+    "source declaration verification",
+    "production comment and immutable historical account comparison"
+  ],
+  "baseline_evidence": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "rejection": "0fb379a26ab64ead0744278935a0b6c64082ef35",
+  "status": "preimplementation hypothesis; no acceptance claim"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-local-attribute-serialization",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "klimt.drawing.svg.SvgGraphics#createXml",
+    "klimt.drawing.svg.SvgGraphics#getTransformer",
+    "xml.XmlFactories#newTransformer",
+    "OpenJDK21.0.5.ToStream#writeAttrString",
+    "OpenJDK21.0.5.ToStream#accumDefaultEscape",
+    "OpenJDK21.0.5.CharInfo"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::escape_xml"
+  ],
+  "invariant": "Sequence-owned SVG attribute serialization matches pinned us-ascii XML output: escape XML metacharacters, encode LF/CR/TAB and non-ASCII Unicode scalars as decimal character references, and retain literal apostrophes.",
+  "causal_divergence": "The local helper only escapes XML metacharacters and two guillemets. Other Unicode and attribute whitespace differ from Java serialized bytes and attribute parsing semantics. Shared maker trace identifies exact JAXP behavior; this branch must implement its own owned helper without importing concurrent shared code.",
+  "planned_change": "Iterate Unicode scalars in the local attribute helper with explicit XML mappings and decimal references. Audit every caller to distinguish attributes and text content; preserve text-node behavior through its appropriate path. Invalid other C0 controls remain T14.20 exporter residue, not simulated crashes. Preserve the received source trace and hashes in new evidence.",
+  "perturbation_axes": [
+    "ASCII metacharacters/attribute whitespace versus non-ASCII and non-BMP",
+    "participant data attributes versus hyperlink attributes"
+  ],
+  "baseline_evidence": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "rejection": "0fb379a26ab64ead0744278935a0b6c64082ef35",
+  "status": "preimplementation hypothesis; no acceptance claim"
+}

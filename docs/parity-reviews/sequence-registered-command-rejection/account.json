@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-registered-command-rejection",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.SequenceDiagramFactory#initCommandsList",
+    "command.CommonCommands#addCommonCommands1",
+    "command.PSystemCommandFactory#getCandidate",
+    "command.PSystemCommandFactory#executeFewLines",
+    "command.SingleLineCommand2#isValid",
+    "command.CommandMultilines2#isValid",
+    "command.CommandMultilines#isValid",
+    "regex.Pattern2#transform",
+    "regex.RegexConcat#match"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::parse_sequence",
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::parse_line"
+  ],
+  "invariant": "The ordered registered command language decides whether each complete command is syntactically admissible. No candidate produces a syntax error; a registered command whose execution is not implemented is separately observable residue, not a syntax error and not silent support.",
+  "causal_divergence": "Rust handler fallthrough sets unconsumed but parse_sequence returns a diagram. Several permissive prefix handlers also consume lines outside Java command grammar. Java PSystemCommandFactory rejects when getCandidate returns null, after complete multiline and registered-order matching.",
+  "planned_change": "Record the complete registered grammar and map handlers. Add a source-derived admission/consumption layer in sequence.rs, including multiline boundaries, Pattern2 classes and FoxSignature preconditions. Keep recognized unsupported commands nonfatal with class/source diagnostics; propagate absence of any command as ParseError. Validate both previously consumed and unconsumed lines, without changing global factory dispatch.",
+  "perturbation_axes": [
+    "command family and registration overlap",
+    "valid/invalid separators and command suffixes",
+    "single/multiline boundaries and supported/unimplemented handlers"
+  ],
+  "baseline_evidence": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "rejection": "0fb379a26ab64ead0744278935a0b6c64082ef35",
+  "status": "preimplementation hypothesis; no acceptance claim"
+}
