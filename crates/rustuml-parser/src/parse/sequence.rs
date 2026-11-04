@@ -63,6 +63,52 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     Ok(parser.finish())
 }
 
+/// Bounded factory viability for recognized decorated messages. Java's
+/// PSystemBuilder tries Sequence before Class; PSystemCommandFactory rejects a
+/// candidate on its first unconsumed command. Reuse the actual sequence parser
+/// and retain the existing fallback for unsupported commands (account 5b45a172).
+pub(super) fn consumes_decorated_sequence(lines: &[String]) -> bool {
+    let mut parser = SeqParser::new();
+    let mut decorated = false;
+    for (index, line) in lines.iter().enumerate() {
+        let (number, text) = super::source_line_and_trimmed(index + 1, line);
+        if text.is_empty()
+            || (text.starts_with("@startuml") || text == "@enduml")
+            || text.starts_with('\'')
+        {
+            continue;
+        }
+        let before = parser.events.len();
+        if parser.parse_line(number, text).is_err() || parser.unconsumed {
+            return false;
+        }
+        if let Some(Event::Message(message)) = parser.events.get(before) {
+            // CommandArrow requires a head/cross dressing; bare class/object
+            // aggregation has no viable sequence command, even though our
+            // historical permissive message regex recognizes its body.
+            let text = text.strip_prefix('&').unwrap_or(text).trim_start();
+            let Some(caps) = MESSAGE_RE
+                .captures(text)
+                .or_else(|| EXTERNAL_MESSAGE_IN_RE.captures(text))
+                .or_else(|| EXTERNAL_MESSAGE_OUT_RE.captures(text))
+            else {
+                return false;
+            };
+            let (_, arrow) = strip_arrow_style_annotation(&caps[2]);
+            if !arrow.contains(['<', '>', '/', '\\', 'x']) {
+                return false;
+            }
+            decorated |= message.arrow.source_circle || message.arrow.target_circle;
+        }
+    }
+    decorated
+        && parser.note_buffer.is_none()
+        && parser.ref_buffer.is_none()
+        && !parser.in_legend
+        && parser.skinparam_block_prefix.is_none()
+        && validate_return_destinations(&parser.events).is_ok()
+}
+
 // CommandReturn#executeArg calls HColorSet#getColor; an unknown name is a
 // command error, not label text or an SVG color. Account ea313c62.
 fn validate_return_destinations(events: &[Event]) -> Result<(), ParseError> {
@@ -314,6 +360,8 @@ struct SeqParser {
     autoactivate: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// PSystemCommandFactory viability: an unknown command rejects a candidate.
+    unconsumed: bool,
     /// Named participant boxes (`box ... end box`).
     boxes: Vec<ParticipantBox>,
     /// Index into `boxes` of the box currently being collected, if any.
@@ -354,6 +402,7 @@ impl SeqParser {
             teoz: false,
             autoactivate: false,
             current_line: 0,
+            unconsumed: false,
             boxes: Vec::new(),
             current_box: None,
             skinparam_block_prefix: None,
@@ -541,7 +590,9 @@ impl SeqParser {
             return Ok(());
         }
 
-        // Unknown lines are silently ignored (matches PlantUML behavior).
+        // Preserve permissive sequence parsing, but never count ignored text as
+        // successful command consumption in factory competition.
+        self.unconsumed = true;
         Ok(())
     }
 
