@@ -1,0 +1,13 @@
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/paint_empty_group_then_note.before.diff.txt:10: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/paint_nested_owned_notes.before.diff.txt:45: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/paint_note_empty_group.before.diff.txt:11: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/paint_root_native_local_note.before.diff.txt:15: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/paint_root_note_local_note.before.diff.txt:32: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/shadow_global_negative.before.diff.txt:5: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/shadow_global_yes.before.diff.txt:8: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/shadow_mapped_no.before.diff.txt:35: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/shadow_mapped_yes.before.diff.txt:29: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/shadow_native_override.before.diff.txt:26: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/shadow_native_raw.before.diff.txt:26: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/url_target_ascii.before.diff.txt:5: new blank line at EOF.
+docs/parity-reviews/class-note-svek-paint-inventory/maker-evidence/packet8/fresh25/url_topurl_multiline.before.diff.txt:5: new blank line at EOF.

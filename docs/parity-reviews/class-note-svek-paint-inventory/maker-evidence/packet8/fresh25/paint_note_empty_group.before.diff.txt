@@ -1,0 +1,11 @@
+SVG structural differences:
+  element count: expected 11, got 8
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "73px"), ("preserveAspectRatio", "none"), ("style", "width:193px;height:73px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 193 73"), ("width", "193px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "45px"), ("preserveAspectRatio", "none"), ("style", "width:112px;height:45px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 112 45"), ("width", "112px"), ("zoomAndPan", "magnify")]
+  [3] tag mismatch: expected <path>, got <g>
+  [4] tag mismatch: expected <line>, got <a>
+  [5] tag mismatch: expected <text>, got <path>
+  [6] tag mismatch: expected <g>, got <path>
+  [7] tag mismatch: expected <a>, got <text>
+

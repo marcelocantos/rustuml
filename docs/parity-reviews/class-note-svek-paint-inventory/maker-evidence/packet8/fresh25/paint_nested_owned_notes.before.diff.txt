@@ -1,0 +1,45 @@
+SVG structural differences:
+  [11] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Bay.Dock"), ("data-source-line", "3"), ("id", "ent0004")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Root"), ("data-source-line", "1"), ("id", "ent0002")]
+  [12] tag mismatch: expected <rect>, got <path>
+  [13] tag mismatch: expected <ellipse>, got <path>
+  [14] tag mismatch: expected <path>, got <text>
+  [15] tag mismatch: expected <text>, got <g>
+  [16] tag mismatch: expected <line>, got <rect>
+  [17] tag mismatch: expected <line>, got <ellipse>
+  [18] tag mismatch: expected <g>, got <path>
+  [19] tag mismatch: expected <path>, got <text>
+  [20] tag mismatch: expected <path>, got <line>
+  [21] tag mismatch: expected <text>, got <line>
+  [22] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Bay.Basin.Archive"), ("data-source-line", "6"), ("id", "ent0009")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Bay.GMN5"), ("data-source-line", "4"), ("id", "ent0006")]
+  [23] <path> attr mismatch:
+    expected: [("d", "M46.19,84 L46.19,109.3105 L137.8013,109.3105 L137.8013,94 L127.8013,84 L46.19,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M172.77,84 L172.77,109.3105 A0,0 0 0 0 172.77,109.3105 L295.2373,109.3105 A0,0 0 0 0 295.2373,109.3105 L295.2373,102 L329.3643,96.6553 L295.2373,94 L295.2373,94 L285.2373,84 L172.77,84 A0,0 0 0 0 172.77,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [24] <path> attr mismatch:
+    expected: [("d", "M127.8013,84 L127.8013,94 L137.8013,94 L127.8013,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M285.2373,84 L285.2373,94 L295.2373,94 L285.2373,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [25] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "70.6113"), ("x", "52.19"), ("y", "101.5684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "101.4673"), ("x", "178.77"), ("y", "101.5684")]
+  [25] <text> text mismatch:
+    expected: Some("inner sheet")
+    actual:   Some("local annotation")
+  [26] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Root"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Bay.Basin.Archive"), ("data-source-line", "6"), ("id", "ent0009")]
+  [27] <path> attr mismatch:
+    expected: [("d", "M431.68,84 L431.68,109.3105 L524.3133,109.3105 L524.3133,94 L514.3133,84 L431.68,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M46.19,84 L46.19,109.3105 L137.8014,109.3105 L137.8014,94 L127.8014,84 L46.19,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [28] <path> attr mismatch:
+    expected: [("d", "M514.3133,84 L514.3133,94 L524.3133,94 L514.3133,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M127.8014,84 L127.8014,94 L137.8014,94 L127.8014,84"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+  [29] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "71.6333"), ("x", "437.68"), ("y", "101.5684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "70.6113"), ("x", "52.19"), ("y", "101.5684")]
+  [29] <text> text mismatch:
+    expected: Some("outer sheet")
+    actual:   Some("inner sheet")
+

@@ -1,0 +1,10 @@
+@startuml
+<style>
+class {
+Shadowing -2.25
+}
+</style>
+class Ledger
+class Book
+Ledger --> Book
+@enduml

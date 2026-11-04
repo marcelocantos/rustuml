@@ -1,0 +1,66 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: actorshadowing
+      value: 'no'
+    style_program:
+      declarations:
+      - selector:
+        - actor
+        property: shadowing
+        value: 'no'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+    source: |
+      @startuml
+      allowmixing
+      skinparam actorShadowing no
+      actor "Intake" as Reader
+      class Ledger
+      Reader --> Ledger
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Reader
+  - !Entity Ledger
+  - !Relationship 0
+  entities:
+  - id: Reader
+    label: Intake
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 3
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships:
+  - from: Reader
+    to: Ledger
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 5
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

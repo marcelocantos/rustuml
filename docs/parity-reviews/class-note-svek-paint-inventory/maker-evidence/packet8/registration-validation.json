@@ -1,0 +1,20 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--cached",
+    "--check"
+  ],
+  "exit": 2,
+  "diagnostics": 13,
+  "scope": "13 raw frozen-comparator before.diff.txt captures end with a blank line. Preserve these bytes; do not trim evidence. Production fmt and production diff checks passed. No broad gates repeated after evidence registration.",
+  "archive": {
+    "sha256": "8fb7eb16f32bc0fea14a891ab8e5b84744e1fa7e5268cc38c0b596f60943f072",
+    "bytes": 13707829,
+    "files_verified": 34246,
+    "excluded_binaries": [
+      "final-rustuml",
+      "draft2-rustuml"
+    ]
+  }
+}

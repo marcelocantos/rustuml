@@ -1,0 +1,26 @@
+SVG structural differences:
+  element count: expected 25, got 20
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "181px"), ("preserveAspectRatio", "none"), ("style", "width:103px;height:181px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 103 181"), ("width", "103px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "178px"), ("preserveAspectRatio", "none"), ("style", "width:100px;height:178px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 100 178"), ("width", "100px"), ("zoomAndPan", "magnify")]
+  [2] tag mismatch: expected <filter>, got <g>
+  [3] tag mismatch: expected <feGaussianBlur>, got <g>
+  [4] tag mismatch: expected <feColorMatrix>, got <rect>
+  [5] tag mismatch: expected <feOffset>, got <ellipse>
+  [6] tag mismatch: expected <feBlend>, got <path>
+  [7] tag mismatch: expected <g>, got <text>
+  [8] tag mismatch: expected <g>, got <line>
+  [9] tag mismatch: expected <rect>, got <line>
+  [10] tag mismatch: expected <ellipse>, got <g>
+  [11] tag mismatch: expected <path>, got <rect>
+  [12] tag mismatch: expected <text>, got <ellipse>
+  [13] tag mismatch: expected <line>, got <path>
+  [14] tag mismatch: expected <line>, got <text>
+  [15] tag mismatch: expected <g>, got <line>
+  [16] tag mismatch: expected <rect>, got <line>
+  [17] tag mismatch: expected <ellipse>, got <g>
+  [18] <path> attr mismatch:
+    expected: [("d", "M30.9231,137.1431 Q30.3421,137.4419 29.7029,137.5913 Q29.0638,137.7407 28.3582,137.7407 Q25.8514,137.7407 24.5315,136.0889 Q23.2117,134.437 23.2117,131.3159 Q23.2117,128.1865 24.5315,126.5347 Q25.8514,124.8828 28.3582,124.8828 Q29.0638,124.8828 29.7112,125.0322 Q30.3587,125.1816 30.9231,125.4805 L30.9231,128.2031 Q30.2923,127.6221 29.6988,127.3523 Q29.1053,127.0825 28.4744,127.0825 Q27.1297,127.0825 26.4449,128.1492 Q25.7601,129.2158 25.7601,131.3159 Q25.7601,133.4077 26.4449,134.4744 Q27.1297,135.541 28.4744,135.541 Q29.1053,135.541 29.6988,135.2712 Q30.2923,135.0015 30.9231,134.4204 Z "), ("fill", "#000000")]
+    actual:   [("codeLine", "5"), ("d", "M46.17,55.26 C46.17,72.94 46.17,91.13 46.17,108.79"), ("fill", "none"), ("id", "Ledger-to-Book"), ("style", "stroke:#181818;stroke-width:1;")]
+  [19] tag mismatch: expected <text>, got <polygon>
+

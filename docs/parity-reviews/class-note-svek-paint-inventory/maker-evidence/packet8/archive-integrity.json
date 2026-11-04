@@ -1,0 +1,9 @@
+{
+  "sha256": "8fb7eb16f32bc0fea14a891ab8e5b84744e1fa7e5268cc38c0b596f60943f072",
+  "bytes": 13707829,
+  "files_verified": 34246,
+  "excluded_binaries": [
+    "final-rustuml",
+    "draft2-rustuml"
+  ]
+}

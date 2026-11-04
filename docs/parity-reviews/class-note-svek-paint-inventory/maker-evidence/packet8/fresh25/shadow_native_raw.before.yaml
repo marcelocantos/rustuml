@@ -1,0 +1,66 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - class
+        property: shadowing
+        value: '-2.25'
+        source_line: 1
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      <style>
+      class {
+      Shadowing -2.25
+      }
+      </style>
+      class Ledger
+      class Book
+      Ledger --> Book
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Ledger
+  - !Entity Book
+  - !Relationship 0
+  entities:
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 6
+  - id: Book
+    label: Book
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 7
+  relationships:
+  - from: Ledger
+    to: Book
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 8
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

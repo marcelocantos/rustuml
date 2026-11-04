@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+skinparam actorShadowing yes
+actor "Intake" as Reader
+class Ledger
+Reader --> Ledger
+@enduml

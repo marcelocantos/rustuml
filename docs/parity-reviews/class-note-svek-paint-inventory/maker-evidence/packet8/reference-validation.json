@@ -1,0 +1,273 @@
+{
+  "gzip_sha256": "60e4254f5edb2804026c4c0d846ce1283c2bbf126d5c4b5075fb04c9f12be5c0",
+  "environment": {
+    "batch": "class25-cff8",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.5dKY3ZXw",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "c5e86ef61319b3c52bf50b4f0c7fa7f80fc2441a89f8bb854576f76350062deb",
+    "manifest_sha256": "5fdee33738fc83926d9396d8494cc3a2d63baf8753db153f1da4508c24825e94",
+    "env_overrides": {},
+    "environment_policy": "Inherited environment; wrapper removes JAVA_TOOL_OPTIONS, _JAVA_OPTIONS, JDK_JAVA_OPTIONS, CLASSPATH and sets GRAPHVIZ_DOT",
+    "timeout_seconds": 60,
+    "classification_performed": false,
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.HOOIG98f/input.json.gz",
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "PRIVATE_CWD",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "PRIVATE_CWD",
+    "timezone": "GMT+11:00",
+    "candidate_account_head": "da5395c5",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_argv_provenance": "Unchanged wrapper execve construction and exact invocation arguments",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  },
+  "cases": [
+    {
+      "name": "paint_root_native_local_note.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "55cbf626720f7994006505d373b83f67a7a31002f55fbe8495aeb9fad37764a3",
+      "reference_sha256": "8e801df84fab7d1c601d2893b6667229380c87ea3babc0adbefc6fb6d8c201f6"
+    },
+    {
+      "name": "paint_local_note_root_native.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "dcce569834eb1959f786c316d1163b0789105ce044871f38fe44903cd45594db",
+      "reference_sha256": "3b3e18dbcfc8ff57f994cd8242c4e03c09223b3e43a8fa89feb70a442e16e45b"
+    },
+    {
+      "name": "paint_root_note_local_note.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "528d342e5b44371dcc08a7970f70341aab7bd7bdc4637a9f7e2ed7cb163b7e22",
+      "reference_sha256": "f7f8fb3fd10d379d82892cfbe536457470fe328894a75d954df14fe63c760ee7"
+    },
+    {
+      "name": "paint_nested_owned_notes.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "790d002eec429fccfe81ab255ed7aa6891f05b1eb63497c3bedcc9f7447c61b4",
+      "reference_sha256": "5902d3e3dd83117cadb434e70c403fecd5d9761cf921d418ec29e2ed13fe12af"
+    },
+    {
+      "name": "paint_note_empty_group.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "0bd1402b25bd5045825993c3820ac709839e04140e2bb1b23b9807344549109b",
+      "reference_sha256": "ea45393efa84ca0c35d7ef175b5051486b281481824262a4cb4535fcfb3d0ea8"
+    },
+    {
+      "name": "paint_empty_group_then_note.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "133be82be4169c680ab462b7ceebd35be8c5db4a402e19bf8b379cfc1bf3f10a",
+      "reference_sha256": "9066777d3096890d53e0541b1335ebf3e84308f0695458823ab1ceb18eabc85a"
+    },
+    {
+      "name": "url_target_curly.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "9203751682dae1b838f2fa6fdc1343acb8091b4912e5483486794e16081df951",
+      "reference_sha256": "775c48b49da8824f09885726014fa7e12e668a37fdbaf743fd218da3ac89d724"
+    },
+    {
+      "name": "url_target_mixed.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "3f9f9f1a16e06ec96f767cedf043953e9e0ecbcb2b541fa45b0e6cf1bc39a116",
+      "reference_sha256": "9d8f3aea13df3c03d6af4c239915c8ab54011698035eb4ecbe4680b51c0318f4"
+    },
+    {
+      "name": "url_target_ascii.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "b912afa184f2d2a311b6c78bb496f7398f2b01f465accb3a3980fff2c109002d",
+      "reference_sha256": "7210813aca4cb6fcd5ff2158c0cccfc6fbf06139ebbb6df87755bd43a0cecbbb"
+    },
+    {
+      "name": "url_scoped_brace.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "12605ef52dc44c79e81673acba96e2857286f1832bc88c9f415c19221a0895ff",
+      "reference_sha256": "79ef3543d48dd1a0e1d95d6452a95c66c458f1ff5ed7e53023f543a93399c7ca"
+    },
+    {
+      "name": "url_single_null.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "fa99bdef621aa5d83a8de0d9518b5c74f373f2e12b6d65d61d733782319433a1",
+      "reference_sha256": "5055e8f0f0411b3a5310d0aac334ebf9f18fbe0d44cafc2b64825a5c78c58194"
+    },
+    {
+      "name": "url_topurl_multiline.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "42dd7f529a6cac5033487fdebd11aac0a7c843a6aba24295ca55417cb4ac4c2f",
+      "reference_sha256": "a36a15b839a56ce977817367076a1980baf9ae02bd34c0c0b611d52575e6577b"
+    },
+    {
+      "name": "url_jaws_target_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "8a38d3a8549ee7a77fbced2b6970f20272c8865da617b59defee0784558b62ea",
+      "reference_sha256": "29f9708f5c469c6a4673e0f0581c684cbd6a5129438df7b417d21bdbf1fcf49a"
+    },
+    {
+      "name": "url_unclosed_quote_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "388593abb0a8e9e2a5483915c090e40ebe0ad3239ee83d9d050d002c0cfd55a9",
+      "reference_sha256": "ca5c14cf41562bd46ab354d50255a2f2bde52194a56f297c2c5d2c9d1fa9fc05"
+    },
+    {
+      "name": "url_empty_quoted_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "79a6a67df034a0eec9791a414736c6f3463d493aa2c349261d644ff2eacb0739",
+      "reference_sha256": "98e79de64901b66030003d9a4874a77618cfd3691daa160249ae035573703a78"
+    },
+    {
+      "name": "url_named_inline_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "02cb8866a24bc142d690af924dc2d217168719232f6e093e8b488c2de5ad06ba",
+      "reference_sha256": "a3178e89c010a0c233d6eec3d5b2e4bbbe20590070a2d1a6f2e13ea73b4028b8"
+    },
+    {
+      "name": "shadow_mapped_yes.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "b57b8f3b643bb1c60101e246bba4212e28e9beda20bd919d51effc3b5a406f7c",
+      "reference_sha256": "2fc74cb88b6e2720b16978521f58a4c857104692a0ad7188d1f4e7b79d4e2e5d"
+    },
+    {
+      "name": "shadow_mapped_no.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "df6454b91a420c46d00154ae50c60815d66806876ce53d666c8946c71817db9e",
+      "reference_sha256": "0011f80f9962c4d4d0d7a563d53bbaf5c2568a4a4dbb0f9d2d3e31bcf88db9fb"
+    },
+    {
+      "name": "shadow_mapped_true.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "7b324f512021a00654b5d1528c2d78cabee62ae70513f4fdd4135f590c311bf4",
+      "reference_sha256": "6dbc7d2d2144f6c7b6a6c899a0503f4074e674d8f47d2f187a81f036f277d2ef"
+    },
+    {
+      "name": "shadow_global_yes.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "27128dcdc0218e2bb4adbb6fac13d5ce9d78f2e89232919317c2080ab644d9c7",
+      "reference_sha256": "492d67312594d215c9f80119abde6c5063ebb37f26c78b18388a88771c8007be"
+    },
+    {
+      "name": "shadow_global_negative.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "2bc25851018bbfa35f1aea36a0ec6834dbcd79836f7930e24f3873397e058637",
+      "reference_sha256": "ef338609a290e37c5476096b6034f54f799be99416d93704f5bbd917bf98375f"
+    },
+    {
+      "name": "shadow_native_negative.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "01c24dd9b1daf5709370bf6845cd58d952f8cf7e5a11407674134af0cf8bfddd",
+      "reference_sha256": "5d9fc55b8a5b2558a0ea7e2d5f1b5ae9995905f8e1a8ef452193984f7695010f"
+    },
+    {
+      "name": "shadow_native_override.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "991ba19303bdb25a49850683386975f55645c5cb69ccdcf326ef07bcca40dfe4",
+      "reference_sha256": "9328618a835f6a937504b881f4ecb9e9b49f0945973b86b02554aa755f87b088"
+    },
+    {
+      "name": "shadow_native_raw.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "5686d7053b4b2885b797c7124aa765e6c374af991231e4da7acea631b39645b6",
+      "reference_sha256": "805d509e890e09b999c3f305a189eb3682b65b78c1671dca96824c821cde8821"
+    },
+    {
+      "name": "shadow_native_degenerate.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "3f1436ec6cfe5714ace00f6623dd573c0bd90baaa5252ddf68c5a589605b4f8f",
+      "reference_sha256": "fc45d5e92ba4e4a6b4b8a3800709708b20e09c168214ad24666958d7ac29f7cf"
+    }
+  ]
+}

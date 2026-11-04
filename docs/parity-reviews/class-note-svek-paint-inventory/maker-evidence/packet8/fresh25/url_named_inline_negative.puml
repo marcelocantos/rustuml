@@ -1,0 +1,3 @@
+@startuml
+note "receipt" as Archive [[docs]]
+@enduml

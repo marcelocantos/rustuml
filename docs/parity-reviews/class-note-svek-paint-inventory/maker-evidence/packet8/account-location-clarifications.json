@@ -1,0 +1,27 @@
+{
+  "status": "Postimplementation evidence clarification, not a replacement account or retroactive chronology claim",
+  "original_accounts_unchanged": true,
+  "locations": [
+    {
+      "account": "class-attached-note-consuming-url-grammar",
+      "written": "classdiagram/command/NameAndCodeParser#codeForClass",
+      "actual": "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java#codeForClass",
+      "note": "Account directory qualifier is incorrect; class/method and mechanism are unchanged.",
+      "java_sha256": "fc54ae0fee21d32b68b2a3c920427d3e04066769eeb7db80f66ffd819d3147b3"
+    },
+    {
+      "account": "class-attached-note-consuming-url-grammar",
+      "written": "utils/StringUtils#isDoubleQuote",
+      "actual": "src/main/java/net/sourceforge/plantuml/StringUtils.java#isDoubleQuote",
+      "note": "Account directory qualifier is incorrect.",
+      "java_sha256": "36a2ae5dfc1b2f4d2ce12861b0ae420cc80307c17467a731e6d7b72e32d3f1e8"
+    },
+    {
+      "account": "class-normalized-shadow-style-consumer",
+      "written": "decoration/symbol/USymbolBoundary#getSkinParameter,asSmall",
+      "actual": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolBoundary.java#getDrawing; inherited USymbolSimpleAbstract#asSmall",
+      "note": "Account method qualifier is incorrect. Existing normalization resides in getDrawing; this packet preserves that behavior.",
+      "java_sha256": "2f8c47287defffea98bf7758663a2d12404d4bb47062939643df48ccf0e1b559"
+    }
+  ]
+}

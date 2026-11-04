@@ -1,0 +1,4 @@
+@startuml
+class Dock
+note right of Dock [[“”]] : receipt
+@enduml

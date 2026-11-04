@@ -1,0 +1,7 @@
+@startuml
+skinparam shadowing -2.25
+skinparam classShadowing false
+class Ledger
+class Book
+Ledger --> Book
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+note "outer sheet" as Root
+package Bay {
+class Dock
+note left of Dock : local annotation
+package Basin {
+note "inner sheet" as Archive
+}
+}
+@enduml

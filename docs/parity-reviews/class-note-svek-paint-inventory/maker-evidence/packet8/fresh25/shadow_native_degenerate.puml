@@ -1,0 +1,4 @@
+@startuml
+skinparam classShadowing -1.25
+class Ledger
+@enduml

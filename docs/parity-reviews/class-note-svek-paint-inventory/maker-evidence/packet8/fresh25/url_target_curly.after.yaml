@@ -1,0 +1,38 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Dock
+      note left of “Dock” [[“local docs”{a tooltip}]]
+      receipt
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Dock
+  - !Note 0
+  entities:
+  - id: Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - receipt
+    target: Dock
+    position: Left
+    alias: null
+    url: local docs
+    url_tooltip: a tooltip
+    source_line: 3
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

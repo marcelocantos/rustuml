@@ -1,0 +1,6 @@
+@startuml
+class Dock
+note left of ”Dock" [[”local docs"{a tooltip}]]
+receipt
+end note
+@enduml

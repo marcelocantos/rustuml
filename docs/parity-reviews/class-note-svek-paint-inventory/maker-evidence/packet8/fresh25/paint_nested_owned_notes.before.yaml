@@ -1,0 +1,81 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "outer sheet" as Root
+      package Bay {
+      class Dock
+      note left of Dock : local annotation
+      package Basin {
+      note "inner sheet" as Archive
+      }
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  - !Package Bay
+  - !Entity Bay.Dock
+  - !Note 1
+  - !Package Bay.Basin
+  - !Note 2
+  entities:
+  - id: Bay.Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Bay
+    kind: Package
+    color: null
+    entities:
+    - Bay.Dock
+    source_line: 2
+    stereotypes: []
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Bay.Basin
+    kind: Package
+    color: null
+    entities: []
+    parent: 0
+    source_line: 5
+    stereotypes: []
+    display_name: Basin
+  notes:
+  - lines:
+    - outer sheet
+    target: null
+    position: null
+    alias: Root
+    source_line: 1
+  - lines:
+    - local annotation
+    target: Bay.Dock
+    position: Left
+    alias: null
+    source_line: 4
+    owner_package: Bay
+  - lines:
+    - inner sheet
+    target: null
+    position: null
+    alias: Bay.Basin.Archive
+    source_line: 6
+    owner_package: Bay.Basin
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

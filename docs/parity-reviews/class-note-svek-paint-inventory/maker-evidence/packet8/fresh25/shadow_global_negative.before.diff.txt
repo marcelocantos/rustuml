@@ -1,0 +1,5 @@
+SVG structural differences:
+  [13] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#flgzgx537qpud)"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "78.334"), ("x", "7"), ("y", "143.24")]
+    actual:   [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "78.334"), ("x", "7"), ("y", "143.24")]
+

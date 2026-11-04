@@ -1,0 +1,45 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "outer sheet" as Archive
+      package Bay {
+      note "local sheet" as Archive
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  - !Package Bay
+  - !Note 1
+  entities: []
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Bay
+    kind: Package
+    color: null
+    entities: []
+    source_line: 2
+    stereotypes: []
+  notes:
+  - lines:
+    - outer sheet
+    target: null
+    position: null
+    alias: Archive
+    source_line: 1
+  - lines:
+    - local sheet
+    target: null
+    position: null
+    alias: Bay.Archive
+    source_line: 3
+    owner_package: Bay
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

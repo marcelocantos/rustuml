@@ -1,0 +1,6 @@
+@startuml
+class Archive
+package Bay {
+note "local sheet" as Archive
+}
+@enduml

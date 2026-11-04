@@ -1,0 +1,30 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: classshadowing
+      value: '-1.25'
+    source: |
+      @startuml
+      skinparam classShadowing -1.25
+      class Ledger
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Ledger
+  entities:
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

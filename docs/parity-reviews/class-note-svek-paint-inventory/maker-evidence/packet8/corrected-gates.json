@@ -1,0 +1,201 @@
+[
+  {
+    "name": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 1.3492002487182617,
+    "log": "corrected-fmt.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  },
+  {
+    "name": "units",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--release",
+      "--lib",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "seconds": 61.91619896888733,
+    "log": "corrected-units.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  },
+  {
+    "name": "cli-errors",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--release",
+      "--test",
+      "pipe_mode",
+      "--test",
+      "error_paths",
+      "--test",
+      "doc_claims",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "seconds": 5.6656599044799805,
+    "log": "corrected-cli-errors.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  },
+  {
+    "name": "no_oracle",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 3.2987070083618164,
+    "log": "corrected-no_oracle.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  },
+  {
+    "name": "assisted",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 2.701866865158081,
+    "log": "corrected-assisted.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  },
+  {
+    "name": "standing",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 3.0379788875579834,
+    "log": "corrected-standing.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  },
+  {
+    "name": "guards",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 1.4718458652496338,
+    "log": "corrected-guards.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  },
+  {
+    "name": "clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 101,
+    "seconds": 7.986001014709473,
+    "log": "corrected-clippy.log",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+    "revision": "90eab708a25bf80b86c4e44b571aa79e3f9b2d05",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-class-cff4/target",
+      "CARGO_BUILD_JOBS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    },
+    "local_jvm_guard": "/Users/marcelo/Library/Caches/rustuml-class-cff8/no-local-jvm"
+  }
+]

@@ -1,0 +1,7 @@
+@startuml
+skinparam topurl https://example.org/base/
+class Dock
+note bottom of Dock [[“local docs”{tip}]]
+receipt
+end note
+@enduml

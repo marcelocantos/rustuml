@@ -1,0 +1,55 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Bay {
+      class Dock
+      note right of “Dock” [[“local docs”{tip}]] {
+      receipt
+      class body text
+      }
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Bay
+  - !Entity Bay.Dock
+  - !Note 0
+  entities:
+  - id: Bay.Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Bay
+    kind: Package
+    color: null
+    entities:
+    - Bay.Dock
+    source_line: 1
+    stereotypes: []
+  notes:
+  - lines:
+    - receipt
+    - class body text
+    target: Bay.Dock
+    position: Right
+    alias: null
+    url: local docs
+    url_tooltip: tip
+    source_line: 4
+    owner_package: Bay
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

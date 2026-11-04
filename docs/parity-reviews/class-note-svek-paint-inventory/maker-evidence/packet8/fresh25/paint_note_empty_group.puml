@@ -1,0 +1,7 @@
+@startuml
+set namespaceSeparator none
+note "outer sheet" as Archive
+package Bay {
+url Archive [[docs]]
+}
+@enduml

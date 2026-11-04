@@ -1,0 +1,19 @@
+{
+  "no_oracle_failure_names.txt": {
+    "before": 63,
+    "after": 62,
+    "new_failures": [],
+    "repaired": [
+      "preprocessing/preproc_procedure_with_relationship"
+    ]
+  },
+  "golden_failure_names.txt": {
+    "before": 728,
+    "after": 726,
+    "new_failures": [],
+    "repaired": [
+      "preprocessing/preproc_complex_crud_generator",
+      "preprocessing/preproc_procedure_with_relationship"
+    ]
+  }
+}

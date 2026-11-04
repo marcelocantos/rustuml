@@ -1,0 +1,9 @@
+@startuml
+package Bay {
+class Dock
+note right of “Dock” [[“local docs”{tip}]] {
+receipt
+class body text
+}
+}
+@enduml

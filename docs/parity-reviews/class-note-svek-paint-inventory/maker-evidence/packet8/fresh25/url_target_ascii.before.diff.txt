@@ -1,0 +1,5 @@
+SVG structural differences:
+  [11] <a> attr mismatch:
+    expected: [("actuate", "onRequest"), ("href", "local docs"), ("href", "local docs"), ("show", "new"), ("target", "_top"), ("title", "a tooltip"), ("title", "a tooltip"), ("type", "simple")]
+    actual:   [("actuate", "onRequest"), ("href", "\"local"), ("href", "\"local"), ("show", "new"), ("target", "_top"), ("title", "a tooltip"), ("title", "a tooltip"), ("type", "simple")]
+

@@ -1,0 +1,4 @@
+@startuml
+class Dock
+note top of “Dock” [[“local docs”{tip}]] : receipt
+@enduml
