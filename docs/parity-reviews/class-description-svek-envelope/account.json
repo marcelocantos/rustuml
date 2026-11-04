@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "2b567395ed5fdb9103b315fd84f01b78cc1e971f",
+  "mechanism": "class-description-svek-envelope",
+  "java_locations": [
+    "svek/SvekResult#calculateDimension",
+    "klimt/drawing/LimitFinder",
+    "decoration/symbol/USymbolSimpleAbstract#asSmall",
+    "svek/EntityImageDegenerated#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_class_diagram,render_plantuml_svg,entity_frontier_min"
+  ],
+  "invariant": "For SvekResult with simple description images, the painted image/edge/label union owns both extrema. Graphviz preferred graph dimensions are solver inputs/output, not an additional painted primitive. EntityImageDegenerated retains preferred dimensions.",
+  "causal_divergence": "Focused v1 repaired all actor_sized emitted text and vertical envelope, but canvas width remains115 vs111. render_plantuml_svg unions result.width/result.height after measuring images, leaking Graphviz preferred extent into the painted result. Actor/boundary minima likewise use plain-font estimates rather than positioned stripe extrema.",
+  "planned_change": "Use the existing complete image/edge/label union without the supplemental Graphviz preferred extent when the graph contains a simple description image. Consume positioned stripe minima for those images. Preserve existing other image paths and the degenerated envelope; diagnose actor degenerate normalization separately. No layout/native/coordinate changes.",
+  "perturbation_axes": [
+    "size/sub/sup labels and blank stripes",
+    "actor/boundary linked directions, chrome and degenerate contrast"
+  ],
+  "verification": "Focused34 then all frozen cohorts; preserve v1 failures and enumerate lost passes. No acceptance."
+}
