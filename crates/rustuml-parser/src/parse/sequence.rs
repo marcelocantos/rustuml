@@ -275,6 +275,88 @@ impl RegisteredSequenceCommand {
             }
         }
     }
+
+    fn validate_colors(
+        &self,
+        line: &str,
+        token: Option<&str>,
+        source_line: usize,
+    ) -> Result<(), ParseError> {
+        let bad = |_color: &str| ParseError {
+            line: source_line,
+            message: "No such color".to_string(),
+        };
+        if let Some(token) = token {
+            // Colors#Colors removes '#' and splits ';'. Dotted line styles
+            // without ':' are styles; shadowing's value is a boolean, not color.
+            let data = token.replace('#', "");
+            for item in data.split(';').filter(|item| !item.is_empty()) {
+                if let Some((name, value)) = item.split_once(':') {
+                    if name != "shadowing" && !valid_sequence_color(value) {
+                        return Err(bad(value));
+                    }
+                } else if !item.contains('.') && !valid_sequence_color(item) {
+                    return Err(bad(item));
+                }
+            }
+        }
+        if let RegisteredPattern::Plain(regex) = &self.pattern
+            && let Some(caps) = regex.captures(line)
+        {
+            for name in regex
+                .capture_names()
+                .flatten()
+                .filter(|name| name.starts_with("seq_color"))
+            {
+                // CommandReferenceMultilinesOverSeveral#execute reads only
+                // REF[0]; its trailing BACKCOLOR capture is not applied.
+                if self.class == "CommandReferenceMultilinesOverSeveral" && name == "seq_color1" {
+                    continue;
+                }
+                if let Some(color) = caps.name(name)
+                    && !valid_sequence_color(color.as_str())
+                {
+                    return Err(bad(color.as_str()));
+                }
+            }
+        }
+        // CommandArrow#applyStyle is also used by both exo commands. Apart
+        // from these four style keywords, each token is passed to HColorSet.
+        if let RegisteredPattern::Plain(regex) = &self.pattern
+            && let Some(caps) = regex.captures(line)
+        {
+            for name in regex
+                .capture_names()
+                .flatten()
+                .filter(|name| name.starts_with("seq_style"))
+            {
+                if let Some(style) = caps.name(name) {
+                    for value in style.as_str().split(',') {
+                        if !matches!(value, "dashed" | "bold" | "dotted" | "hidden")
+                            && !valid_sequence_color(value)
+                        {
+                            return Err(bad(value));
+                        }
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
+// HColorSet#parseColor accepts simple colors and two-color gradients. Command
+// color grammars exclude the '?' scheme syntax; return's existing validator is
+// retained for its previously supported model input contract.
+fn valid_sequence_color(color: &str) -> bool {
+    if valid_return_color(color) {
+        return true;
+    }
+    color.char_indices().any(|(index, ch)| {
+        matches!(ch, '-' | '\\' | '|' | '/')
+            && valid_return_color(&color[..index])
+            && valid_return_color(&color[index + ch.len_utf8()..])
+    })
 }
 
 // SequenceDiagramFactory#initCommandsList / CommonCommands#addCommonCommands1,
@@ -959,6 +1041,7 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
                 message: format!("Syntax error: no registered sequence command accepts {text:?}"),
             });
         };
+        command.validate_colors(&folded, color, source_line)?;
         if color.is_some_and(|token| token.contains([':', ';', '/', '\\', '|'])) {
             eprintln!(
                 "warning: sequence command {} has an execution-valid composite/gradient color; complete style materialization remains unsupported at line {source_line}",
@@ -2791,6 +2874,33 @@ mod tests {
             ])
             .is_ok()
         );
+    }
+
+    #[test]
+    fn registered_color_execution_uses_complete_leaf_boundaries() {
+        for color in [
+            "#back:LightBlue: cargo",
+            "#CeruleanTypo: cargo",
+            "#line:MissingShade : cargo",
+        ] {
+            assert!(
+                parse_sequence(&["N -> S: seed".into(), format!("note over N {color}")]).is_err(),
+                "{color}"
+            );
+        }
+        for color in [
+            "#back:LightBlue : cargo",
+            "#LightBlue/Yellow: cargo",
+            "#transparent: cargo",
+            "#11223344: cargo",
+        ] {
+            assert!(
+                parse_sequence(&["N -> S: seed".into(), format!("note over N {color}")]).is_ok(),
+                "{color}"
+            );
+        }
+        assert!(parse_sequence(&["N -[#NoSuchShade]> S: seed".into()]).is_err());
+        assert!(parse_sequence(&["N -[#blue,dashed]> S: seed".into()]).is_ok());
     }
 
     #[test]
