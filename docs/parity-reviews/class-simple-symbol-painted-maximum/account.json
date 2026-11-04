@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "c1a38ada817d820ca8f57b1e8db0d9048e9657eb",
+  "evidence": "class-note-quark-modifier-lifecycle/maker-evidence/recovery4-remote36; all original records remain immutable",
+  "verification_plan": "Focused preserved36 and new compact source-guided controls, then preserved1559, release main tiers, relevant libs/CLI and unchanged guards. No Java locally; parent receives checksummed private-cache sources. No acceptance claim.",
+  "mechanism": "class-simple-symbol-painted-maximum",
+  "java_locations": [
+    "decoration/symbol/USymbolSimpleAbstract#asSmall.drawU,calculateDimension",
+    "svek/Boundary#drawU,calculateDimension",
+    "skin/ActorStickMan#drawU,getPreferredHeight",
+    "klimt/drawing/LimitFinder#drawText,drawEllipse,drawUPath",
+    "svek/SvekResult#calculateDimension",
+    "svek/EntityImageDegenerated#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_plantuml_svg",
+    "crates/rustuml-render/src/class.rs#calc_entity_dims,render_description_leaf,entity_shadow_extent"
+  ],
+  "invariant": "Layout uses preferred dimensions. Non-degenerated final canvas/chrome unions use maxima of the actual symbol primitives and emitted text; text maximum is baseline+1.5, ellipse maximum includes -1+2*shadow, UPath maximum ignores shadow. Degenerated images retain preferred dimensions.",
+  "causal_divergence": "Current body_bottom/max_y reuse preferred simple-symbol line-box height. Remote boundary font18 gives Java180/Rust183 without stereotype and202/204 with stereotype; font12 also differs by1px but falls inside the frozen root tolerance. This is not exact parity. Actor shares the same simple-symbol composition and must obey the same separation.",
+  "planned_change": "Introduce a renderer-side painted-extent calculation from simple-symbol primitive geometry and text origins/baselines, used consistently by body/chrome and canvas maximum unions. Preserve all layout dimensions, positions, paths and non-simple symbol behavior. Do not subtract per-font corrections or modify fonts/glyphs; no SVG postprocessing.",
+  "perturbation_axes": [
+    "Font size, label length/multiline and stereotype presence",
+    "Actor/boundary, stroke/shadow/style and linked/unlinked TB/LR topology"
+  ]
+}
