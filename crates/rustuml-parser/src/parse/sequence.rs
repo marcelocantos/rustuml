@@ -873,39 +873,48 @@ impl SeqParser {
             return Ok(true);
         }
 
-        // Also handle "note across" (with optional color)
-        if let Some(rest) = line.strip_prefix("note across") {
-            // Parse optional color: "note across #color : text" or "note across #color"
-            let rest = rest.trim();
-            let (color, rest) = if rest.starts_with('#') {
-                let end = rest
-                    .find(|c: char| c.is_whitespace() || c == ':')
-                    .unwrap_or(rest.len());
-                (Some(rest[..end].to_string()), rest[end..].trim())
-            } else {
-                (None, rest)
-            };
-            let text = inline_sequence_display(rest.trim_start_matches(':').trim());
-            if text.is_empty() {
-                self.note_buffer = Some(NoteBuffer {
-                    position: NotePosition::Over,
-                    participants: Vec::new(),
-                    lines: Vec::new(),
-                    shape: NoteShape::Note,
-                    color,
-                    on_message: false,
-                    source_line: self.current_line,
+        // FactorySequenceNoteAcrossCommand composes STYLE, optional whitespace,
+        // ACROSS and color, rather than a literal-space command prefix. Its
+        // nested optional stereotype whitespace contributes no required Fox bit.
+        static ACROSS: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(h|r)?note[%s]*(accross|across)[%s]*(#[^%s:]+)?[%s]*(?::[%s]*(.*))?$")
+                .unwrap()
+        });
+        if let Some(caps) = ACROSS.captures(line) {
+            // FactorySequenceNoteAcrossCommand#executeInternal rejects this
+            // recognized grammar alternative, rather than silently dropping it.
+            if &caps[2] == "accross" {
+                return Err(ParseError {
+                    line: self.current_line,
+                    message: "Use 'across' instead of 'accross'".into(),
                 });
-            } else {
+            }
+            let shape = match caps.get(1).map(|m| m.as_str()) {
+                Some("h") => NoteShape::Hexagonal,
+                Some("r") => NoteShape::Rectangular,
+                _ => NoteShape::Note,
+            };
+            let color = caps.get(3).map(|m| m.as_str().to_string());
+            if let Some(text) = caps.get(4) {
                 self.events.push(Event::Note(Note {
                     position: NotePosition::Over,
                     participants: Vec::new(),
-                    text,
-                    shape: NoteShape::Note,
+                    text: inline_sequence_display(text.as_str()),
+                    shape,
                     color,
                     on_message: false,
                     source_line: self.current_line,
                 }));
+            } else {
+                self.note_buffer = Some(NoteBuffer {
+                    position: NotePosition::Over,
+                    participants: Vec::new(),
+                    lines: Vec::new(),
+                    shape,
+                    color,
+                    on_message: false,
+                    source_line: self.current_line,
+                });
             }
             return Ok(true);
         }
@@ -1156,7 +1165,6 @@ impl SeqParser {
         // CommandAutonumberResume#getRegexConcat has a direct required space;
         // CommandAutonumber's optional argument groups do not contribute it.
         if has_fox_space(line)
-            && line.starts_with("autonumber resume")
             && let Some(caps) = RE_RESUME.captures(line)
         {
             let step = caps.get(1).and_then(|m| m.as_str().parse().ok());
@@ -1420,24 +1428,18 @@ impl SeqParser {
             self.current_box = None;
             return true;
         }
-        if line == "box" || line.starts_with("box ") {
-            let rest = line[3..].trim();
-            // Title is an optional quoted string; colour is an optional #token.
-            let (title, after_title) = if let Some(stripped) = rest.strip_prefix('"') {
-                match stripped.find('"') {
-                    Some(end) => (stripped[..end].to_string(), stripped[end + 1..].trim()),
-                    None => (stripped.to_string(), ""),
-                }
-            } else {
-                // CommandBoxStart#getRegexConcat NAME2 captures the unquoted
-                // title up to the optional color (account 55e88b2a).
-                let end = rest.find('#').unwrap_or(rest.len());
-                (rest[..end].to_string(), &rest[end..])
-            };
-            let color = after_title
-                .split_whitespace()
-                .find(|tok| tok.starts_with('#'))
-                .map(|tok| tok.to_string());
+        // CommandBoxStart#getRegexConcat: title whitespace is inside an
+        // optional RegexOr, so it contributes no required FoxSignature bit.
+        // Preserve NAME1/NAME2 order and complete title capture before color.
+        static START: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r#"^box(?:[%s]+(?:"(?P<quoted>[^"]+)"|(?P<unquoted>[^#]+)))?[%s]*(?P<color>#[^%s]+)?$"#).unwrap()
+        });
+        if let Some(caps) = START.captures(line) {
+            let title = caps
+                .name("quoted")
+                .or_else(|| caps.name("unquoted"))
+                .map_or_else(String::new, |m| m.as_str().to_string());
+            let color = caps.name("color").map(|m| m.as_str().to_string());
             self.boxes.push(ParticipantBox {
                 title,
                 color,
@@ -2850,6 +2852,29 @@ Gate -> Mail: enqueue"#
             assert!(!non_whitespace.is_match(&character.to_string()));
         }
     }
+    #[test]
+    fn command_entry_whitespace_follows_java_composition() {
+        for gap in [' ', '\t', '\u{000c}', '\u{00a0}', '\u{000b}'] {
+            let mut parser = SeqParser::new();
+            assert!(parser.try_box(&format!("box{gap}\"Northern Shore\" #pink")));
+            assert_eq!(parser.boxes[0].title, "Northern Shore");
+            assert_eq!(parser.boxes[0].color.as_deref(), Some("#pink"));
+            assert!(parser.try_note(&format!("rnote{gap}across: body")).unwrap());
+            assert!(
+                matches!(parser.events.last(), Some(Event::Note(note)) if note.shape == NoteShape::Rectangular)
+            );
+            assert_eq!(
+                parser.try_autonumber(&format!("autonumber{gap}resume")),
+                gap != '\u{000b}'
+            );
+            assert!(parser.try_autonumber(&format!("autonumber{gap}resume \"Item 00\"")));
+        }
+        for shape in ["note", "rnote", "hnote"] {
+            let mut parser = SeqParser::new();
+            assert!(parser.try_note(&format!("{shape} accross: body")).is_err());
+        }
+    }
+
     #[test]
     fn fox_space_prefilter_checks_the_complete_command() {
         for gap in [' ', '\t', '\u{000c}', '\u{00a0}', '\u{000b}'] {
