@@ -3172,18 +3172,14 @@ struct ParticipantLayout {
     label: String,
     /// The visual shape of this participant.
     kind: ParticipantKind,
-    /// Optional stereotype text
-    stereotype: Option<String>,
     /// Participant#getDisplay after visibility filtering and declaration order.
     display: Vec<(String, bool)>,
-    /// Text width at the participant label font size.
-    text_width: f64,
+    /// Complete filtered Display height, used by every component consumer.
+    display_height: f64,
     /// Participant#getUsedStyles resolves this kind's font before measure/paint.
     font_size: u32,
-    /// Baseline offset from the participant box top for the label.
-    text_y_offset: f64,
-    /// Stereotype Display width in the resolved participant component font.
-    stereotype_width: f64,
+    /// ComponentRoseParticipant marginY plus component padding.
+    text_top_offset: f64,
     /// Box width (used for spacing and centering — meaning varies by kind)
     box_width: f64,
     /// ComponentRoseParticipant preferred width, including deltaShadow. Kept
@@ -3207,10 +3203,6 @@ struct ParticipantLayout {
     url: Option<String>,
     /// Optional per-participant background colour from the declaration.
     color: Option<String>,
-    /// True when this participant is enclosed in a `box`. Figure participants
-    /// only render their stereotype line (and reserve head height for it) when
-    /// boxed — see `boxed_decl_idx`.
-    in_box: bool,
     /// 1-based line number within the `@startuml` block.
     source_line: u32,
 }
@@ -4883,11 +4875,8 @@ impl PlantUmlSvg {
         rect_y: f64,
         rect_w: f64,
         rect_h: f64,
-        text_x: f64,
-        text_y: f64,
-        text_content: &str,
-        text_len: f64,
-        stereotype: Option<(&str, f64)>, // (stereotype text, text width)
+        text_top: f64,
+        display: &[(String, bool)],
         fill_color: &str,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
@@ -4934,51 +4923,7 @@ impl PlantUmlSvg {
             .unwrap();
         }
 
-        let line_h = stereotype
-            .map(|(text, _)| {
-                ParticipantTextBlock::new(
-                    &format!("«{text}»"),
-                    self.participant_font_size as f64,
-                    &self.participant_font_family,
-                    false,
-                )
-                .height
-            })
-            .unwrap_or(0.0);
-        let label_x = if stereotype.is_some() {
-            rect_x + (rect_w - text_len) / 2.0
-        } else {
-            text_x
-        };
-
-        // Stereotype text (above participant name, same size, italic)
-        if let Some((st_text, st_width)) = stereotype {
-            let st_display = format!("\u{ab}{st_text}\u{bb}");
-            let st_x = rect_x + (rect_w - st_width) / 2.0;
-            let st_y = text_y - line_h;
-            ParticipantTextBlock::new(
-                &st_display,
-                self.participant_font_size as f64,
-                &self.participant_font_family,
-                false,
-            )
-            .draw(
-                &mut self.buf,
-                &TextBase {
-                    x: st_x,
-                    y: st_y,
-                    font_size: self.participant_font_size,
-                    font_family: &self.participant_font_family,
-                    fill: "#000000",
-                    bold: false,
-                    italic: true,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-        }
-
-        self.participant_text(label_x, text_y, text_content, text_len);
+        self.participant_display(display, rect_x + rect_w / 2.0, text_top);
 
         self.participant_group_close();
     }
@@ -5044,63 +4989,37 @@ impl PlantUmlSvg {
         }
     }
 
-    /// Write participant text label.
-    fn participant_text(&mut self, text_x: f64, text_y: f64, text_content: &str, text_len: f64) {
-        let block = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        );
-        let _ = text_len;
-        block.draw(
-            &mut self.buf,
-            &TextBase {
-                x: text_x,
-                y: text_y,
-                font_size: self.participant_font_size,
-                font_family: &self.participant_font_family,
-                fill: &self.participant_font_color,
-                bold: self.participant_font_bold,
-                italic: self.participant_font_italic,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-    }
-
-    /// Draw a figure participant's stereotype line, centred on `cx` one text
-    /// line above `name_y`. Matches PlantUML's `AbstractTextualComponent`,
-    /// which folds the stereotype into the head's text block (italic, same
-    /// font size, drawn above the name). `st` is the raw stereotype text (no
-    /// guillemets) with its rendered width; `line_h` is one participant text
-    /// line. Returns nothing — the caller has already grown the head height by
-    /// `line_h` and pushed `name_y` down so the figure stays at the top.
-    fn participant_stereotype_text(&mut self, cx: f64, name_y: f64, st: (&str, f64), line_h: f64) {
-        let (st_text, st_width) = st;
-        let st_display = format!("\u{ab}{st_text}\u{bb}");
-        let st_x = cx - (st_width + 2.0 * ACTOR_TEXT_PAD) / 2.0;
-        let st_y = name_y - line_h;
-        ParticipantTextBlock::new(
-            &st_display,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            false,
-        )
-        .draw(
-            &mut self.buf,
-            &TextBase {
-                x: st_x,
-                y: st_y,
-                font_size: self.participant_font_size,
-                font_family: &self.participant_font_family,
-                fill: "#000000",
-                bold: false,
-                italic: true,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+    /// AbstractTextualComponent receives Participant#getDisplay as one ordered
+    /// text block. Each stripe uses its own ascent at the accumulated origin.
+    fn participant_display(&mut self, display: &[(String, bool)], center_x: f64, top: f64) {
+        let mut y = top;
+        for (text, stereotype) in display {
+            let block = ParticipantTextBlock::new(
+                text,
+                self.participant_font_size as f64,
+                &self.participant_font_family,
+                !stereotype && self.participant_font_bold,
+            );
+            block.draw(
+                &mut self.buf,
+                &TextBase {
+                    x: center_x - block.width / 2.0,
+                    y: y + block.lines[0].2.ascent,
+                    font_size: self.participant_font_size,
+                    font_family: &self.participant_font_family,
+                    fill: if *stereotype {
+                        "#000000"
+                    } else {
+                        &self.participant_font_color
+                    },
+                    bold: !stereotype && self.participant_font_bold,
+                    italic: *stereotype || self.participant_font_italic,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            y += block.height;
+        }
     }
 
     /// Write a sequence message/arrow label.
@@ -5275,14 +5194,11 @@ impl PlantUmlSvg {
         position: &str,
         cx: f64,
         base_y: f64,
-        text_x: f64,
-        text_content: &str,
-        text_len: f64,
+        display: &[(String, bool)],
+        display_height: f64,
         fill_color: &str,
         border_color: &str,
         teoz: bool,
-        stereo: Option<(&str, f64)>,
-        line_h: f64,
         shadow_delta: f64,
         shadow_filter: Option<&str>,
     ) {
@@ -5290,40 +5206,17 @@ impl PlantUmlSvg {
 
         // Compute text and figure positions based on head vs tail. In Teoz the
         // foot figures mirror the head layout (figure on top, text below).
+        // ComponentRoseActor#drawInternalU places the complete Display
+        // before a legacy tail symbol and after a head symbol. MarginX1/2=3
+        // participate in getTextWidth; the text block itself starts at -marginX1
+        // relative to the symbol center (getTextMiddlePostion).
         let is_tail = position == "tail" && !teoz;
-        let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        // ComponentRose symbol components compose their text block and symbol
-        // vertically; the tail symbol begins after the complete Display.
-        let label = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        );
-        let label_ascent = label.lines[0].2.ascent;
-        let (text_y, figure_base) = if is_tail {
-            // Tail: text first, figure below.
-            (
-                base_y + stereo_shift + label_ascent,
-                base_y + stereo_shift + label.height,
-            )
+        let (text_top, figure_base) = if is_tail {
+            (base_y, base_y + display_height)
         } else {
-            // Head: figure first, text below.
-            // ComponentRoseActor places text below ActorStickMan's complete
-            // preferred height, whose vertical dimension includes shadow.
-            (
-                base_y + ACTOR_SYMBOL_HEIGHT + label_ascent + stereo_shift + shadow_delta,
-                base_y,
-            )
+            (base_y + ACTOR_SYMBOL_HEIGHT + shadow_delta, base_y)
         };
-
-        // Text label
-        // Stereotype line first (above the name), then the name — matching
-        // PlantUML's text-block document order (stereotype precedes the name).
-        if let Some(st) = stereo {
-            self.participant_stereotype_text(cx, text_y, st, line_h);
-        }
-        self.participant_text(text_x, text_y, text_content, text_len);
+        self.participant_display(display, cx - ACTOR_TEXT_PAD, text_top);
 
         // Head circle
         let head_cy = figure_base + ACTOR_HEAD_CY_OFFSET;
@@ -5383,47 +5276,25 @@ impl PlantUmlSvg {
         position: &str,
         cx: f64,
         base_y: f64,
-        text_x: f64,
-        text_content: &str,
-        text_len: f64,
+        display: &[(String, bool)],
+        display_height: f64,
         fill_color: &str,
         border_color: &str,
         teoz: bool,
-        stereo: Option<(&str, f64)>,
-        line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
+        // ComponentRoseBoundary#drawInternalU places the complete Display
+        // before a legacy tail symbol and after a head symbol. MarginX1/2=3
+        // participate in getTextWidth; the text block itself starts at -marginX1
+        // relative to the symbol center (getTextMiddlePostion).
         let is_tail = position == "tail" && !teoz;
-        let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        // ComponentRose symbol components compose their text block and symbol
-        // vertically; the tail symbol begins after the complete Display.
-        let label = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        );
-        let label_ascent = label.lines[0].2.ascent;
-        let (text_y, figure_base) = if is_tail {
-            (
-                base_y + stereo_shift + label_ascent,
-                base_y + stereo_shift + label.height,
-            )
+        let (text_top, figure_base) = if is_tail {
+            (base_y, base_y + display_height)
         } else {
-            (
-                base_y + CIRCLE_SYMBOL_HEIGHT + label_ascent + stereo_shift,
-                base_y,
-            )
+            (base_y + CIRCLE_SYMBOL_HEIGHT, base_y)
         };
-
-        // Text label
-        // Stereotype line first (above the name), then the name — matching
-        // PlantUML's text-block document order (stereotype precedes the name).
-        if let Some(st) = stereo {
-            self.participant_stereotype_text(cx, text_y, st, line_h);
-        }
-        self.participant_text(text_x, text_y, text_content, text_len);
+        self.participant_display(display, cx - ACTOR_TEXT_PAD, text_top);
 
         // Boundary shape: vertical line + horizontal line + circle, centered on cx.
         // shape_w = BOUNDARY_LINE_TO_CIRCLE_GAP + 2 * STEREOTYPE_CIRCLE_R = 17 + 24 = 41
@@ -5472,51 +5343,26 @@ impl PlantUmlSvg {
         position: &str,
         cx: f64,
         base_y: f64,
-        text_x: f64,
-        text_content: &str,
-        text_len: f64,
+        display: &[(String, bool)],
+        display_height: f64,
         fill_color: &str,
         border_color: &str,
         draw_glyph: bool,
         teoz: bool,
-        stereo: Option<(&str, f64)>,
-        line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
+        // ComponentRoseControl#drawInternalU places the complete Display
+        // before a legacy tail symbol and after a head symbol. MarginX1/2=3
+        // participate in getTextWidth; the text block itself starts at -marginX1
+        // relative to the symbol center (getTextMiddlePostion).
         let is_tail = position == "tail" && !teoz;
-        // A stereotype shifts the name baseline down by one text line, leaving
-        // room for the stereotype line above it; the figure stays at the head
-        // top (the head height already grew to absorb the extra line).
-        let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        // ComponentRose symbol components compose their text block and symbol
-        // vertically; the tail symbol begins after the complete Display.
-        let label = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        );
-        let label_ascent = label.lines[0].2.ascent;
-        let (text_y, figure_base) = if is_tail {
-            (
-                base_y + stereo_shift + label_ascent,
-                base_y + stereo_shift + label.height,
-            )
+        let (text_top, figure_base) = if is_tail {
+            (base_y, base_y + display_height)
         } else {
-            (
-                base_y + CIRCLE_SYMBOL_HEIGHT + label_ascent + stereo_shift,
-                base_y,
-            )
+            (base_y + CIRCLE_SYMBOL_HEIGHT, base_y)
         };
-
-        // Text label
-        // Stereotype line first (above the name), then the name — matching
-        // PlantUML's text-block document order (stereotype precedes the name).
-        if let Some(st) = stereo {
-            self.participant_stereotype_text(cx, text_y, st, line_h);
-        }
-        self.participant_text(text_x, text_y, text_content, text_len);
+        self.participant_display(display, cx - ACTOR_TEXT_PAD, text_top);
 
         // Circle
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
@@ -5575,47 +5421,25 @@ impl PlantUmlSvg {
         position: &str,
         cx: f64,
         base_y: f64,
-        text_x: f64,
-        text_content: &str,
-        text_len: f64,
+        display: &[(String, bool)],
+        display_height: f64,
         fill_color: &str,
         border_color: &str,
         teoz: bool,
-        stereo: Option<(&str, f64)>,
-        line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
+        // ComponentRoseEntity#drawInternalU places the complete Display
+        // before a legacy tail symbol and after a head symbol. MarginX1/2=3
+        // participate in getTextWidth; the text block itself starts at -marginX1
+        // relative to the symbol center (getTextMiddlePostion).
         let is_tail = position == "tail" && !teoz;
-        let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        // ComponentRose symbol components compose their text block and symbol
-        // vertically; the tail symbol begins after the complete Display.
-        let label = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        );
-        let label_ascent = label.lines[0].2.ascent;
-        let (text_y, figure_base) = if is_tail {
-            (
-                base_y + stereo_shift + label_ascent,
-                base_y + stereo_shift + label.height,
-            )
+        let (text_top, figure_base) = if is_tail {
+            (base_y, base_y + display_height)
         } else {
-            (
-                base_y + CIRCLE_SYMBOL_HEIGHT + label_ascent + stereo_shift,
-                base_y,
-            )
+            (base_y + CIRCLE_SYMBOL_HEIGHT, base_y)
         };
-
-        // Text label
-        // Stereotype line first (above the name), then the name — matching
-        // PlantUML's text-block document order (stereotype precedes the name).
-        if let Some(st) = stereo {
-            self.participant_stereotype_text(cx, text_y, st, line_h);
-        }
-        self.participant_text(text_x, text_y, text_content, text_len);
+        self.participant_display(display, cx - ACTOR_TEXT_PAD, text_top);
 
         // Circle
         let circle_cy = figure_base + STEREOTYPE_CIRCLE_CY;
@@ -5662,47 +5486,25 @@ impl PlantUmlSvg {
         position: &str,
         cx: f64,
         base_y: f64,
-        text_x: f64,
-        text_content: &str,
-        text_len: f64,
+        display: &[(String, bool)],
+        display_height: f64,
         fill_color: &str,
         border_color: &str,
         teoz: bool,
-        stereo: Option<(&str, f64)>,
-        line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
+        // ComponentRoseDatabase#drawInternalU places the complete Display
+        // before a legacy tail symbol and after a head symbol. MarginX1/2=3
+        // participate in getTextWidth; the text block itself starts at -marginX1
+        // relative to the symbol center (getTextMiddlePostion).
         let is_tail = position == "tail" && !teoz;
-        let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
-        // ComponentRose symbol components compose their text block and symbol
-        // vertically; the tail symbol begins after the complete Display.
-        let label = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        );
-        let label_ascent = label.lines[0].2.ascent;
-        let (text_y, figure_base) = if is_tail {
-            (
-                base_y + stereo_shift + label_ascent,
-                base_y + stereo_shift + label.height,
-            )
+        let (text_top, figure_base) = if is_tail {
+            (base_y, base_y + display_height)
         } else {
-            (
-                base_y + DB_CYLINDER_HEIGHT + label_ascent + stereo_shift,
-                base_y,
-            )
+            (base_y + DB_CYLINDER_HEIGHT, base_y)
         };
-
-        // Text label
-        // Stereotype line first (above the name), then the name — matching
-        // PlantUML's text-block document order (stereotype precedes the name).
-        if let Some(st) = stereo {
-            self.participant_stereotype_text(cx, text_y, st, line_h);
-        }
-        self.participant_text(text_x, text_y, text_content, text_len);
+        self.participant_display(display, cx - ACTOR_TEXT_PAD, text_top);
 
         // Cylinder body
         let left = cx - DB_CYLINDER_HALF_W;
@@ -5758,33 +5560,17 @@ impl PlantUmlSvg {
         box_x: f64,
         base_y: f64,
         box_w: f64,
-        text_x: f64,
-        text_y: f64,
-        text_content: &str,
-        text_len: f64,
+        text_top: f64,
+        display: &[(String, bool)],
+        display_height: f64,
         fill_color: &str,
         border_color: &str,
-        stereo: Option<(&str, f64)>,
-        line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
-        // A boxed stereotype adds one text line above the name; the stacked
-        // rectangles grow by one line and the name baseline shifts down (the
-        // stereotype takes the `text_y` slot the name would otherwise use).
-        let stereo_shift = if stereo.is_some() { line_h } else { 0.0 };
         // Rose#createComponentParticipant selects ComponentRoseParticipant
-        // with collections=true: marginY7 and getDeltaCollection=4. This is
-        // a later citation correction; the original account remains unchanged.
-        let rect_h = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        )
-        .height
-            + 2.0 * 7.0
-            + stereo_shift;
+        // with collections=true: complete Display plus marginY7 twice.
+        let rect_h = display_height + 2.0 * 7.0;
 
         // Back rectangle (offset right and up)
         let back_x = box_x + COLLECTIONS_OFFSET;
@@ -5834,38 +5620,7 @@ impl PlantUmlSvg {
             .unwrap();
         }
 
-        // Stereotype line (above name), then the name shifted down one line.
-        // Both lines are centred in the front rectangle (the stereotype is
-        // typically wider than the name, so it gets its own centred x).
-        if let Some((st_text, st_width)) = stereo {
-            let st_display = format!("\u{ab}{st_text}\u{bb}");
-            let st_x = box_x + (rect_w - st_width) / 2.0;
-            ParticipantTextBlock::new(
-                &st_display,
-                self.participant_font_size as f64,
-                &self.participant_font_family,
-                false,
-            )
-            .draw(
-                &mut self.buf,
-                &TextBase {
-                    x: st_x,
-                    y: text_y,
-                    font_size: self.participant_font_size,
-                    font_family: &self.participant_font_family,
-                    fill: "#000000",
-                    bold: false,
-                    italic: true,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-            // Name centred in the rect, one line below the stereotype.
-            let name_x = box_x + (rect_w - text_len) / 2.0;
-            self.participant_text(name_x, text_y + stereo_shift, text_content, text_len);
-        } else {
-            self.participant_text(text_x, text_y, text_content, text_len);
-        }
+        self.participant_display(display, box_x + rect_w / 2.0, text_top);
 
         self.participant_group_close();
     }
@@ -5962,31 +5717,9 @@ impl PlantUmlSvg {
             &format!("stroke:{border_color};stroke-width:0.5;"),
         );
 
-        // USymbolQueue#asSmall translates the complete label by its margin;
-        // each child starts at its accumulated top and uses its own ascent.
-        let inner_w = box_w - QUEUE_TEXT_H_PAD;
-        let mut stripe_top = text_top;
-        for (block, stereotype) in &blocks {
-            block.draw(
-                &mut self.buf,
-                &TextBase {
-                    x: box_x + QUEUE_TEXT_X_PAD + (inner_w - block.width) / 2.0,
-                    y: stripe_top + block.lines[0].2.ascent,
-                    font_size: self.participant_font_size,
-                    font_family: &self.participant_font_family,
-                    fill: if *stereotype {
-                        "#000000"
-                    } else {
-                        &self.participant_font_color
-                    },
-                    bold: !stereotype && self.participant_font_bold,
-                    italic: *stereotype,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-            stripe_top += block.height;
-        }
+        // USymbolQueue#asSmall translates the complete Display by its margin.
+        let center = box_x + QUEUE_TEXT_X_PAD + (box_w - QUEUE_TEXT_H_PAD) / 2.0;
+        self.participant_display(display, center, text_top);
 
         self.participant_group_close();
     }
@@ -6920,7 +6653,7 @@ fn render_participant_shape(
     _max_box_h: f64,
     fill_color: &str,
     border_color: &str,
-    participant_inner_pad: f64,
+    _participant_inner_pad: f64,
     queue_head_offset: f64,
     draw_control_glyph: bool,
     teoz: bool,
@@ -6930,30 +6663,6 @@ fn render_participant_shape(
     svg.active_participant_url = p.url.clone();
     let outer_font_size = svg.participant_font_size;
     svg.participant_font_size = p.font_size;
-    // Participant#getDisplay prepends the stereotype component to the label.
-    // Use its complete height for both reservation and paint translation.
-    let figure_line_h = p
-        .stereotype
-        .as_ref()
-        .map(|text| {
-            ParticipantTextBlock::new(
-                &format!("«{text}»"),
-                p.font_size as f64,
-                &svg.participant_font_family,
-                false,
-            )
-            .height
-        })
-        .unwrap_or(0.0);
-    // Figure participants only render the stereotype when boxed (see
-    // `boxed_decl_idx` / ParticipantLayout::in_box).
-    let stereo_ref: Option<(&str, f64)> = if p.in_box {
-        p.stereotype
-            .as_ref()
-            .map(|s| (s.as_str(), p.stereotype_width))
-    } else {
-        None
-    };
     match p.kind {
         ParticipantKind::Actor
         | ParticipantKind::Boundary
@@ -6961,7 +6670,6 @@ fn render_participant_shape(
         | ParticipantKind::Entity
         | ParticipantKind::Database => {
             // All non-box shapes: text centered at center_x - (text_width + 2*pad)/2.
-            let text_x = p.center_x - (p.text_width + 2.0 * ACTOR_TEXT_PAD) / 2.0;
             match p.kind {
                 ParticipantKind::Actor => {
                     svg.actor_shape(
@@ -6971,14 +6679,11 @@ fn render_participant_shape(
                         position,
                         p.center_x,
                         base_y,
-                        text_x,
-                        &p.label,
-                        p.text_width,
+                        &p.display,
+                        p.display_height,
                         fill_color,
                         border_color,
                         teoz,
-                        stereo_ref,
-                        figure_line_h,
                         p.shadow_delta,
                         p.shadow_filter.as_deref(),
                     );
@@ -6991,14 +6696,11 @@ fn render_participant_shape(
                         position,
                         p.center_x,
                         base_y,
-                        text_x,
-                        &p.label,
-                        p.text_width,
+                        &p.display,
+                        p.display_height,
                         fill_color,
                         border_color,
                         teoz,
-                        stereo_ref,
-                        figure_line_h,
                     );
                 }
                 ParticipantKind::Control => {
@@ -7009,15 +6711,12 @@ fn render_participant_shape(
                         position,
                         p.center_x,
                         base_y,
-                        text_x,
-                        &p.label,
-                        p.text_width,
+                        &p.display,
+                        p.display_height,
                         fill_color,
                         border_color,
                         draw_control_glyph,
                         teoz,
-                        stereo_ref,
-                        figure_line_h,
                     );
                 }
                 ParticipantKind::Entity => {
@@ -7028,14 +6727,11 @@ fn render_participant_shape(
                         position,
                         p.center_x,
                         base_y,
-                        text_x,
-                        &p.label,
-                        p.text_width,
+                        &p.display,
+                        p.display_height,
                         fill_color,
                         border_color,
                         teoz,
-                        stereo_ref,
-                        figure_line_h,
                     );
                 }
                 ParticipantKind::Database => {
@@ -7046,22 +6742,18 @@ fn render_participant_shape(
                         position,
                         p.center_x,
                         base_y,
-                        text_x,
-                        &p.label,
-                        p.text_width,
+                        &p.display,
+                        p.display_height,
                         fill_color,
                         border_color,
                         teoz,
-                        stereo_ref,
-                        figure_line_h,
                     );
                 }
                 _ => unreachable!(),
             }
         }
         ParticipantKind::Collections => {
-            let text_x = p.box_x + participant_inner_pad;
-            let text_y = base_y + COLLECTIONS_OFFSET + p.text_y_offset;
+            let text_top = base_y + COLLECTIONS_OFFSET + p.text_top_offset;
             svg.collections_shape(
                 part_uid,
                 qualified_name,
@@ -7070,14 +6762,11 @@ fn render_participant_shape(
                 p.box_x,
                 base_y,
                 p.box_width,
-                text_x,
-                text_y,
-                &p.label,
-                p.text_width,
+                text_top,
+                &p.display,
+                p.display_height,
                 fill_color,
                 border_color,
-                stereo_ref,
-                figure_line_h,
             );
         }
         ParticipantKind::Queue => {
@@ -7105,18 +6794,7 @@ fn render_participant_shape(
             );
         }
         ParticipantKind::Participant => {
-            let text_x = p.box_x + participant_inner_pad;
-            let text_y = base_y
-                + p.text_y_offset
-                + if p.stereotype.is_some() {
-                    figure_line_h
-                } else {
-                    0.0
-                };
-            let stereo_ref = p
-                .stereotype
-                .as_ref()
-                .map(|s| (s.as_str(), p.stereotype_width));
+            let text_top = base_y + p.text_top_offset;
             svg.participant_box(
                 part_uid,
                 qualified_name,
@@ -7126,11 +6804,8 @@ fn render_participant_shape(
                 base_y,
                 p.box_width,
                 p.box_height,
-                text_x,
-                text_y,
-                &p.label,
-                p.text_width,
-                stereo_ref,
+                text_top,
+                &p.display,
                 fill_color,
             );
         }
@@ -7925,15 +7600,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .filter(|b| !b.members.is_empty())
         .collect();
     let has_boxes = !participant_boxes.is_empty();
-    // Decl indices of participants enclosed in a `box`. PlantUML only renders a
-    // figure participant's stereotype line (italic, above the name) when the
-    // participant is inside a box; bare-declared figure participants drop the
-    // stereotype from the head display. Verified across all non-error
-    // figure-stereotype sequence goldens (box <=> stereotype rendered).
-    let boxed_decl_idx: std::collections::HashSet<usize> = participant_boxes
-        .iter()
-        .flat_map(|b| b.members.iter().copied())
-        .collect();
     let any_box_titled = participant_boxes.iter().any(|b| !b.title.is_empty());
     // DrawableSet#getHeadAndEngloberHeight composes head plus the englober
     // component. ComponentRoseEnglober reserves text + marginY1*2 +3;
@@ -8063,7 +7729,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             );
             let tw = label_block.width;
             let label_height = label_block.height;
-            let label_ascent = label_block.lines[0].2.ascent;
             let stereotype_height = st_display
                 .as_ref()
                 .map(|text| {
@@ -8150,17 +7815,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             };
 
-            // Participant#getDisplay composes the stereotype above the label.
-            // Its measured height participates in every rendered head kind;
-            // Participant already includes it in its rectangle branch.
-            // Only boxed figure participants render the stereotype (PlantUML
-            // drops it from bare-declared figure heads).
-            let in_box = boxed_decl_idx.contains(&idx);
+            // DrawableSetInitializer#createParticipant passes Participant#getDisplay
+            // to every component, irrespective of box membership. Participant and
+            // queue already include the complete Display in their branches above.
             let bh = match p.kind {
-                // These components already compose the complete Display above.
                 ParticipantKind::Participant | ParticipantKind::Queue => bh,
-                _ if st.is_some() && in_box => bh + stereotype_height,
-                _ => bh,
+                _ => bh + stereotype_height,
             };
 
             ParticipantLayout {
@@ -8169,13 +7829,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 id: p.id.clone(),
                 label,
                 kind: p.kind,
-                stereotype: st,
                 display,
-                text_width: tw,
+                display_height: label_height + stereotype_height,
                 font_size,
                 // ComponentRoseParticipant applies marginY7 before its text block.
-                text_y_offset: label_ascent + 7.0 + global_padding,
-                stereotype_width: st_w,
+                text_top_offset: 7.0 + global_padding,
                 box_width: bw,
                 preferred_width: bw
                     + if p.kind == ParticipantKind::Participant {
@@ -8232,7 +7890,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 lifeline_line_x: 0.0,
                 url: p.url.clone(),
                 color: p.color.clone(),
-                in_box,
                 source_line: p.source_line as u32,
             }
         })
@@ -17245,6 +16902,50 @@ mod tests {
                     + 2.0 * margin;
                 assert!(whole > per_line);
                 assert_eq!(note_rendered_height(shape, &metrics), whole);
+            }
+        }
+    }
+
+    #[test]
+    fn every_participant_paints_filtered_ordered_display() {
+        for kind in [
+            "participant",
+            "actor",
+            "boundary",
+            "control",
+            "entity",
+            "database",
+            "collections",
+            "queue",
+        ] {
+            for teoz in [false, true] {
+                let source = format!(
+                    "@startuml\n{}skinparam stereotypePosition bottom\n{kind} BoxLabel <<tag>>\nBoxLabel -> Elm: call\n@enduml",
+                    if teoz { "!pragma teoz true\n" } else { "" }
+                );
+                let rustuml_parser::diagram::Diagram::Sequence(diagram) =
+                    rustuml_parser::parse::parse_auto(&source).unwrap()
+                else {
+                    panic!("sequence")
+                };
+                let svg = render(&diagram, &Theme::default(), None);
+                let names: Vec<_> = svg
+                    .match_indices(">BoxLabel</text>")
+                    .map(|(i, _)| i)
+                    .collect();
+                let stereotypes: Vec<_> =
+                    svg.match_indices(">«tag»</text>").map(|(i, _)| i).collect();
+                assert_eq!(names.len(), 2, "{kind} teoz={teoz}");
+                assert_eq!(stereotypes.len(), 2, "{kind} teoz={teoz}");
+                assert!(
+                    names
+                        .iter()
+                        .zip(&stereotypes)
+                        .all(|(name, stereotype)| name < stereotype)
+                );
+                let mut hidden = diagram.clone();
+                hidden.hide_stereotypes = true;
+                assert!(!render(&hidden, &Theme::default(), None).contains("«tag»"));
             }
         }
     }
