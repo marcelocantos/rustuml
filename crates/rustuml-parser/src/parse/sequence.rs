@@ -184,6 +184,13 @@ impl RegisteredSequenceCommand {
     // This preserves the language, including fallback to COLOR_REGEXP, without
     // weakening the lookahead or requiring regex backtracking in Rust.
     fn color_match<'a>(&self, line: &'a str) -> Option<Option<&'a str>> {
+        // CommandArrow#getRegexConcat ends with protectSize(2000).
+        // RegexConcat#match compares Java String.length(), hence UTF-16 units.
+        // Other registered commands do not set limitSize. Account 8efd66082.
+        const COMMAND_ARROW_MAX_UTF16: usize = 2000;
+        if self.class == "CommandArrow" && line.encode_utf16().count() > COMMAND_ARROW_MAX_UTF16 {
+            return None;
+        }
         if self.signature & sequence_fox_signature(line) != self.signature {
             return None;
         }
@@ -2848,6 +2855,17 @@ fn note_text_from_lines(lines: &[String]) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn ordinary_arrow_size_limit_counts_utf16_and_is_command_scoped() {
+        let prefix = "N -> S: ";
+        for (payload, units) in [("a", 1), ("😀", 2)] {
+            let line = format!("{prefix}{}", payload.repeat((2000 - prefix.len()) / units));
+            assert!(parse_sequence(std::slice::from_ref(&line)).is_ok());
+            assert!(parse_sequence(&[format!("{line}a")]).is_err());
+        }
+        assert!(parse_sequence(&[format!("title {}", "a".repeat(2100)), "N -> S".into()]).is_ok());
+    }
+
     #[test]
     fn registered_sequence_commands_separate_syntax_and_execution_residue() {
         assert_eq!(super::REGISTERED_SEQUENCE_COMMANDS.len(), 81);
