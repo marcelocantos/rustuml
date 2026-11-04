@@ -526,24 +526,14 @@ fn deprecated_handwritten_warning_block_height() -> f64 {
     plantuml_metrics::mono_text_height(WARNING_FONT_SIZE) + WARNING_BLOCK_EXTRA_HEIGHT
 }
 
-// Create-message layout (reverse-engineered from golden SVGs).
+// ComponentRoseLine#getPreferredHeight; ParticipantBox adds half to the head.
+const ROSE_LIFELINE_PREFERRED_HEIGHT: f64 = 20.0;
+// Remaining historical create-message paint conventions.
 // When `create X` precedes a message targeting X, PlantUML draws X's head box
 // inline at the message instead of at the top, and the lifeline begins there.
-/// Offset from the create message's arrow y up to the inline head box top.
-const CREATE_BOX_TOP_OFFSET: f64 = 21.310575;
-/// Offset from the create message's arrow y down to the created lifeline top.
-const CREATE_LIFELINE_TOP_OFFSET: f64 = 9.4336;
 /// Created queue heads draw their pill flush with the inline head base instead
 /// of using the ordinary mixed-participant 5px head drop.
 const CREATE_QUEUE_HEAD_OFFSET: f64 = 0.0;
-/// Created queue lifelines start 2.5px higher than rectangular created heads.
-const CREATE_QUEUE_LIFELINE_TOP_ADJUST: f64 = 2.5;
-/// Created queue heads extend 5px less below the creating message arrow.
-const CREATE_QUEUE_ADVANCE_ADJUST: f64 = 5.0;
-/// Extra vertical advance added to the y cursor after a create message,
-/// accounting for the inline head box that straddles the arrow. Reverse-engineered
-/// from goldens (the next event sits this much further down than a normal step).
-const CREATE_EXTRA_ADVANCE: f64 = 12.177753125;
 /// Offset for an activation bar that begins on a create+activate message: the bar
 /// starts below the inline head box rather than at the arrow.
 const CREATE_BAR_OFFSET: f64 = 10.0;
@@ -570,7 +560,6 @@ const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
 const OPEN_ACTIVATION_TAIL_CLEARANCE: f64 = 8.0;
 const SHADOW_LIVING_WIDTH_EXTRA: f64 = 3.0;
 const SHADOW_VERTICAL_PAD: f64 = 3.0;
-const SHADOW_CANVAS_RIGHT_PAD: f64 = 3.0;
 
 /// Vertical space a `newpage` separator reserves in the page-1 flow. Java
 /// `ComponentRoseNewpage.getPreferredHeight` returns 1; `prepareNewpage`
@@ -3174,6 +3163,11 @@ struct ParticipantLayout {
     preferred_width: f64,
     /// Box height (varies by participant kind)
     box_height: f64,
+    /// Complete head component height (Rose component, including shadow).
+    preferred_height: f64,
+    /// Resolved component shadow used by symbol measure and paint.
+    shadow_delta: f64,
+    shadow_filter: Option<String>,
     /// Left x of participant box/shape
     box_x: f64,
     /// Center x (exact center, used for messages and lifeline rect)
@@ -5231,6 +5225,8 @@ impl PlantUmlSvg {
         teoz: bool,
         stereo: Option<(&str, f64)>,
         line_h: f64,
+        shadow_delta: f64,
+        shadow_filter: Option<&str>,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
 
@@ -5246,7 +5242,9 @@ impl PlantUmlSvg {
             figure_base = base_y + ACTOR_TAIL_FIGURE_Y_OFFSET;
         } else {
             // Head: figure first, text below.
-            text_y = base_y + ACTOR_HEAD_TEXT_Y_OFFSET + stereo_shift;
+            // ComponentRoseActor places text below ActorStickMan's complete
+            // preferred height, whose vertical dimension includes shadow.
+            text_y = base_y + ACTOR_HEAD_TEXT_Y_OFFSET + stereo_shift + shadow_delta;
             figure_base = base_y;
         }
 
@@ -5260,14 +5258,29 @@ impl PlantUmlSvg {
 
         // Head circle
         let head_cy = figure_base + ACTOR_HEAD_CY_OFFSET;
-        self.write_ellipse(
-            cx,
-            head_cy,
-            8.0,
-            8.0,
-            fill_color,
-            &format!("stroke:{border_color};stroke-width:0.5;"),
-        );
+        // ActorStickMan#drawU applies the same Fashion shadow to head/path.
+        let attrs = shadow_filter
+            .map(|id| format!(r#" filter="url(#{id})""#))
+            .unwrap_or_default();
+        let style = format!("stroke:{border_color};stroke-width:0.5;");
+        if self.handwritten {
+            let points = handwritten_ellipse_points(cx, head_cy, 8.0, 8.0);
+            write!(
+                self.buf,
+                r#"<polygon {}{attrs} points="{points}" style="{style}"/>"#,
+                sequence_fill_attributes(fill_color)
+            )
+            .unwrap();
+        } else {
+            write!(
+                self.buf,
+                r#"<ellipse cx="{}" cy="{}" {}{attrs} rx="8" ry="8" style="{style}"/>"#,
+                fmt_coord(cx),
+                fmt_coord(head_cy),
+                sequence_fill_attributes(fill_color)
+            )
+            .unwrap();
+        }
 
         // Body path: spine, arms, legs
         let spine_top = figure_base + ACTOR_SPINE_TOP_OFFSET;
@@ -5286,11 +5299,7 @@ impl PlantUmlSvg {
             ay = fmt_coord(arm_y),
             lb = fmt_coord(leg_bottom),
         );
-        self.write_path(
-            &d,
-            "none",
-            &format!("stroke:{border_color};stroke-width:0.5;"),
-        );
+        self.write_path_with_attrs(&d, "none", &attrs, &style);
 
         self.participant_group_close();
     }
@@ -6042,8 +6051,6 @@ impl PlantUmlSvg {
         self.message_group_close();
     }
 
-    /// Write a message group with filled arrow (->).
-    #[allow(clippy::too_many_arguments)]
     /// ComponentRoseArrow#drawInternalU paints physical dressing1, dressing2,
     /// then the body. Each dressing owns its head and circle transform.
     #[allow(clippy::too_many_arguments)]
@@ -6178,6 +6185,8 @@ impl PlantUmlSvg {
         self.message_group_close();
     }
 
+    /// Write a message group with filled arrow (->).
+    #[allow(clippy::too_many_arguments)]
     fn message_filled_arrow(
         &mut self,
         entity1: &str,
@@ -6812,6 +6821,8 @@ fn render_participant_shape(
                         teoz,
                         stereo_ref,
                         figure_line_h,
+                        p.shadow_delta,
+                        p.shadow_filter.as_deref(),
                     );
                 }
                 ParticipantKind::Boundary => {
@@ -7453,6 +7464,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         )
     };
     let participant_style = component_style("participant");
+    let actor_style = component_style("actor");
     let lifeline_style = component_style("lifeLine");
     let arrow_style = component_style("arrow");
     if let Some(color) = note_style.property("lineColor") {
@@ -7474,6 +7486,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .map(sequence_note_shadow_value)
         .unwrap_or(if sequence_shadowing {
             SHADOW_LIVING_WIDTH_EXTRA
+        } else {
+            0.0
+        });
+    // ComponentType.ACTOR_* selects actor, not the participant sibling.
+    let actor_shadow_delta = actor_style
+        .property("shadowing")
+        .map(sequence_note_shadow_value)
+        .unwrap_or(if sequence_shadowing {
+            SHADOW_VERTICAL_PAD
         } else {
             0.0
         });
@@ -8004,12 +8025,51 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 preferred_width: bw
                     + if p.kind == ParticipantKind::Participant {
                         participant_shadow_delta
-                    } else if sequence_shadowing {
+                    } else if p.kind == ParticipantKind::Collections && sequence_shadowing {
                         SHADOW_LIVING_WIDTH_EXTRA
                     } else {
+                        // ActorStickMan/Boundary/Control/EntityDomain and USymbol
+                        // calculateDimension do not add painted shadow to width.
                         0.0
                     },
                 box_height: bh,
+                shadow_delta: if p.kind == ParticipantKind::Actor {
+                    actor_shadow_delta
+                } else {
+                    participant_shadow_delta
+                },
+                shadow_filter: (if p.kind == ParticipantKind::Actor {
+                    actor_shadow_delta
+                } else {
+                    participant_shadow_delta
+                } > 0.0)
+                    .then(|| filter_id.clone())
+                    .flatten(),
+                // ComponentRoseParticipant#getPreferredHeight adds shadow+1;
+                // figure components use their own existing preferred geometry.
+                preferred_height: bh
+                    + if matches!(
+                        p.kind,
+                        ParticipantKind::Participant | ParticipantKind::Collections
+                    ) {
+                        1.0 + if p.kind == ParticipantKind::Participant {
+                            participant_shadow_delta
+                        } else if sequence_shadowing {
+                            SHADOW_LIVING_WIDTH_EXTRA
+                        } else {
+                            0.0
+                        }
+                    } else if p.kind == ParticipantKind::Actor {
+                        // ActorStickMan#getPreferredHeight: geometry +2*stroke +
+                        // shadow+1, followed by ComponentRoseActor's label height.
+                        1.0 + actor_shadow_delta
+                    } else if p.kind == ParticipantKind::Queue {
+                        0.0
+                    } else {
+                        // ComponentRose{Boundary,Control,Entity,Database}: symbol
+                        // plus label preferred height, one beyond the visible band.
+                        1.0
+                    },
                 box_x: 0.0,
                 center_x: 0.0,
                 lifeline_line_x: 0.0,
@@ -8140,24 +8200,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .teoz
         .then(|| TeozHistory::new(&diagram.events, &lifecycle_owner));
     let create_msg_idx = sequence_create_message_indices(&diagram.events);
-    // Map creating-message event index -> extra vertical advance for that event:
-    // the base advance plus any extent by which a tall inline head shape (actor,
-    // boundary, etc.) reaches below a rectangle box.
-    let create_msg_extra: HashMap<usize, f64> = create_msg_idx
-        .iter()
-        .filter_map(|(id, &idx)| {
-            id_to_idx.get(id).map(|&pi| {
-                let extra_h = (participants[pi].box_height - HEAD_BOX_H).max(0.0);
-                let queue_adjust = if participants[pi].kind == ParticipantKind::Queue {
-                    CREATE_QUEUE_ADVANCE_ADJUST
-                } else {
-                    0.0
-                };
-                (idx, CREATE_EXTRA_ADVANCE + extra_h - queue_adjust)
-            })
-        })
-        .collect();
-
     // -----------------------------------------------------------------------
     // Phase 4: Pre-compute y positions for each event and vertical dimensions
     // -----------------------------------------------------------------------
@@ -8178,6 +8220,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             p.box_height
                 + if p.kind == ParticipantKind::Participant {
                     participant_shadow_delta
+                } else if p.kind == ParticipantKind::Actor {
+                    p.shadow_delta
                 } else if sequence_shadowing {
                     SHADOW_VERTICAL_PAD
                 } else {
@@ -8385,39 +8429,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // The next message's y step starts from the bottom of the loop.
                         y += SELF_MSG_DROP;
                     }
-                    // A creating message draws an inline head box that straddles the
-                    // arrow; the next event must clear the box bottom.
-                    if let Some(&extra) = create_msg_extra.get(&idx) {
-                        if diagram.teoz {
-                            // CommunicationTile#getPreferredHeight uses max(arrow,
-                            // participant head), not the legacy create advance.
-                            let head = &participants[id_to_idx[&msg.to]];
-                            // ComponentRoseParticipant#getPreferredHeight includes
-                            // its one-pixel reservation beyond the painted rect.
-                            let head_height = head.box_height
-                                + if matches!(
-                                    head.kind,
-                                    ParticipantKind::Participant | ParticipantKind::Collections
-                                ) {
-                                    // CommunicationTile#getPreferredHeight uses
-                                    // the same complete head component as the
-                                    // initial band, including its scoped shadow.
-                                    1.0 + if head.kind == ParticipantKind::Participant {
-                                        participant_shadow_delta
-                                    } else if sequence_shadowing {
-                                        SHADOW_LIVING_WIDTH_EXTRA
-                                    } else {
-                                        0.0
-                                    }
-                                } else {
-                                    0.0
-                                };
-                            let arrow_height =
-                                msg_step(has_text, event_text_height) + message_vertical_padding;
-                            y += (head_height - arrow_height).max(0.0);
-                        } else {
-                            y += extra;
-                        }
+                    // ArrowAndParticipant#getPreferredHeight takes max(arrow,
+                    // ParticipantBox#getHeadHeight). That head includes half of
+                    // ComponentRoseLine's preferred height20. Teoz's
+                    // CommunicationTile instead consumes the head alone.
+                    if create_msg_idx.get(&msg.to) == Some(&idx) {
+                        let head = &participants[id_to_idx[&msg.to]];
+                        let head_height = head.preferred_height
+                            + if diagram.teoz {
+                                0.0
+                            } else {
+                                ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0
+                            };
+                        let arrow_height =
+                            msg_step(has_text, event_text_height) + message_vertical_padding;
+                        y += (head_height - arrow_height).max(0.0);
                     }
                     // LifeEventTile has zero preferred height. The legacy
                     // Step1Message combined row is not part of the Teoz model.
@@ -9144,7 +9170,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             spacing_pending_create.iter().position(|id| *id == msg.to)
                         {
                             spacing_pending_create.remove(pos);
-                            participants[ti].box_width / 2.0
+                            participants[ti].preferred_width / 2.0
                         } else {
                             0.0
                         };
@@ -11883,15 +11909,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // DrawableSetInitializer#prepareMissingSpace compares every graphical
     // element's preferred extent. ArrowAndNoteBox remains a note-bearing event
     // envelope when it wins this comparison (source refinement 09eec925).
-    let canvas_shadow_pad = participants.last().map_or(0.0, |p| {
-        if p.kind == ParticipantKind::Participant {
-            participant_shadow_delta
-        } else if sequence_shadowing {
-            SHADOW_CANVAS_RIGHT_PAD
-        } else {
-            0.0
-        }
-    });
+    // The component preferred width already decides whether its painted
+    // shadow expands horizontal bounds (ActorStickMan does not).
+    let canvas_shadow_pad = participants
+        .last()
+        .map_or(0.0, |p| p.preferred_width - p.box_width);
     let note_envelope_dominates = note_envelope_right
         .max(max_arrow_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
         .max(max_message_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
@@ -12217,17 +12239,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let created_lifeline_top: HashMap<String, f64> = create_msg_idx
         .iter()
         .map(|(id, &idx)| {
-            // For tall shapes (actor, boundary, ...) the lifeline emerges lower,
-            // shifted by half the shape's excess height over a rectangle box.
-            let half_extra = id_to_idx
-                .get(id)
-                .map(|&pi| (participants[pi].box_height - HEAD_BOX_H).max(0.0) / 2.0)
-                .unwrap_or(0.0);
-            let queue_adjust = id_to_idx
-                .get(id)
-                .filter(|&&pi| participants[pi].kind == ParticipantKind::Queue)
-                .map(|_| CREATE_QUEUE_LIFELINE_TOP_ADJUST)
-                .unwrap_or(0.0);
             (
                 id.clone(),
                 if diagram.teoz {
@@ -12236,7 +12247,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         - (msg_step(has_text, height) + 2.0 * global_padding - 2.0 * ARROW_HALF_H)
                         - 2.0
                 } else {
-                    event_y(idx) + CREATE_LIFELINE_TOP_OFFSET + half_extra - queue_adjust
+                    // Step1Message#createArrowCreate records origin+composite/2.
+                    // DrawableSet#drawLineU22 adds ParticipantBox#magicMargin
+                    // (ComponentRoseLine preferred height20 /2).
+                    let head = &participants[id_to_idx[id]];
+                    let (has_text, h) = event_message_text_height(&diagram.events[idx]);
+                    let arrow_height = msg_step(has_text, h) + 2.0 * global_padding;
+                    let contact = (if has_text { h } else { 0.0 })
+                        + 2.0
+                        + ROSE_ARROW_PADDING_Y
+                        + 2.0 * global_padding;
+                    event_y(idx) - contact
+                        + arrow_height
+                            .max(head.preferred_height + ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0)
+                            / 2.0
+                        + ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0
                 },
             )
         })
@@ -13056,11 +13081,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let inline_base_y = if diagram.teoz {
                 created_lifeline_top[&p.id]
             } else {
-                msg_y - CREATE_BOX_TOP_OFFSET
+                // ArrowAndParticipant#drawInternalU starts at the arrow
+                // component origin, plus max(arrowHeight-headHeight,0).
+                let (has_text, h) = event_message_text_height(&diagram.events[ev_idx]);
+                let arrow_height = msg_step(has_text, h) + 2.0 * global_padding;
+                let contact = (if has_text { h } else { 0.0 })
+                    + 2.0
+                    + ROSE_ARROW_PADDING_Y
+                    + 2.0 * global_padding;
+                msg_y - contact
+                    + (arrow_height - (p.preferred_height + ROSE_LIFELINE_PREFERRED_HEIGHT / 2.0))
+                        .max(0.0)
             };
             let mut scratch = PlantUmlSvg::new();
             scratch.participant_border = svg.participant_border.clone();
             scratch.participant_border_thickness = svg.participant_border_thickness.clone();
+            // ParticipantBox draws the same resolved head component on creation.
+            scratch.participant_shadow_filter = svg.participant_shadow_filter.clone();
+            scratch.participant_font_color = svg.participant_font_color.clone();
+            scratch.participant_font_family = svg.participant_font_family.clone();
+            scratch.participant_font_size = svg.participant_font_size;
+            scratch.participant_font_bold = svg.participant_font_bold;
+            scratch.participant_font_italic = svg.participant_font_italic;
             let inline_border = svg.participant_border.clone();
             let inline_queue_head_offset = if p.kind == ParticipantKind::Queue {
                 CREATE_QUEUE_HEAD_OFFSET
@@ -14019,8 +14061,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         };
 
                     let to_x = if is_create_msg {
-                        let half =
-                            participants[*id_to_idx.get(msg.to.as_str()).unwrap()].box_width / 2.0;
+                        let half = participants[*id_to_idx.get(msg.to.as_str()).unwrap()]
+                            .preferred_width
+                            / 2.0;
                         if is_right { to_x - half } else { to_x + half }
                     } else if let Some(actual_to_x) = internal_to_x {
                         actual_to_x
@@ -15638,7 +15681,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note_stroke,
                         note_block_align,
                         note_left + 1.0,
-                        note_left + max_text_w + 2.0 * note_global_padding + 20.0,
+                        note_left
+                            + max_text_w
+                            + 2.0 * note_global_padding
+                            + ROSE_NOTE_MARGIN_X2
+                            + if note_text_align == MessageAlign::Center {
+                                ROSE_NOTE_MARGIN_X2
+                            } else {
+                                NOTE_TEXT_X_PAD
+                            }
+                            - 1.0,
                     );
                 } else {
                     let mut line_top = note_top;
