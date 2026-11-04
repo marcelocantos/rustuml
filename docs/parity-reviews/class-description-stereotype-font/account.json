@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "06dedeb975ba3b0ef70bb3b161de1f22d9b991a1",
+  "verification": "Reuse immutable1559+36+20+34 cohorts; focused CLI frozen comparator, fresh parent-relay controls, model retention and invalid negatives; final main tiers/libs/CLI/guards. No local JVM, SSH, native work or checker verdict.",
+  "mechanism": "class-description-stereotype-font",
+  "java_locations": [
+    "svek/image/EntityImageDescription#constructor styleStereo/fcStereo",
+    "decoration/symbol/USymbolSimpleAbstract#asSmall"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#DescriptionLeafStyle,ClassFontOverrides::from_diagram_for_entity,description_text_size,render_description_leaf"
+  ],
+  "invariant": "Stereotype font comes from its own current style signature, including inherited or overridden bold/italic/size/family/color; label font does not substitute for it.",
+  "causal_divergence": "Review541 multiline controls inherit bold but Rust unconditionally emits italic/nonbold and measures with label font.",
+  "planned_change": "Retain separately resolved stereotype font properties and use them in the same positioned text model. Preserve label and stereotype alignment ownership.",
+  "perturbation_axes": [
+    "inherited bold vs explicit stereotype italic/size",
+    "label/font family changes and symbol/topology variation"
+  ]
+}
