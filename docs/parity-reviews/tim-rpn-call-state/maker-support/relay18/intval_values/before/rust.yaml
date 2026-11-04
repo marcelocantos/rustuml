@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "9/-2147483648/43" as Integers
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Integers
+  entities:
+  - id: Integers
+    label: '9/-2147483648/43'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

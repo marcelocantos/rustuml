@@ -1,0 +1,4 @@
+@startuml
+!$a=%intval(" 7")
+class Lost
+@enduml

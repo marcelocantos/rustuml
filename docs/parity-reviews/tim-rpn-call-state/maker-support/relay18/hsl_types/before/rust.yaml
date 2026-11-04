@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "#0000FF/#0000FF/#0000FF" as Typed
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Typed
+  entities:
+  - id: Typed
+    label: '#0000FF/#0000FF/#0000FF'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

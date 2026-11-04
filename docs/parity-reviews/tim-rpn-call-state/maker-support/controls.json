@@ -1,0 +1,134 @@
+[
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "argv": [
+      "/tmp/rustuml-tim6/final-rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "exit": 0,
+    "comparison_argv": [
+      "/tmp/rustuml-tim6/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.svg",
+      "/tmp/rustuml-tim6/controls/checker2_raw_tight/rust.svg"
+    ],
+    "comparison_exit": 0,
+    "svg_match": true
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "argv": [
+      "/tmp/rustuml-tim6/final-rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "exit": 0,
+    "comparison_argv": [
+      "/tmp/rustuml-tim6/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.svg",
+      "/tmp/rustuml-tim6/controls/checker2_raw_blank_crlf/rust.svg"
+    ],
+    "comparison_exit": 0,
+    "svg_match": true
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "argv": [
+      "/tmp/rustuml-tim6/final-rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "exit": 0,
+    "comparison_argv": [
+      "/tmp/rustuml-tim6/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.svg",
+      "/tmp/rustuml-tim6/controls/checker2_raw_named_trailing/rust.svg"
+    ],
+    "comparison_exit": 0,
+    "svg_match": true
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "argv": [
+      "/tmp/rustuml-tim6/final-rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "exit": 0,
+    "comparison_argv": [
+      "/tmp/rustuml-tim6/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.svg",
+      "/tmp/rustuml-tim6/controls/checker2_raw_counterpart_act_skinparam2_shadowing_true/rust.svg"
+    ],
+    "comparison_exit": 0,
+    "svg_match": true
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "argv": [
+      "/tmp/rustuml-tim6/final-rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "exit": 0,
+    "comparison_argv": [
+      "/tmp/rustuml-tim6/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.svg",
+      "/tmp/rustuml-tim6/controls/checker2_raw_counterpart_act_skinparam_shadowing/rust.svg"
+    ],
+    "comparison_exit": 0,
+    "svg_match": true
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "argv": [
+      "/tmp/rustuml-tim6/final-rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "exit": 0,
+    "comparison_argv": [
+      "/tmp/rustuml-tim6/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.svg",
+      "/tmp/rustuml-tim6/controls/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines/rust.svg"
+    ],
+    "comparison_exit": 0,
+    "svg_match": true
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+    "svg_match": true,
+    "source_equal": true,
+    "provenance": "final-collateral.json; no redundant CLI invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+    "svg_match": true,
+    "source_equal": true,
+    "provenance": "final-collateral.json; no redundant CLI invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+    "svg_match": true,
+    "source_equal": true,
+    "provenance": "final-collateral.json; no redundant CLI invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "svg_match": true,
+    "source_equal": true,
+    "provenance": "final-collateral.json; no redundant CLI invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "svg_match": true,
+    "source_equal": true,
+    "provenance": "final-collateral.json; no redundant CLI invocation"
+  }
+]

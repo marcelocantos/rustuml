@@ -1,0 +1,6 @@
+@startuml
+note as N
+  $p one
+two
+end note
+@enduml

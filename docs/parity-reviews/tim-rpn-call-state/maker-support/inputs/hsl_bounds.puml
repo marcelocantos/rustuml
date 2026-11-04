@@ -1,0 +1,6 @@
+@startuml
+!$a=%hsl_color(-90,120,35,101)
+!$b=%hsl_color(777,63,42,37)
+!$c=%hsl_color(90,-5,150,-10)
+class "$a/$b/$c" as Bounds
+@enduml
