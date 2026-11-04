@@ -1,0 +1,5 @@
+@startuml
+class "X𝄞Y"
+class "XéY"
+"X𝄞Y" <|-- "XéY"
+@enduml

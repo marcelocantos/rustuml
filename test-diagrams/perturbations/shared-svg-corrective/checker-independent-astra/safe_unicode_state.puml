@@ -1,0 +1,5 @@
+@startuml
+state Éclair
+state 𐐀
+Éclair --> 𐐀
+@enduml

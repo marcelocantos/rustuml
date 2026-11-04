@@ -1,0 +1,6 @@
+@startuml
+skinparam stateBackgroundColor #7a3c917f
+state Branch <<choice>>
+state Fern
+Branch --> Fern
+@enduml

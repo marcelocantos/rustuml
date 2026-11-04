@@ -1,0 +1,25 @@
+{
+  "compile_argv": [
+    "rustc",
+    "--edition=2024",
+    "--test",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/fresh-standing.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "--extern",
+    "rustuml_render=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps/librustuml_render-6cf93ea168f1c658.rlib",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/fresh-standing"
+  ],
+  "argv": [
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/fresh-standing",
+    "held_out_perturbations_match_java_without_oracle_layout",
+    "--nocapture"
+  ],
+  "exit": 101,
+  "scope": "Only54 new registered pairs; original standing test body unchanged; separate library diagnostic from CLI truth"
+}

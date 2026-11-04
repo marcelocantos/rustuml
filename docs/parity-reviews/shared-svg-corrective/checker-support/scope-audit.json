@@ -1,0 +1,335 @@
+{
+  "sites": [
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 27391,
+      "mixed": true,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 28343,
+      "mixed": true,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "line": 200,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "line": 394,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "line": 621,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 5283,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 5487,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 6019,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 6477,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 10712,
+      "mixed": true,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 10774,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11097,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11099,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11433,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11435,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 13852,
+      "mixed": true,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 2664,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 2992,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 3188,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 3360,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 4526,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 820,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 963,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 3384,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 5724,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 5726,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 1099,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 1300,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 1499,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 2751,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 4113,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 4119,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8004,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8011,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8241,
+      "mixed": true,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8754,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8756,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8966,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 9003,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 9005,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 2705,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 2820,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 2951,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 3500,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 3783,
+      "mixed": false,
+      "outside_comment_template_unchanged": true,
+      "noncomment_arguments_unchanged": true
+    }
+  ],
+  "count": 45,
+  "mixed": 5,
+  "production_files": [
+    "crates/rustuml-render/src/activity.rs",
+    "crates/rustuml-render/src/archimate.rs",
+    "crates/rustuml-render/src/class.rs",
+    "crates/rustuml-render/src/component.rs",
+    "crates/rustuml-render/src/deployment.rs",
+    "crates/rustuml-render/src/object.rs",
+    "crates/rustuml-render/src/state.rs",
+    "crates/rustuml-render/src/svg.rs",
+    "crates/rustuml-render/src/usecase.rs"
+  ],
+  "no_sequence_changes": true,
+  "no_fixture_shaped_logic": true,
+  "remaining_diffs": "svg.rs: comment helper, single focused unit, fill_attributes visibility; state: two fill producers only"
+}

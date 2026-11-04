@@ -1,0 +1,44 @@
+[
+  {
+    "archive": "metadata.tar.gz",
+    "entries": 147,
+    "sha256": "1409b7bec9846bff6f4bb75a00e783c98659e79c8119d593a3e52e5ef0ae8236",
+    "verified": true
+  },
+  {
+    "archive": "logs.tar.gz",
+    "entries": 33,
+    "sha256": "842cf151e754aabc993f4e8a5e055b94a68856b4bb363485b68eea1d892b2379",
+    "verified": true
+  },
+  {
+    "archive": "frozen-inputs.tar.gz",
+    "entries": 29792,
+    "sha256": "39ce0d4ad23b2b57f0b6298c118ab831cf8fb38e220bcbca6a0c31323be0f1a1",
+    "verified": true
+  },
+  {
+    "archive": "fresh-relay.tar.gz",
+    "entries": 113,
+    "sha256": "f878348a3f40142fc39300e7affcdb5786dfa2dec969c3a138ce352e4d3f8fbe",
+    "verified": true
+  },
+  {
+    "archive": "registered-cli.tar.gz",
+    "entries": 8244,
+    "sha256": "ef72b51a5dd0052bf8fc21c2f73138e549192cdd52ed1d7ac02ee39854ece0fb",
+    "verified": true
+  },
+  {
+    "archive": "captures-before.tar.gz",
+    "entries": 117705,
+    "sha256": "c7670f25fecb1bff63e4c898d24130ef33f16a9b8203ea1b53c54b35385e7701",
+    "verified": true
+  },
+  {
+    "archive": "captures-after.tar.gz",
+    "entries": 117705,
+    "sha256": "4ae64199643f94d8061c419d2a9ded176bd3a6840b757bf74bfc21b9587abd56",
+    "verified": true
+  }
+]

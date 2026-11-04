@@ -1,0 +1,6 @@
+@startuml
+skinparam stateBackgroundColor #7a3c917f
+state End <<end>>
+state Start <<start>>
+Start --> End
+@enduml

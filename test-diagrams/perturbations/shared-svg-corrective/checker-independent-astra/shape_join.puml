@@ -1,0 +1,6 @@
+@startuml
+skinparam stateBackgroundColor #7a3c917f
+state Merge <<join>>
+state Fern
+Fern --> Merge
+@enduml

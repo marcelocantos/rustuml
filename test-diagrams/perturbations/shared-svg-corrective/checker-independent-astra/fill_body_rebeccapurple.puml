@@ -1,0 +1,5 @@
+@startuml
+skinparam stateBackgroundColor RebeccaPurple
+state Cypress : sap
+Cypress : root
+@enduml
