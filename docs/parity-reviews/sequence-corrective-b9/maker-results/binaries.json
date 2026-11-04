@@ -1,0 +1,32 @@
+{
+  "after": {
+    "revision": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+    "binaries": {
+      "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+      "diff_one": "7e74ac0bc5247eb1b8b49a64ac8f34deb22bc827ad48e66d3e45a1b4a3439f1c",
+      "rustuml": "7d9eee45543540cb8005dce25fb0662552efe01d2b1feef7814eeadee09af8e0"
+    },
+    "source_files": {
+      "crates/rustuml-parser/src/parse/sequence.rs": "d682654e511c2450f008c2fd6f98965aa2b2ad65d49a2418ab0a9a2f7471fc9e",
+      "crates/rustuml-render/src/sequence.rs": "f01cd45923fa4cedc2cb130f4b02062257abc0bef0afb8446782c72eb6ec49a7"
+    },
+    "environment": {
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-repair/target",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+    }
+  },
+  "before": {
+    "revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+    "production_revision": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+    "binaries": {
+      "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+      "diff_one": "ade6146d24ded1c89af4b0082844236b5f72570740ac2602be6044a787958604",
+      "rustuml": "266a5619d101f79c085d2bfe0fa58569af1e5219ae416cfc9d9597ee963e0782"
+    },
+    "provenance": "Preserved baseline binaries authenticated by prior maker binaries.json; copied into this private before-bin. No new before build or separate checkout."
+  },
+  "source_binding": "Final checks and CLI replay bound to exact committed 1b29d8c7 source hashes; no later production change."
+}

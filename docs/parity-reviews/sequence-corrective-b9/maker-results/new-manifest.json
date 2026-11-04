@@ -1,0 +1,202 @@
+[
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "self return and transparent/alpha"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "external/self return and gray/zero alpha"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "escaped multiline and activation"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_block_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_block_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "physical multiline and activation"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_center.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_center.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "alignment/scoped numeric shadow/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_right.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_right.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "alignment/scoped numeric shadow/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "theme and nested activation"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "self return and transparent/alpha"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "external/self return and gray/zero alpha"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "escaped multiline and activation"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_block_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_block_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "physical multiline and activation"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_center.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_center.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "alignment/scoped numeric shadow/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_right.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_right.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "alignment/scoped numeric shadow/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "engine",
+      "theme and nested activation"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/legacy_rawclose_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/legacy_rawclose_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "participant order",
+      "unmatched close and nested reopening"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/legacy_rawclose_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/legacy_rawclose_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "participant order",
+      "unmatched close and nested reopening"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "graphical predecessor",
+      "self/ordinary contact and multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "graphical predecessor",
+      "self/ordinary contact and multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_0.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "graphical predecessor",
+      "self/ordinary contact and multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_1.svg",
+    "cohort": "new-maker20",
+    "axes": [
+      "graphical predecessor",
+      "self/ordinary contact and multiline"
+    ],
+    "java_exit": 0
+  }
+]

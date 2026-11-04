@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Harbor -> Orchard ++ : notify
+note right : first narrow\nsecond wider text
+return done
+@enduml

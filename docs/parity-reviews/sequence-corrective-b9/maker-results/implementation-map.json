@@ -1,0 +1,61 @@
+{
+  "accounts": [
+    {
+      "mechanism": "sequence-note-display-normalization",
+      "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+      "implementation_commits": [
+        "c534957672b4a8e2c1721f4646a507110b1a4a84"
+      ]
+    },
+    {
+      "mechanism": "sequence-effective-arrow-color",
+      "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+      "implementation_commits": [
+        "ecd996a303ec94c7f180548328afe88967982c59",
+        "8d668d3fbc67101bb715662442d75aec3773dae9"
+      ]
+    },
+    {
+      "mechanism": "sequence-legacy-raw-life-variations",
+      "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+      "implementation_commits": [
+        "f77e328cd9b278bd23eee7d2ad166d7468732dc6"
+      ]
+    },
+    {
+      "mechanism": "sequence-teoz-parallel-tile-ordinates",
+      "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+      "implementation_commits": [
+        "7e074830c99a898316a5b0448b0c0810d3df8fde",
+        "8d668d3fbc67101bb715662442d75aec3773dae9"
+      ]
+    },
+    {
+      "mechanism": "sequence-effective-note-activation-style",
+      "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+      "implementation_commits": [
+        "8d668d3fbc67101bb715662442d75aec3773dae9"
+      ]
+    },
+    {
+      "mechanism": "sequence-note-textblock-dimensions",
+      "account_commit": "2dab3648e4574d3246dfbe683566c84a38f52ec5",
+      "implementation_commits": [
+        "8d668d3fbc67101bb715662442d75aec3773dae9"
+      ]
+    },
+    {
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "account_commit": "2d17c23b96bee08ac0e61947b4ffe0fc91b969b9",
+      "implementation_commits": [
+        "1b29d8c78d671649b0db6efcdc09e01391f6ce98"
+      ]
+    }
+  ],
+  "files": {
+    "crates/rustuml-parser/src/parse/sequence.rs": "d682654e511c2450f008c2fd6f98965aa2b2ad65d49a2418ab0a9a2f7471fc9e",
+    "crates/rustuml-render/src/sequence.rs": "f01cd45923fa4cedc2cb130f4b02062257abc0bef0afb8446782c72eb6ec49a7"
+  },
+  "tested_revision": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "note": "Intermediate local commits are not independently accepted; verification and requested fresh review concern the full candidate."
+}

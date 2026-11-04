@@ -1,0 +1,1071 @@
+{
+  "kind": "Maker measurements, not independent acceptance",
+  "baseline": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "implementation": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "imported_evidence": {
+    "original": "68c8b95ef1087b5daa83d16b7e8e83670d5ca10f",
+    "local": "37642c05b4cbd8cf84fca9f32091f3848676d58c"
+  },
+  "totals_before": {
+    "entries": 1901,
+    "matches": 1259,
+    "valid_mismatches": 599,
+    "invalid_references": 43,
+    "invalid_rejected": 31,
+    "invalid_accepted": 12,
+    "valid_cli_errors": [],
+    "panics": [],
+    "cli_exit_counts": {
+      "0": 1870,
+      "1": 31
+    },
+    "mode_exit_counts": {
+      "cli_comparison": {
+        "1": 599,
+        "0": 1259,
+        "2": 43
+      },
+      "product_library": {
+        "1": 599,
+        "0": 1259,
+        "2": 42,
+        "101": 1
+      },
+      "assisted_library": {
+        "1": 642,
+        "0": 1216,
+        "2": 42,
+        "101": 1
+      }
+    },
+    "cli_equals_product_library": 1859
+  },
+  "totals_after": {
+    "entries": 1901,
+    "matches": 1299,
+    "valid_mismatches": 559,
+    "invalid_references": 43,
+    "invalid_rejected": 31,
+    "invalid_accepted": 12,
+    "valid_cli_errors": [],
+    "panics": [],
+    "cli_exit_counts": {
+      "0": 1870,
+      "1": 31
+    },
+    "mode_exit_counts": {
+      "cli_comparison": {
+        "1": 559,
+        "0": 1299,
+        "2": 43
+      },
+      "product_library": {
+        "1": 559,
+        "0": 1299,
+        "2": 42,
+        "101": 1
+      },
+      "assisted_library": {
+        "1": 602,
+        "0": 1256,
+        "2": 42,
+        "101": 1
+      }
+    },
+    "cli_equals_product_library": 1859
+  },
+  "gains": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.svg",
+      "source_sha256": "3cd01fd4d3c37f8c4d9824b096ca1fbaaf1b1670c3fefc2c40ba8330205a0b3e",
+      "golden_sha256": "9d58f138f5ccb5c885577a2d6b5d473715afab360c19b5847da481fcb6bfdc0c",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.svg",
+      "source_sha256": "3309b5a0ce2912abdb3fee47e3e4cfa591dab862a7631f1bb5fcd68b3bd4a074",
+      "golden_sha256": "1e7f96b3ada29b8614832e4ee6d877ffed7b98796f2f387334b1859636582140",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.svg",
+      "source_sha256": "ce156cb4d7d2966496368a2b5c8b544868057c2cc41146312a3b93174709f285",
+      "golden_sha256": "2956dc5ede18f7db5fedbb5516227e15326be30ea484c42db214306eddeea4f7",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.svg",
+      "source_sha256": "34c87ccc0905ce78936bc35eff392161cb1b14a0791d59b3a0f1ba33aeef60c8",
+      "golden_sha256": "79ba3829cd07d83e90fcae83e5cc99708036e86a9190a71baeb8c69249ef9bba",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.svg",
+      "source_sha256": "6762d26901f4babef9d6bacdeb43966091c22ea57c56400dadfe15973587ac8a",
+      "golden_sha256": "b4b976bfe73ea29e2c7be4684acfc6215ffc6e2652d5917dcbdde879f2fe86e9",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.svg",
+      "source_sha256": "0c78713272fa350cc28db4115b9664baf76d433754cec77a89d1538e6d21b8a6",
+      "golden_sha256": "097f9eb4acbaf18fe52d3d3f0fd00f194ba573f958661d5938925b99be7d095b",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.svg",
+      "source_sha256": "7dc206004d4d560ff1b09c24fc24ec21fba41ae359f90ba49f0c768523c5db5f",
+      "golden_sha256": "96a713158896c5ef88a005d6e8be4eab79f3db373029032f97558e7141bfd702",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.svg",
+      "source_sha256": "69e93a6d30f3929e8dc5bbc160330591b547561a7338b60cc74fed434280c48d",
+      "golden_sha256": "93018a6428ce0d786f4a51952a52a6aa119308085293e37935e2865fc0f78123",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.svg",
+      "source_sha256": "836a5408eea3d1ff7821a5fc1a0c3e34da5fe76aef0a9a857a4f164fc9292b1b",
+      "golden_sha256": "1646f8c80a6c2fb6cdbe2f4fd4e12fcd98ec8088ce0fb6982c14091636fdab9e",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.svg",
+      "source_sha256": "d5058b46592519d817259effcb0c3186f55e46ae18371c476d55850589717d3c",
+      "golden_sha256": "f1dd4b8f6f76a7b84b9147608784736184d481e6f241c4d1888ca891b1b4dea8",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.svg",
+      "source_sha256": "3134c2e9145646f3a01115226f0b9add84b61c5214c62770676e38bf4a6b2750",
+      "golden_sha256": "d3a97dbd23abfcf4b1c26cc7ea4e1d0038f884c408d4b9b91510696b6856de99",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.svg",
+      "source_sha256": "9a3cbb587337ee24f5bd04262e36518513e93b2db9656b93eabd9fa46928ef29",
+      "golden_sha256": "80a8a515e743cca43e8874e2d2e110b33532886d140cc1baab55abb4c3d0bfdf",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.svg",
+      "source_sha256": "df1ff506fa2256f06ce3025daa80a368402cb1c0623cf2b1c9410e4b79669118",
+      "golden_sha256": "461aa54c494e4dc5e4031e47610768a9e9d80d2778f09f396e594f13b0343ab5",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.svg",
+      "source_sha256": "131b2547a8d6dbf7ab08f7bf1e6aee9aa93b3833ae3ff424e389dbb8dd0e7d39",
+      "golden_sha256": "6d059d3327619a60135445e2545750bc274e0c0a4d4568b3784ce0e38e828855",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.svg",
+      "source_sha256": "57379117ac907a511e6fe24626595d4a3d08b40285733642b8daeedad00eb3f2",
+      "golden_sha256": "c0ab6d75c77a15f5464d4f417bdf5d2d2f7e3c40f7d963d4e5d7268586b8664a",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.svg",
+      "source_sha256": "b29036bbd5da4e78edb0b4227c9f8ba07bce37333345a64961e37908921ddea8",
+      "golden_sha256": "6b533f572c002c69ac5d06588437e707db05d7a47221b76a9b2e834369ec1f5f",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.svg",
+      "source_sha256": "b1567484d3e4fd32432eedaac9ac97b34d034ae0a186ad476a526cd7062e2754",
+      "golden_sha256": "7871a67517761181439f0f93d3d0d9281ca8497418fdb9225818c4ec82f50802",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.svg",
+      "source_sha256": "cbd8697d21f3e381e96d7332218c66b6e1614b0a09231b2359d8a89cf02563b9",
+      "golden_sha256": "72c131c530b14b3200433b403472c4b698c11e315d564a6333a8dc70c0cd962c",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.svg",
+      "source_sha256": "53c1a9117e7d9b28cf66b856f84d651521c5e571b39f2783bf140f969dabc0b3",
+      "golden_sha256": "cc2994dade2ea753720f61ea746bae5639c5327ba00cf8f77c1b4bbeefa67e41",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.svg",
+      "source_sha256": "0316c83984bd74c0a1f8ff1d47f5c40308177b702981a43c542ee2ed8ab16cdc",
+      "golden_sha256": "b808ffa45aa6a0e8b5ea7ddacc490cf153a268c485c0130977184c5ddd9a1583",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.svg",
+      "source_sha256": "14ec0d39f60747c4b89022e5d0bece436293441d1e909c02414662e36e6fdd1a",
+      "golden_sha256": "26f7fc1d22a0cfea41ac59cc8811b64679728d8b51e3968ecff9360917cbd057",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_escaped.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_escaped.svg",
+      "source_sha256": "bcd1ca1f6089bd448e6151559d35234e4408acfefc97ef0a026163579ff559e3",
+      "golden_sha256": "9c58192cfd0ba05d1792597e687f184980c1da68f82d69236acde9603c41c782",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_0.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_0.svg",
+      "source_sha256": "5d90bc04ea7a9f2c6b82c23601102ee08fad26b7fb4569d25a95947a64ea9709",
+      "golden_sha256": "a9db18e55c8a92f25de1f7b112116aa0a646ddcc7a359264f48a66c232341104",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_0.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_0.svg",
+      "source_sha256": "b13d75509b9701553cdf339bbbed03c644cf8b6addbe07e8e1dd41fb9b3c5b17",
+      "golden_sha256": "99b8931659dd20ec5eac80e4522a760db67e652c83fadce40b605fcf93967803",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_0.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_0.svg",
+      "source_sha256": "69e435def0d2fa17fbc5ff82e2b04c3086f940483f9f21aa59cc5976301057cb",
+      "golden_sha256": "55c59cb6d9fccd3b53256073aa28ea8f71f436792ab4b95df73d051c3b68b3f4",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_center.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_center.svg",
+      "source_sha256": "86cc5a74af89098f47fe58cd6653964576d7946137cd7bb63dd233ae0b365222",
+      "golden_sha256": "ee72ced4cfd0fc3fabded24ee3895524a2f14111d183de9ce155b7cc2f110794",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_right.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_right.svg",
+      "source_sha256": "0dc4488552958f772c0d97667edb8f6dfbc8eb6669333faddb8e826d098d5bba",
+      "golden_sha256": "9c31ba86500548299df6c47782f8e962c052e11c7c539f68b02dfd2b5cecc876",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_1.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_1.svg",
+      "source_sha256": "e8a16a174039b4bed8f87a09d1c8a678bce579c7a38359d49e666132f3189245",
+      "golden_sha256": "fcb21a1265bb1278868246646b94418982be452e37fbceaa46601520377a8ee4",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_1.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_1.svg",
+      "source_sha256": "23e7ec2c2acbf80523dbd9d1df4fb7e78e25b39be32b7947e84411773929c387",
+      "golden_sha256": "0c122a8f7cbad497bcde789fd734e5e8b06328d874c7bb78433a35654f3846e5",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_1.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_1.svg",
+      "source_sha256": "4cbf876450cd546f4da502e9d573337085d61be280ec01ac9b8248cd68710e83",
+      "golden_sha256": "dd274fd026e6bc1c94d8bbc2310cd55f474d266beaeb9cecbe8a7df68bb6baa4",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_center.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_center.svg",
+      "source_sha256": "0f9e9b1e3c5816b0a56d629f1b12d18262e2db9665f89a78a840fe82af001a3b",
+      "golden_sha256": "e4bf6819ee0326e29764d260ee96dc10354c9e8f194c2ac573565d7985a8bf8e",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_right.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_right.svg",
+      "source_sha256": "3bbdf79d53319b3fddf6c933b7c48cbdcd7d81e0acfadafc3edff77001247667",
+      "golden_sha256": "48d5d5707fd168b6e2ddf57f6f3a598128a6f915bdd63cb8586e231d538c5d39",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_0.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_0.svg",
+      "source_sha256": "d4650a490ffc108d1f2cb9633945e1d2bbe63e190f8edcd68c5e86b3f2e8b150",
+      "golden_sha256": "9ce55e2f5c6c4ad7a91e0f9e819f2d9709c35375de9793e4b4620df8ac4a9ed7",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_1.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_1.svg",
+      "source_sha256": "dbffcff05aae63be9a53112d1584eb299497b25bcf561fa020ade5e6eb23dd8a",
+      "golden_sha256": "c740f1651715a50d800617f434d75429861b32b6074cff2cfe6ec31a02b1970f",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_0.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_0.svg",
+      "source_sha256": "d1c6fe9c501005c146fe62adc62479f843744e72a861f87b536224b06124684f",
+      "golden_sha256": "fe85eadaa7ce7047d317d73619d9c6941e91e08bdb4caaf83c9429e8ef8344d7",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_1.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_1.svg",
+      "source_sha256": "b3858aadc28dbc09dea5b67845c607313f26939d60a6a1f9572d4a079236b9e0",
+      "golden_sha256": "bb3a938283aa945f6db8aa7604808e2318c2fc027636660559a3985fda193d58",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_0.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_0.svg",
+      "source_sha256": "70c3203ea50230a54c21b8499ea9de0029c8d83240797e5e7e6dd3c9b3bcd0d5",
+      "golden_sha256": "a91f32c57dfe2f08c1809d0e8610abcdae8980d7b105c4c6fdfd440509ccde15",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_0.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_0.svg",
+      "source_sha256": "9b5bd4579fa02e7016fcc6341e9144c62726cf2400cc260f7b528df02382815d",
+      "golden_sha256": "8e83ad871795d2cd7579cdbac9e22547a4ad139692bc956b1857954fa14973ce",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_1.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_1.svg",
+      "source_sha256": "cef4bc4f1477129060466d068a0cc34b9cc0fb794fbf3fceb2f44873ffe1a7b3",
+      "golden_sha256": "a5dc9af0f4818574baf43dda826da8e216344a8a3661efa4f1336953556f1119",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_1.puml",
+      "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_1.svg",
+      "source_sha256": "6bbd2940a715fee5a33e8dda139835683bc5356a2398e5cd1bbd0ca00f48e00f",
+      "golden_sha256": "180ac342a293c5ef26077b1a8484052978cf51a3e201f094e85dbceecaf8c11d",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    }
+  ],
+  "lost_passes_by_mode": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "cohorts": {
+    "old1728": {
+      "before": {
+        "entries": 1728,
+        "matches": 1160,
+        "valid_mismatches": 542,
+        "invalid_references": 26,
+        "invalid_rejected": 14,
+        "invalid_accepted": 12,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 1714,
+          "1": 14
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "1": 542,
+            "0": 1160,
+            "2": 26
+          },
+          "product_library": {
+            "1": 542,
+            "0": 1160,
+            "2": 25,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 585,
+            "0": 1117,
+            "2": 25,
+            "101": 1
+          }
+        },
+        "cli_equals_product_library": 1703
+      },
+      "after": {
+        "entries": 1728,
+        "matches": 1160,
+        "valid_mismatches": 542,
+        "invalid_references": 26,
+        "invalid_rejected": 14,
+        "invalid_accepted": 12,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 1714,
+          "1": 14
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "1": 542,
+            "0": 1160,
+            "2": 26
+          },
+          "product_library": {
+            "1": 542,
+            "0": 1160,
+            "2": 25,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 585,
+            "0": 1117,
+            "2": 25,
+            "101": 1
+          }
+        },
+        "cli_equals_product_library": 1703
+      }
+    },
+    "checker68": {
+      "before": {
+        "entries": 68,
+        "matches": 46,
+        "valid_mismatches": 15,
+        "invalid_references": 7,
+        "invalid_rejected": 7,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 61,
+          "1": 7
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 46,
+            "1": 15,
+            "2": 7
+          },
+          "product_library": {
+            "0": 46,
+            "1": 15,
+            "2": 7
+          },
+          "assisted_library": {
+            "0": 46,
+            "1": 15,
+            "2": 7
+          }
+        },
+        "cli_equals_product_library": 61
+      },
+      "after": {
+        "entries": 68,
+        "matches": 46,
+        "valid_mismatches": 15,
+        "invalid_references": 7,
+        "invalid_rejected": 7,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 61,
+          "1": 7
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 46,
+            "1": 15,
+            "2": 7
+          },
+          "product_library": {
+            "0": 46,
+            "1": 15,
+            "2": 7
+          },
+          "assisted_library": {
+            "0": 46,
+            "1": 15,
+            "2": 7
+          }
+        },
+        "cli_equals_product_library": 61
+      }
+    },
+    "prior-maker32": {
+      "before": {
+        "entries": 32,
+        "matches": 26,
+        "valid_mismatches": 0,
+        "invalid_references": 6,
+        "invalid_rejected": 6,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 26,
+          "1": 6
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 26,
+            "2": 6
+          },
+          "product_library": {
+            "0": 26,
+            "2": 6
+          },
+          "assisted_library": {
+            "0": 26,
+            "2": 6
+          }
+        },
+        "cli_equals_product_library": 26
+      },
+      "after": {
+        "entries": 32,
+        "matches": 26,
+        "valid_mismatches": 0,
+        "invalid_references": 6,
+        "invalid_rejected": 6,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 26,
+          "1": 6
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 26,
+            "2": 6
+          },
+          "product_library": {
+            "0": 26,
+            "2": 6
+          },
+          "assisted_library": {
+            "0": 26,
+            "2": 6
+          }
+        },
+        "cli_equals_product_library": 26
+      }
+    },
+    "retained1828": {
+      "before": {
+        "entries": 1828,
+        "matches": 1232,
+        "valid_mismatches": 557,
+        "invalid_references": 39,
+        "invalid_rejected": 27,
+        "invalid_accepted": 12,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 1801,
+          "1": 27
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "1": 557,
+            "0": 1232,
+            "2": 39
+          },
+          "product_library": {
+            "1": 557,
+            "0": 1232,
+            "2": 38,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 600,
+            "0": 1189,
+            "2": 38,
+            "101": 1
+          }
+        },
+        "cli_equals_product_library": 1790
+      },
+      "after": {
+        "entries": 1828,
+        "matches": 1232,
+        "valid_mismatches": 557,
+        "invalid_references": 39,
+        "invalid_rejected": 27,
+        "invalid_accepted": 12,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 1801,
+          "1": 27
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "1": 557,
+            "0": 1232,
+            "2": 39
+          },
+          "product_library": {
+            "1": 557,
+            "0": 1232,
+            "2": 38,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 600,
+            "0": 1189,
+            "2": 38,
+            "101": 1
+          }
+        },
+        "cli_equals_product_library": 1790
+      }
+    },
+    "checker49": {
+      "before": {
+        "entries": 49,
+        "matches": 23,
+        "valid_mismatches": 22,
+        "invalid_references": 4,
+        "invalid_rejected": 4,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 45,
+          "1": 4
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 23,
+            "1": 22,
+            "2": 4
+          },
+          "product_library": {
+            "0": 23,
+            "1": 22,
+            "2": 4
+          },
+          "assisted_library": {
+            "0": 23,
+            "1": 22,
+            "2": 4
+          }
+        },
+        "cli_equals_product_library": 45
+      },
+      "after": {
+        "entries": 49,
+        "matches": 45,
+        "valid_mismatches": 0,
+        "invalid_references": 4,
+        "invalid_rejected": 4,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 45,
+          "1": 4
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 45,
+            "2": 4
+          },
+          "product_library": {
+            "0": 45,
+            "2": 4
+          },
+          "assisted_library": {
+            "0": 45,
+            "2": 4
+          }
+        },
+        "cli_equals_product_library": 45
+      }
+    },
+    "new-maker20": {
+      "before": {
+        "entries": 20,
+        "matches": 4,
+        "valid_mismatches": 16,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 20
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "1": 16,
+            "0": 4
+          },
+          "product_library": {
+            "1": 16,
+            "0": 4
+          },
+          "assisted_library": {
+            "1": 16,
+            "0": 4
+          }
+        },
+        "cli_equals_product_library": 20
+      },
+      "after": {
+        "entries": 20,
+        "matches": 18,
+        "valid_mismatches": 2,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 20
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 18,
+            "1": 2
+          },
+          "product_library": {
+            "0": 18,
+            "1": 2
+          },
+          "assisted_library": {
+            "0": 18,
+            "1": 2
+          }
+        },
+        "cli_equals_product_library": 20
+      }
+    },
+    "shadow-value4": {
+      "before": {
+        "entries": 4,
+        "matches": 0,
+        "valid_mismatches": 4,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 4
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "1": 4
+          },
+          "product_library": {
+            "1": 4
+          },
+          "assisted_library": {
+            "1": 4
+          }
+        },
+        "cli_equals_product_library": 4
+      },
+      "after": {
+        "entries": 4,
+        "matches": 4,
+        "valid_mismatches": 0,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 4
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 4
+          },
+          "product_library": {
+            "0": 4
+          },
+          "assisted_library": {
+            "0": 4
+          }
+        },
+        "cli_equals_product_library": 4
+      }
+    },
+    "new-maker24": {
+      "before": {
+        "entries": 24,
+        "matches": 4,
+        "valid_mismatches": 20,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 24
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "1": 20,
+            "0": 4
+          },
+          "product_library": {
+            "1": 20,
+            "0": 4
+          },
+          "assisted_library": {
+            "1": 20,
+            "0": 4
+          }
+        },
+        "cli_equals_product_library": 24
+      },
+      "after": {
+        "entries": 24,
+        "matches": 22,
+        "valid_mismatches": 2,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "panics": [],
+        "cli_exit_counts": {
+          "0": 24
+        },
+        "mode_exit_counts": {
+          "cli_comparison": {
+            "0": 22,
+            "1": 2
+          },
+          "product_library": {
+            "0": 22,
+            "1": 2
+          },
+          "assisted_library": {
+            "0": 22,
+            "1": 2
+          }
+        },
+        "cli_equals_product_library": 24
+      }
+    }
+  },
+  "preserved_accepted_axes": "All 8 self-cross and 4 legacy-destroy checker controls still match. Bounded acceptance remains attached only to full tested 5358314a; no extracted or candidate acceptance.",
+  "main_library_tiers": {
+    "product_pass": 11181,
+    "eligible": 11251,
+    "assisted_pass": 10497,
+    "assisted_fail": 754,
+    "skipped": 1299,
+    "sequence_pass": 1411,
+    "sequence_total": 1411,
+    "failures_vs_baseline": {
+      "no_oracle_failure_names.txt": {
+        "before_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+        "after_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+        "newly_failing": [],
+        "recovered": []
+      },
+      "golden_failure_names.txt": {
+        "before_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+        "after_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+        "newly_failing": [],
+        "recovered": []
+      }
+    },
+    "label": "Library tests, not 11251 CLI processes. Frozen ratchets and existing failures remain red."
+  },
+  "units": {
+    "parser": 568,
+    "renderer": 787,
+    "ascii_included": true,
+    "cli_pipe": 13
+  },
+  "builtin_perturbations": {
+    "entries": 1240,
+    "matches": 659,
+    "failures": 581,
+    "isolated_repo_cwd": {
+      "entries": 1240,
+      "matches": 660,
+      "valid_mismatches": 557,
+      "invalid_references": 23,
+      "invalid_rejected": 13,
+      "invalid_accepted": 10,
+      "valid_cli_errors": [],
+      "panics": [],
+      "cli_exit_counts": {
+        "0": 1227,
+        "1": 13
+      },
+      "mode_exit_counts": {
+        "cli_comparison": {
+          "1": 557,
+          "0": 660,
+          "2": 23
+        },
+        "product_library": {
+          "1": 557,
+          "0": 660,
+          "2": 22,
+          "101": 1
+        },
+        "assisted_library": {
+          "1": 600,
+          "0": 617,
+          "2": 22,
+          "101": 1
+        }
+      },
+      "cli_equals_product_library": 1218
+    },
+    "additional_package_cwd_failures": [
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml"
+    ]
+  },
+  "guards": {
+    "passed": 4,
+    "total": 6,
+    "failed": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ]
+  },
+  "format_owned": "pass",
+  "format_workspace": "Existing class formatting failure",
+  "clippy": "Combined check blocked by existing parser/component dead code; renderer-only retains 20 existing findings (previously 22), no newly introduced finding.",
+  "intermediate_failures": "First focused69: 53 matches,12 valid mismatches,4 invalid. First full main:11178 product/10494 assisted, three introduced activation-border regressions, subsequently repaired; all logs and before/intermediate/final CLI captures retained.",
+  "local_java_launched": false,
+  "network_reference_launches": "None; parent relay returned exact remote captures",
+  "reference_runtime": "Pinned Monkey Man JAR; remote OpenJDK21.0.5/Graphviz12.2.0 differ from origin. Seven-case transport calibration was scoped, not global equivalence."
+}
