@@ -1,0 +1,43 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      set namespaceSeparator ::
+      class Harbor::Dock
+      url "Harbor::::Dock" [[https://example.org/bad]]
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Harbor::Dock
+  - !Package Harbor
+  entities:
+  - id: Harbor::Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    url: https://example.org/bad
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor::Dock
+    source_line: 2
+    stereotypes: []
+    display_name: Harbor
+    phantom: true
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

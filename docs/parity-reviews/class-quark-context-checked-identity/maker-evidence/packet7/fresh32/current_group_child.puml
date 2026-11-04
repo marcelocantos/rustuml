@@ -1,0 +1,6 @@
+@startuml
+package Harbor {
+class Harbor
+url Harbor [[https://example.org/child]]
+}
+@enduml

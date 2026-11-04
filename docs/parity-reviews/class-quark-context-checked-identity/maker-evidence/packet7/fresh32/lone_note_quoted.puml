@@ -1,0 +1,4 @@
+@startuml
+note "receipt" as Ledger
+url "Ledger" [["docs with spaces"{Tip}]]
+@enduml

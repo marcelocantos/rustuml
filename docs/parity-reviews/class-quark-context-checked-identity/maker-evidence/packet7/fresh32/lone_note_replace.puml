@@ -1,0 +1,5 @@
+@startuml
+note "a receipt\nsecond line" as Ledger
+url Ledger [[https://example.org/old]]
+url Ledger [[https://example.org/new{Tip}]]
+@enduml

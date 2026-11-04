@@ -1,0 +1,7 @@
+@startuml
+class Ledger
+package Harbor {
+note "inner receipt" as Ledger
+url Ledger [[https://example.org/note]]
+}
+@enduml

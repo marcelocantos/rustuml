@@ -1,0 +1,32 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "216px"), ("preserveAspectRatio", "none"), ("style", "width:88px;height:216px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 88 216"), ("width", "88px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "304px"), ("preserveAspectRatio", "none"), ("style", "width:262px;height:304px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 262 304"), ("width", "262px"), ("zoomAndPan", "magnify")]
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "46.5938"), ("x", "16.92"), ("y", "91.0352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "46.5938"), ("x", "16.92"), ("y", "179.0352")]
+  [13] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "66.4395"), ("x", "7"), ("y", "153.99")]
+    actual:   [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "66.4395"), ("x", "7"), ("y", "241.99")]
+  [14] <ellipse> attr mismatch:
+    expected: [("cx", "22"), ("cy", "169.99"), ("fill", "#ADD1B2"), ("rx", "11"), ("ry", "11"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("cx", "22"), ("cy", "257.99"), ("fill", "#ADD1B2"), ("rx", "11"), ("ry", "11"), ("style", "stroke:#181818;stroke-width:1;")]
+  [15] <path> attr mismatch:
+    expected: [("d", "M24.4731,176.1331 Q23.8921,176.4319 23.2529,176.5813 Q22.6138,176.7307 21.9082,176.7307 Q19.4014,176.7307 18.0815,175.0789 Q16.7617,173.427 16.7617,170.3059 Q16.7617,167.1765 18.0815,165.5247 Q19.4014,163.8728 21.9082,163.8728 Q22.6138,163.8728 23.2612,164.0222 Q23.9087,164.1716 24.4731,164.4705 L24.4731,167.1931 Q23.8423,166.6121 23.2488,166.3423 Q22.6553,166.0725 22.0244,166.0725 Q20.6797,166.0725 19.9949,167.1392 Q19.3101,168.2058 19.3101,170.3059 Q19.3101,172.3977 19.9949,173.4644 Q20.6797,174.531 22.0244,174.531 Q22.6553,174.531 23.2488,174.2612 Q23.8423,173.9915 24.4731,173.4104 Z "), ("fill", "#000000")]
+    actual:   [("d", "M24.4731,264.1331 Q23.8921,264.4319 23.2529,264.5813 Q22.6138,264.7307 21.9082,264.7307 Q19.4014,264.7307 18.0815,263.0789 Q16.7617,261.427 16.7617,258.3059 Q16.7617,255.1765 18.0815,253.5247 Q19.4014,251.8728 21.9082,251.8728 Q22.6138,251.8728 23.2612,252.0222 Q23.9087,252.1716 24.4731,252.4705 L24.4731,255.1931 Q23.8423,254.6121 23.2488,254.3423 Q22.6553,254.0725 22.0244,254.0725 Q20.6797,254.0725 19.9949,255.1392 Q19.3101,256.2058 19.3101,258.3059 Q19.3101,260.3977 19.9949,261.4644 Q20.6797,262.531 22.0244,262.531 Q22.6553,262.531 23.2488,262.2612 Q23.8423,261.9915 24.4731,261.4104 Z "), ("fill", "#000000")]
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.4395"), ("x", "36"), ("y", "175.281")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.4395"), ("x", "36"), ("y", "263.281")]
+  [17] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "72.4395"), ("y1", "185.99"), ("y2", "185.99")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "72.4395"), ("y1", "273.99"), ("y2", "273.99")]
+  [18] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "72.4395"), ("y1", "193.99"), ("y2", "193.99")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "8"), ("x2", "72.4395"), ("y1", "281.99"), ("y2", "281.99")]
+  [20] <path> attr mismatch:
+    expected: [("codeLine", "9"), ("d", "M40.22,94.19 C40.22,114.16 40.22,131.05 40.22,147.7"), ("fill", "none"), ("id", "Ledger-to-Dock"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "9"), ("d", "M40.22,182.36 C40.22,204.36 40.22,220.13 40.22,235.8"), ("fill", "none"), ("id", "Ledger-to-Dock"), ("style", "stroke:#181818;stroke-width:1;")]
+  [21] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "40.22,153.7,44.22,144.7,40.22,148.7,36.22,144.7,40.22,153.7"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "40.22,241.8,44.22,232.8,40.22,236.8,36.22,232.8,40.22,241.8"), ("style", "stroke:#181818;stroke-width:1;")]
+

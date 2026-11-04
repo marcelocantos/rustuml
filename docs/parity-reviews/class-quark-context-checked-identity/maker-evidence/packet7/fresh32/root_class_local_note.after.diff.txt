@@ -1,0 +1,25 @@
+SVG structural differences:
+  [7] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Harbor.Ledger"), ("data-source-line", "3"), ("id", "ent0004")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Ledger"), ("data-source-line", "1"), ("id", "ent0002")]
+  [8] tag mismatch: expected <a>, got <rect>
+  [9] tag mismatch: expected <path>, got <ellipse>
+  [10] <path> depth mismatch: expected 5, got 4
+  [10] <path> attr mismatch:
+    expected: [("d", "M211.5845,41 L211.5845,51 L221.5845,51 L211.5845,41"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M24.4731,51.8031 Q23.8921,52.1019 23.2529,52.2513 Q22.6138,52.4007 21.9082,52.4007 Q19.4014,52.4007 18.0815,50.7489 Q16.7617,49.097 16.7617,45.9759 Q16.7617,42.8465 18.0815,41.1947 Q19.4014,39.5428 21.9082,39.5428 Q22.6138,39.5428 23.2612,39.6922 Q23.9087,39.8416 24.4731,40.1405 L24.4731,42.8631 Q23.8423,42.2821 23.2488,42.0123 Q22.6553,41.7425 22.0244,41.7425 Q20.6797,41.7425 19.9949,42.8092 Q19.3101,43.8758 19.3101,45.9759 Q19.3101,48.0677 19.9949,49.1344 Q20.6797,50.201 22.0244,50.201 Q22.6553,50.201 23.2488,49.9312 Q23.8423,49.6615 24.4731,49.0804 Z "), ("fill", "#000000")]
+  [11] <text> depth mismatch: expected 5, got 4
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "79.8345"), ("x", "126.75"), ("y", "58.5684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "46.334"), ("x", "36"), ("y", "50.951")]
+  [11] <text> text mismatch:
+    expected: Some("inner receipt")
+    actual:   Some("Ledger")
+  [12] tag mismatch: expected <g>, got <line>
+  [13] tag mismatch: expected <rect>, got <line>
+  [14] tag mismatch: expected <ellipse>, got <g>
+  [15] tag mismatch: expected <path>, got <a>
+  [16] tag mismatch: expected <text>, got <path>
+  [17] tag mismatch: expected <line>, got <path>
+  [18] tag mismatch: expected <line>, got <text>
+

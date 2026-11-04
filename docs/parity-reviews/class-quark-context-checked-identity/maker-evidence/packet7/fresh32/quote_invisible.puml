@@ -1,0 +1,5 @@
+@startuml
+class Dock
+note "receipt" as Ledger
+url Ledger [[docs with spaces{read}]]
+@enduml

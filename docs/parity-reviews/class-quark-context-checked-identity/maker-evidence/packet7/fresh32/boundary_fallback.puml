@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+<style>
+boundary {
+ Shadowing oops
+}
+</style>
+boundary "receipt" as Ledger
+class Dock
+Ledger --> Dock
+@enduml

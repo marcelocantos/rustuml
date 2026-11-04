@@ -1,0 +1,51 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Harbor
+      class Harbor.Dock
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Harbor
+  - !Entity Harbor.Dock
+  - !Package Harbor
+  entities:
+  - id: Harbor
+    label: Harbor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 1
+  - id: Harbor.Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Dock
+    source_line: 2
+    stereotypes: []
+    display_name: Harbor
+    phantom: true
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

@@ -1,0 +1,4 @@
+@startuml
+class Harbor
+class Harbor.Dock
+@enduml

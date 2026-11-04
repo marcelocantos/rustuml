@@ -1,0 +1,4603 @@
+{
+  "before_revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "production_revision": "17a3705e17cc79640a1bcfea241b61f9b762d957",
+  "cohorts": {
+    "preserved1559": {
+      "entries": 1559,
+      "unique_sources": 1485,
+      "before": {
+        "mismatch": 534,
+        "pass": 930,
+        "invalid_reference": 35,
+        "process_error": 60
+      },
+      "after": {
+        "mismatch": 534,
+        "pass": 930,
+        "invalid_reference": 35,
+        "process_error": 60
+      },
+      "negative_before": 7,
+      "negative_after": 7
+    },
+    "maker36": {
+      "entries": 36,
+      "unique_sources": 36,
+      "before": {
+        "pass": 32,
+        "mismatch": 4
+      },
+      "after": {
+        "pass": 32,
+        "mismatch": 4
+      },
+      "negative_before": 0,
+      "negative_after": 0
+    },
+    "maker20": {
+      "entries": 20,
+      "unique_sources": 20,
+      "before": {
+        "pass": 16,
+        "mismatch": 4
+      },
+      "after": {
+        "pass": 16,
+        "mismatch": 4
+      },
+      "negative_before": 0,
+      "negative_after": 0
+    },
+    "checker34": {
+      "entries": 34,
+      "unique_sources": 34,
+      "before": {
+        "pass": 26,
+        "invalid_reference": 4,
+        "mismatch": 4
+      },
+      "after": {
+        "pass": 26,
+        "invalid_reference": 4,
+        "mismatch": 4
+      },
+      "negative_before": 2,
+      "negative_after": 2
+    },
+    "preserved1649": {
+      "entries": 1649,
+      "unique_sources": 1575,
+      "before": {
+        "mismatch": 546,
+        "pass": 1004,
+        "invalid_reference": 39,
+        "process_error": 60
+      },
+      "after": {
+        "mismatch": 546,
+        "pass": 1004,
+        "invalid_reference": 39,
+        "process_error": 60
+      },
+      "negative_before": 9,
+      "negative_after": 9
+    },
+    "maker26": {
+      "entries": 26,
+      "unique_sources": 26,
+      "before": {
+        "mismatch": 6,
+        "pass": 20
+      },
+      "after": {
+        "mismatch": 6,
+        "pass": 20
+      },
+      "negative_before": 0,
+      "negative_after": 0
+    },
+    "checker86": {
+      "entries": 86,
+      "unique_sources": 86,
+      "before": {
+        "invalid_reference": 31,
+        "mismatch": 17,
+        "pass": 36,
+        "process_error": 2
+      },
+      "after": {
+        "invalid_reference": 31,
+        "mismatch": 14,
+        "pass": 41
+      },
+      "negative_before": 28,
+      "negative_after": 30
+    },
+    "frozen1761": {
+      "entries": 1761,
+      "unique_sources": 1687,
+      "before": {
+        "mismatch": 569,
+        "pass": 1060,
+        "invalid_reference": 70,
+        "process_error": 62
+      },
+      "after": {
+        "mismatch": 566,
+        "pass": 1065,
+        "invalid_reference": 70,
+        "process_error": 60
+      },
+      "negative_before": 37,
+      "negative_after": 39
+    },
+    "fresh32": {
+      "entries": 32,
+      "unique_sources": 32,
+      "before": {
+        "mismatch": 16,
+        "pass": 7,
+        "process_error": 3,
+        "invalid_reference": 6
+      },
+      "after": {
+        "pass": 20,
+        "mismatch": 6,
+        "invalid_reference": 6
+      },
+      "negative_before": 1,
+      "negative_after": 6
+    }
+  },
+  "combined_entries": 1793,
+  "combined_unique_sources": 1719,
+  "fresh_overlap": 0,
+  "lost_passes": [],
+  "new_valid_errors": [],
+  "additional_counted_model_drops": [],
+  "models_unchanged": 1772,
+  "model_changes": [
+    {
+      "index": 1665,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_left.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_left.puml"
+        ],
+        "sha256": "5dac220231633f3689f200eefb8bb10f9e41699ff60b4f88d5d8f5c364458d92",
+        "capture": "models/1665-group_left.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Inlet.Leaf",
+              "kind": "Class"
+            },
+            {
+              "id": "Inlet.Peer",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Inlet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Inlet",
+              "alias": null,
+              "url": "https://example.org/map"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_left.puml"
+        ],
+        "sha256": "352c3f330fa2417c5afce63e4456bfa018a692829b3c0b9d3f6e6077bfc03f6f",
+        "capture": "models/1665-group_left.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Inlet.Leaf",
+              "kind": "Class"
+            },
+            {
+              "id": "Inlet.Peer",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Inlet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Inlet",
+              "alias": null
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1666,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_top.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_top.puml"
+        ],
+        "sha256": "45c8e8fca9e87de2c2af6395cabc133c24281dc809abcebc31fa25a7e9fc1ea0",
+        "capture": "models/1666-group_top.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Inlet.Leaf",
+              "kind": "Class"
+            },
+            {
+              "id": "Inlet.Peer",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Inlet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Inlet",
+              "alias": null,
+              "url": "https://example.org/map"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_top.puml"
+        ],
+        "sha256": "ba71de4c29a322511f0e85f5162d43cb55f50b75522a5fb1f3430743b98358b8",
+        "capture": "models/1666-group_top.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Inlet.Leaf",
+              "kind": "Class"
+            },
+            {
+              "id": "Inlet.Peer",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Inlet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Inlet",
+              "alias": null
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Inlet"
+          },
+          {
+            "!Entity": "Inlet.Leaf"
+          },
+          {
+            "!Entity": "Inlet.Peer"
+          },
+          {
+            "!Relationship": "0"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1734,
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_False.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_False.puml"
+        ],
+        "sha256": "c10546dc1ec5d77fe99b294c9a6df3a29e064dcbc8ba61796a50f62374163d51",
+        "capture": "models/1734-group_single_False.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 4
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Fleet.Vessel",
+              "kind": "Class"
+            },
+            {
+              "id": "Pier",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Fleet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Fleet",
+              "alias": null,
+              "url": "https://example.org/map"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Fleet"
+          },
+          {
+            "!Entity": "Fleet.Vessel"
+          },
+          {
+            "!Entity": "Pier"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_False.puml"
+        ],
+        "sha256": "e59d583cef70e249518808201658b5c51c2d8bb4337b02c7b4dbbe5c65dc2bd9",
+        "capture": "models/1734-group_single_False.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 4
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Fleet.Vessel",
+              "kind": "Class"
+            },
+            {
+              "id": "Pier",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Fleet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Fleet",
+              "alias": null
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Fleet"
+          },
+          {
+            "!Entity": "Fleet.Vessel"
+          },
+          {
+            "!Entity": "Pier"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1735,
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_True.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_True.puml"
+        ],
+        "sha256": "79bdbb27c1aec540441dccd9b0e9ac4105e1a0c929ea3a7b6764c7c59aa98a94",
+        "capture": "models/1735-group_single_True.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Fleet.Vessel",
+              "kind": "Class"
+            },
+            {
+              "id": "Pier",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Fleet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Fleet",
+              "alias": null,
+              "url": "https://example.org/map"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Fleet"
+          },
+          {
+            "!Entity": "Fleet.Vessel"
+          },
+          {
+            "!Entity": "Pier"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_True.puml"
+        ],
+        "sha256": "4204c41259aca862b33dc7bb8cfad1add72661dfb0033f7aa7abcbf70a13933f",
+        "capture": "models/1735-group_single_True.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 1,
+          "uid_events": 5
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Fleet.Vessel",
+              "kind": "Class"
+            },
+            {
+              "id": "Pier",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Fleet",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Fleet",
+              "alias": null
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Fleet"
+          },
+          {
+            "!Entity": "Fleet.Vessel"
+          },
+          {
+            "!Entity": "Pier"
+          },
+          {
+            "!Note": "0"
+          },
+          {
+            "!Relationship": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1739,
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.puml"
+        ],
+        "sha256": "e96ceca500a66b6055ec684db2401f8806263aa3a9c00656187124f3ce36fa89",
+        "capture": "models/1739-url_bad_separator.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Basin.Anchor",
+              "kind": "Class",
+              "url": "https://example.org/double"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Basin",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Package": "Basin"
+          },
+          {
+            "!Entity": "Basin.Anchor"
+          }
+        ]
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1739-url_bad_separator.after.yaml"
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1741,
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.puml"
+        ],
+        "sha256": "d1aa709d92b15f2e1549232480a5927dbe9a0f10387bec3ede7fe8aa029b9f23",
+        "capture": "models/1741-url_current_group_self.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Basin.Anchor",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": "https://example.org/self",
+              "url_tooltip": null,
+              "name": "Basin",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Package": "Basin"
+          },
+          {
+            "!Entity": "Basin.Anchor"
+          }
+        ]
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1741-url_current_group_self.after.yaml"
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1755,
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml"
+        ],
+        "sha256": "2538e00e3ded39ad933e60e85eb475316f358111fc7ed06e26da6d2d99875e46",
+        "capture": "models/1755-url_root_class_ambiguous.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Memo",
+              "kind": "Class",
+              "url": "https://example.org/current"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Basin",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Memo"
+          },
+          {
+            "!Package": "Basin"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml"
+        ],
+        "sha256": "746336fd5aeed98bb562422c5c28d572b07bca72c0cdcde619f2d166e6fc3581",
+        "capture": "models/1755-url_root_class_ambiguous.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Memo",
+              "kind": "Class"
+            },
+            {
+              "id": "Basin.Memo",
+              "kind": "Class",
+              "url": "https://example.org/current"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Basin",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Memo"
+          },
+          {
+            "!Package": "Basin"
+          },
+          {
+            "!Entity": "Basin.Memo"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1756,
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1756-url_root_class_note_ambiguous.before.yaml"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml"
+        ],
+        "sha256": "1df49e2bd9c54d5711449f256e7fe785fc4b6519e80a23fb12490227e0157247",
+        "capture": "models/1756-url_root_class_note_ambiguous.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Memo",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Basin",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": null,
+              "alias": "Basin.Memo",
+              "url": "https://example.org/current-note",
+              "owner_package": "Basin"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Memo"
+          },
+          {
+            "!Package": "Basin"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1758,
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1758-url_smart_quotes.before.yaml"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml"
+        ],
+        "sha256": "fdbea9996b9d193129c77ab63b7327d0575e934af0e50a22f0cc446189ed8665",
+        "capture": "models/1758-url_smart_quotes.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Anchor",
+              "kind": "Class"
+            }
+          ],
+          "packages": [],
+          "notes": [
+            {
+              "target": null,
+              "alias": "Memo",
+              "url": "doc with spaces",
+              "url_tooltip": "Hint"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Anchor"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1761,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_local_class.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_local_class.puml"
+        ],
+        "sha256": "bf95789b378ca655a3ebd0d28399050297e5a93ea38b542c238a0f3f4a865735",
+        "capture": "models/1761-root_local_class.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Ledger",
+              "kind": "Class",
+              "url": "https://example.org/local"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Ledger"
+          },
+          {
+            "!Package": "Harbor"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_local_class.puml"
+        ],
+        "sha256": "fa289cad23187ed248654f9fcb7cabc9fb499e71f42295d3a7387dd0d27cea3e",
+        "capture": "models/1761-root_local_class.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Ledger",
+              "kind": "Class"
+            },
+            {
+              "id": "Harbor.Ledger",
+              "kind": "Class",
+              "url": "https://example.org/local"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Ledger"
+          },
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Ledger"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1763,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_class_local_note.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_class_local_note.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1763-root_class_local_note.before.yaml"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_class_local_note.puml"
+        ],
+        "sha256": "94d948759ac3135f0237702a7905398f9157dc5728660664b3de7d9b1313b9b1",
+        "capture": "models/1763-root_class_local_note.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Ledger",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": null,
+              "alias": "Harbor.Ledger",
+              "url": "https://example.org/note",
+              "owner_package": "Harbor"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Ledger"
+          },
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1765,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/current_group_negative.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/current_group_negative.puml"
+        ],
+        "sha256": "d69271905b279cb256cbb330a63df1e459bb8d12b6cf34dc2c99e675bcd7b91c",
+        "capture": "models/1765-current_group_negative.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Harbor.Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": "https://example.org/group",
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Dock"
+          }
+        ]
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/current_group_negative.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1765-current_group_negative.after.yaml"
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1767,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_repeated_negative.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_repeated_negative.puml"
+        ],
+        "sha256": "e52e4cfee85fe29dfb128e47c21eb5f50979dd5f0eb531fbe235cd2cdb01c1f8",
+        "capture": "models/1767-separator_repeated_negative.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Harbor.Dock",
+              "kind": "Class",
+              "url": "https://example.org/bad"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Harbor.Dock"
+          },
+          {
+            "!Package": "Harbor"
+          }
+        ]
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_repeated_negative.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1767-separator_repeated_negative.after.yaml"
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1768,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_trailing_negative.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_trailing_negative.puml"
+        ],
+        "sha256": "4ea6b2960b319376aacac8c8f9e619f72fbe671f3c208c8e873bf1af4ffe2b1d",
+        "capture": "models/1768-separator_trailing_negative.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Harbor.Dock",
+              "kind": "Class",
+              "url": "https://example.org/bad"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Harbor.Dock"
+          },
+          {
+            "!Package": "Harbor"
+          }
+        ]
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_trailing_negative.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1768-separator_trailing_negative.after.yaml"
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1769,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_custom_negative.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_custom_negative.puml"
+        ],
+        "sha256": "fabfa9a286d7a76cfe7be48b6c553f98f9fe8ec00fbfcfc6f9ad0993ca2a5be2",
+        "capture": "models/1769-separator_custom_negative.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Harbor::Dock",
+              "kind": "Class",
+              "url": "https://example.org/bad"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Harbor::Dock"
+          },
+          {
+            "!Package": "Harbor"
+          }
+        ]
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_custom_negative.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1769-separator_custom_negative.after.yaml"
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1770,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/non_group_prefix_negative.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/non_group_prefix_negative.puml"
+        ],
+        "sha256": "848735e8e1d36c9e9d6fb109c41cd2e9bf8aa1ed50d0400f159e7e83e46ccd1e",
+        "capture": "models/1770-non_group_prefix_negative.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 2,
+          "packages": 1,
+          "notes": 0,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Harbor",
+              "kind": "Class"
+            },
+            {
+              "id": "Harbor.Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": []
+        },
+        "uid_events": [
+          {
+            "!Entity": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Dock"
+          },
+          {
+            "!Package": "Harbor"
+          }
+        ]
+      },
+      "after": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/non_group_prefix_negative.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1770-non_group_prefix_negative.after.yaml"
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1772,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_curly.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_curly.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1772-quote_curly.before.yaml"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_curly.puml"
+        ],
+        "sha256": "a52ae8f3ff44e3569f78fe93f5c7b59bef7520b3e4e399f745f9079826240db5",
+        "capture": "models/1772-quote_curly.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [],
+          "notes": [
+            {
+              "target": null,
+              "alias": "Ledger",
+              "url": "docs with spaces",
+              "url_tooltip": "read"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1773,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_reversed_curly.puml",
+      "before": {
+        "exit": 1,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_reversed_curly.puml"
+        ],
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "capture": "models/1773-quote_reversed_curly.before.yaml"
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_reversed_curly.puml"
+        ],
+        "sha256": "3b9ea6319ab4e414ba93b28fac0e75b1b5dd4e0860691f6680aabc81cd71b9c0",
+        "capture": "models/1773-quote_reversed_curly.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [],
+          "notes": [
+            {
+              "target": null,
+              "alias": "Ledger",
+              "url": "docs with spaces",
+              "url_tooltip": "read"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1777,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_single.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_single.puml"
+        ],
+        "sha256": "574eebbf428c1aadb93e0abc50cb3cfe2d4008b8cd5a1c2634ab33f80a15b466",
+        "capture": "models/1777-note_left_single.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [],
+          "notes": [
+            {
+              "target": "Dock",
+              "alias": null,
+              "url": "https://example.org/single",
+              "url_tooltip": "tip"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_single.puml"
+        ],
+        "sha256": "29f3ded0f5c2732e7db7283ce228a43c891c03106394074d41c6723cf00bf909",
+        "capture": "models/1777-note_left_single.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [],
+          "notes": [
+            {
+              "target": "Dock",
+              "alias": null
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1780,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_single.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_single.puml"
+        ],
+        "sha256": "f8f2ddfa9ed53b4a97bca50aa9d916464c96b32079ebea28b1303121cd865145",
+        "capture": "models/1780-note_right_single.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [],
+          "notes": [
+            {
+              "target": "Dock",
+              "alias": null,
+              "url": "https://example.org/single",
+              "url_tooltip": "tip"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_single.puml"
+        ],
+        "sha256": "84e6017325013a1076c9db65e66826ad62bd0c02258fc8d69196b1e7b7d72fe3",
+        "capture": "models/1780-note_right_single.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 0,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 2
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [],
+          "notes": [
+            {
+              "target": "Dock",
+              "alias": null
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Entity": "Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    },
+    {
+      "index": 1783,
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_single.puml",
+      "before": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_single.puml"
+        ],
+        "sha256": "42df4a318eb9f2dc6e1ef1e30ee36df81dcdfa8f35f03e52aaca7ef6a8d055ba",
+        "capture": "models/1783-group_single.before.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Harbor.Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Harbor",
+              "alias": null,
+              "url": "https://example.org/group",
+              "url_tooltip": "tip"
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "after": {
+        "exit": 0,
+        "command": [
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+          "--yaml",
+          "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_single.puml"
+        ],
+        "sha256": "acf1fcfde1d1c6c8b9497e79e8bdbbed3b3ed1229c9b4d833541a68bb83f0db9",
+        "capture": "models/1783-group_single.after.yaml",
+        "type": "Class",
+        "counts": {
+          "entities": 1,
+          "packages": 1,
+          "notes": 1,
+          "relationships": 0,
+          "uid_events": 3
+        },
+        "objects": {
+          "entities": [
+            {
+              "id": "Harbor.Dock",
+              "kind": "Class"
+            }
+          ],
+          "packages": [
+            {
+              "url": null,
+              "url_tooltip": null,
+              "name": "Harbor",
+              "kind": "Package"
+            }
+          ],
+          "notes": [
+            {
+              "target": "Harbor",
+              "alias": null
+            }
+          ]
+        },
+        "uid_events": [
+          {
+            "!Package": "Harbor"
+          },
+          {
+            "!Entity": "Harbor.Dock"
+          },
+          {
+            "!Note": "0"
+          }
+        ]
+      },
+      "unchanged_bytes": false
+    }
+  ],
+  "explicit_model_checks": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_left.puml",
+      "claim": "single-line consumes URL syntax without note ownership; all object counts/UID events retained",
+      "objects": {
+        "entities": [
+          {
+            "id": "Inlet.Leaf",
+            "kind": "Class"
+          },
+          {
+            "id": "Inlet.Peer",
+            "kind": "Class"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Inlet",
+            "kind": "Package"
+          }
+        ],
+        "notes": [
+          {
+            "target": "Inlet",
+            "alias": null
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Package": "Inlet"
+        },
+        {
+          "!Entity": "Inlet.Leaf"
+        },
+        {
+          "!Entity": "Inlet.Peer"
+        },
+        {
+          "!Relationship": "0"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff6/fresh-sources/group_top.puml",
+      "claim": "single-line consumes URL syntax without note ownership; all object counts/UID events retained",
+      "objects": {
+        "entities": [
+          {
+            "id": "Inlet.Leaf",
+            "kind": "Class"
+          },
+          {
+            "id": "Inlet.Peer",
+            "kind": "Class"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Inlet",
+            "kind": "Package"
+          }
+        ],
+        "notes": [
+          {
+            "target": "Inlet",
+            "alias": null
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Package": "Inlet"
+        },
+        {
+          "!Entity": "Inlet.Leaf"
+        },
+        {
+          "!Entity": "Inlet.Peer"
+        },
+        {
+          "!Relationship": "0"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_False.puml",
+      "claim": "single-line consumes URL syntax without note ownership; all object counts/UID events retained",
+      "objects": {
+        "entities": [
+          {
+            "id": "Fleet.Vessel",
+            "kind": "Class"
+          },
+          {
+            "id": "Pier",
+            "kind": "Class"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Fleet",
+            "kind": "Package"
+          }
+        ],
+        "notes": [
+          {
+            "target": "Fleet",
+            "alias": null
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Package": "Fleet"
+        },
+        {
+          "!Entity": "Fleet.Vessel"
+        },
+        {
+          "!Entity": "Pier"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_True.puml",
+      "claim": "single-line consumes URL syntax without note ownership; all object counts/UID events retained",
+      "objects": {
+        "entities": [
+          {
+            "id": "Fleet.Vessel",
+            "kind": "Class"
+          },
+          {
+            "id": "Pier",
+            "kind": "Class"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Fleet",
+            "kind": "Package"
+          }
+        ],
+        "notes": [
+          {
+            "target": "Fleet",
+            "alias": null
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Package": "Fleet"
+        },
+        {
+          "!Entity": "Fleet.Vessel"
+        },
+        {
+          "!Entity": "Pier"
+        },
+        {
+          "!Note": "0"
+        },
+        {
+          "!Relationship": "0"
+        }
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml",
+      "claim": "distinct root/local entities, 3 UID events, only local owns URL",
+      "objects": {
+        "entities": [
+          {
+            "id": "Memo",
+            "kind": "Class"
+          },
+          {
+            "id": "Basin.Memo",
+            "kind": "Class",
+            "url": "https://example.org/current"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Basin",
+            "kind": "Package"
+          }
+        ],
+        "notes": []
+      },
+      "uid_events": [
+        {
+          "!Entity": "Memo"
+        },
+        {
+          "!Package": "Basin"
+        },
+        {
+          "!Entity": "Basin.Memo"
+        }
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml",
+      "claim": "root class and local NOTE retained with three UID events and note URL",
+      "objects": {
+        "entities": [
+          {
+            "id": "Memo",
+            "kind": "Class"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Basin",
+            "kind": "Package"
+          }
+        ],
+        "notes": [
+          {
+            "target": null,
+            "alias": "Basin.Memo",
+            "url": "https://example.org/current-note",
+            "owner_package": "Basin"
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Entity": "Memo"
+        },
+        {
+          "!Package": "Basin"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_local_class.puml",
+      "claim": "distinct root/local entities, 3 UID events, only local owns URL",
+      "objects": {
+        "entities": [
+          {
+            "id": "Ledger",
+            "kind": "Class"
+          },
+          {
+            "id": "Harbor.Ledger",
+            "kind": "Class",
+            "url": "https://example.org/local"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Harbor",
+            "kind": "Package"
+          }
+        ],
+        "notes": []
+      },
+      "uid_events": [
+        {
+          "!Entity": "Ledger"
+        },
+        {
+          "!Package": "Harbor"
+        },
+        {
+          "!Entity": "Harbor.Ledger"
+        }
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_class_local_note.puml",
+      "claim": "root class and local NOTE retained with three UID events and note URL",
+      "objects": {
+        "entities": [
+          {
+            "id": "Ledger",
+            "kind": "Class"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Harbor",
+            "kind": "Package"
+          }
+        ],
+        "notes": [
+          {
+            "target": null,
+            "alias": "Harbor.Ledger",
+            "url": "https://example.org/note",
+            "owner_package": "Harbor"
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Entity": "Ledger"
+        },
+        {
+          "!Package": "Harbor"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_single.puml",
+      "claim": "single-line consumes URL syntax without note ownership; all object counts/UID events retained",
+      "objects": {
+        "entities": [
+          {
+            "id": "Dock",
+            "kind": "Class"
+          }
+        ],
+        "packages": [],
+        "notes": [
+          {
+            "target": "Dock",
+            "alias": null
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Entity": "Dock"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_single.puml",
+      "claim": "single-line consumes URL syntax without note ownership; all object counts/UID events retained",
+      "objects": {
+        "entities": [
+          {
+            "id": "Dock",
+            "kind": "Class"
+          }
+        ],
+        "packages": [],
+        "notes": [
+          {
+            "target": "Dock",
+            "alias": null
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Entity": "Dock"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_single.puml",
+      "claim": "single-line consumes URL syntax without note ownership; all object counts/UID events retained",
+      "objects": {
+        "entities": [
+          {
+            "id": "Harbor.Dock",
+            "kind": "Class"
+          }
+        ],
+        "packages": [
+          {
+            "url": null,
+            "url_tooltip": null,
+            "name": "Harbor",
+            "kind": "Package"
+          }
+        ],
+        "notes": [
+          {
+            "target": "Harbor",
+            "alias": null
+          }
+        ]
+      },
+      "uid_events": [
+        {
+          "!Package": "Harbor"
+        },
+        {
+          "!Entity": "Harbor.Dock"
+        },
+        {
+          "!Note": "0"
+        }
+      ]
+    }
+  ],
+  "dom_observations": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_local_class.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/local"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/local"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/local_then_root_class.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/root"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/root"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_class_local_note.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/note"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/note"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_note_local_class.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/class"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Ledger",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/class"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/current_group_child.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Harbor",
+          "id": "ent0003",
+          "urls": [
+            "https://example.org/child"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Harbor",
+          "id": "ent0003",
+          "urls": [
+            "https://example.org/child"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/null_separator_lookup.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": [
+            "https://example.org/shared"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": [
+            "https://example.org/shared"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_curly.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0003",
+          "urls": [
+            "docs with spaces"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0003",
+          "urls": [
+            "docs with spaces"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_reversed_curly.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0003",
+          "urls": [
+            "docs with spaces"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0003",
+          "urls": [
+            "docs with spaces"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/lone_note_replace.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": [
+            "https://example.org/new"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": [
+            "https://example.org/new"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/lone_note_quoted.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": [
+            "docs with spaces"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": [
+            "docs with spaces"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_single.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_multi.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/multi"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/multi"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_brace.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/brace"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/brace"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_single.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_multi.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/multi"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/multi"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_brace.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/brace"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN3",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/brace"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_single.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Dock",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN4",
+          "id": "ent0005",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Dock",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN4",
+          "id": "ent0005",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_multi.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Dock",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN4",
+          "id": "ent0005",
+          "urls": [
+            "https://example.org/group"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Dock",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN4",
+          "id": "ent0005",
+          "urls": [
+            "https://example.org/group"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_negative.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_digits.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_fallback.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_negative.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_digits.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_fallback.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_legacy_negative.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_style_boolean.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Ledger",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Dock",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_multi_False.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": [
+            "https://example.org/map"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": [
+            "https://example.org/map"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_multi_True.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": [
+            "https://example.org/map"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": [
+            "https://example.org/map"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_False.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/group_single_True.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Fleet",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Fleet.Vessel",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Pier",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "GMN5",
+          "id": "ent0006",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_ambiguous_current.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "First",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "cluster",
+          "name": "Second",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "First.Memo",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Second.Memo",
+          "id": "ent0005",
+          "urls": [
+            "https://example.org/current"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0006",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "First",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "cluster",
+          "name": "Second",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "First.Memo",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Second.Memo",
+          "id": "ent0005",
+          "urls": [
+            "https://example.org/current"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0006",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_class_replace.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": [
+            "doc with space"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": [
+            "doc with space"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_empty_tip.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/path"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/path"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_file.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "file:/tmp/name"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "file:/tmp/name"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_nested_tip.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/path"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/path"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_quoted.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/a b?q=x&v=y"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/a b?q=x&v=y"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_scheme_upper.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/HTTPS://example.org/a"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://prefix.example/HTTPS://example.org/a"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            ""
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            ""
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_form_tooltip_label.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            ""
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            ""
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_group_replace.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": [
+            "doc with space"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Anchor",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Harbor",
+          "id": "ent0002",
+          "urls": [
+            "doc with space"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Harbor.Anchor",
+          "id": "ent0003",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_namespace_none.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://example.org/none"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0004",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://example.org/none"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0004",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_note_replace.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": [
+            "doc with space"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": [
+            "doc with space"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Memo",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/current"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Memo",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/current"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Memo",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/current-note"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Memo",
+          "id": "ent0004",
+          "urls": [
+            "https://example.org/current-note"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_rooted_existing.puml",
+      "whole_svg": "mismatch",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Other",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.url",
+          "id": "ent0005",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "Basin",
+          "id": "ent0003",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Basin.Other",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0002",
+          "urls": [
+            "https://example.org/rooted"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": false,
+      "same_order": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "doc with spaces"
+          ]
+        }
+      ],
+      "rust": [
+        {
+          "kind": "entity",
+          "name": "Anchor",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "Memo",
+          "id": "ent0003",
+          "urls": [
+            "doc with spaces"
+          ]
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_unique_crosscontext.puml",
+      "whole_svg": "pass",
+      "java": [
+        {
+          "kind": "cluster",
+          "name": "First",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "cluster",
+          "name": "Second",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "First.Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://example.org/unique"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Second.Anchor",
+          "id": "ent0005",
+          "urls": []
+        }
+      ],
+      "rust": [
+        {
+          "kind": "cluster",
+          "name": "First",
+          "id": "ent0002",
+          "urls": []
+        },
+        {
+          "kind": "cluster",
+          "name": "Second",
+          "id": "ent0004",
+          "urls": []
+        },
+        {
+          "kind": "entity",
+          "name": "First.Memo",
+          "id": "ent0003",
+          "urls": [
+            "https://example.org/unique"
+          ]
+        },
+        {
+          "kind": "entity",
+          "name": "Second.Anchor",
+          "id": "ent0005",
+          "urls": []
+        }
+      ],
+      "same_objects_uids_url_owners": true,
+      "same_order": true
+    }
+  ],
+  "gains": [
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_neg3.puml",
+      "source_sha256": "b915a332017d57e0d8d3dd696ad9344399c89713e16ca0ed767986484da462bf",
+      "reference_sha256": "e804f5edccc04f1134155540df3e1e9cf2c0afc43b51964d25b45ffcbd242a7d",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_neg3.puml",
+      "source_sha256": "b5fbfa2b29e77e527292574820de749cee3b9930be1853833e608eb16621759b",
+      "reference_sha256": "db61111d858a686eec5ca806cf9b59bd07f737b06c93ca8905913a42ebf2a0b7",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_note_replace.puml",
+      "source_sha256": "60a4da10269debf2ffa3e03a39cc3ff765f85ba78da0373a26a161b70a5ce0ba",
+      "reference_sha256": "07c1a22af1eb3812a10adbcc69fe7acda8c95619b7f3543935a6c1c488e2574a",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_ambiguous.puml",
+      "source_sha256": "e426a68598ab7b4cb35917c584ff5e469d51e71622e58b2751387f14f14fca6d",
+      "reference_sha256": "d5967275fab25b583fedd96278c889710e7402ed0951bbfe78608f1e1d5a6276",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml",
+      "source_sha256": "735956c5edcf6c07ab859a7850fba31166faa9b126d31de37e614e22c4278bac",
+      "reference_sha256": "87297d487cd6ff382fd986509f5de3ec828ec535825feae4e345d4322b24e75d",
+      "before": "process_error",
+      "after": "pass",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_local_class.puml",
+      "source_sha256": "3d895508905d5ba905cfecd5de0ad64abea1a8b95c35ba2ea49fdafa988ee6fc",
+      "reference_sha256": "5d97e09e9cb7c56f77d5315c96ec637dd3693538c560caf5740f6ba4055c620f",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_curly.puml",
+      "source_sha256": "8942d3203deee1684dd289b8bb2e6bd1787dab02a27bc1004937e769d4552842",
+      "reference_sha256": "78c3ae2b29ad7687755d0e7adf38d3a0ac0bce15614422dc8b03ef818909e399",
+      "before": "process_error",
+      "after": "pass",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_reversed_curly.puml",
+      "source_sha256": "93fff0b643421add827d63d9a6e80a9ee16a9aadc3343c188b4bf390cee1f184",
+      "reference_sha256": "c166ce3ad7b9fba7d0b38d7238e53fc2bd2d58e6e6c59ca8cb02b26a5b0947c2",
+      "before": "process_error",
+      "after": "pass",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/lone_note_replace.puml",
+      "source_sha256": "23a10c6e2f435ecb71ab867ad624b135e90b44f789ffe6637734f9c6cd2189fa",
+      "reference_sha256": "94e938c2be02a2585bc84e22a089f80800b319af9c782d63a720a70dfd754ff4",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/lone_note_quoted.puml",
+      "source_sha256": "15a88e56e01c699e83f06514b7c81a4ec3d4d320b769caa7b2ee99b716c25ba8",
+      "reference_sha256": "d2bbc569df5aaeeaea7c236084cbd019fdad48975009194645393b92b8b655e4",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_single.puml",
+      "source_sha256": "f35816d104fcd5d02bb3dc8126f9382b59686aaebc91c079954d421a30709dd1",
+      "reference_sha256": "699fbc4abb8b20c721005d22280d733ef08ad87c2c53af1a7e4d8276efbaaeec",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_single.puml",
+      "source_sha256": "1b41ccf8c1b3f81333bd0b2f087b0da7d2bfaee66e3c7dde0f0e985b1b1515bb",
+      "reference_sha256": "03d422a51a2dade65949e5c1761a51fc39d870efc35d028e4e8e1c34bddd0d89",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_negative.puml",
+      "source_sha256": "b80f13c37d82dce2d97c59e073e76d943eada6814215b6321afe8f6b6ba7d2d7",
+      "reference_sha256": "6278070fc3a418e8f4b62e3506e18f24d4a97ec015ab84969d8cf40d6ff90c8b",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_digits.puml",
+      "source_sha256": "e852c36175ec396e6c2ee032ec58312b2873b13f5aa93e0e5521cfe9edbaf321",
+      "reference_sha256": "c766e9fb46c126c8abcba24705aba6d3eda6ab52ed030f829ec116a49615b87b",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_fallback.puml",
+      "source_sha256": "3989472e99ba1f274964b0f161fe8f3bc86b80677ac7b7fea891a7fcb28b30a7",
+      "reference_sha256": "a4b42a8e2dd2949b3a84c681435853620650a9c1b312076a2180875c1e5f4f0d",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_negative.puml",
+      "source_sha256": "ca2f2214442b2446c72d6eecac8f3cb1bab79d0cef0bc98f62302be54cb3add8",
+      "reference_sha256": "8b07127c2b1d169eab294547ceb9ced59c4fbae112b4b6845cbc2fd0bbb1402f",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_fallback.puml",
+      "source_sha256": "36c731406dbe117c7b1a9306d53e81f920153f140024af8d619ea2deaa3687a7",
+      "reference_sha256": "04053fa222e36e35ac2382e37b491d5ee2bd55863292f11f34af63f75abbc081",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_style_boolean.puml",
+      "source_sha256": "2c1c795e63ff4fffe0a9f77662a396e9e8cac6001e33f34564713b06ad3c0f24",
+      "reference_sha256": "b1adcd18ae4680d585f126c3e76b2b552da36d9d9e903ffc4dc33869270468af",
+      "before": "mismatch",
+      "after": "pass",
+      "before_exit": 0,
+      "after_exit": 0,
+      "stderr": ""
+    }
+  ],
+  "error_recoveries": [
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_root_class_note_ambiguous.puml",
+      "source_sha256": "83ff93c8717a36ac0cd81552347beec2738373ac7377bc3b4e805b7a38c1bf26",
+      "reference_sha256": "0dd2d6103bf1b7921dca48182eded127fe167e606b85677118cbccbcc2faf7fa",
+      "before": "process_error",
+      "after": "mismatch",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_smart_quotes.puml",
+      "source_sha256": "735956c5edcf6c07ab859a7850fba31166faa9b126d31de37e614e22c4278bac",
+      "reference_sha256": "87297d487cd6ff382fd986509f5de3ec828ec535825feae4e345d4322b24e75d",
+      "before": "process_error",
+      "after": "pass",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_class_local_note.puml",
+      "source_sha256": "0b74d316d18ea1d480830d2589bc421915990ceef5f9e25b412278891fce9191",
+      "reference_sha256": "162c9b38d896c93807fee1450a9c412e615c05e3676074a53105a4930ed1d096",
+      "before": "process_error",
+      "after": "mismatch",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_curly.puml",
+      "source_sha256": "8942d3203deee1684dd289b8bb2e6bd1787dab02a27bc1004937e769d4552842",
+      "reference_sha256": "78c3ae2b29ad7687755d0e7adf38d3a0ac0bce15614422dc8b03ef818909e399",
+      "before": "process_error",
+      "after": "pass",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_reversed_curly.puml",
+      "source_sha256": "93fff0b643421add827d63d9a6e80a9ee16a9aadc3343c188b4bf390cee1f184",
+      "reference_sha256": "c166ce3ad7b9fba7d0b38d7238e53fc2bd2d58e6e6c59ca8cb02b26a5b0947c2",
+      "before": "process_error",
+      "after": "pass",
+      "before_exit": 1,
+      "after_exit": 0,
+      "stderr": ""
+    }
+  ],
+  "negative_status_changes": [
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_bad_separator.puml",
+      "source_sha256": "4c26d05d696ee2489edc6cbf3a2420cfcb2a8e2b645ac3f67b64c8a8d1e6cf1d",
+      "reference_sha256": "5b9e64c7ac64b0e4877a70dc7dfdf4c55c6a11e7138f94ce6abca0d249854bf2",
+      "before": "invalid_reference",
+      "after": "invalid_reference",
+      "before_exit": 0,
+      "after_exit": 1,
+      "stderr": "parse error: line 4: bad name since . is a separator: Basin..Anchor\n"
+    },
+    {
+      "cohort": "frozen1761",
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/url_current_group_self.puml",
+      "source_sha256": "2b0b7b92da5735b451cab49d2af94a6680f672151d323dcfca8e2ab791fadfef",
+      "reference_sha256": "0f23948dc40494a77e2fce6ee1fe1bfa5afe321e762854f55033017f464ef679",
+      "before": "invalid_reference",
+      "after": "invalid_reference",
+      "before_exit": 0,
+      "after_exit": 1,
+      "stderr": "parse error: line 3: Basin does not exist\n"
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/current_group_negative.puml",
+      "source_sha256": "3f277cb5682a2f6e0afe56eb7f9a0902fe5338b7db39bd402112b41a082462ea",
+      "reference_sha256": "5725be4dc7432f28ad4c174c19d1d98adf4e13a1351c764ee98ee460788f801e",
+      "before": "invalid_reference",
+      "after": "invalid_reference",
+      "before_exit": 0,
+      "after_exit": 1,
+      "stderr": "parse error: line 3: Harbor does not exist\n"
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_repeated_negative.puml",
+      "source_sha256": "600ee2742531faf578c0976cb5001a38cd872200841860f9e65bebd772815494",
+      "reference_sha256": "4de4e18e77faf000c1ee72139d907a09782e8e7fecfefb2bcfca19b548ae8f7c",
+      "before": "invalid_reference",
+      "after": "invalid_reference",
+      "before_exit": 0,
+      "after_exit": 1,
+      "stderr": "parse error: line 2: bad name since . is a separator: Harbor..Dock\n"
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_trailing_negative.puml",
+      "source_sha256": "2303e518c7692699c1d410ba03c1c8cbe593b7876d18f0f3802b935340ab4f71",
+      "reference_sha256": "0daf39fb5ad261d6f95560a72250247bba948529ac75192512886336c476580a",
+      "before": "invalid_reference",
+      "after": "invalid_reference",
+      "before_exit": 0,
+      "after_exit": 1,
+      "stderr": "parse error: line 2: bad name since . is a separator: Harbor.Dock.\n"
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_custom_negative.puml",
+      "source_sha256": "513e91d61c078333d6b681f489e8834c679a83dd7a91c9ce10383aba4ba2bb18",
+      "reference_sha256": "75303be9fd03a1f41c6e1f4f7c39cf2081ec8e2d8da63e1957d8ee35262215d8",
+      "before": "invalid_reference",
+      "after": "invalid_reference",
+      "before_exit": 0,
+      "after_exit": 1,
+      "stderr": "parse error: line 3: bad name since :: is a separator: Harbor::::Dock\n"
+    },
+    {
+      "cohort": "fresh32",
+      "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/non_group_prefix_negative.puml",
+      "source_sha256": "d435aa7bdaa36ecf8dcd3a0a46f04524838ee93dc8b2a21f1cef918c9c81eb70",
+      "reference_sha256": "db19282203817f189100172e6168ffe44d2bf1e7134431d5825cf6bd27eb55fe",
+      "before": "invalid_reference",
+      "after": "invalid_reference",
+      "before_exit": 0,
+      "after_exit": 1,
+      "stderr": "parse error: line 2: not a package: Harbor\n"
+    }
+  ]
+}

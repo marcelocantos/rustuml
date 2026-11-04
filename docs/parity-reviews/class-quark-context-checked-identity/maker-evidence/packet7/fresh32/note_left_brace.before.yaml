@@ -1,0 +1,38 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Dock
+      note left of Dock [[https://example.org/brace{tip}]] {
+      a receipt
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Dock
+  - !Note 0
+  entities:
+  - id: Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - a receipt
+    target: Dock
+    position: Left
+    alias: null
+    url: https://example.org/brace
+    url_tooltip: tip
+    source_line: 3
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

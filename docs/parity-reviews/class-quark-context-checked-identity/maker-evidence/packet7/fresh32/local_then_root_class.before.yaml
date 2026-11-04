@@ -1,0 +1,53 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Harbor {
+      class Ledger
+      }
+      class Ledger
+      url Ledger [[https://example.org/root]]
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Harbor
+  - !Entity Harbor.Ledger
+  - !Entity Ledger
+  entities:
+  - id: Harbor.Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    url: https://example.org/root
+    source_line: 4
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Ledger
+    source_line: 1
+    stereotypes: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

@@ -1,0 +1,28 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "a receipt\nsecond line" as Ledger
+      url Ledger [[https://example.org/old]]
+      url Ledger [[https://example.org/new{Tip}]]
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  entities: []
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - a receipt
+    - second line
+    target: null
+    position: null
+    alias: Ledger
+    url: https://example.org/new
+    url_tooltip: Tip
+    source_line: 1
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

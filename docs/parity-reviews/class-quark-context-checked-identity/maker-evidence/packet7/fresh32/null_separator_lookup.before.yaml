@@ -1,0 +1,43 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      set namespaceSeparator none
+      class Ledger
+      package Harbor {
+      class Ledger
+      url Ledger [[https://example.org/shared]]
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Ledger
+  - !Package Harbor
+  entities:
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    url: https://example.org/shared
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities: []
+    source_line: 3
+    stereotypes: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

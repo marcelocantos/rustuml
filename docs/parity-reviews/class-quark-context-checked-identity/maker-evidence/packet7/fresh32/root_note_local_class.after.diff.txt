@@ -1,0 +1,16 @@
+SVG structural differences:
+  [7] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Harbor.Ledger"), ("data-source-line", "3"), ("id", "ent0004")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Ledger"), ("data-source-line", "1"), ("id", "ent0002")]
+  [8] tag mismatch: expected <a>, got <path>
+  [9] tag mismatch: expected <rect>, got <path>
+  [10] tag mismatch: expected <ellipse>, got <text>
+  [11] tag mismatch: expected <path>, got <g>
+  [12] tag mismatch: expected <text>, got <a>
+  [13] tag mismatch: expected <line>, got <rect>
+  [14] tag mismatch: expected <line>, got <ellipse>
+  [15] tag mismatch: expected <g>, got <path>
+  [16] tag mismatch: expected <path>, got <text>
+  [17] tag mismatch: expected <path>, got <line>
+  [18] tag mismatch: expected <text>, got <line>
+

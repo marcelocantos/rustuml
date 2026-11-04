@@ -1,0 +1,37 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Dock
+      note "receipt" as Ledger
+      url “Ledger” [[“docs with spaces”{read}]]
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Dock
+  - !Note 0
+  entities:
+  - id: Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - receipt
+    target: null
+    position: null
+    alias: Ledger
+    url: docs with spaces
+    url_tooltip: read
+    source_line: 2
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

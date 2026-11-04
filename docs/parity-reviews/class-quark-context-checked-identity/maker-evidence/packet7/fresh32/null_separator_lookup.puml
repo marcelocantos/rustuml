@@ -1,0 +1,8 @@
+@startuml
+set namespaceSeparator none
+class Ledger
+package Harbor {
+class Ledger
+url Ledger [[https://example.org/shared]]
+}
+@enduml

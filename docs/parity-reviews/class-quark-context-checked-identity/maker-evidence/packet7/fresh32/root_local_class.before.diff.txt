@@ -1,0 +1,19 @@
+SVG structural differences:
+  element count: expected 22, got 14
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "120px"), ("preserveAspectRatio", "none"), ("style", "width:229px;height:120px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 229 120"), ("width", "229px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "71px"), ("preserveAspectRatio", "none"), ("style", "width:202px;height:71px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 202 71"), ("width", "202px"), ("zoomAndPan", "magnify")]
+  [3] tag mismatch: expected <g>, got <path>
+  [4] tag mismatch: expected <path>, got <line>
+  [5] tag mismatch: expected <line>, got <text>
+  [6] tag mismatch: expected <text>, got <g>
+  [7] tag mismatch: expected <g>, got <a>
+  [8] tag mismatch: expected <a>, got <rect>
+  [9] tag mismatch: expected <rect>, got <ellipse>
+  [10] tag mismatch: expected <ellipse>, got <path>
+  [11] tag mismatch: expected <path>, got <text>
+  [12] tag mismatch: expected <text>, got <line>
+  [13] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "121"), ("x2", "197.334"), ("y1", "73"), ("y2", "73")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "111.88"), ("x2", "188.214"), ("y1", "48.49"), ("y2", "48.49")]
+

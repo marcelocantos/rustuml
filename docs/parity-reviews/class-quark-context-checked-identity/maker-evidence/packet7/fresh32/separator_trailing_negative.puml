@@ -1,0 +1,4 @@
+@startuml
+class Harbor.Dock
+url Harbor.Dock. [[https://example.org/bad]]
+@enduml

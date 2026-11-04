@@ -1,0 +1,41 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Harbor {
+      class Dock
+      url Harbor [[https://example.org/group]]
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Harbor
+  - !Entity Harbor.Dock
+  entities:
+  - id: Harbor.Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: https://example.org/group
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Dock
+    source_line: 1
+    stereotypes: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

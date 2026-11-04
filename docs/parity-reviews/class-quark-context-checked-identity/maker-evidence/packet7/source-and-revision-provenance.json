@@ -1,0 +1,95 @@
+{
+  "imported_review_original": "157cc571ce99714d41e28d41bd56084b53b8f36d",
+  "imported_as": "07d00af240c9938b63b7672d67f285a53a1d536d",
+  "accounts": {
+    "class-quark-context-checked-identity": {
+      "commit": "b3c510e605fb39393d61e0700ac47f1b256cbb49",
+      "sha256": "7848ba10c4c1289a3233da04d285b4d98b18e36749df0d429c920f2a654c410c",
+      "schema_fields_valid": true,
+      "preimplementation": "Committed before any packet7 draft; prior packet chronology defects preserved separately"
+    },
+    "class-note-url-command-lifecycle": {
+      "commit": "d3dc83434df9ad36f7c0a505eb341b53807db1b6",
+      "sha256": "7e19e59855c10368b665a1dfbbe92a16ac74e6c481d73f47be996569a6339fee",
+      "schema_fields_valid": true,
+      "preimplementation": "Committed before any packet7 draft; prior packet chronology defects preserved separately"
+    },
+    "class-fashion-value-digit-semantics": {
+      "commit": "4bbe21b6ad4428b7dc1166f4081bed4729dfc29d",
+      "sha256": "b898b0af06de74a7a35a62cdf7674d4b054501987dad51edb0fd03a7dc958546",
+      "schema_fields_valid": true,
+      "preimplementation": "Committed before any packet7 draft; prior packet chronology defects preserved separately"
+    }
+  },
+  "production": "17a3705e17cc79640a1bcfea241b61f9b762d957",
+  "production_changed_files": [
+    "crates/rustuml-parser/src/parse/class.rs",
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "protected_unchanged": [
+    "crates/rustuml-render/src/text_render.rs",
+    "crates/rustuml-parser/src/parse/mod.rs",
+    "crates/rustuml-parser/src/diagram/class.rs",
+    "crates/rustuml-layout",
+    "crates/rustuml-parser/src/preprocess",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_source_files": [
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "sha256": "0195e8eca7e26b7300f70194a665f78b3224826ea761a673aea741242bba37af"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/StringUtils.java",
+      "sha256": "36a2ae5dfc1b2f4d2ce12861b0ae420cc80307c17467a731e6d7b72e32d3f1e8"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandUrl.java",
+      "sha256": "f6ea3e2eb6ef6fb5c209583b78ccb871849deeb7bf1601c69ff21d5bd9c23972"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "sha256": "652b36312263c9fb8998b9f9028dc684446c3e5673b3f4bed4a907cc99322252"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "sha256": "db6043b6d004531e4eb4203e2c951903c17879154bd645ee7175253bc0da71d4"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+      "sha256": "803a162f03659ed7ca6a48238145bd0f8c8176a5e6f01fc7c37c1013568ffa4b"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "sha256": "056e1590423d17fe4b4ba1a24c0f773d210ea0c7830415b5a0ba94b0abd74576"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "sha256": "b04ced59627d1d313e127bf5f28532bc162d4a629240a65f6d5730927f33c69d"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "sha256": "c479ef28db5aebca79293c01be674e88d4bd40a3da70eb1cf3aa45f0795d6178"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "sha256": "934c994d396482815a66aa7c7e311c9051c924989004bc0af1a2e8723c87f73c"
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+      "sha256": "0edd4959c52fff7d3eaa42e22a8b970c883b16fffd6926920ae22ccf4b25aeb8"
+    }
+  ],
+  "binaries": {
+    "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml": "cdc29cc286b9494660e30c09c88d4686d28ba82ae5810aed219941c7eed97e68",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff7/iteration1-rustuml": "fa7ba0fc6b32755e92ef258c6d62eef9e0c96d2de3e72fca34db031b4027dd52",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml": "f999036ac976c7a6dda44d4bbd3d252e9382eaddb947d6ce9a0fb16c1551a713",
+    "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg": "0e368102f36bfbc59efe141286df5935b785535db6c0cf537bdbadc9350f21cd"
+  },
+  "golden_gitlink": "160000 commit 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a\ttest-diagrams/golden"
+}

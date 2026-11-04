@@ -1,0 +1,323 @@
+{
+  "gzip_sha256": "39b7ce1c19f901b67707d0a65861fd88906aad00c19d128f7852b5c2a3da6bfd",
+  "environment": {
+    "timezone": "GMT+11:00",
+    "env_overrides": {},
+    "ambient_jvm_variables_removed": [
+      "JAVA_TOOL_OPTIONS",
+      "_JAVA_OPTIONS",
+      "JDK_JAVA_OPTIONS",
+      "CLASSPATH"
+    ],
+    "batch": "class32-cff7",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.JCe6mGHB",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "4b0ef007882a94a64aa099dd82873e1d9374d346c18061c8a09cb6e1384e3bb0",
+    "generated_input_inventory_sha256": "962470e9fc82ad11e83574578d159235632862ccce5128e923b7351e37dc6d42",
+    "timeout_seconds": 60,
+    "classification_performed": false
+  },
+  "cases": [
+    {
+      "name": "root_local_class.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "3d895508905d5ba905cfecd5de0ad64abea1a8b95c35ba2ea49fdafa988ee6fc",
+      "reference_sha256": "5d97e09e9cb7c56f77d5315c96ec637dd3693538c560caf5740f6ba4055c620f"
+    },
+    {
+      "name": "local_then_root_class.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "1f6fdbb48bc4a268077dd1d2f2308ad4d5be71e7d3eacee020f54bbf247738a4",
+      "reference_sha256": "aeaa9e0f75d46403eb6209230a9ed178db00186fc7acb536e630f1ccc0e8ca20"
+    },
+    {
+      "name": "root_class_local_note.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "0b74d316d18ea1d480830d2589bc421915990ceef5f9e25b412278891fce9191",
+      "reference_sha256": "162c9b38d896c93807fee1450a9c412e615c05e3676074a53105a4930ed1d096"
+    },
+    {
+      "name": "root_note_local_class.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "7eb9e762a94bf08c326acb61de9e88a0a84371df262f208b2658ecce7caf7dfc",
+      "reference_sha256": "4fc11901e72c05d13f338b5390c1a335811fea7ee56edb27ea788e1607280ab6"
+    },
+    {
+      "name": "current_group_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "3f277cb5682a2f6e0afe56eb7f9a0902fe5338b7db39bd402112b41a082462ea",
+      "reference_sha256": "5725be4dc7432f28ad4c174c19d1d98adf4e13a1351c764ee98ee460788f801e"
+    },
+    {
+      "name": "current_group_child.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "90138276b45662aacde751bd14d2a815aed4f21153f1dd0b66d1ab282226cad2",
+      "reference_sha256": "68faa258ab633718d9a6b96286ac380d1d4ccee08c0f20444377902a02880f9b"
+    },
+    {
+      "name": "separator_repeated_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "600ee2742531faf578c0976cb5001a38cd872200841860f9e65bebd772815494",
+      "reference_sha256": "4de4e18e77faf000c1ee72139d907a09782e8e7fecfefb2bcfca19b548ae8f7c"
+    },
+    {
+      "name": "separator_trailing_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "2303e518c7692699c1d410ba03c1c8cbe593b7876d18f0f3802b935340ab4f71",
+      "reference_sha256": "0daf39fb5ad261d6f95560a72250247bba948529ac75192512886336c476580a"
+    },
+    {
+      "name": "separator_custom_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "513e91d61c078333d6b681f489e8834c679a83dd7a91c9ce10383aba4ba2bb18",
+      "reference_sha256": "75303be9fd03a1f41c6e1f4f7c39cf2081ec8e2d8da63e1957d8ee35262215d8"
+    },
+    {
+      "name": "non_group_prefix_negative.puml",
+      "expected_valid": false,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "d435aa7bdaa36ecf8dcd3a0a46f04524838ee93dc8b2a21f1cef918c9c81eb70",
+      "reference_sha256": "db19282203817f189100172e6168ffe44d2bf1e7134431d5825cf6bd27eb55fe"
+    },
+    {
+      "name": "null_separator_lookup.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "fc7f7377546f8b319f01b2cc90389edf508eff7ff2e46d1a60a288abf5617d1e",
+      "reference_sha256": "9a4a9e73b5a17163acb09af17bf0b3ed6df305cd3eed51b3bba1c9f7fdb8e493"
+    },
+    {
+      "name": "quote_curly.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "8942d3203deee1684dd289b8bb2e6bd1787dab02a27bc1004937e769d4552842",
+      "reference_sha256": "78c3ae2b29ad7687755d0e7adf38d3a0ac0bce15614422dc8b03ef818909e399"
+    },
+    {
+      "name": "quote_reversed_curly.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "93fff0b643421add827d63d9a6e80a9ee16a9aadc3343c188b4bf390cee1f184",
+      "reference_sha256": "c166ce3ad7b9fba7d0b38d7238e53fc2bd2d58e6e6c59ca8cb02b26a5b0947c2"
+    },
+    {
+      "name": "quote_invisible.puml",
+      "expected_valid": true,
+      "observed_valid": false,
+      "exit": 200,
+      "diagram_type": null,
+      "source_sha256": "5ec88691f36e6f2da3b2cccba88fd23fea00b82d4fa7a05f74b6de9db0ab23c6",
+      "reference_sha256": "373987273ca31e5074a12f97d9a1ebe43c7fe15fa581ea1859fbc9ce7e8a8034"
+    },
+    {
+      "name": "lone_note_replace.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "23a10c6e2f435ecb71ab867ad624b135e90b44f789ffe6637734f9c6cd2189fa",
+      "reference_sha256": "94e938c2be02a2585bc84e22a089f80800b319af9c782d63a720a70dfd754ff4"
+    },
+    {
+      "name": "lone_note_quoted.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "15a88e56e01c699e83f06514b7c81a4ec3d4d320b769caa7b2ee99b716c25ba8",
+      "reference_sha256": "d2bbc569df5aaeeaea7c236084cbd019fdad48975009194645393b92b8b655e4"
+    },
+    {
+      "name": "note_left_single.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "f35816d104fcd5d02bb3dc8126f9382b59686aaebc91c079954d421a30709dd1",
+      "reference_sha256": "699fbc4abb8b20c721005d22280d733ef08ad87c2c53af1a7e4d8276efbaaeec"
+    },
+    {
+      "name": "note_left_multi.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "80b562f8b5bd4ea63c4b1b967a3108884ae926beea34cb9bfa26cc5b1b56970b",
+      "reference_sha256": "a5976b4c6a0f4a3a63a0d91a3c738a74cb32d880b6e61dc3080160ceb1b03122"
+    },
+    {
+      "name": "note_left_brace.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "ccf4d206ab59f8b4f733662e64b066cb6c83ee9c630a90bc57e5d05c95978260",
+      "reference_sha256": "ead5df9231ea619510eb6a1bd53be90304c7dca7d48067c3c88522604ea8c3ca"
+    },
+    {
+      "name": "note_right_single.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "1b41ccf8c1b3f81333bd0b2f087b0da7d2bfaee66e3c7dde0f0e985b1b1515bb",
+      "reference_sha256": "03d422a51a2dade65949e5c1761a51fc39d870efc35d028e4e8e1c34bddd0d89"
+    },
+    {
+      "name": "note_right_multi.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "71396c274296db5c9ac16115698c3a8c920be55705e4648ee39f68a8f382f9f1",
+      "reference_sha256": "97b84e7a8c86ae02da18b6c7a13ba5f66e57d0c157c5d382ccee6d1e5b7e343e"
+    },
+    {
+      "name": "note_right_brace.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "8e981b3c2284715f22c3f2f686245c8ba2fab7846efaf94537ec052f97b81f1d",
+      "reference_sha256": "2ad786c79392a5caaab1d743abb69bd4ce3f4aa90af83b914408610adee2473b"
+    },
+    {
+      "name": "group_single.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "96b4f637ba784fba7ace93efd8bc894d683b4b7f4cea891995c63d48ab2250c8",
+      "reference_sha256": "9989f06bde9c22064a5acf860453cc66c252b66d7348c0db98bc096c7804840b"
+    },
+    {
+      "name": "group_multi.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "1a415e47a707a72f7c3b320963d8e6154f95309c3e3f1aff3b7ea2cb79a74b29",
+      "reference_sha256": "1a8472289d1d548373a8c5c34af99e8633831b9119d34ec1d9e89533c1d895e7"
+    },
+    {
+      "name": "actor_negative.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "b80f13c37d82dce2d97c59e073e76d943eada6814215b6321afe8f6b6ba7d2d7",
+      "reference_sha256": "6278070fc3a418e8f4b62e3506e18f24d4a97ec015ab84969d8cf40d6ff90c8b"
+    },
+    {
+      "name": "actor_digits.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "e852c36175ec396e6c2ee032ec58312b2873b13f5aa93e0e5521cfe9edbaf321",
+      "reference_sha256": "c766e9fb46c126c8abcba24705aba6d3eda6ab52ed030f829ec116a49615b87b"
+    },
+    {
+      "name": "actor_fallback.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "3989472e99ba1f274964b0f161fe8f3bc86b80677ac7b7fea891a7fcb28b30a7",
+      "reference_sha256": "a4b42a8e2dd2949b3a84c681435853620650a9c1b312076a2180875c1e5f4f0d"
+    },
+    {
+      "name": "boundary_negative.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "ca2f2214442b2446c72d6eecac8f3cb1bab79d0cef0bc98f62302be54cb3add8",
+      "reference_sha256": "8b07127c2b1d169eab294547ceb9ced59c4fbae112b4b6845cbc2fd0bbb1402f"
+    },
+    {
+      "name": "boundary_digits.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "c7689276fc0eefb4086c612a670afffa848e66f3fa9dc6e2b78c25231d057a33",
+      "reference_sha256": "ef5fca6e62f23fd00607dba2a084e8191366a2502b51f4361fc68cebf28112e0"
+    },
+    {
+      "name": "boundary_fallback.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "36c731406dbe117c7b1a9306d53e81f920153f140024af8d619ea2deaa3687a7",
+      "reference_sha256": "04053fa222e36e35ac2382e37b491d5ee2bd55863292f11f34af63f75abbc081"
+    },
+    {
+      "name": "actor_legacy_negative.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "d6e197fb63ac9140a3793b08e0ea50a873eb6398dc71d7133e66768f756de367",
+      "reference_sha256": "e6cda1c298104aec6918f915ab7a2539d72c578def5d2e74e9418ab58e7e2f2e"
+    },
+    {
+      "name": "actor_style_boolean.puml",
+      "expected_valid": true,
+      "observed_valid": true,
+      "exit": 0,
+      "diagram_type": "CLASS",
+      "source_sha256": "2c1c795e63ff4fffe0a9f77662a396e9e8cac6001e33f34564713b06ad3c0f24",
+      "reference_sha256": "b1adcd18ae4680d585f126c3e76b2b552da36d9d9e903ffc4dc33869270468af"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+@startuml
+class Dock
+note right of Dock [[https://example.org/brace{tip}]] {
+a receipt
+}
+@enduml

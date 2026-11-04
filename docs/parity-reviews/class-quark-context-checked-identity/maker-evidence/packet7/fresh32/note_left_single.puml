@@ -1,0 +1,4 @@
+@startuml
+class Dock
+note left of Dock [[https://example.org/single{tip}]] : a receipt
+@enduml

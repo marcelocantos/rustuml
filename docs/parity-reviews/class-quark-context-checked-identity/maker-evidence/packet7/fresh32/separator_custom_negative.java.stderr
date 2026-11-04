@@ -1,0 +1,21 @@
+Error java.lang.IllegalStateException
+java.lang.IllegalStateException
+	at net.sourceforge.plantuml.project.Failable.get(Failable.java:70)
+	at net.atmp.CucaDiagram.quarkInContext(CucaDiagram.java:246)
+	at net.sourceforge.plantuml.classdiagram.command.CommandUrl.executeArg(CommandUrl.java:79)
+	at net.sourceforge.plantuml.classdiagram.command.CommandUrl.executeArg(CommandUrl.java:54)
+	at net.sourceforge.plantuml.command.SingleLineCommand2.execute(SingleLineCommand2.java:143)
+	at net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)
+	at net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:169)
+	at net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)
+	at net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)
+	at net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)
+	at net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)
+	at net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)
+	at net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)
+	at net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)
+	at net.sourceforge.plantuml.Run.main(Run.java:183)
+You should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6)
+ERROR
+3
+You should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6) java.lang.IllegalStateException (Assumed diagram type: class)

@@ -1,0 +1,354 @@
+[
+  {
+    "name": "root_local_class.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_local_class.puml",
+    "source_sha256": "3d895508905d5ba905cfecd5de0ad64abea1a8b95c35ba2ea49fdafa988ee6fc",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "local_then_root_class.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/local_then_root_class.puml",
+    "source_sha256": "1f6fdbb48bc4a268077dd1d2f2308ad4d5be71e7d3eacee020f54bbf247738a4",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "root_class_local_note.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_class_local_note.puml",
+    "source_sha256": "0b74d316d18ea1d480830d2589bc421915990ceef5f9e25b412278891fce9191",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "root_note_local_class.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/root_note_local_class.puml",
+    "source_sha256": "7eb9e762a94bf08c326acb61de9e88a0a84371df262f208b2658ecce7caf7dfc",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "current_group_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/current_group_negative.puml",
+    "source_sha256": "3f277cb5682a2f6e0afe56eb7f9a0902fe5338b7db39bd402112b41a082462ea",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": false
+  },
+  {
+    "name": "current_group_child.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/current_group_child.puml",
+    "source_sha256": "90138276b45662aacde751bd14d2a815aed4f21153f1dd0b66d1ab282226cad2",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "separator_repeated_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_repeated_negative.puml",
+    "source_sha256": "600ee2742531faf578c0976cb5001a38cd872200841860f9e65bebd772815494",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": false
+  },
+  {
+    "name": "separator_trailing_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_trailing_negative.puml",
+    "source_sha256": "2303e518c7692699c1d410ba03c1c8cbe593b7876d18f0f3802b935340ab4f71",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": false
+  },
+  {
+    "name": "separator_custom_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/separator_custom_negative.puml",
+    "source_sha256": "513e91d61c078333d6b681f489e8834c679a83dd7a91c9ce10383aba4ba2bb18",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": false
+  },
+  {
+    "name": "non_group_prefix_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/non_group_prefix_negative.puml",
+    "source_sha256": "d435aa7bdaa36ecf8dcd3a0a46f04524838ee93dc8b2a21f1cef918c9c81eb70",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": false
+  },
+  {
+    "name": "null_separator_lookup.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/null_separator_lookup.puml",
+    "source_sha256": "fc7f7377546f8b319f01b2cc90389edf508eff7ff2e46d1a60a288abf5617d1e",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "root/local identity and declaration order",
+      "unique/current/qualified lookup and target kind"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "quote_curly.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_curly.puml",
+    "source_sha256": "8942d3203deee1684dd289b8bb2e6bd1787dab02a27bc1004937e769d4552842",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "Pattern2 quote character",
+      "named-note topology and URL tooltip/body punctuation"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "quote_reversed_curly.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_reversed_curly.puml",
+    "source_sha256": "93fff0b643421add827d63d9a6e80a9ee16a9aadc3343c188b4bf390cee1f184",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "Pattern2 quote character",
+      "named-note topology and URL tooltip/body punctuation"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "quote_invisible.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/quote_invisible.puml",
+    "source_sha256": "5ec88691f36e6f2da3b2cccba88fd23fea00b82d4fa7a05f74b6de9db0ab23c6",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "Pattern2 quote character",
+      "named-note topology and URL tooltip/body punctuation"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "lone_note_replace.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/lone_note_replace.puml",
+    "source_sha256": "23a10c6e2f435ecb71ab867ad624b135e90b44f789ffe6637734f9c6cd2189fa",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "Pattern2 quote character",
+      "named-note topology and URL tooltip/body punctuation"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "lone_note_quoted.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/lone_note_quoted.puml",
+    "source_sha256": "15a88e56e01c699e83f06514b7c81a4ec3d4d320b769caa7b2ee99b716c25ba8",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "Pattern2 quote character",
+      "named-note topology and URL tooltip/body punctuation"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "note_left_single.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_single.puml",
+    "source_sha256": "f35816d104fcd5d02bb3dc8126f9382b59686aaebc91c079954d421a30709dd1",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "note_left_multi.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_multi.puml",
+    "source_sha256": "80b562f8b5bd4ea63c4b1b967a3108884ae926beea34cb9bfa26cc5b1b56970b",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "note_left_brace.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_left_brace.puml",
+    "source_sha256": "ccf4d206ab59f8b4f733662e64b066cb6c83ee9c630a90bc57e5d05c95978260",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "note_right_single.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_single.puml",
+    "source_sha256": "1b41ccf8c1b3f81333bd0b2f087b0da7d2bfaee66e3c7dde0f0e985b1b1515bb",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "note_right_multi.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_multi.puml",
+    "source_sha256": "71396c274296db5c9ac16115698c3a8c920be55705e4648ee39f68a8f382f9f1",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "note_right_brace.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/note_right_brace.puml",
+    "source_sha256": "8e981b3c2284715f22c3f2f686245c8ba2fab7846efaf94537ec052f97b81f1d",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "group_single.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_single.puml",
+    "source_sha256": "96b4f637ba784fba7ace93efd8bc894d683b4b7f4cea891995c63d48ab2250c8",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "group_multi.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/group_multi.puml",
+    "source_sha256": "1a415e47a707a72f7c3b320963d8e6154f95309c3e3f1aff3b7ea2cb79a74b29",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "single-line/end-note/braced command ownership",
+      "left/right and entity/group target"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "actor_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_negative.puml",
+    "source_sha256": "b80f13c37d82dce2d97c59e073e76d943eada6814215b6321afe8f6b6ba7d2d7",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "actor_digits.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_digits.puml",
+    "source_sha256": "e852c36175ec396e6c2ee032ec58312b2873b13f5aa93e0e5521cfe9edbaf321",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "actor_fallback.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_fallback.puml",
+    "source_sha256": "3989472e99ba1f274964b0f161fe8f3bc86b80677ac7b7fea891a7fcb28b30a7",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "boundary_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_negative.puml",
+    "source_sha256": "ca2f2214442b2446c72d6eecac8f3cb1bab79d0cef0bc98f62302be54cb3add8",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "boundary_digits.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_digits.puml",
+    "source_sha256": "c7689276fc0eefb4086c612a670afffa848e66f3fa9dc6e2b78c25231d057a33",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "boundary_fallback.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/boundary_fallback.puml",
+    "source_sha256": "36c731406dbe117c7b1a9306d53e81f920153f140024af8d619ea2deaa3687a7",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "actor_legacy_negative.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_legacy_negative.puml",
+    "source_sha256": "d6e197fb63ac9140a3793b08e0ea50a873eb6398dc71d7133e66768f756de367",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  },
+  {
+    "name": "actor_style_boolean.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-class-cff7/fresh-sources/actor_style_boolean.puml",
+    "source_sha256": "2c1c795e63ff4fffe0a9f77662a396e9e8cac6001e33f34564713b06ad3c0f24",
+    "timezone": "GMT+11:00",
+    "axes": [
+      "raw style vs legacy numeric conversion",
+      "actor/boundary and signed/malformed/digit-dot values"
+    ],
+    "expected_java_valid": true
+  }
+]

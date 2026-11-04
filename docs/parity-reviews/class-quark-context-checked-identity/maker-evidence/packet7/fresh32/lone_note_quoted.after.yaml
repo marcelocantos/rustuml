@@ -1,0 +1,26 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "receipt" as Ledger
+      url "Ledger" [["docs with spaces"{Tip}]]
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  entities: []
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - receipt
+    target: null
+    position: null
+    alias: Ledger
+    url: docs with spaces
+    url_tooltip: Tip
+    source_line: 1
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

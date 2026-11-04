@@ -1,0 +1,50 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Ledger
+      package Harbor {
+      note "inner receipt" as Ledger
+      url Ledger [[https://example.org/note]]
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Ledger
+  - !Package Harbor
+  - !Note 0
+  entities:
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities: []
+    source_line: 2
+    stereotypes: []
+  notes:
+  - lines:
+    - inner receipt
+    target: null
+    position: null
+    alias: Harbor.Ledger
+    url: https://example.org/note
+    source_line: 3
+    owner_package: Harbor
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

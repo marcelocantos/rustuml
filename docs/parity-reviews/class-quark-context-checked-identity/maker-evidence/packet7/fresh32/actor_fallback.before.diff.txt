@@ -1,0 +1,35 @@
+SVG structural differences:
+  element count: expected 22, got 17
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "206px"), ("preserveAspectRatio", "none"), ("style", "width:88px;height:206px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 88 206"), ("width", "88px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "204px"), ("preserveAspectRatio", "none"), ("style", "width:88px;height:204px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 88 204"), ("width", "88px"), ("zoomAndPan", "magnify")]
+  [2] tag mismatch: expected <filter>, got <g>
+  [3] tag mismatch: expected <feGaussianBlur>, got <g>
+  [4] tag mismatch: expected <feColorMatrix>, got <ellipse>
+  [5] tag mismatch: expected <feOffset>, got <path>
+  [6] tag mismatch: expected <feBlend>, got <text>
+  [7] <g> depth mismatch: expected 2, got 3
+  [7] <g> attr mismatch:
+    expected: []
+    actual:   [("class", "entity"), ("data-qualified-name", "Dock"), ("data-source-line", "8"), ("id", "ent0003")]
+  [8] tag mismatch: expected <g>, got <rect>
+  [9] <ellipse> attr mismatch:
+    expected: [("cx", "40.2169"), ("cy", "14"), ("fill", "#F1F1F1"), ("filter", "url(#f1nr4fbtzv1nth)"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "22"), ("cy", "157.99"), ("fill", "#ADD1B2"), ("rx", "11"), ("ry", "11"), ("style", "stroke:#181818;stroke-width:1;")]
+  [10] <path> attr mismatch:
+    expected: [("d", "M40.2169,22 L40.2169,49 M27.2169,30 L53.2169,30 M40.2169,49 L27.2169,64 M40.2169,49 L53.2169,64"), ("fill", "none"), ("filter", "url(#f1nr4fbtzv1nth)"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M24.4731,164.1331 Q23.8921,164.4319 23.2529,164.5813 Q22.6138,164.7307 21.9082,164.7307 Q19.4014,164.7307 18.0815,163.0789 Q16.7617,161.427 16.7617,158.3059 Q16.7617,155.1765 18.0815,153.5247 Q19.4014,151.8728 21.9082,151.8728 Q22.6138,151.8728 23.2612,152.0222 Q23.9087,152.1716 24.4731,152.4705 L24.4731,155.1931 Q23.8423,154.6121 23.2488,154.3423 Q22.6553,154.0725 22.0244,154.0725 Q20.6797,154.0725 19.9949,155.1392 Q19.3101,156.2058 19.3101,158.3059 Q19.3101,160.3977 19.9949,161.4644 Q20.6797,162.531 22.0244,162.531 Q22.6553,162.531 23.2488,162.2612 Q23.8423,161.9915 24.4731,161.4104 Z "), ("fill", "#000000")]
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "46.5938"), ("x", "16.92"), ("y", "80.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.4395"), ("x", "36"), ("y", "163.281")]
+  [11] <text> text mismatch:
+    expected: Some("receipt")
+    actual:   Some("Dock")
+  [12] tag mismatch: expected <g>, got <line>
+  [13] tag mismatch: expected <rect>, got <line>
+  [14] tag mismatch: expected <ellipse>, got <g>
+  [15] <path> attr mismatch:
+    expected: [("d", "M24.4731,165.6331 Q23.8921,165.9319 23.2529,166.0813 Q22.6138,166.2307 21.9082,166.2307 Q19.4014,166.2307 18.0815,164.5789 Q16.7617,162.927 16.7617,159.8059 Q16.7617,156.6765 18.0815,155.0247 Q19.4014,153.3728 21.9082,153.3728 Q22.6138,153.3728 23.2612,153.5222 Q23.9087,153.6716 24.4731,153.9705 L24.4731,156.6931 Q23.8423,156.1121 23.2488,155.8423 Q22.6553,155.5725 22.0244,155.5725 Q20.6797,155.5725 19.9949,156.6392 Q19.3101,157.7058 19.3101,159.8059 Q19.3101,161.8977 19.9949,162.9644 Q20.6797,164.031 22.0244,164.031 Q22.6553,164.031 23.2488,163.7612 Q23.8423,163.4915 24.4731,162.9104 Z "), ("fill", "#000000")]
+    actual:   [("codeLine", "9"), ("d", "M40.22,82.46 C40.22,101.88 40.22,118.95 40.22,135.75"), ("fill", "none"), ("id", "Ledger-to-Dock"), ("style", "stroke:#181818;stroke-width:1;")]
+  [16] tag mismatch: expected <text>, got <polygon>
+

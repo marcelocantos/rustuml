@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+skinparam shadowing -2.5
+actor "receipt" as Ledger
+class Dock
+Ledger --> Dock
+@enduml

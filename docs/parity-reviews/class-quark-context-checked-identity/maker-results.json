@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quark-context-checked-identity",
+  "role": "implementation maker; not an independent review",
+  "production_commit": "17a3705e17cc79640a1bcfea241b61f9b762d957",
+  "evidence": "docs/parity-reviews/class-quark-context-checked-identity/maker-evidence/packet7",
+  "cohorts": {
+    "preserved1559": {
+      "entries": 1559,
+      "unique_sources": 1485,
+      "before": {
+        "mismatch": 534,
+        "pass": 930,
+        "invalid_reference": 35,
+        "process_error": 60
+      },
+      "after": {
+        "mismatch": 534,
+        "pass": 930,
+        "invalid_reference": 35,
+        "process_error": 60
+      },
+      "negative_before": 7,
+      "negative_after": 7
+    },
+    "maker36": {
+      "entries": 36,
+      "unique_sources": 36,
+      "before": {
+        "pass": 32,
+        "mismatch": 4
+      },
+      "after": {
+        "pass": 32,
+        "mismatch": 4
+      },
+      "negative_before": 0,
+      "negative_after": 0
+    },
+    "maker20": {
+      "entries": 20,
+      "unique_sources": 20,
+      "before": {
+        "pass": 16,
+        "mismatch": 4
+      },
+      "after": {
+        "pass": 16,
+        "mismatch": 4
+      },
+      "negative_before": 0,
+      "negative_after": 0
+    },
+    "checker34": {
+      "entries": 34,
+      "unique_sources": 34,
+      "before": {
+        "pass": 26,
+        "invalid_reference": 4,
+        "mismatch": 4
+      },
+      "after": {
+        "pass": 26,
+        "invalid_reference": 4,
+        "mismatch": 4
+      },
+      "negative_before": 2,
+      "negative_after": 2
+    },
+    "preserved1649": {
+      "entries": 1649,
+      "unique_sources": 1575,
+      "before": {
+        "mismatch": 546,
+        "pass": 1004,
+        "invalid_reference": 39,
+        "process_error": 60
+      },
+      "after": {
+        "mismatch": 546,
+        "pass": 1004,
+        "invalid_reference": 39,
+        "process_error": 60
+      },
+      "negative_before": 9,
+      "negative_after": 9
+    },
+    "maker26": {
+      "entries": 26,
+      "unique_sources": 26,
+      "before": {
+        "mismatch": 6,
+        "pass": 20
+      },
+      "after": {
+        "mismatch": 6,
+        "pass": 20
+      },
+      "negative_before": 0,
+      "negative_after": 0
+    },
+    "checker86": {
+      "entries": 86,
+      "unique_sources": 86,
+      "before": {
+        "invalid_reference": 31,
+        "mismatch": 17,
+        "pass": 36,
+        "process_error": 2
+      },
+      "after": {
+        "invalid_reference": 31,
+        "mismatch": 14,
+        "pass": 41
+      },
+      "negative_before": 28,
+      "negative_after": 30
+    },
+    "frozen1761": {
+      "entries": 1761,
+      "unique_sources": 1687,
+      "before": {
+        "mismatch": 569,
+        "pass": 1060,
+        "invalid_reference": 70,
+        "process_error": 62
+      },
+      "after": {
+        "mismatch": 566,
+        "pass": 1065,
+        "invalid_reference": 70,
+        "process_error": 60
+      },
+      "negative_before": 37,
+      "negative_after": 39
+    },
+    "fresh32": {
+      "entries": 32,
+      "unique_sources": 32,
+      "before": {
+        "mismatch": 16,
+        "pass": 7,
+        "process_error": 3,
+        "invalid_reference": 6
+      },
+      "after": {
+        "pass": 20,
+        "mismatch": 6,
+        "invalid_reference": 6
+      },
+      "negative_before": 1,
+      "negative_after": 6
+    }
+  },
+  "lost_passes": [],
+  "new_valid_errors": [],
+  "additional_counted_model_drops": [],
+  "residue": "See README and all-residuals.json; six fresh whole-input mismatches remain, prior failures and negative references preserved",
+  "acceptance": "not claimed; fresh independent checker required"
+}

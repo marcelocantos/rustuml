@@ -1,0 +1,7 @@
+@startuml
+class Ledger
+package Harbor {
+class Ledger
+url Ledger [[https://example.org/local]]
+}
+@enduml

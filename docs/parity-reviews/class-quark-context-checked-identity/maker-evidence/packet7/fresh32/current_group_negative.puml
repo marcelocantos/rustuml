@@ -1,0 +1,6 @@
+@startuml
+package Harbor {
+class Dock
+url Harbor [[https://example.org/group]]
+}
+@enduml

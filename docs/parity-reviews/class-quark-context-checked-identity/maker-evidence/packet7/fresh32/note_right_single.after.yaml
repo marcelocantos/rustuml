@@ -1,0 +1,34 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Dock
+      note right of Dock [[https://example.org/single{tip}]] : a receipt
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Dock
+  - !Note 0
+  entities:
+  - id: Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - a receipt
+    target: Dock
+    position: Right
+    alias: null
+    source_line: 2
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

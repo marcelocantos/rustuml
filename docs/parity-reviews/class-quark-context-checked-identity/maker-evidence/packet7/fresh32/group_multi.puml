@@ -1,0 +1,8 @@
+@startuml
+package Harbor {
+class Dock
+}
+note right of Harbor [[https://example.org/group{tip}]]
+group receipt
+end note
+@enduml

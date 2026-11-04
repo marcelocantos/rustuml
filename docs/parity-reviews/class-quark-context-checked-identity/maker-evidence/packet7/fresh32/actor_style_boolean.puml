@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+<style>
+actor {
+ Shadowing true
+}
+</style>
+actor "receipt" as Ledger
+class Dock
+Ledger --> Dock
+@enduml

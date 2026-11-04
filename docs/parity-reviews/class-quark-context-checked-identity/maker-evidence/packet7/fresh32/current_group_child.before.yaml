@@ -1,0 +1,42 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Harbor {
+      class Harbor
+      url Harbor [[https://example.org/child]]
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Harbor
+  - !Entity Harbor.Harbor
+  entities:
+  - id: Harbor.Harbor
+    label: Harbor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    url: https://example.org/child
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Harbor
+    source_line: 1
+    stereotypes: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null
