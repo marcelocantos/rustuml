@@ -1,0 +1,4 @@
+@startuml
+Cedar o-->>o Maple: first
+class Cedar
+@enduml

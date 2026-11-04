@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-queue-preferred-component",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3Ac792f275-d5e8-406c-bb85-740990ccfb83",
+    "model": "OpenAI gpt-6-astra, high reasoning, Codex harness in T3 Code",
+    "role": "Independent checker; no production implementation, no children"
+  },
+  "account_commit": "7ab48cc4b66eae7b50c7508c9f6bf481427f316d",
+  "implementation_commit": "bc9ef612c05d120650ee6a92b2a4393a663a183d",
+  "implementation_commits": [
+    "bc9ef612c05d120650ee6a92b2a4393a663a183d"
+  ],
+  "reviewed_candidate": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "reviewed_production": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent existing Monkey Man runner only: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; actual argv/cwd/status/raw bytes in captures.tar.gz reference-results.json and supplement-reference-results.json",
+    "uv run --no-project python PRIVATE_CACHE/checks.py candidate (private target, jobs4): parser572/render791/CLI13 pass; main library11181/11251 and10497/11251, guards4/6; original golden-submodule outage preserved and unresolved tiers rerun after exact9efdc12f initialization",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/fresh-candidate",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/supplement-reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/supplement-candidate",
+    "uv run --no-project python PRIVATE_CACHE/checks.py before; replay_before.py; checks.py intermediate; queue_replay.py; all exact commands, exits, bindings and raw streams in support archive"
+  ],
+  "perturbations": [
+    {
+      "name": "queue_stereo_legacy",
+      "source": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_stereo_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_stereo_legacy.svg",
+      "axes": [
+        "stereotype in box",
+        "activation destruction",
+        "legacy"
+      ],
+      "result": "fail",
+      "claim": "sequence-queue-preferred-component",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "b92c0809a9bdef06b9281155ed92e6d7f009cae33fafda1f842d45f438d17825",
+      "golden_sha256": "cd3968b287a2e6dac32b10268d0c6af2d29dab8e33a10e1d2f680cf5737e0b95"
+    },
+    {
+      "name": "queue_only_legacy",
+      "source": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_only_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_only_legacy.svg",
+      "axes": [
+        "queue-only reverse creation",
+        "loop destruction",
+        "legacy"
+      ],
+      "result": "pass",
+      "claim": "sequence-queue-preferred-component",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 0,
+      "source_sha256": "1926965f0adbb48e3cdb8bbf44b13a1a51472d8f0c37c6490b6094f19b09a7af",
+      "golden_sha256": "d6d8539c16a5b9ff492434b9a90d27cd0f737cfae2ae3dbcb7528f7f4eb7a832"
+    },
+    {
+      "name": "queue_stereo_teoz",
+      "source": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_stereo_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_stereo_teoz.svg",
+      "axes": [
+        "stereotype in box",
+        "activation destruction",
+        "teoz"
+      ],
+      "result": "fail",
+      "claim": "sequence-queue-preferred-component",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "aad55003a7a6c28d568f288a66b2ecb2a4744458202d257eb50767ccc1a91380",
+      "golden_sha256": "b6982e83c454f81f90eb572da841711965b6cf44764a4de16f00bbff1db9ce9a"
+    },
+    {
+      "name": "queue_only_teoz",
+      "source": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_only_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_only_teoz.svg",
+      "axes": [
+        "queue-only reverse creation",
+        "loop destruction",
+        "teoz"
+      ],
+      "result": "pass",
+      "claim": "sequence-queue-preferred-component",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 0,
+      "source_sha256": "02704796b5034cd0656ae7277892a86cbcdf771edf0adeeb97994ed570ad6dde",
+      "golden_sha256": "19926ce8e77d710c91cfc3ed1e2de645aa95db17dc47d0c59ae7dc43db5d98d9"
+    },
+    {
+      "name": "queue_multiline_legacy",
+      "source": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_multiline_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_multiline_legacy.svg",
+      "axes": [
+        "queue_multiline",
+        "legacy"
+      ],
+      "result": "fail",
+      "claim": "sequence-queue-preferred-component",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "e603683ae133bd09aa942f4aef2bf4d8889ae42730c7c5c06a05e100cde426e3",
+      "golden_sha256": "1005f43a19ff190eac8af5ba6a3a417bcbde5f36b19bcfc8054aba4d309b89af"
+    },
+    {
+      "name": "queue_multiline_teoz",
+      "source": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_multiline_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-preferred-component/checker_672_queue_multiline_teoz.svg",
+      "axes": [
+        "queue_multiline",
+        "teoz"
+      ],
+      "result": "fail",
+      "claim": "sequence-queue-preferred-component",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "720f85ffc778f72d582c6b76c4912d82033edceb42a761d53c40470e10be3fce",
+      "golden_sha256": "20514a9f229b5f7ba42a299c400f82c36b69d8747b1bd9d46093d4482030a741"
+    }
+  ],
+  "findings": [
+    "Source derivation for single-line queue component height is correct: merged text dimensions plus top5/bottom5, not mixed-kind row band. Four intermediate queue losses are reproduced separately, not erased.",
+    "DISPROVED full component claim: Rust uses line_h times one/two based on boxed stereotype, not the full Display height. Fresh multiline queue labels are valid and fail both engines; literal backslash-n text, fewer text elements and undersized canvas remain. Boxed stereotyped creation controls also fail; queue-only reverse loop/destroy controls pass.",
+    "No queue-specific scheduling offset has been reintroduced. Existing mixed-kind row bands and paint are still separate approximations; bounded recovery is not whole queue acceptance.",
+    "Rejected under whole-output/fresh-counterexample gate. Passing subsets are bounded observations, not extracted acceptance. Earlier accounts/reviews/counterexamples and all failures remain unchanged.",
+    "Account chronology and precise Java/Rust source hashes/line locations independently checked in checker-672-astra/integrity.json and source-audit.json. Exact Java local source blobs agree with pinned revision."
+  ],
+  "verdict": "rejected",
+  "support": "docs/parity-reviews/sequence-composed-components-packet/checker-672-astra/README.md",
+  "standing_registration": "Every fresh pair is registered under test-diagrams/perturbations and automatically collected by the unchanged standing harness. Last executed candidate standing suite714/1310 before these42 additions; no broad rerun after evidence-only registration. All42 checked through real CLI and unchanged library diagnostics.",
+  "residue": [
+    "Historical frozen failures, factory_component/factory_quoted, shared tabs/URL second Display/natural alignment/logical fonts, themed self Real/padder/envelope, other component/style/page/ASCII contracts, welcome-factory TIM handoff remain unresolved.",
+    "No native/layout/fault review retry, production/account/baseline/comparator/skip/target/reader changes, shared style/font fixes, unrelated production imports, shipping, or self-acceptance."
+  ]
+}

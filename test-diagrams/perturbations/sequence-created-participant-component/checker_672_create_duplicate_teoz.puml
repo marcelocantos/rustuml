@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Maple
+create Maple
+Cedar -> Maple: one
+create Maple
+Cedar -> Maple: two
+@enduml

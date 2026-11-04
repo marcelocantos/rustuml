@@ -1,0 +1,129 @@
+{
+  "prior_paths": 7736,
+  "prior_changed": [],
+  "imported_paths": 343,
+  "imported_changed": [],
+  "production_diff": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/mod.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "candidate_production_diff": [],
+  "chronology": [
+    {
+      "mechanism": "sequence-factory-command-viability",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "aeb638a3e2c23f2d874641c49c49ad993b7bb140"
+      ],
+      "account_unchanged": true,
+      "account_introduction": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementations": [
+        {
+          "commit": "aeb638a3e2c23f2d874641c49c49ad993b7bb140",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: prefer viable decorated sequence command candidates\n\nCausal account 5b45a17258268b0aba71a1a7d35b02a169e3a088, sequence-factory-command-viability. Reuse actual command consumption before sequence/class competition; keep existing scoring when this bounded candidate is not viable. Focused contrasting factory test passes; full collateral checks follow in the packet.\n\nCo-Authored-By: Codex <noreply@openai.com>"
+        }
+      ]
+    },
+    {
+      "mechanism": "sequence-endpoint-dressing-composition",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "96716b8b9595abf437a26b6bd6af914411cef44a"
+      ],
+      "account_unchanged": true,
+      "account_introduction": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementations": [
+        {
+          "commit": "96716b8b9595abf437a26b6bd6af914411cef44a",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: compose independent sequence endpoint dressings\n\nCausal account 5b45a17258268b0aba71a1a7d35b02a169e3a088, sequence-endpoint-dressing-composition. Normalize both dressings, retain source head independently, and paint both physical endpoints before the stroke. Use the same intrinsic self half polygon in Teoz and legacy. ASCII scope is exactly two authorized source_dressing: None test constructor fields; actual ASCII output is measured separately. Focused model serialization and retained checker controls pass.\n\nCo-Authored-By: Codex <noreply@openai.com>"
+        }
+      ]
+    },
+    {
+      "mechanism": "sequence-note-body-composition",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "689f00cb730100e6640ebec8bfb026f942c1cf03",
+        "c921945aac3bfaf7d61dd323498f0e4899f32182"
+      ],
+      "account_unchanged": true,
+      "account_introduction": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementations": [
+        {
+          "commit": "689f00cb730100e6640ebec8bfb026f942c1cf03",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: compose enhanced sequence note bodies before titles\n\nCausal account 5b45a17258268b0aba71a1a7d35b02a169e3a088, sequence-note-body-composition. Use the same segmented block object for preferred dimensions and painting, including body margins, title centering, and body-before-title traversal. Preserve ordinary child allocation and message-only underline height.\n\nCo-Authored-By: Codex <noreply@openai.com>"
+        },
+        {
+          "commit": "c921945aac3bfaf7d61dd323498f0e4899f32182",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: share complete participant bounds with creation consumers\n\nCausal account 5b45a17258268b0aba71a1a7d35b02a169e3a088, sequence-created-participant-component. Replace inferred creation advances/origins with ArrowAndParticipant and ParticipantBox preferred dimensions, carry shadow/font paint into created heads, and preserve ActorStickMan vertical shadow without reserving it horizontally. Also retain endpoint argument lint annotation and derive enhanced-note stencil margins from Rose alignment. Full packet validation follows; no acceptance claim.\n\nCo-Authored-By: Codex <noreply@openai.com>"
+        }
+      ]
+    },
+    {
+      "mechanism": "sequence-created-participant-component",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "c921945aac3bfaf7d61dd323498f0e4899f32182",
+        "bc9ef612c05d120650ee6a92b2a4393a663a183d"
+      ],
+      "account_unchanged": true,
+      "account_introduction": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementations": [
+        {
+          "commit": "c921945aac3bfaf7d61dd323498f0e4899f32182",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: share complete participant bounds with creation consumers\n\nCausal account 5b45a17258268b0aba71a1a7d35b02a169e3a088, sequence-created-participant-component. Replace inferred creation advances/origins with ArrowAndParticipant and ParticipantBox preferred dimensions, carry shadow/font paint into created heads, and preserve ActorStickMan vertical shadow without reserving it horizontally. Also retain endpoint argument lint annotation and derive enhanced-note stencil margins from Rose alignment. Full packet validation follows; no acceptance claim.\n\nCo-Authored-By: Codex <noreply@openai.com>"
+        },
+        {
+          "commit": "bc9ef612c05d120650ee6a92b2a4393a663a183d",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: separate queue preferred size from aligned head band\n\nAccounts 7ab48cc4 (queue component dimensions) and 5b45a172 (resolved participant paint). Restore the four queue creation/history main regressions using USymbolQueue text plus symbol margins, include actor-only shadow filters in definitions, and express touched actor placement without late initialization. First broad failures remain preserved."
+        }
+      ]
+    },
+    {
+      "mechanism": "sequence-queue-preferred-component",
+      "account_commit": "7ab48cc4b66eae7b50c7508c9f6bf481427f316d",
+      "implementation_commits": [
+        "bc9ef612c05d120650ee6a92b2a4393a663a183d"
+      ],
+      "account_unchanged": true,
+      "account_introduction": "7ab48cc4b66eae7b50c7508c9f6bf481427f316d",
+      "implementations": [
+        {
+          "commit": "bc9ef612c05d120650ee6a92b2a4393a663a183d",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: separate queue preferred size from aligned head band\n\nAccounts 7ab48cc4 (queue component dimensions) and 5b45a172 (resolved participant paint). Restore the four queue creation/history main regressions using USymbolQueue text plus symbol margins, include actor-only shadow filters in definitions, and express touched actor placement without late initialization. First broad failures remain preserved."
+        }
+      ]
+    },
+    {
+      "mechanism": "sequence-resolved-head-alignment",
+      "account_commit": "00845306f8df250f86517580cc4cc7d4fbaf3b46",
+      "implementation_commits": [
+        "b4f37ab5840b8d70bf1246e3659f1902c0952a51"
+      ],
+      "account_unchanged": true,
+      "account_introduction": "00845306f8df250f86517580cc4cc7d4fbaf3b46",
+      "implementations": [
+        {
+          "commit": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+          "account_is_strict_ancestor": true,
+          "commit_message": "fix: align sequence heads using resolved component heights\n\nPreimplementation account 00845306, continuing 5b45a172. Share the existing resolved head band between maximum reservation and bottom-aligned paint; Java ParticipantBox#drawHeadTailU and LivingSpaces#drawHeads are the consumers. Both scoped actor shadow controls now match through real CLI and both library modes. The account names LivingSpace#drawHead as the Teoz drawing consumer; LivingSpaces#drawHeads performs the preceding max-minus-height translation."
+        }
+      ]
+    }
+  ],
+  "source_hash_errors": [],
+  "entries": 2021,
+  "unique_bytes": 1973,
+  "duplicates": 48,
+  "ascii_diff": "diff --git a/crates/rustuml-render/src/ascii.rs b/crates/rustuml-render/src/ascii.rs\nindex 5b9d745c..a529de75 100644\n--- a/crates/rustuml-render/src/ascii.rs\n+++ b/crates/rustuml-render/src/ascii.rs\n@@ -537,6 +537,7 @@ mod tests {\n                 source_cross: false,\n                 source_circle: false,\n                 target_circle: false,\n+                source_dressing: None,\n             },\n             activation: None,\n             activation_color: None,\n@@ -560,6 +561,7 @@ mod tests {\n                 source_cross: false,\n                 source_circle: false,\n                 target_circle: false,\n+                source_dressing: None,\n             },\n             activation: None,\n             activation_color: None,"
+}
