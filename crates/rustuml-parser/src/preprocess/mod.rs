@@ -3,6 +3,8 @@
 
 //! TIM preprocessor — handles variables, defines, conditionals,
 //! includes, and comments before diagram-specific parsing.
+//
+// Checker4 corrective contracts: precommitted causal accounts 6d46a483aad389d4535e1ba24822fdd116baf517.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -372,7 +374,7 @@ enum Expression {
     Number(String),
     Not(Box<Expression>),
     Binary(Box<Expression>, String, Box<Expression>),
-    Call(String, Vec<(Option<String>, Expression)>),
+    Call(String, Vec<(Option<Expression>, Expression)>),
 }
 
 // ---------------------------------------------------------------------------
@@ -943,7 +945,7 @@ impl PreprocessContext {
         // as text; no special theme-only subblock execution path exists.
         if let Some(name) = self.collecting_sub.clone() {
             self.push_directive_placeholder(output);
-            if trimmed == "!endsub" {
+            if directive_argument(trimmed, "!endsub").is_some() {
                 self.collecting_sub = None;
                 let body = std::mem::take(&mut self.collecting_sub_lines);
                 self.subs.insert(name, body.clone());
@@ -1000,7 +1002,7 @@ impl PreprocessContext {
             self.push_directive_placeholder(output);
             return;
         }
-        if trimmed == "!endsub" {
+        if directive_argument(trimmed, "!endsub").is_some() {
             self.push_directive_placeholder(output);
             return;
         }
@@ -1089,20 +1091,9 @@ impl PreprocessContext {
                 if let Some(expanded) = self.try_expand_archimate(line_no_comment.trim()) {
                     expanded
                 } else {
-                    // Try definelong macro expansion.
-                    let subst = self.substitute_vars(&line_no_comment);
-                    let (after_definelong, expanded_multiline) =
-                        self.try_expand_definelong(&subst).unwrap_or((subst, false));
-                    if expanded_multiline {
-                        // Java TFunctionImpl.executeProcedureInternal feeds
-                        // multiline LEGACY_DEFINELONG bodies back through
-                        // TContext.executeLines with their StringLocated
-                        // definition origins. Following caller lines therefore
-                        // need explicit origins once expansion changes length.
-                        self.mark_source_lines = true;
-                    }
-                    // Expand any inline $func(args) calls in output content.
-                    after_definelong
+                    // Legacy functions participate in the same original-source
+                    // scan as variables. Never rescan the completed substitution.
+                    self.substitute_vars(&line_no_comment)
                 };
             // A definelong expansion can produce multiple lines joined with '\n'.
             // Split them so each line is processed individually by the parser.
@@ -1283,78 +1274,44 @@ impl PreprocessContext {
         false
     }
 
-    fn try_expand_definelong(&self, line: &str) -> Option<(String, bool)> {
-        let trimmed = line.trim();
-        // Try each definelong macro.
-        for (name, dl) in &self.definelong_macros {
-            // Check if line contains a macro call: NAME(args)
-            if let Some(idx) = trimmed.find(&format!("{name}(")) {
-                let after = &trimmed[idx + name.len()..];
-                if let Some(end) = find_matching_paren(after) {
-                    let args_str = &after[1..end];
-                    let args = split_args(args_str);
-
-                    // Expand: substitute params in body using whole-word replacement
-                    // to avoid a short param name (e.g. "a") matching as a
-                    // substring inside another param name (e.g. "label").
-                    let mut result_lines = Vec::new();
-                    for body_line in &dl.body {
-                        let mut expanded = body_line.text.clone();
-                        for (i, param) in dl.params.iter().enumerate() {
-                            if let Some(arg) = args.get(i) {
-                                // Use word-boundary regex so that a param like
-                                // "a" does not replace the "a" inside "label".
-                                if let Ok(re) =
-                                    Regex::new(&format!(r"\b{}\b", regex::escape(param)))
-                                {
-                                    expanded = re.replace_all(&expanded, arg.as_str()).to_string();
-                                }
-                            }
-                        }
-                        // Apply ## token-pasting: collapse "foo##bar" → "foobar".
-                        expanded = expanded.replace("##", "");
-                        // TFunctionImpl.finalizeEnddefinelong converts a
-                        // one-line body to LEGACY_DEFINE, which expands inline
-                        // at the caller. Multiline bodies remain procedures and
-                        // retain each StringLocated definition line.
-                        if dl.body.len() > 1 {
-                            expanded = source_line_marker(body_line.source_line, &expanded);
-                        }
-                        result_lines.push(expanded);
-                    }
-                    // For single-line macros, replace inline.
-                    if result_lines.len() == 1 {
-                        let prefix = &trimmed[..idx];
-                        let suffix = &trimmed[idx + name.len() + end + 1..];
-                        return Some((format!("{prefix}{}{suffix}", result_lines[0]), false));
-                    }
-                    return Some((result_lines.join("\n"), true));
-                }
-            }
-            // Bare name match (no parens, no params).
-            if dl.params.is_empty() && trimmed.contains(name.as_str()) {
-                // Only substitute word-boundary matches.
-                if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name)))
-                    && re.is_match(trimmed)
-                {
-                    let body = dl
-                        .body
-                        .iter()
-                        .map(|line| {
-                            if dl.body.len() > 1 {
-                                source_line_marker(line.source_line, &line.text)
-                            } else {
-                                line.text.clone()
-                            }
-                        })
-                        .collect::<Vec<_>>()
-                        .join("\n");
-                    let result = re.replace_all(trimmed, body.as_str()).to_string();
-                    return Some((result, dl.body.len() > 1));
-                }
-            }
+    fn expand_definelong(&self, name: &str, args: &[String]) -> (String, bool) {
+        let definition = &self.definelong_macros[name];
+        // Bind legacy parameters in one pass over each original body line;
+        // inserted arguments are values and cannot become another parameter.
+        let pattern = definition
+            .params
+            .iter()
+            .map(|p| regex::escape(p))
+            .collect::<Vec<_>>()
+            .join("|");
+        let binding =
+            (!pattern.is_empty()).then(|| Regex::new(&format!(r"\b(?:{pattern})\b")).unwrap());
+        let mut lines = Vec::new();
+        for body in &definition.body {
+            let text = if let Some(binding) = &binding {
+                binding
+                    .replace_all(&body.text, |captures: &regex::Captures<'_>| {
+                        let index = definition
+                            .params
+                            .iter()
+                            .position(|name| name == &captures[0])
+                            .unwrap();
+                        args[index].clone()
+                    })
+                    .into_owned()
+            } else {
+                body.text.clone()
+            };
+            // Retain the existing legacy token-paste lowering. Full legacy
+            // function-body execution is not changed by source-scan selection.
+            let text = text.replace("##", "");
+            lines.push(if definition.body.len() > 1 {
+                source_line_marker(body.source_line, &text)
+            } else {
+                text
+            });
         }
-        None
+        (lines.join("\n"), definition.body.len() > 1)
     }
 
     fn try_function_def(&mut self, line: &str) -> bool {
@@ -1485,7 +1442,7 @@ impl PreprocessContext {
         if self.error.is_some() {
             return (None, Vec::new());
         }
-        self.call_function_values(name, positional, named)
+        self.call_function_values(name, positional, named, false)
     }
 
     fn call_function_values(
@@ -1493,6 +1450,7 @@ impl PreprocessContext {
         name: &str,
         positional: Vec<Value>,
         mut named: HashMap<String, Value>,
+        expression_call: bool,
     ) -> (Option<Value>, Vec<EvaluatedEvent>) {
         if self.error.is_some() {
             return (None, Vec::new());
@@ -1501,6 +1459,26 @@ impl PreprocessContext {
             self.fail(format!("Unknown built-in function {name}"));
             return (None, Vec::new());
         };
+        // FunctionsSet first matches positional signature arity. RPN also
+        // calls canCover with an empty named set; plain calls supply key names.
+        let exact_signature = positional.len() == func.params.len();
+        let needed = func
+            .params
+            .iter()
+            .filter(|param| {
+                param.default.is_none() && (expression_call || !named.contains_key(&param.name))
+            })
+            .count();
+        let unknown_name = !expression_call
+            && named
+                .keys()
+                .any(|key| !func.params.iter().any(|param| &param.name == key));
+        if (expression_call || !exact_signature)
+            && (positional.len() > func.params.len() || positional.len() < needed || unknown_name)
+        {
+            self.fail(format!("Bad number of arguments for {name}"));
+            return (None, Vec::new());
+        }
         let mut positional = positional.into_iter();
         let mut scope = LocalMemory::default();
         for param in &func.params {
@@ -1652,6 +1630,12 @@ impl PreprocessContext {
                     .keys()
                     .map(|key| Value::Json(serde_json::Value::String(key.clone())))
                     .collect(),
+                Value::Json(_) => {
+                    // EaterForeach.size rejects JSON scalars; toJson on a
+                    // non-JSON TValue instead returns null, which is skipped.
+                    self.fail("Foreach requires a JSON array or object".into());
+                    return true;
+                }
                 _ => Vec::new(),
             };
 
@@ -1894,30 +1878,10 @@ impl PreprocessContext {
                 let mut selected = Vec::new();
                 let mut found = false;
                 let mut skip = false;
-                let mut comment = false;
                 for (index, text) in content.lines().enumerate() {
+                    // Sub.fromFile sees raw markers before TIM's comment iterators.
+                    // UncommentReadLine handles embedding prefixes, not TIM comments.
                     let trimmed = text.trim();
-                    // TContext uses UncommentReadLine before Sub.fromFile.
-                    if comment {
-                        if trimmed.ends_with("'/") {
-                            comment = false;
-                        }
-                        continue;
-                    }
-                    if trimmed.starts_with("/'") {
-                        if !trimmed.contains("'/") {
-                            comment = true;
-                            continue;
-                        }
-                        if trimmed.ends_with("'/") {
-                            continue;
-                        }
-                    }
-                    if trimmed.starts_with('\'') {
-                        continue;
-                    }
-                    let clean = remove_inner_comment(text);
-                    let trimmed = clean.trim();
                     if let Some(name) = directive_argument(trimmed, "!startsub") {
                         // Sub.fromFile validates every marker, even before a
                         // selected block. Suppression applies only to body execution.
@@ -1938,7 +1902,7 @@ impl PreprocessContext {
                     }
                     if found && !skip {
                         selected.push(BufferedLine {
-                            text: clean,
+                            text: text.to_string(),
                             raw_source_line: index + 1,
                             source_line: index,
                         });
@@ -2218,9 +2182,10 @@ impl PreprocessContext {
                 split_builtin_args(raw)
                     .into_iter()
                     .map(|arg| {
-                        let (key, value) = named_argument(arg).map_or((None, arg), |(k, v)| {
-                            (Some(k.trim_start_matches('$').to_string()), v)
-                        });
+                        // ShuntingYard resolves the AFFECTATION left operand
+                        // through Knowledge too. EaterFunctionCall keeps it literal.
+                        let (key, value) = named_argument(arg)
+                            .map_or((None, arg), |(k, v)| (Some(self.prepare_expression(k)), v));
                         (key, self.prepare_expression(value))
                     })
                     .collect()
@@ -2292,12 +2257,15 @@ impl PreprocessContext {
                 let mut positional = Vec::new();
                 let mut named = HashMap::new();
                 for (key, expression) in args {
+                    let key = key
+                        .as_ref()
+                        .map(|key| self.execute_expression(key).to_display());
                     let value = self.execute_expression(expression);
                     if self.error.is_some() {
                         return Value::Str(String::new());
                     }
                     if let Some(key) = key {
-                        named.insert(key.clone(), value);
+                        named.insert(key.trim_start_matches('$').to_string(), value);
                     } else {
                         positional.push(value);
                     }
@@ -2318,7 +2286,7 @@ impl PreprocessContext {
                     );
                     return Value::Str(String::new());
                 }
-                let (ret, events) = self.call_function_values(name, positional, named);
+                let (ret, events) = self.call_function_values(name, positional, named, true);
                 self.expression_events.extend(events);
                 ret.unwrap_or_else(|| Value::Str(String::new()))
             }
@@ -2487,6 +2455,9 @@ impl PreprocessContext {
             // appended values are never rescanned as legacy macro source.
             if (ch.is_alphanumeric() || ch == '_')
                 && (offset == 0
+                    // VariableManager.justAfterBackslashN treats literal \n as
+                    // a token boundary without rescanning appended values.
+                    || line[..offset].ends_with("\\n")
                     || !line[..offset]
                         .chars()
                         .next_back()
@@ -2496,7 +2467,64 @@ impl PreprocessContext {
                     .char_indices()
                     .find(|(_, c)| !c.is_alphanumeric() && *c != '_')
                     .map_or(line.len(), |(i, _)| offset + i);
-                if let Some(value) = self.token_defines.get(&line[offset..end]).cloned() {
+                let name = &line[offset..end];
+                if let Some(definition) = self.definelong_macros.get(name)
+                    && line[end..].starts_with('(')
+                    && let Some(close) = find_matching_paren_from(line, end)
+                {
+                    // FunctionsSet registers even zero-argument definelong as
+                    // NAME(. EaterFunctionCall evaluates legacy string arguments
+                    // once; a bare name is not a function invocation.
+                    let expected = definition.params.len();
+                    let raw = &line[end + 1..close];
+                    let parts = if raw.trim().is_empty() {
+                        Vec::new()
+                    } else {
+                        split_builtin_args(raw)
+                    };
+                    let args = parts
+                        .into_iter()
+                        .map(|arg| {
+                            let arg = arg.trim();
+                            let text = if let Some(quote) =
+                                arg.chars().next().filter(|c| matches!(c, '\'' | '"'))
+                                && arg.len() >= 2
+                                && arg.ends_with(quote)
+                            {
+                                &arg[1..arg.len() - 1]
+                            } else {
+                                arg
+                            };
+                            self.substitute_vars(text)
+                        })
+                        .collect::<Vec<_>>();
+                    if args.len() != expected {
+                        self.fail(format!("Function not found {name}"));
+                        return String::new();
+                    }
+                    let (expanded, multiline) = self.expand_definelong(name, &args);
+                    if multiline {
+                        self.mark_source_lines = true;
+                        for (index, line) in expanded.split('\n').enumerate() {
+                            let (origin, text) = split_source_line_marker(line)
+                                .map_or((None, line), |(n, t)| (Some(n), t));
+                            let text = if index == 0 {
+                                format!("{result}{text}")
+                            } else {
+                                text.to_string()
+                            };
+                            self.expression_events.push(EvaluatedEvent::Plain(
+                                origin.map_or(text.clone(), |n| source_line_marker(n, &text)),
+                            ));
+                        }
+                        self.text_consumed = true;
+                        return String::new();
+                    }
+                    result.push_str(&expanded);
+                    offset = close + 1;
+                    continue;
+                }
+                if let Some(value) = self.token_defines.get(name).cloned() {
                     let (value, end) = self.variable_path(value, line, end);
                     result.push_str(&value.to_display());
                     offset = end;
@@ -2535,6 +2563,11 @@ impl PreprocessContext {
                     break;
                 };
                 let Some(field) = object.get(&text[start..end]) else {
+                    // VariableManager.replaceJson allows a final missing field,
+                    // but cannot traverse a subsequent member/index through null.
+                    if text[end..].starts_with(['.', '[']) {
+                        self.fail("Data parsing error: missing intermediate member".into());
+                    }
                     return (Value::Str(String::new()), end);
                 };
                 json = field.clone();
@@ -2670,6 +2703,59 @@ impl PreprocessContext {
     fn eval_builtin_values(&mut self, func: &str, values: &[Value]) -> Value {
         if self.error.is_some() {
             return Value::Str(String::new());
+        }
+        // FunctionsSet.getFunctionSmart / each implemented builtin's canCover.
+        // Argument expressions have executed already; no body runs on mismatch.
+        if builtin_arity(func).is_some_and(|arity| !arity.contains(&values.len())) {
+            self.fail(format!("Unknown built-in function %{func}"));
+            return Value::Str(String::new());
+        }
+        match func {
+            "upper" | "lower" => {
+                // Upper/Lower call Java String case conversion, which preserves
+                // unmatched UTF-16 units. Convert valid spans, not lossy display.
+                let units = values[0].utf16_units();
+                let mut result = Vec::new();
+                let mut span = String::new();
+                for decoded in char::decode_utf16(units) {
+                    match decoded {
+                        Ok(ch) => span.push(ch),
+                        Err(error) => {
+                            append_case_span(&mut result, &span, func == "upper");
+                            span.clear();
+                            result.push(error.unpaired_surrogate());
+                        }
+                    }
+                }
+                append_case_span(&mut result, &span, func == "upper");
+                return Value::from_utf16(result);
+            }
+            "chr" => {
+                // Chr uses TValue.toInt and Character.toChars; the latter
+                // permits BMP surrogate code units and catches invalid points as NUL.
+                let code = values[0].java_int();
+                return Value::from_utf16(if let Ok(unit) = u16::try_from(code) {
+                    vec![unit]
+                } else if let Some(ch) = u32::try_from(code).ok().and_then(char::from_u32) {
+                    ch.encode_utf16(&mut [0; 2]).to_vec()
+                } else {
+                    vec![0]
+                });
+            }
+            "boolval" => {
+                // BoolVal trueValues/falseValues are explicit textual conversions,
+                // not TValue.toBoolean (where nonempty text "false" is truthy).
+                let text = values[0].to_display().to_lowercase();
+                return match text.as_str() {
+                    "true" | "1" => Value::Int(1),
+                    "false" | "0" => Value::Int(0),
+                    _ => {
+                        self.fail(format!("Cannot convert {text} to boolean."));
+                        Value::Str(String::new())
+                    }
+                };
+            }
+            _ => {}
         }
         let args: Vec<String> = values.iter().map(Value::to_display).collect();
         let refs: Vec<&str> = args.iter().map(String::as_str).collect();
@@ -2817,8 +2903,6 @@ impl PreprocessContext {
             "strlen" => args
                 .first()
                 .map_or("0".to_string(), |s| s.encode_utf16().count().to_string()),
-            "upper" => args.first().map_or(String::new(), |s| s.to_uppercase()),
-            "lower" => args.first().map_or(String::new(), |s| s.to_lowercase()),
             "newline" => "\n".to_string(),
             "tab" => "\t".to_string(),
             // PlantUML's %true() and %false() return numeric 1 and 0, not
@@ -2872,10 +2956,6 @@ impl PreprocessContext {
                 .first()
                 .and_then(|s| s.parse::<f64>().ok())
                 .map_or("0".to_string(), |n| format!("{}", n as i64)),
-            "chr" => {
-                let code: u32 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
-                char::from_u32(code).map_or(String::new(), |c| c.to_string())
-            }
             "darken" => {
                 // PlantUML `%darken(color, ratio)` decreases luminance by a
                 // *relative* fraction: `L -= L * (ratio / 100)`. Match Java's
@@ -3093,6 +3173,34 @@ fn format_java_date(epoch_ms: i64, tz: &TzSpec) -> String {
         mon = MONTHS[month],
         tz = tz.name,
     )
+}
+
+// Arity is taken from tim/builtin/<class>.canCover for already implemented
+// dispatch entries. Registration is intentionally separate: unimplemented names
+// remain explicit errors, never synthetic empty results. Rust-only extensions
+// retain their previous contracts.
+fn builtin_arity(name: &str) -> Option<std::ops::RangeInclusive<usize>> {
+    Some(match name {
+        "true" | "false" | "newline" | "tab" | "filename" | "dirpath" => 0..=0,
+        "upper" | "lower" | "chr" | "boolval" | "strlen" | "string" | "dec2hex" | "not"
+        | "get_variable_value" | "getenv" | "str2json" | "size" | "intval" | "hex2dec"
+        | "is_dark" | "is_light" | "variable_exists" | "function_exists" | "file_exists"
+        | "feature" => 1..=1,
+        "strpos" | "set_variable_value" | "darken" | "lighten" => 2..=2,
+        "substr" => 2..=3,
+        "date" => 0..=2,
+        "hsl_color" => 3..=4,
+        _ => return None,
+    })
+}
+
+fn append_case_span(units: &mut Vec<u16>, text: &str, upper: bool) {
+    let mapped = if upper {
+        text.to_uppercase()
+    } else {
+        text.to_lowercase()
+    };
+    units.extend(mapped.encode_utf16());
 }
 
 // TContext.addStandardFunctions registers these names before text expansion.
@@ -3499,6 +3607,113 @@ mod tests {
             assert_eq!(ctx.eval_expr_to_value(expression).to_display(), expected);
             assert!(ctx.error.is_none());
         }
+    }
+
+    #[test]
+    fn case_conversion_preserves_utf16_and_chr_keeps_typed_contract() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (expr, units) in [
+            (
+                r#"%upper(%substr("🦉",0,1))+%lower(%substr("🦉",1,1))"#,
+                "🦉".encode_utf16().collect(),
+            ),
+            (
+                r#"%upper("oak"+%substr("🦉",0,1))"#,
+                vec![79, 65, 75, 0xd83e],
+            ),
+            (r#"%chr("65")"#, vec![0]),
+            (r#"%chr(%str2json("65"))"#, vec![0]),
+            ("%chr(65)", vec![65]),
+            ("%chr(55296)", vec![55296]),
+        ] {
+            assert_eq!(ctx.eval_expr_to_value(expr).utf16_units(), units, "{expr}");
+            assert!(ctx.error.is_none());
+        }
+    }
+
+    #[test]
+    fn boolval_is_text_conversion_not_truthiness() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (expr, expected) in [
+            (r#"%boolval("TrUe")+2"#, "3"),
+            (r#"%boolval(%str2json("false"))+3"#, "3"),
+            (r#"%boolval(1)+%boolval("0")"#, "1"),
+        ] {
+            assert_eq!(ctx.eval_expr_to_value(expr).to_display(), expected);
+            assert!(ctx.error.is_none());
+        }
+        ctx.eval_expr_to_value(r#"%boolval("00")"#);
+        assert_eq!(ctx.error.unwrap().message, "Cannot convert 00 to boolean.");
+    }
+
+    #[test]
+    fn arity_failure_occurs_after_arguments_and_before_body_or_next_expression() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return 1\n!endfunction");
+        ctx.eval_expr_to_value(r#"%strlen($tick(),"extra")+%date("Q",0)"#);
+        assert_eq!(
+            ctx.error.as_ref().unwrap().message,
+            "Unknown built-in function %strlen"
+        );
+        assert!(matches!(ctx.get_var("n"), Some(Value::Int(1))));
+        let output = preprocess_full(
+            "@startuml\n!function $only($a)\n!return $a\n!endfunction\n!$v=$only()\nclass After\n@enduml",
+            None,
+        );
+        assert!(
+            output
+                .error
+                .unwrap()
+                .message
+                .contains("Bad number of arguments")
+        );
+        assert!(!output.uml_source.contains("class"));
+    }
+
+    #[test]
+    fn named_keys_are_expression_operands_but_plain_call_literals() {
+        let source = "@startuml\n!$a=\"$b\"\n!function $pair($a=\"seed\",$b=\"leaf\")\n!return $a+\"/\"+$b\n!endfunction\n!$r=$pair($a=\"oak\",$b=4)\nclass \"$r / $pair($a=\"elm\",$b=5)\" as Keys\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"seed/4 / elm/5\" as Keys\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn legacy_calls_scan_original_text_once_with_newline_boundary() {
+        let source = "@startuml\n!define TOKEN gold\n!definelong STAMP()\nchanged\n!enddefinelong\n!$v=\"STAMP()\"\nclass \"$v / STAMP() / STAMP / north\\nTOKEN / prefixTOKEN\" as Literal\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"STAMP() / changed / STAMP / north\\ngold / prefixTOKEN\" as Literal\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn local_sub_end_suffix_closes_before_following_model() {
+        let source = "@startuml\n!$n=0\n!startsub chosen\n!$n=$n+2\n!endsub: suffix\n!includesub chosen\nclass Record$n\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass Record4\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn json_scalar_iteration_and_intermediate_missing_members_are_fatal() {
+        for expr in ["true", "3", "null", "\"text\""] {
+            let source = format!(
+                "@startuml\n!foreach $x in %str2json('{expr}')\n!endfor\nclass After\n@enduml"
+            );
+            let output = preprocess_full(&source, None);
+            assert!(output.error.is_some(), "{expr}");
+            assert!(!output.uml_source.contains("class"));
+        }
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.eval_expr_to_value(r#"{"present":1}"#);
+        ctx.process("@startuml\n!$data={\"present\":1}");
+        assert_eq!(ctx.eval_expr_to_value("$data.absent").to_display(), "");
+        assert!(ctx.error.is_none());
+        ctx.eval_expr_to_value("$data.absent[0]");
+        assert!(ctx.error.is_some());
     }
 
     #[test]
@@ -4213,7 +4428,8 @@ class QuartzLedger {
 
         let lines = preprocess_full_for_parse(input, None).lines;
         assert_eq!(lines[4], "class QuartzLedger {");
-        assert_eq!(lines[5], "  +token: String");
+        // TContext appends caller prefix and TFunctionImpl legacy return verbatim.
+        assert_eq!(lines[5], "    +token: String");
     }
 
     #[test]
