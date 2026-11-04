@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "corrective maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "00e00750b42f448ab45441c9d2cdd84b1ee5eb78",
+  "java_locations": [
+    "svek/image/EntityImageDescription stereotype TextBlockUtils.withMargin(text,1,0)",
+    "klimt/shape/TextBlockMarged#drawU",
+    "klimt/drawing/LimitFinder#drawEmpty"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#DescriptionText,entity_painted_extent,entity_frontier_min"
+  ],
+  "invariant": "Stereotype margin wrapper draws a UEmpty of its complete preferred dimensions before translated text. That UEmpty contributes both bounds even though it serializes no SVG element. Positioned text is not the whole drawing model.",
+  "causal_divergence": "v3 focused regression detects8 old56 actor passes and2 preserved1559 boundary passes lost. New extrema omit TextBlockMarged UEmpty and its1px left/right margins, shifting complete graphs and narrowing canvas.",
+  "planned_change": "Compose stereotype text extrema with the actual margin wrapper UEmpty and translation; use the resulting block bounds in both min/max unions. No font or fixture subtraction, no changes to graph/native. Preserve v3 regression outputs.",
+  "perturbation_axes": [
+    "stereotype wider/narrower than label and font sizes",
+    "actor/boundary and LR/TB linked geometry"
+  ]
+}
