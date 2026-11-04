@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-phantom-quark-materialization-phase",
+  "status": "maker correction plan; not accepted",
+  "corrects_prior_plan": "class-note-quark-modifier-lifecycle",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8d81598b9ba970878504d403c6715e0c15db5c05",
+  "java_locations": [
+    "net/atmp/CucaDiagram.java#reallyCreateLeaf lines219-241",
+    "net/atmp/CucaDiagram.java#eventuallyBuildPhantomGroups lines324-336",
+    "net/atmp/CucaDiagram.java#gotoGroup lines348-358",
+    "net/atmp/CucaDiagram.java#getTextBlock lines490",
+    "abel/LeafType.java#LIKE_CLASS"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#ensure_phantom_packages,push_note,create_entity_at_path,try_package,finish"
+  ],
+  "invariant": "Quark ancestors exist before their group Entity data. Only isLikeClass leaf creation materializes all missing groups immediately; NOTE creation does not. Explicit group entry creates missing data at that command, but never replaces location of existing data. Remaining missing groups materialize before render.",
+  "causal_divergence": "The previous correction wrongly treated phantom group data as replaceable at every explicit reopening. Eight preserved passes exposed that groups already materialized by class/link creation retain their original location. Named notes differ because their parent quarks have no group data until a later class, explicit group or final materialization. Eager note ensure_phantom_packages collapsed these phases.",
+  "planned_change": "Create ancestor placeholders without allocating group UID/source metadata for notes and other non-class leaves. Materialize outstanding placeholder groups after a class-like leaf, on explicit group entry or at finish, in creation order; assign group UID only at that transition. Preserve existing group locations. This replaces the overly broad phantom-reopening source-line update.",
+  "perturbation_axes": [
+    "Qualified named note followed by explicit group versus class-like leaf in another scope",
+    "Class/relation-created phantom then explicit reopening, deeper nesting and declaration order"
+  ],
+  "verification_plan": "Repair all eight identified lost passes while retaining qualified_reopen; structured model tests for UID/source metadata and exact retained CLI comparisons. Existing rejected records unchanged."
+}
