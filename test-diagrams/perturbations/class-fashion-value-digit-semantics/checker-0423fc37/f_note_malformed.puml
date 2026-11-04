@@ -1,0 +1,9 @@
+@startuml
+<style>
+note {
+Shadowing 1.2.3
+}
+</style>
+note "memorandum" as Token
+url Token [[https://example.org/note]]
+@enduml

@@ -1,0 +1,9 @@
+{
+  "sha256": "393c2d3f3a817670f3020489138e7086cc68bc7e545ff494ff2271b422a7c290",
+  "bytes": 10397344,
+  "files_verified": 25631,
+  "artifact": "evidence.tar.gz",
+  "maker_archive": "docs/parity-reviews/class-quark-context-checked-identity/maker-evidence/packet7/packet7-evidence.tar.gz",
+  "maker_archive_sha256": "72972d5b8b2033091dc317d23ebb869936c6cd4ab186c12478a9fcdc4927576f",
+  "excluded": "Private build targets, binary artifacts and git archives; exact build commands/hashes retained. All own capture streams, inputs, references and full models are included."
+}

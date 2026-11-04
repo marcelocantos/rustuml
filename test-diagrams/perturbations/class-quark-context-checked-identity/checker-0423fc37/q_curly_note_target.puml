@@ -1,0 +1,6 @@
+@startuml
+class Beacon
+note right of “Beacon”
+memorandum
+end note
+@enduml

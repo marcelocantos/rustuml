@@ -1,0 +1,3 @@
+@startuml
+class Beacon extends Cove..Token
+@enduml

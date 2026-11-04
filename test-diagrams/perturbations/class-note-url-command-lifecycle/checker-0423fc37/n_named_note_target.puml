@@ -1,0 +1,6 @@
+@startuml
+note "named memorandum" as Token
+note right of Token [[https://example.org/attached{tip}]] {
+second memorandum
+}
+@enduml

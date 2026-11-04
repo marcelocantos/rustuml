@@ -1,0 +1,11 @@
+@startuml
+<style>
+boundary {
+Shadowing -.25rem
+}
+</style>
+allowmixing
+boundary "Gateway" as Port
+class Beacon
+Port --> Beacon
+@enduml

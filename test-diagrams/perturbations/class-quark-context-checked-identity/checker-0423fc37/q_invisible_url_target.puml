@@ -1,0 +1,4 @@
+@startuml
+class Beacon
+url Beacon [[https://example.org/opaque]]
+@enduml

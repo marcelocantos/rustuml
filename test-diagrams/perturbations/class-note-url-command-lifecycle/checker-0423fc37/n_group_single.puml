@@ -1,0 +1,6 @@
+@startuml
+package Cove {
+class Beacon
+}
+note left of Cove [[https://example.org/ignored]] : memorandum
+@enduml

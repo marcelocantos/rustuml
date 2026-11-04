@@ -1,0 +1,7 @@
+@startuml
+skinparam topurl https://example.org/base/
+skinparam svgLinkTarget _self
+note "wide memorandum\nsecond row" as Token
+url Token [[old]]
+url Token [["new page"{final tip}]]
+@enduml

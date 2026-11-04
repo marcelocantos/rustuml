@@ -1,0 +1,8 @@
+@startuml
+<style>
+note {
+Shadowing false
+}
+</style>
+note "memorandum" as Token
+@enduml

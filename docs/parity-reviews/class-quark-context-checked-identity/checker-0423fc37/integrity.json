@@ -1,0 +1,1053 @@
+{
+  "candidate": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+  "packet_files_verified": 365,
+  "archive_members_verified": 33591,
+  "historical_files_verified": 8802,
+  "snapshot_entries": 1793,
+  "unique_sources": 1719,
+  "cohorts": {
+    "fresh32": {
+      "entries": 32,
+      "unique_sources": 32
+    },
+    "frozen1761": {
+      "entries": 1761,
+      "unique_sources": 1687
+    }
+  },
+  "duplicate_extra_entries": 74,
+  "duplicate_sources": [
+    {
+      "sha256": "f12696f3d3a0a7a81a7f28f57e1c9abdee839c552b0237f1421c1ea6ccf3c28c",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/left_False.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f12696f3d3a0a7a81a7f28f57e1c9abdee839c552b0237f1421c1ea6ccf3c28c",
+          "reference_blob": "fddbe0c26516ce8e10d4f454c67ebe288d1682ce59a21a5b600e3741464b9190"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_False.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f12696f3d3a0a7a81a7f28f57e1c9abdee839c552b0237f1421c1ea6ccf3c28c",
+          "reference_blob": "fddbe0c26516ce8e10d4f454c67ebe288d1682ce59a21a5b600e3741464b9190"
+        }
+      ]
+    },
+    {
+      "sha256": "e5e6de599409f82754a79fad659ca9e4a67deed095274b6990d2d805b71edb9b",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/left_True.puml",
+          "cohort": "frozen1761",
+          "source_blob": "e5e6de599409f82754a79fad659ca9e4a67deed095274b6990d2d805b71edb9b",
+          "reference_blob": "7a5b230234f0e5240339476c093e7d7a8852e5b3a28c274597d80c709864211b"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_True.puml",
+          "cohort": "frozen1761",
+          "source_blob": "e5e6de599409f82754a79fad659ca9e4a67deed095274b6990d2d805b71edb9b",
+          "reference_blob": "7a5b230234f0e5240339476c093e7d7a8852e5b3a28c274597d80c709864211b"
+        }
+      ]
+    },
+    {
+      "sha256": "fd5d0c68b5034a0f5dac73c9033fc03d19e83072362097d446ad6b76deec5474",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/style_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "fd5d0c68b5034a0f5dac73c9033fc03d19e83072362097d446ad6b76deec5474",
+          "reference_blob": "3cc031dea4297d5322ad41a3fa0cf1855cf3cb1f4c21adb9d39e979b9694e58d"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "fd5d0c68b5034a0f5dac73c9033fc03d19e83072362097d446ad6b76deec5474",
+          "reference_blob": "3cc031dea4297d5322ad41a3fa0cf1855cf3cb1f4c21adb9d39e979b9694e58d"
+        }
+      ]
+    },
+    {
+      "sha256": "19749ddf86b2a54545fa747be588f616bd58f629934dabe9d28e8a576fb2fb1d",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-chrome-bordered-block-geometry/checker/style_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "19749ddf86b2a54545fa747be588f616bd58f629934dabe9d28e8a576fb2fb1d",
+          "reference_blob": "f68b4796e7049953ef89233b15fd35f3f82d81edde4a9c8ec3937c73daa5476e"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "19749ddf86b2a54545fa747be588f616bd58f629934dabe9d28e8a576fb2fb1d",
+          "reference_blob": "f68b4796e7049953ef89233b15fd35f3f82d81edde4a9c8ec3937c73daa5476e"
+        }
+      ]
+    },
+    {
+      "sha256": "0403f02d8204b2474d709a733007c86792d61126633d4750e1245936fc99518b",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_cloud.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0403f02d8204b2474d709a733007c86792d61126633d4750e1245936fc99518b",
+          "reference_blob": "2f9977887f2ed0ae635f3ffacce5ba08d043fc5a212ac5b9cb152e47159b9999"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-svek-painted-origin/checker/origin_cloud.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0403f02d8204b2474d709a733007c86792d61126633d4750e1245936fc99518b",
+          "reference_blob": "2f9977887f2ed0ae635f3ffacce5ba08d043fc5a212ac5b9cb152e47159b9999"
+        }
+      ]
+    },
+    {
+      "sha256": "7ddf039ae50de3930d6384fdd898184321221288c364fbe4606c3e8c93f65839",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_node.puml",
+          "cohort": "frozen1761",
+          "source_blob": "7ddf039ae50de3930d6384fdd898184321221288c364fbe4606c3e8c93f65839",
+          "reference_blob": "98e729a01ff184b1ed970bcc7386ca894a5428e3577edc0a47f805df979bb100"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-svek-painted-origin/checker/origin_node.puml",
+          "cohort": "frozen1761",
+          "source_blob": "7ddf039ae50de3930d6384fdd898184321221288c364fbe4606c3e8c93f65839",
+          "reference_blob": "98e729a01ff184b1ed970bcc7386ca894a5428e3577edc0a47f805df979bb100"
+        }
+      ]
+    },
+    {
+      "sha256": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+          "cohort": "frozen1761",
+          "source_blob": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+          "reference_blob": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-group-paint-ownership/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+          "cohort": "frozen1761",
+          "source_blob": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+          "reference_blob": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/root_note_cloud.puml",
+          "cohort": "frozen1761",
+          "source_blob": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+          "reference_blob": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-svek-painted-origin/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+          "cohort": "frozen1761",
+          "source_blob": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+          "reference_blob": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280"
+        }
+      ]
+    },
+    {
+      "sha256": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_record.puml",
+          "cohort": "frozen1761",
+          "source_blob": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+          "reference_blob": "945318c15cbb5651d0386dddc4e8e180cca324d2f47e26247b499fbad355287f"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__bare_native_record.puml",
+          "cohort": "frozen1761",
+          "source_blob": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+          "reference_blob": "945318c15cbb5651d0386dddc4e8e180cca324d2f47e26247b499fbad355287f"
+        }
+      ]
+    },
+    {
+      "sha256": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_interface.puml",
+          "cohort": "frozen1761",
+          "source_blob": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+          "reference_blob": "aec79c53fd55a780407f558dd852f3a53f5981829edb563b486423e76fc61363"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__braced_note_interface.puml",
+          "cohort": "frozen1761",
+          "source_blob": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+          "reference_blob": "aec79c53fd55a780407f558dd852f3a53f5981829edb563b486423e76fc61363"
+        }
+      ]
+    },
+    {
+      "sha256": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+          "reference_blob": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+          "reference_blob": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+          "reference_blob": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02"
+        }
+      ]
+    },
+    {
+      "sha256": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+          "cohort": "frozen1761",
+          "source_blob": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+          "reference_blob": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+          "cohort": "frozen1761",
+          "source_blob": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+          "reference_blob": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+          "cohort": "frozen1761",
+          "source_blob": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+          "reference_blob": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8"
+        }
+      ]
+    },
+    {
+      "sha256": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+          "cohort": "frozen1761",
+          "source_blob": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+          "reference_blob": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+          "cohort": "frozen1761",
+          "source_blob": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+          "reference_blob": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+          "cohort": "frozen1761",
+          "source_blob": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+          "reference_blob": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7"
+        }
+      ]
+    },
+    {
+      "sha256": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+          "cohort": "frozen1761",
+          "source_blob": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+          "reference_blob": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+          "cohort": "frozen1761",
+          "source_blob": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+          "reference_blob": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+          "cohort": "frozen1761",
+          "source_blob": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+          "reference_blob": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17"
+        }
+      ]
+    },
+    {
+      "sha256": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+          "cohort": "frozen1761",
+          "source_blob": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+          "reference_blob": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+          "cohort": "frozen1761",
+          "source_blob": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+          "reference_blob": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+          "cohort": "frozen1761",
+          "source_blob": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+          "reference_blob": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12"
+        }
+      ]
+    },
+    {
+      "sha256": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/named-note-scoped-identity-closure__qualified_0.puml",
+          "cohort": "frozen1761",
+          "source_blob": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+          "reference_blob": "fe337b30308f1daee732b1773901030dc7962cc49d537bed69d36cb7e55a0af1"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_0.puml",
+          "cohort": "frozen1761",
+          "source_blob": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+          "reference_blob": "fe337b30308f1daee732b1773901030dc7962cc49d537bed69d36cb7e55a0af1"
+        }
+      ]
+    },
+    {
+      "sha256": "9f5a7148f6f9b90bff9340af136955ebcca4ae40763d01bc71a5b5bf1f5d11b4",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/note-target-quark__group_target_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "9f5a7148f6f9b90bff9340af136955ebcca4ae40763d01bc71a5b5bf1f5d11b4",
+          "reference_blob": "84bc27be7d3b5673e57e9a521488aa4983a04fb34c6c77c8a5d6d63b126de3ce"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-note-target-quark/checker/group_target_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "9f5a7148f6f9b90bff9340af136955ebcca4ae40763d01bc71a5b5bf1f5d11b4",
+          "reference_blob": "84bc27be7d3b5673e57e9a521488aa4983a04fb34c6c77c8a5d6d63b126de3ce"
+        }
+      ]
+    },
+    {
+      "sha256": "dea39482d5eb3039bd4d600216ab82453cad10853d84cbb767b8234c43e2fff7",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/package-command-precedence-closure__visibility_public.puml",
+          "cohort": "frozen1761",
+          "source_blob": "dea39482d5eb3039bd4d600216ab82453cad10853d84cbb767b8234c43e2fff7",
+          "reference_blob": "40b8e6e14a7638c89c1cfbdb05594067eca8e74ec891033ae7575442c16cdf5d"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-package-command-precedence-closure/checker/visibility_public.puml",
+          "cohort": "frozen1761",
+          "source_blob": "dea39482d5eb3039bd4d600216ab82453cad10853d84cbb767b8234c43e2fff7",
+          "reference_blob": "40b8e6e14a7638c89c1cfbdb05594067eca8e74ec891033ae7575442c16cdf5d"
+        }
+      ]
+    },
+    {
+      "sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+          "reference_blob": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-group-endpoint-routing/retained-maker/group_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+          "reference_blob": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-group-magnetic-extremities/retained-maker/group_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+          "reference_blob": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-group-paint-ownership/retained-maker/group_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+          "reference_blob": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-maker/group_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+          "reference_blob": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/retained-maker/group_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+          "reference_blob": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-svek-painted-origin/retained-maker/group_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+          "reference_blob": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454"
+        }
+      ]
+    },
+    {
+      "sha256": "7790b9944dea121fb8d4d2a55846216dab78d4466b50abed830cede63494a817",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/grouped_record.puml",
+          "cohort": "frozen1761",
+          "source_blob": "7790b9944dea121fb8d4d2a55846216dab78d4466b50abed830cede63494a817",
+          "reference_blob": "bc03905cab65a8a6e7e6c2cee1af8b5279a81eeaa65cb9ad743a2f09b38ede51"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-group-paint-ownership/dependencies/current-spot-cascade__grouped_record.puml",
+          "cohort": "frozen1761",
+          "source_blob": "7790b9944dea121fb8d4d2a55846216dab78d4466b50abed830cede63494a817",
+          "reference_blob": "bc03905cab65a8a6e7e6c2cee1af8b5279a81eeaa65cb9ad743a2f09b38ede51"
+        }
+      ]
+    },
+    {
+      "sha256": "278630db916998ab8420afe441c453e71deecbbe12b5fb0878fa5c55d1a807fa",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-description-leaf-image-dependency/checker/dependency_component_uml1.puml",
+          "cohort": "frozen1761",
+          "source_blob": "278630db916998ab8420afe441c453e71deecbbe12b5fb0878fa5c55d1a807fa",
+          "reference_blob": "180e1ede9b580b38af514d9b2de569c1af0d4bbe39299765dcd7cc9882ce5a3e"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml1.puml",
+          "cohort": "frozen1761",
+          "source_blob": "278630db916998ab8420afe441c453e71deecbbe12b5fb0878fa5c55d1a807fa",
+          "reference_blob": "180e1ede9b580b38af514d9b2de569c1af0d4bbe39299765dcd7cc9882ce5a3e"
+        }
+      ]
+    },
+    {
+      "sha256": "553a04198f607f2bc29d1bac2f10000d36ddca95bd8dd43972538846c899f428",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-description-leaf-image-dependency/checker/dependency_component_uml2.puml",
+          "cohort": "frozen1761",
+          "source_blob": "553a04198f607f2bc29d1bac2f10000d36ddca95bd8dd43972538846c899f428",
+          "reference_blob": "366fc8606758f3e1a11b5ef91102f55f820b4f840a6c15d5f5d24acb2ecc9fe8"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml2.puml",
+          "cohort": "frozen1761",
+          "source_blob": "553a04198f607f2bc29d1bac2f10000d36ddca95bd8dd43972538846c899f428",
+          "reference_blob": "366fc8606758f3e1a11b5ef91102f55f820b4f840a6c15d5f5d24acb2ecc9fe8"
+        }
+      ]
+    },
+    {
+      "sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-group-endpoint-routing/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+          "reference_blob": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-group-magnetic-extremities/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+          "reference_blob": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-group-paint-ownership/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+          "reference_blob": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+          "reference_blob": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+          "reference_blob": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+          "reference_blob": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-svek-painted-origin/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+          "reference_blob": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6"
+        }
+      ]
+    },
+    {
+      "sha256": "035a2e0cc53b9053ac97157cf4de58fe46a613f3a4c988d9f63c4c96995921dd",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-group-endpoint-routing/retained-current/description-element-command-case__followup3__followup3_upper_interface_bare_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "035a2e0cc53b9053ac97157cf4de58fe46a613f3a4c988d9f63c4c96995921dd",
+          "reference_blob": "45789c12c51dadb82d802cfbd3f3116ee6f31fc321699c54ce0a8f8eb99107e3"
+        },
+        {
+          "source": "test-diagrams/perturbations/description-element-command-case/followup3/followup3_upper_interface_bare_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "035a2e0cc53b9053ac97157cf4de58fe46a613f3a4c988d9f63c4c96995921dd",
+          "reference_blob": "45789c12c51dadb82d802cfbd3f3116ee6f31fc321699c54ce0a8f8eb99107e3"
+        }
+      ]
+    },
+    {
+      "sha256": "33f62c91d72f235df6856684d4cfe7d1881ea50683e4dc73b00d97ab12cf4e4b",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/duplicate_local_aliases_reopened_tb.puml",
+          "cohort": "frozen1761",
+          "source_blob": "33f62c91d72f235df6856684d4cfe7d1881ea50683e4dc73b00d97ab12cf4e4b",
+          "reference_blob": "3c7474ba0352e992e876a4a02aa20f2a28224af24002898475fae4c8a8d0458c"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_local_aliases_reopened_tb.puml",
+          "cohort": "frozen1761",
+          "source_blob": "33f62c91d72f235df6856684d4cfe7d1881ea50683e4dc73b00d97ab12cf4e4b",
+          "reference_blob": "3c7474ba0352e992e876a4a02aa20f2a28224af24002898475fae4c8a8d0458c"
+        }
+      ]
+    },
+    {
+      "sha256": "abdf575dfdf4fb37862e4ef49587b42527128a4f9d435bcea6eee79cbc8b78e0",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/namespace_separator_reopened_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "abdf575dfdf4fb37862e4ef49587b42527128a4f9d435bcea6eee79cbc8b78e0",
+          "reference_blob": "35bf16404771ab0fe735f84d3853bd3001d0ea655edc48c1c7b63a662c63788e"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/namespace_separator_reopened_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "abdf575dfdf4fb37862e4ef49587b42527128a4f9d435bcea6eee79cbc8b78e0",
+          "reference_blob": "35bf16404771ab0fe735f84d3853bd3001d0ea655edc48c1c7b63a662c63788e"
+        }
+      ]
+    },
+    {
+      "sha256": "ea36d208638a6d3af768180a17a6794a30b7c5a94bad3aa502da7026188c72c1",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_source_double_link_tb.puml",
+          "cohort": "frozen1761",
+          "source_blob": "ea36d208638a6d3af768180a17a6794a30b7c5a94bad3aa502da7026188c72c1",
+          "reference_blob": "fad12dcb948fe8d40f8a695de96ccdaa04ddc96310dac99cea6c0fc51bf89c55"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/reopened_package_source_double_link_tb.puml",
+          "cohort": "frozen1761",
+          "source_blob": "ea36d208638a6d3af768180a17a6794a30b7c5a94bad3aa502da7026188c72c1",
+          "reference_blob": "fad12dcb948fe8d40f8a695de96ccdaa04ddc96310dac99cea6c0fc51bf89c55"
+        }
+      ]
+    },
+    {
+      "sha256": "fbacaedf5fce06b46720e8c0a7eea9d97adac9edd188dea3114d2d03a7841a8f",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_target_double_link_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "fbacaedf5fce06b46720e8c0a7eea9d97adac9edd188dea3114d2d03a7841a8f",
+          "reference_blob": "b7a618bd44db7580d45cc3d1ff90909dce0e72ed06c7067de5359e5c2feee75a"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/reopened_package_target_double_link_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "fbacaedf5fce06b46720e8c0a7eea9d97adac9edd188dea3114d2d03a7841a8f",
+          "reference_blob": "b7a618bd44db7580d45cc3d1ff90909dce0e72ed06c7067de5359e5c2feee75a"
+        }
+      ]
+    },
+    {
+      "sha256": "276b21babc6f447225aed184acd50f9282adeec5a36d17cdea83053f973bac96",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_source_single_link_tb.puml",
+          "cohort": "frozen1761",
+          "source_blob": "276b21babc6f447225aed184acd50f9282adeec5a36d17cdea83053f973bac96",
+          "reference_blob": "05b9fdc8750a57368bcb96376f6a469171dfdb622b0ab0a744f65b38e32f5e71"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/root_source_single_link_tb.puml",
+          "cohort": "frozen1761",
+          "source_blob": "276b21babc6f447225aed184acd50f9282adeec5a36d17cdea83053f973bac96",
+          "reference_blob": "05b9fdc8750a57368bcb96376f6a469171dfdb622b0ab0a744f65b38e32f5e71"
+        }
+      ]
+    },
+    {
+      "sha256": "7ec26dcc0f2037ba86c0381563db3e216cc00a9765d0be9841b8685d3a2bfd3f",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_target_single_link_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "7ec26dcc0f2037ba86c0381563db3e216cc00a9765d0be9841b8685d3a2bfd3f",
+          "reference_blob": "a19120482b2b34da534817e01b3540835975d0f67e5ba02fdea378e2dc858ff0"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-named-note-quark-identity/root_target_single_link_lr.puml",
+          "cohort": "frozen1761",
+          "source_blob": "7ec26dcc0f2037ba86c0381563db3e216cc00a9765d0be9841b8685d3a2bfd3f",
+          "reference_blob": "a19120482b2b34da534817e01b3540835975d0f67e5ba02fdea378e2dc858ff0"
+        }
+      ]
+    },
+    {
+      "sha256": "4e752ea7c755ca4e1b6f85ab500bc962f348717ad41ef599db6fd2f598236e66",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-note-cluster-ownership-dependency/checker/dependency_scope_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "4e752ea7c755ca4e1b6f85ab500bc962f348717ad41ef599db6fd2f598236e66",
+          "reference_blob": "2496cf33ef2c309e7add1a65e4061cd9470423badccb7f190d9a9337e1ce0a5e"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "4e752ea7c755ca4e1b6f85ab500bc962f348717ad41ef599db6fd2f598236e66",
+          "reference_blob": "2496cf33ef2c309e7add1a65e4061cd9470423badccb7f190d9a9337e1ce0a5e"
+        }
+      ]
+    },
+    {
+      "sha256": "6e8d9111212b203bd3869d46ee8b8e85218067009407ec8948f9fb586e0979a6",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-note-cluster-ownership-dependency/checker/dependency_scope_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6e8d9111212b203bd3869d46ee8b8e85218067009407ec8948f9fb586e0979a6",
+          "reference_blob": "7e64fa7f3adf242ced4574fc706b4f558eeeb1920610fa14406a5fbfd8800197"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "6e8d9111212b203bd3869d46ee8b8e85218067009407ec8948f9fb586e0979a6",
+          "reference_blob": "7e64fa7f3adf242ced4574fc706b4f558eeeb1920610fa14406a5fbfd8800197"
+        }
+      ]
+    },
+    {
+      "sha256": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/class-note-cluster-ownership-dependency/dependencies/single-svek-envelope-origin__single_root_note_top.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+          "reference_blob": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-note-declaration-scope/dependencies/single-svek-envelope-origin__single_root_note_top.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+          "reference_blob": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027"
+        },
+        {
+          "source": "test-diagrams/perturbations/class-single-svek-envelope-origin/checker/single_root_note_top.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+          "reference_blob": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027"
+        }
+      ]
+    },
+    {
+      "sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+          "reference_blob": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+          "reference_blob": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+          "reference_blob": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db"
+        }
+      ]
+    },
+    {
+      "sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+          "reference_blob": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+          "reference_blob": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+          "reference_blob": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0"
+        }
+      ]
+    },
+    {
+      "sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+          "reference_blob": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+          "reference_blob": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+          "reference_blob": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76"
+        }
+      ]
+    },
+    {
+      "sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+          "reference_blob": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+          "reference_blob": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+          "reference_blob": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8"
+        }
+      ]
+    },
+    {
+      "sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+          "reference_blob": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+          "reference_blob": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+          "reference_blob": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7"
+        }
+      ]
+    },
+    {
+      "sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+          "reference_blob": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+          "reference_blob": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+          "reference_blob": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9"
+        }
+      ]
+    },
+    {
+      "sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+          "reference_blob": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+          "reference_blob": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_left.puml",
+          "cohort": "frozen1761",
+          "source_blob": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+          "reference_blob": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b"
+        }
+      ]
+    },
+    {
+      "sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+          "reference_blob": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+          "reference_blob": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_right.puml",
+          "cohort": "frozen1761",
+          "source_blob": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+          "reference_blob": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e"
+        }
+      ]
+    },
+    {
+      "sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+          "cohort": "frozen1761",
+          "source_blob": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+          "reference_blob": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam2_shadowing_true.puml",
+          "cohort": "frozen1761",
+          "source_blob": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+          "reference_blob": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7"
+        }
+      ]
+    },
+    {
+      "sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+          "cohort": "frozen1761",
+          "source_blob": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+          "reference_blob": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam_shadowing.puml",
+          "cohort": "frozen1761",
+          "source_blob": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+          "reference_blob": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee"
+        }
+      ]
+    },
+    {
+      "sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+          "reference_blob": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_edge_whitespace_multiple_blank_lines.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+          "reference_blob": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee"
+        }
+      ]
+    },
+    {
+      "sha256": "4c1b80f05035e5920580e8ea66abdd9388c40390fef252e40b04ebceedea2be3",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_aws_activity_seed.puml",
+          "cohort": "frozen1761",
+          "source_blob": "4c1b80f05035e5920580e8ea66abdd9388c40390fef252e40b04ebceedea2be3",
+          "reference_blob": "d131cfa655d65569ee69298bc47a00d8e92bba60ed142c67b46bb2b54579d507"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.puml",
+          "cohort": "frozen1761",
+          "source_blob": "4c1b80f05035e5920580e8ea66abdd9388c40390fef252e40b04ebceedea2be3",
+          "reference_blob": "d131cfa655d65569ee69298bc47a00d8e92bba60ed142c67b46bb2b54579d507"
+        }
+      ]
+    },
+    {
+      "sha256": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+          "reference_blob": "acf708bfa441cf858a6324430983513e6058ce947f3283980fa0283e9c8086bd"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+          "cohort": "frozen1761",
+          "source_blob": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+          "reference_blob": "acf708bfa441cf858a6324430983513e6058ce947f3283980fa0283e9c8086bd"
+        }
+      ]
+    },
+    {
+      "sha256": "8a4fb5c87ce06a556210e263fa08918501876367856119d097a7126656aab218",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.puml",
+          "cohort": "frozen1761",
+          "source_blob": "8a4fb5c87ce06a556210e263fa08918501876367856119d097a7126656aab218",
+          "reference_blob": "2e91013e4501132652c20ef789ac995f10f637b8a4cc2cbceea4c1a3587fab02"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml",
+          "cohort": "frozen1761",
+          "source_blob": "8a4fb5c87ce06a556210e263fa08918501876367856119d097a7126656aab218",
+          "reference_blob": "2e91013e4501132652c20ef789ac995f10f637b8a4cc2cbceea4c1a3587fab02"
+        }
+      ]
+    },
+    {
+      "sha256": "c3c3aa1dc1f7d442de4f0662e166afbc5d4df42f0f8e711977b4206145ce49f7",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.puml",
+          "cohort": "frozen1761",
+          "source_blob": "c3c3aa1dc1f7d442de4f0662e166afbc5d4df42f0f8e711977b4206145ce49f7",
+          "reference_blob": "d79fb1d7ff70025128d691ca8e005a34d71cdae193a46c003a42778be1a210b0"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml",
+          "cohort": "frozen1761",
+          "source_blob": "c3c3aa1dc1f7d442de4f0662e166afbc5d4df42f0f8e711977b4206145ce49f7",
+          "reference_blob": "d79fb1d7ff70025128d691ca8e005a34d71cdae193a46c003a42778be1a210b0"
+        }
+      ]
+    },
+    {
+      "sha256": "5e2e311258edab80ecfb17e61395d27827d5338becec63d7f828e9f2bb52d4d5",
+      "entries": [
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.puml",
+          "cohort": "frozen1761",
+          "source_blob": "5e2e311258edab80ecfb17e61395d27827d5338becec63d7f828e9f2bb52d4d5",
+          "reference_blob": "6c4d0becb3bb497936d4b291b913c5206e95a3f9c267621f04d740e27dff1967"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml",
+          "cohort": "frozen1761",
+          "source_blob": "5e2e311258edab80ecfb17e61395d27827d5338becec63d7f828e9f2bb52d4d5",
+          "reference_blob": "6c4d0becb3bb497936d4b291b913c5206e95a3f9c267621f04d740e27dff1967"
+        }
+      ]
+    }
+  ],
+  "chronology": [
+    {
+      "commit": "b3c510e605fb39393d61e0700ac47f1b256cbb49",
+      "metadata": "commit b3c510e605fb39393d61e0700ac47f1b256cbb49\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Wed Nov 4 21:41:15 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Wed Nov 4 21:41:15 2026 +1100\n\n    docs: account checked quark context and URL grammar before new drafts\n",
+      "changed": [
+        "docs/parity-reviews/class-quark-context-checked-identity/account.json",
+        "docs/parity-reviews/class-quark-context-checked-identity/prior-chronology.json"
+      ],
+      "ancestor_exit": 0,
+      "production_difference_from_before": []
+    },
+    {
+      "commit": "d3dc83434df9ad36f7c0a505eb341b53807db1b6",
+      "metadata": "commit d3dc83434df9ad36f7c0a505eb341b53807db1b6\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Wed Nov 4 21:41:15 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Wed Nov 4 21:41:15 2026 +1100\n\n    docs: account note URL command-form and degenerated ownership\n",
+      "changed": [
+        "docs/parity-reviews/class-note-url-command-lifecycle/account.json"
+      ],
+      "ancestor_exit": 0,
+      "production_difference_from_before": []
+    },
+    {
+      "commit": "4bbe21b6ad4428b7dc1166f4081bed4729dfc29d",
+      "metadata": "commit 4bbe21b6ad4428b7dc1166f4081bed4729dfc29d\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Wed Nov 4 21:41:15 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Wed Nov 4 21:41:15 2026 +1100\n\n    docs: account class Fashion value conversion before implementation\n",
+      "changed": [
+        "docs/parity-reviews/class-fashion-value-digit-semantics/account.json"
+      ],
+      "ancestor_exit": 0,
+      "production_difference_from_before": []
+    }
+  ],
+  "production_commit": "commit 17a3705e17cc79640a1bcfea241b61f9b762d957\nAuthor:     Marcelo Cantos <marcelo.cantos@gmail.com>\nAuthorDate: Wed Nov 4 21:55:09 2026 +1100\nCommit:     Marcelo Cantos <marcelo.cantos@gmail.com>\nCommitDate: Wed Nov 4 21:55:09 2026 +1100\n\n    fix: preserve class quark context and note URL ownership\n    \n    Resolve class names through checked context rules, retain distinct root/local\n    objects, consume Pattern2 URL quotes, and reject malformed separators. Keep\n    attached note URL assignment with its command form and render lone note URLs\n    inside their entity groups. Materialize description/note Fashion shadow values\n    through Java digit/dot conversion with legacy boolean handling kept separate.\n    \n    Preimplementation accounts:\n    b3c510e605fb39393d61e0700ac47f1b256cbb49\n    d3dc83434df9ad36f7c0a505eb341b53807db1b6\n    4bbe21b6ad4428b7dc1166f4081bed4729dfc29d\n    \n    Maker implementation only. Group geometry, SVEK note order, native class numeric\n    shadowing, shared metrics and CommandLinkClass multi-pass behavior remain open.\n    \n    Co-Authored-By: Codex <noreply@openai.com>\n",
+  "production_files": [
+    "crates/rustuml-parser/src/parse/class.rs",
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "candidate_vs_production_crates": [],
+  "maker_binaries": [
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff7/final-rustuml",
+      "expected": "cdc29cc286b9494660e30c09c88d4686d28ba82ae5810aed219941c7eed97e68",
+      "actual": "cdc29cc286b9494660e30c09c88d4686d28ba82ae5810aed219941c7eed97e68"
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff7/iteration1-rustuml",
+      "expected": "fa7ba0fc6b32755e92ef258c6d62eef9e0c96d2de3e72fca34db031b4027dd52",
+      "actual": "fa7ba0fc6b32755e92ef258c6d62eef9e0c96d2de3e72fca34db031b4027dd52"
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff6/final-rustuml",
+      "expected": "f999036ac976c7a6dda44d4bbd3d252e9382eaddb947d6ce9a0fb16c1551a713",
+      "actual": "f999036ac976c7a6dda44d4bbd3d252e9382eaddb947d6ce9a0fb16c1551a713"
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-class-cff4/check_svg",
+      "expected": "0e368102f36bfbc59efe141286df5935b785535db6c0cf537bdbadc9350f21cd",
+      "actual": "0e368102f36bfbc59efe141286df5935b785535db6c0cf537bdbadc9350f21cd"
+    }
+  ],
+  "errors": [],
+  "chronology_limit": "Git proves all three accounts precede committed production and contain no production edits. The absence of earlier uncommitted drafts is a maker declaration, not a property recoverable from Git; archived failed draft evidence is preserved. Earlier admitted chronology defects remain unremedied."
+}

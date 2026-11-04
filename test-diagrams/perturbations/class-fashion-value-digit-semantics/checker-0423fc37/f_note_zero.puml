@@ -1,0 +1,11 @@
+@startuml
+<style>
+note {
+Shadowing -0
+}
+</style>
+class Beacon
+note right of Beacon
+memorandum
+end note
+@enduml
