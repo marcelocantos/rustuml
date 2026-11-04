@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-header-circle-measured-centering",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "33588b1aa9290300599ed0d7fd3fcc2cf10a51c9",
+  "java_locations": [
+    "svek/HeaderLayout.java#getDimension,drawU",
+    "svek/image/EntityImageClassHeader.java#constructor circledCharacter margin"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_entity_content icon_cy"
+  ],
+  "invariant": "The complete circled-character block is vertically centered in the measured header, whether or not stereotype text is present. Its top/bottom margin is five from EntityImageClassHeader.",
+  "causal_divergence": "The no-stereotype path already centers against measured header height. The stereotype path instead uses default-font constant20.3105 plus constant stripe heights, ignoring padding, enlarged/multiline names and custom radius. Custom themed spot is displaced roughly nine pixels despite a correctly retained glyph and palette.",
+  "planned_change": "Use the existing measured-header centering calculation for both paths; remove the default-only stereotype circle center constant. This does not claim the separate stereotype legacy font metrics/color or themed group title model is repaired.",
+  "perturbation_axes": [
+    "Stereotype count and multiline/enlarged name",
+    "Circled radius and global padding, including custom spot glyph"
+  ],
+  "verification_plan": "Retained custom/native spot references and full heldouts, explicit geometric invariant unit tests, source-guided new controls staged. Remaining text metrics/colors are named residuals, never waived."
+}
