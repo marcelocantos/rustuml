@@ -1,0 +1,511 @@
+{
+  "schema_version": 1,
+  "purpose": "Bounded sequence destination decoration, complete child allocation and component style controls; accounts0b329582",
+  "remote_private_directory": "allocate with existing new-worker runner",
+  "cases": [
+    {
+      "name": "circle_internal_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_internal_0.puml",
+      "source_sha256": "df71877728133a9ac7af325e99587519780b8e20ab95b0dbde1676fe51807bde",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "circle versus normal/open head",
+        "direction/activation/alpha"
+      ]
+    },
+    {
+      "name": "circle_self_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_self_0.puml",
+      "source_sha256": "00d77e54cd9b4b3e41c8eba82f08ef22d0e35cfc853f2dd7ca580df6a48777d1",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "self circle normal/open",
+        "direction/live depth"
+      ]
+    },
+    {
+      "name": "circle_external_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_external_0.puml",
+      "source_sha256": "507202ba75f274740a8975648f14491c42648185e2796a55f5427d3ac225f79c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "both borders",
+        "direction/activation"
+      ]
+    },
+    {
+      "name": "circle_both_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_both_0.puml",
+      "source_sha256": "1d1479b3d03bee9dacb978a6dc15312951a6e4ea962a167ea40bfff07ffa24e6",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "source/target independent decorations",
+        "normal/open/half"
+      ]
+    },
+    {
+      "name": "child_fonts_0_11_13",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_11_13.puml",
+      "source_sha256": "928783df85d446dd4f725a01f714b741c8b9410e19c661f5bbdeff25ccc5d41b",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "note/message font relation",
+        "styled multiline/activation"
+      ]
+    },
+    {
+      "name": "child_fonts_0_18_10",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_18_10.puml",
+      "source_sha256": "3883a43dd904759213a9eba376cec77113d542a228e684511a67452c0e44f1ec",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "note/message font relation",
+        "styled multiline/activation"
+      ]
+    },
+    {
+      "name": "child_fonts_0_10_20",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_10_20.puml",
+      "source_sha256": "ba461d3d45c93e941ecf53f2670d959aec4edabee66b60694ccb952c42ba568b",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "note/message font relation",
+        "styled multiline/activation"
+      ]
+    },
+    {
+      "name": "child_two_notes_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_two_notes_0.puml",
+      "source_sha256": "bf41bc86cf70068924b71a5714431d75e5bd3e25bc502d7b24b9fb1b11fc20b1",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "multiple children",
+        "reverse/padding/font"
+      ]
+    },
+    {
+      "name": "style_root_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_root_0.puml",
+      "source_sha256": "5d2d9e000ca17f8ff93536f75e6e9954b6012d31f670299bfc6eba6fec6ca5e4",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "root inherited line color",
+        "participant/arrow/activation/note"
+      ]
+    },
+    {
+      "name": "style_siblings_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_siblings_0.puml",
+      "source_sha256": "4c40623086a59811b213693514feb483643f5f51cc92d98b8fb1e5c507719bdd",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "lifeLine versus activationBox siblings",
+        "ordinary/self/return"
+      ]
+    },
+    {
+      "name": "style_shadow_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_shadow_0.puml",
+      "source_sha256": "c1b6f88ae76c003b3a04ae71f66aa573c922e0b78950ceeff7aeacf1fb3498fd",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "root versus component numeric shadow",
+        "independent participant/note/activation"
+      ]
+    },
+    {
+      "name": "invalid_circle_order_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/invalid_circle_order_0.puml",
+      "source_sha256": "da9882520763946dd21b43d883b545a5be9936cdfaae7cef77d4797e50e2276e",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "head/decoration grammar negative",
+        "engine"
+      ]
+    },
+    {
+      "name": "circle_internal_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_internal_1.puml",
+      "source_sha256": "92aee83fe4afadd67ea26347cd8678bca392b32c845f6f4d53335e281ef6c64c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "circle versus normal/open head",
+        "direction/activation/alpha"
+      ]
+    },
+    {
+      "name": "circle_self_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_self_1.puml",
+      "source_sha256": "3f8c8630d1315b5e995aa02504bfb257dba347ef0a80e006c0c002e135f09c21",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "self circle normal/open",
+        "direction/live depth"
+      ]
+    },
+    {
+      "name": "circle_external_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_external_1.puml",
+      "source_sha256": "26f58a96ac6cc8df6db7ca4df8d658216fbcf1282629839b73af564f5e178e74",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "both borders",
+        "direction/activation"
+      ]
+    },
+    {
+      "name": "circle_both_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_both_1.puml",
+      "source_sha256": "07b1dc1171b5532150e79d259f9d35385e25ba18b0faad578bd2ebcf979e41ec",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "source/target independent decorations",
+        "normal/open/half"
+      ]
+    },
+    {
+      "name": "child_fonts_1_11_13",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_1_11_13.puml",
+      "source_sha256": "06b7d883459d1a4932b04b2eb325ba7c6cec7df0b568c897232b6310224d83e9",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "note/message font relation",
+        "styled multiline/activation"
+      ]
+    },
+    {
+      "name": "child_fonts_1_18_10",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_1_18_10.puml",
+      "source_sha256": "19a143e8a508971bc57a65bae68fe0f1b5db4617d6009dfad995aae978199ee7",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "note/message font relation",
+        "styled multiline/activation"
+      ]
+    },
+    {
+      "name": "child_fonts_1_10_20",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_1_10_20.puml",
+      "source_sha256": "ab19630e209e32319ccbe98fc3249c7b6ceb4d3666ee06358ff7b88c36c26ebc",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "note/message font relation",
+        "styled multiline/activation"
+      ]
+    },
+    {
+      "name": "child_two_notes_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_two_notes_1.puml",
+      "source_sha256": "57b426de0f0509e20cdd0bc9f7bd28ebbf5c67ad9175d6031db2e06d7415d621",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "multiple children",
+        "reverse/padding/font"
+      ]
+    },
+    {
+      "name": "style_root_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_root_1.puml",
+      "source_sha256": "5e13e89f40cf5f88ddcd4ccf304a18da0057343a89a43dfdeae28920afe650c5",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "root inherited line color",
+        "participant/arrow/activation/note"
+      ]
+    },
+    {
+      "name": "style_siblings_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_siblings_1.puml",
+      "source_sha256": "850f330b22bdc7b5b49f623620c912b64aaaf7e241ba29fead1462e3c7d73315",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "lifeLine versus activationBox siblings",
+        "ordinary/self/return"
+      ]
+    },
+    {
+      "name": "style_shadow_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_shadow_1.puml",
+      "source_sha256": "5aa0df2803df42acd56c4e09aa33e64d346e2fd0ed3db883c37c90faa029135b",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "root versus component numeric shadow",
+        "independent participant/note/activation"
+      ]
+    },
+    {
+      "name": "invalid_circle_order_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/invalid_circle_order_1.puml",
+      "source_sha256": "e804ada487ecde1b8c606f28efe35e5dbf10886786adb6329ac0b44457f38c7b",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_DECORATION_HEIGHT_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "head/decoration grammar negative",
+        "engine"
+      ]
+    }
+  ]
+}
