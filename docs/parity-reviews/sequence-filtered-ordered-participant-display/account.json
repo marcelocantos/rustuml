@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "0cde5d7e55139b63cb8e91f8e42acd473441f80a",
+  "evidence_import": "bd40c0f16838359779e406592edb51f32be2e9bd",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-filtered-ordered-participant-display",
+  "java_locations": [
+    "sequencediagram.SequenceDiagram#hideOrShow",
+    "classdiagram.command.CommandHideShowByGender#executeSequenceDiagram",
+    "sequencediagram.Participant#getDisplay",
+    "sequencediagram.command.CommandParticipant#executeArg",
+    "skin.SkinParam#stereotypePositionTop",
+    "skin.rose.ComponentRoseQueue#constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/sequence.rs::SequenceDiagram/Participant",
+    "crates/rustuml-parser/src/parse/sequence.rs::try_hide/try_participant",
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout/queue_shape"
+  ],
+  "invariant": "Raw stereotypes remain in the model; global hidden state filters display for every participant kind, and order is captured at declaration. Queue preferred size and every head/tail paint traverse the same filtered ordered Display.",
+  "causal_divergence": "try_hide consumes hide commands without state. Queue now unconditionally uses raw stereotype, introducing four losses; stereotype order is not recorded. Other participant consumers have no independent hiding contract either.",
+  "planned_change": "Add serde-defaulted, false-omitted hide_stereotypes and stereotype_position_bottom fields; parse hide/show and declaration-time order. Derive filtered Display once before metrics for all participant kinds, and feed ordered queue blocks to size and paint. Keep spotted/multiple/stereotype-style expansion outside this mechanism. Exactly three authorized ASCII fixture defaults compile the fields; no renderer edit there. Capture full YAML before/after and distinguish new true fields from default compatibility.",
+  "perturbation_axes": [
+    "hide/show before/after declarations across participant kinds and engines",
+    "top/bottom declaration-time ordering, bare/boxed/created heads and tails"
+  ]
+}
