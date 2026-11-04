@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "07d00af240c9938b63b7672d67f285a53a1d536d",
+  "verification_plan": "Retained1649+26+86 including invalid references and missing allowmixing; frozen CLI/comparator; exact models/UIDs/URL owners; fresh source-guided relay controls, final main tiers/libs/CLI/guards once stable. No local JVM/SSH, child, native/fault work, shared metric/style changes or acceptance.",
+  "mechanism": "class-fashion-value-digit-semantics",
+  "java_locations": [
+    "style/ValueImpl#extractDigitsAndDot,asDoubleDefaultTo",
+    "style/Style#getShadowing",
+    "style/FromSkinparamToStyle#getShadowingValue",
+    "klimt/Fashion#isShadowing",
+    "decoration/symbol/USymbolBoundary#getDrawing",
+    "skin/ActorStickMan"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#parse_shadowing_delta,ClassFontOverrides::from_diagram_for_entity,ResolvedNoteStyle,resolved_note_shadowing"
+  ],
+  "invariant": "Present style Shadowing extracts ASCII digits/dots then parses with default1.5 on empty/invalid conversion; missing property yields0. Legacy true/false/yes/no converts3/0 before style numeric conversion. Boundary then normalizes positive delta4, actor retains converted delta.",
+  "causal_divergence": "Review F2: signed -3 parses/clamps0 in Rust whereas Java ValueImpl yields3 before Fashion, losing actor/boundary shadow and actor preferred height.",
+  "planned_change": "Add class-owned style value materialization using existing ResolvedStyle declaration/origin APIs as required. Keep raw legacy boolean conversion distinct; route owned class/note image Fashion values through source-derived digit/dot conversion. No shared style/metrics/native changes.",
+  "perturbation_axes": [
+    "signed/fractional/decorated/invalid numeric spelling and absent/zero values",
+    "CSS versus legacy skinparam, actor/boundary/note image policy and linked/degenerated topology"
+  ]
+}
