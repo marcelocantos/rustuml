@@ -24,6 +24,62 @@ use crate::plantuml_metrics;
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
+// HColorSet#parseColor/#parseSimpleColor preserves the accepted arrow domain.
+// Keep this sequence materialization separate from shared resolve_color callers.
+fn sequence_arrow_color(color: &str) -> String {
+    let raw = color.strip_prefix('#').unwrap_or(color);
+    if raw.eq_ignore_ascii_case("transparent") || raw.eq_ignore_ascii_case("background") {
+        return "none".to_string();
+    }
+    if raw.len() == 1 && raw.bytes().all(|c| c.is_ascii_hexdigit()) {
+        return format!("#{}", raw.to_ascii_uppercase().repeat(6));
+    }
+    if raw.len() == 8 && raw.bytes().all(|c| c.is_ascii_hexdigit()) {
+        // HColor#toSvg maps every transparent HColorSimple to #00000000;
+        // SvgGraphics#fixColor maps it to none. XColor#toSvg omits opaque alpha.
+        let upper = raw.to_ascii_uppercase();
+        return match &upper[6..] {
+            "00" => "none".to_string(),
+            "FF" => format!("#{}", &upper[..6]),
+            _ => format!("#{upper}"),
+        };
+    }
+    // Additional registered names in pinned ColorTrieNode's constructor.
+    let registered = match raw.to_ascii_lowercase().as_str() {
+        "business" => Some("#FFFFCC"),
+        "application" => Some("#C2F0FF"),
+        "motivation" => Some("#CCCCFF"),
+        "strategy" => Some("#F8E7C0"),
+        "technology" => Some("#C9FFC9"),
+        "physical" => Some("#97FF97"),
+        "implementation" => Some("#FFE0E0"),
+        _ => None,
+    };
+    if let Some(color) = registered {
+        return color.to_string();
+    }
+
+    resolve_color(color)
+}
+
+// SvgGraphics#fillMe separates alpha from RGB for filled primitives. Stroke
+// color retains its complete eight-digit value in SvgGraphics#styleMe.
+fn sequence_fill_attributes(color: &str) -> String {
+    if color.len() == 9
+        && color.starts_with('#')
+        && color[1..].bytes().all(|c| c.is_ascii_hexdigit())
+    {
+        let alpha = u8::from_str_radix(&color[7..], 16).expect("validated alpha");
+        format!(
+            r#"fill="{}" fill-opacity="{:.5}""#,
+            &color[..7],
+            f64::from(alpha) / f64::from(u8::MAX)
+        )
+    } else {
+        format!(r#"fill="{color}""#)
+    }
+}
+
 /// Resolve a PlantUML color string (e.g., "#blue", "#FF0000") to a CSS hex color.
 pub(crate) fn resolve_color(color: &str) -> String {
     let name = color.strip_prefix('#').unwrap_or(color);
@@ -4443,36 +4499,38 @@ impl PlantUmlSvg {
     }
 
     fn write_polygon(&mut self, fill: &str, points: &str, style: &str) {
+        let fill_attributes = sequence_fill_attributes(fill);
         if self.handwritten
             && let Some(parsed) = parse_svg_points(points)
         {
             let points = handwritten_polygon_points(&parsed);
             write!(
                 self.buf,
-                r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+                r#"<polygon {fill_attributes} points="{points}" style="{style}"/>"#
             )
             .unwrap();
         } else {
             write!(
                 self.buf,
-                r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+                r#"<polygon {fill_attributes} points="{points}" style="{style}"/>"#
             )
             .unwrap();
         }
     }
 
     fn write_ellipse(&mut self, cx: f64, cy: f64, rx: f64, ry: f64, fill: &str, style: &str) {
+        let fill_attributes = sequence_fill_attributes(fill);
         if self.handwritten {
             let points = handwritten_ellipse_points(cx, cy, rx, ry);
             write!(
                 self.buf,
-                r#"<polygon fill="{fill}" points="{points}" style="{style}"/>"#
+                r#"<polygon {fill_attributes} points="{points}" style="{style}"/>"#
             )
             .unwrap();
         } else {
             write!(
                 self.buf,
-                r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="{style}"/>"#,
+                r#"<ellipse cx="{}" cy="{}" {fill_attributes} rx="{}" ry="{}" style="{style}"/>"#,
                 fmt_coord(cx),
                 fmt_coord(cy),
                 fmt_coord(rx),
@@ -4483,8 +4541,9 @@ impl PlantUmlSvg {
     }
 
     fn write_path_with_attrs(&mut self, d: &str, fill: &str, attrs: &str, style: &str) {
+        let fill_attributes = sequence_fill_attributes(fill);
         if style.is_empty() {
-            write!(self.buf, r#"<path d="{d}" fill="{fill}"{attrs}/>"#).unwrap();
+            write!(self.buf, r#"<path d="{d}" {fill_attributes}{attrs}/>"#).unwrap();
             return;
         }
         if self.handwritten
@@ -4492,13 +4551,13 @@ impl PlantUmlSvg {
         {
             write!(
                 self.buf,
-                r#"<path d="{d}" fill="{fill}"{attrs} style="{style}"/>"#
+                r#"<path d="{d}" {fill_attributes}{attrs} style="{style}"/>"#
             )
             .unwrap();
         } else {
             write!(
                 self.buf,
-                r#"<path d="{d}" fill="{fill}"{attrs} style="{style}"/>"#
+                r#"<path d="{d}" {fill_attributes}{attrs} style="{style}"/>"#
             )
             .unwrap();
         }
@@ -6711,7 +6770,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             "arrowcolor" | "sequencearrowcolor" | "classarrowcolor" => {
-                default_arrow_color = resolve_color(val);
+                default_arrow_color = sequence_arrow_color(val);
             }
             "arrowthickness" | "sequencearrowthickness" => {
                 if let Ok(v) = val.parse::<f64>() {
@@ -12695,7 +12754,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .arrow
                     .color
                     .as_ref()
-                    .map(|c| resolve_color(c))
+                    .map(|c| sequence_arrow_color(c))
                     .unwrap_or_else(|| default_arrow_color.to_string());
 
                 // Source participant uid
@@ -13008,8 +13067,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             );
                             write!(
                                 svg.buf,
-                                r##"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:1;"/>"##,
-                                &arrow_color, arrow_pts, &arrow_color,
+                                r##"<polygon {} points="{}" style="stroke:{};stroke-width:1;"/>"##,
+                                sequence_fill_attributes(&arrow_color),
+                                arrow_pts,
+                                &arrow_color,
                             )
                             .unwrap();
                         }
@@ -13052,8 +13113,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         );
                         write!(
                             svg.buf,
-                            r##"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:1;"/>"##,
-                            &arrow_color,
+                            r##"<polygon {} points="{}" style="stroke:{};stroke-width:1;"/>"##,
+                            sequence_fill_attributes(&arrow_color),
                             arrow_pts,
                             &arrow_color,
                         )
