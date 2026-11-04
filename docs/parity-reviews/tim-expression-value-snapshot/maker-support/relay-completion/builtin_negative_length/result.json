@@ -1,0 +1,64 @@
+{
+  "source": "/tmp/rustuml-tim4/new/builtin_negative_length.puml",
+  "mechanism": "tim-builtin-typed-contracts",
+  "intended_negative": true,
+  "source_sha256": "82f30441ad1fc1e1b31de4df699de4a575cced744247d2c4574e039c99690cfd",
+  "java_exit": 1,
+  "java_probe_exit": 1,
+  "java_svg_xml_valid": false,
+  "java_valid_reference": false,
+  "cli_exit": 1,
+  "comparison_exit": 3,
+  "svg_match": false,
+  "source_equal": false,
+  "source_diagnostic_error": "'NoneType' object has no attribute 'value'",
+  "java_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_probe_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new",
+    "--timezone",
+    "GMT+11:00",
+    "--probe",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/SourceProbe.java",
+    "--classpath",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP",
+    "--",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new/builtin_negative_length.puml",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new"
+  ],
+  "rust_calls": [
+    {
+      "argv": [
+        "/tmp/rustuml-tim4/final-rustuml",
+        "-pipe"
+      ],
+      "cwd": "/tmp/rustuml-tim4/new",
+      "exit_code": 1
+    },
+    {
+      "argv": [
+        "/tmp/rustuml-tim4/final-rustuml",
+        "--yaml",
+        "-pipe"
+      ],
+      "cwd": "/tmp/rustuml-tim4/new",
+      "exit_code": 1
+    }
+  ],
+  "comparison_argv": [
+    "/tmp/rustuml-tim4/probe",
+    "compare",
+    "/tmp/rustuml-tim4/relay-completion/builtin_negative_length/java.svg",
+    "/tmp/rustuml-tim4/relay-completion/builtin_negative_length/rust.svg"
+  ]
+}

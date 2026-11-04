@@ -1,0 +1,151 @@
+{
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP",
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new",
+  "hostname": "MacBookPro",
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+  "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+  "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+  "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+  "timezone": "GMT+11:00",
+  "locale": "en_AU",
+  "encoding": "UTF-8",
+  "headless": true,
+  "timeout_seconds_per_call": 60,
+  "input_compressed_sha256": "4cd171c5c3b0e08205875b4e845f7434cd03c41a6ac875ea539541218f400539",
+  "resources": [
+    {
+      "local_path": "/tmp/rustuml-tim4/new/builtin_negative_length.puml",
+      "remote_relative_path": "new/builtin_negative_length.puml",
+      "sha256": "82f30441ad1fc1e1b31de4df699de4a575cced744247d2c4574e039c99690cfd",
+      "bytes": 83
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/builtin_surrogate_roundtrip.puml",
+      "remote_relative_path": "new/builtin_surrogate_roundtrip.puml",
+      "sha256": "e6e3baedd4bb8919cbe3c126a6a72161a3b6df18a92b29d7ae3416a330d7bb32",
+      "bytes": 200
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/builtin_window.puml",
+      "remote_relative_path": "new/builtin_window.puml",
+      "sha256": "e53269850a0c11c840df0b0d697ba78a627457ebec9b9a96c72e01da29df6859",
+      "bytes": 208
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/foreach_json_global.puml",
+      "remote_relative_path": "new/foreach_json_global.puml",
+      "sha256": "bf002d1fa4dbc8135ac461c32ec5f401784ffd769c3bb5f60cf714ff224d7af3",
+      "bytes": 224
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/foreach_object_order.puml",
+      "remote_relative_path": "new/foreach_object_order.puml",
+      "sha256": "1d83801a2754cc51f7da9e615fe012916b20840df806145828fe3cb135620f4b",
+      "bytes": 131
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/lib/bad.inc",
+      "remote_relative_path": "new/lib/bad.inc",
+      "sha256": "58062a40a117dfac6014526dd6bdb132dcaf1588ac57c4fb2b5b254730e7248f",
+      "bytes": 91
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/lib/blocks.inc",
+      "remote_relative_path": "new/lib/blocks.inc",
+      "sha256": "49943ce9f0dc3dae1110ca8e9ba7b6b63964fe7669cc7a1fe3a4f353ef4e7d4f",
+      "bytes": 84
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/literal_define_capture.puml",
+      "remote_relative_path": "new/literal_define_capture.puml",
+      "sha256": "7e0acf1ad1ccf256bb76e77584bf6a47438c6922b3c68a16cf198847229db576",
+      "bytes": 211
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/literal_define_order.puml",
+      "remote_relative_path": "new/literal_define_order.puml",
+      "sha256": "faf3f0e6f66e383007bf6096c8bd4ddb9a60be4d3bbd64b21dcf923722498000",
+      "bytes": 176
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/procedure_value_error.puml",
+      "remote_relative_path": "new/procedure_value_error.puml",
+      "sha256": "7527ff9db20bd40ffe4334fb82310ebbd0cc65c6dee4ed3c9a9b9204ddef64a0",
+      "bytes": 102
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/registry_environment.puml",
+      "remote_relative_path": "new/registry_environment.puml",
+      "sha256": "7182ceddf1a24e3fecfafce7befdce8f802dd81a783e781ef6048e705e731b9f",
+      "bytes": 169
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/registry_literal.puml",
+      "remote_relative_path": "new/registry_literal.puml",
+      "sha256": "3924d1277f0218e7746b449b7a24fc3f0f944cc236a5b09b52fb3db966362817",
+      "bytes": 94
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/return_nested.puml",
+      "remote_relative_path": "new/return_nested.puml",
+      "sha256": "4cc614cf02e4f2106cb78f81c6b89a6249a61fbc30d2fad34d01a279765fc230",
+      "bytes": 215
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/return_while_nested.puml",
+      "remote_relative_path": "new/return_while_nested.puml",
+      "sha256": "4811e1c5df2edde21f80e5878ac85abc5b2286d9f13bad0f35208cbe3ab99d7a",
+      "bytes": 183
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/snapshot_json.puml",
+      "remote_relative_path": "new/snapshot_json.puml",
+      "sha256": "6a3ea6c7adfe64d7c20e57ad502e596a06704b530a2ac20c8fb82330ebc1e84d",
+      "bytes": 202
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/snapshot_nested.puml",
+      "remote_relative_path": "new/snapshot_nested.puml",
+      "sha256": "e3abca3cd34b4d16f34e015927bcc00410a814cde73a2f7dfb3813692fee7943",
+      "bytes": 178
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/sub_bad_unselected.puml",
+      "remote_relative_path": "new/sub_bad_unselected.puml",
+      "sha256": "588ad4558dbcd58961a9986c7047845d166365729af12ebe449cc9626f8c2dcd",
+      "bytes": 67
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/sub_dynamic_twice.puml",
+      "remote_relative_path": "new/sub_dynamic_twice.puml",
+      "sha256": "4d7746a23a924902a55acc661ac6a00fedc8834b40b91b4ea539b222d66075b9",
+      "bytes": 219
+    },
+    {
+      "local_path": "/tmp/rustuml-tim4/new/sub_local_selector.puml",
+      "remote_relative_path": "new/sub_local_selector.puml",
+      "sha256": "72e79a7f276edc300c66f144ca9164a41ae1d3f5a17f9b956f9ccd611341f076",
+      "bytes": 133
+    },
+    {
+      "local_path": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-corrective-execution-maker/SourceProbe.java",
+      "remote_relative_path": "SourceProbe.java",
+      "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+      "bytes": 689
+    }
+  ],
+  "probe_sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+  "classification_performed": false,
+  "ambient_jvm_variables_removed": [
+    "JAVA_TOOL_OPTIONS",
+    "_JAVA_OPTIONS",
+    "JDK_JAVA_OPTIONS",
+    "CLASSPATH"
+  ]
+}

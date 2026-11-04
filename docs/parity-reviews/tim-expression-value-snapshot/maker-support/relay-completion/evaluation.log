@@ -1,0 +1,37 @@
+builtin_window java 0 rust 0 svg True source True
+builtin_surrogate_roundtrip java 0 rust 0 svg True source True
+builtin_negative_length java 1 rust 1 svg False source False
+snapshot_nested java 0 rust 0 svg True source True
+snapshot_json java 0 rust 0 svg True source True
+literal_define_order java 0 rust 0 svg True source True
+literal_define_capture java 0 rust 0 svg True source True
+return_nested java 0 rust 0 svg True source True
+return_while_nested java 0 rust 0 svg True source True
+procedure_value_error java 200 rust 1 svg False source False
+foreach_json_global java 0 rust 0 svg True source True
+foreach_object_order java 0 rust 0 svg True source True
+sub_dynamic_twice java 0 rust 0 svg True source True
+sub_bad_unselected java 200 rust 1 svg False source False
+sub_local_selector java 0 rust 0 svg True source True
+registry_literal java 0 rust 0 svg True source True
+registry_environment java 0 rust 0 svg True source True
+{
+  "candidate": "6c550246b458eb5f37539713510dc7d919843421",
+  "cases": 17,
+  "valid_references": 14,
+  "svg_matches": 14,
+  "source_matches": 14,
+  "negative_references": [
+    "/tmp/rustuml-tim4/new/builtin_negative_length.puml",
+    "/tmp/rustuml-tim4/new/procedure_value_error.puml",
+    "/tmp/rustuml-tim4/new/sub_bad_unselected.puml"
+  ],
+  "valid_cli_errors": [],
+  "valid_svg_failures": [],
+  "transport_input_compressed_sha256": "4cd171c5c3b0e08205875b4e845f7434cd03c41a6ac875ea539541218f400539",
+  "transport_output_compressed_sha256": "cd50f6bf14cd85993a8e584280d4db3c45133ced6a74ca6682c0d3da0704f7ae",
+  "resources_verified": 20,
+  "binary_sha256": "0b73e42dc1d512ba8bc39345c9c6c09936b0efba022c39dfd42960e86a408a2b",
+  "comparator_sha256": "43ce27167f6ad8697a8043edbb4f580ddbf9ab68b4e0ea4db15f2a69e3fc97b5",
+  "local_java_launches": 0
+}

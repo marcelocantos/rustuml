@@ -1,0 +1,3 @@
+@startuml
+class "OLD / new / 1" as Captured
+@enduml
