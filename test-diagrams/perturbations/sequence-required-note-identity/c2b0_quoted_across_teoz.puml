@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Remote
+participant "Harbour 5" as across
+Remote -> across: inbound
+hnote right of "across"
+line one
+line two
+end note
+@enduml

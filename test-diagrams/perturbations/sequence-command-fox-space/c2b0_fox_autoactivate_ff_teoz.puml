@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+autoactivateon
+Quartz -> Vale: enter
+returndone
+@enduml

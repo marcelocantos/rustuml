@@ -1,0 +1,6 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+rnote over Vale #back:LightBlue: cargo
+@enduml

@@ -1,0 +1,256 @@
+{
+  "before": {
+    "revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+    "product": {
+      "pass_count": 11181,
+      "denominator": 11251
+    },
+    "assisted": {
+      "total": 12550,
+      "pass_count": 10497,
+      "fail_count": 754,
+      "skipped": 1299,
+      "eligible": 11251
+    },
+    "sequence": [
+      1411,
+      1411
+    ],
+    "standing": {
+      "entries": 1724,
+      "failures": 693,
+      "matches": 1031,
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-oracle"
+    },
+    "units": [
+      581,
+      800
+    ],
+    "cli": [
+      13
+    ],
+    "commands": [
+      {
+        "name": "units",
+        "argv": [
+          "cargo",
+          "test",
+          "--release",
+          "--lib",
+          "-p",
+          "rustuml-parser",
+          "-p",
+          "rustuml-render"
+        ],
+        "exit": 0,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6"
+      },
+      {
+        "name": "cli",
+        "argv": [
+          "cargo",
+          "test",
+          "--release",
+          "-p",
+          "rustuml",
+          "--test",
+          "pipe_mode"
+        ],
+        "exit": 0,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6"
+      },
+      {
+        "name": "broad",
+        "argv": [
+          "cargo",
+          "test",
+          "--release",
+          "--no-fail-fast",
+          "-p",
+          "rustuml-oracle",
+          "--test",
+          "golden_no_oracle",
+          "--test",
+          "golden_pairs",
+          "--test",
+          "parity_perturbations",
+          "--test",
+          "harness_guards",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6"
+      }
+    ],
+    "stable_broad_runs": 1
+  },
+  "after": {
+    "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+    "product": {
+      "pass_count": 11181,
+      "denominator": 11251
+    },
+    "assisted": {
+      "total": 12550,
+      "pass_count": 10497,
+      "fail_count": 754,
+      "skipped": 1299,
+      "eligible": 11251
+    },
+    "sequence": [
+      1411,
+      1411
+    ],
+    "standing": {
+      "entries": 2258,
+      "failures": 857,
+      "matches": 1401,
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-oracle"
+    },
+    "units": [
+      586,
+      800
+    ],
+    "cli": [
+      13
+    ],
+    "commands": [
+      {
+        "name": "units",
+        "argv": [
+          "cargo",
+          "test",
+          "--release",
+          "--lib",
+          "-p",
+          "rustuml-parser",
+          "-p",
+          "rustuml-render"
+        ],
+        "exit": 0,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6"
+      },
+      {
+        "name": "cli",
+        "argv": [
+          "cargo",
+          "test",
+          "--release",
+          "-p",
+          "rustuml",
+          "--test",
+          "pipe_mode"
+        ],
+        "exit": 0,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6"
+      },
+      {
+        "name": "broad",
+        "argv": [
+          "cargo",
+          "test",
+          "--release",
+          "--no-fail-fast",
+          "-p",
+          "rustuml-oracle",
+          "--test",
+          "golden_no_oracle",
+          "--test",
+          "golden_pairs",
+          "--test",
+          "parity_perturbations",
+          "--test",
+          "harness_guards",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 101,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6"
+      },
+      {
+        "name": "fmt-owned",
+        "argv": [
+          "rustfmt",
+          "--check",
+          "--edition",
+          "2024",
+          "--config",
+          "skip_children=true",
+          "crates/rustuml-parser/src/parse/sequence.rs",
+          "crates/rustuml-render/src/sequence.rs"
+        ],
+        "exit": 0,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6"
+      },
+      {
+        "name": "fmt-workspace",
+        "argv": [
+          "cargo",
+          "fmt",
+          "--all",
+          "--",
+          "--check"
+        ],
+        "exit": 1,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6"
+      },
+      {
+        "name": "clippy",
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "rustuml-parser",
+          "-p",
+          "rustuml-render",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit": 101,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6"
+      },
+      {
+        "name": "clippy-render",
+        "argv": [
+          "cargo",
+          "clippy",
+          "-p",
+          "rustuml-render",
+          "--no-deps",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit": 101,
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+        "revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6"
+      }
+    ],
+    "stable_broad_runs": 1
+  },
+  "failure_name_comparison": {
+    "no_oracle_failure_names.txt": {
+      "byte_equal": true,
+      "before_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "after_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910"
+    },
+    "golden_failure_names.txt": {
+      "byte_equal": true,
+      "before_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "after_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+    }
+  },
+  "guard_result": "4/6 each; decimal provenance and review acceptance guards remain red",
+  "limits": "Main library suite counts are not shipped CLI replay counts. Before standing1724 and after standing2258 differ because imported534 evidence is included; compare explicit fixed3111 CLI cohort for regressions. No broad gate rerun after adding fresh evidence."
+}

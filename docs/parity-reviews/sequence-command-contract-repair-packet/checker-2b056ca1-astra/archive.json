@@ -1,0 +1,6 @@
+{
+  "file": "captures.tar.gz",
+  "sha256": "922b8713646a127139b0ee44c7ba6963513c39b4c4a7b54d30995abf9f53f08c",
+  "size": 21042273,
+  "contents": "Raw CLI SVGs; complete AST/ASCII/YAML stdout/stderr base64/statuses; library diagnostics; exact before/after commands/logs/failure-name snapshots; immutable reference request/response/transport envelopes; first hydration failure and successful retry; source/hash audits. No compiled binaries/targets."
+}

@@ -1,0 +1,148 @@
+[
+  {
+    "name": "c2b0_create_actor_outer_legacy",
+    "source": "test-diagrams/perturbations/sequence-command-provenance-correction/c2b0_create_actor_outer_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-provenance-correction/c2b0_create_actor_outer_legacy.svg",
+    "cohort": "checker358",
+    "mechanism": "sequence-command-provenance-correction",
+    "axes": [
+      "nested group and loop",
+      "kind actor",
+      "outer signature separator",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true,
+    "reference_outcome": "valid_sequence",
+    "syntax_rejection_obligation": false,
+    "java_exit": 0,
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "export_failure": false,
+    "source_sha256": "3cd61bcb5bb6078f018d01df77386097af6739ea52b57777ff583b5bb3d1416e",
+    "golden_sha256": "04fac00a5a25d70ed5c1c2fb49a2a4168b1758ce4cc4a57c3fea91d2e61088e6",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.CgqDvhD4/new",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "reference_cwd": "/Users/marcelo/rustuml-reference/scratch/worker.CgqDvhD4/new",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "0f14b597c7e9e82e7974c80025aabf1d850062513b14b62af54c2eef51644d24",
+      "svg": "78132cb12ae8fe1394ef.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+    "command_rejection_obligation": false,
+    "duplicate_of": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_outer_legacy.puml"
+  },
+  {
+    "name": "c2b0_create_queue_inner_teoz",
+    "source": "test-diagrams/perturbations/sequence-command-provenance-correction/c2b0_create_queue_inner_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-provenance-correction/c2b0_create_queue_inner_teoz.svg",
+    "cohort": "checker358",
+    "mechanism": "sequence-command-provenance-correction",
+    "axes": [
+      "nested group and loop",
+      "kind queue",
+      "inner signature separator",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true,
+    "reference_outcome": "valid_sequence",
+    "syntax_rejection_obligation": false,
+    "java_exit": 0,
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "export_failure": false,
+    "source_sha256": "296ec48ce87e35140583d3f6522edbb3cda3005114f6323d08700dd9d27bac55",
+    "golden_sha256": "985634b8f48021bd59bb897eef30df98a21379a9f77ebf1b8afc097c05dc6b8d",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.CgqDvhD4/new",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "reference_cwd": "/Users/marcelo/rustuml-reference/scratch/worker.CgqDvhD4/new",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "b61afe1607f70e19d627a894ab545f6beae6d9ffeeb00435d7972432d7204f75",
+      "svg": "783e140d4dceed1ba926.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+    "command_rejection_obligation": false,
+    "duplicate_of": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_inner_teoz.puml"
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/negative-historical.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/before-bin/rustuml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/after-bin/rustuml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/rejection-historical.json"
+    ],
+    "exit": 1
+  },
+  {
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/negative-fresh.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/before-bin/rustuml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/after-bin/rustuml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/rejection-fresh.json"
+    ],
+    "exit": 1
+  },
+  {
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/negative-exporter.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/before-bin/rustuml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/after-bin/rustuml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/rejection-exporter.json"
+    ],
+    "exit": 1
+  }
+]

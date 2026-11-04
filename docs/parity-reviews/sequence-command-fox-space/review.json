@@ -1,0 +1,4324 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-fox-space",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A481a605b-38ce-49c2-a334-2037d4b478a3",
+    "model": "gpt-6-astra, high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+    "branch": "review/sequence-command-contract-independent-20261105",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+  "implementation_commit": "fc3019e363c1e2b8b2f4822261255dc954037d7e",
+  "tested_rust_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "baseline_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (exact per-revision cwd/env/targets in before-build.json and after-build.json)",
+    "Parent existing Monkey Man relay only: [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]; every expanded argv and source byte hash retained in reference-results.json.gz and supplement/reference-results.json.gz",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN_DIR PRIVATE_OUTPUT_DIR (unchanged comparator, before/after3111 and fresh358/fresh64)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO_ROOT NEGATIVE_MANIFEST BEFORE_RUSTUML AFTER_RUSTUML OUTPUT_JSON"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_legacy.svg",
+      "axes": [
+        "command family participant",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "ba8bca1e04e8cba749d4c4f9c1204368d3d50ba210ada3e293389d2bdd276199",
+      "golden_sha256": "3d99434894bac5a95c7124d7540b3350308cb6e4dff511b9dad4615d80915d83",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_teoz.svg",
+      "axes": [
+        "command family participant",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "68716dd51ff015450fdf01aec6eba9637c748eff6ef9f815d57df07aa3bccc65",
+      "golden_sha256": "3359ab44157ee4321abbe1f3dc28d892dfffa57220f6b4972a15b4425ec29688",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_ff_legacy.svg",
+      "axes": [
+        "command family participant",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "43e74ff367067130966497f209413564d2914fa8b7a0f7bbb21700f961b22b02",
+      "golden_sha256": "62b1ba938316d27a15990c56bbf1d60c6529dee84105355be132d8ead1e97125",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_ff_teoz.svg",
+      "axes": [
+        "command family participant",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "55f1a24d5ef79a84e441c5a70ca00be50da363ab4c85ad47d043123c669a5f47",
+      "golden_sha256": "6eb922f0605d8c4d94bd87c5bff7257f363f649996733a13aa6aae2229be6280",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_space_legacy.svg",
+      "axes": [
+        "command family participant",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "f1b7bc4f705c8c6f9c702e003e9e2335da9d4c79717c36efd950930803a2a0da",
+      "golden_sha256": "ffeccfacbd137cbfcced17c55887137dbfea817cda8f5a8b779e103583564add",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_participant_vt_space_teoz.svg",
+      "axes": [
+        "command family participant",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "1857f7602a377b1f50a1ae8edbb1d6aad9cff9058ae720a1ae8d7f48d6448d8a",
+      "golden_sha256": "d600dab3bc82bed2b0adde7662e335c5ab8849c15886c130575d83ea548d26fa",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_legacy.svg",
+      "axes": [
+        "command family activation",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "be01376b9261a58cec39685f1ea1eb314fedca258030b0f5007c58f3c4b42a7b",
+      "golden_sha256": "0c99397acec83088559123c0495359767594c01f819801b3e1a87e92efa31e69",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_teoz.svg",
+      "axes": [
+        "command family activation",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "152145fbba6b8c7256fec09315ad2559dc58ced768343f31c0481ae43264075d",
+      "golden_sha256": "2ebd07a495e0d5d2427743cf261386c7dda04bb2dd063ddb743c32d8a71a1bce",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_ff_legacy.svg",
+      "axes": [
+        "command family activation",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "9cc0e8ae85b89f514dd681a72a021583e867591d6e534aaee5fb5e83d1283652",
+      "golden_sha256": "41637c3468f27eb0dba6047e972cba8fd075974f5a33951788d2407cc5ee2086",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_ff_teoz.svg",
+      "axes": [
+        "command family activation",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "ec3622289147ca44d964042c36851e4d5bce454c3ade2b8fc210a092d5d89631",
+      "golden_sha256": "e08c063a0328cecbdab03fa1ab7f8dc7bc58824c50d861740cbbfc67d52d168a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_space_legacy.svg",
+      "axes": [
+        "command family activation",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "6c4378367249bbca4c29bf6b853ba1a0db0594f24ec34b6e5c9acbf18d918a48",
+      "golden_sha256": "69f9ba3284ad5adca637f5ff4af4b2957c196e33af4d0e377e0d68f23ce066b6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_activation_vt_space_teoz.svg",
+      "axes": [
+        "command family activation",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "deb0eb74bf6d10d45682a9a693e2b7e1db9708f06ea0cdd92e5d3f47e3b9e0fb",
+      "golden_sha256": "02d5654aa8f0162685a6d038c6636a1306dd021fbfbf910361c52cdb1de0a0ff",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_legacy.svg",
+      "axes": [
+        "command family destroy",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "8fcbb651e0b705d4e32a63b1bec514bfbbe82f59ab5ddf714fe81c65729c5ba6",
+      "golden_sha256": "2bd9e71611d85ee3c9187ad0cef013c2bd4d5d8047fd2afef66ec5794dd67200",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_teoz.svg",
+      "axes": [
+        "command family destroy",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "5a57cd3241b0ae18e94f8b904ebf5683bc01f93fc87672e12f0d0bfcea5f5303",
+      "golden_sha256": "f3c2a514f3b477c0733cb648f6e4b3703684766161d97772708dc7de15d5062b",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_ff_legacy.svg",
+      "axes": [
+        "command family destroy",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "8849f8b9a9da621f38d9fd0533a8e33e96722993dfe2f8b33f2ed603b70cf51c",
+      "golden_sha256": "a1db0dc6a31e737a9c9629f6d5626ee3619bbe2530127d1abbf4a541494f2cfe",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_ff_teoz.svg",
+      "axes": [
+        "command family destroy",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "40882dc599de99f0c07581bb2b6a062db044b4063d6e133cd1d219e2ddae73b4",
+      "golden_sha256": "d3dc51d7c97aeb847e94c278881739bf77400977e380edb6f4ca83fa112e3820",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_space_legacy.svg",
+      "axes": [
+        "command family destroy",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ee1d361a20c13a06a44f377938e9de263d9c75050725e2e0aee0a1ab7522dc0a",
+      "golden_sha256": "05f4ed58658e1b0a0875a56933c3c181fbf8b89efe0cf746443d064a51556b51",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_destroy_vt_space_teoz.svg",
+      "axes": [
+        "command family destroy",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "bbe0445b230e09ed8f95be12c2589c0d4569936ff253dd8eab6e6c0da629967c",
+      "golden_sha256": "aa36c079b9c637606eacc05281010b4c0eee137ab336c652fa544b385e58a10e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_legacy.svg",
+      "axes": [
+        "command family create_plain",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "eda59ed70017aa31513ce3f1fecd774023187caef33e0d47707444258e45042c",
+      "golden_sha256": "b736e3eb1ed6c9eaaecfe6669f69f89ad44d7f8524fc9beaa42207e4dac689e7",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_teoz.svg",
+      "axes": [
+        "command family create_plain",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "fd75898274fbfc2cef059f514bbb6b79f4a5b1c0e0e0ce97e710ea4efdcabb67",
+      "golden_sha256": "22d0fa1e4e082cbc0936700f8b858b4bfb86e21c0f44dec80152d4a0dc8b8d7f",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_ff_legacy.svg",
+      "axes": [
+        "command family create_plain",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "b89c3f0790e8d51476f96dc8e9a3c85921a05f0961a50298d1ee5472477836fe",
+      "golden_sha256": "044021a1616a181b9eb64c95f4ddd5d20bca466dd8baf49b9f3acdfde6c5a233",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_ff_teoz.svg",
+      "axes": [
+        "command family create_plain",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "ca515863da7ff2ee9cd55503416736d76a7a852cb8451da199ce49e768d1fec6",
+      "golden_sha256": "142b72d89866fba233a100c17d55422066e0e1a2b600e8d8d884b5e697f477d1",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_space_legacy.svg",
+      "axes": [
+        "command family create_plain",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "6ab082abd1a69efb02bf8a59bd6f7eb585f7b2f64d26c33eaffe8c816db77d62",
+      "golden_sha256": "5d06ad080f42fdc09da344353ba2762f521ca4e64dbb2aa920b957bc16ba2707",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_create_plain_vt_space_teoz.svg",
+      "axes": [
+        "command family create_plain",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d30ef49c8690dfdba4d31d717ec515cc41cef9be5070b0bf630393e0c6a4e9e9",
+      "golden_sha256": "d70fd6387a6660cd9028cde613c360a9e90809ab711441fc5a7d81ed2dd7b85f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_legacy.svg",
+      "axes": [
+        "command family autoactivate",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "18edb3e36a9258384e9a7de6a3ee80594ae99f273889af0b47568d6a157b9351",
+      "golden_sha256": "17fc19b3d54951623aa3e8f2697b7b943fd1248f586557ef1d84f3a88a6100e0",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_teoz.svg",
+      "axes": [
+        "command family autoactivate",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "23003f831438e8084de4be25ba06092671a34d0df21c6fa9f13303ef5dfbf7e7",
+      "golden_sha256": "7d56c401eda33e05e4313fd278b61503366761882c7fb2b95fe4b951c02d185c",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_ff_legacy.svg",
+      "axes": [
+        "command family autoactivate",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "407e5a2995aed36b1c552a6f721101defa6f5fd29734d535955d9853d329a61d",
+      "golden_sha256": "e3a6be9c724c42d646d4c483a7181fbca1b6c37f0e5921966b7e4b873125ebe0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_ff_teoz.svg",
+      "axes": [
+        "command family autoactivate",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b60a8220637cd9cc28b0ca2eaf1d3617c54cfa2430211fd4302cfbdd2691a1b8",
+      "golden_sha256": "5fd4f97ba2edebceeafedf0bb0f2825ddfe301511b755bf92516b26a528ad898",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_space_legacy.svg",
+      "axes": [
+        "command family autoactivate",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "21e5efc0b73dc843b0a6ef2fb2e07d004b0a8ae71146e920597b8c50756c2368",
+      "golden_sha256": "c5e141bb3c8951c6025302d0612783d5a8bacc65fd683737651735a2c4cf5ed5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autoactivate_vt_space_teoz.svg",
+      "axes": [
+        "command family autoactivate",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "c3a1354fccf63b427bf1da1d0a382dceae6e835e68d2ebc67e7ef3de6bb11b73",
+      "golden_sha256": "cd9f580ccef2a5e7e088be0fd5ecedab55ebd900682464d54f9c0bc499de16b1",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_legacy.svg",
+      "axes": [
+        "command family autonumber",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "354c2b0b18a4ef53e8f72d56769937d8771700d25ce649d425d0d77cf27a66d1",
+      "golden_sha256": "6e9da6ab0f5f983695116123f0893f5cf76b8d01feb1c703936ad1d3b4f824d0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_teoz.svg",
+      "axes": [
+        "command family autonumber",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b4f90dfddcf00b7f3eed1eea59820229a4fdf338ae8380fe9b7fcc79012f58f8",
+      "golden_sha256": "c8ba792c2a4379cd435ff31f7a5569048ee5feb00d10be03ce7d158def79e0df",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_ff_legacy.svg",
+      "axes": [
+        "command family autonumber",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "b532f171997c54ade8939e86143f393a5d07bb4b54e494e439976aa5bee3b062",
+      "golden_sha256": "4eab44fe60c6b7a63b4c9849cf089441c73b649a7c2cfcbafb42f5dc67c61f6d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_ff_teoz.svg",
+      "axes": [
+        "command family autonumber",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "4508ed7c288b2bbac96b02387c1f02d04d3ef8cffa0d10cad895349f777aa719",
+      "golden_sha256": "28b62dd308091ad0a0a25f18b7e1736846fdc31d21dabf07d304ab651a9bb257",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_space_legacy.svg",
+      "axes": [
+        "command family autonumber",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "029b20201c4df651e4eec9f536afe54492d688e42902108da154291f3cd9131f",
+      "golden_sha256": "f8f214c2f96d5b8024ed1c549b6dd68212e32411352e7b0fac2ff4f2be65efd4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_autonumber_vt_space_teoz.svg",
+      "axes": [
+        "command family autonumber",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "4f4293cbdf894c2c5c0538d9c1f81ecb3c39a19d7dac56df3d585daee8c4c09a",
+      "golden_sha256": "6bdbc8155f3518031e0752c1ab59eb90fa133cf54c8a8dd15d48aec202e124eb",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_legacy.svg",
+      "axes": [
+        "command family resume",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "745717cde338bc51a02657d312f8dc78be7010aba1bb6ba6b03cdb85ccb956c4",
+      "golden_sha256": "d324f06b05282e1cb484c28a8228c39c17ee2394599169ad89720312f6fc129f",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_teoz.svg",
+      "axes": [
+        "command family resume",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "4c1f507ad973541e7f40aa0eacc5cc1541fcbe0eb5d105c6e257329fbe3f3e9e",
+      "golden_sha256": "30329beaa281378bc64558dcde9cef3c733a6f956816f6705a5ec5137888c65a",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_ff_legacy.svg",
+      "axes": [
+        "command family resume",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "4a52aebd7a4a1d934c0b7b289427324d1a1ee30e1d1907f0c7fbff6b474d714d",
+      "golden_sha256": "487ecf0ec3639936ee1f01ac6706f36fae37d19ca087d508cd2594941be10feb",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_ff_teoz.svg",
+      "axes": [
+        "command family resume",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "7b8e803591a650b008ebcc74a804610462fae7dfb7ad03683f86af0559e7c616",
+      "golden_sha256": "0885980f62ed50d710f9a9707ff183bfb80be99fbd752093bd56d5956e9e4049",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_space_legacy.svg",
+      "axes": [
+        "command family resume",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "648629a98d833af2cf92aef54ef7d5c008826f81bebeb67d6078168bf52feb7f",
+      "golden_sha256": "06810bb835e9f34e497e19b8298234b0b0e5058d8be16dcaf446ea273d119e62",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_space_teoz.svg",
+      "axes": [
+        "command family resume",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "7c9a38f0f3f62d7af73cf25a971fec1f713a3303dd37955735479a82fc3ca4a7",
+      "golden_sha256": "f1d654fd9360c9f8f8ff99d2253adfb04c1ff8e561c0ce6bf13e345506331f6a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_legacy.svg",
+      "axes": [
+        "command family stop",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "7bd51424e4a012081e5eb7456e893c6a4b0be722a24741fd860de586c347472e",
+      "golden_sha256": "512c4bad815242919414549db13636718a7cb6b0014f4de4b4b8b2ee3175bc54",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_teoz.svg",
+      "axes": [
+        "command family stop",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "6dfbc3afd4bd79e05e357362376563dec77bc08f21b1aeac487b7325858352a3",
+      "golden_sha256": "7da83f3cc7fe04ddf384cf4f3c3aa1b7b64024a002117c07a733f8fb917769f8",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_ff_legacy.svg",
+      "axes": [
+        "command family stop",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "c6388790a24dac525526237955212eda3ba32bc21300ad19f9034836510d4118",
+      "golden_sha256": "8c68375fef8599dfeaa506f071ecf11443876076f9783171eab6aecbea3cd918",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_ff_teoz.svg",
+      "axes": [
+        "command family stop",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "5f6900b7491697dfcafbafc12d553345ee3b04856a1b66dd51b8fb9e6f451288",
+      "golden_sha256": "0c21bf6f0e2c9c9abf5343aa6945ba07d661b5e3e35b69a135d50191b135ac40",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_space_legacy.svg",
+      "axes": [
+        "command family stop",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "93e28874d5aaa8438c3fa0fef0fdfb89406e05b2f751a18ac9888e08e1d3306c",
+      "golden_sha256": "870c7f7a09d405b3595f1f3568a7ceee8e85a57d166527c035d65756359ba64b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_space_teoz.svg",
+      "axes": [
+        "command family stop",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "bd51fb7bccee4d6aa47bc5cc48079facdc395c75207032251ff9cbeac4cacd51",
+      "golden_sha256": "01697ebf699a60a8d373dcaacf9ddca7ed9469d93eb2e41729409da79194a0ff",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_legacy.svg",
+      "axes": [
+        "command family increment",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "9a9e788ab9fbb21893201a8edd6c445388a7ff694816af27be504c69310807fc",
+      "golden_sha256": "7ebed0ddc14a9c2e64ab5be555f8f7fff2f509ad3ed3ea70be9a77413f72d2a9",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_teoz.svg",
+      "axes": [
+        "command family increment",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "d19327ec0f97f2c4cb4338cab28833424dbbeb7529ec3d4d041f8be2d229886c",
+      "golden_sha256": "d2241c8d2b956ca614cea2af232317e31a52218e2f163238b9b394973bc689ca",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_legacy.svg",
+      "axes": [
+        "command family increment",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "1a9d1526941b10a6cccbcae1f5f6ecbd2e708e591a6bb152a528100a4eddcaa1",
+      "golden_sha256": "45524257ec2f92b0c73d2b299e2532b9e7916abf9a25c3774b4a4c69716f9573",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_teoz.svg",
+      "axes": [
+        "command family increment",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "091a544d41de2fa2d3d3cec91d49033abfdaa7bfff20ede0029d74e66272a5c0",
+      "golden_sha256": "f4618ee1aa9cb1bd93079f63a6f65acfaf600f51af16b5628618eba34a487c0d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_legacy.svg",
+      "axes": [
+        "command family increment",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "d0e66f2c4b86ac3c2090206b4280299420a2ad170bb0acf36df546d1dd1d8d28",
+      "golden_sha256": "2965876f6abf954adcc0aff2fc8de581fe0ab77bf2498b4caa4f3fb4d1d1d363",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_teoz.svg",
+      "axes": [
+        "command family increment",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "af62622840ecc3bdf459d5fac62846df1d43e4997660fbe223d843c4f316b86f",
+      "golden_sha256": "697f3375d74b21ad9a736fa1f90ebc6d2a6358e2a196e328afbb7c837bed6b88",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_legacy.svg",
+      "axes": [
+        "command family note_named",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "03198659f50332ae8fad16c38487983312ec31dce19766b9cc5c9c45f181681e",
+      "golden_sha256": "c2c258bfe332ee093fa95c529ce5e944f575d3060c3f4c7a20c44eb92d936520",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_teoz.svg",
+      "axes": [
+        "command family note_named",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "221188e842d75b418d73ce35423cbbdc0dae3c0aab4bdfaca872aa3544943a66",
+      "golden_sha256": "14da82ab45ae799c3038206755d8dd9ca76b094805b5329e7ea5feb908e2dca6",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_ff_legacy.svg",
+      "axes": [
+        "command family note_named",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "4c9a9d1670b801968a02a70356e8b6d9e7a7859acf1e3725aa597978feb31c7f",
+      "golden_sha256": "9dab7e4b327dd0dd64b053c5659c96acb3f40e56a7e4073fa387ce3e8baddc63",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_ff_teoz.svg",
+      "axes": [
+        "command family note_named",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "47b39cbecd30d35cd76718a005f57e6ce9da427a7e39d56ff0020eb9440586f3",
+      "golden_sha256": "6ca9ddc0640e025ceb120f6adfe149b03eec304f54344f73588d90d5a71ecc8d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_space_legacy.svg",
+      "axes": [
+        "command family note_named",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "6d2ca5538d6515035f32d4a653ad532750dd2e8d803f4f939b4bfdd3a46cbd85",
+      "golden_sha256": "3d8205e0cf5f647e04c15b07d320934b2baa8071d85d80f6431103f5b204f32d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_named_vt_space_teoz.svg",
+      "axes": [
+        "command family note_named",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "08aa09a4155c0bd7e8c1bdaa0bc2c2845f6ee5829ff7f53e281e4741415faca5",
+      "golden_sha256": "271458cb63f3464acc2605354a06b09b9492d0c5a682d98b67abf67139e7bcba",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_legacy.svg",
+      "axes": [
+        "command family note_pair",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "67b038f5c4287a00c838c6ca91eff99f8f4e9d30ccbfd91fe7086af0e4310948",
+      "golden_sha256": "2c674e757c03165f43c635017b9e5685ff628037174af21915c06c4d7c519e10",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_teoz.svg",
+      "axes": [
+        "command family note_pair",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "a3640591ec644e72d5f15066e00f27316691aa345d2e101a55ea7e2d473cd7b9",
+      "golden_sha256": "da5383a2b63d011493c52d4441e900aa61a0bd877c81d94d850b8ef3265d358a",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_ff_legacy.svg",
+      "axes": [
+        "command family note_pair",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "6eb3d4ded752bacc3d4e444f15168d12ff5097733c224574fc309b616c936455",
+      "golden_sha256": "7e5b5b03de5127ddc9fa151369285fb4af5d4df26756fd4ab8d33ac4fc589d68",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_ff_teoz.svg",
+      "axes": [
+        "command family note_pair",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "203f552561a1c31559fe28aadef96a7ea7590d816895472892ab63757375f0b8",
+      "golden_sha256": "80b287e2ff76badc14ead881d7cc3272c35a737296083158ff220c115814a68f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_space_legacy.svg",
+      "axes": [
+        "command family note_pair",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "9b0c4da06b19007bf84fcf5aa1f3c036e8eba6bd7c701d13a6a7bd2f26ac2819",
+      "golden_sha256": "131071661ab96bf07e5e0f70c2f2eef828088950617fe5ba6c859ec1bde0038a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_pair_vt_space_teoz.svg",
+      "axes": [
+        "command family note_pair",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "149b82d9cc104e61d11e657a389daa8b6946b87422529f3aabab5eeb173ae93f",
+      "golden_sha256": "d014c6cb4945c49fbd3d6bc6ed9621389cbedab4cf06d69d37db8ec1a1e59ab1",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_legacy.svg",
+      "axes": [
+        "command family note_attached",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "8ff9795ba23a46dce863655b585ed8b7ab9b134df451c692ede42d9e92563ca1",
+      "golden_sha256": "b2b7020dc3d9ff1e14bdb329549d6f850012d85165801e88aa4852d14d91f31b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_teoz.svg",
+      "axes": [
+        "command family note_attached",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "fa51cc4d7f95b6834df82628d384c938cfd483a10114657783fc23b4d03ff2aa",
+      "golden_sha256": "000344a9f6268ed3e8704ff2c2e4ae64ae94d0598477dc303c0a9538ad679988",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_ff_legacy.svg",
+      "axes": [
+        "command family note_attached",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "570d074b75af63498250967193632f11c9947fab0f36367c5e9817daa8aebc71",
+      "golden_sha256": "ad8aa7f153de82d12ab17db7aa2a3c051ac4774c833da2e447ba78d0a3d8c1ec",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_ff_teoz.svg",
+      "axes": [
+        "command family note_attached",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "28c198b2bcaf9f42dbf86a0ca4b5ffa4ca988899ff658517ee253331e7cd6450",
+      "golden_sha256": "55b20672193b74c5a53b0676638fbb538f1ae1fa33e2a15360b617d3e798856b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_space_legacy.svg",
+      "axes": [
+        "command family note_attached",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "3667bde688fa77551787cbc442ac72178991dbd58ce082a2a3be2229eb110ba1",
+      "golden_sha256": "66c1ec2af24f35247403ab02a1eb50b62218ae0aba7de4c8c138b66d3925a9d5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_attached_vt_space_teoz.svg",
+      "axes": [
+        "command family note_attached",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "4de853f0461c256be6765bf59bc294d123f8c59d6e213964ff8d2a93df8c8e00",
+      "golden_sha256": "ef9e57711b895bd5458342d5da756c88d35da375e099270ab54bef4a4c6e9de5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_legacy.svg",
+      "axes": [
+        "command family note_across",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "611feaee138d26af455cf57366bdd3eeabb3e1f4fd7b82ded229faaf887cc8de",
+      "golden_sha256": "58c0136ca1c4bd3907e820a72795c12759c66bd891fcfcb545e974b7c68e4060",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_teoz.svg",
+      "axes": [
+        "command family note_across",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "c7b7f375959800f1dbd2b27a69f22e01f1369c984b7b3558d8ea48e704561bfa",
+      "golden_sha256": "3d227b4e1ed4a2a7122473f286e38b171eae3732ca5784a7d0d51104de73c65d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_ff_legacy.svg",
+      "axes": [
+        "command family note_across",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "5df67b11df45add581ac2b848f4b8878eebc7d7d47abc66881c17e874ca8e46a",
+      "golden_sha256": "c7081c7f3320b7eb9197852cf6a0de4be3aa763590483acc0433086690545d1b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_ff_teoz.svg",
+      "axes": [
+        "command family note_across",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f84a29a0f9951e071281a8f5217c0116d3e7dd5a0237823486b02bba72c91f56",
+      "golden_sha256": "34541e1894b52392a4404c890b547689fcf21b4c52bf538d110e6cf408d6d6a4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_space_legacy.svg",
+      "axes": [
+        "command family note_across",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "1d4497f03f58eb2581d727c4e1d87b44056e9cc8401f9f9be1796592876b30e2",
+      "golden_sha256": "be73deeda63e7797bdf23fcec7345670312e1ca80a84322f8229d03fa33a7dfd",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_space_teoz.svg",
+      "axes": [
+        "command family note_across",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "42f315770bc562ff469ecf249c9dfeeee7bcfb430466ace3530a4744129cfdf9",
+      "golden_sha256": "24ade5992f13e6a4916129abd72fa75e6063c8d1907be8f75d8f650447add26c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_legacy.svg",
+      "axes": [
+        "command family reference",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "c8864a22dc173587f52102d182afd11b82828e1c9e5e0d08541993b499fb1fb3",
+      "golden_sha256": "a2adb7ce3f07eb9229326d3ecc6aca22b6cf1c0778645ed750326db1270968db",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_teoz.svg",
+      "axes": [
+        "command family reference",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "0aa4959738a9fce0278fd223b756ad360cd555ceebe7828a454061c230f08e69",
+      "golden_sha256": "10423d1e226bb35e7584e4c023f986de88ed34f35d06be8cec5ed189885503d2",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_ff_legacy.svg",
+      "axes": [
+        "command family reference",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "0d995f5cae6dab70e4c29b62e6afb5461646fe28f3460f69745735423fed01a8",
+      "golden_sha256": "f2c252364ba58a7209b6f25f9564274bdc1200fe30923362578cf05422649695",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_ff_teoz.svg",
+      "axes": [
+        "command family reference",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "dda96baa56b9260d02ff51311c072fe508cc087d6bc6b25fc8973fd38a0adcaf",
+      "golden_sha256": "9b2877cd11c5bb79f6cf00bb607030cffad7e564d02f86e6c21769b6b67e145d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_space_legacy.svg",
+      "axes": [
+        "command family reference",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ed3329c215131f5f4d3b53d9506cec4c426ba0398a7003d2263fe5e085e9516a",
+      "golden_sha256": "d381223c684d969157f93ac4ad5f2e42c5b6183a4a54448d41376bfaa14ab5ff",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_vt_space_teoz.svg",
+      "axes": [
+        "command family reference",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b4a0167d9c1805962c41bd06fed4ea02df26b2ed502a0e8bd17b892e304048e7",
+      "golden_sha256": "a6ef12b3f4822aff233824a15727b7127f0895a5b0f90ea460abc4d0f1a4b729",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_legacy.svg",
+      "axes": [
+        "command family reference_multi",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "0353b9e4cbd7fec3ac27fd1102f3266bb7fc118ab1a668167dec219ff58f8abe",
+      "golden_sha256": "c992efca67a2479bf86a72cc495ddce6329c5bb9796c1bab39bd903486073230",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_teoz.svg",
+      "axes": [
+        "command family reference_multi",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "182efcaca288bbed05b0fcef18669fe500a97b9e626b966a58df74c910f7e5e9",
+      "golden_sha256": "88bc81ee13fa3a0e6d0946523ec095ecae878ad5b748e4c1bff0568358bf4672",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_ff_legacy.svg",
+      "axes": [
+        "command family reference_multi",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "a9b9139908a3e2bd910e2e05bd2360d3ed40fa32af22b4d1a0e5e646047ab51e",
+      "golden_sha256": "a15df6c80a39a34da8f308941de1bf5e3667a404a2a929a2bb204f9007511f1a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_ff_teoz.svg",
+      "axes": [
+        "command family reference_multi",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "9b5495c262d8f10fd5a4e05ebf522133a9f511cc4498895daab208ca87186a9f",
+      "golden_sha256": "67e1c2f2435c0c6e4e2ad22c210c9b19d8a85d28d5e2fc5d319cabfe945045a8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_space_legacy.svg",
+      "axes": [
+        "command family reference_multi",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "e04e2f5009ca679a6e1af0053c7655622589a53440971ca8dafa609229996369",
+      "golden_sha256": "953ba7cd899d16569707de869d1d5453970e2ad941f370e53802a1e32ece55f0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_reference_multi_vt_space_teoz.svg",
+      "axes": [
+        "command family reference_multi",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "ac8b4a48bd92f3a0907893fc0b8d8a5e473138266ac2d649c6a309b5c575a7d1",
+      "golden_sha256": "d0b0da2fdcef98b65919116c5805bc5a724e2ae0c21d7de91d26ed90acfc0140",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_legacy.svg",
+      "axes": [
+        "command family group",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "616a9465592439f066fc551fbb84d4719aa56b279b0eb2e862a024c045938401",
+      "golden_sha256": "fcba34a3a89edbb8b501923b686bdf95560bcc49c8da876e43c48991fd758ee3",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_teoz.svg",
+      "axes": [
+        "command family group",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "6827b845cf3ea760857e61add835f305001f6d6fb57d53bf40ce2b038df432b5",
+      "golden_sha256": "4dc612eb673c0fa934d94d2b576d72ffd5634fe6a755236d71ce13c8997f5887",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_ff_legacy.svg",
+      "axes": [
+        "command family group",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "f4d07fc9b8413f67546921bb13541fa7022cf816fbaa0233e58780f28d9bc251",
+      "golden_sha256": "fe0335c5b68011e0b46100562c1b6240b8c1797dc32334be238c9cde7ad46292",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_ff_teoz.svg",
+      "axes": [
+        "command family group",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "cd22b50513a6a7c5b4a323b93fc779f74eb3971ffa593ee4365cff5a1803dd91",
+      "golden_sha256": "62b6080b95982cab96bc01079b00ba88d278c46000d33bb75e7fbf9a1f922116",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_space_legacy.svg",
+      "axes": [
+        "command family group",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "f2999010a3055bd9cce7fb1383749707fa52d68c35f017a309dbe51913a48078",
+      "golden_sha256": "90d98c6243cfb8dc4edc1b63e754fcc19bdf7247f8a08660b985a451626b0d93",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_group_vt_space_teoz.svg",
+      "axes": [
+        "command family group",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "6f8fdb72b7ae980bd3c50d2c935438468c61d44ba958e7c8eeec1088d5b51a41",
+      "golden_sha256": "c15c90b9089679bced3a4cea90ec4b4065face4a8dc88ee1a4aed600b0a376f2",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_legacy.svg",
+      "axes": [
+        "command family box",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "8aa776fed532ef96ad04ee0b3c7779911e30a516e8dc1e81b94516572f523328",
+      "golden_sha256": "916c9e162e2bc05a7d4d24402353bb909b6e0958491c07a70440a483a259229a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_teoz.svg",
+      "axes": [
+        "command family box",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "786aa632b4b4b8c46417a2f9804cd41ce5d84d801162a090b427f6003021d753",
+      "golden_sha256": "1d2ec2787178969cbde89e90b7e71b965a5d1a0cca01eb6b441f7a6ae715c828",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_ff_legacy.svg",
+      "axes": [
+        "command family box",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "0409bdc222ddfc046eff878559575e13d04b85e89b25d5e045444ae2d28bd9a3",
+      "golden_sha256": "8d5d2631f8db20cbb42cababbd9ab7cea940e27532489d7ffe0a0ce74025c68c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_ff_teoz.svg",
+      "axes": [
+        "command family box",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "2edd2fe093350afbc15fc09bb337deae834d64dc8017600d0460655c433e001b",
+      "golden_sha256": "8f8f400c996c1df667e1c40e32b2aee5d0b0bf0a8898c371c889dbd69e099c7c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_space_legacy.svg",
+      "axes": [
+        "command family box",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "d4099c305e5190442b30e53a3365d638a916ecc47c5a95203bff2cc560def854",
+      "golden_sha256": "9d672c13af9eee10dd101ea933bb4474f3a015f46ecfad03eefff51a12b24207",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_space_teoz.svg",
+      "axes": [
+        "command family box",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "cb46578845ab25f90f0da1b7d894729a3ee1354a02c88419a9c6dd3c9ca6fc54",
+      "golden_sha256": "d13db983173ee06dcf14df6506500e69d2d66cbf789705a652a11bc9b65fb415",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_legacy.svg",
+      "axes": [
+        "command family box_end",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "91a893e155d56f65902c17f82824317d9118f8edec9611cb240508c51e760342",
+      "golden_sha256": "6d36140f9f89bbbc8b3e9a8cbb88bd29c16c4715239d8e73e25eb87cc79d116b",
+      "intended_valid": false,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_teoz.svg",
+      "axes": [
+        "command family box_end",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "effe4eec145d800c4a98fd2881bc7ac25f159ac6cfe2846247863527bec9a97d",
+      "golden_sha256": "4dbb5ce6b8564864c10e7285bf659a0b0ef7a463786a2f3ab2f34089ad45154a",
+      "intended_valid": false,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_ff_legacy.svg",
+      "axes": [
+        "command family box_end",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ec29bdb31d5d1dae943953b613aa094d6040dfbcbb5796f7f64d7b3d06cf703a",
+      "golden_sha256": "8ec88c80773f7914a63b6fcb161748a068b1bb6449526fd28f893336c7b20e10",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_ff_teoz.svg",
+      "axes": [
+        "command family box_end",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "9892cef297634acd2f540a573b25b37774779f966f7c9bf2826037bd86308e07",
+      "golden_sha256": "bf2cd7e3c15e6ce3c499ffb841dee9baafa243e3600b52e73f75179907c45506",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_space_legacy.svg",
+      "axes": [
+        "command family box_end",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "73435e3509c3d869015b5087af3ac185e90e45cf1deb30a37d67b320b74742fb",
+      "golden_sha256": "7cfc37cb08ec2922af602cec5de295d3c3f3c9e64ccebd859697174d614acc8a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_space_teoz.svg",
+      "axes": [
+        "command family box_end",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "340bcafa539fb6760d4b03437d6dc5169b188fc756220cddd707847dab5d9313",
+      "golden_sha256": "ae86eaaae73025f83eae3ba6303a2e35ec5916182346d08f91bfc4dbf9ff0d54",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_legacy.svg",
+      "axes": [
+        "command family hide_stereo",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "a663680028d7bb73d6cd32823323ea731142bc25c18e9eaf0d5f56d6a95ce72d",
+      "golden_sha256": "f7d8b22a4b1653cff8fb6adcd433c124405b1726eba9f863326abc3cc5e80fb4",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_teoz.svg",
+      "axes": [
+        "command family hide_stereo",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "6da250d572c2323e83ec9de9c51cefbd51ddfad54592e30a58bf5c9e9c2982e8",
+      "golden_sha256": "cabf39b14617a17c9af40fc5c9bc349bc76dc95dd075bcdedccf6adc67cac98e",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_ff_legacy.svg",
+      "axes": [
+        "command family hide_stereo",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "e5e8b38f69930986c2f796672d97268f42f7f3881987e94e566848b8600d58d5",
+      "golden_sha256": "b667a80ecd9f20fe2f1594f01732ccd0c0867adf6c0cfe79939d91fad9958f1c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_ff_teoz.svg",
+      "axes": [
+        "command family hide_stereo",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "ca2a53144f664c9fce33a999eafcf24102659d32cd6264d79ab931d377b2d14b",
+      "golden_sha256": "8f4715de69dc480bd1a46a6301c858502f17516603879279e4c7988e29769ca9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_space_legacy.svg",
+      "axes": [
+        "command family hide_stereo",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "9a38df3b4e7ec7332cff44170ba25c2868c4a5e1cbcd3048bcf1e4f2fe0bbd15",
+      "golden_sha256": "b298bdb5ce1af93381ea33c256722690b8b6ea2cacd288f58a59b6839a21d17b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_stereo_vt_space_teoz.svg",
+      "axes": [
+        "command family hide_stereo",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "cb1399b68e47b9cba64d3d8761f20347286cc06d68b101f844f5050bc1969ee7",
+      "golden_sha256": "3f4f18e48d307982b86e6c73f2b19f486426d8aa632f423c308421e56d7bd3c0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_legacy.svg",
+      "axes": [
+        "command family hide_footbox",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "f9b4156d497bc359f7d6a71887a42223229f13663d0081439b75daf3a99008e2",
+      "golden_sha256": "fa421e2310da9be6c0fc0c19058672727ad9aaaf8e340b51bddda9f82de19f37",
+      "intended_valid": false,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_teoz.svg",
+      "axes": [
+        "command family hide_footbox",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "20fcd83bbc4838a3a80dae775d7e6e60d504a8413607ad4c3eef2078db24f47a",
+      "golden_sha256": "29463d9964e13a0952e0cb16bb91de71c93ad67c54900bc3b9ff991e3feeb261",
+      "intended_valid": false,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_legacy.svg",
+      "axes": [
+        "command family hide_footbox",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "4f5734f5b1576606654ff9401dc6b47528f973c83fa11817c6953c67a19600db",
+      "golden_sha256": "d1e8844efb8bc0e86220117e25e50cd0ba67be8b2b35d7a04cec23ab5ccb8285",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_ff_teoz.svg",
+      "axes": [
+        "command family hide_footbox",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "b72c1b6243f21b512ca5602a6482d2151ac8000a8ec48d5201a5744455d4d98b",
+      "golden_sha256": "0edd389d787404913fd138269bf3b654e93be5611f3fa221ea83c44b9b37816d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_legacy.svg",
+      "axes": [
+        "command family hide_footbox",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "879760bf1fd07d1fb176185ba33aa36cd3a895cb037e9f6446001d88b27aa3d3",
+      "golden_sha256": "ddb94704a942de08569bd01d9989225e86cd541f25a3572e9a10e90529046dd2",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_hide_footbox_vt_space_teoz.svg",
+      "axes": [
+        "command family hide_footbox",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "3dda6c089c9a3dcdc9cfbf8689d2f03c7cf4d8f7f3afc6ceae0d2b2ae8f76aa0",
+      "golden_sha256": "49478b3adea5790575ab9a3e2fca76140d1638e4e0a293240f67a20fb3614d19",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_legacy.svg",
+      "axes": [
+        "command family return",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "6e4887eb53dadb1e368f9f95acbaecba92aaa6d78a8de7e25472c07223d4ae3d",
+      "golden_sha256": "22d1b2c21519c5f191fc7c1f898891c5766f512ec07b189388ed3a3fe81a25c6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_teoz.svg",
+      "axes": [
+        "command family return",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "8c49c463e154ebba6272a21c9d6899d47b39c47ba809009da5ef12c2d1a6d33e",
+      "golden_sha256": "3e862b68e0e296602f2b76354dd133589642917b6cbc0720a6fd5fe7b2d4ef0d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_ff_legacy.svg",
+      "axes": [
+        "command family return",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "d0ad60173e64b4a6d43ed1f094bf830fcd49015163a6209a6e9ad850b63dc9fd",
+      "golden_sha256": "a4218b9fb1bd90e1a75b485ea9094298d1d3124308dee7d5863931b1480b977f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_ff_teoz.svg",
+      "axes": [
+        "command family return",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "e02832af739ace36f85b6059e8405f7aa0db917f66322afb1a1bd5defdf81647",
+      "golden_sha256": "b32d16c328f2e4e093d411e1f2200522e850c5c5953ca3b0231be7e4413f7b59",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_space_legacy.svg",
+      "axes": [
+        "command family return",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "d274cd52e50cedb7738e12f5aca7a9325f8abee567d882538a807ede94b8878d",
+      "golden_sha256": "180ec8380b4871321d44e77d94d848b00b591bcbc3fe4c3a5d1a0e16da3a68cf",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_return_vt_space_teoz.svg",
+      "axes": [
+        "command family return",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "636e95dd97fa17856d5663429e910267552a8da58dca3de7b09c1aa9d438fdc0",
+      "golden_sha256": "3cdcb231d472379a3364539421ed6f0f2c42d9623b7300645f6036f83c2a76c9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_legacy.svg",
+      "axes": [
+        "command family newpage",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "30d7081248ab9d706edef2a18190ad86b297c91aaa659374b744802b1d9b0785",
+      "golden_sha256": "f6b7608d5d8fad83b85dd8b1b8fca09afb3eb721017cee5006fe6fae39d58674",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_teoz.svg",
+      "axes": [
+        "command family newpage",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "884d8e13b22d014ebf0b1b7ee8ca70bab19e250dbd582eb59a9725a13e5c1165",
+      "golden_sha256": "0baa929f6d59587ce1da25f875b8e222533210c5903354c5157625134c6c3743",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_ff_legacy.svg",
+      "axes": [
+        "command family newpage",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "990f507ff24a288e8d3d28886a335c5a33a125c07a82944b9d3bebe75a9304ab",
+      "golden_sha256": "612d9a30e17983ca45cdda504eb84c493af6b1405426ef6b429f82cd70c7ddbe",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_ff_teoz.svg",
+      "axes": [
+        "command family newpage",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "c845321c33d48aec15fd03ae4a17d6feed6d15903e0da2b746ee268865e72e60",
+      "golden_sha256": "992230e4f676838f4cd863cefa94a5eb0577e4f075b89a338dddf2083225110e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_space_legacy.svg",
+      "axes": [
+        "command family newpage",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "2e28114c742d1f94f5ca7004abb5b1a74a1e5c8c910552990fb293df276ebf34",
+      "golden_sha256": "4f34562401b423bad32ffb3ef6fe475f53e4def9f9b07ad985287be7ba80790c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_space_teoz.svg",
+      "axes": [
+        "command family newpage",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "b0628d015c150d579ff94724c5fe5433015ebf7fb0cbc4ca2a38af7ae4822dec",
+      "golden_sha256": "4395b28eae7255cee51a75e1ebde8f9473b6a6e06ec0d66092909305d6941e93",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_legacy.svg",
+      "axes": [
+        "command family arrow",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "e5eb8fac38cc58ba097b5730493c8a74e50a025421a17878916693d5ab59d83c",
+      "golden_sha256": "2943007c866e53ab9e7999f2ed791abef1bcb7148e7ac4f9989bccca9d39f863",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_teoz.svg",
+      "axes": [
+        "command family arrow",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "6e5ce452f8d71e7c9c16b99c4650f5805e837b16b59d608957f0b55d1ea63dbf",
+      "golden_sha256": "daa39cfe3453bfe73d71c40c3c75feb9cc8cbf37b8389c5badcd87c759a63d28",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_ff_legacy.svg",
+      "axes": [
+        "command family arrow",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "68683a17a0f0fe31e5fefa21de8e978c5d8d9ea36ece7d152db1244bf3a02f1b",
+      "golden_sha256": "63d5cc95757ed435e08fa8f65e53e94a13917de502ea64b353505565920770e4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_ff_teoz.svg",
+      "axes": [
+        "command family arrow",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "74045482472681d47c004a3c981bb8734027456a0bcfd9ccdb6e7050509e8193",
+      "golden_sha256": "7e58e39edb1f33fc77d218f589568b0d5bb4a0aefb287ecaf2fa419b072bbbf9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_space_legacy.svg",
+      "axes": [
+        "command family arrow",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "65f72f546efd52048a73fc4518125380dcbc4d494dbc3717d7f457b5cee13ae0",
+      "golden_sha256": "5cd4856fcb972f2742c069b58c6ca09168f13048568c8b4fd962965c157fe6e8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_arrow_vt_space_teoz.svg",
+      "axes": [
+        "command family arrow",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "9bea4f96c89556182e3bc6a05a23e87aef6b6a4abacb72b1a24d10895bc1278b",
+      "golden_sha256": "b5f2c82bcef596194d8700cc304c4ed5e18cf7494934c7eb81afc56c2064d790",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_legacy.svg",
+      "axes": [
+        "command family exo_arrow",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "18597c1938d35c3ee2a335cc3b77dff5948ad358e4f655bbac403fdb86b8e3a5",
+      "golden_sha256": "7bd1f33cf662949f79008082540828c302a7bf05a38b18d994d92a6606b7a32c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_teoz.svg",
+      "axes": [
+        "command family exo_arrow",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "55bc373e2b1c512c4063308c8065077a22bafafe0ca3dd037f0c7d5fe76dd92d",
+      "golden_sha256": "7a92d5cd9280b3e3fcbed8b45989032c3d26a892ec37d62bc6777068938749c2",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_ff_legacy.svg",
+      "axes": [
+        "command family exo_arrow",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "4b0572653437919c79ad8e27be87206ef9a8e00917c25ced5e52b4599a2437dd",
+      "golden_sha256": "16367463f02462a74e35c3e4b6a937e6f8b2090d4a72b450009e5d2995c4995e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_ff_teoz.svg",
+      "axes": [
+        "command family exo_arrow",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "bf4188905d1812a9a8b5616c1ef72cad9fb31b4b799567473d5ab4b978de9df9",
+      "golden_sha256": "ce89c5b07f8fc01095bd82a2ded38d075ccd8b371dd6bdf9d6601c0046d9b1bc",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_space_legacy.svg",
+      "axes": [
+        "command family exo_arrow",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "5d66e71c22ca3b79f500296cad18e32ab37c67ae4b3ec74a0c7946f2be58b55a",
+      "golden_sha256": "8951924fe6257922bd9748606faed736cfd9ccad83dccd0f7a8d2338c48f9971",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_exo_arrow_vt_space_teoz.svg",
+      "axes": [
+        "command family exo_arrow",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "7a43f679057d9dc1e7d5c1d9bb8ac193d4e25603a04fc2fd8adb9d5848c5470a",
+      "golden_sha256": "67ab457095af353396356cfb2312876f459f68cfd31be3a5f8b77f8ce634a423",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_legacy.svg",
+      "axes": [
+        "command family divider",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "acaee757a1225de6105c20914840547526fcbad9cc55fdf15237617bc56411d3",
+      "golden_sha256": "47dea1da653d6e28fbfff88ce80d8b30089ec5655888ab8c361fdfb8dbd8ebec",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_teoz.svg",
+      "axes": [
+        "command family divider",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "6694caa6b321df4da6e4c1b7a19e70d501155015c658a8560ea4e458bcaabd1d",
+      "golden_sha256": "1a4e1a5d85f5184b5ce6ffe3e9965e7190568f70e47e2201b502591516befa68",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_legacy.svg",
+      "axes": [
+        "command family divider",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "4aba7a3576186b088d67f744efd928ac6fc36855c7124bbf23ab9436411aa074",
+      "golden_sha256": "536a786f3112cb6dc3ae0b1192e5987dd5555bd3ef5b6585d0c566c2b54fe0b8",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_teoz.svg",
+      "axes": [
+        "command family divider",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "9d41b51a491430af883444b8910a9354218d7af57042add6d53724b452e5f93d",
+      "golden_sha256": "eb6347b5db42f6ffb568e24044f1aeadda1a21eb69ff1545d5956fa5eb30cd73",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_legacy.svg",
+      "axes": [
+        "command family divider",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "d35c010944e4629d3dc54fb00a28d9438b7980ea8962467a884c41b16a953584",
+      "golden_sha256": "b495317bcb29da25b0517235922cf4e4f8838d29adc583a93927c6caef35a010",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_teoz.svg",
+      "axes": [
+        "command family divider",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "895f807ad6b8c58798bd33ba3a86eb0c25b8d5149899916f759c1acc493b921e",
+      "golden_sha256": "4d0535e7a7b348557b32b5181071ab7ab566250f09fb5a7306b83cc3d499825e",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_legacy.svg",
+      "axes": [
+        "command family delay",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "9dcf0f8436f4f3d5c0bc7dde510394067947bde86a0e79e4abdc71514aac0201",
+      "golden_sha256": "20cb328c3daae1405b09d5ae74d1dba2c3b9437173a2b447210edd93bb382e18",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_teoz.svg",
+      "axes": [
+        "command family delay",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "3f2c71d57b9526dabcec1f7e82df27dbc70e921d95d360b96306fdcf0fd6aebb",
+      "golden_sha256": "e70e2cd875adf94f646d36d0b5b5b7fe9610b3d4f7d9e623eecb190c19ad7186",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_legacy.svg",
+      "axes": [
+        "command family delay",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "0fd6131354b004cfe73bb77a2a46ab622415110bd2c14a15e471619cbf8705ad",
+      "golden_sha256": "106d6fdcf9d1766bce2ed339515e363d9c18b4b77ca1e5ec1c1e28d60f176c86",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_teoz.svg",
+      "axes": [
+        "command family delay",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "a5c1f2fa1deb0a8f5ca51d474e38b0b6baf6d82b4abfdd33f7c25fbe80195d5d",
+      "golden_sha256": "6e02adf2f066d2eea1bc4ceb959fbe2c3b5c5b7770536b395d530306f194753e",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_legacy.svg",
+      "axes": [
+        "command family delay",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "b9de15f1ff0ce1d5bfbf076f1fe5f2aab31dbe73f145e594e866340ee1d41bd3",
+      "golden_sha256": "7614057bfe8d01acfd311b8e5bcf2effb3e334b0a224bfbb853b809486ff8c4e",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_teoz.svg",
+      "axes": [
+        "command family delay",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "fba237d0ac789e890018d87ca2efb1f4ae69dd97fc64054685128f8f78e557f1",
+      "golden_sha256": "100cdbaaacbc05f4822b68f3a4b5b8e383680e27d02907fbd36ece188a06a85f",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_export_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_legacy.svg",
+      "axes": [
+        "command family spacing",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "1d8059b3198f18381bdd7066233feee21b389b897f75fe942461bae6bf9aaed6",
+      "golden_sha256": "fe23ee2ff3212f680762aaf38ecaf290f99e360191bf462490e07aa5f32800c6",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_teoz.svg",
+      "axes": [
+        "command family spacing",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "bf9bc4eac1cabcf378c7111f2c2824aa3d0b01c5feef41c0ac0898ac826ce555",
+      "golden_sha256": "448e209edbda2a4812d79e60c6aa8efeb86544dff05a360ec34cbf41760caa9c",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_legacy.svg",
+      "axes": [
+        "command family spacing",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "bc0f7bcd0b4d90e89b9a09f3edc9904035598c6e6cd5505cfe24586372ab9b72",
+      "golden_sha256": "a4c2a0454915f4ebd55f825ef441dd49cb3bfb11d558161323b7771291676077",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_ff_teoz.svg",
+      "axes": [
+        "command family spacing",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "2f17d00df175da585ddf525bed97f41dfdd3db8f54b5ae45aa04f6b5cca624ba",
+      "golden_sha256": "29796cb0752f166a20eaa18e3facfb8ff41a2ffb683c1cde5599fe66dfb54ce5",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_legacy.svg",
+      "axes": [
+        "command family spacing",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "8f5b0b00ff1ac23ebfd015564e9d1e6c736e3b72e8396511410c93de0cbfe002",
+      "golden_sha256": "cdf8a133d39fb83dcaa9a160d0113fcd3b5027d226c985cb0e0b4b191f9ef051",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_teoz.svg",
+      "axes": [
+        "command family spacing",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "55dbce5e47dc6ef472909ba46364035d54af044ea8d87f742d2e51f281f143c2",
+      "golden_sha256": "a5e278f72f1838a07fd399d81d4d929a30de3ec46332bca6ca3f2d6931361537",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_legacy.svg",
+      "axes": [
+        "command family skinparam",
+        "vt",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "8678f9ed02a978d1ac10e21be17e780ebc5949dd1eb67c60862abebf4ba84574",
+      "golden_sha256": "5d1987d2e339e8358fbaca7b7d3d5a3e82d4802d1edd1a8d358be1c9ffb7dac0",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_teoz.svg",
+      "axes": [
+        "command family skinparam",
+        "vt",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "89889ae5875480bed0acc19de02b602d7bb897dbd3f4abde45ad37898f112718",
+      "golden_sha256": "d90b5210ab0800999ce731196e720e0d2ec0451cbb02f3fe96eb46331fe759f7",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_ff_legacy.svg",
+      "axes": [
+        "command family skinparam",
+        "ff",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "01ec0ad26672ef58af18b1da7eafb550fcc566d52111a54f3a546f8e4a9b5886",
+      "golden_sha256": "17022acf6762fe5b6d25620d0b539853aee54bf0c00aed76e277cf6ea34426c6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_ff_teoz.svg",
+      "axes": [
+        "command family skinparam",
+        "ff",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "404c7705045cea22cb177433cdce34fb8d213cf077b6d19e1c98c10cb748c51a",
+      "golden_sha256": "84fe3ac79bca878f841a971abd8776e142694f542524337a1100f8b940c38f74",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_space_legacy.svg",
+      "axes": [
+        "command family skinparam",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "1a8e5d1333a05e370675af087dc83b98180b408c542ac42f3cc534f121a05b10",
+      "golden_sha256": "a0921ba2b3376829623530e8205608e61f9fb99191a5a5bd1e80ad00b70b9a25",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_space_teoz.svg",
+      "axes": [
+        "command family skinparam",
+        "vt_space",
+        "global signature with optional/nested leaves",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "3a4a55f826a6ecda301efb9167a1e4ac27526c66b053a974d74356603e918668",
+      "golden_sha256": "90e6b9557c26614adf56c4f7613382223787ad6204629817c276a00e403c649a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_0_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_0_legacy.svg",
+      "axes": [
+        "inline arrow alias tail reparse",
+        "quoted display supplies global bit",
+        "'\\x0b'",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "ed79e8b2425b24337c13ba9406320805abc53c3a7756a7cd0d632e89089233d3",
+      "golden_sha256": "ed41e754939887c9a2559bccbbb1a2c5feeff60b3420671b1576f0653a956132",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_0_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_0_teoz.svg",
+      "axes": [
+        "inline arrow alias tail reparse",
+        "quoted display supplies global bit",
+        "'\\x0b'",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "43b27cd793620a1f49700156e9fb8fe887765d493f9afa4c25d3ade0b6c3d3ad",
+      "golden_sha256": "31e81b0ab2329a2486a1dc9bb966bc758bcd7dbcb4eefc8425dbee8d587bc953",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_1_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_1_legacy.svg",
+      "axes": [
+        "inline arrow alias tail reparse",
+        "quoted display supplies global bit",
+        "'\\x0c'",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "1f970dd7fe3cb27d9fb2bb563431b9bc26e458f64200e6437bf57c230e99e269",
+      "golden_sha256": "b21cf19e92bc45e583519f56084743ac590f2f0111977e1e9ea5007c0cb65cfa",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_1_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_1_teoz.svg",
+      "axes": [
+        "inline arrow alias tail reparse",
+        "quoted display supplies global bit",
+        "'\\x0c'",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "a3d43b9f7c39c7107b19a58b5517383e5392366e3e6356630dc1d026ab508f58",
+      "golden_sha256": "24cd7120084cbc46b334e569f431dc4c1d59738fb6a44652d3c822d347dd9e56",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_legacy.svg",
+      "axes": [
+        "auto_newpage",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "e4a576a79e11fbb2dc8b443c8bba613020f807163db5188bba891a13a63cf0cb",
+      "golden_sha256": "1e5da93fefdd8b3af94a0aa3d04fec6ea8ef909dbb73994e5b4c135f47ab453a",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_vt_teoz.svg",
+      "axes": [
+        "auto_newpage",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "a9e6102155dd1491ef68164a7f7ed1e5ba14526c267c903adfa34124a469d3a5",
+      "golden_sha256": "cfb39fe2de6017061e872be3c42b7e619973f3f7eb7fb7c521e33a3f0204d430",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_ff_legacy.svg",
+      "axes": [
+        "auto_newpage",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "e88b0008ba15361df71a982eb4c95dd025efa885dfc0c863905d65bf1cbf8515",
+      "golden_sha256": "c98918dc8cfa9c6a8e57d0a9a370809981574ddf978b3ed626a7fed879be794f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_ff_teoz.svg",
+      "axes": [
+        "auto_newpage",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "576d45de5e30899af36b4848cf6d5f43d8415bdf3b5624e49d222d7fd33c8c6b",
+      "golden_sha256": "5984f6c1472a981c5cbfd003babda1a7d81bcf2fb84739bc2d0e7be369566be9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_vt_legacy.svg",
+      "axes": [
+        "ignore_newpage",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "4f8b001d7c3f19c8142862cc08d1f37dba9c297c87cf20bb8d1c683ee2f6d456",
+      "golden_sha256": "648c062bb4f714d3bbff2c0b9043edb9f41d0dfbd8262b76e7c999e6f65e344b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_vt_teoz.svg",
+      "axes": [
+        "ignore_newpage",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "ad60c0f01c1f5cf762d008074e608b4e4bec1e848e8c0a6c4594c01b0381b685",
+      "golden_sha256": "6524b3e040ece6958ca3cf4ce734011448c037c8305688ff1d8eda8d23616809",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_ff_legacy.svg",
+      "axes": [
+        "ignore_newpage",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "afd74583ee77e626bf56141945c4053d895cf8f91cba6f21a269d8de8fae2b9d",
+      "golden_sha256": "be478309d4b4b6fd9e6943710c58a1ed31c0b969135b4a150f25a7333c606405",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_ff_teoz.svg",
+      "axes": [
+        "ignore_newpage",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "ca552b016361d73a3b564b69c53a154ae59127341acd41276c505a224055c569",
+      "golden_sha256": "849654d2fe2f9bcfae47f04c9e75be6df62579cf11947f00e676dfbb70ee007c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_legacy.svg",
+      "axes": [
+        "hide_unlinked",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "aa866214f3f8e118a4705dbf6e863403e9bda1a6120e6a69a9e4dce7d468d2ab",
+      "golden_sha256": "70c1caebefb7967429ea4d73ff5fce4cec03dcac195f4075e1d956036ab33d06",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_vt_teoz.svg",
+      "axes": [
+        "hide_unlinked",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "31e2bd349fd9996d5b874b54870f7c309e164b856038ef71ece09ceb3efcd5b5",
+      "golden_sha256": "f8432df2ad3db66fd53a16099f84b40b37936f8c8f640806904eaec679edf1dc",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_ff_legacy.svg",
+      "axes": [
+        "hide_unlinked",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "891d1a4b2df24c92a53b2e2bf175c41500a6ac93dc911acd7da390cb30ae5b0a",
+      "golden_sha256": "bae3ac60f1ac9308256f0c75c65ff7e6a054da0c10f7431f4a13ed5db57565f3",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_ff_teoz.svg",
+      "axes": [
+        "hide_unlinked",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "83eef2ae53cb722af06d7496f74922f4fe8fa744b8ff41f15e29c13ab1301f8c",
+      "golden_sha256": "ecbb50c4a9a993621e146fc5e5aad5e0dc1c57809ef5affbb93ebd550a958518",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_legacy.svg",
+      "axes": [
+        "footbox_old",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "39360c557e0f77781c38ea13557e8cc10b57fba668cbe760204d77c1d7d7465a",
+      "golden_sha256": "c14aadc60304806e75d6c739a1631a2c0b545c9899767afd36f0517f426dbcfd",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_vt_teoz.svg",
+      "axes": [
+        "footbox_old",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "144b8068203669dccf960fae9b83f73a71d217e52d576cad51c9d5ca23104e89",
+      "golden_sha256": "5a1c1a2a5de64a4ede02acb963fda89d22c71a43496d48d807d1362af70119d7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_legacy.svg",
+      "axes": [
+        "footbox_old",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "efc20fb1aa60a977f8d9d3c225556fa5b86c72432e0513aa17d2e50b0dfdc7c9",
+      "golden_sha256": "f4b2d98ef663035acfe5f0269ab6cf235b2a3a490d6ff0227dad05cf2fbfb3d0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_footbox_old_ff_teoz.svg",
+      "axes": [
+        "footbox_old",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "6ce09c3487d158dcaa77c0def331156b971d36fa5845d0ef8a5fcde15ef9b467",
+      "golden_sha256": "670925a3d72290ca973df32b8c398ad512d132e26ab16d474fe2a5ee5f402619",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_legacy.svg",
+      "axes": [
+        "activate_short",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "265803780c6ab4438af50eeb80dce5998a17997b8499834a8474bf10db8e09a0",
+      "golden_sha256": "b122e23348e988aa37c2a89fb8479ca04fce75894a2bc5b75f625230f6513280",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_teoz.svg",
+      "axes": [
+        "activate_short",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "11886d048a3dd34dcada9873e2a8d5193bd9002b1677ca96b4d472b378ad1a71",
+      "golden_sha256": "8fd134db3445badbafe9cff76b1a22f66178371e9e7a64f4faf3962c97c4c2ac",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_legacy.svg",
+      "axes": [
+        "activate_short",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "ca842d8714563c3504ed0ecc63c6cd2723d34a8982aa7e69eebb4bffdd8b461a",
+      "golden_sha256": "814a32cff38abe6c0cedb42b2999f1d631a24e52889e6a80422d20af60ede002",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_teoz.svg",
+      "axes": [
+        "activate_short",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "00c01d9503d69b39c0de785a298e2c4a1220ac1049b21c577faa1f8857ac7f29",
+      "golden_sha256": "e6db8e956522f92e60b078a86d243c747d400bf10e8ab436ce94f64f16d6281f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_vt_legacy.svg",
+      "axes": [
+        "deactivate_short",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "14ecab83893cc8903b92b7a0655a6c026a310111f80099b1993b65c430eefc37",
+      "golden_sha256": "843d05977779bbad490618c085424d63338e061650f8b6ae4dedf8294e3c002d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_vt_teoz.svg",
+      "axes": [
+        "deactivate_short",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "03eb712aae6cf5ed70e0720fd9d982ac29977405d085321d5e323bf2579c2f9a",
+      "golden_sha256": "c9bef4ae5284fefe4a7119e990ae4928c2103bdba953290fb4f66da1ac38ca48",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_ff_legacy.svg",
+      "axes": [
+        "deactivate_short",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "7d8ebfda720dc14d54f71402809d6eb6907b4fffe440154f6564baec4c2ba09d",
+      "golden_sha256": "59cb3a0ab8bdf2bc00870ec2f7677470a9a34a9d86c9fed85427a3d86c310603",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_ff_teoz.svg",
+      "axes": [
+        "deactivate_short",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "ccd8837bdbf23bd2ec9def8b1b44d9cc0bcba7d929e596b30c3d0e4dfdb972bf",
+      "golden_sha256": "56cfc1b3e872726519965551e26808fa121bea1718b85fd0cd1dcfefaef1d8b4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_legacy.svg",
+      "axes": [
+        "url",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "872c77e6eb4384501eb4b0a5ab930b15a4569042ecc304ca0fc7ec7aa25fca51",
+      "golden_sha256": "50b604df45632774bf869b1c529508db0e2aca0560a37c00de4bba4ce51fe2e1",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_vt_teoz.svg",
+      "axes": [
+        "url",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "5be19892ec5a94689f1279b7cc2aebbc5f10758eafc0f996e49a93ff64846845",
+      "golden_sha256": "21c57cf3b9c21f8e8382c69b855328d19f98885b17662381967e6b5ecf413031",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_ff_legacy.svg",
+      "axes": [
+        "url",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "3c71418a8464762b022c98b341b1b6a0c24a5b4b96a86dcd0878a9b04091b0dd",
+      "golden_sha256": "653088588864b24c1c56b123bedc286f36da4e24fb73360de249005bff395f8b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_ff_teoz.svg",
+      "axes": [
+        "url",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "cd17f782559affba7eb5fa1a5c954160bd5864ce0050143e0c006bc340faf899",
+      "golden_sha256": "d2e9f72df9b31d22b3fbaeacfa3026b4a45f9e3657e198b4034933fb2d8ad64a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_legacy.svg",
+      "axes": [
+        "participant_multiline",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "326e4f02215d99186a36e13a6c55427fe2e9dc88484a3f3fcfa83f8a6e4ef396",
+      "golden_sha256": "10ad1ff607cf505650a93f4c2821dfe88bc2968dec3767ebdb610a3929e39c11",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_vt_teoz.svg",
+      "axes": [
+        "participant_multiline",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "aabd162b6136a58cec363b2b5409fa45d8f4d93b5e43b90607b07f6adb7326ec",
+      "golden_sha256": "0b8d10c00d5aaec2872f62dec6bc0fc0f08fc64ee4206c1ae1901dda8028c69f",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_legacy.svg",
+      "axes": [
+        "participant_multiline",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "2a6e8d365e6c9df4624ab493043d8192398c7c783e4d130f14cf93516826585c",
+      "golden_sha256": "f2c7c5fcb7ed54414763518555cb1ff7d9c618a7fb9b350a2006c1c0cc354269",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_teoz.svg",
+      "axes": [
+        "participant_multiline",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "d2e9d23c575d108331a3170bc14860b4c7f0241586b11c69e4172c8c6d1a14b1",
+      "golden_sha256": "b07a3334a469aaef453ef0cde3d0db6a5db5a6bd45f8d56a632b0326fb4e42d0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_legacy.svg",
+      "axes": [
+        "declaration_a2",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "88c72b85e0a2dcaaeb49dc86fb9eb8d440eb41ec19f70ce08a93bd51c7ce0b1f",
+      "golden_sha256": "c4b98e1cbc63836c7dabb523ff9335254783252adf86ede0fd6aa82361443177",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_vt_teoz.svg",
+      "axes": [
+        "declaration_a2",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "fe06501ef6ca2e4f39c240cb3c37c188a14a841a3889bec5add6823ad198febb",
+      "golden_sha256": "1a74173ddc52d337ec64fa80b7d204ffcb3e96ab4d728bcdcafc2c330debe3b2",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_ff_legacy.svg",
+      "axes": [
+        "declaration_a2",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ed9b4b25647acac4453c5811aae44a35ce22a144b25c721d06e1e1722f6d752b",
+      "golden_sha256": "1f95c475be5bfaa4121560789f17d580a5dcfe808f39303f6de618660b96e6dd",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a2_ff_teoz.svg",
+      "axes": [
+        "declaration_a2",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "a1f202e90a8c2c01a38130a440586068a108bb7335e85bb56fc7b0a18f9b37a5",
+      "golden_sha256": "f84c9b3b161d993c312b85b6a169a90e61c2ea64fd68f494658c0ab6fc35df64",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_legacy.svg",
+      "axes": [
+        "declaration_a3",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "346da3c7549a7e45ff1b0c44359f30fc0f30a3632aff3f219b303bf9cc5df65e",
+      "golden_sha256": "48f297bb1a9a617c73eec3328064a6a1cd1ca7b8f2bb8bc38cf3bdc64fad39f8",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_vt_teoz.svg",
+      "axes": [
+        "declaration_a3",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "4b82b09fdf0e9194de5883e35161c8b449826ef68ec74851b027991ce2d216fe",
+      "golden_sha256": "55e0994b4ddbefc52ab4374c9e942f4e5b82d21da17624b9111ff2e99c0bd2fb",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_ff_legacy.svg",
+      "axes": [
+        "declaration_a3",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "051a21027cea0f96386b2515b857310c5c3979afdab1262731ccee9eee5fc432",
+      "golden_sha256": "c1fd2ba2b3dda8ad2ad6d3ff545616802a4e2412fc1ad9b07cf19fff48d155df",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a3_ff_teoz.svg",
+      "axes": [
+        "declaration_a3",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "1c4967200cef90105c1481039e4ab4ec74686fd89e446f2614fdc53b934fe936",
+      "golden_sha256": "b39571e03fa09637c8b035aa191a020cd7edc9e1a58d59d499aece8dd1eb2110",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_legacy.svg",
+      "axes": [
+        "declaration_a4",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "8463332c279ef55574044874d11c11b0fb72dbffeeeaafc1b87798b8b1fed363",
+      "golden_sha256": "67d0fb48a03b07ca7502eb6becbef424b40b0e9bb62e0a5182c72b5ccc4772d9",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_vt_teoz.svg",
+      "axes": [
+        "declaration_a4",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "ea1e2fef937a9affe0c7e1bc7605451cc607c7ecf0f6202e2e483136de43f472",
+      "golden_sha256": "a4a895b335176bd676813fbb85f2733a012a100ff454b542f54c472ac4735286",
+      "intended_valid": false,
+      "observed_valid": false,
+      "reference_outcome": "java_syntax_error_with_export_failure",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_ff_legacy.svg",
+      "axes": [
+        "declaration_a4",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "aea6b91737843b87be73adf729ff2e0682dbe9a5f5686d005d9da38ca5f1743a",
+      "golden_sha256": "3fbc91f7b522fdc3f3c086c2a9e5af444c70afd0f9d033db2b9d5578ed91c82a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_declaration_a4_ff_teoz.svg",
+      "axes": [
+        "declaration_a4",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b91498dd274d060a8dd250e2b37a72c79611178a854d7e74aec32198a0cc00fe",
+      "golden_sha256": "a46fa109b5cddb337cc654ad124f2d6f03896dfea6320c4760b1ff40262f8db5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_legacy.svg",
+      "axes": [
+        "link_anchor",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "4d9191e686d7c565971d4ba34c48ced8543b1583eb249a3c1949608da9d4105b",
+      "golden_sha256": "83028594ee9c8e325b93af8c5372ba794ddc2c1ea1c159b41e85c0b19d4bdcf0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_teoz.svg",
+      "axes": [
+        "link_anchor",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "f198c504c11661e392d942a82404bd71591002117939a3e4ec4ba4cb1a5c5920",
+      "golden_sha256": "2adc9762d78ddd62813a933073f192a2a58447b3f20706326a31ba63493a9030",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_legacy.svg",
+      "axes": [
+        "link_anchor",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "08041565fa6ffecbcffce6ea79cfebe4114fcb970394f21e92cec764e7ff622a",
+      "golden_sha256": "9ebab4052ce71ace774cc2a25749cd22af0684a5896a2a5250387bc88bdbdb27",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_teoz.svg",
+      "axes": [
+        "link_anchor",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "b5bf9b37ad71941a8993e32ac6b8d45d61efb245cb7732cc44cfd218fe870cec",
+      "golden_sha256": "702ca010c742a49d316c12fb83026539cd81fadd1b114eaff83003915c670512",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_vt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_vt_legacy.svg",
+      "axes": [
+        "exo_out",
+        "vt",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "76b463136f5eba74abf2cda64dfaa38c65b30b3c7fb8f2ac203bfb200a2255d5",
+      "golden_sha256": "af386052c9abce4dc1c9cc8dd98a388d09249cb0252c20708c0c8cdca2bc2a96",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_vt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_vt_teoz.svg",
+      "axes": [
+        "exo_out",
+        "vt",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "3ec3f521263a3c5da02810c395436ee06b5fdd0b78ba05c1826d40697859a46d",
+      "golden_sha256": "7e509293e7f3970b4aa2c6cc4a25e7f88c8bae7711415474006ebc4f77bcacc9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_ff_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_ff_legacy.svg",
+      "axes": [
+        "exo_out",
+        "ff",
+        "factory-registration completion",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "81e9e835b16f245aae652bb1e5ad45b7a27604ed9597510afe1417f33de2ffa7",
+      "golden_sha256": "ddd6a7fcb5c086f2e3651dfc62d71f23580c86340ed7210bbbd62d8290811dca",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_ff_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_exo_out_ff_teoz.svg",
+      "axes": [
+        "exo_out",
+        "ff",
+        "factory-registration completion",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "ddd7b4cd1898a327e5a846c75f53c636a68b147815ad640c87c8d0e602756622",
+      "golden_sha256": "66b7824c2e1130e450757ae9ec5674b0dfe04b27d91baffc13f10b08b95bae8d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    }
+  ],
+  "findings": [
+    "RegexLeaf#getFoxSignature contributes MASK_SPACES for direct mandatory [%s]+; RegexConcat#foxRegex combines direct leaves only and #match checks the full StringLocated signature. FoxSignature#getMask includes SPACE/TAB/CR/LF/FF/NBSP, not VT. Rust has_fox_space follows this source table; it is not a VT fixture special case.",
+    "All registered sequence command families were challenged using VT/FF and full-line bit placement, with optional/nested/direct Pattern2 distinctions. Fresh result103/224:63 valid mismatches and58 nonpositive references remain.46 command rejections in this mechanism are falsely accepted by both Rust revisions;12 exporter outcomes in this mechanism are separate. Complete fresh taxonomy is in fresh-summary.json.",
+    "Four intended-invalid inputs are Java-valid: CommandBoxEnd#getRegexConcat and CommandFootbox#HIDE_SHOW_FOOTBOX use spaceZeroOrMore, so no mandatory whitespace bit exists. Their intent was preserved. Rust end-box uses split_whitespace and handles the token; legacy whole-output matches, Teoz envelope fails. Rust hide footbox uses exact literal matching and silently misses VT in both engines; both are pre-existing mismatches.",
+    "Create is the only command that calls the guarded declaration parser on a tail. Return/color fragments, autoactivate, skinparam and parallel/arrow-style stripping are other tail consumers without that guard. Inline arrow aliases are an unsupported grammar, not another recursive Rust declaration call. No non-VT case newly rejects. T14.17 remains active."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output packet acceptance, not a claim that every locally supported mechanism is wrong.",
+  "fresh_counts": {
+    "before": {
+      "entries": 224,
+      "match": 93,
+      "mismatch": 73,
+      "nonpositive": 58,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    },
+    "after": {
+      "entries": 224,
+      "match": 103,
+      "mismatch": 63,
+      "nonpositive": 58,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    }
+  },
+  "evidence": "docs/parity-reviews/sequence-command-contract-repair-packet/checker-2b056ca1-astra",
+  "inherited_failed_dependencies": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/remaining-dependencies.json",
+  "reference_limits": [
+    "Java argv is derived, not process-traced.",
+    "OpenJDK21.0.5/Graphviz12.2 historical equivalence remains unproved.",
+    "No correctness claim for concurrent shared SVG serialization work."
+  ],
+  "bounded_next_obligations": [
+    "Create is the only command that calls the guarded declaration parser on a tail. Return/color fragments, autoactivate, skinparam and parallel/arrow-style stripping are other tail consumers without that guard. Inline arrow aliases are an unsupported grammar, not another recursive Rust declaration call. No non-VT case newly rejects. T14.17 remains active."
+  ]
+}

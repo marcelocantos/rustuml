@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+note over Vale #LightBlue	 : cargo
+@enduml

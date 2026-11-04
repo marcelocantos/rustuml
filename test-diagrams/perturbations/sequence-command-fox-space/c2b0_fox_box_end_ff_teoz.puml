@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+box "Depot"
+participant Yard
+endbox
+Yard -> Quartz: inbound
+@enduml

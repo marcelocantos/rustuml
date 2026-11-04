@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Remote
+participant "Harbour 6" as on
+Remote -> on: inbound
+note right of "on"
+line one
+line two
+end note
+@enduml
