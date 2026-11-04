@@ -20,7 +20,7 @@ use rustuml_layout::graph::{
     LayoutGraph, NodePosition,
 };
 use rustuml_parser::diagram::class::*;
-use rustuml_parser::diagram::style::StyleScheme;
+use rustuml_parser::diagram::style::{StyleOrigin, StyleScheme};
 use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment, SpriteData};
 
 use crate::layout_oracle::{
@@ -29,7 +29,7 @@ use crate::layout_oracle::{
     emit_oracle_cluster_children, emit_oracle_note_entity, wrap_oracle_envelope,
 };
 use crate::style::Theme;
-use crate::style_cascade::{StyleCascade, StyleSignature};
+use crate::style_cascade::{ResolvedStyle, StyleCascade, StyleSignature};
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
@@ -2284,12 +2284,39 @@ fn has_shadowing_skinparam(diagram: &ClassDiagram) -> bool {
         .is_some_and(|sp| sp.value.trim().eq_ignore_ascii_case("true"))
 }
 
+fn fashion_shadowing_delta(value: &str) -> f64 {
+    // Style#getShadowing -> ValueImpl#asDoubleDefaultTo(1.5) extracts only
+    // ASCII digits and dots. A sign or unit is not part of the numeric value;
+    // malformed/empty extracted numbers take Style's default, not zero.
+    value
+        .chars()
+        .filter(|ch| ch.is_ascii_digit() || *ch == '.')
+        .collect::<String>()
+        .parse::<f64>()
+        .unwrap_or(1.5)
+}
+
 fn parse_shadowing_delta(value: &str) -> f64 {
+    // FromSkinparamToStyle#getShadowingValue maps legacy booleans before
+    // ValueImpl performs numeric conversion. Raw style values skip this step.
     match value.trim().to_ascii_lowercase().as_str() {
         "true" | "yes" => 3.0,
         "false" | "no" => 0.0,
-        _ => value.trim().parse::<f64>().unwrap_or(0.0).max(0.0),
+        _ => fashion_shadowing_delta(value),
     }
+}
+
+fn style_shadowing_delta(style: &ResolvedStyle<'_>) -> Option<f64> {
+    style
+        .declaration("shadowing")
+        .map(|declaration| match declaration.origin {
+            StyleOrigin::UserSkinParam | StyleOrigin::ThemeSkinParam { .. } => {
+                parse_shadowing_delta(&declaration.value)
+            }
+            StyleOrigin::UserStyle | StyleOrigin::ThemeStyle { .. } => {
+                fashion_shadowing_delta(&declaration.value)
+            }
+        })
 }
 
 fn resolved_note_shadowing(diagram: &ClassDiagram) -> f64 {
@@ -2298,10 +2325,7 @@ fn resolved_note_shadowing(diagram: &ClassDiagram) -> f64 {
     // root.note and wins over the root-level `shadowing` fallback.
     let cascade = StyleCascade::new(&diagram.meta.style_program);
     let signature = StyleSignature::from_selectors(["root", "element", "classDiagram", "note"]);
-    cascade
-        .resolve(&signature, StyleScheme::Regular)
-        .property("shadowing")
-        .map(parse_shadowing_delta)
+    style_shadowing_delta(&cascade.resolve(&signature, StyleScheme::Regular))
         .or_else(|| note_skinparam(diagram, "Shadowing").map(parse_shadowing_delta))
         .or_else(|| {
             diagram
@@ -3379,10 +3403,7 @@ impl ClassFontOverrides {
             );
             // FromSkinparamToStyle.getShadowingValue converts true to 3;
             // Style.getShadowing otherwise reads the numeric Fashion delta.
-            let shadow = style
-                .property("shadowing")
-                .map(parse_shadowing_delta)
-                .unwrap_or(0.0);
+            let shadow = style_shadowing_delta(&style).unwrap_or(0.0);
             // USymbolBoundary.getDrawing normalizes every nonzero Fashion
             // shadow to 4. ActorStickMan retains the original Fashion value.
             let shadow = if matches!(selected, DescriptionSymbol::Boundary) && shadow != 0.0 {
@@ -14992,8 +15013,8 @@ impl ResolvedNoteStyle {
                 _ => NoteTextAlignment::Left,
             };
         }
-        if let Some(value) = style.property("shadowing") {
-            result.shadow = parse_shadowing_delta(value);
+        if let Some(value) = style_shadowing_delta(&style) {
+            result.shadow = value;
         }
         result
     }
@@ -16032,6 +16053,12 @@ fn render_single_named_note(
         note.source_line,
     )
     .unwrap();
+    // EntityImageNote#drawU starts the entity URL inside its entity group;
+    // EntityImageDegenerated changes the envelope, not this URL ownership.
+    let anchor = note_anchor(diagram, note);
+    if let Some(anchor) = &anchor {
+        body.push_str(anchor);
+    }
     write!(
         body,
         r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}"{shadow_attr} style="stroke:{};stroke-width:{};"/>"#,
@@ -16068,6 +16095,9 @@ fn render_single_named_note(
     )
     .unwrap();
     emit_note_body(&mut body, note, x, y, width, sprites, &style);
+    if anchor.is_some() {
+        body.push_str("</a>");
+    }
     body.push_str("</g>");
     svg.raw_inline(&body);
     svg.finalize_plantuml()
@@ -21358,6 +21388,65 @@ mod tests {
                 assert_eq!(height, (baseline + 1.5).floor() + 15.0, "{source}\n{svg}");
             }
         }
+    }
+
+    #[test]
+    fn fashion_shadow_preserves_style_and_legacy_conversion_boundaries() {
+        // Values follow ValueImpl#extractDigitsAndDot and Style#getShadowing;
+        // this also exercises the raw-style/skinparam origin distinction.
+        for (value, expected) in [
+            ("-2.5", 2.5),
+            ("1e2", 12.0),
+            ("bad", 1.5),
+            ("1.2.3", 1.5),
+            ("true", 1.5),
+            ("0", 0.0),
+        ] {
+            for kind in ["actor", "boundary"] {
+                let source = format!(
+                    "@startuml\nallowmixing\n<style>\n{kind} {{\nShadowing {value}\n}}\n</style>\n{kind} Clerk\nclass Dock\nClerk --> Dock\n@enduml"
+                );
+                let rustuml_parser::diagram::Diagram::Class(d) =
+                    rustuml_parser::parse::parse(&source).unwrap()
+                else {
+                    panic!("class model expected")
+                };
+                let style = ClassFontOverrides::from_diagram_entity(&d, Some(&d.entities[0]))
+                    .description
+                    .unwrap();
+                let expected = if kind == "boundary" && expected != 0.0 {
+                    4.0
+                } else {
+                    expected
+                };
+                assert_eq!(style.shadow, expected, "{source}");
+            }
+        }
+        assert_eq!(parse_shadowing_delta("yes"), 3.0);
+        assert_eq!(parse_shadowing_delta("no"), 0.0);
+        assert_eq!(parse_shadowing_delta("-2.5"), 2.5);
+    }
+
+    #[test]
+    fn lone_named_note_keeps_last_model_url_inside_entity_group() {
+        let source = "@startuml\nnote \"receipt\" as Ledger\nurl Ledger [[https://example.org/old]]\nurl Ledger [[https://example.org/new{Hint}]]\n@enduml";
+        let diagram = rustuml_parser::parse::parse(source).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert_eq!(svg.matches("<a href=").count(), 1);
+        assert!(!svg.contains("https://example.org/old"));
+        let (before, after) = svg.split_once("<a href=").unwrap();
+        assert_eq!(
+            before
+                .rsplit_once("<g class=\"entity\"")
+                .unwrap()
+                .1
+                .matches('>')
+                .count(),
+            1
+        );
+        assert!(after.contains("https://example.org/new"));
+        assert!(after.contains("title=\"Hint\""));
+        assert!(after.contains("</a></g>"));
     }
 
     #[test]

@@ -287,7 +287,7 @@ impl ClassParser {
         // CommandFactoryNote.executeInternal creates a NOTE in its resolved
         // quark parent, which need not be the current declaration scope.
         note.owner_package = if let Some(alias) = &note.alias {
-            let path = self.resolve_quark_path(alias, QuarkLookup::CurrentContext);
+            let path = self.resolve_quark_path(alias, QuarkLookup::CurrentContext)?;
             let id = self.path_id(&path);
             if self.entity_by_path.contains_key(&path)
                 || self.package_by_path.contains_key(&path)
@@ -337,24 +337,22 @@ impl ClassParser {
         path.join(self.identity_separator())
     }
 
-    fn split_identity(&self, raw: &str) -> (bool, Vec<String>) {
+    fn split_identity(&self, raw: &str) -> Result<(bool, Vec<String>), ParseError> {
         let raw = raw.trim();
         let Some(separator) = self.namespace_sep.as_deref() else {
-            return (false, vec![raw.to_string()]);
+            return Ok((false, vec![raw.to_string()]));
         };
+        // CucaDiagram#badName validates before quark allocation: empty
+        // components are errors, not aliases for a collapsed path.
+        if raw.ends_with(separator) || raw.contains(&separator.repeat(2)) {
+            return Err(ParseError {
+                line: self.current_line,
+                message: format!("bad name since {separator} is a separator: {raw}"),
+            });
+        }
         let rooted = raw.starts_with(separator);
-        let raw = if rooted {
-            raw.trim_start_matches(separator)
-        } else {
-            raw
-        };
-        (
-            rooted,
-            raw.split(separator)
-                .filter(|part| !part.is_empty())
-                .map(str::to_string)
-                .collect(),
-        )
+        let raw = raw.strip_prefix(separator).unwrap_or(raw);
+        Ok((rooted, raw.split(separator).map(str::to_string).collect()))
     }
 
     fn unique_quark_path_named(&self, name: &str) -> Option<Vec<String>> {
@@ -386,67 +384,66 @@ impl ClassParser {
     /// Mirrors `CucaDiagram#quarkInContextSafe`: qualified names resolve from
     /// the root when their first group exists, otherwise from the current
     /// group; a reusable unqualified name binds to its sole existing quark.
-    fn resolve_quark_path(&self, raw: &str, lookup: QuarkLookup) -> Vec<String> {
+    fn resolve_quark_path(
+        &self,
+        raw: &str,
+        lookup: QuarkLookup,
+    ) -> Result<Vec<String>, ParseError> {
         let raw = raw.trim();
         if self.namespace_sep.is_none() {
-            // `CucaDiagram#quarkInContextSafe` bypasses both lookup modes
-            // here and delegates directly to creation-ordered
-            // `Plasma#firstWithName`.
+            // CucaDiagram#quarkInContextSafe delegates both lookup modes to
+            // creation-ordered Plasma#firstWithName when the separator is null.
             if let Some(path) = self.first_quark_path_named(raw) {
-                return path;
+                return Ok(path);
             }
             let mut path = self.current_group_path().to_vec();
             path.push(raw.to_string());
-            return path;
+            return Ok(path);
         }
 
-        let (rooted, parts) = self.split_identity(raw);
-        if rooted || self.entity_by_path.contains_key(&parts) {
-            return parts;
+        let (rooted, parts) = self.split_identity(raw)?;
+        if rooted {
+            return Ok(parts);
         }
         if parts.len() == 1 {
+            // CucaDiagram#quarkInContextSafe excludes the current group from
+            // unique reuse. Current-context declarations never short-circuit
+            // to an existing root leaf with the same short name.
             if matches!(lookup, QuarkLookup::ReuseUnique)
                 && let Some(path) = self.unique_quark_path_named(&parts[0])
+                && path != self.current_group_path()
             {
-                return path;
+                return Ok(path);
             }
-            let mut path = self.current_group_path().to_vec();
-            path.extend(parts);
-            return path;
-        }
-        if self.package_by_path.contains_key(&vec![parts[0].clone()]) {
-            return parts;
+        } else {
+            let first = vec![parts[0].clone()];
+            if self.quark_creation_order.contains(&first) {
+                // The Java root child may exist without data; only existing
+                // non-group data rejects a qualified path at this stage.
+                let first_id = self.path_id(&first);
+                if self.entity_by_path.contains_key(&first)
+                    || self
+                        .notes
+                        .iter()
+                        .any(|note| note.alias.as_deref() == Some(&first_id))
+                {
+                    return Err(ParseError {
+                        line: self.current_line,
+                        message: format!("not a package: {}", parts[0]),
+                    });
+                }
+                return Ok(parts);
+            }
         }
         let mut path = self.current_group_path().to_vec();
         path.extend(parts);
-        path
+        Ok(path)
     }
 
-    fn resolve_group_path(&self, raw: &str) -> Vec<String> {
-        let raw = raw.trim();
-        if self.namespace_sep.is_none() {
-            // Package commands call the same `CucaDiagram#quarkInContextSafe`
-            // path as entity commands. With a null separator Java delegates
-            // to creation-ordered `Plasma#firstWithName` across the shared
-            // entity/package quark namespace.
-            if let Some(path) = self.first_quark_path_named(raw) {
-                return path;
-            }
-            let mut path = self.current_group_path().to_vec();
-            path.push(raw.to_string());
-            return path;
-        }
-
-        let (rooted, parts) = self.split_identity(raw);
-        if rooted {
-            return parts;
-        }
-        if parts.len() > 1 && self.package_by_path.contains_key(&vec![parts[0].clone()]) {
-            return parts;
-        }
-        let mut path = self.current_group_path().to_vec();
-        path.extend(parts);
-        path
+    fn resolve_group_path(&self, raw: &str) -> Result<Vec<String>, ParseError> {
+        // CommandPackage uses quarkInContext(false), the same checked resolver
+        // as native declarations, including null-separator firstWithName.
+        self.resolve_quark_path(raw, QuarkLookup::CurrentContext)
     }
 
     fn register_entity_path(&mut self, path: &[String], entity_id: &str) {
@@ -581,22 +578,22 @@ impl ClassParser {
         id
     }
 
-    fn ensure_entity(&mut self, raw: &str) -> String {
-        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+    fn ensure_entity(&mut self, raw: &str) -> Result<String, ParseError> {
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique)?;
         if let Some(&idx) = self.entity_by_path.get(&path) {
-            return self.entities[idx].id.clone();
+            return Ok(self.entities[idx].id.clone());
         }
         let label = path.last().cloned().unwrap_or_default();
-        self.create_entity_at_path(path, label, EntityKind::Class, false)
+        Ok(self.create_entity_at_path(path, label, EntityKind::Class, false))
     }
 
-    fn ensure_entity_kind(&mut self, raw: &str, kind: EntityKind) -> String {
-        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+    fn ensure_entity_kind(&mut self, raw: &str, kind: EntityKind) -> Result<String, ParseError> {
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique)?;
         if let Some(&idx) = self.entity_by_path.get(&path) {
-            return self.entities[idx].id.clone();
+            return Ok(self.entities[idx].id.clone());
         }
         let label = path.last().cloned().unwrap_or_default();
-        self.create_entity_at_path(path, label, kind, false)
+        Ok(self.create_entity_at_path(path, label, kind, false))
     }
 
     /// Port of `CommandLinkLollipop`: the visible interface label belongs to a
@@ -628,13 +625,13 @@ impl ClassParser {
         Some(self.create_entity_at_path(path, label, kind, false))
     }
 
-    fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
+    fn resolve_relationship_endpoint(&mut self, raw: &str) -> Result<String, ParseError> {
         // `CommandLinkClass#executeArg` calls
         // `CucaDiagram#quarkInContextSafe(true, endpoint)` and first creates a
         // missing endpoint as `LeafType.CLASS` at the relationship location.
-        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique)?;
         if let Some(&index) = self.package_by_path.get(&path) {
-            return self.packages[index].name.clone();
+            return Ok(self.packages[index].name.clone());
         }
         let id = self.path_id(&path);
         if self
@@ -642,7 +639,7 @@ impl ClassParser {
             .iter()
             .any(|note| note.alias.as_deref() == Some(&id))
         {
-            return id;
+            return Ok(id);
         }
         self.ensure_entity(raw)
     }
@@ -835,22 +832,22 @@ impl ClassParser {
             return Ok(());
         }
         // ClassDiagramFactory registers shared containers before mixed leaves.
-        if self.try_package(line) {
+        if self.try_package(line)? {
             return Ok(());
         }
         if self.try_entity_decl(line)? {
             return Ok(());
         }
-        if self.try_association_class(line) {
+        if self.try_association_class(line)? {
             return Ok(());
         }
-        if self.try_relationship(line) {
+        if self.try_relationship(line)? {
             return Ok(());
         }
-        if self.try_inline_member(line) {
+        if self.try_inline_member(line)? {
             return Ok(());
         }
-        if self.try_enum_decl(line) {
+        if self.try_enum_decl(line)? {
             return Ok(());
         }
         if self.try_note(line)? {
@@ -1024,7 +1021,7 @@ impl ClassParser {
             } else {
                 QuarkLookup::ReuseUnique
             };
-            let entity_path = self.resolve_quark_path(&id, lookup);
+            let entity_path = self.resolve_quark_path(&id, lookup)?;
             let display_label = if explicit_alias {
                 label
             } else if quoted_only {
@@ -1110,7 +1107,7 @@ impl ClassParser {
             // `LinkType(NONE, EXTENDS)`. Preserve that SVEK orientation:
             // reversing an otherwise equivalent child -> parent edge changes
             // Graphviz ranks, endpoint UIDs, and the SVG path identity.
-            self.parse_supertypes(&clean_tail, &final_id);
+            self.parse_supertypes(&clean_tail, &final_id)?;
 
             if line.ends_with('{') || line.ends_with("{{") {
                 self.current_entity = Some(final_id.clone());
@@ -1126,7 +1123,7 @@ impl ClassParser {
     /// each named supertype. Generic (`<...>`) and stereotype (`<<...>>`) spans
     /// are stripped first so a bounded type param like `class Foo<T extends X>`
     /// is not mistaken for an inheritance clause.
-    fn parse_supertypes(&mut self, line: &str, child_id: &str) {
+    fn parse_supertypes(&mut self, line: &str, child_id: &str) -> Result<(), ParseError> {
         let body = strip_empty_inline_body(line);
         // Drop angle-bracket spans (generics + `<<stereotype>>`).
         let mut scan = String::new();
@@ -1171,7 +1168,7 @@ impl ClassParser {
             } else {
                 EntityKind::Class
             };
-            let parent = self.ensure_entity_kind(&name, parent_kind);
+            let parent = self.ensure_entity_kind(&name, parent_kind)?;
             let dashed = parent_kind == EntityKind::Interface && !child_is_interface;
             self.push_relationship(Relationship {
                 from: parent,
@@ -1193,6 +1190,7 @@ impl ClassParser {
                 source_line: self.current_line,
             });
         }
+        Ok(())
     }
 
     fn attribute_multiline_declaration_to_first_body_line(&mut self) {
@@ -1218,26 +1216,26 @@ impl ClassParser {
         }
     }
 
-    fn try_enum_decl(&mut self, line: &str) -> bool {
+    fn try_enum_decl(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^enum\s+(\w+)\s*\{?$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let id = self.ensure_entity_kind(&caps[1], EntityKind::Enum);
+            let id = self.ensure_entity_kind(&caps[1], EntityKind::Enum)?;
             if line.ends_with('{') {
                 self.current_entity = Some(id.clone());
                 self.current_entity_needs_body_location = true;
             }
             self.last_entity_id = Some(id);
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
     /// Association class: `(A, B) .. C` or `(A, B) -- C`. PlantUML draws a tiny
     /// anchor (`apoint`) on the A–B line and a dashed (`..`) / solid (`--`)
     /// connector to the association class `C`. Endpoints may be quoted.
-    fn try_association_class(&mut self, line: &str) -> bool {
+    fn try_association_class(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r#"^\(\s*(?:"([^"]+)"|([\w.]+))\s*,\s*(?:"([^"]+)"|([\w.]+))\s*\)\s*(\.\.|-{2,})\s*(?:"([^"]+)"|([\w.]+))\s*$"#,
@@ -1245,7 +1243,7 @@ impl ClassParser {
             .unwrap()
         });
         let Some(caps) = RE.captures(line) else {
-            return false;
+            return Ok(false);
         };
         let pick = |q: usize, b: usize| -> String {
             if let Some(m) = caps.get(q) {
@@ -1260,9 +1258,9 @@ impl ClassParser {
         let c_raw = pick(6, 7);
         let dashed = connector.starts_with('.');
 
-        let a = self.ensure_entity(&a_raw);
-        let b = self.ensure_entity(&b_raw);
-        let c = self.ensure_entity(&c_raw);
+        let a = self.ensure_entity(&a_raw)?;
+        let b = self.ensure_entity(&b_raw)?;
+        let c = self.ensure_entity(&c_raw)?;
 
         self.uid_events
             .push(ClassUidEvent::Association(self.association_classes.len()));
@@ -1274,10 +1272,10 @@ impl ClassParser {
                 dashed,
                 source_line: self.current_line,
             });
-        true
+        Ok(true)
     }
 
-    fn try_relationship(&mut self, line: &str) -> bool {
+    fn try_relationship(&mut self, line: &str) -> Result<bool, ParseError> {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
         //                   <-->, <..>, <->, --, -->, -->>, <--, <-, ->, ->>,
@@ -1344,8 +1342,8 @@ impl ClassParser {
             } else {
                 relationship_length(rel_str)
             };
-            let mut from = self.resolve_relationship_endpoint(&from_raw);
-            let mut to = self.resolve_relationship_endpoint(&to_raw);
+            let mut from = self.resolve_relationship_endpoint(&from_raw)?;
+            let mut to = self.resolve_relationship_endpoint(&to_raw)?;
             let mut from_mult = from_mult;
             let mut to_mult = to_mult;
             if direction.is_some_and(QueueDirection::inverts_link) {
@@ -1376,7 +1374,7 @@ impl ClassParser {
                 style,
                 source_line: self.current_line,
             });
-            return true;
+            return Ok(true);
         }
 
         if let Some(caps) = ER_RE.captures(line) {
@@ -1388,8 +1386,8 @@ impl ClassParser {
                 .get(5)
                 .map(|m| normalize_relationship_label(m.as_str().trim().trim_matches('"')));
 
-            let from = self.ensure_entity(from_raw);
-            let to = self.ensure_entity(to_raw);
+            let from = self.ensure_entity(from_raw)?;
+            let to = self.ensure_entity(to_raw)?;
 
             self.push_relationship(Relationship {
                 from,
@@ -1407,7 +1405,7 @@ impl ClassParser {
                 style: RelationshipStyle::default(),
                 source_line: self.current_line,
             });
-            return true;
+            return Ok(true);
         }
 
         // `CommandLinkLollipop` creates a synthetic LOLLIPOP_FULL/HALF leaf
@@ -1439,9 +1437,9 @@ impl ClassParser {
             } else {
                 EntityKind::LollipopHalf
             };
-            let normal = self.ensure_entity(&normal_raw);
+            let normal = self.ensure_entity(&normal_raw)?;
             let Some(lollipop) = self.create_lollipop_entity(&normal, display, kind) else {
-                return false;
+                return Ok(false);
             };
             self.push_relationship(Relationship {
                 from: normal,
@@ -1461,7 +1459,7 @@ impl ClassParser {
                 style: RelationshipStyle::default(),
                 source_line: self.current_line,
             });
-            return true;
+            return Ok(true);
         }
         if let Some(caps) = LOLLIPOP_THEN_ENT_RE.captures(line) {
             let display = endpoint(&caps, 1, 2);
@@ -1471,9 +1469,9 @@ impl ClassParser {
             } else {
                 EntityKind::LollipopHalf
             };
-            let normal = self.ensure_entity(&normal_raw);
+            let normal = self.ensure_entity(&normal_raw)?;
             let Some(lollipop) = self.create_lollipop_entity(&normal, display, kind) else {
-                return false;
+                return Ok(false);
             };
             self.push_relationship(Relationship {
                 from: lollipop,
@@ -1493,17 +1491,17 @@ impl ClassParser {
                 style: RelationshipStyle::default(),
                 source_line: self.current_line,
             });
-            return true;
+            return Ok(true);
         }
 
-        false
+        Ok(false)
     }
 
-    fn try_inline_member(&mut self, line: &str) -> bool {
+    fn try_inline_member(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let entity_id = self.ensure_entity(&caps[1]);
+            let entity_id = self.ensure_entity(&caps[1])?;
             let member_text = caps[2].trim();
 
             let member = parse_member(member_text);
@@ -1511,9 +1509,9 @@ impl ClassParser {
             if let Some(entity) = self.find_entity_mut(&entity_id) {
                 entity.members.push(member);
             }
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
@@ -1536,7 +1534,7 @@ impl ClassParser {
         true
     }
 
-    fn try_package(&mut self, line: &str) -> bool {
+    fn try_package(&mut self, line: &str) -> Result<bool, ParseError> {
         // ClassDiagramFactory registers CommandPackage before the symbol
         // command. Its one non-greedy stereotype capture backtracks to the
         // final >> when needed; apparent `as` inside that blob is not an alias.
@@ -1577,11 +1575,11 @@ impl ClassParser {
         static STEREO: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^<<(.+?)>>\s*").unwrap());
         static TAG: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\$([^\s{}<>]+)\s*").unwrap());
         let Some(prefix) = PREFIX.captures(line) else {
-            return false;
+            return Ok(false);
         };
         let input = &line[prefix.get(0).unwrap().end()..];
         let Some((first, quoted, mut rest)) = name_token(input) else {
-            return false;
+            return Ok(false);
         };
         rest = rest.trim_start();
         let mut identity_stereotypes = Vec::new();
@@ -1596,7 +1594,7 @@ impl ClassParser {
             && word.eq_ignore_ascii_case("as")
         {
             let Some((second, second_quoted, tail)) = name_token(tail.trim_start()) else {
-                return false;
+                return Ok(false);
             };
             if second_quoted && !quoted {
                 display = second.into();
@@ -1639,18 +1637,18 @@ impl ClassParser {
             *value = format!("{}{value}", top.value);
         }
         let Some(suffix) = clean_tail.trim().strip_suffix('{') else {
-            return false;
+            return Ok(false);
         };
         let suffix = suffix.trim();
         let color = if suffix.is_empty() {
             None
         } else if let Some(value) = suffix.strip_prefix('#') {
             if value.is_empty() || value.chars().any(char::is_whitespace) {
-                return false;
+                return Ok(false);
             }
             Some(value.into())
         } else {
-            return false;
+            return Ok(false);
         };
         {
             let kind_key = prefix[1].to_ascii_lowercase();
@@ -1695,9 +1693,9 @@ impl ClassParser {
             // keeps `NAME` solely as display; `CommandNamespace#executeArg`
             // follows the same quark-backed group discipline.
             let code = alias.as_deref().unwrap_or(&display);
-            let path = self.resolve_group_path(code);
+            let path = self.resolve_group_path(code)?;
             if path.is_empty() {
-                return false;
+                return Ok(false);
             }
             let requested_display_name = (alias.is_some() || path.len() > 1).then(|| {
                 if alias.is_some() {
@@ -1790,36 +1788,40 @@ impl ClassParser {
             }
             self.package_stack.push(package_idx);
             self.scope_stack.push(ClassScope::Package);
-            true
+            Ok(true)
         }
     }
 
     fn try_url(&mut self, line: &str) -> Result<bool, ParseError> {
         // classdiagram.command.CommandUrl#getRegexConcat: consume the complete
         // command, then resolve existing quark data without allocating a UID.
+        // Pattern2 expands %g to ASCII, curly and Jaws invisible quotes.
         static URL: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-            r#"(?i)^url\s*(?:of|for)?\s+(?P<code>[\p{L}\p{N}_.]+|"[^"]+")\s+(?:is)?\s*(?P<url>\[\[.+\]\])$"#
+            r#"(?i)^url\s*(?:of|for)?\s+(?P<code>[\p{L}\p{N}_.]+|["“”\u{e121}][^"“”\u{e121}]+["“”\u{e121}])\s+(?:is)?\s*(?P<url>\[\[.+\]\])$"#
         ).unwrap()
         });
         let Some(caps) = URL.captures(line) else {
             return Ok(false);
         };
-        let code = caps["code"].trim_matches('"');
+        // CucaDiagram#cleanId delegates to StringUtils#isDoubleQuote, which
+        // removes ASCII/curly quotes but not the internal Jaws %g delimiter.
+        // Pattern2 recognition and quark identity cleanup are separate stages.
+        let code = caps["code"].trim_matches(['"', '“', '”']);
         // CucaDiagram.quarkInContextSafe(true) first reuses a unique
         // short-name quark, then resolves relative to the current group.
-        let path = self.resolve_quark_path(code, QuarkLookup::ReuseUnique);
+        let path = self.resolve_quark_path(code, QuarkLookup::ReuseUnique)?;
         let id = self.path_id(&path);
         // UrlBuilder#getRegexp/getUrl tests these strict alternatives in order.
         // Keep this consuming grammar local: older declaration extractors are
         // not a validator for a standalone CommandUrl.
         static BUILDERS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
             [
-            r#"^\[\[\s*"(?P<link>[^"]+)"(?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
+            r#"^\[\[\s*["“”\u{e121}](?P<link>[^"“”\u{e121}]+)["“”\u{e121}](?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
             r"^\[\[\s*\{(?P<tip>.*)\}\s*\]\]$",
             r"^\[\[\s*\{(?P<tip>[^{}]*)\}\s*[^\s{}\[\]][^\[\]]*\s*\]\]$",
-            r#"^\[\[\s*(?P<link>[^\s"{}\[\]]+?)\s*\{(?P<tip>.+)\}\s*\]\]$"#,
-            r#"^\[\[\s*(?P<link>[^\s"\[\]]+?)(?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
+            r#"^\[\[\s*(?P<link>[^\s"“”\u{e121}{}\[\]]+?)\s*\{(?P<tip>.+)\}\s*\]\]$"#,
+            r#"^\[\[\s*(?P<link>[^\s"“”\u{e121}\[\]]+?)(?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
         ].into_iter().map(|pattern| Regex::new(pattern).unwrap()).collect()
         });
         let Some(value) = BUILDERS
@@ -1892,7 +1894,7 @@ impl ClassParser {
                 let path = self.resolve_quark_path(
                     target.as_str().trim_matches('"'),
                     QuarkLookup::ReuseUnique,
-                );
+                )?;
                 let id = self.path_id(&path);
                 // Quark<Entity>.getData includes NOTE leaves and groups.
                 if !self.entity_by_path.contains_key(&path)
@@ -1916,7 +1918,13 @@ impl ClassParser {
             } else {
                 None
             };
-            let url_text = caps.name("url").map_or("", |value| value.as_str());
+            // CommandFactoryNoteOnEntity#createSingleLine passes null to
+            // executeInternal; only its multiline command constructs a Url.
+            let url_text = if attached && caps.name("text").is_some() {
+                ""
+            } else {
+                caps.name("url").map_or("", |value| value.as_str())
+            };
             let (url, _) = super::extract_link_url(url_text);
             let mut note = Note {
                 target,
@@ -2012,7 +2020,7 @@ impl ClassParser {
                     kind: MemberKind::Field,
                     display_text: text.to_string(),
                 };
-                let id = self.ensure_entity("note");
+                let id = self.ensure_entity("note")?;
                 if let Some(ent) = self.find_entity_mut(&id) {
                     ent.members.push(member);
                 }
@@ -2925,6 +2933,106 @@ mod tests {
     fn parse(input: &str) -> ClassDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_class(&lines).unwrap()
+    }
+
+    #[test]
+    fn checked_quarks_preserve_root_and_local_data_and_uid_order() {
+        let d = parse(
+            "class Ledger\npackage Harbor {\nclass Ledger\nurl Ledger [[https://example.org/local]]\n}",
+        );
+        assert_eq!(
+            d.entities.iter().map(|e| e.id.as_str()).collect::<Vec<_>>(),
+            ["Ledger", "Harbor.Ledger"]
+        );
+        assert_eq!(d.entities[0].url, None);
+        assert_eq!(
+            d.entities[1].url.as_deref(),
+            Some("https://example.org/local")
+        );
+        assert_eq!(
+            format!("{:?}", d.uid_events),
+            "[Entity(\"Ledger\"), Package(\"Harbor\"), Entity(\"Harbor.Ledger\")]"
+        );
+        let d = parse(
+            "class Ledger\npackage Harbor {\nnote \"receipt\" as Ledger\nurl Ledger [[https://example.org/note]]\n}",
+        );
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].alias.as_deref(), Some("Harbor.Ledger"));
+        assert_eq!(d.notes[0].owner_package.as_deref(), Some("Harbor"));
+        assert_eq!(d.notes[0].url.as_deref(), Some("https://example.org/note"));
+        assert_eq!(d.entities[0].url, None);
+        assert_eq!(
+            format!("{:?}", d.uid_events),
+            "[Entity(\"Ledger\"), Package(\"Harbor\"), Note(0)]"
+        );
+    }
+
+    #[test]
+    fn checked_quarks_reject_bad_separators_and_current_group_reuse() {
+        for source in [
+            "class Harbor.Dock\nurl Harbor..Dock [[https://example.org/bad]]",
+            "class Harbor.Dock\nurl Harbor.Dock. [[https://example.org/bad]]",
+            "set namespaceSeparator ::\nclass Harbor::Dock\nurl \"Harbor::::Dock\" [[https://example.org/bad]]",
+            "package Harbor {\nclass Dock\nurl Harbor [[https://example.org/bad]]\n}",
+            "class Harbor\nclass Harbor.Dock",
+        ] {
+            let lines = source.lines().map(str::to_owned).collect::<Vec<_>>();
+            assert!(parse_class(&lines).is_err(), "{source}");
+            assert!(
+                super::super::parse(&format!("@startuml\n{source}\n@enduml")).is_err(),
+                "{source}"
+            );
+        }
+        let d =
+            parse("package Harbor {\nclass Harbor\nurl Harbor [[https://example.org/child]]\n}");
+        assert_eq!(d.entities[0].id, "Harbor.Harbor");
+        assert_eq!(
+            d.entities[0].url.as_deref(),
+            Some("https://example.org/child")
+        );
+        assert_eq!(d.packages[0].url, None);
+    }
+
+    #[test]
+    fn command_url_owns_pattern2_quotes_without_changing_url_content() {
+        for (left, right) in [('"', '"'), ('“', '”'), ('”', '“')] {
+            let d = parse(&format!(
+                "note \"receipt\" as Ledger\nurl {left}Ledger{right} [[{left}doc with spaces{right}{{Hint}}]]"
+            ));
+            assert_eq!(d.notes[0].url.as_deref(), Some("doc with spaces"));
+            assert_eq!(d.notes[0].url_tooltip.as_deref(), Some("Hint"));
+            assert_eq!(d.uid_events.len(), 1);
+        }
+    }
+
+    #[test]
+    fn command_url_internal_quote_is_not_an_identity_cleanup_quote() {
+        let source =
+            "note \"receipt\" as Ledger\nurl \u{e121}Ledger\u{e121} [[https://example.org/]]";
+        let lines = source.lines().map(str::to_owned).collect::<Vec<_>>();
+        assert!(parse_class(&lines).is_err());
+    }
+
+    #[test]
+    fn attached_note_command_form_owns_url_assignment() {
+        for position in ["left", "right", "top", "bottom"] {
+            for (body, expected) in [
+                (" : receipt", None),
+                ("\nreceipt\nend note", Some("https://example.org/note")),
+                (" {\nreceipt\n}", Some("https://example.org/note")),
+            ] {
+                let d = parse(&format!(
+                    "class Dock\nnote {position} of Dock [[https://example.org/note{{Hint}}]]{body}"
+                ));
+                assert_eq!(d.entities.len(), 1);
+                assert_eq!(d.notes.len(), 1);
+                assert_eq!(d.notes[0].target.as_deref(), Some("Dock"));
+                assert_eq!(d.notes[0].url.as_deref(), expected);
+                assert_eq!(d.notes[0].url_tooltip.as_deref(), expected.map(|_| "Hint"));
+                assert_eq!(d.notes[0].lines, ["receipt"]);
+            }
+        }
     }
 
     #[test]
