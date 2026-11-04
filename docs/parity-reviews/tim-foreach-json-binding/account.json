@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-foreach-json-binding",
+  "rust_revision": "8765ccc2ea4c2574fe90d25c2ba9921ad520682e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/EaterForeach.java:analyze",
+    "tim/ExecutionContextForeach.java:currentValue",
+    "tim/iterator/CodeIteratorForeach.java:setLoopVariable",
+    "tim/TMemoryLocal.java:putVariable"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs:try_foreach"
+  ],
+  "invariant": "Foreach consumes a JSON collection, binds each JSON value (object keys for objects) in GLOBAL memory, and leaves the last bound value on termination or return. Explicit parameter/local overrides remain independent.",
+  "causal_divergence": "Rust evaluates individual list items as ordinary integer/string expressions, binds through automatic scope and restores the previous value after each iteration.",
+  "planned_change": "Evaluate the collection once, retain JSON element values, publish the iteration binding in global memory without restoration, and retain immediate-return control flow. Preserve existing list-form inputs and support the JSON collection expression used by EaterForeach.",
+  "perturbation_axes": [
+    "JSON numbers versus numeric-looking strings with arithmetic",
+    "Global binding visibility through sibling calls and early return"
+  ],
+  "oracle_plan": [
+    "Bounded remote Java source and actual CLI SVG controls, including nested-loop early return.",
+    "Reuse all frozen checker and maker controls; no acceptance record."
+  ]
+}
