@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Birch
+participant Hub
+Birch -> Hub: prior
+[<- Birch: leave
+note right: current owner
+@enduml

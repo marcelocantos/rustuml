@@ -1,0 +1,5 @@
+@startuml
+participant Hub
+Hub <-]: arrive
+note left: current owner
+@enduml

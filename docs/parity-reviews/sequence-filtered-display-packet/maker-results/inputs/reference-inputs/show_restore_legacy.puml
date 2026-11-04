@@ -1,0 +1,7 @@
+@startuml
+hide stereotype
+queue Mail <<work>>
+participant Hub
+show stereotype
+Hub -> Mail: put
+@enduml
