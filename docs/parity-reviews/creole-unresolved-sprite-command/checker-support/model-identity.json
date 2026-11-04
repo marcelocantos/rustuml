@@ -1,0 +1,24 @@
+{
+  "retained": {
+    "entries": 1730,
+    "yaml_stdout_changed": [],
+    "yaml_exit_changed": [],
+    "projected_sources_changed": []
+  },
+  "maker18": {
+    "entries": 18,
+    "yaml_stdout_changed": [],
+    "yaml_exit_changed": [],
+    "projected_sources_changed": []
+  },
+  "sprites50": {
+    "entries": 50,
+    "yaml_stdout_changed": [],
+    "yaml_exit_changed": [],
+    "projected_sources_changed": []
+  },
+  "fresh38": {
+    "entries": 38,
+    "yaml_stdout_changed": []
+  }
+}

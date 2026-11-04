@@ -1,0 +1,46 @@
+{
+  "entries": 38,
+  "observed_categories": {
+    "positive_reference": 34,
+    "runtime_error_svg": 2,
+    "empty_description_welcome_error_svg": 1,
+    "syntax_error_svg_with_welcome": 1
+  },
+  "valid": 34,
+  "before_pass": 8,
+  "after_pass": 22,
+  "standing_pass": 22,
+  "lost_passes": [],
+  "new_passes": [
+    "run_edges",
+    "run_spaces",
+    "style_same",
+    "empty_closed",
+    "empty_eol",
+    "empty_adjacent",
+    "case_keywords",
+    "optional_braces",
+    "color_separator",
+    "unicode_name",
+    "double_escape",
+    "scale_zero",
+    "scale_overflow",
+    "legacy_title"
+  ],
+  "positive_failures": [
+    "style_nested",
+    "empty_lines",
+    "nested_angle",
+    "url_label",
+    "url_after",
+    "empty_link",
+    "note_undefined",
+    "note_defined_scale",
+    "class_defined",
+    "seq_defined",
+    "legacy_wbs",
+    "wbs"
+  ],
+  "model_changes": [],
+  "zero_byte_java_outputs": 0
+}

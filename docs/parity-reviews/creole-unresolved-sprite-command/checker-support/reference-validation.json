@@ -1,0 +1,15 @@
+{
+  "validated": true,
+  "cases": 38,
+  "resources": 38,
+  "returned_gzip_sha256": "d7ef84c5920c5ae2f9a17c77e90aeebc55e5aa6ce9ab6094ebdb6437f19c3908",
+  "request_sha256": "689ab4642e561b4ca32b9fc6c6fb897e9726d1a10e7aa2da8c171cfea819f620",
+  "bundle_sha256": "6b56b1939100abddff0608c128d92f6c1ad134a0f5c5f3f5a7254477f43c73e2",
+  "checks": [
+    "source and resource hashes and lengths",
+    "all stream hashes and statuses",
+    "exact wrapper and Java argv",
+    "private cwd timezone env headless JAR",
+    "membership order and independently classified validity"
+  ]
+}

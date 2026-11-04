@@ -1,0 +1,56 @@
+[
+  {
+    "argv": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/probe.rs",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps",
+      "--extern",
+      "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/probe"
+    ],
+    "exit": 0,
+    "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "binary_sha256": "9a78d80e60b4a7cae1460d4555ed83c5a619992463f776ee366a2af0a9d7ae3a"
+  },
+  {
+    "argv": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/source_probe.rs",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps",
+      "--extern",
+      "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/source-probe"
+    ],
+    "exit": 0,
+    "source_sha256": "3f10c70dc881bbfe6474d2d63ee4153da07af5f3dee670eac4c241f0349b4ae9",
+    "binary_sha256": "c78358955567a3c926b6fd951f05f49f8d0d20ddd94cf13203f34e14625793af"
+  },
+  {
+    "argv": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/standing_slice.rs",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps",
+      "--extern",
+      "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "--extern",
+      "rustuml_render=/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after/release/deps/librustuml_render-6cf93ea168f1c658.rlib",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/standing-slice"
+    ],
+    "exit": 0,
+    "source_sha256": "6c6b03aa2e3400a03321d774dc2808a00e294588b49c42f5355b5dec78b452aa",
+    "binary_sha256": "8da142ca869a2aecf5b36c125fb1fc792e64977631e99ac137a6017326f7db34"
+  }
+]

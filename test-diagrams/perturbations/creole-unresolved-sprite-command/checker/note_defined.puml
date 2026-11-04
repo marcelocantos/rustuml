@@ -1,0 +1,10 @@
+@startuml
+sprite $checker [2x2/16] {
+F0
+0F
+}
+class Birch
+note right of Birch
+A<$checker>B<$north>C
+end note
+@enduml
