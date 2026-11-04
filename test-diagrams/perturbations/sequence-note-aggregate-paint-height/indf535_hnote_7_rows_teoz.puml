@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+participant Larch
+participant Alder
+Larch -> Larch: inspect
+hnote over Larch
+<size:13>row0twig</size>
+<size:16>row1twig</size>
+<size:19>row2twig</size>
+<size:13>row3twig</size>
+<size:16>row4twig</size>
+<size:19>row5twig</size>
+<size:13>row6twig</size>
+end note
+Larch -> Alder: resume
+@enduml

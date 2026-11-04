@@ -1,0 +1,7 @@
+@startuml
+skinparam stereotypePosition bottom
+boundary "Fir" as Cedar2 <<ExtremelyWideTransportRole>>
+skinparam stereotypePosition top
+participant Wren
+Cedar2 -> Wren: export
+@enduml

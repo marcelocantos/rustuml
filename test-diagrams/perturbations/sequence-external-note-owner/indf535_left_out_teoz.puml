@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Rowan
+participant Linden
+[<- Rowan: border
+note left
+annotation one
+<size:18>annotation two</size>
+end note
+@enduml

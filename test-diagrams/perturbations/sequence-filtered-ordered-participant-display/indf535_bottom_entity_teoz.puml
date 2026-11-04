@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition bottom
+entity "Fir" as Cedar4 <<ExtremelyWideTransportRole>>
+skinparam stereotypePosition top
+participant Wren
+Cedar4 -> Wren: export
+@enduml

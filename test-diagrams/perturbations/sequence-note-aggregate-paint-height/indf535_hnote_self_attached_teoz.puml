@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Moss
+Moss -> Moss: spiral
+hnote right
+<size:23>dew</size>
+<size:17>bark</size>
+spore
+end note
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant Viburnum
+rnote over Viburnum
+<size:76>v</size>
+<size:77>v</size>
+<size:78>v</size>
+<size:79>v</size>
+<size:80>v</size>
+<size:81>v</size>
+<size:86>v</size>
+end note
+Viburnum -> Viburnum: grow
+@enduml
