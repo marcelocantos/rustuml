@@ -817,7 +817,10 @@ fn emit_clusters_dfs(
                 .as_deref()
                 .map(str::to_string)
                 .unwrap_or_else(|| node.source_line.to_string());
-            svg.raw(&format!("<!--cluster {}-->", node.label));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("cluster {}", node.label)),
+            ));
             svg.raw(&format!(
                 r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
                 sl = source_line, qname = crate::svg::escape_attribute(&qname), ent_id = crate::svg::escape_attribute(&ent_id),
@@ -960,7 +963,10 @@ fn emit_entity(
             .as_deref()
             .map(str::to_string)
             .unwrap_or_else(|| node.source_line.to_string());
-        svg.raw(&format!("<!--entity {}-->", node.label));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("entity {}", node.label)),
+        ));
         svg.raw(&format!(
             r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
             sl = source_line, qname = crate::svg::escape_attribute(qname), ent_id = crate::svg::escape_attribute(&ent_id),
@@ -3381,7 +3387,10 @@ fn render_connection(
         (&from_qname, &to_qname)
     };
     let prefix = if is_reverse { "reverse link" } else { "link" };
-    svg.raw(&format!("<!--{prefix} {comment_from} to {comment_to}-->"));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("{prefix} {comment_from} to {comment_to}")),
+    ));
 
     let entity_1 = oracle_edge
         .and_then(|e| e.entity_1.as_deref())
@@ -5721,9 +5730,17 @@ fn render_no_oracle_edges(
             conn.arrow_at_end
         };
         if reversed {
-            svg.raw(&format!("<!--reverse link {} to {}-->", conn.to, conn.from));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("reverse link {} to {}", conn.to, conn.from)),
+            ));
         } else {
-            svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("link {} to {}", conn.from, conn.to)),
+            ));
         }
         let link_type = if conn.arrow_at_start || conn.arrow_at_end {
             "dependency"

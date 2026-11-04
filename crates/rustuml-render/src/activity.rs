@@ -27389,19 +27389,18 @@ fn emit_legacy_graph_edge(
     shortened[last - 1].1 += shift.1;
 
     write!(
-        body,
-        r##"<!--link {} to {}--><g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{}" style="stroke:#181818;stroke-width:1;"/>"##,
-        crate::svg::escape_attribute(&from_label),
-        crate::svg::escape_attribute(&to_label),
-        from_node.entity_id,
-        to_node.entity_id,
-        edge.source_line,
-        edge.link_id,
-        legacy_graph_edge_path(&shortened),
-        crate::svg::escape_attribute(&from_label),
-        crate::svg::escape_attribute(&to_label),
-        legacy_graph_arrow_points(control, contact),
-    )
+body,
+r##"<!--{svg_comment}--><g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{}" style="stroke:#181818;stroke-width:1;"/>"##,
+from_node.entity_id,
+to_node.entity_id,
+edge.source_line,
+edge.link_id,
+legacy_graph_edge_path(&shortened),
+crate::svg::escape_attribute(&from_label),
+crate::svg::escape_attribute(&to_label),
+legacy_graph_arrow_points(control, contact),
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , &from_label, &to_label)),
+)
     .unwrap();
     emit_legacy_graph_edge_label(body, edge.center_label.as_deref(), path.label, 1.0);
     emit_legacy_graph_edge_label(body, edge.head_label.as_deref(), path.head_label, 0.0);
@@ -28341,33 +28340,33 @@ fn emit_legacy_v1_partition_cluster(
     let tab_right = x + label_w + 6.0;
     let tab_tip = tab_right + 7.0;
     write!(
-        out,
-        r##"<!--cluster {}--><g class="cluster" data-qualified-name="{}" data-source-line="1" id="ent0002"><polygon fill="none" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"##,
-        crate::svg::escape_attribute(label),
-        crate::svg::escape_attribute(label),
-        f(x),
-        f(y),
-        f(tab_right),
-        f(y),
-        f(tab_tip),
-        f(header_y),
-        f(right),
-        f(header_y),
-        f(right),
-        f(bottom),
-        f(x),
-        f(bottom),
-        f(x),
-        f(y),
-        f(x),
-        f(tab_tip),
-        f(header_y),
-        f(header_y),
-        f(label_w),
-        f(x + 4.0),
-        f(y + 15.5352),
-        crate::svg::escape_attribute(label),
-    )
+out,
+r##"<!--{svg_comment}--><g class="cluster" data-qualified-name="{}" data-source-line="1" id="ent0002"><polygon fill="none" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"##,
+crate::svg::escape_attribute(label),
+f(x),
+f(y),
+f(tab_right),
+f(y),
+f(tab_tip),
+f(header_y),
+f(right),
+f(header_y),
+f(right),
+f(bottom),
+f(x),
+f(bottom),
+f(x),
+f(y),
+f(x),
+f(tab_tip),
+f(header_y),
+f(header_y),
+f(label_w),
+f(x + 4.0),
+f(y + 15.5352),
+crate::svg::escape_attribute(label),
+svg_comment = crate::svg::comment_text(&format!("cluster {}" , label)),
+)
     .unwrap();
 }
 

@@ -28,6 +28,26 @@ pub(crate) fn escape_attribute(value: &str) -> String {
     result
 }
 
+/// Serialize a complete DOM comment body, independently of XML attributes.
+/// OpenJDK21.0.5 ToStream.comment:2312–2333 separates adjacent/final dashes.
+/// SvgGraphics uses lowercase us-ascii; Encodings.getWriter and StreamEncoder
+/// replace each unmappable Unicode scalar with ?. Literal ASCII is retained.
+pub(crate) fn comment_text(body: &str) -> String {
+    let mut result = String::with_capacity(body.len());
+    let mut was_dash = false;
+    for ch in body.chars() {
+        if was_dash && ch == '-' {
+            result.push(' ');
+        }
+        result.push(if ch.is_ascii() { ch } else { '?' });
+        was_dash = ch == '-';
+    }
+    if was_dash {
+        result.push(' ');
+    }
+    result
+}
+
 /// UFontImpl.getFamily(SVG) replaces definition quotes before DOM emission.
 /// This deliberately does not change the family used for font measurement.
 pub(crate) fn font_family_attribute(value: &str) -> String {
@@ -48,7 +68,7 @@ pub(crate) fn fill_opacity_attribute(alpha: Option<u8>) -> String {
     }
 }
 
-fn fill_attributes(value: &str) -> String {
+pub(crate) fn fill_attributes(value: &str) -> String {
     let (rgb, alpha) = crate::text_render::color_with_opacity(value);
     let fill = if alpha == Some(0) { "none" } else { &rgb };
     format!(
@@ -966,6 +986,22 @@ fn escape_xml(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn comment_serialization_matches_dom_dash_and_ascii_rules() {
+        assert_eq!(
+            comment_text("class Pine---Ridge-"),
+            "class Pine- - -Ridge- "
+        );
+        assert_eq!(comment_text("link Fir-- to Ash-"), "link Fir- - to Ash- ");
+        assert_eq!(comment_text("class ÉΩ𐐷--Leaf-"), "class ???- -Leaf- ");
+        assert_eq!(
+            comment_text("entity A & <B> \"Q\" 'S'"),
+            "entity A & <B> \"Q\" 'S'"
+        );
+        assert_eq!(comment_text(""), "");
+        assert_eq!(comment_text("class Plain"), "class Plain");
+    }
 
     #[test]
     fn attributes_follow_java_ascii_xml_serialization() {

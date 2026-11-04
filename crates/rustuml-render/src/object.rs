@@ -1096,7 +1096,12 @@ fn emit_object_cluster(
     let tab_join = position.x + title_width - 2.5;
     let right = position.x + position.width;
     let bottom = position.y + position.height;
-    write!(svg, "<!--cluster {}-->", escape_xml(&cluster.qname)).unwrap();
+    write!(
+        svg,
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("cluster {}", &cluster.qname)),
+    )
+    .unwrap();
     if cluster.source_line > 0 {
         write!(
             svg,
@@ -1297,7 +1302,12 @@ fn render_plantuml_svg(
         .unwrap_or_default();
     for cluster in &oracle_clusters {
         let cid = cluster.entity_id.as_deref().unwrap_or("ent0002");
-        write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("cluster {}", cluster.qualified_name)),
+        )
+        .unwrap();
         match cluster.source_line.as_deref() {
             Some(sl) => write!(
                 svg,
@@ -1496,7 +1506,12 @@ fn render_layout_links(
         let path_id = object_link_path_id(link, from_base, to_base, parallel_index);
         let link_type = object_link_type(link.kind);
 
-        write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_base} to {to_base}")),
+        )
+        .unwrap();
         write!(
             svg,
             r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
@@ -2748,7 +2763,12 @@ fn render_oracle_links(
         let source_line = edge.source_line.as_deref().unwrap_or("0");
         let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
 
-        write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_base} to {to_base}")),
+        )
+        .unwrap();
         write!(
             svg,
             r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),

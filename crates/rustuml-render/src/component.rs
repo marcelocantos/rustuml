@@ -2661,7 +2661,11 @@ pub fn render_with_oracle(
         };
 
         // HTML comment.
-        svg.raw(&format!("<!--entity {}-->", fold_non_ascii(&comp.id, '?')));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment =
+                crate::svg::comment_text(&format!("entity {}", fold_non_ascii(&comp.id, '?'))),
+        ));
         if hidden_components.contains(comp.id.as_str()) {
             continue;
         }
@@ -2989,7 +2993,10 @@ pub fn render_with_oracle(
         && !orc.note_entities.is_empty()
     {
         for ne in &orc.note_entities {
-            svg.raw(&format!("<!--entity {}-->", ne.qualified_name));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("entity {}", ne.qualified_name)),
+            ));
             let mut group = String::new();
             let _ = emit_oracle_note_entity(
                 &mut group,
@@ -3185,7 +3192,10 @@ pub fn render_with_oracle(
                 0.0,
             );
             let path_d = build_path_d(&points);
-            svg.raw(&format!("<!--link {from_name} to {to_name}-->"));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {from_name} to {to_name}")),
+            ));
             svg.raw(&format!(
                 r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="association" data-source-line="{}" id="lnk{}">"#,
                 note.source_line, uid.link_id, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2),
@@ -3358,7 +3368,10 @@ pub fn render_with_oracle(
                 "link"
             };
             svg.raw(&format!(
-                "<!--{comment_prefix} {logical_from} to {logical_to}-->"
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!(
+                    "{comment_prefix} {logical_from} to {logical_to}"
+                )),
             ));
             if hidden_components.contains(logical_from) || hidden_components.contains(logical_to) {
                 continue;
@@ -4523,7 +4536,10 @@ fn render_interface(
         .map(|source_line| format!(r#" data-source-line="{source_line}""#))
         .unwrap_or_default();
 
-    svg.raw(&format!("<!--entity {}-->", iface.id));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("entity {}", iface.id)),
+    ));
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qualified_name}"{source_attr} id="{ent_id}">"#,
         qualified_name = crate::svg::escape_attribute(qualified_name),

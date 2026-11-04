@@ -5280,7 +5280,12 @@ fn render_plantuml_svg(
         .unwrap_or_default();
     oracle_note_entities.sort_by_key(|n| ent_id_seq(n.entity_id.as_deref()));
     for cluster in &oracle_pkg_clusters {
-        write!(svg, "<!--cluster {}-->", cluster.qualified_name).unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("cluster {}", cluster.qualified_name)),
+        )
+        .unwrap();
         let cluster_id = cluster.entity_id.as_deref().unwrap_or("ent0002");
         let source_line = cluster.source_line.as_deref().unwrap_or("0");
         write!(
@@ -5484,7 +5489,12 @@ fn render_plantuml_svg(
         }
 
         // HTML comment before entity.
-        write!(svg, "<!--class {}-->", entity.label).unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("class {}", entity.label)),
+        )
+        .unwrap();
 
         // Entity group wrapper.
         write!(
@@ -6011,15 +6021,11 @@ fn layout_empty_packages(
         .collect()
 }
 
-fn emit_layout_empty_package(
-    svg: &mut String,
-    package: &EmptyPackageLayout,
-    entity_id: &str,
-) {
+fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
     write!(
         svg,
-        "<!--entity {}-->",
-        escape_xml(&package.qualified_name)
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("entity {}", &package.qualified_name)),
     )
     .unwrap();
     write!(
@@ -6476,8 +6482,8 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     let text_y = y + PACKAGE_TITLE_BASELINE;
     write!(
         svg,
-        "<!--cluster {}-->",
-        escape_xml(&cluster.qualified_name)
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("cluster {}", &cluster.qualified_name)),
     )
     .unwrap();
     write!(
@@ -10710,19 +10716,18 @@ fn render_no_oracle_association_class_links(
             }
             let dash = if dashed { "stroke-dasharray:7,7;" } else { "" };
             write!(
-                svg,
-                r#"<!--link {} to {}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;{}"/></g>"#,
-                crate::svg::escape_attribute(from_label),
-                crate::svg::escape_attribute(to_label),
-                crate::svg::escape_attribute(from_entity),
-                crate::svg::escape_attribute(to_entity),
-                association.source_line,
-                first_link_id + link_idx,
-                path,
-                crate::svg::escape_attribute(from_label),
-                crate::svg::escape_attribute(to_label),
-                dash,
-            )
+svg,
+r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;{}"/></g>"#,
+crate::svg::escape_attribute(from_entity),
+crate::svg::escape_attribute(to_entity),
+association.source_line,
+first_link_id + link_idx,
+path,
+crate::svg::escape_attribute(from_label),
+crate::svg::escape_attribute(to_label),
+dash,
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , from_label, to_label)),
+)
             .unwrap();
         }
     }
@@ -10771,7 +10776,12 @@ fn render_association_class_links(svg: &mut String, diagram: &ClassDiagram, orac
             };
             let from = edge_id.split('-').next().unwrap_or("");
             let to = edge_id.rsplit('-').next().unwrap_or("");
-            write!(svg, "<!--link {from} to {to}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+            )
+            .unwrap();
 
             let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
             let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -11094,9 +11104,20 @@ fn render_oracle_relationships(
     for (_, rel, oracle_edge, is_reverse) in matches {
         // HTML comment
         if is_reverse {
-            write!(svg, "<!--reverse link {} to {}-->", rel.from, rel.to).unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("reverse link {} to {}", rel.from, rel.to)),
+            )
+            .unwrap();
         } else {
-            write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {} to {}", rel.from, rel.to)),
+            )
+            .unwrap();
         }
 
         // Link group wrapper — use oracle attributes directly.
@@ -11430,9 +11451,20 @@ fn render_relationship_svg(
 
     // HTML comment.
     if is_reverse {
-        write!(svg, "<!--reverse link {from_name} to {to_name}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment =
+                crate::svg::comment_text(&format!("reverse link {from_name} to {to_name}")),
+        )
+        .unwrap();
     } else {
-        write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_name} to {to_name}")),
+        )
+        .unwrap();
     }
     if rel.style.hidden {
         return;
@@ -13850,18 +13882,17 @@ fn render_no_oracle_attached_note_connector(
         point_idx += 3;
     }
     write!(
-        svg,
-        r#"<!--link {} to {}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
-        crate::svg::escape_attribute(&from_name),
-        crate::svg::escape_attribute(&to_name),
-        crate::svg::escape_attribute(&from_entity),
-        crate::svg::escape_attribute(&to_entity),
-        note.source_line,
-        note_start + 2,
-        path,
-        crate::svg::escape_attribute(&from_name),
-        crate::svg::escape_attribute(&to_name),
-    )
+svg,
+r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
+crate::svg::escape_attribute(&from_entity),
+crate::svg::escape_attribute(&to_entity),
+note.source_line,
+note_start + 2,
+path,
+crate::svg::escape_attribute(&from_name),
+crate::svg::escape_attribute(&to_name),
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , &from_name, &to_name)),
+)
     .unwrap();
 }
 

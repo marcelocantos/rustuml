@@ -197,7 +197,10 @@ fn emit_entity(svg: &mut SvgBuilder, ent: &OracleEntity, elem: &ArchimateElement
     let r = &ent.rect;
     let qn = &ent.qualified_name;
 
-    svg.raw(&format!("<!--entity {}-->", elem.id));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("entity {}", elem.id)),
+    ));
 
     let source_attr = r
         .source_line
@@ -391,7 +394,10 @@ fn emit_link(
         .cloned()
         .unwrap_or_default();
     let prefix = if reverse { "reverse link" } else { "link" };
-    svg.raw(&format!("<!--{prefix} {from} to {to}-->"));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("{prefix} {from} to {to}")),
+    ));
 
     let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
     let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -618,7 +624,10 @@ fn emit_no_oracle_clusters(
             String::new()
         };
         let entity_id = &uids.group_ids[index];
-        svg.raw(&format!("<!--cluster {}-->", escape_text(&group.label)));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("cluster {}", &group.label)),
+        ));
         svg.raw(&format!(
             r#"<g class="cluster" data-qualified-name="{}"{source_attr} id="{entity_id}">"#,
             crate::svg::escape_attribute(&group.label),

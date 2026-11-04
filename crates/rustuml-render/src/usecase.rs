@@ -2702,7 +2702,10 @@ fn render_package_group(
         .as_deref()
         .map(resolve_fill)
         .unwrap_or_else(|| "none".to_string());
-    svg.raw(&format!("<!--cluster {}-->", sanitize_comment(&pkg.name)));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("cluster {}", sanitize_comment(&pkg.name))),
+    ));
     svg.raw(&format!(
         r#"<g class="cluster" data-qualified-name="{qname}"{src_attr} id="{ent_id}">"#,
         qname = crate::svg::escape_attribute(&qname),
@@ -2817,7 +2820,11 @@ fn render_actor(
     } else {
         actor.id.as_str()
     };
-    svg.raw(&format!("<!--entity {}-->", sanitize_comment(display_raw)));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment =
+            crate::svg::comment_text(&format!("entity {}", sanitize_comment(display_raw))),
+    ));
     let display = sanitize_qname(display_raw);
     let src_attr = source_line_attr(actor.source_line);
     svg.raw(&format!(
@@ -2949,8 +2956,9 @@ fn render_use_case(
         .or_else(|| id_map.get(&format!("uc::{}", uc.id)).cloned())
         .unwrap_or_else(|| "ent0003".to_string());
     svg.raw(&format!(
-        "<!--entity {}-->",
-        sanitize_comment(display_name(uc))
+        "<!--{svg_comment}-->",
+        svg_comment =
+            crate::svg::comment_text(&format!("entity {}", sanitize_comment(display_name(uc)))),
     ));
     let src_attr = source_line_attr(uc.source_line);
     svg.raw(&format!(
@@ -3497,7 +3505,10 @@ fn render_oracle_connections(
         let source_attr = source_line
             .map(|s| format!(r#" data-source-line="{s}""#))
             .unwrap_or_default();
-        svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_label} to {to_label}")),
+        ));
         svg.raw(&format!(
             r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
 ));
@@ -3780,7 +3791,10 @@ fn render_no_oracle_connections(
         } else {
             "association"
         };
-        svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from_label} to {to_label}")),
+        ));
         svg.raw(&format!(
             r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
             line = conn.source_line, ent1 = crate::svg::escape_attribute(ent1), ent2 = crate::svg::escape_attribute(ent2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(&link_id),

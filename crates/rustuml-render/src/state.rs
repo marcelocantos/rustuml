@@ -4112,11 +4112,20 @@ fn emit_autonomous_scope_links(
         if arrow_at_start {
             write!(
                 svg,
-                "<!--reverse link {edge_from_name} to {edge_to_name}-->"
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!(
+                    "reverse link {edge_from_name} to {edge_to_name}"
+                )),
             )
             .unwrap();
         } else {
-            write!(svg, "<!--link {edge_from_name} to {edge_to_name}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("link {edge_from_name} to {edge_to_name}")),
+            )
+            .unwrap();
         }
         write!(
             svg,
@@ -7320,11 +7329,11 @@ pub fn render_with_oracle(
                         } else {
                             write!(
                                 svg,
-                                r#"<rect fill="{fill_color}"{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                r#"<rect {fill_color}{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                                 fmt_f(*bh),
                                 fmt_f(*bw),
                                 fmt_f(box_x),
-                                fmt_f(box_y), fill_color = crate::svg::escape_attribute(&fill_color), stroke_style = crate::svg::escape_attribute(&stroke_style),
+                                fmt_f(box_y), fill_color = crate::svg::fill_attributes(&fill_color), stroke_style = crate::svg::escape_attribute(&stroke_style),
 )
                             .unwrap();
                         }
@@ -7400,11 +7409,11 @@ pub fn render_with_oracle(
                         } else {
                             write!(
                                 svg,
-                                r#"<rect fill="{fill_color}"{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                r#"<rect {fill_color}{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                                 fmt_f(*bh),
                                 fmt_f(*bw),
                                 fmt_f(box_x),
-                                fmt_f(box_y), fill_color = crate::svg::escape_attribute(&fill_color), stroke_style = crate::svg::escape_attribute(&stroke_style),
+                                fmt_f(box_y), fill_color = crate::svg::fill_attributes(&fill_color), stroke_style = crate::svg::escape_attribute(&stroke_style),
 )
                             .unwrap();
                         }
@@ -8003,12 +8012,23 @@ pub fn render_with_oracle(
             if arrow_at_start {
                 write!(
                     svg,
-                    "<!--reverse link {} to {}-->",
-                    edge_from_name, edge_to_name
+                    "<!--{svg_comment}-->",
+                    svg_comment = crate::svg::comment_text(&format!(
+                        "reverse link {} to {}",
+                        edge_from_name, edge_to_name
+                    )),
                 )
                 .unwrap();
             } else {
-                write!(svg, "<!--link {} to {}-->", edge_from_name, edge_to_name).unwrap();
+                write!(
+                    svg,
+                    "<!--{svg_comment}-->",
+                    svg_comment = crate::svg::comment_text(&format!(
+                        "link {} to {}",
+                        edge_from_name, edge_to_name
+                    )),
+                )
+                .unwrap();
             }
 
             let link_id = allocated_ids
@@ -8239,13 +8259,16 @@ pub fn render_with_oracle(
             }
             let note = &diagram.notes[position.note_index];
             write!(
-                svg,
-                r#"<!--link {from} to {to}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="{}"><path d="{d}" fill="none" id="{from_attr}-{to_attr}" style="stroke:{};stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
-                endpoint_id(from),
-                endpoint_id(to),
-                note.source_line,
-                crate::svg::escape_attribute(&spec.link_id),
-                crate::svg::escape_attribute(&skin.stroke), from_attr = crate::svg::escape_attribute(from), to_attr = crate::svg::escape_attribute(to),
+svg,
+r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="{}"><path d="{d}" fill="none" id="{from_attr}-{to_attr}" style="stroke:{};stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
+endpoint_id(from),
+endpoint_id(to),
+note.source_line,
+crate::svg::escape_attribute(&spec.link_id),
+crate::svg::escape_attribute(&skin.stroke),
+from_attr = crate::svg::escape_attribute(from),
+to_attr = crate::svg::escape_attribute(to),
+svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
 )
             .unwrap();
         }
@@ -8751,9 +8774,20 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
 
         // HTML comment.
         if is_reverse {
-            write!(svg, "<!--reverse link {to_name} to {from_name}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("reverse link {to_name} to {from_name}")),
+            )
+            .unwrap();
         } else {
-            write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {from_name} to {to_name}")),
+            )
+            .unwrap();
         }
 
         // Link group wrapper using oracle attributes.
@@ -8963,7 +8997,12 @@ fn emit_note_connector_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     if let Some(idx) = edge.id.rfind("-GMN") {
         let from = &edge.id[..idx];
         let to = &edge.id[idx + 1..];
-        write!(svg, "<!--link {from} to {to}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+        )
+        .unwrap();
     }
     let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
     let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -9000,9 +9039,19 @@ fn emit_oracle_edge_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     // ids are `<from>-to-<to>` / `<from>-backto-<to>`; the comment uses the
     // same names with the verb spelled out.
     if let Some((from, to)) = edge.id.split_once("-backto-") {
-        write!(svg, "<!--reverse link {to} to {from}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("reverse link {to} to {from}")),
+        )
+        .unwrap();
     } else if let Some((from, to)) = edge.id.split_once("-to-") {
-        write!(svg, "<!--link {from} to {to}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+        )
+        .unwrap();
     }
     let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
     let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
