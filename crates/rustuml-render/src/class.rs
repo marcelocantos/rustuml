@@ -146,8 +146,6 @@ const GENERIC_HEADER_GAP: f64 = 8.0;
 const STEREOTYPE_LINE_HEIGHT: f64 = 14.1328;
 /// Stereotype text baseline y relative to entity rect top.
 const STEREOTYPE_Y_OFFSET: f64 = 16.6016;
-/// Icon center y relative to entity rect top when stereotypes are present.
-const ICON_CY_WITH_STEREO: f64 = 20.3105;
 
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_BORDER: &str = "#181818";
@@ -905,6 +903,9 @@ impl DescriptionSymbol {
 #[derive(Clone)]
 struct DescriptionLeafStyle {
     symbol: DescriptionSymbol,
+    stereotype_alignment: LegendHorizontalAlignment,
+    shadow: f64,
+    shadow_filter_id: Option<String>,
     alignment: LegendHorizontalAlignment,
     family: String,
     size: u32,
@@ -977,7 +978,7 @@ fn calc_entity_dims(
             // preferred dimension adds twice the stroke and one bottom pixel.
             (
                 width.max(26.0 + 2.0 * style.thickness),
-                59.0 + 2.0 * style.thickness + name_height + stereo_height,
+                59.0 + 2.0 * style.thickness + style.shadow + name_height + stereo_height,
             )
         } else {
             (
@@ -1472,6 +1473,24 @@ fn member_content_height(
         .sum()
 }
 
+// MethodsOrFieldsArea + PlacementStrategyVisibility: each row reserves
+// max(padded text, icon). Return its content portion; callers add padding once.
+fn member_allocated_content_height(
+    member: &Member,
+    size: f64,
+    family: &str,
+    monospace: bool,
+    icon_height: f64,
+    padding: f64,
+) -> f64 {
+    let text = member_content_height(member, size, family, monospace);
+    if visibility_modifier(member).is_some() {
+        text.max(icon_height - padding * 2.0)
+    } else {
+        text
+    }
+}
+
 fn members_content_height<'a>(
     members: impl IntoIterator<Item = &'a Member>,
     font_size: f64,
@@ -1505,7 +1524,8 @@ fn member_first_baseline_ascent(
 
     // Java `PlacementStrategyVisibility.getPositions` vertically centres the
     // text block against `VisibilityModifier.getUBlock(size + 1)`. The member
-    // dimensions still sum text heights, so this affects placement only.
+    // preferred dimensions sum text heights; drawing also advances by each
+    // max row height independently of that preferred compartment extent.
     let text_height = member_content_height(
         member,
         attr_font.size as f64,
@@ -2495,6 +2515,9 @@ fn render_with_oracle_uid_origin(
         layout.add_node(&note_id, "", width, height);
         attached_layout_slots.push(next_layout_slot);
         next_layout_slot += 1;
+        // Quark identity and Bibliotekon node id differ for notes/empty groups.
+        let target_id = relationship_layout_id(diagram, target);
+        let target = target_id.as_ref();
         match position {
             NotePosition::Left => {
                 // Bibliotekon.addLine puts note links of length 1 in lines0;
@@ -3205,8 +3228,47 @@ impl ClassFontOverrides {
                     _ => DescriptionSymbol::Component2,
                 },
             };
+            // EntityImageDescription resolves a separate stereotype signature;
+            // USymbolRectangle uses its alignment for mergeTB, unlike the
+            // component/database/queue symbols which explicitly center it.
+            let mut stereo_signature = StyleSignature::from_selectors([
+                "root",
+                "element",
+                "classDiagram",
+                symbol,
+                "stereotype",
+            ]);
+            for stereo in &entity.stereotypes {
+                stereo_signature = stereo_signature.with_stereotype(stereo);
+            }
+            let stereo_style = cascade.resolve_entity_at_source_line(
+                &stereo_signature,
+                StyleScheme::Regular,
+                entity.source_line,
+            );
+            // FromSkinparamToStyle.getShadowingValue converts true to 3;
+            // Style.getShadowing otherwise reads the numeric Fashion delta.
+            let shadow = style
+                .property("shadowing")
+                .map(parse_shadowing_delta)
+                .unwrap_or(0.0);
             font.description = Some(DescriptionLeafStyle {
                 symbol: selected,
+                stereotype_alignment: match stereo_style.property("horizontalAlignment") {
+                    Some(value) if value.eq_ignore_ascii_case("left") => {
+                        LegendHorizontalAlignment::Left
+                    }
+                    Some(value) if value.eq_ignore_ascii_case("right") => {
+                        LegendHorizontalAlignment::Right
+                    }
+                    _ => LegendHorizontalAlignment::Center,
+                },
+                shadow,
+                shadow_filter_id: (shadow > 0.0).then(|| {
+                    crate::filter_registry::shadow_id_for(
+                        diagram.meta.source.as_deref().unwrap_or(""),
+                    )
+                }),
                 // BodyEnhanced2.create9 receives the title style alignment.
                 alignment: match style.property("horizontalAlignment") {
                     Some(value) if value.eq_ignore_ascii_case("right") => {
@@ -4329,6 +4391,15 @@ fn relationship_endpoint_name<'a>(
             .iter()
             .find(|note| note.alias.as_deref() == Some(id))
             .and_then(|note| note.owner_package.as_deref());
+        let owner = owner.or_else(|| {
+            diagram
+                .packages
+                .iter()
+                .find(|p| p.name == id)
+                .and_then(|p| p.parent)
+                .and_then(|idx| diagram.packages.get(idx))
+                .map(|p| p.name.as_str())
+        });
         let local = owner
             .and_then(|owner| id.strip_prefix(owner))
             .map(|suffix| suffix.trim_start_matches(|c: char| !c.is_alphanumeric() && c != '_'));
@@ -4985,9 +5056,17 @@ fn render_plantuml_svg(
     let note_shadow_filter_id = (resolved_note_shadowing(diagram) > 0.0
         && !diagram.notes.is_empty())
     .then(|| crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or("")));
+    // ActorStickMan.drawU gives both primitives the Fashion shadow. Keep
+    // symbol-specific style shadows in the same generated defs registry.
+    let description_shadow_filter_id = diagram.entities.iter().find_map(|entity| {
+        ClassFontOverrides::from_diagram_for_entity(diagram, entity)
+            .description
+            .and_then(|style| style.shadow_filter_id)
+    });
     let generated_shadow_filter_id = class_shadow_filter_id
         .as_deref()
-        .or(note_shadow_filter_id.as_deref());
+        .or(note_shadow_filter_id.as_deref())
+        .or(description_shadow_filter_id.as_deref());
     let mut adjusted_edge_paths = edge_paths.to_vec();
     let layout_x_bias = svek_layout_x_bias(
         diagram,
@@ -5106,9 +5185,15 @@ fn render_plantuml_svg(
         } else {
             0.0
         };
-        body_max_x = body_max_x.max(x + dims[i].width + generic_right);
+        let shadow_extra = entity_shadow_extent(
+            diagram,
+            &diagram.entities[i],
+            &dims[i],
+            class_shadow_filter_id.is_some(),
+        );
+        body_max_x = body_max_x.max(x + dims[i].width + generic_right.max(shadow_extra.0));
         body_top = body_top.min(*y);
-        body_bottom = body_bottom.max(y + dims[i].height);
+        body_bottom = body_bottom.max(y + dims[i].height + shadow_extra.1);
         // USymbolDatabase.drawDatabase: UEmpty(10,10) at (width,height).
         if diagram.entities[i].kind == EntityKind::Database {
             body_max_x = body_max_x.max(x + dims[i].width + DATABASE_CLUSTER_ENVELOPE_EXTRA);
@@ -5283,8 +5368,14 @@ fn render_plantuml_svg(
             } else {
                 0.0
             };
-            max_x = max_x.max(x + dims[i].width + generic_right);
-            max_y = max_y.max(y + dims[i].height);
+            let shadow_extra = entity_shadow_extent(
+                diagram,
+                &diagram.entities[i],
+                &dims[i],
+                class_shadow_filter_id.is_some(),
+            );
+            max_x = max_x.max(x + dims[i].width + generic_right.max(shadow_extra.0));
+            max_y = max_y.max(y + dims[i].height + shadow_extra.1);
             let entity = &diagram.entities[i];
             // USymbolDatabase.drawDatabase's UEmpty extends the painted envelope.
             if entity.kind == EntityKind::Database {
@@ -5441,7 +5532,7 @@ fn render_plantuml_svg(
         let extent_pad = if uses_degenerated_entity {
             13
         } else {
-            PACKAGE_CANVAS_EXTENT_PAD + i64::from(class_shadow_filter_id.is_some()) * 5
+            PACKAGE_CANVAS_EXTENT_PAD
         };
         let (extent_pad_x, extent_pad_y, document_width) =
             document_margin.map_or((extent_pad, extent_pad, 0), |margin| {
@@ -6031,7 +6122,64 @@ fn render_plantuml_svg(
         let edge_indices = relationship_edge_indices(diagram, edge_paths);
         let relationship_note_indices = relationship_note_indices(diagram);
         let mut relationship_path_ids = HashSet::new();
-        for rel_idx in relationship_svek_order(diagram) {
+        let mut links = diagram
+            .relationships
+            .iter()
+            .enumerate()
+            .map(|(idx, rel)| {
+                (
+                    svek_ids.relationship_ids[idx],
+                    false,
+                    idx,
+                    rel.from.clone(),
+                    rel.to.clone(),
+                )
+            })
+            .collect::<Vec<_>>();
+        for &idx in &non_opale_attached_notes {
+            let note = &diagram.notes[idx];
+            let start = svek_ids.attached_note_starts[idx].expect("attached note uid");
+            links.push((
+                start + 2,
+                true,
+                idx,
+                format!("GMN{start}"),
+                note.target.clone().expect("attached target"),
+            ));
+        }
+        links.sort_by_key(|link| link.0);
+        let mut ordered: Vec<(usize, bool, usize, String, String)> = Vec::new();
+        // CucaDiagramFileMakerSvek.getLinks groups parallel connections while
+        // preserving the construction order of the first connection.
+        for link in links {
+            let same = |other: &(usize, bool, usize, String, String)| {
+                (other.3 == link.3 && other.4 == link.4) || (other.3 == link.4 && other.4 == link.3)
+            };
+            let insert = ordered
+                .iter()
+                .position(same)
+                .map(|mut idx| {
+                    while idx < ordered.len() && same(&ordered[idx]) {
+                        idx += 1;
+                    }
+                    idx
+                })
+                .unwrap_or(ordered.len());
+            ordered.insert(insert, link);
+        }
+        for (_, is_note, rel_idx, _, _) in ordered {
+            if is_note {
+                render_no_oracle_attached_note_connector(
+                    &mut svg,
+                    diagram,
+                    rel_idx,
+                    edge_paths,
+                    &svek_ids,
+                    layout_x_bias,
+                    &layout_pkg_clusters,
+                );
+                continue;
+            }
             let rel = &diagram.relationships[rel_idx];
             let edge_idx = edge_indices[rel_idx];
             let link_id = svek_ids.relationship_ids[rel_idx];
@@ -6063,17 +6211,6 @@ fn render_plantuml_svg(
                 );
             }
         }
-    }
-    for note_idx in non_opale_attached_notes {
-        render_no_oracle_attached_note_connector(
-            &mut svg,
-            diagram,
-            note_idx,
-            edge_paths,
-            &svek_ids,
-            layout_x_bias,
-            &layout_pkg_clusters,
-        );
     }
 
     // Bottom/default legends (anything not placed in the top group above) are
@@ -6140,6 +6277,27 @@ fn package_anchor(diagram: &ClassDiagram, package: &Package) -> Option<String> {
             .url_tooltip
             .as_deref()
             .unwrap_or(package.url.as_deref().unwrap()),
+    ));
+    let target = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|p| p.key.eq_ignore_ascii_case("svgLinkTarget"))
+        .map_or("_top", |p| p.value.as_str());
+    Some(format!(
+        r#"<a href="{href}" target="{}" title="{title}" xlink:actuate="onRequest" xlink:href="{href}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
+        escape_xml(target)
+    ))
+}
+
+// EntityImageNote.drawU opens the retained Url around its complete image.
+fn note_anchor(diagram: &ClassDiagram, note: &Note) -> Option<String> {
+    let href = escape_xml(note.url.as_deref()?);
+    let title = escape_xml(&crate::svg::normalize_svg_link_title(
+        note.url_tooltip
+            .as_deref()
+            .unwrap_or(note.url.as_deref().unwrap()),
     ));
     let target = diagram
         .meta
@@ -7092,7 +7250,7 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
 fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     let x = cluster.x;
     let y = cluster.y;
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let label_w = cluster_title_width(cluster);
     let path_right = x + label_w + FRAME_TITLE_CORNER;
     // USymbolFrame.getYpos = title.height+3; drawFrame subtracts corner=10.
     let lower_y = y + text_render::label_height(&cluster.label, FONT_SIZE) + 3.0;
@@ -7138,7 +7296,7 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
 fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     let x = cluster.x;
     let y = cluster.y;
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let label_w = cluster_title_width(cluster);
 
     // Java `USymbolRectangle.asBig()` delegates to `drawRect()` and centres
     // the title independently of the stereotype block.
@@ -7168,7 +7326,7 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     let right = x + cluster.width;
     let front_right = right - NODE_BEVEL;
     let bottom = y + cluster.height;
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let label_w = cluster_title_width(cluster);
 
     // Java `USymbolNode.asBig()` delegates to `drawNode()`: a bevelled
     // polygon followed by the top-right diagonal, front top, and front side.
@@ -7519,13 +7677,23 @@ fn emit_layout_cloud_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     )
     .unwrap();
 
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let label_w = cluster_title_width(cluster);
     emit_layout_symbol_cluster_title(
         svg,
         cluster,
         cluster.x + (cluster.width - label_w) / 2.0,
         cluster.y + CLOUD_TITLE_BASELINE,
     );
+}
+
+// ClusterHeader.getTitleBlock merges visibility(size+1) and title width.
+fn cluster_title_width(cluster: &LayoutPackageCluster) -> f64 {
+    text_render::measure_no_underline(&cluster.label, FONT_SIZE, true)
+        + if cluster.visibility == Visibility::Default {
+            0.0
+        } else {
+            (cluster.visibility_size + 1) as f64
+        }
 }
 
 fn emit_layout_symbol_cluster_title(
@@ -7538,7 +7706,12 @@ fn emit_layout_symbol_cluster_title(
     // before the title. Frame owns a title tab and is handled separately.
     let stereo_first = !matches!(cluster.kind, PackageKind::Frame);
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-    let center_x = x + label_w / 2.0;
+    let visibility_width = if cluster.visibility == Visibility::Default {
+        0.0
+    } else {
+        (cluster.visibility_size + 1) as f64
+    };
+    let center_x = x + (label_w + visibility_width) / 2.0;
     let mut title_y = y;
     if stereo_first {
         for stereo in &cluster.stereotype_lines {
@@ -7561,11 +7734,31 @@ fn emit_layout_symbol_cluster_title(
             title_y += text_render::label_height(stereo, FONT_SIZE);
         }
     }
+    // ClusterHeader.getTitleBlock: margin-top 4 around size+1 icon,
+    // then mergeLR CENTER, before USymbol.asBig positions the complete title.
+    let text_height = text_render::label_height(&cluster.label, FONT_SIZE);
+    let title_height = text_height.max(if visibility_width > 0.0 {
+        visibility_width + 4.0
+    } else {
+        0.0
+    });
+    let title_top = title_y - crate::plantuml_metrics::ascent(FONT_SIZE);
+    if visibility_width > 0.0 {
+        render_declaration_visibility(
+            svg,
+            cluster.visibility,
+            x,
+            title_top + (title_height - visibility_width - 4.0) / 2.0 + 4.0,
+            cluster.visibility_size,
+            cluster.stroke_width,
+        );
+    }
+    title_y += (title_height - text_height) / 2.0;
     text_render::emit_text(
         svg,
         &cluster.label,
         &TextBase {
-            x,
+            x: x + visibility_width,
             y: title_y,
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
@@ -7972,7 +8165,13 @@ impl DecorationLayout {
     fn block_height(diagram: &ClassDiagram, class_name: &str, text: &str) -> f64 {
         let st = Self::style(diagram, class_name);
         text.split('\n')
-            .map(|line| text_render::label_height(line, st.font_size as f64))
+            .map(|line| {
+                text_render::label_height_with_family(
+                    if line.is_empty() { " " } else { line },
+                    st.font_size as f64,
+                    &st.family,
+                )
+            })
             .sum::<f64>()
             + 2.0 * st.inset
             + DECORATION_BORDER_EXTENT
@@ -8019,8 +8218,7 @@ impl DecorationLayout {
         ]
         .into_iter()
         .filter_map(|(class_name, text)| {
-            text.filter(|text| !text.is_empty())
-                .map(|text| Self::block_width(diagram, class_name, text))
+            text.map(|text| Self::block_width(diagram, class_name, text))
         })
         .fold(0.0_f64, f64::max);
         wrap_centered(header_footer_w);
@@ -8032,10 +8230,12 @@ impl DecorationLayout {
                 &diagram.meta.footer,
             ]
             .into_iter()
-            .any(|text| text.as_deref().is_some_and(|text| !text.is_empty()));
+            .any(|text| text.is_some());
         let block_height = |class_name, text: Option<&str>| {
-            text.filter(|value| !value.is_empty())
-                .map_or(0.0, |value| Self::block_height(diagram, class_name, value))
+            text.filter(|value| {
+                class_name == "header" || class_name == "footer" || !value.is_empty()
+            })
+            .map_or(0.0, |value| Self::block_height(diagram, class_name, value))
         };
         let header_h = block_height("header", diagram.meta.header.as_deref());
         let title_h = block_height("title", diagram.meta.title.as_deref());
@@ -8133,12 +8333,14 @@ impl DecorationLayout {
         oracle_texts: Option<&[EntityText]>,
     ) {
         let Some(text) = text else { return };
-        if text.is_empty() {
+        // DisplayPositioned.createRibbon preserves a present empty stripe.
+        if text.is_empty() && class_name != "header" && class_name != "footer" {
             return;
         }
         let st = Self::style(diagram, class_name);
         let source_line = line.unwrap_or(1);
-        let line_height = crate::plantuml_metrics::text_height(st.font_size as f64);
+        let line_height =
+            text_render::label_height_with_family("X", st.font_size as f64, &st.family);
         write!(
             svg,
             r#"<g class="{class_name}" data-source-line="{source_line}">"#
@@ -8185,9 +8387,14 @@ impl DecorationLayout {
                 .filter(|t| t.text == line_text);
             let x = oracle_text.map_or(computed_x, |t| t.x);
             let y = oracle_text.map_or(computed_y, |t| t.y);
+            let content = if is_monospace_font(&st.family) {
+                line_text.replace(' ', "\u{00a0}")
+            } else {
+                line_text.to_string()
+            };
             text_render::emit_text(
                 svg,
-                line_text,
+                &content,
                 &text_render::TextBase {
                     x,
                     y,
@@ -8285,16 +8492,48 @@ fn render_description_leaf(
             | DescriptionSymbol::Boundary
             | DescriptionSymbol::Actor => {}
         }
-        for (rx, ry, w, h, round) in rectangles {
+        for (index, (rx, ry, w, h, round)) in rectangles.into_iter().enumerate() {
+            // USymbolComponent[12]/Rectangle draw the outer rectangle with
+            // Fashion deltaShadow; component adornments have no shadow.
+            let shadow_attr = style
+                .shadow_filter_id
+                .as_ref()
+                .filter(|_| index == 0)
+                .map(|id| format!(r#" filter="url(#{id})""#))
+                .unwrap_or_default();
             let rounded = if round > 0.0 {
                 format!(r#" rx="{}" ry="{}""#, fmt4(round), fmt4(round))
             } else {
                 String::new()
             };
-            write!(svg,r#"<rect fill="{}" height="{}"{} style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+            write!(svg,r#"<rect fill="{}"{shadow_attr} height="{}"{} style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
                 style.fill,fmt4(h),rounded,style.stroke,fmt4(style.thickness),fmt4(w),fmt4(rx),fmt4(ry)).unwrap();
         }
         (x + left, y + top)
+    };
+    // USymbolRectangle.asSmall merges with stereoAlignment; all other
+    // supported symbols explicitly use CENTER. Stereo's own margin is 1px.
+    let merge_offset = |width: f64| {
+        if matches!(style.symbol, DescriptionSymbol::Rectangle) {
+            match style.stereotype_alignment {
+                LegendHorizontalAlignment::Left => 0.0,
+                LegendHorizontalAlignment::Right => text_width - width,
+                LegendHorizontalAlignment::Center => (text_width - width) / 2.0,
+            }
+        } else {
+            (text_width - width) / 2.0
+        }
+    };
+    let stereo_width = if dim.hide.stereotype {
+        0.0
+    } else {
+        entity
+            .stereotypes
+            .iter()
+            .map(|label| {
+                text_render::measure(&format!("«{label}»"), style.size as f64, false) + 2.0
+            })
+            .fold(0.0_f64, f64::max)
     };
     let line_height = text_render::label_height("X", style.size as f64);
     let mut stereotype_image = String::new();
@@ -8307,7 +8546,7 @@ fn render_description_leaf(
                 &mut stereotype_image,
                 &label,
                 &TextBase {
-                    x: text_x + (text_width - width) / 2.0,
+                    x: text_x + merge_offset(stereo_width) + (stereo_width - width) / 2.0,
                     y: text_y
                         + i as f64 * line_height
                         + text_render::label_ascent(&label, style.size as f64),
@@ -8328,12 +8567,17 @@ fn render_description_leaf(
     if actor {
         // ActorStickMan.drawU: centered 16px head, then the 27px body,
         // arms at y=8 with half-width 13, and legs extending (13,15).
+        let shadow_attr = style
+            .shadow_filter_id
+            .as_ref()
+            .map(|id| format!(r#" filter="url(#{id})""#))
+            .unwrap_or_default();
         let cx = x + dim.width / 2.0;
         let head_y = y + stereo_height + style.thickness;
         let body_y = head_y + 16.0;
-        write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:{};stroke-width:{};"/>"#,
+        write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{}"{shadow_attr} rx="8" ry="8" style="stroke:{};stroke-width:{};"/>"#,
             fmt4(cx),fmt4(head_y+8.0),style.fill,style.stroke,fmt4(style.thickness)).unwrap();
-        write!(svg, r#"<path d="M{},{} L{},{} M{},{} L{},{} M{},{} L{},{} M{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        write!(svg, r#"<path d="M{},{} L{},{} M{},{} L{},{} M{},{} L{},{} M{},{} L{},{}" fill="none"{shadow_attr} style="stroke:{};stroke-width:{};"/>"#,
             fmt4(cx),fmt4(body_y),fmt4(cx),fmt4(body_y+27.0),
             fmt4(cx-13.0),fmt4(body_y+8.0),fmt4(cx+13.0),fmt4(body_y+8.0),
             fmt4(cx),fmt4(body_y+27.0),fmt4(cx-13.0),fmt4(body_y+42.0),
@@ -8355,7 +8599,7 @@ fn render_description_leaf(
         + if boundary {
             32.0
         } else if actor {
-            59.0 + 2.0 * style.thickness
+            59.0 + 2.0 * style.thickness + style.shadow
         } else {
             0.0
         };
@@ -8372,7 +8616,7 @@ fn render_description_leaf(
             &TextBase {
                 // mergeTB centers the label block; BodyEnhanced2 aligns its lines.
                 x: text_x
-                    + (text_width - label_width) / 2.0
+                    + merge_offset(label_width)
                     + match style.alignment {
                         LegendHorizontalAlignment::Left => 0.0,
                         LegendHorizontalAlignment::Center => (label_width - width) / 2.0,
@@ -8998,9 +9242,6 @@ fn render_entity_content(
     });
     let icon_cy = if let Some(cy) = icon_cy_override {
         cy
-    } else if dim.has_stereotypes {
-        y + ICON_CY_WITH_STEREO
-            + (dim.stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT / 2.0
     } else {
         let circle_height = icon_radius * 2.0 + CIRCLED_ICON_TOP_INSET * 2.0;
         let header_height = class_header_height(
@@ -10178,11 +10419,13 @@ fn render_entity_content(
                     member_text_offset,
                 );
                 oracle_field_text_idx += oracle_text_count;
-                member_top += member_content_height(
+                member_top += member_allocated_content_height(
                     member,
                     attr_font.size as f64,
                     attr_font.family,
                     attr_font.monospace_spaces,
+                    attr_font.icon.block_height,
+                    text_padding,
                 ) + text_padding * 2.0;
                 // Emit any inline separators that fall AFTER this field.
                 for (_, sym) in inline_field_separators
@@ -10345,11 +10588,13 @@ fn render_entity_content(
                         member_text_offset,
                     );
                     oracle_method_text_idx += oracle_text_count;
-                    method_top += member_content_height(
+                    method_top += member_allocated_content_height(
                         member,
                         attr_font.size as f64,
                         attr_font.family,
                         attr_font.monospace_spaces,
+                        attr_font.icon.block_height,
+                        text_padding,
                     ) + text_padding * 2.0;
                 }
 
@@ -10513,11 +10758,13 @@ fn render_entity_content(
                     member_text_offset,
                 );
                 oracle_method_text_idx += oracle_text_count;
-                method_top += member_content_height(
+                method_top += member_allocated_content_height(
                     member,
                     attr_font.size as f64,
                     attr_font.family,
                     attr_font.monospace_spaces,
+                    attr_font.icon.block_height,
+                    text_padding,
                 ) + text_padding * 2.0;
             }
         } else {
@@ -11115,7 +11362,11 @@ fn render_member_line(
 ) {
     let lines = member_display_lines(member, attr_font.monospace_spaces);
 
-    if let Some(vis_mod) = visibility_modifier(member) {
+    if let Some(vis_mod) = visibility_modifier(member)
+        && !(member.visibility == Visibility::Private
+            && attr_font.icon.round_half <= 0.0
+            && vis_icon_polygon.is_none())
+    {
         // Visibility icon group. When the class carries a link, PlantUML wraps
         // the icon shape (inside the `<g>`) in its own `<a>`.
         let first_ascent = lines
@@ -13553,6 +13804,47 @@ fn package_leaf_frontier_position(index: usize, position: &NodePosition) -> Clus
     }
 }
 
+// LimitFinder.drawRectangle/drawEllipse include 2*deltaShadow - 1 at
+// maxima. drawUPath ignores shadow; ActorStickMan's text is independent of
+// its head ellipse, so a wide label must not receive a rectangle shadow pad.
+fn entity_shadow_extent(
+    diagram: &ClassDiagram,
+    entity: &ClassEntity,
+    dim: &EntityDims,
+    class_shadow: bool,
+) -> (f64, f64) {
+    let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+    if let Some(style) = &font.description {
+        if matches!(style.symbol, DescriptionSymbol::Actor) {
+            let (_, _, stereo_height) = description_text_size(entity, dim.hide, style);
+            let head_right = dim.width / 2.0 + 8.0 - 1.0 + style.shadow * 2.0;
+            let head_bottom = stereo_height + style.thickness + 16.0 - 1.0 + style.shadow * 2.0;
+            return (
+                (head_right - dim.width).max(0.0),
+                (head_bottom - dim.height).max(0.0),
+            );
+        }
+        // Rectangle-based USymbols carry their Fashion shadow on the border.
+        if matches!(
+            style.symbol,
+            DescriptionSymbol::Rectangle
+                | DescriptionSymbol::Component1
+                | DescriptionSymbol::Component2
+        ) {
+            let extra = (style.shadow * 2.0 - 1.0).max(0.0);
+            return (extra, extra);
+        }
+        return (0.0, 0.0);
+    }
+    // FromSkinparamToStyle maps enabled class shadowing to deltaShadow=3.
+    let extra = if class_shadow {
+        (parse_shadowing_delta("true") * 2.0 - 1.0).max(0.0)
+    } else {
+        0.0
+    };
+    (extra, extra)
+}
+
 fn entity_frontier_min(
     diagram: &ClassDiagram,
     index: usize,
@@ -13617,7 +13909,14 @@ fn entity_frontier_min(
                 description_text_size(entity, effective_hide(diagram, entity), style);
             return (
                 ((position.width - text_width) / 2.0).min((position.width - 49.0) / 2.0 + 4.0),
-                if stereo_height > 0.0 { 0.0 } else { 4.0 },
+                if stereo_height > 0.0 {
+                    // LimitFinder.drawText: baseline - (font height - 1.5).
+                    text_render::label_ascent("X", style.size as f64)
+                        - text_render::label_height("X", style.size as f64)
+                        + 1.5
+                } else {
+                    4.0
+                },
             );
         }
     }
@@ -14471,7 +14770,7 @@ impl ResolvedNoteStyle {
             Some(value) if value.eq_ignore_ascii_case("right") => NoteTextAlignment::Right,
             _ => NoteTextAlignment::Left,
         };
-        Self {
+        let mut result = Self {
             background,
             border,
             border_width,
@@ -14482,7 +14781,54 @@ impl ResolvedNoteStyle {
             bold: font_style.contains("bold"),
             italic: font_style.contains("italic"),
             alignment,
+        };
+        // EntityImageNote uses the NOTE entity's creation-time style builder,
+        // including the stereotype retained by CommandFactoryNote[OnEntity].
+        let mut signature =
+            StyleSignature::from_selectors(["root", "element", "classDiagram", "note"]);
+        for stereotype in &note.stereotypes {
+            signature = signature.with_stereotype(stereotype);
         }
+        let style = StyleCascade::new(&diagram.meta.style_program).resolve_entity_at_source_line(
+            &signature,
+            StyleScheme::Regular,
+            note.source_line,
+        );
+        if note.color.is_none()
+            && let Some(value) = style.property("backgroundColor").and_then(solid_color)
+        {
+            result.background = value;
+        }
+        if let Some(value) = style.property("lineColor").and_then(solid_color) {
+            result.border = value;
+        }
+        if let Some(value) = style.property("lineThickness").and_then(|v| v.parse().ok()) {
+            result.border_width = value;
+        }
+        if let Some(value) = style.property("fontColor").and_then(solid_color) {
+            result.font_color = value;
+        }
+        if let Some(value) = style.property("fontSize").and_then(|v| v.parse().ok()) {
+            result.font_size = value;
+        }
+        if let Some(value) = style.property("fontName") {
+            result.font_family = canonical_class_font_family(value);
+        }
+        if let Some(value) = style.property("fontStyle") {
+            result.bold = value.to_ascii_lowercase().contains("bold");
+            result.italic = value.to_ascii_lowercase().contains("italic");
+        }
+        if let Some(value) = style.property("horizontalAlignment") {
+            result.alignment = match value.to_ascii_lowercase().as_str() {
+                "center" => NoteTextAlignment::Center,
+                "right" => NoteTextAlignment::Right,
+                _ => NoteTextAlignment::Left,
+            };
+        }
+        if let Some(value) = style.property("shadowing") {
+            result.shadow = parse_shadowing_delta(value);
+        }
+        result
     }
 
     fn line_x(&self, note_x: f64, note_width: f64, line_width: f64) -> f64 {
@@ -14536,6 +14882,14 @@ fn floating_note_opale_relationship(diagram: &ClassDiagram, note_idx: usize) -> 
         return None;
     }
     let alias = note.alias.as_deref()?;
+    // onlyOneLink counts attached-note links as well as explicit relations.
+    if diagram
+        .notes
+        .iter()
+        .any(|note| note.target.as_deref() == Some(alias))
+    {
+        return None;
+    }
     let mut links = diagram
         .relationships
         .iter()
@@ -14596,6 +14950,10 @@ fn render_attached_note(
     entity_id: &str,
     sprites: &HashMap<String, SpriteData>,
 ) {
+    let anchor = note_anchor(diagram, note);
+    if let Some(anchor) = &anchor {
+        svg.push_str(anchor);
+    }
     let style = ResolvedNoteStyle::for_note(diagram, note);
     let shadow_attr = note_shadow_attr(diagram, &style);
     let f = crate::plantuml_metrics::fmt_coord;
@@ -14755,6 +15113,9 @@ fn render_attached_note(
     .unwrap();
     emit_note_body(svg, note, x, y, width, sprites, &style);
     svg.push_str("</g>");
+    if anchor.is_some() {
+        svg.push_str("</a>");
+    }
 }
 
 fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> String {
@@ -15023,10 +15384,10 @@ fn render_no_oracle_attached_note_connector(
             format!("ent{:04}", note_start + 1),
         ),
     };
-    let Some(edge) = edge_paths
-        .iter()
-        .find(|edge| edge.from == edge_from && edge.to == edge_to)
-    else {
+    let Some(edge) = edge_paths.iter().find(|edge| {
+        edge.from == relationship_layout_id(diagram, edge_from).as_ref()
+            && edge.to == relationship_layout_id(diagram, edge_to).as_ref()
+    }) else {
         return;
     };
     let group = packages
@@ -15121,10 +15482,10 @@ fn render_svek_note(
             NotePosition::Left | NotePosition::Top => (note_layout_id.as_str(), target),
             NotePosition::Right | NotePosition::Bottom => (target, note_layout_id.as_str()),
         };
-        let Some(edge) = edge_paths
-            .iter()
-            .find(|edge| edge.from == edge_from && edge.to == edge_to)
-        else {
+        let Some(edge) = edge_paths.iter().find(|edge| {
+            edge.from == relationship_layout_id(diagram, edge_from).as_ref()
+                && edge.to == relationship_layout_id(diagram, edge_to).as_ref()
+        }) else {
             return false;
         };
         let endpoint = match position {
@@ -15158,7 +15519,17 @@ fn render_svek_note(
             p.name == target
                 && package_render_model(diagram).roles[idx] == PackageRenderRole::Cluster
         });
-        if !group_peer && edge_path_is_opalisable(edge) {
+        // GraphvizImageBuilder.isOpalisable excludes NOTE peers, even though
+        // their quark data and Bibliotekon node are valid attachment targets.
+        let note_peer = diagram
+            .notes
+            .iter()
+            .any(|candidate| candidate.alias.as_deref() == Some(target));
+        if !group_peer
+            && !note_peer
+            && !has_strictuml_style(diagram)
+            && edge_path_is_opalisable(edge)
+        {
             render_attached_note(
                 svg,
                 diagram,
@@ -15311,6 +15682,10 @@ fn render_floating_note_entity(
     entity_id: &str,
     sprites: &HashMap<String, SpriteData>,
 ) {
+    let anchor = note_anchor(diagram, note);
+    if let Some(anchor) = &anchor {
+        svg.push_str(anchor);
+    }
     let style = ResolvedNoteStyle::for_note(diagram, note);
     let shadow_attr = note_shadow_attr(diagram, &style);
     let right = x + width;
@@ -15363,6 +15738,9 @@ fn render_floating_note_entity(
     .unwrap();
     emit_note_body(svg, note, x, y, width, sprites, &style);
     svg.push_str("</g>");
+    if anchor.is_some() {
+        svg.push_str("</a>");
+    }
 }
 
 /// `EntityImageNoteLink.drawU` paints directly inside the owning `SvekEdge`

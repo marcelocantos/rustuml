@@ -186,6 +186,7 @@ struct ClassParser {
     namespace_sep: Option<String>,
     /// Whether we are inside a multi-line header/footer/legend block.
     meta_block: Option<MetaBlock>,
+    meta_block_lines: usize,
     /// Prefix of an open `skinparam X { ... }` block.
     current_skinparam_prefix: Option<String>,
     /// Current 1-based source line number (set before each parse_line call).
@@ -236,6 +237,7 @@ impl ClassParser {
             last_entity_id: None,
             namespace_sep: Some(".".to_string()),
             meta_block: None,
+            meta_block_lines: 0,
             current_skinparam_prefix: None,
             current_line: 0,
             hide_show: Vec::new(),
@@ -249,7 +251,11 @@ impl ClassParser {
         }
     }
 
-    fn finish(self) -> ClassDiagram {
+    fn finish(mut self) -> ClassDiagram {
+        // CucaDiagram.getTextBlock materializes any remaining parent quarks
+        // with null source location after command execution has finished.
+        self.current_line = 0;
+        self.materialize_phantom_packages();
         ClassDiagram {
             meta: self.meta,
             direction: self.direction,
@@ -295,7 +301,9 @@ impl ClassParser {
                     message: format!("note already created: {id}"),
                 });
             }
-            self.ensure_phantom_packages(&path);
+            // reallyCreateLeaf allocates the NOTE before phantom ancestors.
+            self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
+            self.ensure_phantom_packages(&path, false);
             note.alias = Some(id);
             self.register_quark_path(&path);
             self.package_by_path
@@ -307,7 +315,9 @@ impl ClassParser {
                 .last()
                 .map(|&idx| self.packages[idx].name.clone())
         };
-        self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
+        if note.alias.is_none() {
+            self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
+        }
         self.notes.push(note);
         Ok(())
     }
@@ -468,22 +478,16 @@ impl ClassParser {
 
     /// `CucaDiagram#eventuallyBuildPhantomGroups` materializes every empty
     /// parent quark when a class-like leaf is first created below it.
-    fn ensure_phantom_packages(&mut self, entity_path: &[String]) {
+    fn ensure_phantom_packages(&mut self, entity_path: &[String], materialize: bool) {
         for depth in 1..entity_path.len() {
             let path = entity_path[..depth].to_vec();
-            if let Some(&idx) = self.package_by_path.get(&path) {
-                if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
-                    self.packages[idx].source_line = self.current_line;
-                    self.uid_events
-                        .push(ClassUidEvent::Package(self.packages[idx].name.clone()));
-                }
+            if self.package_by_path.contains_key(&path) {
                 continue;
             }
             let parent =
                 (depth > 1).then(|| self.package_by_path[&entity_path[..depth - 1].to_vec()]);
             let idx = self.packages.len();
             let name = self.path_id(&path);
-            self.uid_events.push(ClassUidEvent::Package(name.clone()));
             self.packages.push(Package {
                 visibility: Visibility::Default,
                 name,
@@ -494,7 +498,7 @@ impl ClassParser {
                 color: None,
                 entities: Vec::new(),
                 parent,
-                source_line: self.current_line,
+                source_line: 0,
                 stereotypes: Vec::new(),
                 display_name: path.last().cloned(),
                 phantom: true,
@@ -502,6 +506,21 @@ impl ClassParser {
             self.package_paths.push(path.clone());
             self.package_by_path.insert(path.clone(), idx);
             self.register_quark_path(&path);
+        }
+        if materialize {
+            self.materialize_phantom_packages();
+        }
+    }
+
+    fn materialize_phantom_packages(&mut self) {
+        // reallyCreateLeaf calls this only for LeafType.isLikeClass. It visits
+        // all missing ancestor data, including quarks introduced by notes.
+        for package in &mut self.packages {
+            if package.phantom && package.source_line == 0 {
+                self.uid_events
+                    .push(ClassUidEvent::Package(package.name.clone()));
+                package.source_line = self.current_line;
+            }
         }
     }
 
@@ -516,7 +535,24 @@ impl ClassParser {
         // `reallyCreateLeaf` consumes the entity UID before
         // `eventuallyBuildPhantomGroups` materializes missing parent quarks.
         self.uid_events.push(ClassUidEvent::Entity(id.clone()));
-        self.ensure_phantom_packages(&path);
+        // LeafType.LIKE_CLASS excludes OBJECT and DESCRIPTION/NOTE leaves.
+        let class_like = matches!(
+            kind,
+            EntityKind::Annotation
+                | EntityKind::AbstractClass
+                | EntityKind::Class
+                | EntityKind::Interface
+                | EntityKind::Enum
+                | EntityKind::Entity
+                | EntityKind::Protocol
+                | EntityKind::Struct
+                | EntityKind::Exception
+                | EntityKind::Metaclass
+                | EntityKind::Stereotype
+                | EntityKind::Dataclass
+                | EntityKind::Record
+        );
+        self.ensure_phantom_packages(&path, class_like);
         let idx = self.entities.len();
         self.entities.push(ClassEntity {
             id: id.clone(),
@@ -676,14 +712,14 @@ impl ClassParser {
                 match block {
                     MetaBlock::Header => {
                         let h = self.meta.header.get_or_insert_with(String::new);
-                        if !h.is_empty() {
+                        if self.meta_block_lines > 0 {
                             h.push('\n');
                         }
                         h.push_str(line);
                     }
                     MetaBlock::Footer => {
                         let f = self.meta.footer.get_or_insert_with(String::new);
-                        if !f.is_empty() {
+                        if self.meta_block_lines > 0 {
                             f.push('\n');
                         }
                         f.push_str(line);
@@ -711,6 +747,7 @@ impl ClassParser {
                     }
                 }
             }
+            self.meta_block_lines += 1;
             return Ok(());
         }
 
@@ -1687,7 +1724,11 @@ impl ClassParser {
                             package.url = url.clone();
                             package.url_tooltip = url_tooltip.clone();
                         }
+                        // gotoGroup creates data only when the quark has none;
+                        // existing materialized group data retains its location.
                         if package.source_line == 0 {
+                            self.uid_events
+                                .push(ClassUidEvent::Package(package.name.clone()));
                             package.source_line = self.current_line;
                         }
                         package.phantom = false;
@@ -1751,181 +1792,86 @@ impl ClassParser {
     }
 
     fn try_note(&mut self, line: &str) -> Result<bool, ParseError> {
-        // Single-line attached note: `note <pos> of <entity> : <text>`
-        // Entity may be a dotted name (e.g. `domain.User` in namespace diagrams).
-        static ATTACHED_RE: LazyLock<Regex> = LazyLock::new(|| {
+        // CommandFactoryNoteOnEntity owns the same ordered modifiers for
+        // single-line, end-note and braced bodies. A recognized start consumes
+        // its complete body in parse_line, including command-looking text.
+        static ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("[^"]+"|[^\s{}"<>]+)\s*:\s*(.+)$"#,
-            )
-            .unwrap()
+            r#"(?i)^note\s+(?P<position>top|bottom|left|right)(?:\s+of\s+(?P<target>"[^"]+"|[^\s{}"<>]+))?\s*(?P<tags1>(?:\$[^\s{}"<>$]+\s*)*)(?:<<(?P<stereo>.+?)>>)?\s*(?P<tags2>(?:\$[^\s{}"<>$]+\s*)*)(?P<color>#[^\s{}]+)?\s*(?P<url>\[\[.*?\]\])?\s*(?:(?P<brace>\{)|:\s*(?P<text>.*))?$"#
+        ).unwrap()
         });
-        // Multi-line attached note start: `note <pos> of <entity>` (optional color: `#color`)
-        static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+        // CommandFactoryNote has a named NOTE code, not a class display name;
+        // both its forms allow tags, stereotype and background color.
+        static FLOATING: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("[^"]+"|[^\s{}"<>]+)\s*(#[^\s{}]+)?\s*(\{)?\s*$"#,
-            )
-            .unwrap()
+            r#"(?i)^note\s+(?:"(?P<text>[^"]+)"\s+)?as\s+(?P<alias>[\p{L}\p{N}_.]+)\s*(?P<tags1>(?:\$[^\s{}"<>$]+\s*)*)(?:<<(?P<stereo>.+?)>>)?\s*(?P<color>#[^\s{}]+)?\s*$"#
+        ).unwrap()
         });
-        // Shorthand single-line note attached to last entity: `note <pos> : <text>`
-        static SHORT_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap()
-        });
-        // Shorthand multi-line note attached to last entity: `note <pos>` (optional color)
-        static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*(#[^\s{}]+)?\s*(\{)?\s*$").unwrap()
-        });
-        // Floating named note: `note "text" as Name`
-        static FLOATING_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+([\p{L}\p{N}_.]+)\s*$"#).unwrap()
-        });
-        // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
-        static FLOATING_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"(?i)^note\s+as\s+([\p{L}\p{N}_.]+)\s*(#\S+)?\s*$").unwrap()
-        });
-
-        if let Some(caps) = ATTACHED_RE.captures(line) {
-            let position = parse_note_position(&caps[1].to_ascii_lowercase());
-            // CommandFactoryNoteOnEntity.executeInternal resolves the target
-            // with quarkInContext(true, idShort) before creating the note/link.
-            let target_path =
-                self.resolve_quark_path(caps[2].trim_matches('"'), QuarkLookup::ReuseUnique);
-            // Quark<Entity>.getData includes groups as well as leaves.
-            let target = self
-                .entity_by_path
-                .get(&target_path)
-                .map(|&idx| self.entities[idx].id.clone())
-                .or_else(|| {
-                    self.package_by_path
-                        .get(&target_path)
-                        .map(|&idx| self.packages[idx].name.clone())
-                })
-                .ok_or_else(|| ParseError {
+        if let Some(caps) = ATTACHED.captures(line).or_else(|| FLOATING.captures(line)) {
+            let attached = caps.name("position").is_some();
+            let target = if let Some(target) = caps.name("target") {
+                let path = self.resolve_quark_path(
+                    target.as_str().trim_matches('"'),
+                    QuarkLookup::ReuseUnique,
+                );
+                let id = self.path_id(&path);
+                // Quark<Entity>.getData includes NOTE leaves and groups.
+                if !self.entity_by_path.contains_key(&path)
+                    && !self.package_by_path.contains_key(&path)
+                    && !self
+                        .notes
+                        .iter()
+                        .any(|note| note.alias.as_deref() == Some(&id))
+                {
+                    return Err(ParseError {
+                        line: self.current_line,
+                        message: format!("unknown note target: {}", target.as_str()),
+                    });
+                }
+                Some(id)
+            } else if attached {
+                Some(self.last_entity_id.clone().ok_or_else(|| ParseError {
                     line: self.current_line,
-                    message: format!("unknown note target: {}", &caps[2]),
-                })?;
-            let text = caps[3].trim().to_string();
-            // Expand `\n` escape sequences into actual newlines.  Preserve
-            // leading whitespace on each segment so that indented `* items`
-            // (e.g. `  * point 2`) are distinguishable from top-level bullet
-            // items (`* point 1`) in the renderer.  Only strip trailing
-            // whitespace from each segment.
-            let lines = text
-                .split("\\n")
-                .map(|s| s.trim_end().to_string())
-                .collect();
-            self.push_note(Note {
-                owner_package: None,
-                lines,
-                target: Some(target),
-                position: Some(position),
-                alias: None,
-                color: None,
-                source_line: self.current_line,
-            })?;
-            return Ok(true);
-        }
-
-        if let Some(caps) = ATTACHED_ML_RE.captures(line) {
-            self.note_with_bracket = caps.get(4).is_some();
-            let position = parse_note_position(&caps[1].to_ascii_lowercase());
-            // CommandFactoryNoteOnEntity.executeInternal resolves the target
-            // with quarkInContext(true, idShort) before creating the note/link.
-            let target_path =
-                self.resolve_quark_path(caps[2].trim_matches('"'), QuarkLookup::ReuseUnique);
-            // Quark<Entity>.getData includes groups as well as leaves.
-            let target = self
-                .entity_by_path
-                .get(&target_path)
-                .map(|&idx| self.entities[idx].id.clone())
-                .or_else(|| {
-                    self.package_by_path
-                        .get(&target_path)
-                        .map(|&idx| self.packages[idx].name.clone())
-                })
-                .ok_or_else(|| ParseError {
-                    line: self.current_line,
-                    message: format!("unknown note target: {}", &caps[2]),
-                })?;
-            self.current_note = Some(Note {
-                owner_package: None,
-                lines: Vec::new(),
-                target: Some(target),
-                position: Some(position),
-                alias: None,
-                color: caps.get(3).map(|m| m.as_str().to_string()),
-                source_line: self.current_line,
-            });
-            return Ok(true);
-        }
-
-        // Shorthand: `note right : text` — attaches to the last declared entity.
-        if let Some(caps) = SHORT_RE.captures(line) {
-            let position = parse_note_position(&caps[1].to_ascii_lowercase());
-            let text = caps[2].trim().to_string();
-            let lines = text
-                .split("\\n")
-                .map(|s| s.trim_end().to_string())
-                .collect();
-            let target = self.last_entity_id.clone();
-            self.push_note(Note {
-                owner_package: None,
-                lines,
+                    message: "nothing to note to".into(),
+                })?)
+            } else {
+                None
+            };
+            let url_text = caps.name("url").map_or("", |value| value.as_str());
+            let (url, _) = super::extract_link_url(url_text);
+            let mut note = Note {
                 target,
-                position: Some(position),
-                alias: None,
-                color: None,
+                position: caps
+                    .name("position")
+                    .map(|value| parse_note_position(&value.as_str().to_ascii_lowercase())),
+                alias: caps.name("alias").map(|value| value.as_str().to_string()),
+                color: caps.name("color").map(|value| value.as_str().to_string()),
+                stereotypes: caps
+                    .name("stereo")
+                    .map(|value| vec![value.as_str().trim().to_string()])
+                    .unwrap_or_default(),
+                tags: ["tags1", "tags2"]
+                    .into_iter()
+                    .filter_map(|key| caps.name(key))
+                    .flat_map(|value| value.as_str().split_whitespace())
+                    .map(|tag| tag.trim_start_matches('$').to_string())
+                    .collect(),
+                url,
+                url_tooltip: super::extract_link_tooltip(url_text),
                 source_line: self.current_line,
-            })?;
-            return Ok(true);
-        }
-
-        // Shorthand multi-line: `note right` — attaches to the last declared entity.
-        if let Some(caps) = SHORT_ML_RE.captures(line) {
-            self.note_with_bracket = caps.get(3).is_some();
-            let position = parse_note_position(&caps[1].to_ascii_lowercase());
-            let target = self.last_entity_id.clone();
-            self.current_note = Some(Note {
-                owner_package: None,
-                lines: Vec::new(),
-                target,
-                position: Some(position),
-                alias: None,
-                color: caps.get(2).map(|m| m.as_str().to_string()),
-                source_line: self.current_line,
-            });
-            return Ok(true);
-        }
-
-        if let Some(caps) = FLOATING_RE.captures(line) {
-            let text = caps[1].trim().to_string();
-            let alias = caps[2].to_string();
-            let lines = text
-                .split("\\n")
-                .map(|s| s.trim_end().to_string())
-                .collect();
-            self.push_note(Note {
-                owner_package: None,
-                lines,
-                target: None,
-                position: None,
-                alias: Some(alias),
-                color: None,
-                source_line: self.current_line,
-            })?;
-            return Ok(true);
-        }
-
-        if let Some(caps) = FLOATING_ML_RE.captures(line) {
-            let alias = caps[1].to_string();
-            self.current_note = Some(Note {
-                owner_package: None,
-                lines: Vec::new(),
-                target: None,
-                position: None,
-                alias: Some(alias),
-                color: caps.get(2).map(|m| m.as_str().to_string()),
-                source_line: self.current_line,
-            });
+                ..Note::default()
+            };
+            if let Some(text) = caps.name("text") {
+                note.lines = text
+                    .as_str()
+                    .split("\\n")
+                    .map(|s| s.trim_end().to_string())
+                    .collect();
+                self.push_note(note)?;
+            } else {
+                self.note_with_bracket = caps.name("brace").is_some();
+                self.current_note = Some(note);
+            }
             return Ok(true);
         }
 
@@ -1950,6 +1896,7 @@ impl ClassParser {
                 alias: None,
                 color: None,
                 source_line: self.current_line,
+                ..Note::default()
             })?;
             return Ok(true);
         }
@@ -1963,6 +1910,7 @@ impl ClassParser {
                 alias: None,
                 color: None,
                 source_line: self.current_line,
+                ..Note::default()
             });
             return Ok(true);
         }
@@ -2049,6 +1997,7 @@ impl ClassParser {
                 let value = command[name.len()..].trim();
                 if value.is_empty() {
                     self.meta_block = Some(block);
+                    self.meta_block_lines = 0;
                 }
                 if name == "header" {
                     self.header_alignment = alignment;
@@ -4463,5 +4412,85 @@ mod tests {
             empty.packages[0].url.as_deref(),
             Some("https://example.org/m")
         );
+    }
+
+    #[test]
+    fn note_modifiers_own_the_body_and_retain_metadata() {
+        for (start, end) in [
+            (
+                "note left of Ledger $audit <<warning>> $export #pink [[https://example.org/ledger{detail}]] {",
+                "}",
+            ),
+            (
+                "note bottom of Ledger $audit <<warning>> $export #pink [[https://example.org/ledger{detail}]]",
+                "end note",
+            ),
+        ] {
+            let diagram = parse(&format!(
+                "record Ledger\n{start}\ncomponent body is opaque\nclass BodyWord\n{end}"
+            ));
+            assert_eq!(diagram.entities.len(), 1);
+            assert_eq!(diagram.entities[0].kind, EntityKind::Record);
+            let note = &diagram.notes[0];
+            assert_eq!(note.target.as_deref(), Some("Ledger"));
+            assert_eq!(note.stereotypes, ["warning"]);
+            assert_eq!(note.tags, ["audit", "export"]);
+            assert_eq!(note.color.as_deref(), Some("#pink"));
+            assert_eq!(note.url.as_deref(), Some("https://example.org/ledger"));
+            assert_eq!(note.url_tooltip.as_deref(), Some("detail"));
+            assert_eq!(note.lines, ["component body is opaque", "class BodyWord"]);
+        }
+    }
+
+    #[test]
+    fn attached_notes_resolve_scoped_named_note_quarks() {
+        for position in ["left", "bottom"] {
+            let d = parse(&format!(
+                "package Harbor {{\nclass Ledger\nnote \"memo\" as Memo $audit <<warning>> #yellow\nnote {position} of Memo : follow-up\nMemo .. Ledger\n}}"
+            ));
+            assert_eq!(d.entities.len(), 1);
+            assert_eq!(d.notes.len(), 2);
+            assert_eq!(d.notes[1].target.as_deref(), Some("Harbor.Memo"));
+            assert_eq!(d.notes[0].tags, ["audit"]);
+            assert_eq!(d.relationships[0].from, "Harbor.Memo");
+        }
+    }
+
+    #[test]
+    fn note_parent_data_materializes_after_the_triggering_class_leaf() {
+        let d = parse("note \"memo\" as Port.Archive\nclass Bolt");
+        assert!(matches!(d.uid_events[0], ClassUidEvent::Note(0)));
+        assert!(matches!(&d.uid_events[1], ClassUidEvent::Entity(id) if id == "Bolt"));
+        assert!(matches!(&d.uid_events[2], ClassUidEvent::Package(id) if id == "Port"));
+        assert_eq!(d.packages[0].source_line, 2);
+    }
+
+    #[test]
+    fn explicit_group_preserves_materialized_location_but_creates_missing_note_parent_data() {
+        let existing = parse("class Port.Bolt\npackage Port {\nclass Pin\n}");
+        assert_eq!(existing.packages[0].source_line, 1);
+        let missing = parse("note \"memo\" as Port.Archive\npackage Port {\nclass Pin\n}");
+        assert_eq!(missing.packages[0].source_line, 2);
+        assert!(matches!(missing.uid_events[0], ClassUidEvent::Note(0)));
+        assert!(matches!(&missing.uid_events[1], ClassUidEvent::Package(id) if id == "Port"));
+    }
+
+    #[test]
+    fn ribbon_body_counts_leading_and_only_blank_stripes() {
+        let d = parse("header\n\nheading\nend header\nright footer\n\n\nend footer\nclass Ledger");
+        assert_eq!(d.meta.header.as_deref(), Some("\nheading"));
+        assert_eq!(d.meta.footer.as_deref(), Some("\n"));
+    }
+
+    #[test]
+    fn note_command_trials_reject_unknown_targets_and_trailing_modifier_garbage() {
+        for input in [
+            "class Ledger\nnote right of Missing : absent",
+            "class Ledger\nnote right of Ledger <<hint>> unexpected {\ntext\n}",
+        ] {
+            let lines = input.lines().map(str::to_string).collect::<Vec<_>>();
+            assert!(parse_class(&lines).is_err());
+            assert!(!native_container_candidate(&lines));
+        }
     }
 }

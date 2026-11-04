@@ -16,7 +16,7 @@ pub enum NotePosition {
 }
 
 /// A note attached to an entity or floating.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct Note {
     /// Note content lines (may contain Creole/HTML markup).
     pub lines: Vec<String>,
@@ -27,6 +27,15 @@ pub struct Note {
     /// Canonical quark identity for a named note (`note "..." as N`).
     /// CommandFactoryNote resolves it in the current namespace.
     pub alias: Option<String>,
+    /// CommandFactoryNote[OnEntity] modifiers belong to the NOTE leaf.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub stereotypes: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url_tooltip: Option<String>,
     /// Optional note background color.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
