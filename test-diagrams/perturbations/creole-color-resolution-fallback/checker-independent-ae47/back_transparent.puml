@@ -1,0 +1,4 @@
+@startuml
+state Perch
+Perch : <back:red>a<back:transparent>b</back>c</back>d
+@enduml

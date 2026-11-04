@@ -1,0 +1,3 @@
+@startuml
+Oriole -> Finch : <back:blue|yellow>a</back><back:blue/NoTint77>b</back><back:NoTint77-yellow>c</back>
+@enduml

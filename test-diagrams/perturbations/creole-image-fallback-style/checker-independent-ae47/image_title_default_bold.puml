@@ -1,0 +1,4 @@
+@startuml
+title a<img:checker-ae47-absent.png>b
+Oriole -> Finch : ping
+@enduml

@@ -1,0 +1,17 @@
+{
+  "java_names": 154,
+  "rust_names": 148,
+  "java_only": [
+    "application",
+    "business",
+    "implementation",
+    "motivation",
+    "physical",
+    "strategy",
+    "technology"
+  ],
+  "rust_only": [
+    "rebeccapurple"
+  ],
+  "grammar_safety": "Schemes and multiple gradient separators supported by HColorSet are excluded by unchanged command candidate grammar; permissive resolver branches are not exposed to combined font commands."
+}

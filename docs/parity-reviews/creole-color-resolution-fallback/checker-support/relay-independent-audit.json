@@ -1,0 +1,16 @@
+{
+  "resource_count": 32,
+  "all_exact": true,
+  "java_argv_provenance": "derived, not process-traced",
+  "historical_fonts_and_graphviz_equivalence": "unproved",
+  "hashes": {
+    "request.json": "1d98a73398e33471aa6fcea2f32f75cf613805e8c68460fbbe9ad0893971c677",
+    "manifest.json": "10c8742b6bba0cc269ac3de589c5608ac7f525a8e3f244af656bcc57dec4a8d9",
+    "input-bundle.json.gz": "b658c9b004ebf1b2955474fae72f66f41eb3c1176ba883c4d20470d3f8921fdd",
+    "parent-relay-input.json.gz": "96c86e262c4d5f64a46c7bff2da9eba5b913d0a0e417e1d3d6598be48ac058f0",
+    "reference-results.json.gz": "f63a40bc5d3c3ad5ea4d049414610d07bb66c71027f4a7d2692f41250d315b4a",
+    "reference-transport.json": "60e895baec8c1e2a46e65be426114e4d84ddcadf764b1999d22721aafb0e570c",
+    "parent-upload-validation.json": "c49a661a060b3ce6b6e47426871c173eca265788f35e694d57acfa3b1faed970",
+    "parent-relay-validation.json": "19d5f26b44d939d07fa956f881355065ad9edb9829eb4b0954477478e05a46d7"
+  }
+}

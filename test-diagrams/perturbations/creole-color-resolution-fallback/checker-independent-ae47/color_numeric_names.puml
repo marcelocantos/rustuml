@@ -1,0 +1,4 @@
+@startuml
+state Perch
+Perch : <color:teal>a<color:12>b</color><color:12345>c</color><color:1234567>d</color>e
+@enduml
