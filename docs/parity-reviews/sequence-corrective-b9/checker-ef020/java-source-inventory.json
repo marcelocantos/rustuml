@@ -1,0 +1,150 @@
+[
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+    "sha256": "cdd4b8ae6aaf39eebafb1107bab16184e671e639aafdc77fd925bc1b66597be1"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+    "sha256": "7aba3c7b36008abccd5a61e8b64bc9540fdf7873a153d4c24cac50b9987107c2"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleUrl.java",
+    "sha256": "84df5275eaf87f525e12751444aebeb8e1e4c936b3872643b82521f18f025f52"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java",
+    "sha256": "90e62fb331a47aab282ba79c672c65e9386ac31024049d00f93ddcd8df3b9642"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomTextUtils.java",
+    "sha256": "b4ab0a3222a55203349b08723538874aa5d93c9838b9aefbd3a5aa18efc27d89"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeSimple.java",
+    "sha256": "5da5e0b2ec483a26ee58e63a58e79ab37f7a881f465701bfddac9ba1d8967eec"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "sha256": "4c7e91766b084ca734321706cac46ca28891109cb5a77297be8daea717894593"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+    "sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReturn.java",
+    "sha256": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ArrowAndNoteBox.java",
+    "sha256": "843b8beb1b76bed07576f2c46e1564c28f0094263cab0ca42555ef69e4ea3668"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LifeLine.java",
+    "sha256": "ab19690d9fbf098ba3a320b10ca42516d9c36e51543d378a3f3a6e2c36dcbcd4"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LifeSegmentVariation.java",
+    "sha256": "01b45cd4e117a87e5b6154a29059351268bfeecbd1b8da7b6a1c2ea94c4d096e"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/MessageSelfArrow.java",
+    "sha256": "c08a18f11cf0b2dbe6fc6436275aeca5717ab7d3d6900c9c32c8a0b3db7a0b3e"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1Abstract.java",
+    "sha256": "8707864d422b6cd290b0842b89e4ce6f617a646a068a92b6e4fabaf38f837635"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1Message.java",
+    "sha256": "9be5a4dcc57f391c80bdec8618031d285bb31cc6181b90bfe3e19774edf81baa"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelf.java",
+    "sha256": "b0d937e0df4352381839029be07569c65a0333de8ef629ad111a590a8276a8bf"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelfNoteRight.java",
+    "sha256": "477afe4e7c52011fbfed7fa571a70efa8441931d103b72ed6e6a710b43012d81"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/GroupingTile.java",
+    "sha256": "309f74ba94ff1b098a39cb17658d7a04612673d3e82b6a83e01e9c9e80ac39e1"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LiveBoxes.java",
+    "sha256": "0c1f7856008b04c90efbbf3addcc0b16deca3ade303a6f779cbc1481982c586d"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LivingSpace.java",
+    "sha256": "d23029368faa371190bf352abd7be065716cb11957c45318cc4c0ed043cadd7c"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/NoteTile.java",
+    "sha256": "dae7ba8b898b8307d2ccb7512dfb11490d11662a758a6c542edcfdcb69a95c83"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/PlayingSpaceWithParticipants.java",
+    "sha256": "d6181364a8d7f05e2de10d960dc23fa2135825467c1505aa5b04f7a3a8030b55"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java",
+    "sha256": "ea10d1eab9d37506dae992c01f909a28a63aa90f3a58c9a7712b9e4dece006dc"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/TileParallel.java",
+    "sha256": "b3c570c05b9a116af5fd200e7dc8d3462f9aef7adc22963dfda28b572e3a2542"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+    "sha256": "3b34cd97df5bd5fcea39e132bffb8d42390842f21cfc7a92163f6e6200c59862"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/ArrowConfiguration.java",
+    "sha256": "08139b5d7fc69fa7ef9febcd01217607ea27c6edf6e5050872a8bbeddc58b3d1"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/AbstractComponentRoseArrow.java",
+    "sha256": "9a0207b14fff40521c3944d644e392239821859d9f25152e066fd14c04efcbe1"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseActiveLine.java",
+    "sha256": "7dcf50c70858075d3f2c0c7eb570eb28e6bab57378b466fe0cb0452c6b2991b9"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseArrow.java",
+    "sha256": "5c7592a11e5e1164362daf44ea8acfc1014e8f9895296b740c3eda2c10578060"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseLine.java",
+    "sha256": "9053f5c36a3ab630a495d700785aa2e86ec7cb85e441af9a1070fb693350ed66"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+    "sha256": "78f64269ceccf430d3e31a6298acc35f2a563f5d699e5db1c86ab8239edf7d49"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseSelfArrow.java",
+    "sha256": "ee42d78cfe425c46e76fb57f5040f16cd92513c058d016bb15d462cce616c7b0"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/Rose.java",
+    "sha256": "be607bf6195086d7a1764d7a5e6d08d8d067dbcd73fc67de404e62531aac694f"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+    "sha256": "b04ced59627d1d313e127bf5f28532bc162d4a629240a65f6d5730927f33c69d"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+    "sha256": "056e1590423d17fe4b4ba1a24c0f773d210ea0c7830415b5a0ba94b0abd74576"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+    "sha256": "803a162f03659ed7ca6a48238145bd0f8c8176a5e6f01fc7c37c1013568ffa4b"
+  },
+  {
+    "path": "src/main/resources/skin/plantuml.skin",
+    "sha256": "efc1747ec10be10c62b7d69bc280196c4f64fac618a5556d15c1fe3858017bbb"
+  }
+]

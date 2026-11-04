@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-shadow-value-materialization",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A253dfb72-0e49-40b9-b53c-b6160ecef3bf",
+    "model": "gpt-6-astra / high reasoning / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "2d17c23b96bee08ac0e61947b4ffe0fc91b969b9",
+  "implementation_commit": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "implementation_commits": [
+    "1b29d8c78d671649b0db6efcdc09e01391f6ce98"
+  ],
+  "tested_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_revision": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "before_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (exact substituted argv, source hashes, streams and environment preserved in checker-ef020 raw relay archives)",
+    "cargo build --locked --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (fresh distinct private targets at exact before/candidate)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT",
+    "cargo test --locked --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "See docs/parity-reviews/sequence-corrective-b9/checker-ef020/commands.json for all exact local commands, cwd, environment and exits."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.svg",
+      "axes": [
+        "digit/dot extraction -0px",
+        "engine/scoped override/global false"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_0.puml",
+      "source_sha256": "df292b60bdad843d03af99382c582a7c583609a92afd714a74837831b8781915",
+      "golden_sha256": "f6724d4b1b8c3c1e29d051260885d021d8b5fd646360b0d5d9820a014f39c1f1",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.before.rust.svg",
+          "svg_sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.after.rust.svg",
+          "svg_sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.svg",
+      "axes": [
+        "digit/dot extraction .5px",
+        "engine/scoped override/global false"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_1.puml",
+      "source_sha256": "2b436b24460ee1b089ad4c04df753bf70d6407f70554687e8a706d55fabb295d",
+      "golden_sha256": "1aac123f77ac61782c9229eedfab22fe4d42ff4c65ce892524f11e48954378a8",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.before.rust.svg",
+          "svg_sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.after.rust.svg",
+          "svg_sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.svg",
+      "axes": [
+        "digit/dot extraction 1e2",
+        "engine/scoped override/global false"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_2.puml",
+      "source_sha256": "fd61353d1c3cb15413f902c3bed42b3d2d8a11f2c0c5bcd8bfcfd474f4cd7989",
+      "golden_sha256": "7e587dff09ace4b1d57bafc64a01516e451879b22be709b78c44f828975f7720",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.before.rust.svg",
+          "svg_sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.after.rust.svg",
+          "svg_sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.svg",
+      "axes": [
+        "digit/dot extraction 1..2",
+        "engine/scoped override/global false"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_3.puml",
+      "source_sha256": "791cd0df665e9da265dcdf77ad20c354f798bd5b110234d0a9b07ee36933c3df",
+      "golden_sha256": "05be3711b9f4eb90f97f4a9bbb31f4133d7a368114ff6c00a9760bf2c086a815",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.before.rust.svg",
+          "svg_sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.after.rust.svg",
+          "svg_sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.svg",
+      "axes": [
+        "digit/dot extraction false",
+        "engine/scoped override/global false"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_4.puml",
+      "source_sha256": "74ef5c005b511826bd1926ad8a3c258391f463fccb177ccbaa3b4d611b14116e",
+      "golden_sha256": "7aee4c704d00b2e232923bbb995eda7380a458f54b30c7235ac8a594615ccf3a",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.before.rust.svg",
+          "svg_sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.after.rust.svg",
+          "svg_sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.svg",
+      "axes": [
+        "digit/dot extraction .",
+        "engine/scoped override/global false"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_5.puml",
+      "source_sha256": "5561272e8efc5965857b299963e24a7ce88892574d0bf1e724ab64d75a62b80d",
+      "golden_sha256": "1a22b70855163347ac31916bae541941d8653f0d46a034970026e995b158be1b",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.before.rust.svg",
+          "svg_sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.after.rust.svg",
+          "svg_sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.svg",
+      "axes": [
+        "root numeric versus scoped default",
+        "multiline/global inheritance"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-shadow-value-materialization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_global_scope.puml",
+      "source_sha256": "7fe10f6e9e610764878f583c5f94b96431d742bfad40d6f633da89b4c5f720c5",
+      "golden_sha256": "058b005ad93941e80b2e19d4a77262ca89421bff84cf83c115bcfad93cd00ce0",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.before.rust.svg",
+          "svg_sha256": "fc7a4d0558ca94abd9e5a85c5987eef5eaf43c0448b11c91f7b3959fc391c8b6"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.after.rust.svg",
+          "svg_sha256": "bb53da809f325663449fb3b7bb696fb1591f4c80deb35b671e7de0fa38630552"
+        }
+      }
+    }
+  ],
+  "findings": [
+    "shadow-default-supported-inheritance-open: The scoped conversion correctly retains only ASCII digits/dots, with present malformed/default1.5. Six fresh controls cover zero/sign/unit, leading decimal, exponent text (1e2 becomes12), repeated dots, false and dot-only; all pass both engines across the matrix. Root numeric shadow4 combined with scoped nonnumeric default still fails complete output: note size and relative line metrics agree, but participant filter is absent and head/lifeline/canvas envelopes omit root shadow. Shadow conversion is supported locally; inherited/global product behavior is not accepted or waived. Causal next step: Keep ValueImpl conversion; route each component's inherited numeric shadow into its preferred dimensions and paint instead of relying on the sequence-wide boolean skinparam shadow switch."
+  ],
+  "source_audit": [
+    {
+      "id": "shadow-default-supported-inheritance-open",
+      "mechanisms": [
+        "sequence-note-shadow-value-materialization",
+        "sequence-effective-note-activation-style"
+      ],
+      "sources": [
+        "shadow_boundary_0",
+        "shadow_boundary_1",
+        "shadow_boundary_2",
+        "shadow_boundary_3",
+        "shadow_boundary_4",
+        "shadow_boundary_5",
+        "shadow_global_scope"
+      ],
+      "java": [
+        "style.ValueImpl#extractDigitsAndDot/#asDoubleDefaultTo (133-158)",
+        "style.Style#getShadowing (110-115)",
+        "style.FromSkinparamToStyle#getShadowingValue",
+        "skin.rose.ComponentRoseNote#getPreferredWidth/#getPreferredHeight"
+      ],
+      "rust": [
+        "crates/rustuml-render/src/sequence.rs::sequence_note_shadow_value (456-464)",
+        "crates/rustuml-render/src/sequence.rs::note_shadow_delta/note_shadow_filter (7188-7202)",
+        "crates/rustuml-render/src/sequence.rs::sequence_shadowing/participant_shadow_filter"
+      ],
+      "diagnosis": "The scoped conversion correctly retains only ASCII digits/dots, with present malformed/default1.5. Six fresh controls cover zero/sign/unit, leading decimal, exponent text (1e2 becomes12), repeated dots, false and dot-only; all pass both engines across the matrix. Root numeric shadow4 combined with scoped nonnumeric default still fails complete output: note size and relative line metrics agree, but participant filter is absent and head/lifeline/canvas envelopes omit root shadow. Shadow conversion is supported locally; inherited/global product behavior is not accepted or waived.",
+      "next_repair": "Keep ValueImpl conversion; route each component's inherited numeric shadow into its preferred dimensions and paint instead of relying on the sequence-wide boolean skinparam shadow switch."
+    }
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Independent bounded source/control observation on exact candidate only. This is not whole-sequence acceptance, a shipping recommendation, a waiver of dependencies or standing red gates, or transfer of old5358314a self-cross/destroy acceptance.",
+  "residue": [
+    "Existing557 retained mismatches, fonts/deferred layout and12 accepted negative references remain active.",
+    "Parent-only326 sources were not measured in this replay.",
+    "Remote font/dot equivalence is scoped to captured environment and these sequence cases.",
+    "Scoped shadow scalar conversion and activation sibling fallback are locally supported even where complete-output dependencies reject the requested mechanism acceptance."
+  ],
+  "evidence": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/README.md"
+}

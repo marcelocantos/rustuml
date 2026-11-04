@@ -1,0 +1,14 @@
+[
+  {
+    "path": "crates/rustuml-parser/src/parse/sequence.rs",
+    "before_sha256": "1661ec00047258984bf3201c9763f4ced33c56898d4b9ba7c9edc1f7a664778f",
+    "after_sha256": "d682654e511c2450f008c2fd6f98965aa2b2ad65d49a2418ab0a9a2f7471fc9e",
+    "candidate_sha256": "d682654e511c2450f008c2fd6f98965aa2b2ad65d49a2418ab0a9a2f7471fc9e"
+  },
+  {
+    "path": "crates/rustuml-render/src/sequence.rs",
+    "before_sha256": "8c203b0ed8bb5176f16d87df209b7ef30a754bc7015b93a4eec437a1deaa98a3",
+    "after_sha256": "f01cd45923fa4cedc2cb130f4b02062257abc0bef0afb8446782c72eb6ec49a7",
+    "candidate_sha256": "f01cd45923fa4cedc2cb130f4b02062257abc0bef0afb8446782c72eb6ec49a7"
+  }
+]

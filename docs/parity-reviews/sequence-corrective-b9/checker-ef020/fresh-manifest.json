@@ -1,0 +1,365 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-display-normalization",
+    "axes": [
+      "inline newline/tab/backslash",
+      "engine/font/style"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-display-normalization",
+    "axes": [
+      "block literal escape",
+      "engine/font/style"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-display-normalization",
+    "axes": [
+      "natural right/left alignment",
+      "engine/unequal lines"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-arrow-color",
+    "axes": [
+      "alpha 01/80/fe/no-paint/grayscale",
+      "line/polygon/ellipse/path/self/cross"
+    ],
+    "java_exit": 200
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-arrow-color",
+    "axes": [
+      "return/external/self",
+      "registered/alpha zero/opaque"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_siblings_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_siblings_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-note-activation-style",
+    "axes": [
+      "scoped sibling inheritance",
+      "note component/block alignment/shadow"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_root_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_root_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-note-activation-style",
+    "axes": [
+      "root vs sibling inheritance",
+      "engine/nesting"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_precision_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_precision_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-textblock-dimensions",
+    "axes": [
+      "fractional full line widths/mixed height",
+      "engine/alignment/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_theme_self_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_theme_self_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-textblock-dimensions",
+    "axes": [
+      "theme preferred allocation",
+      "engine/self note/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-display-normalization",
+    "axes": [
+      "inline newline/tab/backslash",
+      "engine/font/style"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-display-normalization",
+    "axes": [
+      "block literal escape",
+      "engine/font/style"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-display-normalization",
+    "axes": [
+      "natural right/left alignment",
+      "engine/unequal lines"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-arrow-color",
+    "axes": [
+      "alpha 01/80/fe/no-paint/grayscale",
+      "line/polygon/ellipse/path/self/cross"
+    ],
+    "java_exit": 200
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-arrow-color",
+    "axes": [
+      "return/external/self",
+      "registered/alpha zero/opaque"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_siblings_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_siblings_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-note-activation-style",
+    "axes": [
+      "scoped sibling inheritance",
+      "note component/block alignment/shadow"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_root_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/style_root_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-effective-note-activation-style",
+    "axes": [
+      "root vs sibling inheritance",
+      "engine/nesting"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_precision_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_precision_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-textblock-dimensions",
+    "axes": [
+      "fractional full line widths/mixed height",
+      "engine/alignment/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_theme_self_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/text_theme_self_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-textblock-dimensions",
+    "axes": [
+      "theme preferred allocation",
+      "engine/self note/multiline"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "axes": [
+      "two unmatched closes/nested opens",
+      "zero/one/two explicit closing events"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "axes": [
+      "two unmatched closes/nested opens",
+      "zero/one/two explicit closing events"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_2.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_unmatched_2.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "axes": [
+      "two unmatched closes/nested opens",
+      "zero/one/two explicit closing events"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_return_ownership.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/life_return_ownership.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-legacy-raw-life-variations",
+    "axes": [
+      "raw close versus command stack",
+      "reverse declarations/nested returns"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "axes": [
+      "self/standalone note/ordinary predecessor",
+      "parallel lifecycles/contact/paint order"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "axes": [
+      "self/standalone note/ordinary predecessor",
+      "parallel lifecycles/contact/paint order"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_2.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_contact_2.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "axes": [
+      "self/standalone note/ordinary predecessor",
+      "parallel lifecycles/contact/paint order"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_create_order.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/teoz_create_order.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-teoz-parallel-tile-ordinates",
+    "axes": [
+      "creation in parallel level",
+      "destruction/activation order"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_0.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "axes": [
+      "digit/dot extraction -0px",
+      "engine/scoped override/global false"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_1.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "axes": [
+      "digit/dot extraction .5px",
+      "engine/scoped override/global false"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_2.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_2.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "axes": [
+      "digit/dot extraction 1e2",
+      "engine/scoped override/global false"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_3.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_3.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "axes": [
+      "digit/dot extraction 1..2",
+      "engine/scoped override/global false"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_4.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_4.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "axes": [
+      "digit/dot extraction false",
+      "engine/scoped override/global false"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_5.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_boundary_5.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "axes": [
+      "digit/dot extraction .",
+      "engine/scoped override/global false"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_global_scope.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/shadow_global_scope.svg",
+    "cohort": "fresh33",
+    "mechanism": "sequence-note-shadow-value-materialization",
+    "axes": [
+      "root numeric versus scoped default",
+      "multiline/global inheritance"
+    ],
+    "java_exit": 0
+  }
+]

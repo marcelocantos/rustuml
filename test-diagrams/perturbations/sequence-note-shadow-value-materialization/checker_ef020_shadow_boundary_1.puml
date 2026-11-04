@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+<style>
+sequenceDiagram {
+ note {
+ Shadowing .5px
+ }
+}
+</style>
+skinparam shadowing false
+Ibis -> Swift : call
+note right : test\nheight
+@enduml

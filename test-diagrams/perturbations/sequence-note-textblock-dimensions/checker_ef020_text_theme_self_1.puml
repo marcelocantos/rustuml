@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+!theme cerulean
+Magpie -> Finch ++ : begin
+Finch -> Finch ++ : recursive
+note right : compact\nlonger allocation
+return nested
+return finished
+@enduml

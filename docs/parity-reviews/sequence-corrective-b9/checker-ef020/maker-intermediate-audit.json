@@ -1,0 +1,173 @@
+[
+  {
+    "phase": "before",
+    "source": "test-diagrams/golden/combo/combo_sequence_everything.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "sha256": "b4e36cf204dfe07aa5bce9548d8cc306f799fff5530f8e994ff18b0643fb4032",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"389.6816\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"235.6855\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"299.1055\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"719.2988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"154.5527\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"264.9961\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"783.9199\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"117.2422\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"746.6978\" y=\"842.541\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"294.3066\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"871.8516\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"389.6816\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"235.6855\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"299.1055\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"719.2988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"154.5527\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"264.9961\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"783.9199\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"117.2422\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"746.6978\" y=\"842.541\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"294.3066\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"871.8516\"/>"
+    ]
+  },
+  {
+    "phase": "before",
+    "source": "test-diagrams/golden/skinparam/skin_sequence_lifelineBorderColor_black.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "sha256": "d239eea2b133c257cd0ae1254d05c5072b23c38705e50b20fa8cc5501a5eaf3d",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>"
+    ]
+  },
+  {
+    "phase": "before",
+    "source": "test-diagrams/golden/skinparam/skin_sequence_lifelineBorderColor_blue.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "sha256": "93d5a67d94baab8a4c1679f25a4f68cfcf0bcfa72ac55438f15f29b69f5dbccf",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>"
+    ]
+  },
+  {
+    "phase": "intermediate",
+    "source": "test-diagrams/golden/combo/combo_sequence_everything.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [8] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"389.6816\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"235.6855\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"389.6816\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"235.6855\")]\n  [10] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"299.1055\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"719.2988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"299.1055\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"719.2988\")]\n  [12] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"154.5527\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"264.9961\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"154.5527\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"264.9961\")]\n  [14] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"783.9199\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"783.9199\")]\n  [16] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"117.2422\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"746.6978\"), (\"y\", \"842.541\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"117.2422\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"746.6978\"), (\"y\", \"842.541\")]\n  [18] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"294.3066\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"294.3066\")]\n  [20] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"871.8516\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"871.8516\")]\n  [101] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"389.6816\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"235.6855\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"389.6816\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"235.6855\")]\n  [103] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"299.1055\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"719.2988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"299.1055\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"354.1592\"), (\"y\", \"719.2988\")]\n  [105] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"154.5527\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"264.9961\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"154.5527\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"264.9961\")]\n  [107] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"783.9199\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"587.521\"), (\"y\", \"783.9199\")]\n  [109] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"117.2422\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"746.6978\"), (\"y\", \"842.541\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"117.2422\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"746.6978\"), (\"y\", \"842.541\")]\n  [111] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"294.3066\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"294.3066\")]\n  [113] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"871.8516\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#999999;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"927.8457\"), (\"y\", \"871.8516\")]\n\n",
+      "stderr": ""
+    },
+    "sha256": "e922ae33b4a0cce51a350d7b2e6b7555abc0dcafd1ebb49f6afadd1d8b1ecc68",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"389.6816\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"235.6855\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"299.1055\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"719.2988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"154.5527\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"264.9961\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"783.9199\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"117.2422\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"746.6978\" y=\"842.541\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"294.3066\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"871.8516\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"389.6816\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"235.6855\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"299.1055\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"719.2988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"154.5527\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"264.9961\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"783.9199\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"117.2422\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"746.6978\" y=\"842.541\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"294.3066\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#999999;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"871.8516\"/>"
+    ]
+  },
+  {
+    "phase": "intermediate",
+    "source": "test-diagrams/golden/skinparam/skin_sequence_lifelineBorderColor_black.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#000000;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n  [27] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#000000;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n\n",
+      "stderr": ""
+    },
+    "sha256": "284147185694963a51f61ec98a0bba997cafaf6cd06b389391d1b16642383afd",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#000000;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#000000;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>"
+    ]
+  },
+  {
+    "phase": "intermediate",
+    "source": "test-diagrams/golden/skinparam/skin_sequence_lifelineBorderColor_blue.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#0000FF;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n  [27] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#0000FF;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"158.4302\"), (\"y\", \"67.7988\")]\n\n",
+      "stderr": ""
+    },
+    "sha256": "adb7c7352d8053e85834d21b733f1c42dff17df8fef35e2b93060569aa03b6f3",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#0000FF;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#0000FF;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>"
+    ]
+  },
+  {
+    "phase": "fixed",
+    "source": "test-diagrams/golden/combo/combo_sequence_everything.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "sha256": "b4e36cf204dfe07aa5bce9548d8cc306f799fff5530f8e994ff18b0643fb4032",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"389.6816\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"235.6855\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"299.1055\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"719.2988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"154.5527\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"264.9961\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"783.9199\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"117.2422\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"746.6978\" y=\"842.541\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"294.3066\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"871.8516\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"389.6816\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"235.6855\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"299.1055\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"354.1592\" y=\"719.2988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"154.5527\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"264.9961\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"587.521\" y=\"783.9199\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"117.2422\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"746.6978\" y=\"842.541\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"294.3066\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"927.8457\" y=\"871.8516\"/>"
+    ]
+  },
+  {
+    "phase": "fixed",
+    "source": "test-diagrams/golden/skinparam/skin_sequence_lifelineBorderColor_black.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "sha256": "d239eea2b133c257cd0ae1254d05c5072b23c38705e50b20fa8cc5501a5eaf3d",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>"
+    ]
+  },
+  {
+    "phase": "fixed",
+    "source": "test-diagrams/golden/skinparam/skin_sequence_lifelineBorderColor_blue.puml",
+    "cli_exit": 0,
+    "comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "sha256": "93d5a67d94baab8a4c1679f25a4f68cfcf0bcfa72ac55438f15f29b69f5dbccf",
+    "activation_rects": [
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>",
+      "<rect fill=\"#FFFFFF\" height=\"29.3105\" style=\"stroke:#181818;stroke-width:1;\" width=\"10\" x=\"158.4302\" y=\"67.7988\"/>"
+    ]
+  }
+]
