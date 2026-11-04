@@ -5,7 +5,7 @@
     "fallback16/font_invalid_with_size"
   ],
   "status": "Nonpositive NoSuchColorRuntimeException crash SVGs and matching nonempty stderr, both exit0. Rust still emits ordinary SVG; mismatch retained, no inherited-color or white fallback invented.",
-  "java": "CommandCreoleColorAndSizeChange.java82-105 -> StripeSimple.modifyStripe -> text block measurement -> UgDiagram.exportDiagramNow:92-103 catches Throwable and CrashReportHandler.exportDiagramError",
+  "java": "CommandCreoleColorAndSizeChange.java82-105 -> StripeSimple.modifyStripe -> text block measurement -> UgDiagram.exportDiagram:92-103 catches Throwable and CrashReportHandler.exportDiagramError",
   "rust": "creole.rs parse_segments/parse_segments_inner return Vec<Segment>; handle_tag returns bool; renderer lib.rs:95 render_svg returns String. No error channel from lexical command to render/CLI serialization.",
   "scope": "Requires coordinated fallible text construction, render error propagation and CLI diagram-error serialization. Not creole-only; no panic/error text synthesis or public API draft. Source-derived handoff preserves both raw crash diagrams."
 }

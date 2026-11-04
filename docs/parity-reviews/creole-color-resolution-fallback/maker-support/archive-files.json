@@ -161,8 +161,8 @@
   },
   {
     "path": "dependency-handoff.json",
-    "sha256": "78404da24e7270264641f33f0972a1c6516908894d47c2e13131bc79ce4cc66d",
-    "bytes": 17524
+    "sha256": "b5ff62f1251490417e6e41d7114637bb88ce29c45597f53b025d3d903d83623e",
+    "bytes": 17521
   },
   {
     "path": "edit.py",
@@ -171,8 +171,8 @@
   },
   {
     "path": "evidence.py",
-    "sha256": "29bf94f1480f23031c6fcff433ad05d39c392d847c21509cd968a93614a9e9b0",
-    "bytes": 10377
+    "sha256": "dc7e53678933cffd841ab454d61662358d8eb54227040c9c8209fd4905931300",
+    "bytes": 10374
   },
   {
     "path": "fallback16-after.json",
