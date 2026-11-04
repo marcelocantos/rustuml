@@ -1,0 +1,16 @@
+{
+  "archive": "measurements.tar.gz",
+  "sha256": "680d863a30d2be60bc4302fc6b4b61aa061d73f78e9086a80985fc4cdde977b7",
+  "bytes": 24048559,
+  "files": 64578,
+  "all_member_bytes_verified": true,
+  "excluded_rebuildable": [
+    "__pycache__",
+    "after-initial-rustuml",
+    "after-rustuml",
+    "before-rustuml",
+    "probe",
+    "target-after",
+    "target-before"
+  ]
+}

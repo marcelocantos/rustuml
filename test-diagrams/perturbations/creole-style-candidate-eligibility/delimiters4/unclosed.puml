@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : **A<$twig>B\n//C<$bud>D\n__E<$leaf>F\n--G<$seed>H\n~~I<$stem>J
+@enduml

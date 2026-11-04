@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : A<b>Fir</b>B<i>Elm</i>C\n<u>Birch</u><s>Ash</s><w>Oak</w>\n<back:red>Yew</back>
+@enduml

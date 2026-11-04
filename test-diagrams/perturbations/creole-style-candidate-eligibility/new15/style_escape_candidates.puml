@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : A<outer~<b></b>>B\n<b>A~</b>B</b>C\n~<i></i>
+@enduml

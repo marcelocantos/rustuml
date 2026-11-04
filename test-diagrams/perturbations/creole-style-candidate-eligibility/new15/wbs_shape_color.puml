@@ -1,0 +1,6 @@
+@startwbs
+* Root
+**_[#pink] East
+***[#yellow]_ Leaf
+--[#cyan]_ West
+@endwbs
