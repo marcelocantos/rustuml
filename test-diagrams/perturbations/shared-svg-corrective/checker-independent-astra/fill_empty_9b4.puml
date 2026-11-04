@@ -1,0 +1,5 @@
+@startuml
+hide empty description
+skinparam stateBackgroundColor #9b4
+state Cypress
+@enduml

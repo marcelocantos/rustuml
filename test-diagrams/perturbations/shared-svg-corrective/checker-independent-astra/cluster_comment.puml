@@ -1,0 +1,7 @@
+@startuml
+package "Shelf<!--]]>--" {
+class "--Box"
+}
+class Outside
+"--Box" --> Outside
+@enduml

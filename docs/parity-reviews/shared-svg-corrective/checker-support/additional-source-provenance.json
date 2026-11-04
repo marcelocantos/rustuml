@@ -1,0 +1,20 @@
+[
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/utils/CharHidder.java",
+    "sha256": "db440b9903a7ff58b2ee9185f7776635b9ab5e3ecaa1fb384eb31a40d130acd3",
+    "pin": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java",
+    "sha256": "90e62fb331a47aab282ba79c672c65e9386ac31024049d00f93ddcd8df3b9642",
+    "pin": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.base/share/classes/sun/nio/cs/Surrogate.java",
+    "sha256": "276345773be1bc8e34c08c5d569c88909e7d507b7434b14e4019235ba7654272"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.base/share/classes/java/nio/charset/Charset-X-Coder.java.template",
+    "sha256": "72a089cd644c6a502877a91d035d20cdfcf78ebe168d496c7447a8f72f6c3b45"
+  }
+]

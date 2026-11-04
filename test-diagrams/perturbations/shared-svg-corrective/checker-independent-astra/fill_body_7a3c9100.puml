@@ -1,0 +1,5 @@
+@startuml
+skinparam stateBackgroundColor #7a3c9100
+state Cypress : sap
+Cypress : root
+@enduml
