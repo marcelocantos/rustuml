@@ -949,6 +949,35 @@ fn push_literal(out: &mut Vec<Segment>, text: &str, style: &Style) {
     push_segment(out, &final_text, style);
 }
 
+/// CommandCreoleStyle.createCreole requires at least one captured character
+/// before a closing delimiter. A failed candidate leaves input unconsumed so
+/// StripeSimple's literal-character fallback can reach subsequent commands.
+fn take_style_delimiter(
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    delimiter: &str,
+) -> Option<String> {
+    // The first opener character was read by walk_segments; the second is
+    // still pending. Delimiters are existing two-character ASCII commands.
+    let remaining: String = chars.clone().skip(1).collect();
+    let mut scan = remaining.char_indices().peekable();
+    while let Some((offset, c)) = scan.next() {
+        if c == '~' && delimiter != "~~"
+            || (c == '\\' && scan.peek().is_some_and(|(_, c)| *c == '~'))
+        {
+            scan.next();
+            continue;
+        }
+        if offset > 0 && remaining[offset..].starts_with(delimiter) {
+            chars.next();
+            for _ in remaining[..offset + delimiter.len()].chars() {
+                chars.next();
+            }
+            return Some(remaining[..offset].to_string());
+        }
+    }
+    None
+}
+
 fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<Segment>) {
     let mut chars = text.chars().peekable();
     let mut buf = String::new();
@@ -966,20 +995,23 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
     while let Some(c) = chars.next() {
         match c {
             '~' if chars.peek() == Some(&'~') => {
-                chars.next();
-                let (content, found) = collect_until(&mut chars, "~~");
-                flush_buf!();
-                if found {
+                if let Some(content) = take_style_delimiter(&mut chars, "~~") {
+                    flush_buf!();
                     let mut nested = style.clone();
                     nested.wavy_underline = true;
-                    // Recursively walk so inner markup (e.g. `__under__`,
-                    // `**bold**`) inside the wavy-underline span is honoured.
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
                     walk_segments(&content, &nested, skip_underline, out);
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
                     last_char = content.chars().last();
                 } else {
-                    push_literal(out, "~~", style);
-                    push_literal(out, &content, style);
-                    last_char = content.chars().last().or(Some('~'));
+                    buf.push('~');
+                    last_char = Some('~');
                 }
             }
             '~' => {
@@ -1042,68 +1074,72 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 last_char = content.chars().last();
             }
             '*' if chars.peek() == Some(&'*') => {
-                chars.next();
-                let (content, found) = collect_until(&mut chars, "**");
-                flush_buf!();
-                if found {
+                if let Some(content) = take_style_delimiter(&mut chars, "**") {
+                    flush_buf!();
                     let mut nested = style.clone();
                     nested.bold = true;
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
                     walk_segments(&content, &nested, skip_underline, out);
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
                     last_char = content.chars().last();
                 } else {
-                    push_literal(out, "**", style);
-                    push_literal(out, &content, style);
-                    last_char = content.chars().last().or(Some('*'));
+                    buf.push('*');
+                    last_char = Some('*');
                 }
             }
             '/' if chars.peek() == Some(&'/') => {
-                // `//` opens an italic run unless it directly follows a URL
-                // scheme separator (`http://`); see the matching note in
-                // `to_svg_tspans_inner`.
-                let preceded_by_scheme = last_char == Some(':');
-                if preceded_by_scheme {
-                    buf.push('/');
-                    buf.push('/');
+                // Preserve the existing caller's URL-scheme exclusion.
+                if last_char == Some(':') {
+                    buf.push_str("//");
                     chars.next();
                     last_char = Some('/');
-                } else {
-                    chars.next();
-                    let (content, found) = collect_until(&mut chars, "//");
+                } else if let Some(content) = take_style_delimiter(&mut chars, "//") {
                     flush_buf!();
-                    if found && !content.is_empty() {
-                        let mut nested = style.clone();
-                        nested.italic = true;
-                        walk_segments(&content, &nested, skip_underline, out);
-                        last_char = content.chars().last();
-                    } else if found {
-                        push_literal(out, "////", style);
-                        last_char = Some('/');
-                    } else {
-                        push_literal(out, "//", style);
-                        push_literal(out, &content, style);
-                        last_char = content.chars().last().or(Some('/'));
-                    }
+                    let mut nested = style.clone();
+                    nested.italic = true;
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
+                    walk_segments(&content, &nested, skip_underline, out);
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
+                    last_char = content.chars().last();
+                } else {
+                    buf.push('/');
+                    last_char = Some('/');
                 }
             }
             '_' if chars.peek() == Some(&'_') => {
-                chars.next();
                 if skip_underline {
-                    buf.push('_');
+                    chars.next();
+                    buf.push_str("__");
+                    last_char = Some('_');
+                } else if let Some(content) = take_style_delimiter(&mut chars, "__") {
+                    flush_buf!();
+                    let mut nested = style.clone();
+                    nested.underline = true;
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
+                    walk_segments(&content, &nested, skip_underline, out);
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
+                    last_char = content.chars().last();
+                } else {
                     buf.push('_');
                     last_char = Some('_');
-                } else {
-                    let (content, found) = collect_until(&mut chars, "__");
-                    flush_buf!();
-                    if found {
-                        let mut nested = style.clone();
-                        nested.underline = true;
-                        walk_segments(&content, &nested, skip_underline, out);
-                        last_char = content.chars().last();
-                    } else {
-                        push_literal(out, "__", style);
-                        push_literal(out, &content, style);
-                        last_char = content.chars().last().or(Some('_'));
-                    }
                 }
             }
             '_' => {
@@ -1111,18 +1147,23 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 last_char = Some('_');
             }
             '-' if chars.peek() == Some(&'-') => {
-                chars.next();
-                let (content, found) = collect_until(&mut chars, "--");
-                flush_buf!();
-                if found {
+                if let Some(content) = take_style_delimiter(&mut chars, "--") {
+                    flush_buf!();
                     let mut nested = style.clone();
                     nested.line_through = true;
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
                     walk_segments(&content, &nested, skip_underline, out);
+                    out.push(Segment {
+                        text: String::new(),
+                        style: style.clone(),
+                    });
                     last_char = content.chars().last();
                 } else {
-                    push_literal(out, "--", style);
-                    push_literal(out, &content, style);
-                    last_char = content.chars().last().or(Some('-'));
+                    buf.push('-');
+                    last_char = Some('-');
                 }
             }
             '<' => {
@@ -1227,76 +1268,56 @@ fn handle_tag(
         // `<color:>`, `<size:>`, `<font:>`, `<back:>`, `<img:>`). The HTML5
         // synonyms `<strong>`, `<em>`, `<ins>` are NOT recognized and render
         // literally, so they deliberately fall through to the unknown-tag arm.
-        "b" | "B" => walk_with(
-            chars,
-            format!("</{tag}>"),
-            tag,
-            "",
-            style,
-            |s| s.bold = true,
-            skip_underline,
-            out,
-        ),
-        "i" | "I" => walk_with(
-            chars,
-            format!("</{tag}>"),
-            tag,
-            "",
-            style,
-            |s| s.italic = true,
-            skip_underline,
-            out,
-        ),
-        "u" | "U" => walk_with(
-            chars,
-            format!("</{tag}>"),
-            tag,
-            "",
-            style,
-            |s| s.underline = true,
-            skip_underline,
-            out,
-        ),
-        "s" | "S" => walk_with(
-            chars,
-            format!("</{tag}>"),
-            tag,
-            "",
-            style,
-            |s| s.line_through = true,
-            skip_underline,
-            out,
-        ),
-        "w" | "W" => walk_with(
-            chars,
-            format!("</{tag}>"),
-            tag,
-            "",
-            style,
-            |s| s.wavy_underline = true,
-            skip_underline,
-            out,
-        ),
-        "del" => walk_with(
-            chars,
-            "</del>".into(),
-            tag,
-            "",
-            style,
-            |s| s.line_through = true,
-            skip_underline,
-            out,
-        ),
-        "strike" => walk_with(
-            chars,
-            "</strike>".into(),
-            tag,
-            "",
-            style,
-            |s| s.line_through = true,
-            skip_underline,
-            out,
-        ),
+        "b" | "B" => {
+            return walk_style_tag(
+                chars,
+                &["b", "B"],
+                style,
+                |s| s.bold = true,
+                skip_underline,
+                out,
+            );
+        }
+        "i" | "I" => {
+            return walk_style_tag(
+                chars,
+                &["i", "I"],
+                style,
+                |s| s.italic = true,
+                skip_underline,
+                out,
+            );
+        }
+        "u" | "U" => {
+            return walk_style_tag(
+                chars,
+                &["u", "U"],
+                style,
+                |s| s.underline = true,
+                skip_underline,
+                out,
+            );
+        }
+        "w" | "W" => {
+            return walk_style_tag(
+                chars,
+                &["w", "W"],
+                style,
+                |s| s.wavy_underline = true,
+                skip_underline,
+                out,
+            );
+        }
+        "s" | "S" | "del" | "DEL" | "strike" | "STRIKE" => {
+            return walk_style_tag(
+                chars,
+                &["s", "S", "del", "DEL", "strike", "STRIKE"],
+                style,
+                |s| s.line_through = true,
+                skip_underline,
+                out,
+            );
+        }
         "mono" => walk_with(
             chars,
             "</mono>".into(),
@@ -1392,12 +1413,14 @@ fn handle_tag(
                 .split_once(':')
                 .map(|(_, c)| c.to_string())
                 .unwrap_or_default();
-            let content = collect_until_tag(chars, "</back>");
-            let mut nested = style.clone();
-            // Store the raw colour spec; the filter registry resolves named
-            // colours to upper-case hex when materialising the SVG `<filter>`.
-            nested.background = Some(color);
-            walk_segments(&content, &nested, skip_underline, out);
+            return walk_style_tag(
+                chars,
+                &["back"],
+                style,
+                |s| s.background = Some(color),
+                skip_underline,
+                out,
+            );
         }
         _ if tag.starts_with("img:") => {
             let raw_src = &tag["img:".len()..];
@@ -1417,6 +1440,64 @@ fn handle_tag(
         }
         _ => return false,
     }
+    true
+}
+
+/// CommandCreoleBuilder orders the bounded style candidate before its EOL
+/// alternative. CommandCreoleStyle.matchingSize returns captured body length,
+/// unlike size/color commands, whose parameter groups determine eligibility.
+fn walk_style_tag(
+    chars: &mut std::iter::Peekable<std::str::Chars>,
+    closing_names: &[&str],
+    style: &Style,
+    apply: impl FnOnce(&mut Style),
+    skip_underline: bool,
+    out: &mut Vec<Segment>,
+) -> bool {
+    let remaining: String = chars.clone().collect();
+    let mut closed = None;
+    let mut scan = remaining.char_indices().peekable();
+    while let Some((offset, c)) = scan.next() {
+        // StripeSimple.analyzeAndAdd applies CharHidder before matching. A
+        // tilde pair hides its second character; escaped tildes hide only ~.
+        if c == '~' || (c == '\\' && scan.peek().is_some_and(|(_, c)| *c == '~')) {
+            scan.next();
+            continue;
+        }
+        if c == '<'
+            && let Some(rest) = remaining[offset..].strip_prefix("</")
+            && let Some(end) = rest.find('>')
+        {
+            let name = &rest[..end];
+            let matches = closing_names.contains(&name)
+                || (closing_names == ["back"] && name.eq_ignore_ascii_case("back"));
+            if matches {
+                closed = Some((offset, offset + end + "</>".len()));
+                break;
+            }
+        }
+    }
+    let (content_end, consumed) = match closed {
+        Some((body, consumed)) if body > 0 => (body, consumed),
+        _ if !remaining.is_empty() => (remaining.len(), remaining.len()),
+        _ => return false,
+    };
+    for _ in remaining[..consumed].chars() {
+        chars.next();
+    }
+    let mut nested = style.clone();
+    apply(&mut nested);
+    // StripeSimple flushes before a selected command and at the end of its
+    // recursive body, even when the surrounding and nested styles coincide.
+    out.push(Segment {
+        text: String::new(),
+        style: style.clone(),
+    });
+    walk_segments(&remaining[..content_end], &nested, skip_underline, out);
+    out.push(Segment {
+        text: String::new(),
+        style: style.clone(),
+    });
     true
 }
 
@@ -1488,6 +1569,78 @@ mod tests {
             parse_segments("hello world"),
             vec![seg("hello world", Style::default())]
         );
+    }
+
+    #[test]
+    fn delimited_style_candidates_preserve_empty_and_unclosed_input() {
+        for delimiter in ["**", "//", "__", "--", "~~"] {
+            let empty = delimiter.repeat(2);
+            assert_eq!(stripped_text(&empty), empty);
+            let one = format!(
+                "{delimiter}{}{delimiter}",
+                delimiter.chars().next().unwrap()
+            );
+            let segments = parse_segments(&one);
+            assert_eq!(segments.len(), 1, "{one}");
+            assert_ne!(segments[0].style, Style::default(), "{one}");
+            let unclosed = format!("{delimiter}A<$twig>B");
+            assert_eq!(stripped_text(&unclosed), format!("{delimiter}AB"));
+        }
+    }
+
+    #[test]
+    fn style_candidates_require_nonempty_captures() {
+        for (open, close) in [
+            ("b", "b"),
+            ("i", "I"),
+            ("u", "u"),
+            ("s", "del"),
+            ("w", "W"),
+            ("back:red", "back"),
+        ] {
+            let markup = format!("<{open}></{close}>");
+            let segments = parse_segments(&markup);
+            assert_eq!(segments.len(), 1, "{markup}");
+            assert_eq!(
+                unescape_for_metrics(&segments[0].text),
+                format!("</{close}>")
+            );
+            assert_ne!(segments[0].style, Style::default(), "{markup}");
+        }
+        assert_eq!(stripped_text("<b>"), "<b>");
+        assert_eq!(parse_segments("<size:25></size>"), Vec::<Segment>::new());
+        assert_eq!(parse_segments("<color:red></color>"), Vec::<Segment>::new());
+        assert_eq!(
+            parse_segments("<b><$bud></b>"),
+            vec![seg(" ", Style::default())]
+        );
+    }
+
+    #[test]
+    fn style_candidate_order_preserves_closing_literals_and_escapes() {
+        assert_eq!(
+            parse_segments("<b><b></b></b>"),
+            vec![
+                seg("&lt;b&gt;", bold_style()),
+                seg("&lt;/b&gt;", Style::default()),
+            ]
+        );
+        assert_eq!(
+            parse_segments("<b>A~</b>B</b>C"),
+            vec![
+                seg("A&lt;/b&gt;B", bold_style()),
+                seg("C", Style::default()),
+            ]
+        );
+        assert_eq!(
+            parse_segments("A<outer<b></b>>B<$bud>C"),
+            vec![
+                seg("A&lt;outer", Style::default()),
+                seg("&lt;/b&gt;&gt;B", bold_style()),
+                seg("C", bold_style()),
+            ]
+        );
+        assert_eq!(stripped_text("~<b></b>"), "<b></b>");
     }
 
     #[test]

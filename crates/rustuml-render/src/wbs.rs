@@ -18,7 +18,7 @@
 
 use std::fmt::Write;
 
-use rustuml_parser::diagram::wbs::{WbsDiagram, WbsNode, WbsSide};
+use rustuml_parser::diagram::wbs::{WbsDiagram, WbsNode, WbsShape, WbsSide};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
@@ -45,11 +45,13 @@ const STROKE: &str = "#181818";
 
 /// A measured WBS node: PlantUML's `ITF` (either `ITFLeaf` or `ITFComposed`).
 struct Itf {
-    label: String,
+    lines: Vec<TextLine>,
+    shape: WbsShape,
+    text_x: f64,
+    text_top: f64,
     fill: String,
     main_w: f64,
     main_h: f64,
-    text_baseline: f64,
     /// Children that grow leftward (`--` prefix), in source order.
     left: Vec<Itf>,
     /// Children that grow rightward (`**` prefix), in source order.
@@ -80,18 +82,83 @@ fn coll_height(children: &[Itf]) -> f64 {
         .sum::<f64>()
 }
 
+struct TextLine {
+    content: String,
+    height: f64,
+    baseline: f64,
+}
+
+/// WBSDiagram.addIdea projects Display.getWithNewlines before constructing
+/// its text block. Keep this caller projection separate from the raw label
+/// stored in the model and from other consumers' display/escape policies.
+fn display_lines(label: &str) -> Vec<String> {
+    let mut lines = Vec::new();
+    let mut current = String::new();
+    let mut chars = label.char_indices().peekable();
+    let mut raw = false;
+    while let Some((offset, c)) = chars.next() {
+        let rest = &label[offset..];
+        if rest.starts_with("<math>") || rest.starts_with("<latex>") || rest.starts_with("[[") {
+            raw = true;
+        } else if rest.starts_with("</math>")
+            || rest.starts_with("</latex>")
+            || rest.starts_with("]]")
+        {
+            raw = false;
+        }
+        if c == '\\'
+            && !raw
+            && let Some((_, next)) = chars.next()
+        {
+            match next {
+                'n' => lines.push(std::mem::take(&mut current)),
+                '\\' => current.push('\\'),
+                't' => current.push('\t'),
+                _ => {
+                    current.push(c);
+                    current.push(next);
+                }
+            }
+        } else {
+            current.push(c);
+        }
+    }
+    // Display preserves the final line even when it is empty.
+    lines.push(current);
+    lines
+}
+
 fn measure(node: &WbsNode, is_root: bool) -> Itf {
-    // FtileBoxOld measures and draws the same Creole SheetBlock. Keep the
-    // semantic run projection identical to emit_box, including consumed
-    // commands and styled font sizes; layout only sees its preferred size.
-    let main_w = text_render::measure(&node.label, FONT_SIZE, false) + PAD_X * 2.0;
-    let main_h = text_render::label_height(&node.label, FONT_SIZE) + PAD_X * 2.0;
-    let text_baseline = PAD_X
-        + text_render::label_first_baseline_ascent_with_family(
-            &node.label,
-            FONT_SIZE,
-            "sans-serif",
-        );
+    // FtileBoxOld and the unboxed Display block measure and paint the same
+    // SheetBlock stripes: maximum width and accumulated line heights.
+    let mut text_w: f64 = 0.0;
+    let mut text_h = 0.0;
+    let lines = display_lines(&node.label)
+        .into_iter()
+        .map(|content| {
+            text_w = text_w.max(text_render::measure(&content, FONT_SIZE, false));
+            let height = text_render::label_height(&content, FONT_SIZE);
+            let baseline = text_render::label_first_baseline_ascent_with_family(
+                &content,
+                FONT_SIZE,
+                "sans-serif",
+            );
+            text_h += height;
+            TextLine {
+                content,
+                height,
+                baseline,
+            }
+        })
+        .collect();
+    // WBSTextBlock.buildMain / ITFLeaf: BOX uses the style padding; NONE
+    // uses TextBlockUtils.withMargin(text, 0, 3, 1, 1), i.e. left/right/top/bottom.
+    let (text_x, right, text_top, bottom) = match node.shape {
+        WbsShape::Box => (PAD_X, PAD_X, PAD_X, PAD_X),
+        WbsShape::None => (0.0, 3.0, 1.0, 1.0),
+    };
+    let main_w = text_w + text_x + right;
+    let main_h = text_h + text_top + bottom;
     let fill = node
         .color
         .as_deref()
@@ -123,11 +190,13 @@ fn measure(node: &WbsNode, is_root: bool) -> Itf {
     };
 
     Itf {
-        label: node.label.clone(),
+        lines,
+        shape: node.shape,
+        text_x,
+        text_top,
         fill,
         main_w,
         main_h,
-        text_baseline,
         left,
         right,
         width,
@@ -150,7 +219,8 @@ fn emit_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
 }
 
 fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
-    write!(
+    if node.shape == WbsShape::Box {
+        write!(
         buf,
         r#"<rect fill="{fill}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
         fill = node.fill,
@@ -160,21 +230,26 @@ fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
         y = pm::fmt_coord(y),
     )
     .unwrap();
-    text_render::emit_text(
-        buf,
-        &node.label,
-        &text_render::TextBase {
-            x: x + PAD_X,
-            y: y + node.text_baseline,
-            font_size: FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: "#000000",
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
-    );
+    }
+    let mut line_top = y + node.text_top;
+    for line in &node.lines {
+        text_render::emit_text(
+            buf,
+            &line.content,
+            &text_render::TextBase {
+                x: x + node.text_x,
+                y: line_top + line.baseline,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        line_top += line.height;
+    }
 }
 
 /// `ITFComposed.drawU` (and `ITFLeaf.drawU`): draw this subtree with its frame
@@ -182,7 +257,13 @@ fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
 /// then left children (each preceded by its elbow line), then right children,
 /// then the trunk vertical.
 fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
-    let x = node.w1(); // trunk x within this frame
+    // ITFLeaf.drawU paints its block at the supplied origin. Only
+    // ITFComposed.drawU applies the trunk/collection offset from getw1.
+    let x = if node.is_leaf() {
+        node.main_w / 2.0
+    } else {
+        node.w1()
+    };
     emit_box(buf, ox + x - node.main_w / 2.0, oy, node);
 
     if node.left.is_empty() && node.right.is_empty() {
@@ -387,6 +468,20 @@ pub fn render(diagram: &WbsDiagram, _theme: &Theme) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn display_projection_preserves_blanks_and_escaped_content() {
+        assert_eq!(super::display_lines(r"\nRoot\n\n"), ["", "Root", "", ""]);
+        assert_eq!(super::display_lines(r"A\\nB\nC"), [r"A\nB", "C"]);
+        assert_eq!(
+            super::display_lines(r"[[https://example.test/a\nb label]]\nTail"),
+            [r"[[https://example.test/a\nb label]]", "Tail"]
+        );
+        assert_eq!(
+            super::display_lines(r"<math>a\nb</math>\n"),
+            [r"<math>a\nb</math>", ""]
+        );
+    }
+
     #[test]
     fn renders_simple_wbs() {
         let input = "@startwbs\n* Project\n** Phase 1\n*** Task A\n** Phase 2\n@endwbs";
