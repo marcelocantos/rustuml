@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "base_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "production_base": "1ffb930b7b56decb15208121db5e70d252ed3c1b",
+  "imported_rejection": "84b5439aef3b41d10257d4ec964f0134a2e24ce1",
+  "import_commit": "bb550b42bf7bc3bd23774df31e9b137493cb6743",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "shared-svg-attributes",
+  "java_locations": [
+    "klimt/font/UFontImpl.java:104-123 getFamily(SVG): full definition replaces double quote with apostrophe; logical-family mapping deferred",
+    "klimt/drawing/svg/SvgGraphics.java:657-734 text sets DOM attributes; :765-785 getTransformer selects us-ascii; :802-856 DOMSource transform; other shapes likewise use setAttribute",
+    "xml/XmlFactories.java:25-34 TransformerFactory.newInstance/newTransformer",
+    "OpenJDK21.0.5 ToStream.java:912-928 escapingNotNeeded; :1696-1780 accumDefaultEscape; :1781-1811 decimal scalar references; :2000-2068 processAttributes/writeAttrString",
+    "OpenJDK21.0.5 CharInfo.java:200-201,301-302,343-356 LF/CR/TAB special attribute characters; XMLEntities.properties quot/amp/lt/gt",
+    "klimt/drawing/svg/UGraphicSvg.java:136-139 wraps TransformerException; UgDiagram.java:75-104 catches Throwable and exports error diagram (T14.20 deferred)"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs:1618-1727 writes font_family unescaped; :1739 local link escaper",
+    "crates/rustuml-render/src/svg.rs::SvgBuilder and ::escape_xml; direct family writers in approved proposed-routing-list.json",
+    "crates/rustuml-render/src/creole.rs:340 legacy tspan family raw attribute (encoding only; lexical/metric behavior unchanged)",
+    "crates/rustuml/tests/pipe_mode.rs standing actual-CLI test target already wired into Makefile test-parity"
+  ],
+  "invariant": "Each user-derived attribute value is encoded exactly once at serialization. Java family quote normalization happens only at family emission, without changing metrics/resolution. Ordinary printable ASCII excluding XML metacharacters remains byte-identical. Numeric geometry, fixed tokens and generated IDs are not routed. No SVG postprocessing repair.",
+  "causal_divergence": "Multiple raw string writers and local escapers bypass the DOM serialization contract. Raw quotes in font definitions break XML; other escapers omit XML whitespace references and ASCII-output numeric references. Existing model content must remain untouched.",
+  "planned_change": "Add one shared attribute encoder in svg.rs and a font-family normalization entry through that encoder. Route exactly the approved user-string list with mechanical expression/producer changes only. Replace existing escaping at its producer, never escape encoded strings again. Leave sequence untouched and provide Java-based handoff. Keep XML-invalid scalars unmodified under the existing infallible API, explicitly unimplemented T14.20; no deletion/replacement/panic/fake crash SVG. Add strict roxmltree 0.20 actual-CLI census in existing pipe_mode target; enumerate every golden/registered perturbation pair without reference-validity skips, and parse every nonempty CLI SVG including failures. No expected-malformed cases until observed and owner-approved.",
+  "perturbation_axes": [
+    "ampersand/angles/quotes/apostrophe/ASCII versus LF/CR/TAB/NBSP/non-BMP/C0",
+    "font family versus URL/tooltip versus identity and CSS attributes",
+    "shared text versus direct non-sequence family and imported model emitters"
+  ],
+  "production_files": [
+    "crates/rustuml-render/src/activity.rs",
+    "crates/rustuml-render/src/archimate.rs",
+    "crates/rustuml-render/src/class.rs",
+    "crates/rustuml-render/src/component.rs",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/deployment.rs",
+    "crates/rustuml-render/src/ditaa.rs",
+    "crates/rustuml-render/src/dot_diagram.rs",
+    "crates/rustuml-render/src/ebnf.rs",
+    "crates/rustuml-render/src/filter_registry.rs",
+    "crates/rustuml-render/src/gantt.rs",
+    "crates/rustuml-render/src/json_diagram.rs",
+    "crates/rustuml-render/src/layout_oracle.rs",
+    "crates/rustuml-render/src/mindmap.rs",
+    "crates/rustuml-render/src/nwdiag.rs",
+    "crates/rustuml-render/src/object.rs",
+    "crates/rustuml-render/src/regex_diagram.rs",
+    "crates/rustuml-render/src/salt.rs",
+    "crates/rustuml-render/src/state.rs",
+    "crates/rustuml-render/src/svg.rs",
+    "crates/rustuml-render/src/text_render.rs",
+    "crates/rustuml-render/src/timing.rs",
+    "crates/rustuml-render/src/usecase.rs",
+    "crates/rustuml-render/src/wbs.rs",
+    "crates/rustuml/tests/pipe_mode.rs",
+    "crates/rustuml/Cargo.toml"
+  ],
+  "scope_approval": "Parent approved901sites/24files SHA2561fa76a52dad7312a0745155341f1a964808ee5593c6c55ea72dbf6c3b990ac08 before this commit. Sequence excluded. Core serializer changes plus one-line attribute-expression routing only; no geometry/layout/text restructuring.",
+  "verification": "Full12550golden CLI SVG+YAML before/after; every1944registered pair plus fresh registrations; all2082retained observations and compact22. Strict unchanged comparator losses separate from byte changes. XML-equivalent attribute encoding changes separately categorized and compared to Java raw bytes. Any decoded-value change investigated. Broad gates once stable; failure-name sets compared to exact baseline; no self-review.",
+  "dependency_choice": "roxmltree0.20 already locked and used by unchanged oracle comparator; add same version as CLI dev-dependency only. No extra production dependency."
+}
