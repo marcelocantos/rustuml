@@ -592,6 +592,11 @@ impl SeqParser {
         if self.try_pragma(line) {
             return Ok(());
         }
+        // CommandFootbox accepts a zero-length separator. CommandArrow requires
+        // its arrow body, so identifiers such as hidefootbox cannot be arrows.
+        if self.try_hide(line) {
+            return Ok(());
+        }
         let message_line = line.strip_prefix('&').unwrap_or(line).trim_start();
         if let Some(caps) = MESSAGE_RE
             .captures(message_line)
@@ -622,9 +627,6 @@ impl SeqParser {
             return Ok(());
         }
         if self.try_skinparam(line) {
-            return Ok(());
-        }
-        if self.try_hide(line) {
             return Ok(());
         }
         if self.try_external_message(line) {
@@ -1165,7 +1167,7 @@ impl SeqParser {
             self.push_autonumber(AutonumberCmd::Stop);
             return true;
         }
-        // CommandAutonumberResume#getRegexConcat has a direct required space;
+        // CommandAutonumberResume#getConcat has a direct required space;
         // CommandAutonumber's optional argument groups do not contribute it.
         if has_fox_space(line)
             && let Some(caps) = RE_RESUME.captures(line)
@@ -1503,8 +1505,22 @@ impl SeqParser {
     }
 
     fn try_hide(&mut self, line: &str) -> bool {
-        if line == "hide footbox" {
-            self.hide_footbox = true;
+        // CommandFootbox#HIDE_SHOW_FOOTBOX and CommandFootboxOld#getRegexConcat:
+        // zero-or-more Pattern2 whitespace, with no required FoxSignature bit.
+        static FOOTBOX: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"(?i)^(hide|show)?[%s]*footbox$").unwrap());
+        static FOOTBOX_OLD: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"(?i)^footbox[%s]*(on|off)?[%s]*$").unwrap());
+        if let Some(caps) = FOOTBOX.captures(line) {
+            self.hide_footbox = !caps
+                .get(1)
+                .is_some_and(|m| m.as_str().eq_ignore_ascii_case("show"));
+            return true;
+        }
+        if let Some(caps) = FOOTBOX_OLD.captures(line) {
+            self.hide_footbox = !caps
+                .get(1)
+                .is_some_and(|m| m.as_str().eq_ignore_ascii_case("on"));
             return true;
         }
         // CommandHideShowByGender#executeSequenceDiagram ignores the gender
@@ -1749,6 +1765,18 @@ fn note_text_from_lines(lines: &[String]) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn footbox_optional_pattern2_separator_and_both_command_orders() {
+        for gap in ["", " ", "\t", "\u{000b}", "\u{00a0}"] {
+            let hidden = parse(&format!("A -> B\nhide{gap}footbox"));
+            assert!(hidden.hide_footbox);
+            let shown = parse(&format!("A -> B\nhide footbox\nshow{gap}footbox"));
+            assert!(!shown.hide_footbox);
+            let old = parse(&format!("A -> B\nfootbox{gap}off"));
+            assert!(old.hide_footbox);
+        }
+    }
+
     use super::*;
 
     #[test]
