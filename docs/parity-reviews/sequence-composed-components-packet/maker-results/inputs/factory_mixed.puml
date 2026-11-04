@@ -1,0 +1,5 @@
+@startuml
+class Elm
+participant Ash
+Elm o-->>o Ash: mixed
+@enduml

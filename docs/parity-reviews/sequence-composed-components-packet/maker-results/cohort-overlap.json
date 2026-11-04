@@ -1,0 +1,32 @@
+{
+  "entries": 2021,
+  "unique_source_paths": 2021,
+  "unique_source_bytes": 1973,
+  "duplicate_entries_by_source_bytes": 48,
+  "cohorts": {
+    "preserved1966": {
+      "entries": 1966,
+      "unique_sources": 1918,
+      "overlap_previous": 0
+    },
+    "checker31": {
+      "entries": 31,
+      "unique_sources": 31,
+      "overlap_previous": 0
+    },
+    "maker22": {
+      "entries": 22,
+      "unique_sources": 22,
+      "overlap_previous": 0
+    },
+    "actor2": {
+      "entries": 2,
+      "unique_sources": 2,
+      "overlap_previous": 0
+    }
+  },
+  "parent1449_overlap": 1123,
+  "parent_only_not_replayed": 326,
+  "parent_overlap_provenance": "../../sequence-decoration-height-packet/maker-results/cohort-overlap.json",
+  "note": "Parent1449 is overlapping, not additive. No unrelated growth imported. Every retained duplicate entry is measured."
+}

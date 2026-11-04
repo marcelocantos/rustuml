@@ -1,0 +1,18 @@
+@startuml
+!pragma teoz true
+<style>
+sequenceDiagram {
+ participant {
+ Shadowing 0
+ }
+ actor {
+ Shadowing 5
+ }
+}
+</style>
+actor Branch
+participant Trunk
+create Branch
+Trunk -> Branch: grow
+Branch --> Trunk: green
+@enduml
