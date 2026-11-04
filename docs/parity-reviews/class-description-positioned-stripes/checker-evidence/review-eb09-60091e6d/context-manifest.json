@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "review": "class-packet6-context-60091e6d",
+  "candidate": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "timezone": "GMT+11:00",
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "resources": [],
+  "cases": [
+    {
+      "name": "url_current_group_self",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_current_group_self.puml",
+      "remote_name": "url_current_group_self.puml",
+      "source_sha256": "2b0b7b92da5735b451cab49d2af94a6680f672151d323dcfca8e2ab791fadfef",
+      "bytes": 88,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQmFzaW4gewpjbGFzcyBBbmNob3IKdXJsIEJhc2luIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9zZWxmXV0KfQpAZW5kdW1sCg==",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_root_class_ambiguous",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_root_class_ambiguous.puml",
+      "remote_name": "url_root_class_ambiguous.puml",
+      "source_sha256": "e426a68598ab7b4cb35917c584ff5e469d51e71622e58b2751387f14f14fca6d",
+      "bytes": 99,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIE1lbW8KcGFja2FnZSBCYXNpbiB7CmNsYXNzIE1lbW8KdXJsIE1lbW8gW1todHRwczovL2V4YW1wbGUub3JnL2N1cnJlbnRdXQp9CkBlbmR1bWwK",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_root_class_note_ambiguous",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_root_class_note_ambiguous.puml",
+      "remote_name": "url_root_class_note_ambiguous.puml",
+      "source_sha256": "83ff93c8717a36ac0cd81552347beec2738373ac7377bc3b4e805b7a38c1bf26",
+      "bytes": 119,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIE1lbW8KcGFja2FnZSBCYXNpbiB7Cm5vdGUgImxvY2FsIG1lbW8iIGFzIE1lbW8KdXJsIE1lbW8gW1todHRwczovL2V4YW1wbGUub3JnL2N1cnJlbnQtbm90ZV1dCn0KQGVuZHVtbAo=",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_rooted_existing",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_rooted_existing.puml",
+      "remote_name": "url_rooted_existing.puml",
+      "source_sha256": "ac59039be33bfbb445885ba22c52d111eaea4bf8acfaab36ea3b429e8e62b137",
+      "bytes": 100,
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIE1lbW8KcGFja2FnZSBCYXNpbiB7CmNsYXNzIE90aGVyCnVybCAuTWVtbyBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvcm9vdGVkXV0KfQpAZW5kdW1sCg==",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_bad_separator",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_bad_separator.puml",
+      "remote_name": "url_bad_separator.puml",
+      "source_sha256": "4c26d05d696ee2489edc6cbf3a2420cfcb2a8e2b645ac3f67b64c8a8d1e6cf1d",
+      "bytes": 98,
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQmFzaW4gewpjbGFzcyBBbmNob3IKfQp1cmwgQmFzaW4uLkFuY2hvciBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvZG91YmxlXV0KQGVuZHVtbAo=",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    },
+    {
+      "name": "url_namespace_none",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_namespace_none.puml",
+      "remote_name": "url_namespace_none.puml",
+      "source_sha256": "4c9b96bc130e0f6114124552fdb6c7ca983d0c7a31c3f5229a0a4ed89bd74f77",
+      "bytes": 135,
+      "source_base64": "QHN0YXJ0dW1sCnNldCBuYW1lc3BhY2VTZXBhcmF0b3Igbm9uZQpwYWNrYWdlIEJhc2luIHsKbm90ZSAibWVtbyIgYXMgTWVtbwp9CmNsYXNzIEFuY2hvcgp1cmwgTWVtbyBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvbm9uZV1dCkBlbmR1bWwK",
+      "axes": [
+        "quark context/root/namespace",
+        "target owner and ambiguity"
+      ],
+      "mechanisms": [
+        "class-command-url-named-quark",
+        "class-command-url-builder-context"
+      ]
+    }
+  ]
+}

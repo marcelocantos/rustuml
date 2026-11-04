@@ -1,0 +1,54 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: topurl
+      value: https://prefix.example/
+    source: |
+      @startuml
+      skinparam topurl https://prefix.example/
+      class Anchor
+      note "memo body" as Memo
+      url for Memo is [["a b?q=x&v=y"{hint} label]]
+      Memo .. Anchor
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Anchor
+  - !Note 0
+  - !Relationship 0
+  entities:
+  - id: Anchor
+    label: Anchor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships:
+  - from: Memo
+    to: Anchor
+    kind: Association
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: None
+    dashed: true
+    length: 2
+    source_line: 5
+  packages: []
+  notes:
+  - lines:
+    - memo body
+    target: null
+    position: null
+    alias: Memo
+    url: https://prefix.example/a b?q=x&v=y
+    url_tooltip: hint
+    source_line: 3
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

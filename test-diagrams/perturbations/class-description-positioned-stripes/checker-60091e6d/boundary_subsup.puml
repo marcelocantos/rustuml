@@ -1,0 +1,5 @@
+@startuml
+boundary "<size:7>t<sup>u</sup></size><size:28>W<sub>j</sub></size>\n<sup>A</sup><sub>z</sub>" as Orb
+class Dock
+Orb -right-> Dock
+@enduml

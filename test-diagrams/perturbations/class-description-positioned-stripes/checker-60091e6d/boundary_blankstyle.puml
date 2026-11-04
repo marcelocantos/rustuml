@@ -1,0 +1,5 @@
+@startuml
+boundary "upper\n<size:31>\nlower" as Orb
+class Dock
+Orb -right-> Dock
+@enduml

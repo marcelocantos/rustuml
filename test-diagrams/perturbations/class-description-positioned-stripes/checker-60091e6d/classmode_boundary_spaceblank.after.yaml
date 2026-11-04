@@ -1,0 +1,51 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      allowmixing
+      boundary "  wide  \n   \nlast" as Orb
+      class Dock
+      Orb -right-> Dock
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Orb
+  - !Entity Dock
+  - !Relationship 0
+  entities:
+  - id: Orb
+    label: '  wide  \n   \nlast'
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  - id: Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships:
+  - from: Orb
+    to: Dock
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 1
+    source_line: 4
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

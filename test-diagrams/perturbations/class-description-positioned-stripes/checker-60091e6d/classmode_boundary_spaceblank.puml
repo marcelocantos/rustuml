@@ -1,0 +1,6 @@
+@startuml
+allowmixing
+boundary "  wide  \n   \nlast" as Orb
+class Dock
+Orb -right-> Dock
+@enduml

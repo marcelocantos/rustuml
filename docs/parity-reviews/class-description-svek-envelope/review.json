@@ -1,0 +1,850 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-description-svek-envelope",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A39457d79-0e4b-4e29-88ed-087e0951d23d",
+    "model": "gpt-6-astra high / Codex harness / T3 Code"
+  },
+  "account_commit": "12b72619e304cbb5bb0259aefd243676094fb904",
+  "implementation_commit": "d84b89cd8ee2ddd64ac71863004ec6ee84b1c4cd",
+  "candidate_revision": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "before_revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before CARGO_BUILD_JOBS=4 cargo build --release -p rustuml (at b074d2082cb9ed2b9460f79a32b170e31cc1ab5e)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-60091e6d/run_gates.py (at exact eb09cecbc90f5690c4a09bf49118f2feff8c1c12; all exact commands and env in evidence/gates.json)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-review-60091e6d/replay.py {before|after} {preserved|fresh|nonclass} (six actual invocations, raw argv in reports)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing Monkey Man relay only; three exact worker cwd/argv/environment manifests retained)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_blankstyle.svg",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_0.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_degenerate_11.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_mixedfamily.svg",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_spaceblank.svg",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_small.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_stereowrapper_wide.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_subsup.svg",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/actor_tabonly.svg",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_blankstyle.svg",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_0.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_degenerate_11.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_mixedfamily.svg",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_spaceblank.svg",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_small.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_stereowrapper_wide.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_subsup.svg",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/boundary_tabonly.svg",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR"
+      ],
+      "result": "fail",
+      "classification": "invalid_reference",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "class_path_scope": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_blankstyle.svg",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_0.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_degenerate_11.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_mixedfamily.svg",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_spaceblank.svg",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_small.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_stereowrapper_wide.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_subsup.svg",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_actor_tabonly.svg",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_blankstyle.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_blankstyle.svg",
+      "axes": [
+        "symbol kind",
+        "blankstyle",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_0.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_11.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_degenerate_11.svg",
+      "axes": [
+        "degenerated one entity",
+        "shadow",
+        "mixed/blank stripes",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_mixedfamily.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_mixedfamily.svg",
+      "axes": [
+        "symbol kind",
+        "mixedfamily",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0p5.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_0p5.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_13.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_13.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_neg3.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_shadow_neg3.svg",
+      "axes": [
+        "shadow zero/fraction/positive/negative",
+        "actor/boundary",
+        "stroke width",
+        "explicit class factory selection"
+      ],
+      "result": "fail",
+      "classification": "mismatch",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_spaceblank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_spaceblank.svg",
+      "axes": [
+        "symbol kind",
+        "spaceblank",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_small.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_small.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_wide.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_stereowrapper_wide.svg",
+      "axes": [
+        "stereotype wider/narrower",
+        "independent font style/size",
+        "reversed linked TB",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_subsup.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_subsup.svg",
+      "axes": [
+        "symbol kind",
+        "subsup",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_tabonly.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/classmode_boundary_tabonly.svg",
+      "axes": [
+        "symbol kind",
+        "tabonly",
+        "linked LR",
+        "explicit class factory selection"
+      ],
+      "result": "pass",
+      "classification": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "class_path_scope": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_blank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_blank.svg",
+      "axes": [
+        "retained maker source, not fresh",
+        "font family and symbol"
+      ],
+      "result": "fail",
+      "classification": "retained mismatch",
+      "provenance": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/actor_blank.puml"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_blank.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_blank.svg",
+      "axes": [
+        "retained maker source, not fresh",
+        "font family and symbol"
+      ],
+      "result": "fail",
+      "classification": "retained mismatch",
+      "provenance": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_blank.puml"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_stereo.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_actor_stereo.svg",
+      "axes": [
+        "retained maker source, not fresh",
+        "font family and symbol"
+      ],
+      "result": "fail",
+      "classification": "retained mismatch",
+      "provenance": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/actor_stereo.puml"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_stereo.puml",
+      "golden": "test-diagrams/perturbations/class-description-positioned-stripes/checker-60091e6d/retained_maker_boundary_stereo.svg",
+      "axes": [
+        "retained maker source, not fresh",
+        "font family and symbol"
+      ],
+      "result": "fail",
+      "classification": "retained mismatch",
+      "provenance": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_stereo.puml"
+    }
+  ],
+  "findings": [
+    "SvekResult uses painted MinMax, translates origin to6-min and adds15 to measured dimensions. Omitting a supplemental Graphviz preferred bounding rectangle for actor/boundary graphs is causally consistent. The full union still depends on existing edge, note and cluster measurements; this change does not establish those as correct.",
+    "Degenerated Java image translates by7 and adds14 to preferred dimensions, then paints its trailing UEmpty. Excluding degenerated actor from painted-min correction fixes the previous origin policy mismatch; preferred dimensions remain the source of its envelope.",
+    "F1-mixed-family: text_render::explicit_monospace_font_uses_surrounding_metrics forces <font:monospaced> to surrounding Sans metrics and preserves monospaced spelling. Java FontConfiguration.changeFamily obtains logical monospaced font and UFontImpl.getFamily maps its SVG name to monospace. At14px Java W/i widths both8.4287, Rust11.9766/4.0469; tab i x73.4297 vs41.4375. Different heights propagate to next stripe and peer position. Existing helper, newly consumed by PositionedStripe, remains an unsatisfied dependency.",
+    "F2-shadow-value-input: ValueImpl.extractDigitsAndDot(-3) yields3, whereas parse_shadowing_delta clamps -3 to0. Boundary Java emits both filtered primitives, Rust no filters. Actor preferred height also differs3px. Factory normalization on an already-positive value is supported; the complete source-to-Fashion model is not.",
+    "F9-group-geometry-and-inline-ownership: Single-line Java CommandFactoryNoteOnEntity passes null URL; Rust emits extra anchor. Multiline both own one anchor but Java note text x184.46 versus Rust182.46, canvas338 versus336 without external link and246 versus244 with link. Geometry fails independently of anchor ownership. No fresh native solve or global environment claim.",
+    "Independent real release CLI replay: preserved1649 990\u21921004 matches; maker26 2\u219220; zero lost passes/new valid process errors. These1675 entries contain1601 unique source hashes; smaller cohorts overlap and are not additive.",
+    "Independent fresh86:36 pass,17 mismatch,2 valid-input process errors,31 invalid Java references.55 Java-valid inputs;36/55 match. The29 explicit-class controls are24 pass/5 mismatch. Original no-allowmixing controls remain preserved separately.",
+    "Main exact-candidate library tiers:11188/11251 product and10523/11251 assisted, both exit101. Guards4/6, clippy20 diagnostics remain red.1444 unit and34 CLI/doc/error tests plus fmt pass. Neither main tier is a CLI headline.",
+    "All prior584 independent evidence files are byte-identical. No historic account/review/pair or production/baseline/comparator/skip/target/policy was edited. Source account commit ancestry is established, but corrective-account descriptions of v1/v3 drafts prevent certifying a literal before-any-code-written chronology.",
+    "No broad gate was rerun after evidence-only additions. New pairs are collected by the existing parity_perturbations test; no green standing-perturbation claim or packet acceptance. No local JVM/javac/SSH, children, native fault/production work or shipping."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/class-description-positioned-stripes/checker-evidence/review-eb09-60091e6d",
+  "source_audit_locations": {
+    "java": [
+      "svek.SvekResult#calculateDimension",
+      "svek.EntityImageDegenerated#calculateDimension,drawU",
+      "svek.GraphvizImageBuilder degenerate selection"
+    ],
+    "rust": [
+      "class.rs::render_with_oracle_uid_origin",
+      "class.rs::render_plantuml_svg",
+      "class.rs::entity_frontier_min"
+    ],
+    "observations": [
+      "SvekResult uses painted MinMax, translates origin to6-min and adds15 to measured dimensions. Omitting a supplemental Graphviz preferred bounding rectangle for actor/boundary graphs is causally consistent. The full union still depends on existing edge, note and cluster measurements; this change does not establish those as correct.",
+      "Degenerated Java image translates by7 and adds14 to preferred dimensions, then paints its trailing UEmpty. Excluding degenerated actor from painted-min correction fixes the previous origin policy mismatch; preferred dimensions remain the source of its envelope."
+    ]
+  },
+  "scope": "Complete exact candidate with all retained failures; narrow supported formulas do not authorize extracted-patch acceptance."
+}

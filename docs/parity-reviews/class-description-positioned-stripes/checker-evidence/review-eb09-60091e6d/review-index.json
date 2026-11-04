@@ -1,0 +1,14 @@
+{
+  "verdict": "rejected",
+  "reviews": [
+    "docs/parity-reviews/class-description-stereotype-margin-envelope/review.json",
+    "docs/parity-reviews/class-command-url-builder-context/review.json",
+    "docs/parity-reviews/class-description-header-envelope-ownership/review.json",
+    "docs/parity-reviews/class-description-svek-envelope/review.json",
+    "docs/parity-reviews/class-command-url-named-quark/review.json",
+    "docs/parity-reviews/class-description-stereotype-font/review.json",
+    "docs/parity-reviews/class-boundary-fashion-shadow/review.json",
+    "docs/parity-reviews/class-description-positioned-stripes/review.json"
+  ],
+  "prior_verdicts": "unchanged"
+}

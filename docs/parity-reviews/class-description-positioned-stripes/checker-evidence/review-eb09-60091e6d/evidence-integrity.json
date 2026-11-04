@@ -1,0 +1,12 @@
+{
+  "reviews": 8,
+  "fresh_pairs": 86,
+  "retained_duplicate_pairs": 6,
+  "verified_raw_svg_ast_yaml_streams": 10734,
+  "modified_historical_files": 0,
+  "notes": [
+    "Initial random-access gzip archive verification was interrupted after excessive re-decompression; replaced with this single-pass artifact check, not a product rerun.",
+    "git diff --cached --check reports trailing blank lines in byte-preserved raw comparator output; output bytes intentionally unchanged.",
+    "No main gate reruns after evidence additions."
+  ]
+}

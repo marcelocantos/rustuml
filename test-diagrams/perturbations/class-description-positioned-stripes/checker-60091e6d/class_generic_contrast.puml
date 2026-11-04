@@ -1,0 +1,5 @@
+@startuml
+class "<size:23>Header</size>" as Orb
+class "Peer<T>" as Peer
+Orb --> Peer
+@enduml

@@ -1,0 +1,54 @@
+{
+  "index": 1657,
+  "source": "docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_blank.puml",
+  "source_sha256": "6487a1b738e89ea69b0d5c9c430e2665bf315cc82222ee9e2eb3e3b1a2309ffc",
+  "java_sha256": "55e47f2f4947b4e0fdc9a2b6512e15169907753868aa7a0e6dcbf72fd99a026c",
+  "status": "mismatch",
+  "outputs": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/preserved-after/1657-boundary_blank",
+  "cli": {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+      "-tsvg",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d/docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_blank.puml"
+    ],
+    "exit": 0,
+    "seconds": 0.013436317443847656,
+    "stdout_sha256": "3c7e816e6b0a1d41a6d2f29eed02892691f2f6a6f0e632d3f20a5babe98b4310",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  "ast": {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+      "--ast",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d/docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_blank.puml"
+    ],
+    "exit": 0,
+    "seconds": 0.014691829681396484,
+    "stdout_sha256": "95d221f40ed0839162442462a4140438e98e25d106f6f6f65195918fc70d6217",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  "yaml": {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+      "--yaml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d/docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_blank.puml"
+    ],
+    "exit": 0,
+    "seconds": 0.014001846313476562,
+    "stdout_sha256": "69572b51574dbdf5155d916f1d4324a23b12ccbd4632897be10cf729576796df",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  "comparison": {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/check_svg",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-60091e6d/docs/parity-reviews/class-description-positioned-stripes/maker-evidence/packet6/fresh-pairs/boundary_blank.svg",
+      "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/preserved-after/1657-boundary_blank/rust.svg"
+    ],
+    "exit": 1,
+    "seconds": 0.003887176513671875,
+    "stderr": ""
+  }
+}

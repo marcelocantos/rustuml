@@ -1,0 +1,8 @@
+@startuml
+<style>
+actor {
+ Shadowing 11
+}
+</style>
+actor "<size:25>top</size>\n\n<sub>end</sub>" as Orb <<small>>
+@enduml

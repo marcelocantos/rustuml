@@ -1,0 +1,46 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: topurl
+      value: https://late.example/
+    source: |
+      @startuml
+      package Harbor {
+      class Anchor
+      }
+      url Harbor [[https://example.org/old{Old}]]
+      urlfor Harbor is [["doc with space"{New} caption]]
+      skinparam topurl https://late.example/
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Harbor
+  - !Entity Harbor.Anchor
+  entities:
+  - id: Harbor.Anchor
+    label: Anchor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: doc with space
+    url_tooltip: New
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Anchor
+    source_line: 1
+    stereotypes: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

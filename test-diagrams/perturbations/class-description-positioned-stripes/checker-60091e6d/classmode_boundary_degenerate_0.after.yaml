@@ -1,0 +1,45 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - boundary
+        property: shadowing
+        value: '0'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      <style>
+      boundary {
+       Shadowing 0
+      }
+      </style>
+      boundary "<size:25>top</size>\n\n<sub>end</sub>" as Orb <<small>>
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Orb
+  entities:
+  - id: Orb
+    label: <size:25>top</size>\n\n<sub>end
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - small
+    generic: /sub
+    source_line: 7
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

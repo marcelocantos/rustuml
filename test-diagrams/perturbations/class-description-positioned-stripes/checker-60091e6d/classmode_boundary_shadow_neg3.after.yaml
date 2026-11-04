@@ -1,0 +1,78 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - boundary
+        property: shadowing
+        value: '-3'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: linethickness
+        value: '3'
+        source_line: 2
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      <style>
+      boundary {
+       Shadowing -3
+       LineThickness 3
+      }
+      </style>
+      boundary "m\n<sub>n</sub>" as Orb
+      class Dock
+      Orb --> Dock
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Orb
+  - !Entity Dock
+  - !Relationship 0
+  entities:
+  - id: Orb
+    label: m\n<sub>n
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    generic: /sub
+    source_line: 8
+  - id: Dock
+    label: Dock
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 9
+  relationships:
+  - from: Orb
+    to: Dock
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 10
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

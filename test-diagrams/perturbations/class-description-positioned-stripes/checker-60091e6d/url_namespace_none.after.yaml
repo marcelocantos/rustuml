@@ -1,0 +1,51 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      set namespaceSeparator none
+      package Basin {
+      note "memo" as Memo
+      }
+      class Anchor
+      url Memo [[https://example.org/none]]
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Basin
+  - !Note 0
+  - !Entity Anchor
+  entities:
+  - id: Anchor
+    label: Anchor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Basin
+    kind: Package
+    color: null
+    entities: []
+    source_line: 2
+    stereotypes: []
+  notes:
+  - lines:
+    - memo
+    target: null
+    position: null
+    alias: Basin.Memo
+    url: https://example.org/none
+    source_line: 3
+    owner_package: Basin
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

@@ -1,0 +1,7 @@
+@startuml
+class Memo
+package Basin {
+note "local memo" as Memo
+url Memo [[https://example.org/current-note]]
+}
+@enduml

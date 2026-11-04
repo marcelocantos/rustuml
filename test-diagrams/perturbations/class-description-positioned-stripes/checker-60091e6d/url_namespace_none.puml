@@ -1,0 +1,8 @@
+@startuml
+set namespaceSeparator none
+package Basin {
+note "memo" as Memo
+}
+class Anchor
+url Memo [[https://example.org/none]]
+@enduml

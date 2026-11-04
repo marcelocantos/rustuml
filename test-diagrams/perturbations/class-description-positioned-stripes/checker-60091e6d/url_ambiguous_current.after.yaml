@@ -1,0 +1,72 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package First {
+      note "one" as Memo
+      }
+      package Second {
+      note "two" as Memo
+      url Memo [[https://example.org/current]]
+      }
+      class Anchor
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package First
+  - !Note 0
+  - !Package Second
+  - !Note 1
+  - !Entity Anchor
+  entities:
+  - id: Anchor
+    label: Anchor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: First
+    kind: Package
+    color: null
+    entities: []
+    source_line: 1
+    stereotypes: []
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Second
+    kind: Package
+    color: null
+    entities: []
+    source_line: 4
+    stereotypes: []
+  notes:
+  - lines:
+    - one
+    target: null
+    position: null
+    alias: First.Memo
+    source_line: 2
+    owner_package: First
+  - lines:
+    - two
+    target: null
+    position: null
+    alias: Second.Memo
+    url: https://example.org/current
+    source_line: 5
+    owner_package: Second
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

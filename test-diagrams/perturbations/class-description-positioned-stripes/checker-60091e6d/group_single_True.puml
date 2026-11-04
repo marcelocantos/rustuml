@@ -1,0 +1,8 @@
+@startuml
+package Fleet {
+class Vessel
+}
+class Pier
+note right of Fleet [[https://example.org/map]] : chart
+Fleet --> Pier
+@enduml

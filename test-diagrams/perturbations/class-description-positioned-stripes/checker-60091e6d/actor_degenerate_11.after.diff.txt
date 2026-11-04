@@ -1,0 +1,39 @@
+SVG structural differences:
+  element count: expected 26, got 19
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "327px"), ("preserveAspectRatio", "none"), ("style", "width:72px;height:327px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 72 327"), ("width", "72px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "183px"), ("preserveAspectRatio", "none"), ("style", "width:114px;height:183px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 114 183"), ("width", "114px"), ("zoomAndPan", "magnify")]
+  [2] tag mismatch: expected <filter>, got <g>
+  [3] tag mismatch: expected <feGaussianBlur>, got <g>
+  [4] tag mismatch: expected <feColorMatrix>, got <g>
+  [5] tag mismatch: expected <feOffset>, got <rect>
+  [6] tag mismatch: expected <feBlend>, got <line>
+  [7] <g> depth mismatch: expected 2, got 3
+  [7] <g> attr mismatch:
+    expected: []
+    actual:   [("class", "participant participant-head"), ("data-entity-uid", "part1"), ("data-qualified-name", "Orb"), ("data-source-line", "6"), ("id", "part1-head")]
+  [8] tag mismatch: expected <g>, got <text>
+  [9] tag mismatch: expected <g>, got <text>
+  [10] tag mismatch: expected <rect>, got <text>
+  [11] tag mismatch: expected <line>, got <ellipse>
+  [12] tag mismatch: expected <g>, got <path>
+  [13] tag mismatch: expected <text>, got <g>
+  [14] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "25"), ("lengthAdjust", "spacing"), ("textLength", "40.4419"), ("x", "10.1301"), ("y", "116.6582")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "25"), ("lengthAdjust", "spacing"), ("textLength", "40.4419"), ("x", "5"), ("y", "114.0234")]
+  [15] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "4.4297"), ("x", "28.1362"), ("y", "135.4668")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "32.0605"), ("x", "45.4419"), ("y", "116.3438")]
+  [15] <text> text mismatch:
+    expected: None
+    actual:   Some("\\n\\n")
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "19.8784"), ("x", "20.4119"), ("y", "149.0547")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "19.8784"), ("x", "77.5024"), ("y", "119.9766")]
+  [17] <ellipse> attr mismatch:
+    expected: [("cx", "33.3511"), ("cy", "13.5"), ("fill", "#E2E2F0"), ("filter", "url(#ftpldgeyb8tei)"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "54.1904"), ("cy", "125.4766"), ("fill", "#E2E2F0"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [18] <path> attr mismatch:
+    expected: [("d", "M33.3511,21.5 L33.3511,48.5 M20.3511,29.5 L46.3511,29.5 M33.3511,48.5 L20.3511,63.5 M33.3511,48.5 L46.3511,63.5"), ("fill", "none"), ("filter", "url(#ftpldgeyb8tei)"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M54.1904,133.4766 L54.1904,160.4766 M41.1904,141.4766 L67.1904,141.4766 M54.1904,160.4766 L41.1904,175.4766 M54.1904,160.4766 L67.1904,175.4766"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+

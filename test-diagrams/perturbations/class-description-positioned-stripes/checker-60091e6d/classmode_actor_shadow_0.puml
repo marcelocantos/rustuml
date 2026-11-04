@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+<style>
+actor {
+ Shadowing 0
+ LineThickness 3
+}
+</style>
+actor "m\n<sub>n</sub>" as Orb
+class Dock
+Orb --> Dock
+@enduml

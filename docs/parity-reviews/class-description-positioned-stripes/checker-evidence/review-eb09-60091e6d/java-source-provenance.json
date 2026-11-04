@@ -1,0 +1,142 @@
+[
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Sea.java",
+    "sha256": "b2fcda1618c7dfa46d2eecf6096cb8b9a47f811f976ddd1d805d62b1eafd4c63",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeSimple.java",
+    "sha256": "5da5e0b2ec483a26ee58e63a58e79ab37f7a881f465701bfddac9ba1d8967eec",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java",
+    "sha256": "90e62fb331a47aab282ba79c672c65e9386ac31024049d00f93ddcd8df3b9642",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/font/FontPosition.java",
+    "sha256": "4d797027bd8a2d10fc68f1304e025ada3717849b138eb380b906dad851648af7",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/font/FontConfiguration.java",
+    "sha256": "f9befb054f8592aa8f60c8454860ff9d7fd90534440ba86716539a471dea6a95",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sha256": "b6866edc25e6a35003067202a9167b24435387fdc7ce3f2f8759583fae985bfa",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockMarged.java",
+    "sha256": "ac2c4d183df70512aa8b6d219b690b96a620726f27e130f5c98af9e163128980",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/Fashion.java",
+    "sha256": "ec864ba9db11c24979befc65024a2e56ec7c986d404ee442ce8757e7c59fcca3",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+    "sha256": "2f000b9eca5b99f3f492eda8b7e49835e447041327da49be78a2f0bdf51e9d6e",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClassHeader.java",
+    "sha256": "c19976f9876a674ab487009016683a108a44dc4a1d5ae44d6228d3fe5f8b3971",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/svek/EntityImageDegenerated.java",
+    "sha256": "84960c12a6364c56cdd04c58901487a44210ad903f378f6e75dd6c3f5bd34b51",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "sha256": "934c994d396482815a66aa7c7e311c9051c924989004bc0af1a2e8723c87f73c",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "sha256": "c479ef28db5aebca79293c01be674e88d4bd40a3da70eb1cf3aa45f0795d6178",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/svek/Boundary.java",
+    "sha256": "87c396739eaed181fceafb2be48dba943ff7358a1fd254cdcc4d541d4653347a",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/ActorStickMan.java",
+    "sha256": "109cc7ab3f314181e47568fd599cd2d4e770ab5e78c6871ee0905afd1a9abb7e",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolBoundary.java",
+    "sha256": "2f8c47287defffea98bf7758663a2d12404d4bb47062939643df48ccf0e1b559",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java",
+    "sha256": "7ef9718ded7d41323a4ed2903d980448d6514f32033b380472f84246203d627c",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandUrl.java",
+    "sha256": "f6ea3e2eb6ef6fb5c209583b78ccb871849deeb7bf1601c69ff21d5bd9c23972",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/url/UrlBuilder.java",
+    "sha256": "4b349f8636eac12301a8a5e1d2f90eaa6d5b1f0e373597802cbc2929bc764432",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "sha256": "b10a512804766ce08729a737389ee2a26320a5b725f41dfc20c0e8bb16aab8c2",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/atmp/CucaDiagram.java",
+    "sha256": "0195e8eca7e26b7300f70194a665f78b3224826ea761a673aea741242bba37af",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+    "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+    "sha256": "056e1590423d17fe4b4ba1a24c0f773d210ea0c7830415b5a0ba94b0abd74576",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+    "sha256": "803a162f03659ed7ca6a48238145bd0f8c8176a5e6f01fc7c37c1013568ffa4b",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
+    "sha256": "ed642f88666938454eb8f4da33cbdc50a2f6840a59f00240763dfa17f129e00a",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+    "sha256": "19ed17c5ec56c21ccf2b0042bdf9b9029995b53ad691bedf0d7d9a599ed6950a",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "sha256": "652b36312263c9fb8998b9f9028dc684446c3e5673b3f4bed4a907cc99322252",
+    "matches_pinned": true
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/svek/ClusterDotString.java",
+    "sha256": "8208a6a61e1b3b57828a962578cac84a23f98826f5dd84e63bc443444714ab26",
+    "matches_pinned": true
+  }
+]

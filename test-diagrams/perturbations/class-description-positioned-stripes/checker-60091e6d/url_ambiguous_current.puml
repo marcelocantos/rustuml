@@ -1,0 +1,10 @@
+@startuml
+package First {
+note "one" as Memo
+}
+package Second {
+note "two" as Memo
+url Memo [[https://example.org/current]]
+}
+class Anchor
+@enduml

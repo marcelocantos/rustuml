@@ -1,0 +1,19 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+boundary {
+FontSize 19
+FontName Serif
+FontStyle bold
+stereotype {
+FontStyle italic
+FontSize 13
+FontColor DarkGreen
+}
+}
+</style>
+class Wharf
+boundary "Tall alder\nBank" as Sailor <<pilot>>
+Wharf --> Sailor
+@enduml

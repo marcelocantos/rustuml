@@ -1,0 +1,36 @@
+{
+  "name": "url_rooted_existing",
+  "remote_name": "url_rooted_existing.puml",
+  "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_rooted_existing.puml",
+  "source_sha256": "ac59039be33bfbb445885ba22c52d111eaea4bf8acfaab36ea3b429e8e62b137",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.ncyzI9IP",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.ncyzI9IP",
+  "env_overrides": {},
+  "timezone": "GMT+11:00",
+  "timed_out": false,
+  "elapsed_seconds": 1.2434266670024954,
+  "stdout_sha256": "0ad1cfe6b5fbd647b2357b1bc0d5f626901bc963dae9e1e1ba8b85acf85cd4ae",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ]
+}

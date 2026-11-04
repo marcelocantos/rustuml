@@ -1,0 +1,143 @@
+{
+  "warning": "All these cohorts overlap the preserved1649; never sum their denominators.",
+  "cohorts": {
+    "original810": {
+      "entries": 810,
+      "unique_source_hashes": 804,
+      "before": {
+        "mismatch": 250,
+        "pass": 553,
+        "invalid_reference": 7
+      },
+      "after": {
+        "mismatch": 250,
+        "pass": 553,
+        "invalid_reference": 7
+      }
+    },
+    "current955": {
+      "entries": 955,
+      "unique_source_hashes": 945,
+      "before": {
+        "mismatch": 329,
+        "pass": 610,
+        "invalid_reference": 9,
+        "process_error": 7
+      },
+      "after": {
+        "mismatch": 329,
+        "pass": 610,
+        "invalid_reference": 9,
+        "process_error": 7
+      }
+    },
+    "class23": {
+      "entries": 23,
+      "unique_source_hashes": 23,
+      "before": {
+        "pass": 23
+      },
+      "after": {
+        "pass": 23
+      }
+    },
+    "maker62": {
+      "entries": 62,
+      "unique_source_hashes": 62,
+      "before": {
+        "pass": 62
+      },
+      "after": {
+        "pass": 62
+      }
+    },
+    "checker139": {
+      "entries": 139,
+      "unique_source_hashes": 131,
+      "before": {
+        "pass": 124,
+        "invalid_reference": 4,
+        "mismatch": 11
+      },
+      "after": {
+        "pass": 124,
+        "invalid_reference": 4,
+        "mismatch": 11
+      }
+    },
+    "frozen1192": {
+      "entries": 1192,
+      "unique_source_hashes": 1138,
+      "before": {
+        "mismatch": 341,
+        "pass": 821,
+        "invalid_reference": 13,
+        "process_error": 17
+      },
+      "after": {
+        "mismatch": 341,
+        "pass": 821,
+        "invalid_reference": 13,
+        "process_error": 17
+      }
+    },
+    "combined1449": {
+      "entries": 1449,
+      "unique_source_hashes": 1375,
+      "before": {
+        "mismatch": 518,
+        "pass": 838,
+        "invalid_reference": 33,
+        "process_error": 60
+      },
+      "after": {
+        "mismatch": 518,
+        "pass": 838,
+        "invalid_reference": 33,
+        "process_error": 60
+      }
+    },
+    "checker62": {
+      "entries": 62,
+      "unique_source_hashes": 62,
+      "before": {
+        "pass": 47,
+        "mismatch": 13,
+        "invalid_reference": 2
+      },
+      "after": {
+        "pass": 47,
+        "mismatch": 13,
+        "invalid_reference": 2
+      }
+    },
+    "maker48": {
+      "entries": 48,
+      "unique_source_hashes": 48,
+      "before": {
+        "pass": 45,
+        "mismatch": 3
+      },
+      "after": {
+        "pass": 45,
+        "mismatch": 3
+      }
+    },
+    "combined1559": {
+      "entries": 1559,
+      "unique_source_hashes": 1485,
+      "before": {
+        "mismatch": 534,
+        "pass": 930,
+        "invalid_reference": 35,
+        "process_error": 60
+      },
+      "after": {
+        "mismatch": 534,
+        "pass": 930,
+        "invalid_reference": 35,
+        "process_error": 60
+      }
+    }
+  }
+}

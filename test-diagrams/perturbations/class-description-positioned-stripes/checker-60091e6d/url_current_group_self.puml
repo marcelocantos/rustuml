@@ -1,0 +1,6 @@
+@startuml
+package Basin {
+class Anchor
+url Basin [[https://example.org/self]]
+}
+@enduml

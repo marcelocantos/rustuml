@@ -1,0 +1,7 @@
+{
+  "script": "model_checks_v1.py",
+  "failure": "AssertionError for url_0_True: source-derived expected notes0 versus actual notes1",
+  "cause": "Checker regex recognized only one-line note quoted declarations, omitted the existing note as Memo multiline spelling.",
+  "resolution": "Extended the source census to both documented declarations; no product/reference/comparator change or product rerun. Original failed analysis script preserved.",
+  "second_analysis_failure": "v2 omitted qualified endpoints Port.Memo .. Port.Berth from source-derived relationship census (0 instead of1). Preserve model_checks_v2.py; corrected regex permits dots."
+}

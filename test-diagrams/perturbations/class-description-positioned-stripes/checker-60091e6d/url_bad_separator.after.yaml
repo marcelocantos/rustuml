@@ -1,0 +1,42 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Basin {
+      class Anchor
+      }
+      url Basin..Anchor [[https://example.org/double]]
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Basin
+  - !Entity Basin.Anchor
+  entities:
+  - id: Basin.Anchor
+    label: Anchor
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    url: https://example.org/double
+    source_line: 2
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Basin
+    kind: Package
+    color: null
+    entities:
+    - Basin.Anchor
+    source_line: 1
+    stereotypes: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

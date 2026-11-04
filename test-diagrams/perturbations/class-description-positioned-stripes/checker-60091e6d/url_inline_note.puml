@@ -1,0 +1,4 @@
+@startuml
+class Anchor
+note "memo" as Memo [[https://example.org/]]
+@enduml

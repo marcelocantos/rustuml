@@ -1,0 +1,148 @@
+{
+  "source_sha256": "583100eba2dc91e2fbaf5c53e3577218761a53a655a47e287bc8571d1e993cb1",
+  "java_sha256": "0a5ad918195b0d27ccd976418bed621e232650407485237df357bc92142bad01",
+  "java": {
+    "name": "url_unique_crosscontext",
+    "remote_name": "url_unique_crosscontext.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml",
+    "source_sha256": "583100eba2dc91e2fbaf5c53e3577218761a53a655a47e287bc8571d1e993cb1",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.eR1QU1P3",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.eR1QU1P3",
+    "env_overrides": {},
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.2471414159954293,
+    "stdout_sha256": "0a5ad918195b0d27ccd976418bed621e232650407485237df357bc92142bad01",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "before": {
+    "index": 85,
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml",
+    "source_sha256": "583100eba2dc91e2fbaf5c53e3577218761a53a655a47e287bc8571d1e993cb1",
+    "java_sha256": "0a5ad918195b0d27ccd976418bed621e232650407485237df357bc92142bad01",
+    "status": "process_error",
+    "outputs": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-before/0085-url_unique_crosscontext",
+    "cli": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "-tsvg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.015410900115966797,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d68be9e78491402bfd7d83447fe96c362f5395e6f7735d65a21d42a26026a667",
+      "stderr": "parse error: line 6: unrecognized class command: url Memo [[https://example.org/unique]]\n"
+    },
+    "ast": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "--ast",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.014642953872680664,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d68be9e78491402bfd7d83447fe96c362f5395e6f7735d65a21d42a26026a667",
+      "stderr": "parse error: line 6: unrecognized class command: url Memo [[https://example.org/unique]]\n"
+    },
+    "yaml": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-before/release/rustuml",
+        "--yaml",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml"
+      ],
+      "exit": 1,
+      "seconds": 0.01434016227722168,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d68be9e78491402bfd7d83447fe96c362f5395e6f7735d65a21d42a26026a667",
+      "stderr": "parse error: line 6: unrecognized class command: url Memo [[https://example.org/unique]]\n"
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/check_svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-before/0085-url_unique_crosscontext/rust.svg"
+      ],
+      "exit": 1,
+      "seconds": 0.0032210350036621094,
+      "stderr": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+    }
+  },
+  "after": {
+    "index": 85,
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml",
+    "source_sha256": "583100eba2dc91e2fbaf5c53e3577218761a53a655a47e287bc8571d1e993cb1",
+    "java_sha256": "0a5ad918195b0d27ccd976418bed621e232650407485237df357bc92142bad01",
+    "status": "pass",
+    "outputs": "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-after/0085-url_unique_crosscontext",
+    "cli": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "-tsvg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.012473106384277344,
+      "stdout_sha256": "5de2a18e631cd3202b0fa94c2279220cafd5cee8d81a1fa02b4e5e1a2e318d6d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "ast": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "--ast",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.01246190071105957,
+      "stdout_sha256": "5ca1ddba3eb4bfb7b9183e49efe1aa1ff5b6bb360edc4ad89caf5c4c95f31de6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "yaml": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/target-after/release/rustuml",
+        "--yaml",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.puml"
+      ],
+      "exit": 0,
+      "seconds": 0.013862133026123047,
+      "stdout_sha256": "6598958361dcc74aea15b7b1ec230aba1eb526f919fbcc157e9372f89cf7de76",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/check_svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh/url_unique_crosscontext.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-60091e6d/fresh-after/0085-url_unique_crosscontext/rust.svg"
+      ],
+      "exit": 0,
+      "seconds": 0.003129243850708008,
+      "stderr": ""
+    }
+  }
+}

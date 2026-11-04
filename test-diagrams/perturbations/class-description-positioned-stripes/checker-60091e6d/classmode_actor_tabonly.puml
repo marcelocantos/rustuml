@@ -1,0 +1,6 @@
+@startuml
+allowmixing
+actor "\t\n\t\t" as Orb
+class Dock
+Orb -right-> Dock
+@enduml

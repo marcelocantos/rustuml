@@ -1,0 +1,6 @@
+@startuml
+class Anchor
+url Anchor [[https://example.org/old{Old}]]
+urlfor Anchor is [["doc with space"{New} caption]]
+skinparam topurl https://late.example/
+@enduml
