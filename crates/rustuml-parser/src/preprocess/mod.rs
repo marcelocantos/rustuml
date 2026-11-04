@@ -4,6 +4,7 @@
 //! TIM preprocessor — handles variables, defines, conditionals,
 //! includes, and comments before diagram-specific parsing.
 //
+// Checker7 corrective contracts: precommitted accounts 02fa49de2396c1445a4ddf1a783c973f883a82f4.
 // Checker4 corrective contracts: precommitted causal accounts 6d46a483aad389d4535e1ba24822fdd116baf517.
 
 use std::collections::HashMap;
@@ -574,7 +575,7 @@ fn tim_hsl_color(values: &[Value]) -> String {
 
 struct PreprocessContext {
     /// Exact Java variable keys (both `name` and `$name`), including !define.
-    defines: HashMap<String, Value>,
+    defines: VariableMemory,
     /// `!definelong TOKEN(params)` style multi-line macros.
     definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
@@ -622,17 +623,139 @@ struct PreprocessContext {
     expression_events: Vec<EvaluatedEvent>,
     text_consumed: bool,
     execution_kind: FunctionKind,
+    /// CodeIteratorSub's empty replay ends only its current executeLines iterator.
+    iterator_stopped: bool,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
 const MAX_WHILE_ITERATIONS: usize = 10000;
 
+// TrieImpl follows UTF-16 edges without backtracking to an earlier terminal.
+// Removing a name clears only its terminal, retaining the prefix path. Both
+// details affect later lookup even when the remaining value maps are identical.
+#[derive(Default)]
+struct NameTrie {
+    children: HashMap<u16, NameTrie>,
+    terminal: Option<String>,
+}
+
+impl NameTrie {
+    fn insert(&mut self, name: &str) {
+        let mut node = self;
+        for unit in name.encode_utf16() {
+            node = node.children.entry(unit).or_default();
+        }
+        node.terminal = Some(name.to_string());
+    }
+
+    fn remove(&mut self, name: &str) {
+        let mut node = self;
+        for unit in name.encode_utf16() {
+            let Some(child) = node.children.get_mut(&unit) else {
+                return;
+            };
+            node = child;
+        }
+        node.terminal = None;
+    }
+
+    fn match_at(&self, text: &str) -> Option<&str> {
+        let mut node = self;
+        for unit in text.encode_utf16() {
+            let Some(child) = node.children.get(&unit) else {
+                return node.terminal.as_deref();
+            };
+            // TrieImpl treats a child with no remaining edges as a dead end.
+            if child.children.is_empty() && child.terminal.is_none() {
+                return node.terminal.as_deref();
+            }
+            node = child;
+        }
+        node.terminal.as_deref()
+    }
+}
+
+// Keep mutation and name discovery together. TMemoryLocal builds its argument /
+// explicit-override trie lazily; global and automatic-local tries are eager.
+struct VariableMemory {
+    values: HashMap<String, Value>,
+    names: Option<NameTrie>,
+}
+
+impl Default for VariableMemory {
+    fn default() -> Self {
+        Self {
+            values: HashMap::new(),
+            names: Some(NameTrie::default()),
+        }
+    }
+}
+
+impl VariableMemory {
+    fn get(&self, name: &str) -> Option<&Value> {
+        self.values.get(name)
+    }
+
+    fn contains_key(&self, name: &str) -> bool {
+        self.values.contains_key(name)
+    }
+
+    fn insert(&mut self, name: String, value: Value) {
+        if let Some(names) = &mut self.names {
+            names.insert(&name);
+        }
+        self.values.insert(name, value);
+    }
+
+    fn remove(&mut self, name: &str) -> Option<Value> {
+        if let Some(names) = &mut self.names {
+            names.remove(name);
+        }
+        self.values.remove(name)
+    }
+
+    fn match_at(&mut self, text: &str) -> Option<String> {
+        let names = self.names.get_or_insert_with(|| {
+            let mut names = NameTrie::default();
+            for name in self.values.keys() {
+                names.insert(name);
+            }
+            names
+        });
+        names
+            .match_at(text)
+            .filter(|name| !name.is_empty())
+            .map(str::to_string)
+    }
+}
+
+// TLineType's boundary test is Character.isLetter(char), ASCII digit, underscore
+// or either UTF-16 surrogate. It is not a restriction on stored variable names.
+fn variable_boundary_letter(ch: char) -> bool {
+    static LETTER: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\p{L}$").unwrap());
+    ch == '_'
+        || ch.is_ascii_digit()
+        || ch.len_utf16() == 2
+        || LETTER.is_match(ch.encode_utf8(&mut [0; 4]))
+}
+
 // TMemoryLocal separates explicit locals/arguments from automatically local
 // names. A global introduced later takes precedence over an automatic local.
-#[derive(Default)]
 struct LocalMemory {
-    overrides: HashMap<String, Value>,
-    locals: HashMap<String, Value>,
+    overrides: VariableMemory,
+    locals: VariableMemory,
+}
+
+impl Default for LocalMemory {
+    fn default() -> Self {
+        Self {
+            overrides: VariableMemory {
+                values: HashMap::new(),
+                names: None,
+            },
+            locals: VariableMemory::default(),
+        }
+    }
 }
 
 struct CondState {
@@ -711,7 +834,7 @@ struct DefineLongDef {
 impl PreprocessContext {
     fn new(base_dir: Option<PathBuf>, mark_function_body_source_lines: bool) -> Self {
         Self {
-            defines: HashMap::new(),
+            defines: VariableMemory::default(),
             definelong_macros: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
@@ -742,6 +865,7 @@ impl PreprocessContext {
             expression_events: Vec::new(),
             text_consumed: false,
             execution_kind: FunctionKind::Procedure,
+            iterator_stopped: false,
         }
     }
 
@@ -877,11 +1001,15 @@ impl PreprocessContext {
 
     fn process_lines(&mut self, lines: &[&str]) -> Vec<EvaluatedEvent> {
         let mut output = Vec::new();
+        let outer_stop = std::mem::replace(&mut self.iterator_stopped, false);
 
         let saved_source_line = self.current_source_line;
         let saved_override = self.source_line_override;
         let saved_mark = self.mark_source_lines;
         for (idx, &line) in lines.iter().enumerate() {
+            if self.iterator_stopped || self.error.is_some() {
+                break;
+            }
             self.current_source_line = idx + 1;
             if self.include_depth > 0 {
                 // ReadLineReader gives each included file its own zero-based
@@ -897,14 +1025,38 @@ impl PreprocessContext {
         self.source_line_override = saved_override;
         self.current_source_line = saved_source_line;
 
+        self.iterator_stopped = outer_stop;
         output
+    }
+
+    // Each TContext.executeLines/executeLinesInternal owns a fresh iterator.
+    // Sub replay within one iterator deliberately uses process_buffered_line
+    // directly instead, so an empty replay cannot be mistaken for a nested call.
+    fn process_buffered_lines(
+        &mut self,
+        lines: &[BufferedLine],
+        output: &mut Vec<EvaluatedEvent>,
+        mark_origins: bool,
+    ) {
+        let outer_stop = std::mem::replace(&mut self.iterator_stopped, false);
+        for line in lines {
+            if self.iterator_stopped || self.error.is_some() || self.return_signal.is_some() {
+                break;
+            }
+            if mark_origins {
+                self.process_buffered_line(line, output);
+            } else {
+                self.process_one_line(&line.text, output);
+            }
+        }
+        self.iterator_stopped = outer_stop;
     }
 
     fn process_one_line(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) {
         // TContext.resultList is shared by return-value and procedure execution.
         // Each statement owns a sink; nested statements preserve the caller's
         // already-emitted effects and contribute their own before its content.
-        if self.error.is_some() || self.return_signal.is_some() {
+        if self.error.is_some() || self.return_signal.is_some() || self.iterator_stopped {
             return;
         }
         let outer = std::mem::take(&mut self.expression_events);
@@ -1005,6 +1157,12 @@ impl PreprocessContext {
                 self.collecting_sub = None;
                 let body = std::mem::take(&mut self.collecting_sub_lines);
                 self.subs.insert(name, body.clone());
+                // CodeIteratorSub.peek installs an empty iterator and returns
+                // null. No next() occurs to clear it: executeLines stops here.
+                if body.is_empty() {
+                    self.iterator_stopped = true;
+                    return;
+                }
                 for buffered in &body {
                     self.process_buffered_line(buffered, output);
                 }
@@ -1554,7 +1712,7 @@ impl PreprocessContext {
         &mut self,
         name: &str,
         positional: Vec<Value>,
-        mut named: HashMap<String, Value>,
+        named: HashMap<String, Value>,
         expression_call: bool,
     ) -> (Option<Value>, Vec<EvaluatedEvent>) {
         if self.error.is_some() {
@@ -1579,7 +1737,8 @@ impl PreprocessContext {
         let mut scope = LocalMemory::default();
         for param in &func.params {
             let value = named
-                .remove(&param.name)
+                .get(&param.name)
+                .cloned()
                 .or_else(|| positional.next())
                 .or_else(|| param.default.clone())
                 .unwrap_or_else(|| Value::Str(String::new()));
@@ -1599,18 +1758,11 @@ impl PreprocessContext {
 
         let mut output_lines = Vec::new();
 
-        for body_line in &func.body {
-            // Process through the preprocessor (handles !if/!while/!return etc.)
-            if self.mark_function_body_source_lines {
-                self.process_buffered_line(body_line, &mut output_lines);
-            } else {
-                self.process_one_line(&body_line.text, &mut output_lines);
-            }
-            // Check if process_one_line set a return signal.
-            if self.return_signal.is_some() {
-                break;
-            }
-        }
+        self.process_buffered_lines(
+            &func.body,
+            &mut output_lines,
+            self.mark_function_body_source_lines,
+        );
 
         let return_value = self.return_signal.take();
         // Restore outer return signal.
@@ -1750,14 +1902,18 @@ impl PreprocessContext {
         {
             if self.is_active() {
                 for val in &foreach.values {
-                    if self.return_signal.is_some() || self.error.is_some() {
+                    if self.return_signal.is_some() || self.error.is_some() || self.iterator_stopped
+                    {
                         break;
                     }
                     self.defines.insert(foreach.var_name.clone(), val.clone());
 
                     for body_line in &foreach.body_lines {
                         self.process_buffered_line(body_line, output);
-                        if self.return_signal.is_some() || self.error.is_some() {
+                        if self.return_signal.is_some()
+                            || self.error.is_some()
+                            || self.iterator_stopped
+                        {
                             break;
                         }
                     }
@@ -1817,6 +1973,7 @@ impl PreprocessContext {
                 let mut iterations = 0;
                 loop {
                     if self.error.is_some()
+                        || self.iterator_stopped
                         || self.return_signal.is_some()
                         || iterations >= MAX_WHILE_ITERATIONS
                     {
@@ -1828,7 +1985,10 @@ impl PreprocessContext {
 
                     for body_line in &while_state.body_lines {
                         self.process_buffered_line(body_line, output);
-                        if self.return_signal.is_some() || self.error.is_some() {
+                        if self.return_signal.is_some()
+                            || self.error.is_some()
+                            || self.iterator_stopped
+                        {
                             break;
                         }
                     }
@@ -1954,9 +2114,7 @@ impl PreprocessContext {
             };
             let saved_kind = std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
             let mut output = Vec::new();
-            for line in &body {
-                self.process_buffered_line(line, &mut output);
-            }
+            self.process_buffered_lines(&body, &mut output, true);
             self.execution_kind = saved_kind;
             return Some(output);
         };
@@ -2016,9 +2174,7 @@ impl PreprocessContext {
                     std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
                 self.include_depth += 1;
                 let mut output = Vec::new();
-                for line in &selected {
-                    self.process_buffered_line(line, &mut output);
-                }
+                self.process_buffered_lines(&selected, &mut output, true);
                 self.include_depth -= 1;
                 self.base_dir = saved_base;
                 self.execution_kind = saved_kind;
@@ -2502,19 +2658,44 @@ impl PreprocessContext {
     // Variable substitution
     // ------------------------------------------------------------------
 
+    fn variable_name_at(&mut self, text: &str, offset: usize) -> Option<String> {
+        // VariableManager.getVarnameAt / TMemoryLocal.variablesNames3. A longer
+        // returned path wins across scopes before the right boundary is checked.
+        if !text[offset..].starts_with('$')
+            && !text[..offset].ends_with("\\n")
+            && text[..offset]
+                .chars()
+                .next_back()
+                .is_some_and(variable_boundary_letter)
+        {
+            return None;
+        }
+        let suffix = &text[offset..];
+        let mut candidates = vec![self.defines.match_at(suffix)];
+        if let Some(scope) = self.local_vars.last_mut() {
+            candidates.push(scope.overrides.match_at(suffix));
+            candidates.push(scope.locals.match_at(suffix));
+        }
+        // All matches are prefixes of one valid UTF-8 string, so byte length
+        // and UTF-16 length give the same ordering (equal lengths are same key).
+        let name = candidates.into_iter().flatten().max_by_key(String::len)?;
+        if text[offset + name.len()..]
+            .chars()
+            .next()
+            .is_some_and(variable_boundary_letter)
+        {
+            return None;
+        }
+        Some(name)
+    }
+
     fn substitute_vars(&mut self, line: &str) -> String {
         let mut result = String::new();
         let mut offset = 0;
         while offset < line.len() && self.error.is_none() {
             let ch = line[offset..].chars().next().unwrap();
-            if ch == '<'
-                && line[offset..].starts_with("<$")
-                && let Some(end) = line[offset..].find('>')
-            {
-                result.push_str(&line[offset..offset + end + 1]);
-                offset += end + 1;
-                continue;
-            }
+            // TContext scans every original position, including sprite markup;
+            // absence of a matching stored name, not markup syntax, preserves it.
             // TContext.getFunctionNameAt permits $/% after a letter, but bare
             // names require the same original-text boundary as VariableManager.
             let bare_boundary = offset == 0
@@ -2574,14 +2755,6 @@ impl PreprocessContext {
                         }
                     }
                     offset = close + 1;
-                    continue;
-                }
-                if ch == '$'
-                    && let Some(value) = self.get_var(&line[offset..name_end]).cloned()
-                {
-                    let (value, end) = self.variable_path(value, line, name_end);
-                    result.push_str(&value.to_display());
-                    offset = end;
                     continue;
                 }
             }
@@ -2661,12 +2834,22 @@ impl PreprocessContext {
                     offset = close + 1;
                     continue;
                 }
-                if let Some(value) = self.get_var(name).cloned() {
-                    let (value, end) = self.variable_path(value, line, end);
-                    result.push_str(&value.to_display());
-                    offset = end;
-                    continue;
+            }
+            // VariableManager tests the original source position after function
+            // lookup. Stored names, not a token grammar, define the candidate.
+            if let Some(name) = self.variable_name_at(line, offset)
+                && let Some(value) = self.get_var(&name).cloned()
+            {
+                if result.ends_with("##") {
+                    result.truncate(result.len() - 2);
                 }
+                let (value, end) = self.variable_path(value, line, offset + name.len());
+                result.push_str(&value.to_display());
+                offset = end;
+                if line[offset..].starts_with("##") {
+                    offset += 2;
+                }
+                continue;
             }
             result.push(ch);
             offset += ch.len_utf8();
@@ -3020,6 +3203,10 @@ impl PreprocessContext {
             }
             "set_variable_value" if values.len() >= 2 => {
                 // SetVariableValue explicitly uses GLOBAL, preserving its exact key.
+                if args[0].contains('\0') {
+                    self.fail("Fatal parsing error".into());
+                    return Value::Str(String::new());
+                }
                 self.defines.insert(args[0].clone(), values[1].clone());
                 return Value::Str(String::new());
             }
@@ -3707,6 +3894,139 @@ mod tests {
             .into_iter()
             .filter(|l| !l.is_empty())
             .collect()
+    }
+
+    #[test]
+    fn stored_names_drive_text_matching_without_token_grammar() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (name, value) in [
+            ("a$b", "oak"),
+            ("twig\u{301}", "ash"),
+            ("two words", "elm"),
+            ("rock.dot", "fir"),
+        ] {
+            ctx.set_var(name, &Value::Str(value.into()));
+        }
+        assert_eq!(
+            ctx.substitute_vars("a$b / twig\u{301} / two words / rock.dot"),
+            "oak / ash / elm / fir"
+        );
+        assert_eq!(
+            ctx.substitute_vars("xa$b / a$b2 / \\na$b / ##a$b##"),
+            "xa$b / a$b2 / \\noak / oak"
+        );
+    }
+
+    #[test]
+    fn trie_path_mismatch_and_removal_do_not_backtrack() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.set_var("ax", &Value::Str("short".into()));
+        ctx.set_var("ax-bc", &Value::Str("long".into()));
+        assert_eq!(
+            ctx.substitute_vars("ax / ax-bc / ax-bX / ax-"),
+            "short / long / ax-bX / ax-"
+        );
+        ctx.remove_var("ax-bc");
+        assert_eq!(
+            ctx.substitute_vars("ax / ax-bX / ax-bc"),
+            "short / ax-bX / ax-bc"
+        );
+        ctx.set_var("ax😀z", &Value::Str("astral".into()));
+        assert_eq!(
+            ctx.substitute_vars("ax😁 / ax😀z / 😀ax / ax²"),
+            "ax😁 / astral / 😀ax / short²"
+        );
+    }
+
+    #[test]
+    fn override_trie_lifetime_and_cross_scope_longest_match() {
+        let mut scope = LocalMemory::default();
+        scope.overrides.insert("a".into(), Value::Int(1));
+        scope.overrides.insert("a-bc".into(), Value::Int(2));
+        scope.overrides.remove("a-bc");
+        assert_eq!(scope.overrides.match_at("a-bX"), Some("a".into()));
+        scope.overrides.insert("a-bc".into(), Value::Int(3));
+        scope.overrides.remove("a-bc");
+        assert_eq!(scope.overrides.match_at("a-bX"), None);
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.set_var("a-bc", &Value::Str("global-long".into()));
+        ctx.local_vars.push(scope);
+        assert_eq!(ctx.substitute_vars("a / a-bc"), "1 / global-long");
+        ctx.set_local_var("a-bc", &Value::Str("override".into()));
+        assert_eq!(ctx.substitute_vars("a-bc"), "override");
+        ctx.remove_var("a-bc");
+        assert_eq!(ctx.substitute_vars("a-bc"), "global-long");
+    }
+
+    #[test]
+    fn variable_values_are_not_rescanned_and_functions_keep_priority() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("!function read()\n!return 7\n!endfunction");
+        ctx.set_var("read", &Value::Str("variable".into()));
+        ctx.set_var("raw", &Value::Str("read()".into()));
+        assert_eq!(
+            ctx.substitute_vars("raw / read / read()"),
+            "read() / variable / 7"
+        );
+        ctx.set_var("a", &Value::Str("n".into()));
+        ctx.set_var("$b", &Value::Str("value".into()));
+        assert_eq!(ctx.substitute_vars("a$b"), "nvalue");
+        assert_eq!(
+            ctx.substitute_vars("<$b> / <$absent>"),
+            "<value> / <$absent>"
+        );
+    }
+
+    #[test]
+    fn duplicate_formals_reuse_named_values_without_consuming_positionals() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("!function $read(b=\"first\",$middle=\"mid\",b=\"last\")\n!return b+2+\"/\"+$middle\n!endfunction");
+        let (value, _) = ctx.call_function_values(
+            "$read",
+            vec![Value::Str("position".into())],
+            HashMap::from([("b".into(), Value::Str("007".into()))]),
+            false,
+        );
+        assert_eq!(value.unwrap().to_display(), "0072/position");
+        let (value, _) = ctx.call_function_values(
+            "$read",
+            vec![Value::Int(1), Value::Str("position".into()), Value::Int(4)],
+            HashMap::new(),
+            false,
+        );
+        assert_eq!(value.unwrap().to_display(), "6/position");
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn empty_sub_terminates_source_before_tail_effects() {
+        for prefix in ["", "!procedure $unused()\n", "!function $unused()\n"] {
+            let source = format!(
+                "@startuml\nclass Anchor\n{prefix}!startsub empty\n/' removed '/\n!endsub\n!$v=%intval(\"bad\")\nclass Lost\n@enduml\n"
+            );
+            let out = preprocess_full(&source, None);
+            assert!(out.error.is_none());
+            assert_eq!(out.uml_source, "@startuml\nclass Anchor\n");
+            assert!(!out.lines.iter().any(|s| s.contains("Lost")));
+        }
+    }
+
+    #[test]
+    fn empty_replay_is_local_to_execution_and_blank_line_is_not_empty() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.include_depth = 1;
+        let mut events = ctx.process("class Head\n!startsub empty\n!endsub\n!$v=%intval(\"bad\")");
+        assert!(!ctx.iterator_stopped);
+        assert!(ctx.error.is_none());
+        ctx.process_one_line("class Tail", &mut events);
+        let mut identity = Vec::new();
+        project_events(&events, &mut identity, &mut Vec::new(), &mut Vec::new());
+        assert_eq!(identity, ["class Head", "class Tail"]);
+        let out = preprocess_full(
+            "@startuml\n!startsub blank\n\n!endsub\nclass Continued\n@enduml",
+            None,
+        );
+        assert_eq!(out.uml_source, "@startuml\n\nclass Continued\n@enduml\n");
     }
 
     #[test]
