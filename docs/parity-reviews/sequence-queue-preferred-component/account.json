@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-queue-preferred-component",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "skin.rose.ComponentRoseQueue#getPreferredHeight",
+    "decoration.symbol.USymbolQueue#asSmall/#getMargin",
+    "sequencediagram.graphic.ParticipantBox#getHeadHeight",
+    "sequencediagram.graphic.ArrowAndParticipant#getPreferredHeight"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout::preferred_height"
+  ],
+  "invariant": "Queue preferred height is label/stereotype height plus the symbol vertical margins, independent of the participant row alignment band.",
+  "causal_divergence": "The first composed-component implementation fed queue_layout_h (a mixed-kind row alignment band) into preferred_height; four main sequence creation/destruction cases regress. USymbolQueue uses Margin(5,15,5,5) around merged text and excludes shadow from preferred dimensions.",
+  "planned_change": "Compute queue preferred height from its existing text line height plus top/bottom symbol margins, with the existing rendered stereotype condition. Keep row alignment and symbol paint separate. Existing creation composite consumes that height without queue-specific scheduling offsets.",
+  "perturbation_axes": [
+    "create/activate/destroy and loop history",
+    "mixed participant kinds versus queue-only and stereotype text"
+  ],
+  "before_revision": "c921945aac3bfaf7d61dd323498f0e4899f32182",
+  "account_date": "2026-11-04",
+  "evidence": "Private final-logs/main-tiers-and-guards.log: 1407/1411 sequence; all four losses are queue histories. Preserve as first broad run."
+}
