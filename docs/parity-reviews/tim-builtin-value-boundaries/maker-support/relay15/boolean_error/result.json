@@ -1,0 +1,94 @@
+{
+  "source": "/tmp/rustuml-tim5/new/boolean_error.puml",
+  "mechanism": "tim-builtin-value-boundaries",
+  "negative": true,
+  "cwd": "new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "source_sha256": "2f13eebd79710bf31f61f4793642f06f0539a868e61d1fa9cf924f2ed37b8579",
+  "java_exit": 200,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "reference_valid": false,
+  "measurements": {
+    "before": {
+      "cli_exit": 1,
+      "svg_match": false,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "calls": [
+        {
+          "argv": [
+            "/tmp/rustuml-tim5/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim5/new",
+          "environment_overrides": {
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "TZ": "GMT+11:00"
+          },
+          "exit_code": 1
+        },
+        {
+          "argv": [
+            "/tmp/rustuml-tim5/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim5/new",
+          "environment_overrides": {
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "TZ": "GMT+11:00"
+          },
+          "exit_code": 1
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-tim5/probe",
+        "compare",
+        "/tmp/rustuml-tim5/relay15/boolean_error/java.svg.stdout",
+        "/tmp/rustuml-tim5/relay15/boolean_error/before/rust.svg"
+      ]
+    },
+    "iteration1": {
+      "cli_exit": 1,
+      "svg_match": false,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "calls": [
+        {
+          "argv": [
+            "/tmp/rustuml-tim5/iteration1-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim5/new",
+          "environment_overrides": {
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "TZ": "GMT+11:00"
+          },
+          "exit_code": 1
+        },
+        {
+          "argv": [
+            "/tmp/rustuml-tim5/iteration1-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-tim5/new",
+          "environment_overrides": {
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "TZ": "GMT+11:00"
+          },
+          "exit_code": 1
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-tim5/probe",
+        "compare",
+        "/tmp/rustuml-tim5/relay15/boolean_error/java.svg.stdout",
+        "/tmp/rustuml-tim5/relay15/boolean_error/iteration1/rust.svg"
+      ]
+    }
+  }
+}

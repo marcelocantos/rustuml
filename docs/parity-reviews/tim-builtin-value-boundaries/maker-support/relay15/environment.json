@@ -1,0 +1,32 @@
+{
+  "batch": "TIM15",
+  "request_sha256": "7eb6f7446148b437cf104be02461a2fd724cf6ed4a554b7205161d3fd89dc462",
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.4Whf5xcR",
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.4Whf5xcR",
+  "hostname": "MacBookPro",
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+  "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+  "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+  "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+  "timezone": "per result argv",
+  "locale": "en_AU",
+  "encoding": "UTF-8",
+  "headless": true,
+  "timeout_seconds_per_call": 60,
+  "input_compressed_sha256": "3c8aadaec4e5354798790215cfda12668e10e2fab271d7213c788286ec8c36e5",
+  "manifest_sha256": "46deda6a3749d4f7af193438c7920db3ea9aa35e384f39092d2539db41caaf91",
+  "probe_sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+  "classification_performed": false,
+  "ambient_jvm_variables_removed": [
+    "JAVA_TOOL_OPTIONS",
+    "_JAVA_OPTIONS",
+    "JDK_JAVA_OPTIONS",
+    "CLASSPATH"
+  ]
+}

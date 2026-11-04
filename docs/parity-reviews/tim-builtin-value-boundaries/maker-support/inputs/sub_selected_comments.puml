@@ -1,0 +1,5 @@
+@startuml
+!$n=0
+!includesub lib/blocks.inc!chosen
+class "n=$n" as Selected
+@enduml

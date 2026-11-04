@@ -1,0 +1,10 @@
+@startuml
+!definelong STAMP()
+changed
+!enddefinelong
+!$v="STAMP()"
+!function $text()
+!return "STAMP()"
+!endfunction
+class "STAMP() / $v / $text() / STAMP" as Literal
+@enduml

@@ -1,0 +1,563 @@
+[
+  {
+    "source": "/tmp/rustuml-tim4/new/builtin_window.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/builtin_window/java.svg",
+      "/tmp/rustuml-tim5/prior17/builtin_window/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/builtin_surrogate_roundtrip.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/builtin_surrogate_roundtrip/java.svg",
+      "/tmp/rustuml-tim5/prior17/builtin_surrogate_roundtrip/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/builtin_negative_length.puml",
+    "reference_valid": false,
+    "java_exit": 1,
+    "cli_exit": 1,
+    "svg_match": false,
+    "source_equal": false,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 1
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/builtin_negative_length/java.svg",
+      "/tmp/rustuml-tim5/prior17/builtin_negative_length/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/snapshot_nested.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/snapshot_nested/java.svg",
+      "/tmp/rustuml-tim5/prior17/snapshot_nested/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/snapshot_json.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/snapshot_json/java.svg",
+      "/tmp/rustuml-tim5/prior17/snapshot_json/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/literal_define_order.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/literal_define_order/java.svg",
+      "/tmp/rustuml-tim5/prior17/literal_define_order/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/literal_define_capture.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/literal_define_capture/java.svg",
+      "/tmp/rustuml-tim5/prior17/literal_define_capture/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/return_nested.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/return_nested/java.svg",
+      "/tmp/rustuml-tim5/prior17/return_nested/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/return_while_nested.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/return_while_nested/java.svg",
+      "/tmp/rustuml-tim5/prior17/return_while_nested/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/procedure_value_error.puml",
+    "reference_valid": false,
+    "java_exit": 200,
+    "cli_exit": 1,
+    "svg_match": false,
+    "source_equal": false,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 1
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/procedure_value_error/java.svg",
+      "/tmp/rustuml-tim5/prior17/procedure_value_error/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/foreach_json_global.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/foreach_json_global/java.svg",
+      "/tmp/rustuml-tim5/prior17/foreach_json_global/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/foreach_object_order.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/foreach_object_order/java.svg",
+      "/tmp/rustuml-tim5/prior17/foreach_object_order/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/sub_dynamic_twice.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/sub_dynamic_twice/java.svg",
+      "/tmp/rustuml-tim5/prior17/sub_dynamic_twice/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/sub_bad_unselected.puml",
+    "reference_valid": false,
+    "java_exit": 200,
+    "cli_exit": 1,
+    "svg_match": false,
+    "source_equal": false,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 1
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/sub_bad_unselected/java.svg",
+      "/tmp/rustuml-tim5/prior17/sub_bad_unselected/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/sub_local_selector.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/sub_local_selector/java.svg",
+      "/tmp/rustuml-tim5/prior17/sub_local_selector/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/registry_literal.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/registry_literal/java.svg",
+      "/tmp/rustuml-tim5/prior17/registry_literal/rust.svg"
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim4/new/registry_environment.puml",
+    "reference_valid": true,
+    "java_exit": 0,
+    "cli_exit": 0,
+    "svg_match": true,
+    "source_equal": true,
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim4/new",
+        "exit": 0
+      }
+    ],
+    "comparison_argv": [
+      "/tmp/rustuml-tim5/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/docs/parity-reviews/tim-expression-value-snapshot/maker-support/relay-completion/registry_environment/java.svg",
+      "/tmp/rustuml-tim5/prior17/registry_environment/rust.svg"
+    ]
+  }
+]

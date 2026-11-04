@@ -1,0 +1,8 @@
+@startuml
+!define TOKEN gold
+!definelong WRAP(value)
+[value]
+!enddefinelong
+!$v="WRAP(ash)"
+class "WRAP(oak) / $v / north\nTOKEN / prefixTOKEN" as Boundary
+@enduml
