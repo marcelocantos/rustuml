@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+activate Kestrel
+return #11223344 paint
+Kestrel --> Juniper: receipt
+@enduml

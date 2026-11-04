@@ -1,0 +1,44 @@
+[
+  {
+    "mechanism": "sequence-registered-command-rejection",
+    "review": "docs/parity-reviews/sequence-registered-command-rejection/review.json",
+    "verdict": "rejected",
+    "perturbation_entries": 298
+  },
+  {
+    "mechanism": "sequence-command-color-execution",
+    "review": "docs/parity-reviews/sequence-command-color-execution/review.json",
+    "verdict": "rejected",
+    "perturbation_entries": 156
+  },
+  {
+    "mechanism": "sequence-footbox-command-consumption",
+    "review": "docs/parity-reviews/sequence-footbox-command-consumption/review.json",
+    "verdict": "rejected",
+    "perturbation_entries": 57
+  },
+  {
+    "mechanism": "sequence-local-attribute-serialization",
+    "review": "docs/parity-reviews/sequence-local-attribute-serialization/review.json",
+    "verdict": "rejected",
+    "perturbation_entries": 48
+  },
+  {
+    "mechanism": "sequence-resume-citation-correction",
+    "review": "docs/parity-reviews/sequence-resume-citation-correction/review.json",
+    "verdict": "rejected",
+    "perturbation_entries": 2
+  },
+  {
+    "mechanism": "sequence-command-size-admission",
+    "review": "docs/parity-reviews/sequence-command-size-admission/review.json",
+    "verdict": "rejected",
+    "perturbation_entries": 4
+  },
+  {
+    "mechanism": "sequence-command-size-dispatch-correction",
+    "review": "docs/parity-reviews/sequence-command-size-dispatch-correction/review.json",
+    "verdict": "rejected",
+    "perturbation_entries": 12
+  }
+]

@@ -1,0 +1,131 @@
+{
+  "before": {
+    "entries": 571,
+    "mismatch": 236,
+    "nonpositive": 189,
+    "match": 146
+  },
+  "after": {
+    "entries": 571,
+    "mismatch": 211,
+    "nonpositive": 189,
+    "match": 170,
+    "valid_error": 1
+  },
+  "gains": [
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_21_plain.puml",
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_75_unusual.puml",
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_76_unusual.puml",
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_78_plain.puml",
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_78_unusual.puml",
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_legend_spaced_end.puml",
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_ref_bare_end.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_zero_legacy.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_hide_zero_teoz.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_zero_legacy.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_zero_teoz.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_sp_legacy.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_sp_teoz.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_tab_legacy.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_tab_teoz.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_vt_legacy.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_vt_teoz.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ff_legacy.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_ff_teoz.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nbsp_legacy.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_footbox_show_nbsp_teoz.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footboxon.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_footboxoff.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_hidefootbox.puml",
+    "test-diagrams/perturbations/sequence-footbox-command-consumption/bd087_s_bare_showfootbox.puml"
+  ],
+  "lost_matches": [
+    "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml"
+  ],
+  "new_valid_errors": [
+    {
+      "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+      "source_sha256": "8785094fa9474b31ca2be3e0b3d83c9d8d41f5ff1815f8a63e9d523771aa9409",
+      "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"<rect width=\\\"2\\\" height=\\\"2\\\"/>\"\n"
+    }
+  ],
+  "lost_rejections": [],
+  "panics": [],
+  "timeouts": [],
+  "strict_xml": {
+    "outputs": 992,
+    "failures": []
+  },
+  "mechanisms": {
+    "sequence-command-color-execution": {
+      "before": {
+        "entries": 156,
+        "nonpositive": 52,
+        "mismatch": 85,
+        "match": 19
+      },
+      "after": {
+        "entries": 156,
+        "nonpositive": 52,
+        "mismatch": 85,
+        "match": 19
+      }
+    },
+    "sequence-command-size-dispatch-correction": {
+      "before": {
+        "entries": 12,
+        "mismatch": 4,
+        "match": 4,
+        "nonpositive": 4
+      },
+      "after": {
+        "entries": 12,
+        "mismatch": 4,
+        "match": 4,
+        "nonpositive": 4
+      }
+    },
+    "sequence-footbox-command-consumption": {
+      "before": {
+        "entries": 57,
+        "mismatch": 18,
+        "match": 10,
+        "nonpositive": 29
+      },
+      "after": {
+        "entries": 57,
+        "match": 28,
+        "nonpositive": 29
+      }
+    },
+    "sequence-local-attribute-serialization": {
+      "before": {
+        "entries": 48,
+        "mismatch": 22,
+        "match": 18,
+        "nonpositive": 8
+      },
+      "after": {
+        "entries": 48,
+        "mismatch": 22,
+        "match": 18,
+        "nonpositive": 8
+      }
+    },
+    "sequence-registered-command-rejection": {
+      "before": {
+        "entries": 298,
+        "mismatch": 107,
+        "nonpositive": 96,
+        "match": 95
+      },
+      "after": {
+        "entries": 298,
+        "mismatch": 100,
+        "nonpositive": 96,
+        "match": 101,
+        "valid_error": 1
+      }
+    }
+  }
+}

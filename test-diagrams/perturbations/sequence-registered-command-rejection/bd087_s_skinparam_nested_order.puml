@@ -1,0 +1,12 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+skinparam sequence {
+participant {
+BackgroundColor Wheat
+}
+ArrowColor Olive
+}
+Alder -> Osprey: color
+@enduml

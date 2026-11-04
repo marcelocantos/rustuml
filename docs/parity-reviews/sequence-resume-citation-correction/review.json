@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-resume-citation-correction",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A29fed3c4-f6f1-48fa-9925-601e7b0c6dcb",
+    "model": "gpt-6-astra; high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+    "branch": "review/sequence-admission-bd08723a",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+  "implementation_commit": "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c",
+  "implementation_commits": [
+    "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c"
+  ],
+  "tested_rust_revision": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "production_revision": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "baseline_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE/target-before cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one at dc438fd0cd0f5edd44816db81f0d765bf48ce4e6; independently repeat at c6295ccdef39719b60f0e88dfd9555919523c961 with target-after.",
+    "rustc --edition=2024 docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs -L dependency=PRIVATE_TARGET/release/deps --extern rustuml_oracle=EXACT_RLIB -o PRIVATE_BIN/compare_cli (exact binding records retained).",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT REPO_CWD; retained3569 and fresh509+62 before/after.",
+    "replay.py before|after golden|retained|fresh-main|fresh-supplement: actual rustuml -tsvg/-ttxt/--ast/--yaml -pipe; full byte captures and unchanged compare_cli.",
+    "Parent existing Monkey Man relay batches AH/AI only; [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]. No local Java/javac, SSH, runner or child was launched.",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render; cargo test --release -p rustuml --test pipe_mode; cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (stable broad run once; exact logs preserved).",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO NEGATIVES BEFORE_CLI AFTER_CLI OUTPUT; historical, prior-fresh, exporter and fresh-checker cohorts separately.",
+    "xml.etree.ElementTree.fromstring over every nonempty CLI SVG capture and every new reference, with empty/error outcomes retained separately."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-resume-citation-correction/bd087_reg_73_plain.puml",
+      "golden": "test-diagrams/perturbations/sequence-resume-citation-correction/bd087_reg_73_plain.svg",
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume",
+        "canonical form",
+        "two-way sequence context"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "44ecc5be01b39b2998f331c8bf65fe2865fdb6c9167058613379cacb43d1de00",
+      "golden_sha256": "23967713f888bd7cda2020f377d23375665a47b13f55f2fb6a075b7b5615c665",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-resume-citation-correction/bd087_reg_73_unusual.puml",
+      "golden": "test-diagrams/perturbations/sequence-resume-citation-correction/bd087_reg_73_unusual.svg",
+      "axes": [
+        "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume",
+        "ASCII uppercase first keyword and first NBSP",
+        "self-message context"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "ed2e0e0dc4a3934002baf80517e0aedcf7cffe9c239274c8fef6c3630e204ec2",
+      "golden_sha256": "569d2b6219781cdba981a9a6ac253150540c91ad59378ade9fc91ca25abe868d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "The source correction is accurate: pinned CommandAutonumberResume declares getConcat at line56, not getRegexConcat. The production comment names the actual method; earlier accounts and reviews are unchanged. Account3b38384b3 precedes2cc081521.",
+    "REJECT whole-output packet acceptance, not the editorial correction: the two independent resume forms include an uppercase/NBSP command that is Java-valid but unsupported by the partial Rust handler and mismatches. No new behavioral regression is attributed to this comment-only correction."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output and rejection-contract acceptance; bounded support is not a waiver. Source-correct or reverted portions are distinguished in findings.",
+  "fresh_counts": null,
+  "evidence": "docs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra",
+  "bounded_next_obligations": [
+    "REJECT whole-output packet acceptance, not the editorial correction: the two independent resume forms include an uppercase/NBSP command that is Java-valid but unsupported by the partial Rust handler and mismatches. No new behavioral regression is attributed to this comment-only correction."
+  ],
+  "limits": [
+    "No shared-SVG combined correctness claim.",
+    "Java argv is wrapper-derived, not process-traced.",
+    "No baseline/comparator/skip/allow-list/target changes.",
+    "Prior accepted exceptions remain exactly15 frozen entries (14 distinct source hashes); fresh sprite loss is an unapproved16th error, not silently added to that set."
+  ]
+}

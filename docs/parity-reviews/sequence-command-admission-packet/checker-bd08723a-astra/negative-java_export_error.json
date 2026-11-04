@@ -1,0 +1,102 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_ff_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_divider_vt_space_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_ff_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_legacy.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_delay_vt_space_teoz.puml",
+    "observed_valid": false,
+    "intended_valid": true
+  }
+]

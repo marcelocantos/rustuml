@@ -1,0 +1,1973 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_worktree_status": "",
+  "source_hashes": [
+    {
+      "index": 0,
+      "class_name": "net.sourceforge.plantuml.command.CommandTitle",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandTitle.java",
+      "sha256": "04b107c823b6f922b9b22488ae7071f5f529ebc3eda16e20275309320edc696a",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 1,
+      "class_name": "net.sourceforge.plantuml.command.CommandMainframe",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandMainframe.java",
+      "sha256": "9edad6702f27c8953ad4995ec70f4dadd3368ef0d1ac131da110e9d718e7da62",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 2,
+      "class_name": "net.sourceforge.plantuml.command.CommandCaption",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandCaption.java",
+      "sha256": "ebcf602ba83bd15674c54ab65cec7ccf4e8abee3473072cc2551b9528e35b617",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 3,
+      "class_name": "net.sourceforge.plantuml.command.CommandMultilinesCaption",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandMultilinesCaption.java",
+      "sha256": "1370826a3312d1c84db5675c46227981842e99717071165e28a03330f80ec0f5",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 4,
+      "class_name": "net.sourceforge.plantuml.command.CommandMultilinesTitle",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandMultilinesTitle.java",
+      "sha256": "1c0d78e6de4b1d0ce6dc62a58e7da40a5674f0b527c4f3ec1fbc5068c496ca37",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 5,
+      "class_name": "net.sourceforge.plantuml.command.CommandMultilinesLegend",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandMultilinesLegend.java",
+      "sha256": "31a5a3bd2862ae6ddb4f2d3d21592f5d77a016c3e1ae25b2b8d3db9fc8ae358e",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 6,
+      "class_name": "net.sourceforge.plantuml.command.CommandLegend",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandLegend.java",
+      "sha256": "66acbf23ad03c5e3e3ee735e7097ce6f20e45dc5958a7c5d6d83c173cc3d264b",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 7,
+      "class_name": "net.sourceforge.plantuml.command.CommandFooter",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandFooter.java",
+      "sha256": "750b5adadc2a2101fcbbac70bbc6482082991e6d6eddea34ac3b3ad9493931d7",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 8,
+      "class_name": "net.sourceforge.plantuml.command.CommandMultilinesFooter",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandMultilinesFooter.java",
+      "sha256": "013195e9d7e67b4fc6d982b9e31fbe578315ab6feeb84643cf0079b18f8751db",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 9,
+      "class_name": "net.sourceforge.plantuml.command.CommandHeader",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandHeader.java",
+      "sha256": "c227f39258ffe392fb61a53623c8f2d2371f3aa5eedf4ab739d35107e0a731a5",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 10,
+      "class_name": "net.sourceforge.plantuml.command.CommandMultilinesHeader",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandMultilinesHeader.java",
+      "sha256": "95cda08730db9b266443e4e992cc71c32623875a4901c0068ba9fc31e026725c",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 11,
+      "class_name": "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator",
+      "source": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandNamespaceSeparator.java",
+      "sha256": "823055130b08e7e6d48cefe7978510fc6e4b8e134a7ab9a0c18e01e0006934e1",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 12,
+      "class_name": "net.sourceforge.plantuml.command.CommandNope",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandNope.java",
+      "sha256": "d8b1c41f8ab9d469aea516cda2256e12934177e91f8e11ac84bec575e93536c0",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 13,
+      "class_name": "net.sourceforge.plantuml.command.CommandPragma",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandPragma.java",
+      "sha256": "87d2e4c6d7574c2ba5051d7dfff4a726bde66139828bd80b1597287300734002",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 14,
+      "class_name": "net.sourceforge.plantuml.command.CommandAssumeTransparent",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandAssumeTransparent.java",
+      "sha256": "da9502d816d54c341ca5c2a4cdc31b1307f25354bfe63112b8df142edb99ccaa",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 15,
+      "class_name": "net.sourceforge.plantuml.command.CommandSkinParam",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSkinParam.java",
+      "sha256": "eb2acc94a4c6b933b496d6a3a0c60883044f7a0ef9477d5551201ab5f6f30c9e",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 16,
+      "class_name": "net.sourceforge.plantuml.command.CommandSkinParamJaws",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSkinParamJaws.java",
+      "sha256": "9537d7f8863f8953edbdffd40559e773cd4fcae0d1937bdf7359903ab0535844",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 17,
+      "class_name": "net.sourceforge.plantuml.command.CommandSkinParamMultilines",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSkinParamMultilines.java",
+      "sha256": "fa571317a733c7bcbb489989967d65ecaf538d5e8e2ae93d6f347dcf1804d45d",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 18,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandSkin",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandSkin.java",
+      "sha256": "1b2dc7c5d814bab22f6cf9a76a749cdb08fcc5e54a26d57e9ae8c87cf5521360",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 19,
+      "class_name": "net.sourceforge.plantuml.command.CommandMinwidth",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandMinwidth.java",
+      "sha256": "1cb787d28683e333b40330ba8fc158db1d7061dfc97795d0d5bc7c110c0d1d91",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 20,
+      "class_name": "net.sourceforge.plantuml.command.CommandPage",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandPage.java",
+      "sha256": "c2463ee4e12f9092dda23ba2787791e817ba970a556a7c235b4ecc29b1411176",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 21,
+      "class_name": "net.sourceforge.plantuml.command.CommandRotate",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandRotate.java",
+      "sha256": "9b185fa9ab20eb7ee75fb60b9249ea09b0321848d9273667578bddb0319850ae",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 22,
+      "class_name": "net.sourceforge.plantuml.command.CommandFactorySprite$1",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandFactorySprite.java",
+      "sha256": "d11e794549b2f8f2552cb99dd4ad07099e0d9b7234b8c299f0973927ddfd7815",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 23,
+      "class_name": "net.sourceforge.plantuml.command.CommandFactorySprite$2",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandFactorySprite.java",
+      "sha256": "d11e794549b2f8f2552cb99dd4ad07099e0d9b7234b8c299f0973927ddfd7815",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 24,
+      "class_name": "net.sourceforge.plantuml.command.CommandSpriteSvg",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSpriteSvg.java",
+      "sha256": "844f9180bfd10a6126d4ece42cadffd18a7a41f40cd004ddcd8f6182cc13b6d5",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 25,
+      "class_name": "net.sourceforge.plantuml.command.CommandSpriteStdlib",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSpriteStdlib.java",
+      "sha256": "f2d9cdbeb60dfa43782485365348d77ac905a55589811d97930ff1595dc10dac",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 26,
+      "class_name": "net.sourceforge.plantuml.command.CommandSpriteStdlibSvg",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSpriteStdlibSvg.java",
+      "sha256": "bd4caca79648b1f2935c92acadc5ba4532d56465674e86aa82be4c26c200e959",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 27,
+      "class_name": "net.sourceforge.plantuml.command.CommandSpriteSvgMultiline",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSpriteSvgMultiline.java",
+      "sha256": "31479aa05dad54e1d62b39cc9935a30f8c1e6f86c619cb7374e999a3798a4a00",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 28,
+      "class_name": "net.sourceforge.plantuml.command.CommandSpriteFile",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandSpriteFile.java",
+      "sha256": "e1d4defb8c493d6ec590744d60941b898cadf7007ccf7c00a71674f0121b7814",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 29,
+      "class_name": "net.sourceforge.plantuml.style.CommandStyleMultilinesCSS",
+      "source": "src/main/java/net/sourceforge/plantuml/style/CommandStyleMultilinesCSS.java",
+      "sha256": "cb9ce30a3ed858b7983e53b60f1abc201d42b88f23f4773de8c3ed494339f35f",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 30,
+      "class_name": "net.sourceforge.plantuml.style.CommandStyleImport",
+      "source": "src/main/java/net/sourceforge/plantuml/style/CommandStyleImport.java",
+      "sha256": "fca093338cb95caa93cea6915efa99b494dd5ee7708972258b989e32b3fd9780",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 31,
+      "class_name": "net.sourceforge.plantuml.command.CommandScale",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandScale.java",
+      "sha256": "8ff4d988e9222bc4e732775729164d3e0b5e7a1eee059b06bfb44ced27985ba5",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 32,
+      "class_name": "net.sourceforge.plantuml.command.CommandScaleWidthAndHeight",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandScaleWidthAndHeight.java",
+      "sha256": "6c46581b1519eb6d2fb8aa22068b21c1820e1da44f9ce9c10d057fe7e48ff206",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 33,
+      "class_name": "net.sourceforge.plantuml.command.CommandScaleWidthOrHeight",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandScaleWidthOrHeight.java",
+      "sha256": "7cc36c0c744a8fd2f4bfaa932fe289420478df23284e6bc60ced69b97d412ea6",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 34,
+      "class_name": "net.sourceforge.plantuml.command.CommandScaleMaxWidth",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandScaleMaxWidth.java",
+      "sha256": "026aa6a05d1c7e84152d18dfbffbb676f364692b2c524a596f20c0686cce82f9",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 35,
+      "class_name": "net.sourceforge.plantuml.command.CommandScaleMaxHeight",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandScaleMaxHeight.java",
+      "sha256": "ac7ab0f51cb6c0d40492c45126dda2dd8e669d8813c7287d93a2e3f480c6d5b0",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 36,
+      "class_name": "net.sourceforge.plantuml.command.CommandScaleMaxWidthAndHeight",
+      "source": "src/main/java/net/sourceforge/plantuml/command/CommandScaleMaxWidthAndHeight.java",
+      "sha256": "89a6b45ecbf9ce60d249a201f515b24bea4488b4b8a6382afc054c6eaa98a38a",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 37,
+      "class_name": "net.sourceforge.plantuml.statediagram.command.CommandHideEmptyDescription",
+      "source": "src/main/java/net/sourceforge/plantuml/statediagram/command/CommandHideEmptyDescription.java",
+      "sha256": "99885ff8305dba78aa690cd32ad20b34cb841895e495b9eed3087ed2da810c4d",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 38,
+      "class_name": "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByVisibility",
+      "source": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByVisibility.java",
+      "sha256": "722f87059bf8f102ab28601a62fb680c6d7da4c6331276a889ac05630795c6e8",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 39,
+      "class_name": "net.sourceforge.plantuml.classdiagram.command.CommandHideShowByGender",
+      "source": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByGender.java",
+      "sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 40,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandHideUnlinked",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandHideUnlinked.java",
+      "sha256": "e49ca327c44f3559bf9aca2a76a01be584ac7e2bd113edd3173e7ed4e683c94e",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 41,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandActivate",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandActivate.java",
+      "sha256": "8d653402d29619ab112333ffb17e5e188ae84661fc1e1f75df676de54cf81299",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 42,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandDeactivateShort",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDeactivateShort.java",
+      "sha256": "0bc321e64b82099b7ee926234974cf8efb86e3e06c24ab030326bcdbc39da9d5",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 43,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java",
+      "sha256": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 44,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA2",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA2.java",
+      "sha256": "04ef56cbcccf57d00ac734924789fd28035b30d6cea69cba566e0825e8bf06af",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 45,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA3",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA3.java",
+      "sha256": "ed1f123de770356792aee51faa0baf1ceb2217cc2dc0d9371b2b30daa9427fa0",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 46,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantA4",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA4.java",
+      "sha256": "65d1e19a67935a50316be252968046d8baf7677378a56612e2fe0f079ddcff29",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 47,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandParticipantMultilines",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantMultilines.java",
+      "sha256": "a9dcf9bc059e3c931048024b39aaf17a4e812c22ac8c039d004ac1b8fdd44508",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 48,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandArrow",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 49,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowLeft",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowLeft.java",
+      "sha256": "97c0f744c0fa01bce1f1cb61ecd19296d41bca857dac2f7f7c14d64f301e548b",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 50,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowRight",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowRight.java",
+      "sha256": "ed229434c93f7226764e8228bd3bb57d66576b8020a1c2c346d26e5057f62c95",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 51,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$2",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 52,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$1",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 53,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$1",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+      "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 54,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandBoxStart",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxStart.java",
+      "sha256": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 55,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandBoxEnd",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxEnd.java",
+      "sha256": "f96861ce32f742154859937834d9ddb7b3d3a43a995a337d1b21c76812e2a486",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 56,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandGrouping",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandGrouping.java",
+      "sha256": "fa1736360451c1a8a01d860a6a124b0031ce56a925d2c699330ff5c25654d5cb",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 57,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandActivate2",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandActivate2.java",
+      "sha256": "4146916326223e086860be0960442c48e6fbbfad5b186232853508fea3284fc8",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 58,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandReturn",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReturn.java",
+      "sha256": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 59,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$1",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 60,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteCommand$1",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 61,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOverSeveralCommand$2",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 62,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteOnArrowCommand$2",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 63,
+      "class_name": "net.sourceforge.plantuml.command.note.sequence.FactorySequenceNoteAcrossCommand$2",
+      "source": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+      "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 64,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandNewpage",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandNewpage.java",
+      "sha256": "d32ae4dded850b6e33d70e8144eb46c4afd99f985216236b1c7e664648c81b16",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 65,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandIgnoreNewpage",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandIgnoreNewpage.java",
+      "sha256": "893f4287998c8361c38456931ac9e1109ccc9892377224cabba088a1f2b18c9a",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 66,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandAutoNewpage",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutoNewpage.java",
+      "sha256": "c4d1c00e5977cdddf4d8f4acbdef36cd88f1221adf58c19de187e242495135b1",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 67,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandDivider",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDivider.java",
+      "sha256": "02b14eff2e2eee29b7277e978287e2e81c7d67e0f7a87d858fa23fcfd1814e02",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 68,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandHSpace",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandHSpace.java",
+      "sha256": "11b8fb89c3c9f3124644de6ba5b8df33e2a3ddd31e54c802cb878ecf3482581a",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 69,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceOverSeveral",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceOverSeveral.java",
+      "sha256": "9948cf0d17ee31420cd89bb69a04b36ef4a9d96ed47ac937a8ae56021072dac7",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 70,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandReferenceMultilinesOverSeveral",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceMultilinesOverSeveral.java",
+      "sha256": "11e6d7dadc1d8d924bd3df29098bf01f54bf36b04caaee8ae0d67a013487adae",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 71,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumber",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumber.java",
+      "sha256": "546c672dff29eb3edebe20bad232b5e831c50250c8aa78ce8d4241960e7ab6b6",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 72,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberStop",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberStop.java",
+      "sha256": "ed713305507ff2a520969a1059d3aa9a12916e267b14cb667e1d93f2558d2634",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 73,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberResume",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberResume.java",
+      "sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 74,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandAutonumberIncrement",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberIncrement.java",
+      "sha256": "79ebb1dcf3b63dd755cc798cbae58c39585a41724d0a78a12d4400cddec89313",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 75,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandAutoactivate",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutoactivate.java",
+      "sha256": "545bdee1cad86bab5c526b1f4a9001085e9369c6ace51954a1d9d7e47090e0e1",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 76,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandFootbox",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandFootbox.java",
+      "sha256": "feecf9dc535c1f6d71dcc16c5142f3c9ca629e4554501cefd8a81d5779ecf4dc",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 77,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandDelay",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDelay.java",
+      "sha256": "56d490f356a65c30e581119ab8f826c823d9d4756f49a756379f6ce6747d603d",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 78,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandFootboxOld",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandFootboxOld.java",
+      "sha256": "d0e437a74ad956af8f8c35123434822b999bceb1afc5f38d2c72aed7c7926284",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 79,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandUrl",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandUrl.java",
+      "sha256": "48bae03b333685c5cc81d7ca59ba0581a9cfefe49faa76906ed7d44479302e3f",
+      "matches_inventory": true,
+      "matches_pin": true
+    },
+    {
+      "index": 80,
+      "class_name": "net.sourceforge.plantuml.sequencediagram.command.CommandLinkAnchor",
+      "source": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandLinkAnchor.java",
+      "sha256": "37cb04663c74f403596679837d4e8ddfe9cc16cc9f810d04d5f511962e4206db",
+      "matches_inventory": true,
+      "matches_pin": true
+    }
+  ],
+  "accounts": [
+    {
+      "mechanism": "sequence-registered-command-rejection",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "ebbbe28c09c11c9fd3c720b8bbc3a56dda71af29"
+      ],
+      "status": "requires NEW independent checker",
+      "account_path": "docs/parity-reviews/sequence-registered-command-rejection/account.json",
+      "account_unchanged": true,
+      "precedes": [
+        true
+      ],
+      "messages": [
+        "fix: reject unregistered sequence commands and expose unsupported commands\n\nCausal account 3b38384b3: sequence-registered-command-rejection. Preserve all 81 Java factory registrations, their order, Pattern2/FoxSignature language and multiline boundaries. Dispatch recognized commands only to their mapped Rust handlers; report unsupported classes/variants explicitly. No global dispatch or other-family edits. Parent-approved T14.21/T14.22 upstream exceptions remain in maker evidence.\n\n"
+      ]
+    },
+    {
+      "mechanism": "sequence-command-color-execution",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "d10628bd7845a77832a5a682b87bbfa4e1b7419e",
+        "268fa9f8b700ba08579efc603e4d0e92b4313e5f"
+      ],
+      "status": "requires NEW independent checker",
+      "account_path": "docs/parity-reviews/sequence-command-color-execution/account.json",
+      "account_unchanged": true,
+      "precedes": [
+        true,
+        true
+      ],
+      "messages": [
+        "fix: propagate sequence command color execution failures\n\nCausal account 3b38384b3: sequence-command-color-execution. Validate the selected ColorParser leaf and HColorSet command fields, including PART2 boundary fallback and arrow style colors. Preserve valid color syntax and explicitly report incomplete composite/gradient paint support.\n\n",
+        "fix: validate gradient endpoints as Java simple colors\n\nCausal account 3b38384b3: sequence-command-color-execution. HColorSet.parseColor delegates gradient endpoints to parseSimpleColor; transparent, background and automatic are HColor symbols, not XColor endpoints.\n\n"
+      ]
+    },
+    {
+      "mechanism": "sequence-footbox-command-consumption",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c"
+      ],
+      "status": "requires NEW independent checker",
+      "account_path": "docs/parity-reviews/sequence-footbox-command-consumption/account.json",
+      "account_unchanged": true,
+      "precedes": [
+        true
+      ],
+      "messages": [
+        "fix: consume complete sequence footbox visibility commands\n\nCausal accounts 3b38384b3: sequence-footbox-command-consumption and sequence-resume-citation-correction. Match Pattern2 optional whitespace before permissive Rust message parsing, and correct the current CommandAutonumberResume method citation without rewriting history.\n\n"
+      ]
+    },
+    {
+      "mechanism": "sequence-local-attribute-serialization",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "4ac3ccba2b8e7b02559cd4166f088c5eea3da8a0"
+      ],
+      "status": "requires NEW independent checker",
+      "account_path": "docs/parity-reviews/sequence-local-attribute-serialization/account.json",
+      "account_unchanged": true,
+      "precedes": [
+        true
+      ],
+      "messages": [
+        "fix: serialize sequence SVG attributes with ASCII XML references\n\nCausal account 3b38384b3: sequence-local-attribute-serialization. Follow pinned SvgGraphics us-ascii JAXP attribute serialization for whitespace and Unicode scalars. Keep existing text-node consumers separate; no shared SVG imports.\n\n"
+      ]
+    },
+    {
+      "mechanism": "sequence-resume-citation-correction",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c"
+      ],
+      "status": "requires NEW independent checker",
+      "account_path": "docs/parity-reviews/sequence-resume-citation-correction/account.json",
+      "account_unchanged": true,
+      "precedes": [
+        true
+      ],
+      "messages": [
+        "fix: consume complete sequence footbox visibility commands\n\nCausal accounts 3b38384b3: sequence-footbox-command-consumption and sequence-resume-citation-correction. Match Pattern2 optional whitespace before permissive Rust message parsing, and correct the current CommandAutonumberResume method citation without rewriting history.\n\n"
+      ]
+    },
+    {
+      "mechanism": "sequence-command-size-admission",
+      "account_commit": "8efd66082c108fb0b46439665363fe9a8ce827d4",
+      "implementation_commits": [
+        "ba3d0196bcb11829a3e114871976faaa695c7025"
+      ],
+      "status": "reverted; not part of final behavior",
+      "account_path": "docs/parity-reviews/sequence-command-size-admission/account.json",
+      "account_unchanged": true,
+      "precedes": [
+        true
+      ],
+      "messages": [
+        "fix: enforce Java ordinary-arrow UTF-16 admission limit\n\nCausal account 8efd66082. CommandArrow alone applies RegexConcat.protectSize(2000); enforce it after Java command trimming and before pattern matching. Count UTF-16 units rather than UTF-8 bytes or Unicode scalar count.\n\n"
+      ]
+    },
+    {
+      "mechanism": "sequence-command-size-dispatch-correction",
+      "account_commit": "297c7a1eacfff66445700496190630b891eb3ee7",
+      "implementation_commits": [
+        "c525fd32ae97b642b440a161140e9457f29bcfc8"
+      ],
+      "status": "requires NEW independent checker",
+      "account_path": "docs/parity-reviews/sequence-command-size-dispatch-correction/account.json",
+      "account_unchanged": true,
+      "precedes": [
+        true
+      ],
+      "messages": [
+        "Revert \"fix: enforce Java ordinary-arrow UTF-16 admission limit\"\n\nThis reverts commit ba3d0196bcb11829a3e114871976faaa695c7025.\n\n"
+      ]
+    }
+  ],
+  "changed_production_files": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "size_revert_remaining_source_diff": [],
+  "registration_count": 81,
+  "registration_order_equal": true,
+  "registry": [
+    {
+      "index": 0,
+      "class_name": "CommandTitle",
+      "rust_pattern": "^title(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "java_pattern": "^title(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "signature": 2106432,
+      "java_signature": 2106432,
+      "support_flag": true,
+      "actual_handler": "self.try_meta(line),",
+      "maker_handler": "try_meta",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 1,
+      "class_name": "CommandMainframe",
+      "rust_pattern": "^mainframe(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*)$",
+      "java_pattern": "^mainframe(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*)$",
+      "signature": 574660,
+      "java_signature": 574660,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 2,
+      "class_name": "CommandCaption",
+      "rust_pattern": "^caption(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "java_pattern": "^caption(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "signature": 2327572,
+      "java_signature": 2327572,
+      "support_flag": true,
+      "actual_handler": "self.try_meta(line),",
+      "maker_handler": "try_meta",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 3,
+      "class_name": "CommandMultilinesCaption",
+      "rust_pattern": "^caption$",
+      "java_pattern": "^caption$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 4,
+      "class_name": "CommandMultilinesTitle",
+      "rust_pattern": "^title$",
+      "java_pattern": "^title$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 5,
+      "class_name": "CommandMultilinesLegend",
+      "rust_pattern": "^legend(?:[%s]+(top|bottom))?(?:[%s]+(left|right|center))?$",
+      "java_pattern": "^legend(?:[%s]+(top|bottom))?(?:[%s]+(left|right|center))?$",
+      "signature": 41312,
+      "java_signature": 41312,
+      "support_flag": true,
+      "actual_handler": "self.try_meta(line),",
+      "maker_handler": "try_meta",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 6,
+      "class_name": "CommandLegend",
+      "rust_pattern": "^legend(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "java_pattern": "^legend(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "signature": 41312,
+      "java_signature": 41312,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 7,
+      "class_name": "CommandFooter",
+      "rust_pattern": "^(?:(left|right|center))?[%s]*footer(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "java_pattern": "^(?:(left|right|center))?[%s]*footer(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "signature": 2687168,
+      "java_signature": 2687168,
+      "support_flag": true,
+      "actual_handler": "self.try_meta(line),",
+      "maker_handler": "try_meta",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 8,
+      "class_name": "CommandMultilinesFooter",
+      "rust_pattern": "^(?:(left|right|center)?[%s]*)footer$",
+      "java_pattern": "^(?:(left|right|center)?[%s]*)footer$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 9,
+      "class_name": "CommandHeader",
+      "rust_pattern": "^(?:(left|right|center))?[%s]*header(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "java_pattern": "^(?:(left|right|center))?[%s]*header(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+      "signature": 524900,
+      "java_signature": 524900,
+      "support_flag": true,
+      "actual_handler": "self.try_meta(line),",
+      "maker_handler": "try_meta",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 10,
+      "class_name": "CommandMultilinesHeader",
+      "rust_pattern": "^(?:(left|right|center)?[%s]*)header$",
+      "java_pattern": "^(?:(left|right|center)?[%s]*)header$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 11,
+      "class_name": "CommandNamespaceSeparator",
+      "rust_pattern": "^set[%s]+(?:separator|namespaceseparator)[%s]+(\\S+)$",
+      "java_pattern": "^set[%s]+(?:separator|namespaceseparator)[%s]+(\\S+)$",
+      "signature": 3145793,
+      "java_signature": 3145793,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 12,
+      "class_name": "CommandNope",
+      "rust_pattern": "^[%s]*$",
+      "java_pattern": "^[%s]*$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": null,
+      "maker_handler": "empty",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 13,
+      "class_name": "CommandPragma",
+      "rust_pattern": "^!pragma[%s]+([A-Za-z_][A-Za-z_0-9]*)(?:[%s]+(.*))?$",
+      "java_pattern": "^!pragma[%s]+([A-Za-z_][A-Za-z_0-9]*)(?:[%s]+(.*))?$",
+      "signature": 537542917,
+      "java_signature": 537542917,
+      "support_flag": true,
+      "actual_handler": "self.try_pragma(line),",
+      "maker_handler": "try_pragma",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 14,
+      "class_name": "CommandAssumeTransparent",
+      "rust_pattern": "^!assume[%s]+transparent[%s]+(dark|light)$",
+      "java_pattern": "^!assume[%s]+transparent[%s]+(dark|light)$",
+      "signature": 544915525,
+      "java_signature": 544915525,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 15,
+      "class_name": "CommandSkinParam",
+      "rust_pattern": "^(skinparam|skinparamlocked)[%s]+([\\w.]*(?:\\<\\<[^<>]*\\>\\>)?[\\w.]*)[%s]+([^{}]*)$",
+      "java_pattern": "^(skinparam|skinparamlocked)[%s]+([\\w.]*(?:\\<\\<[^<>]*\\>\\>)?[\\w.]*)[%s]+([^{}]*)$",
+      "signature": 1758213,
+      "java_signature": 1758213,
+      "support_flag": true,
+      "actual_handler": "self.try_skinparam(line),",
+      "maker_handler": "try_skinparam",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 16,
+      "class_name": "CommandSkinParamJaws",
+      "rust_pattern": "^((skinparam|skinparamlocked)[%s]+.*\ue100.*)+$",
+      "java_pattern": "^((skinparam|skinparamlocked)[%s]+.*\ue100.*)+$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 17,
+      "class_name": "CommandSkinParamMultilines",
+      "rust_pattern": "^skinparam[%s]*(?:[%s]+([\\w.]*(?:\\<\\<.*\\>\\>)?[\\w.]*))?[%s]*\\{$",
+      "java_pattern": "^skinparam[%s]*(?:[%s]+([\\w.]*(?:\\<\\<.*\\>\\>)?[\\w.]*))?[%s]*\\{$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": "self.try_skinparam(line),",
+      "maker_handler": "skinparam_block",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 18,
+      "class_name": "CommandSkin",
+      "rust_pattern": "^skin[%s]+([\\w.]+)$",
+      "java_pattern": "^skin[%s]+([\\w.]+)$",
+      "signature": 1086465,
+      "java_signature": 1086465,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 19,
+      "class_name": "CommandMinwidth",
+      "rust_pattern": "^minwidth[%s]+(\\d+)$",
+      "java_pattern": "^minwidth[%s]+(\\d+)$",
+      "signature": 18925089,
+      "java_signature": 18925089,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 20,
+      "class_name": "CommandPage",
+      "rust_pattern": "^page[%s]+(\\d+)[%s]*x*[%s]*(\\d+)$",
+      "java_pattern": "^page[%s]+(\\d+)[%s]*x*[%s]*(\\d+)$",
+      "signature": 131397,
+      "java_signature": 131397,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 21,
+      "class_name": "CommandRotate",
+      "rust_pattern": "^rotate$",
+      "java_pattern": "^rotate$",
+      "signature": 2687044,
+      "java_signature": 2687044,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 22,
+      "class_name": "CommandFactorySprite$1",
+      "rust_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)?|(color))\\])?[%s]*\\{$",
+      "java_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)?|(color))\\])?[%s]*\\{$",
+      "signature": 72057594041730113,
+      "java_signature": 72057594041730113,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 23,
+      "class_name": "CommandFactorySprite$2",
+      "rust_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)|(color))\\])?[%s]+([-_A-Za-z0-9]+)$",
+      "java_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)|(color))\\])?[%s]+([-_A-Za-z0-9]+)$",
+      "signature": 3802177,
+      "java_signature": 3802177,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 24,
+      "class_name": "CommandSpriteSvg",
+      "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*\\</svg\\>)$",
+      "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*\\</svg\\>)$",
+      "signature": 360639826101569,
+      "java_signature": 360639826101569,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 25,
+      "class_name": "CommandSpriteStdlib",
+      "rust_pattern": "^sprite[%s]+\\$([-%pLN_]+)[%s]*#([^#]+)#([^%s]+)$",
+      "java_pattern": "^sprite[%s]+\\$([-%pLN_]+)[%s]*#([^#]+)#([^%s]+)$",
+      "signature": 4298769473,
+      "java_signature": 4298769473,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 26,
+      "class_name": "CommandSpriteStdlibSvg",
+      "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]*:([^:]+):([^%s]+)$",
+      "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]*:([^:]+):([^%s]+)$",
+      "signature": 3802177,
+      "java_signature": 3802177,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 27,
+      "class_name": "CommandSpriteSvgMultiline",
+      "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*)$",
+      "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*)$",
+      "signature": 70368756368705,
+      "java_signature": 70368756368705,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 28,
+      "class_name": "CommandSpriteFile",
+      "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+([^<>%g#]*)$",
+      "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+([^<>%g#]*)$",
+      "signature": 3802177,
+      "java_signature": 3802177,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 29,
+      "class_name": "CommandStyleMultilinesCSS",
+      "rust_pattern": "^\\<style\\>$",
+      "java_pattern": "^\\<style\\>$",
+      "signature": 351843791151168,
+      "java_signature": 351843791151168,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 30,
+      "class_name": "CommandStyleImport",
+      "rust_pattern": "^\\<style[%s]*\\w+[%s]*=[%s]*[%q%g]?([^%q%g]*)[%q%g]?\\>$",
+      "java_pattern": "^\\<style[%s]*\\w+[%s]*=[%s]*[%q%g]?([^%q%g]*)[%q%g]?\\>$",
+      "signature": 492581279506498,
+      "java_signature": 492581279506498,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 31,
+      "class_name": "CommandScale",
+      "rust_pattern": "^scale[%s]+([0-9.]+)(?:[%s]*/[%s]*([0-9.]+))?$",
+      "java_pattern": "^scale[%s]+([0-9.]+)(?:[%s]*/[%s]*([0-9.]+))?$",
+      "signature": 1056853,
+      "java_signature": 1056853,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 32,
+      "class_name": "CommandScaleWidthAndHeight",
+      "rust_pattern": "^scale[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+      "java_pattern": "^scale[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+      "signature": 1056853,
+      "java_signature": 1056853,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 33,
+      "class_name": "CommandScaleWidthOrHeight",
+      "rust_pattern": "^scale[%s]+([0-9.]+)[%s]+(width|height)$",
+      "java_pattern": "^scale[%s]+([0-9.]+)[%s]+(width|height)$",
+      "signature": 3155541,
+      "java_signature": 3155541,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 34,
+      "class_name": "CommandScaleMaxWidth",
+      "rust_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+width$",
+      "java_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+width$",
+      "signature": 53503605,
+      "java_signature": 53503605,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 35,
+      "class_name": "CommandScaleMaxHeight",
+      "rust_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+height$",
+      "java_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+height$",
+      "signature": 36726613,
+      "java_signature": 36726613,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 36,
+      "class_name": "CommandScaleMaxWidthAndHeight",
+      "rust_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+      "java_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+      "signature": 34627669,
+      "java_signature": 34627669,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 37,
+      "class_name": "CommandHideEmptyDescription",
+      "rust_pattern": "^(hide|show)[%s]+empty[%s]+description$",
+      "java_pattern": "^(hide|show)[%s]+empty[%s]+description$",
+      "signature": 71026289,
+      "java_signature": 71026289,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 38,
+      "class_name": "CommandHideShowByVisibility",
+      "rust_pattern": "^(hide|show)[%s]+((?:public|private|protected|package)?(?:[,%s]+(?:public|private|protected|package))*)[%s]+(members?|attributes?|fields?|methods?)$",
+      "java_pattern": "^(hide|show)[%s]+((?:public|private|protected|package)?(?:[,%s]+(?:public|private|protected|package))*)[%s]+(members?|attributes?|fields?|methods?)$",
+      "signature": 577,
+      "java_signature": 577,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 39,
+      "class_name": "CommandHideShowByGender",
+      "rust_pattern": "^(hide|show)[%s]+(?:(class|object|interface|enum|annotation|dataclass|record|abstract|[%pLN_.]+|[%g][^%g]+[%g]|\\<\\<.*\\>\\>)[%s]+)*?(?:(empty)[%s]+)?(members?|attributes?|fields?|methods?|circles?|circled?|stereotypes?)$",
+      "java_pattern": "^(hide|show)[%s]+(?:(class|object|interface|enum|annotation|dataclass|record|abstract|[%pLN_.]+|[%g][^%g]+[%g]|\\<\\<.*\\>\\>)[%s]+)*?(?:(empty)[%s]+)?(members?|attributes?|fields?|methods?|circles?|circled?|stereotypes?)$",
+      "signature": 577,
+      "java_signature": 577,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_hide(line)\n            }",
+      "maker_handler": "try_hide",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 40,
+      "class_name": "CommandHideUnlinked",
+      "rust_pattern": "^(hide|show)[%s]+@?unlinked$",
+      "java_pattern": "^(hide|show)[%s]+@?unlinked$",
+      "signature": 4240993,
+      "java_signature": 4240993,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 41,
+      "class_name": "CommandActivate",
+      "rust_pattern": "^(activate|deactivate|destroy|create)[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?P<seq_color0>#\\w+)?(?:[%s]+(?P<seq_color1>#\\w+))?$",
+      "java_pattern": "^(activate|deactivate|destroy|create)[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(#\\w+)?(?:[%s]+(#\\w+))?$",
+      "signature": 2097217,
+      "java_signature": 2097217,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_activate_deactivate(line) || self.try_create_destroy(line)\n            }",
+      "maker_handler": "try_activate_deactivate / try_create_destroy",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 42,
+      "class_name": "CommandDeactivateShort",
+      "rust_pattern": "^deactivate[%s]*$",
+      "java_pattern": "^deactivate[%s]*$",
+      "signature": 10486900,
+      "java_signature": 10486900,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 43,
+      "class_name": "CommandParticipantA",
+      "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+(?:[%g]([^%g]+)[%g][%s]+as[%s]+)?([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+      "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+(?:[%g]([^%g]+)[%g][%s]+as[%s]+)?([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+      "signature": 1,
+      "java_signature": 1,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+      "maker_handler": "try_participant_decl / try_create_destroy",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 44,
+      "class_name": "CommandParticipantA2",
+      "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+      "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+      "signature": 1048581,
+      "java_signature": 1048581,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+      "maker_handler": "try_participant_decl",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 45,
+      "class_name": "CommandParticipantA3",
+      "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+      "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+      "signature": 1048581,
+      "java_signature": 1048581,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+      "maker_handler": "try_participant_decl",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 46,
+      "class_name": "CommandParticipantA4",
+      "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+      "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+      "signature": 1,
+      "java_signature": 1,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+      "maker_handler": "try_participant_decl",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 47,
+      "class_name": "CommandParticipantMultilines",
+      "rust_pattern": "^(participant)[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}[%s]*\\[$",
+      "java_pattern": "^(participant)[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*\\[$",
+      "signature": 2251799816471573,
+      "java_signature": 2251799816471573,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 48,
+      "class_name": "CommandArrow",
+      "rust_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:([%s][ox]|(?:[%s][ox]|\\(\\d+\\))?<<?_?|(?:[%s][ox])?//?|(?:[%s][ox])?\\\\\\\\?))?(?:(-+)(?:\\[(?P<seq_style0>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)|(-*)(?:\\[(?P<seq_style1>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))(?:(_?>>?(?:[ox][%s]|\\(\\d+\\))?|//?(?:[ox][%s])?|\\\\\\\\?(?:[ox][%s])?|[ox][%s]))?[%s]*(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])((?:\\s&\\s[%pLN_.@]+)*)(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:(\\+\\+|\\*\\*|!!|--|--\\+\\+|\\+\\+--)?)[%s]*(?:(?P<seq_color0>#\\w+)?)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+      "java_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:([%s][ox]|(?:[%s][ox]|\\(\\d+\\))?<<?_?|(?:[%s][ox])?//?|(?:[%s][ox])?\\\\\\\\?))?(?:(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)|(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))(?:(_?>>?(?:[ox][%s]|\\(\\d+\\))?|//?(?:[ox][%s])?|\\\\\\\\?(?:[ox][%s])?|[ox][%s]))?[%s]*(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])((?:\\s&\\s[%pLN_.@]+)*)(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:(\\+\\+|\\*\\*|!!|--|--\\+\\+|\\+\\+--)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": "self.try_message(line),",
+      "maker_handler": "try_message",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 49,
+      "class_name": "CommandExoArrowLeft",
+      "rust_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([?\\[\\]][ox]?)?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[(?P<seq_style0>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[(?P<seq_style1>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox][%s]+)?[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:([+*!-]+)?)[%s]*(?:(?P<seq_color0>#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+      "java_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([?\\[\\]][ox]?)?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox][%s]+)?[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:([+*!-]+)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": "self.try_external_message(line),",
+      "maker_handler": "try_external_message",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 50,
+      "class_name": "CommandExoArrowRight",
+      "rust_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*([%s]+[ox])?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[(?P<seq_style0>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[(?P<seq_style1>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox]?[?\\]\\[])?[%s]*(?:([+*!-]+)?)[%s]*(?:(?P<seq_color0>#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+      "java_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*([%s]+[ox])?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox]?[?\\]\\[])?[%s]*(?:([+*!-]+)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": "self.try_external_message(line),",
+      "maker_handler": "try_external_message",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 51,
+      "class_name": "FactorySequenceNoteCommand$2",
+      "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s])?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s])?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "signature": 17592188239937,
+      "java_signature": 17592188239937,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "try_note",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 52,
+      "class_name": "FactorySequenceNoteOverSeveralCommand$1",
+      "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "signature": 18691708780609,
+      "java_signature": 18691708780609,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "try_note",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 53,
+      "class_name": "FactorySequenceNoteAcrossCommand$1",
+      "rust_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "java_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "signature": 17592189812820,
+      "java_signature": 17592189812820,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "try_note",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 54,
+      "class_name": "CommandBoxStart",
+      "rust_pattern": "^box(?:(?:[%s]+[%g]([^%g]+)[%g]|[%s]+([^#]+)))?[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}$",
+      "java_pattern": "^box(?:(?:[%s]+[%g]([^%g]+)[%g]|[%s]+([^#]+)))?[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+      "signature": 33619976,
+      "java_signature": 33619976,
+      "support_flag": true,
+      "actual_handler": "self.try_box(line),",
+      "maker_handler": "try_box",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 55,
+      "class_name": "CommandBoxEnd",
+      "rust_pattern": "^end[%s]*box$",
+      "java_pattern": "^end[%s]*box$",
+      "signature": 33652840,
+      "java_signature": 33652840,
+      "support_flag": true,
+      "actual_handler": "self.try_box(line),",
+      "maker_handler": "try_box",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 56,
+      "class_name": "CommandGrouping",
+      "rust_pattern": "^(&[%s]*)?(?:(opt|alt|loop|par|par2|break|critical|group|partition)(?P<seq_color0>#\\w+)?|(else|end|also))(?:[%s]+(?P<seq_color1>#\\w+))?(?:[%s]+(.*?))?$",
+      "java_pattern": "^(&[%s]*)?(opt|alt|loop|par|par2|break|critical|else|end|also|group|partition)((?<!else)(?<!also)(?<!end)#\\w+)?(?:[%s]+(#\\w+))?(?:[%s]+(.*?))?$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": "self.try_group(line),",
+      "maker_handler": "try_group",
+      "reconstructed_raw_equal": false,
+      "signature_equal": true
+    },
+    {
+      "index": 57,
+      "class_name": "CommandActivate2",
+      "rust_pattern": "^([%pLN_.@]+)[%s]*(\\+\\+|--)[%s]*(?P<seq_color0>#\\w+)?$",
+      "java_pattern": "^([%pLN_.@]+)[%s]*(\\+\\+|--)[%s]*(#\\w+)?$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 58,
+      "class_name": "CommandReturn",
+      "rust_pattern": "^(&[%s]*)?[%s]*return[%s]*(?:(?P<seq_color0>#\\w+)[%s]+)?(.*)$",
+      "java_pattern": "^(&[%s]*)?[%s]*return[%s]*(?:(#\\w+)[%s]+)?(.*)$",
+      "signature": 6848576,
+      "java_signature": 6848576,
+      "support_flag": true,
+      "actual_handler": "self.try_return(line),",
+      "maker_handler": "try_return",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 59,
+      "class_name": "FactorySequenceNoteOnArrowCommand$1",
+      "rust_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "java_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+      "signature": 17592188239936,
+      "java_signature": 17592188239936,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "try_note",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 60,
+      "class_name": "FactorySequenceNoteCommand$1",
+      "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "signature": 2195521,
+      "java_signature": 2195521,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "note_buffer",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 61,
+      "class_name": "FactorySequenceNoteOverSeveralCommand$2",
+      "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "signature": 1099522736193,
+      "java_signature": 1099522736193,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "note_buffer",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 62,
+      "class_name": "FactorySequenceNoteOnArrowCommand$2",
+      "rust_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "java_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "signature": 2195520,
+      "java_signature": 2195520,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "note_buffer",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 63,
+      "class_name": "FactorySequenceNoteAcrossCommand$2",
+      "rust_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "java_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+      "signature": 3768404,
+      "java_signature": 3768404,
+      "support_flag": true,
+      "actual_handler": "self.try_note(line)?,",
+      "maker_handler": "note_buffer",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 64,
+      "class_name": "CommandNewpage",
+      "rust_pattern": "^@?newpage(?:(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*))?$",
+      "java_pattern": "^@?newpage(?:(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*))?$",
+      "signature": 16941380,
+      "java_signature": 16941380,
+      "support_flag": true,
+      "actual_handler": "self.try_newpage(line),",
+      "maker_handler": "try_newpage",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 65,
+      "class_name": "CommandIgnoreNewpage",
+      "rust_pattern": "^ignore[%s]*newpage$",
+      "java_pattern": "^ignore[%s]*newpage$",
+      "signature": 17532228,
+      "java_signature": 17532228,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 66,
+      "class_name": "CommandAutoNewpage",
+      "rust_pattern": "^autonewpage[%s]+(\\d+)$",
+      "java_pattern": "^autonewpage[%s]+(\\d+)$",
+      "signature": 23298373,
+      "java_signature": 23298373,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 67,
+      "class_name": "CommandDivider",
+      "rust_pattern": "^==[%s]*(.*)[%s]*==$",
+      "java_pattern": "^==[%s]*(.*)[%s]*==$",
+      "signature": 140737488355330,
+      "java_signature": 140737488355330,
+      "support_flag": true,
+      "actual_handler": "self.try_divider(line),",
+      "maker_handler": "try_divider",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 68,
+      "class_name": "CommandHSpace",
+      "rust_pattern": "^\\|\\|(\\d+)?\\|+$",
+      "java_pattern": "^\\|\\|(\\d+)?\\|+$",
+      "signature": 144115188075855872,
+      "java_signature": 144115188075855872,
+      "support_flag": true,
+      "actual_handler": "self.try_space(line),",
+      "maker_handler": "try_space",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 69,
+      "class_name": "CommandReferenceOverSeveral",
+      "rust_pattern": "^ref(?P<seq_color0>#\\w+)?[%s]+over[%s]+(([%pLN_.@]+|[%g][^%g]+[%g])([%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*:[%s]*(.*)$",
+      "java_pattern": "^ref(#\\w+)?[%s]+over[%s]+(([%pLN_.@]+|[%g][^%g]+[%g])([%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*:[%s]*(.*)$",
+      "signature": 17592195023041,
+      "java_signature": 17592195023041,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_ref(line)\n            }",
+      "maker_handler": "try_ref",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 70,
+      "class_name": "CommandReferenceMultilinesOverSeveral",
+      "rust_pattern": "^ref(?P<seq_color0>#\\w+)?[%s]+over[%s]+((?:[%pLN_.@]+|[%g][^%g]+[%g])(?:[%s]*,[%s]*(?:[%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*(?P<seq_color1>#\\w+)?$",
+      "java_pattern": "^ref(#\\w+)?[%s]+over[%s]+((?:[%pLN_.@]+|[%g][^%g]+[%g])(?:[%s]*,[%s]*(?:[%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*(#\\w+)?$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_ref(line)\n            }",
+      "maker_handler": "ref_buffer",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 71,
+      "class_name": "CommandAutonumber",
+      "rust_pattern": "^autonumber[%s]*(\\d(?:(?:[^%pLN%s]+|\\d+)*\\d)?)?(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?[%s]*$",
+      "java_pattern": "^autonumber[%s]*(\\d(?:(?:[^%pLN%s]+|\\d+)*\\d)?)?(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?[%s]*$",
+      "signature": 6930508,
+      "java_signature": 6930508,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_autonumber(line)\n            }",
+      "maker_handler": "try_autonumber",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 72,
+      "class_name": "CommandAutonumberStop",
+      "rust_pattern": "^autonumber[%s]+stop[%s]*$",
+      "java_pattern": "^autonumber[%s]+stop[%s]*$",
+      "signature": 8110157,
+      "java_signature": 8110157,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_autonumber(line)\n            }",
+      "maker_handler": "try_autonumber",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 73,
+      "class_name": "CommandAutonumberResume",
+      "rust_pattern": "^autonumber[%s]+resume[%s]*(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?$",
+      "java_pattern": "^autonumber[%s]+resume[%s]*(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?$",
+      "signature": 7979085,
+      "java_signature": 7979085,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_autonumber(line)\n            }",
+      "maker_handler": "try_autonumber",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 74,
+      "class_name": "CommandAutonumberIncrement",
+      "rust_pattern": "^autonumber[%s]+inc(?:[%s]+([A-Za-z]))?[%s]*$",
+      "java_pattern": "^autonumber[%s]+inc(?:[%s]+([A-Za-z]))?[%s]*$",
+      "signature": 6931549,
+      "java_signature": 6931549,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 75,
+      "class_name": "CommandAutoactivate",
+      "rust_pattern": "^autoactivate[%s]+(off|on)$",
+      "java_pattern": "^autoactivate[%s]+(off|on)$",
+      "signature": 14746709,
+      "java_signature": 14746709,
+      "support_flag": true,
+      "actual_handler": "self.try_autoactivate(line),",
+      "maker_handler": "try_autoactivate",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 76,
+      "class_name": "CommandFootbox",
+      "rust_pattern": "^(hide|show)?[%s]*footbox$",
+      "java_pattern": "^(hide|show)?[%s]*footbox$",
+      "signature": 35717256,
+      "java_signature": 35717256,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_hide(line)\n            }",
+      "maker_handler": "try_hide",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 77,
+      "class_name": "CommandDelay",
+      "rust_pattern": "^(?:\\.{3}|\u2026)(?:(.*)(?:\\.{3}|\u2026))?$",
+      "java_pattern": "^(?:\\.{3}|\u2026)(?:(.*)(?:\\.{3}|\u2026))?$",
+      "signature": 0,
+      "java_signature": 0,
+      "support_flag": true,
+      "actual_handler": "self.try_delay(line),",
+      "maker_handler": "try_delay",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 78,
+      "class_name": "CommandFootboxOld",
+      "rust_pattern": "^footbox[%s]*(on|off)?[%s]*$",
+      "java_pattern": "^footbox[%s]*(on|off)?[%s]*$",
+      "signature": 35717256,
+      "java_signature": 35717256,
+      "support_flag": true,
+      "actual_handler": "{\n                self.try_hide(line)\n            }",
+      "maker_handler": "try_hide",
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 79,
+      "class_name": "CommandUrl",
+      "rust_pattern": "^url[%s]*(?:of|for)?[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]+(?:is)?[%s]*(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\])$",
+      "java_pattern": "^url[%s]*(?:of|for)?[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]+(?:is)?[%s]*(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\])$",
+      "signature": 4726785,
+      "java_signature": 4726785,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    },
+    {
+      "index": 80,
+      "class_name": "CommandLinkAnchor",
+      "rust_pattern": "^\\{([%pLN_]+)\\}[%s]*\\<-\\>[%s]*\\{([%pLN_]+)\\}[%s]*(?::[%s]*(.*))?$",
+      "java_pattern": "^\\{([%pLN_]+)\\}[%s]*\\<-\\>[%s]*\\{([%pLN_]+)\\}[%s]*(?::[%s]*(.*))?$",
+      "signature": 354042744143874,
+      "java_signature": 354042744143874,
+      "support_flag": false,
+      "actual_handler": null,
+      "maker_handler": null,
+      "reconstructed_raw_equal": true,
+      "signature_equal": true
+    }
+  ],
+  "dispatch_arms": [
+    {
+      "classes": [
+        "CommandTitle",
+        "CommandCaption",
+        "CommandFooter",
+        "CommandHeader",
+        "CommandMultilinesLegend"
+      ],
+      "body": "self.try_meta(line),"
+    },
+    {
+      "classes": [
+        "CommandPragma"
+      ],
+      "body": "self.try_pragma(line),"
+    },
+    {
+      "classes": [
+        "CommandSkinParam",
+        "CommandSkinParamMultilines"
+      ],
+      "body": "self.try_skinparam(line),"
+    },
+    {
+      "classes": [
+        "CommandHideShowByGender",
+        "CommandFootbox",
+        "CommandFootboxOld"
+      ],
+      "body": "{\n                self.try_hide(line)\n            }"
+    },
+    {
+      "classes": [
+        "CommandActivate"
+      ],
+      "body": "{\n                self.try_activate_deactivate(line) || self.try_create_destroy(line)\n            }"
+    },
+    {
+      "classes": [
+        "CommandParticipantA",
+        "CommandParticipantA2",
+        "CommandParticipantA3",
+        "CommandParticipantA4"
+      ],
+      "body": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }"
+    },
+    {
+      "classes": [
+        "CommandArrow"
+      ],
+      "body": "self.try_message(line),"
+    },
+    {
+      "classes": [
+        "CommandExoArrowLeft",
+        "CommandExoArrowRight"
+      ],
+      "body": "self.try_external_message(line),"
+    },
+    {
+      "classes": [
+        "FactorySequenceNoteCommand$1",
+        "FactorySequenceNoteCommand$2",
+        "FactorySequenceNoteOverSeveralCommand$1",
+        "FactorySequenceNoteOverSeveralCommand$2",
+        "FactorySequenceNoteAcrossCommand$1",
+        "FactorySequenceNoteAcrossCommand$2",
+        "FactorySequenceNoteOnArrowCommand$1",
+        "FactorySequenceNoteOnArrowCommand$2"
+      ],
+      "body": "self.try_note(line)?,"
+    },
+    {
+      "classes": [
+        "CommandBoxStart",
+        "CommandBoxEnd"
+      ],
+      "body": "self.try_box(line),"
+    },
+    {
+      "classes": [
+        "CommandGrouping"
+      ],
+      "body": "self.try_group(line),"
+    },
+    {
+      "classes": [
+        "CommandReturn"
+      ],
+      "body": "self.try_return(line),"
+    },
+    {
+      "classes": [
+        "CommandNewpage"
+      ],
+      "body": "self.try_newpage(line),"
+    },
+    {
+      "classes": [
+        "CommandDivider"
+      ],
+      "body": "self.try_divider(line),"
+    },
+    {
+      "classes": [
+        "CommandHSpace"
+      ],
+      "body": "self.try_space(line),"
+    },
+    {
+      "classes": [
+        "CommandReferenceOverSeveral",
+        "CommandReferenceMultilinesOverSeveral"
+      ],
+      "body": "{\n                self.try_ref(line)\n            }"
+    },
+    {
+      "classes": [
+        "CommandAutonumber",
+        "CommandAutonumberStop",
+        "CommandAutonumberResume"
+      ],
+      "body": "{\n                self.try_autonumber(line)\n            }"
+    },
+    {
+      "classes": [
+        "CommandAutoactivate"
+      ],
+      "body": "self.try_autoactivate(line),"
+    },
+    {
+      "classes": [
+        "CommandDelay"
+      ],
+      "body": "self.try_delay(line),"
+    }
+  ],
+  "protected_changes": [],
+  "grouping_rewrite": "Only row 56 rewrites syntax: Java negative fixed lookbehinds exclude immediate #color after else/also/end; Rust uses a disjoint alternation for those three keywords. Both retain the separate spaced second color. Fresh group-primary/secondary and alt nesting test this."
+}

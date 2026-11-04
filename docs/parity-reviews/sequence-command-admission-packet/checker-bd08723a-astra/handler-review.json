@@ -1,0 +1,3476 @@
+[
+  {
+    "index": 0,
+    "class_name": "CommandTitle",
+    "rust_pattern": "^title(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "java_pattern": "^title(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "signature": 2106432,
+    "java_signature": 2106432,
+    "support_flag": true,
+    "actual_handler": "self.try_meta(line),",
+    "maker_handler": "try_meta",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_00_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_00_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandTitle variant is recognized but unimplemented at line 4: title: Walnut observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_00_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_00_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandTitle variant is recognized but unimplemented at line 5: TITLE:\u00a0Cypress observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_00_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_00_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@title: Walnut observatory@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "class_name": "CommandMainframe",
+    "rust_pattern": "^mainframe(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*)$",
+    "java_pattern": "^mainframe(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*)$",
+    "signature": 574660,
+    "java_signature": 574660,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_01_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_01_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMainframe is recognized but unimplemented at line 4: mainframe: Walnut observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_01_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_01_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMainframe is recognized but unimplemented at line 5: MAINFRAME:\u00a0Cypress observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_01_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_01_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@mainframe: Walnut observatory@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "class_name": "CommandCaption",
+    "rust_pattern": "^caption(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "java_pattern": "^caption(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "signature": 2327572,
+    "java_signature": 2327572,
+    "support_flag": true,
+    "actual_handler": "self.try_meta(line),",
+    "maker_handler": "try_meta",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_02_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_02_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandCaption variant is recognized but unimplemented at line 4: caption: Walnut observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_02_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_02_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandCaption variant is recognized but unimplemented at line 5: CAPTION:\u00a0Cypress observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_02_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_02_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@caption: Walnut observatory@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "class_name": "CommandMultilinesCaption",
+    "rust_pattern": "^caption$",
+    "java_pattern": "^caption$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_03_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_03_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesCaption is recognized but unimplemented at line 4: caption\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_03_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_03_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesCaption is recognized but unimplemented at line 5: CAPTION\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_03_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_03_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@caption@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 4,
+    "class_name": "CommandMultilinesTitle",
+    "rust_pattern": "^title$",
+    "java_pattern": "^title$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_04_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_04_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesTitle is recognized but unimplemented at line 4: title\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_04_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_04_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesTitle is recognized but unimplemented at line 5: TITLE\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_04_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_04_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@title@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 5,
+    "class_name": "CommandMultilinesLegend",
+    "rust_pattern": "^legend(?:[%s]+(top|bottom))?(?:[%s]+(left|right|center))?$",
+    "java_pattern": "^legend(?:[%s]+(top|bottom))?(?:[%s]+(left|right|center))?$",
+    "signature": 41312,
+    "java_signature": 41312,
+    "support_flag": true,
+    "actual_handler": "self.try_meta(line),",
+    "maker_handler": "try_meta",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_05_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_05_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_05_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_05_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesLegend variant is recognized but unimplemented at line 5: LEGEND\u00a0top right\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_05_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_05_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@legend top right@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 6,
+    "class_name": "CommandLegend",
+    "rust_pattern": "^legend(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "java_pattern": "^legend(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "signature": 41312,
+    "java_signature": 41312,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_06_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_06_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandLegend is recognized but unimplemented at line 4: legend: Walnut observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_06_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_06_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandLegend is recognized but unimplemented at line 5: LEGEND:\u00a0Cypress observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_06_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_06_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@legend: Walnut observatory@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 7,
+    "class_name": "CommandFooter",
+    "rust_pattern": "^(?:(left|right|center))?[%s]*footer(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "java_pattern": "^(?:(left|right|center))?[%s]*footer(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "signature": 2687168,
+    "java_signature": 2687168,
+    "support_flag": true,
+    "actual_handler": "self.try_meta(line),",
+    "maker_handler": "try_meta",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_07_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_07_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandFooter variant is recognized but unimplemented at line 4: left footer: Walnut observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_07_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_07_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandFooter variant is recognized but unimplemented at line 5: LEFT\u00a0footer: Cypress observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_07_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_07_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@left footer: Walnut observatory@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 8,
+    "class_name": "CommandMultilinesFooter",
+    "rust_pattern": "^(?:(left|right|center)?[%s]*)footer$",
+    "java_pattern": "^(?:(left|right|center)?[%s]*)footer$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_08_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_08_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesFooter is recognized but unimplemented at line 4: left footer\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_08_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_08_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesFooter is recognized but unimplemented at line 5: LEFT\u00a0footer\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_08_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_08_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@left footer@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 9,
+    "class_name": "CommandHeader",
+    "rust_pattern": "^(?:(left|right|center))?[%s]*header(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "java_pattern": "^(?:(left|right|center))?[%s]*header(?:[%s]*:[%s]*|[%s]+)(?:[%g](.*)[%g]|(.*[%pLN_.].*))$",
+    "signature": 524900,
+    "java_signature": 524900,
+    "support_flag": true,
+    "actual_handler": "self.try_meta(line),",
+    "maker_handler": "try_meta",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_09_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_09_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHeader variant is recognized but unimplemented at line 4: right header: Walnut observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_09_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_09_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHeader variant is recognized but unimplemented at line 5: RIGHT\u00a0header: Cypress observatory\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_09_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_09_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@right header: Walnut observatory@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 10,
+    "class_name": "CommandMultilinesHeader",
+    "rust_pattern": "^(?:(left|right|center)?[%s]*)header$",
+    "java_pattern": "^(?:(left|right|center)?[%s]*)header$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_10_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_10_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesHeader is recognized but unimplemented at line 4: right header\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_10_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_10_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMultilinesHeader is recognized but unimplemented at line 5: RIGHT\u00a0header\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_10_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_10_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@right header@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 11,
+    "class_name": "CommandNamespaceSeparator",
+    "rust_pattern": "^set[%s]+(?:separator|namespaceseparator)[%s]+(\\S+)$",
+    "java_pattern": "^set[%s]+(?:separator|namespaceseparator)[%s]+(\\S+)$",
+    "signature": 3145793,
+    "java_signature": 3145793,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_11_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_11_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandNamespaceSeparator is recognized but unimplemented at line 4: set separator ::\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_11_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_11_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandNamespaceSeparator is recognized but unimplemented at line 5: SET\u00a0separator ::\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_11_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_11_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@set separator ::@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 12,
+    "class_name": "CommandNope",
+    "rust_pattern": "^[%s]*$",
+    "java_pattern": "^[%s]*$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": null,
+    "maker_handler": "empty",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_12_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_12_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_12_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_12_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_12_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_12_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 13,
+    "class_name": "CommandPragma",
+    "rust_pattern": "^!pragma[%s]+([A-Za-z_][A-Za-z_0-9]*)(?:[%s]+(.*))?$",
+    "java_pattern": "^!pragma[%s]+([A-Za-z_][A-Za-z_0-9]*)(?:[%s]+(.*))?$",
+    "signature": 537542917,
+    "java_signature": 537542917,
+    "support_flag": true,
+    "actual_handler": "self.try_pragma(line),",
+    "maker_handler": "try_pragma",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_13_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_13_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_13_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_13_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_13_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_13_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@!pragma teoz true@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 14,
+    "class_name": "CommandAssumeTransparent",
+    "rust_pattern": "^!assume[%s]+transparent[%s]+(dark|light)$",
+    "java_pattern": "^!assume[%s]+transparent[%s]+(dark|light)$",
+    "signature": 544915525,
+    "java_signature": 544915525,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_14_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_14_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 4: !assume transparent dark\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_14_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_14_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 5: !assume\u00a0transparent dark\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_14_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_14_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@!assume transparent dark@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 15,
+    "class_name": "CommandSkinParam",
+    "rust_pattern": "^(skinparam|skinparamlocked)[%s]+([\\w.]*(?:\\<\\<[^<>]*\\>\\>)?[\\w.]*)[%s]+([^{}]*)$",
+    "java_pattern": "^(skinparam|skinparamlocked)[%s]+([\\w.]*(?:\\<\\<[^<>]*\\>\\>)?[\\w.]*)[%s]+([^{}]*)$",
+    "signature": 1758213,
+    "java_signature": 1758213,
+    "support_flag": true,
+    "actual_handler": "self.try_skinparam(line),",
+    "maker_handler": "try_skinparam",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_15_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_15_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_15_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_15_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSkinParam variant is recognized but unimplemented at line 5: SKINPARAM\u00a0SequenceArrowColor Olive\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_15_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_15_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@skinparam SequenceArrowColor Olive@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 16,
+    "class_name": "CommandSkinParamJaws",
+    "rust_pattern": "^((skinparam|skinparamlocked)[%s]+.*\ue100.*)+$",
+    "java_pattern": "^((skinparam|skinparamlocked)[%s]+.*\ue100.*)+$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_16_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_16_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSkinParamJaws is recognized but unimplemented at line 4: skinparam sequence {\ue100ArrowColor Olive\ue100}\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_16_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_16_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSkinParamJaws is recognized but unimplemented at line 5: SKINPARAM\u00a0sequence {\ue100ArrowColor Olive\ue100}\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_16_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_16_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@skinparam sequence {\\u{e100}ArrowColor Olive\\u{e100}}@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 17,
+    "class_name": "CommandSkinParamMultilines",
+    "rust_pattern": "^skinparam[%s]*(?:[%s]+([\\w.]*(?:\\<\\<.*\\>\\>)?[\\w.]*))?[%s]*\\{$",
+    "java_pattern": "^skinparam[%s]*(?:[%s]+([\\w.]*(?:\\<\\<.*\\>\\>)?[\\w.]*))?[%s]*\\{$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": "self.try_skinparam(line),",
+    "maker_handler": "skinparam_block",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_17_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_17_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_17_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_17_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSkinParamMultilines variant is recognized but unimplemented at line 5: SKINPARAM\u00a0sequence {\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_17_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_17_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@skinparam sequence {@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 18,
+    "class_name": "CommandSkin",
+    "rust_pattern": "^skin[%s]+([\\w.]+)$",
+    "java_pattern": "^skin[%s]+([\\w.]+)$",
+    "signature": 1086465,
+    "java_signature": 1086465,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_18_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_18_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSkin is recognized but unimplemented at line 4: skin rose\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_18_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_18_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSkin is recognized but unimplemented at line 5: SKIN\u00a0rose\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_18_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_18_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@skin rose@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 19,
+    "class_name": "CommandMinwidth",
+    "rust_pattern": "^minwidth[%s]+(\\d+)$",
+    "java_pattern": "^minwidth[%s]+(\\d+)$",
+    "signature": 18925089,
+    "java_signature": 18925089,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_19_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_19_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMinwidth is recognized but unimplemented at line 4: minwidth 170\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_19_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_19_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandMinwidth is recognized but unimplemented at line 5: MINWIDTH\u00a0170\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_19_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_19_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@minwidth 170@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 20,
+    "class_name": "CommandPage",
+    "rust_pattern": "^page[%s]+(\\d+)[%s]*x*[%s]*(\\d+)$",
+    "java_pattern": "^page[%s]+(\\d+)[%s]*x*[%s]*(\\d+)$",
+    "signature": 131397,
+    "java_signature": 131397,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_20_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_20_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandPage is recognized but unimplemented at line 4: page 2 x 1\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_20_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_20_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandPage is recognized but unimplemented at line 5: PAGE\u00a02 x 1\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_20_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_20_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@page 2 x 1@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 21,
+    "class_name": "CommandRotate",
+    "rust_pattern": "^rotate$",
+    "java_pattern": "^rotate$",
+    "signature": 2687044,
+    "java_signature": 2687044,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_21_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_21_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandRotate is recognized but unimplemented at line 4: rotate\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_21_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_21_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandRotate is recognized but unimplemented at line 5: ROTATE\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_21_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_21_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@rotate@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 22,
+    "class_name": "CommandFactorySprite$1",
+    "rust_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)?|(color))\\])?[%s]*\\{$",
+    "java_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)?|(color))\\])?[%s]*\\{$",
+    "signature": 72057594041730113,
+    "java_signature": 72057594041730113,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_22_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_22_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 5: SPRITE\u00a0$cypress [2x2/16] {\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_22_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@sprite $walnut [2x2/16] {@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 23,
+    "class_name": "CommandFactorySprite$2",
+    "rust_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)|(color))\\])?[%s]+([-_A-Za-z0-9]+)$",
+    "java_pattern": "^sprite[%s]+\\$?([-.%pLN_]+)[%s]*(?:\\[(\\d+)x(\\d+)/(?:(\\d+)(z)|(color))\\])?[%s]+([-_A-Za-z0-9]+)$",
+    "signature": 3802177,
+    "java_signature": 3802177,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_23_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_plain.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_23_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_unusual.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandFactorySprite$2 is recognized but unimplemented at line 5: SPRITE\u00a0$cypress [1x1/16z] 0\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_23_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@sprite $walnut [1x1/16z] 0@@\"\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_s_sprite_inline",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_inline.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_s_sprite_inline_colour",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_inline_colour.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 24,
+    "class_name": "CommandSpriteSvg",
+    "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*\\</svg\\>)$",
+    "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*\\</svg\\>)$",
+    "signature": 360639826101569,
+    "java_signature": 360639826101569,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_24_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_24_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 5: SPRITE\u00a0$cypress <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2\" height=\"2\"><rect width=\"2\" height=\"2\"/></svg>\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_24_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@sprite $walnut <svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"2\\\" height=\\\"2\\\"><rect width=\\\"2\\\" height=\\\"2\\\"/></svg>@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 25,
+    "class_name": "CommandSpriteStdlib",
+    "rust_pattern": "^sprite[%s]+\\$([-%pLN_]+)[%s]*#([^#]+)#([^%s]+)$",
+    "java_pattern": "^sprite[%s]+\\$([-%pLN_]+)[%s]*#([^#]+)#([^%s]+)$",
+    "signature": 4298769473,
+    "java_signature": 4298769473,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_25_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_plain.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_25_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_unusual.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSpriteStdlib is recognized but unimplemented at line 5: SPRITE\u00a0$cypress #archimate#application\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_25_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@sprite $walnut #archimate#application@@\"\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_s_sprite_lib",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_lib.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      }
+    ]
+  },
+  {
+    "index": 26,
+    "class_name": "CommandSpriteStdlibSvg",
+    "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]*:([^:]+):([^%s]+)$",
+    "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]*:([^:]+):([^%s]+)$",
+    "signature": 3802177,
+    "java_signature": 3802177,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_26_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_26_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSpriteStdlibSvg is recognized but unimplemented at line 5: SPRITE\u00a0$cypress :archimate:application\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_26_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@sprite $walnut :archimate:application@@\"\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_s_sprite_lib_svg",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_lib_svg.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      }
+    ]
+  },
+  {
+    "index": 27,
+    "class_name": "CommandSpriteSvgMultiline",
+    "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*)$",
+    "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+(\\<svg\\b.*)$",
+    "signature": 70368756368705,
+    "java_signature": 70368756368705,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_27_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"<rect width=\\\"2\\\" height=\\\"2\\\"/>\"\n",
+        "whole_output": 3
+      },
+      {
+        "name": "bd087_reg_27_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: SPRITE\u00a0$cypress <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2\" height=\"2\">\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_27_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@sprite $walnut <svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"2\\\" height=\\\"2\\\">@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 28,
+    "class_name": "CommandSpriteFile",
+    "rust_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+([^<>%g#]*)$",
+    "java_pattern": "^sprite[%s]+\\$?([-%pLN_]+)[%s]+([^<>%g#]*)$",
+    "signature": 3802177,
+    "java_signature": 3802177,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_28_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_plain.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_28_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_unusual.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandSpriteFile is recognized but unimplemented at line 5: SPRITE\u00a0$cypress cypress_missing.png\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_28_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@sprite $walnut walnut_missing.png@@\"\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_s_sprite_internal",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_internal.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_s_sprite_internal_other",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_internal_other.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      }
+    ]
+  },
+  {
+    "index": 29,
+    "class_name": "CommandStyleMultilinesCSS",
+    "rust_pattern": "^\\<style\\>$",
+    "java_pattern": "^\\<style\\>$",
+    "signature": 351843791151168,
+    "java_signature": 351843791151168,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_29_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_29_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_29_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_29_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_29_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_29_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@<style>@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 30,
+    "class_name": "CommandStyleImport",
+    "rust_pattern": "^\\<style[%s]*\\w+[%s]*=[%s]*[%q%g]?([^%q%g]*)[%q%g]?\\>$",
+    "java_pattern": "^\\<style[%s]*\\w+[%s]*=[%s]*[%q%g]?([^%q%g]*)[%q%g]?\\>$",
+    "signature": 492581279506498,
+    "java_signature": 492581279506498,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_30_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_30_plain.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandStyleImport is recognized but unimplemented at line 4: <style file=walnut_missing.css>\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_30_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_30_unusual.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandStyleImport is recognized but unimplemented at line 5: <style\u00a0file=cypress_missing.css>\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_reg_30_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_30_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@<style file=walnut_missing.css>@@\"\n",
+        "whole_output": 2
+      },
+      {
+        "name": "bd087_s_style_internal",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_style_internal.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandStyleImport is recognized but unimplemented at line 4: <style file=plantuml.skin>\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_s_style_internal_quoted",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_style_internal_quoted.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandStyleImport is recognized but unimplemented at line 4: <style file='rose.skin'>\n",
+        "whole_output": 1
+      }
+    ]
+  },
+  {
+    "index": 31,
+    "class_name": "CommandScale",
+    "rust_pattern": "^scale[%s]+([0-9.]+)(?:[%s]*/[%s]*([0-9.]+))?$",
+    "java_pattern": "^scale[%s]+([0-9.]+)(?:[%s]*/[%s]*([0-9.]+))?$",
+    "signature": 1056853,
+    "java_signature": 1056853,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_31_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_31_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScale is recognized but unimplemented at line 4: scale 1/2\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_31_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_31_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScale is recognized but unimplemented at line 5: SCALE\u00a01/2\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_31_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_31_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@scale 1/2@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 32,
+    "class_name": "CommandScaleWidthAndHeight",
+    "rust_pattern": "^scale[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+    "java_pattern": "^scale[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+    "signature": 1056853,
+    "java_signature": 1056853,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_32_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_32_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleWidthAndHeight is recognized but unimplemented at line 4: scale 270*180\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_32_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_32_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleWidthAndHeight is recognized but unimplemented at line 5: SCALE\u00a0270*180\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_32_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_32_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@scale 270*180@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 33,
+    "class_name": "CommandScaleWidthOrHeight",
+    "rust_pattern": "^scale[%s]+([0-9.]+)[%s]+(width|height)$",
+    "java_pattern": "^scale[%s]+([0-9.]+)[%s]+(width|height)$",
+    "signature": 3155541,
+    "java_signature": 3155541,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_33_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_33_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleWidthOrHeight is recognized but unimplemented at line 4: scale 270 width\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_33_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_33_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleWidthOrHeight is recognized but unimplemented at line 5: SCALE\u00a0270 width\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_33_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_33_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@scale 270 width@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 34,
+    "class_name": "CommandScaleMaxWidth",
+    "rust_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+width$",
+    "java_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+width$",
+    "signature": 53503605,
+    "java_signature": 53503605,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_34_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_34_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleMaxWidth is recognized but unimplemented at line 4: scale max 270 width\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_34_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_34_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleMaxWidth is recognized but unimplemented at line 5: SCALE\u00a0max 270 width\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_34_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_34_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@scale max 270 width@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 35,
+    "class_name": "CommandScaleMaxHeight",
+    "rust_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+height$",
+    "java_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]+height$",
+    "signature": 36726613,
+    "java_signature": 36726613,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_35_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_35_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleMaxHeight is recognized but unimplemented at line 4: scale max 180 height\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_35_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_35_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleMaxHeight is recognized but unimplemented at line 5: SCALE\u00a0max 180 height\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_35_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_35_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@scale max 180 height@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 36,
+    "class_name": "CommandScaleMaxWidthAndHeight",
+    "rust_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+    "java_pattern": "^scale[%s]+max[%s]+([0-9.]+)[%s]*[*x][%s]*([0-9.]+)$",
+    "signature": 34627669,
+    "java_signature": 34627669,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_36_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_36_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleMaxWidthAndHeight is recognized but unimplemented at line 4: scale max 270*180\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_36_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_36_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandScaleMaxWidthAndHeight is recognized but unimplemented at line 5: SCALE\u00a0max 270*180\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_36_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_36_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@scale max 270*180@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 37,
+    "class_name": "CommandHideEmptyDescription",
+    "rust_pattern": "^(hide|show)[%s]+empty[%s]+description$",
+    "java_pattern": "^(hide|show)[%s]+empty[%s]+description$",
+    "signature": 71026289,
+    "java_signature": 71026289,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_37_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_37_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHideEmptyDescription is recognized but unimplemented at line 4: hide empty description\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_37_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_37_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHideEmptyDescription is recognized but unimplemented at line 5: HIDE\u00a0empty description\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_37_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_37_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@hide empty description@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 38,
+    "class_name": "CommandHideShowByVisibility",
+    "rust_pattern": "^(hide|show)[%s]+((?:public|private|protected|package)?(?:[,%s]+(?:public|private|protected|package))*)[%s]+(members?|attributes?|fields?|methods?)$",
+    "java_pattern": "^(hide|show)[%s]+((?:public|private|protected|package)?(?:[,%s]+(?:public|private|protected|package))*)[%s]+(members?|attributes?|fields?|methods?)$",
+    "signature": 577,
+    "java_signature": 577,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_38_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_38_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHideShowByVisibility is recognized but unimplemented at line 4: hide public methods\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_38_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_38_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHideShowByVisibility is recognized but unimplemented at line 5: HIDE\u00a0public methods\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_38_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_38_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@hide public methods@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 39,
+    "class_name": "CommandHideShowByGender",
+    "rust_pattern": "^(hide|show)[%s]+(?:(class|object|interface|enum|annotation|dataclass|record|abstract|[%pLN_.]+|[%g][^%g]+[%g]|\\<\\<.*\\>\\>)[%s]+)*?(?:(empty)[%s]+)?(members?|attributes?|fields?|methods?|circles?|circled?|stereotypes?)$",
+    "java_pattern": "^(hide|show)[%s]+(?:(class|object|interface|enum|annotation|dataclass|record|abstract|[%pLN_.]+|[%g][^%g]+[%g]|\\<\\<.*\\>\\>)[%s]+)*?(?:(empty)[%s]+)?(members?|attributes?|fields?|methods?|circles?|circled?|stereotypes?)$",
+    "signature": 577,
+    "java_signature": 577,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_hide(line)\n            }",
+    "maker_handler": "try_hide",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_39_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_39_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_39_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_39_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_39_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_39_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@hide stereotype@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 40,
+    "class_name": "CommandHideUnlinked",
+    "rust_pattern": "^(hide|show)[%s]+@?unlinked$",
+    "java_pattern": "^(hide|show)[%s]+@?unlinked$",
+    "signature": 4240993,
+    "java_signature": 4240993,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_40_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_40_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHideUnlinked is recognized but unimplemented at line 4: hide unlinked\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_40_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_40_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandHideUnlinked is recognized but unimplemented at line 5: HIDE\u00a0unlinked\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_40_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_40_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@hide unlinked@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 41,
+    "class_name": "CommandActivate",
+    "rust_pattern": "^(activate|deactivate|destroy|create)[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?P<seq_color0>#\\w+)?(?:[%s]+(?P<seq_color1>#\\w+))?$",
+    "java_pattern": "^(activate|deactivate|destroy|create)[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(#\\w+)?(?:[%s]+(#\\w+))?$",
+    "signature": 2097217,
+    "java_signature": 2097217,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_activate_deactivate(line) || self.try_create_destroy(line)\n            }",
+    "maker_handler": "try_activate_deactivate / try_create_destroy",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_41_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_41_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_41_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_41_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 5: ACTIVATE\u00a0Juniper #Wheat\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_41_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_41_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@activate Juniper #Wheat@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 42,
+    "class_name": "CommandDeactivateShort",
+    "rust_pattern": "^deactivate[%s]*$",
+    "java_pattern": "^deactivate[%s]*$",
+    "signature": 10486900,
+    "java_signature": 10486900,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_42_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_42_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandDeactivateShort is recognized but unimplemented at line 5: deactivate\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_42_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_42_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 5: ACTIVATE\u00a0Juniper\nwarning: sequence command CommandDeactivateShort is recognized but unimplemented at line 6: deactivate\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_42_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_42_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@activate Juniper@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 43,
+    "class_name": "CommandParticipantA",
+    "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+(?:[%g]([^%g]+)[%g][%s]+as[%s]+)?([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+    "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+(?:[%g]([^%g]+)[%g][%s]+as[%s]+)?([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+    "signature": 1,
+    "java_signature": 1,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+    "maker_handler": "try_participant_decl / try_create_destroy",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_43_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_43_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandParticipantA variant is recognized but unimplemented at line 5: PARTICIPANT\u00a0\"Cypress node\" as Cypress #Wheat\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_43_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@participant \\\"Walnut node\\\" as Walnut #Wheat@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 44,
+    "class_name": "CommandParticipantA2",
+    "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+    "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+    "signature": 1048581,
+    "java_signature": 1048581,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+    "maker_handler": "try_participant_decl",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_44_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_44_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandParticipantA2 variant is recognized but unimplemented at line 5: PARTICIPANT\u00a0Cypress as \"Cypress node\" #Wheat\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_44_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@participant Walnut as \\\"Walnut node\\\" #Wheat@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 45,
+    "class_name": "CommandParticipantA3",
+    "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+    "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+([%pLN_.@]+)[%s]+as[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+    "signature": 1048581,
+    "java_signature": 1048581,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+    "maker_handler": "try_participant_decl",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_45_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_45_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandParticipantA3 variant is recognized but unimplemented at line 5: PARTICIPANT\u00a0Cypress as Hazel #Wheat\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_45_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@participant Walnut as Hazel #Wheat@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 46,
+    "class_name": "CommandParticipantA4",
+    "rust_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}$",
+    "java_pattern": "^(?:(participant|actor|create|boundary|control|entity|queue|database|collections)|create[%s](participant|actor|boundary|control|entity|queue|database|collections))[%s]+[%g]([^%g]+)[%g][%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+    "signature": 1,
+    "java_signature": 1,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_create_destroy(line) || self.try_participant_decl(line)\n            }",
+    "maker_handler": "try_participant_decl",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_46_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_46_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandParticipantA4 variant is recognized but unimplemented at line 5: PARTICIPANT\u00a0\"Cypress node\" #Wheat\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_46_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@participant \\\"Walnut node\\\" #Wheat@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 47,
+    "class_name": "CommandParticipantMultilines",
+    "rust_pattern": "^(participant)[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*{COLOR}[%s]*\\[$",
+    "java_pattern": "^(participant)[%s]+([%pLN_.@]+)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:order[%s]+(-?\\d{1,7}))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*\\[$",
+    "signature": 2251799816471573,
+    "java_signature": 2251799816471573,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_47_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_47_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandParticipantMultilines is recognized but unimplemented at line 4: participant Walnut [\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_47_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_47_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandParticipantMultilines is recognized but unimplemented at line 5: PARTICIPANT\u00a0Cypress [\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_47_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_47_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@participant Walnut [@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 48,
+    "class_name": "CommandArrow",
+    "rust_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:([%s][ox]|(?:[%s][ox]|\\(\\d+\\))?<<?_?|(?:[%s][ox])?//?|(?:[%s][ox])?\\\\\\\\?))?(?:(-+)(?:\\[(?P<seq_style0>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)|(-*)(?:\\[(?P<seq_style1>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))(?:(_?>>?(?:[ox][%s]|\\(\\d+\\))?|//?(?:[ox][%s])?|\\\\\\\\?(?:[ox][%s])?|[ox][%s]))?[%s]*(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])((?:\\s&\\s[%pLN_.@]+)*)(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:(\\+\\+|\\*\\*|!!|--|--\\+\\+|\\+\\+--)?)[%s]*(?:(?P<seq_color0>#\\w+)?)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+    "java_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:([%s][ox]|(?:[%s][ox]|\\(\\d+\\))?<<?_?|(?:[%s][ox])?//?|(?:[%s][ox])?\\\\\\\\?))?(?:(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)|(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))(?:(_?>>?(?:[ox][%s]|\\(\\d+\\))?|//?(?:[ox][%s])?|\\\\\\\\?(?:[ox][%s])?|[ox][%s]))?[%s]*(([%pLN_.@]+)|[%g]([^%g]+)[%g]|[%g]([^%g]+)[%g][%s]*as[%s]+([%pLN_.@]+)|([%pLN_.@]+)[%s]+as[%s]*[%g]([^%g]+)[%g])((?:\\s&\\s[%pLN_.@]+)*)(\\{([%pLN_]+)\\}[%s]+)?[%s]*(?:(\\+\\+|\\*\\*|!!|--|--\\+\\+|\\+\\+--)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": "self.try_message(line),",
+    "maker_handler": "try_message",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_48_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_48_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_48_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_48_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_48_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_48_near_miss.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 4: @Juniper -> Kestrel: additional@@\n",
+        "whole_output": 1
+      }
+    ]
+  },
+  {
+    "index": 49,
+    "class_name": "CommandExoArrowLeft",
+    "rust_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([?\\[\\]][ox]?)?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[(?P<seq_style0>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[(?P<seq_style1>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox][%s]+)?[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:([+*!-]+)?)[%s]*(?:(?P<seq_color0>#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+    "java_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([?\\[\\]][ox]?)?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox][%s]+)?[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:([+*!-]+)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": "self.try_external_message(line),",
+    "maker_handler": "try_external_message",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_49_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_49_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_49_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_49_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_49_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_49_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@[-> Kestrel: inbound@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 50,
+    "class_name": "CommandExoArrowRight",
+    "rust_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*([%s]+[ox])?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[(?P<seq_style0>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[(?P<seq_style1>(?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox]?[?\\]\\[])?[%s]*(?:([+*!-]+)?)[%s]*(?:(?P<seq_color0>#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+    "java_pattern": "^(&[%s]*)?(\\{([%pLN_]+)\\}[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*([%s]+[ox])?(?:(<<?|//?|\\\\\\\\?)?(-+)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-*)(>>?|//?|\\\\\\\\?)|(<<?|//?|\\\\\\\\?)(-*)(?:\\[((?:#\\w+|dotted|dashed|plain|bold|hidden|norank|single|node|thickness=\\d+)(?:,#\\w+|,dotted|,dashed|,plain|,bold|,hidden|,norank|,single|,node|,thickness=\\d+)*)\\])?(-+))([ox]?[?\\]\\[])?[%s]*(?:([+*!-]+)?)[%s]*(?:(#\\w+)?)[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*(?::[%s]*(.*))?$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": "self.try_external_message(line),",
+    "maker_handler": "try_external_message",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_50_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_50_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_50_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_50_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_50_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_50_near_miss.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 4: @Juniper ->]: outbound@@\n",
+        "whole_output": 1
+      }
+    ]
+  },
+  {
+    "index": 51,
+    "class_name": "FactorySequenceNoteCommand$2",
+    "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s])?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s])?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "signature": 17592188239937,
+    "java_signature": 17592188239937,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "try_note",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_51_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_51_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_51_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_51_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 variant is recognized but unimplemented at line 5: NOTE\u00a0left of Juniper: cypress\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_51_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_51_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note left of Juniper: walnut@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 52,
+    "class_name": "FactorySequenceNoteOverSeveralCommand$1",
+    "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "signature": 18691708780609,
+    "java_signature": 18691708780609,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "try_note",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_52_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_52_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_52_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_52_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteOverSeveralCommand$1 variant is recognized but unimplemented at line 5: NOTE\u00a0over Juniper,Kestrel: cypress\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_52_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_52_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note over Juniper,Kestrel: walnut@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 53,
+    "class_name": "FactorySequenceNoteAcrossCommand$1",
+    "rust_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "java_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "signature": 17592189812820,
+    "java_signature": 17592189812820,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "try_note",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_53_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_53_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_53_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_53_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteAcrossCommand$1 variant is recognized but unimplemented at line 5: NOTE\u00a0across: cypress\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_53_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_53_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note across: walnut@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 54,
+    "class_name": "CommandBoxStart",
+    "rust_pattern": "^box(?:(?:[%s]+[%g]([^%g]+)[%g]|[%s]+([^#]+)))?[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}$",
+    "java_pattern": "^box(?:(?:[%s]+[%g]([^%g]+)[%g]|[%s]+([^#]+)))?[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?$",
+    "signature": 33619976,
+    "java_signature": 33619976,
+    "support_flag": true,
+    "actual_handler": "self.try_box(line),",
+    "maker_handler": "try_box",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_54_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_54_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_54_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_54_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandBoxStart variant is recognized but unimplemented at line 5: BOX\u00a0\"Cypress annex\" #Wheat\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_54_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_54_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@box \\\"Walnut annex\\\" #Wheat@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 55,
+    "class_name": "CommandBoxEnd",
+    "rust_pattern": "^end[%s]*box$",
+    "java_pattern": "^end[%s]*box$",
+    "signature": 33652840,
+    "java_signature": 33652840,
+    "support_flag": true,
+    "actual_handler": "self.try_box(line),",
+    "maker_handler": "try_box",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_55_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_55_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_55_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_55_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandBoxStart variant is recognized but unimplemented at line 5: BOX\u00a0\"Cypress annex\"\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_55_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_55_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@box \\\"Walnut annex\\\"@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 56,
+    "class_name": "CommandGrouping",
+    "rust_pattern": "^(&[%s]*)?(?:(opt|alt|loop|par|par2|break|critical|group|partition)(?P<seq_color0>#\\w+)?|(else|end|also))(?:[%s]+(?P<seq_color1>#\\w+))?(?:[%s]+(.*?))?$",
+    "java_pattern": "^(&[%s]*)?(opt|alt|loop|par|par2|break|critical|else|end|also|group|partition)((?<!else)(?<!also)(?<!end)#\\w+)?(?:[%s]+(#\\w+))?(?:[%s]+(.*?))?$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": "self.try_group(line),",
+    "maker_handler": "try_group",
+    "reconstructed_raw_equal": false,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_56_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_56_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_56_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_56_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandGrouping variant is recognized but unimplemented at line 5: ALT\u00a0cypress\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_56_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_56_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@alt walnut@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 57,
+    "class_name": "CommandActivate2",
+    "rust_pattern": "^([%pLN_.@]+)[%s]*(\\+\\+|--)[%s]*(?P<seq_color0>#\\w+)?$",
+    "java_pattern": "^([%pLN_.@]+)[%s]*(\\+\\+|--)[%s]*(#\\w+)?$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_57_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_57_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 4: Juniper ++ #Wheat\nwarning: sequence command CommandActivate2 is recognized but unimplemented at line 5: Juniper --\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_57_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_57_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 5: JUNIPER\u00a0++ #Wheat\nwarning: sequence command CommandActivate2 is recognized but unimplemented at line 6: Juniper --\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_57_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_57_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@Juniper ++ #Wheat@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 58,
+    "class_name": "CommandReturn",
+    "rust_pattern": "^(&[%s]*)?[%s]*return[%s]*(?:(?P<seq_color0>#\\w+)[%s]+)?(.*)$",
+    "java_pattern": "^(&[%s]*)?[%s]*return[%s]*(?:(#\\w+)[%s]+)?(.*)$",
+    "signature": 6848576,
+    "java_signature": 6848576,
+    "support_flag": true,
+    "actual_handler": "self.try_return(line),",
+    "maker_handler": "try_return",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_58_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_58_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_58_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_58_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 5: ACTIVATE\u00a0Kestrel\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_58_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_58_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@activate Kestrel@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 59,
+    "class_name": "FactorySequenceNoteOnArrowCommand$1",
+    "rust_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "java_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?[%s]*:[%s]*(.*)$",
+    "signature": 17592188239936,
+    "java_signature": 17592188239936,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "try_note",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_59_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_59_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_59_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_59_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteOnArrowCommand$1 variant is recognized but unimplemented at line 5: NOTE\u00a0right: cypress\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_59_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_59_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note right: walnut@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 60,
+    "class_name": "FactorySequenceNoteCommand$1",
+    "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|over)[%s]+(?:of[%s]+)?([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "signature": 2195521,
+    "java_signature": 2195521,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "note_buffer",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_60_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_60_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_60_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_60_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteCommand$1 variant is recognized but unimplemented at line 5: NOTE\u00a0over Juniper\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_60_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_60_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note over Juniper@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 61,
+    "class_name": "FactorySequenceNoteOverSeveralCommand$2",
+    "rust_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "java_pattern": "^(&[%s]*)?(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*over[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g])[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "signature": 1099522736193,
+    "java_signature": 1099522736193,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "note_buffer",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_61_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_61_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_61_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_61_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteOverSeveralCommand$2 variant is recognized but unimplemented at line 5: NOTE\u00a0over Juniper,Kestrel\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_61_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_61_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note over Juniper,Kestrel@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 62,
+    "class_name": "FactorySequenceNoteOnArrowCommand$2",
+    "rust_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "java_pattern": "^[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(right|left|bottom|top)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "signature": 2195520,
+    "java_signature": 2195520,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "note_buffer",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_62_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_62_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteOnArrowCommand$2 variant is recognized but unimplemented at line 4: note bottom\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_62_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_62_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteOnArrowCommand$2 variant is recognized but unimplemented at line 5: NOTE\u00a0bottom\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_62_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_62_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note bottom@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 63,
+    "class_name": "FactorySequenceNoteAcrossCommand$2",
+    "rust_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*{COLOR}[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "java_pattern": "^(/)?[%s]*(note|hnote|rnote)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*(accross|across)[%s]*(?:(\\<\\<.+?\\>\\>))?[%s]*((?:#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+)|(?:#\\w+[-\\\\|/]?\\w+))?[%s]*(?:(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]))?$",
+    "signature": 3768404,
+    "java_signature": 3768404,
+    "support_flag": true,
+    "actual_handler": "self.try_note(line)?,",
+    "maker_handler": "note_buffer",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_63_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_63_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_63_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_63_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command FactorySequenceNoteAcrossCommand$2 variant is recognized but unimplemented at line 5: NOTE\u00a0across\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_63_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_63_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@note across@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 64,
+    "class_name": "CommandNewpage",
+    "rust_pattern": "^@?newpage(?:(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*))?$",
+    "java_pattern": "^@?newpage(?:(?:[%s]*:[%s]*|[%s]+)(.*[%pLN_.].*))?$",
+    "signature": 16941380,
+    "java_signature": 16941380,
+    "support_flag": true,
+    "actual_handler": "self.try_newpage(line),",
+    "maker_handler": "try_newpage",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_64_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_64_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 4: newpage: Walnut\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_64_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_64_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 5: NEWPAGE:\u00a0Cypress\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_64_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_64_near_miss.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 4: @newpage: Walnut@@\n",
+        "whole_output": 1
+      }
+    ]
+  },
+  {
+    "index": 65,
+    "class_name": "CommandIgnoreNewpage",
+    "rust_pattern": "^ignore[%s]*newpage$",
+    "java_pattern": "^ignore[%s]*newpage$",
+    "signature": 17532228,
+    "java_signature": 17532228,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_65_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_65_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandIgnoreNewpage is recognized but unimplemented at line 4: ignore newpage\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_65_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_65_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandIgnoreNewpage is recognized but unimplemented at line 5: IGNORE\u00a0newpage\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_65_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_65_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@ignore newpage@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 66,
+    "class_name": "CommandAutoNewpage",
+    "rust_pattern": "^autonewpage[%s]+(\\d+)$",
+    "java_pattern": "^autonewpage[%s]+(\\d+)$",
+    "signature": 23298373,
+    "java_signature": 23298373,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_66_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_66_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutoNewpage is recognized but unimplemented at line 4: autonewpage 300\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_66_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_66_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutoNewpage is recognized but unimplemented at line 5: AUTONEWPAGE\u00a0300\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_66_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_66_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@autonewpage 300@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 67,
+    "class_name": "CommandDivider",
+    "rust_pattern": "^==[%s]*(.*)[%s]*==$",
+    "java_pattern": "^==[%s]*(.*)[%s]*==$",
+    "signature": 140737488355330,
+    "java_signature": 140737488355330,
+    "support_flag": true,
+    "actual_handler": "self.try_divider(line),",
+    "maker_handler": "try_divider",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_67_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_67_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_67_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_67_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_67_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_67_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@== Walnut ==@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 68,
+    "class_name": "CommandHSpace",
+    "rust_pattern": "^\\|\\|(\\d+)?\\|+$",
+    "java_pattern": "^\\|\\|(\\d+)?\\|+$",
+    "signature": 144115188075855872,
+    "java_signature": 144115188075855872,
+    "support_flag": true,
+    "actual_handler": "self.try_space(line),",
+    "maker_handler": "try_space",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_68_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_68_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_68_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_68_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_68_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_68_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@||17||@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 69,
+    "class_name": "CommandReferenceOverSeveral",
+    "rust_pattern": "^ref(?P<seq_color0>#\\w+)?[%s]+over[%s]+(([%pLN_.@]+|[%g][^%g]+[%g])([%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*:[%s]*(.*)$",
+    "java_pattern": "^ref(#\\w+)?[%s]+over[%s]+(([%pLN_.@]+|[%g][^%g]+[%g])([%s]*,[%s]*([%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*:[%s]*(.*)$",
+    "signature": 17592195023041,
+    "java_signature": 17592195023041,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_ref(line)\n            }",
+    "maker_handler": "try_ref",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_69_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_69_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_69_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_69_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandReferenceOverSeveral variant is recognized but unimplemented at line 5: REF\u00a0over Juniper,Kestrel: Cypress\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_69_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_69_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@ref over Juniper,Kestrel: Walnut@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 70,
+    "class_name": "CommandReferenceMultilinesOverSeveral",
+    "rust_pattern": "^ref(?P<seq_color0>#\\w+)?[%s]+over[%s]+((?:[%pLN_.@]+|[%g][^%g]+[%g])(?:[%s]*,[%s]*(?:[%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*(?P<seq_color1>#\\w+)?$",
+    "java_pattern": "^ref(#\\w+)?[%s]+over[%s]+((?:[%pLN_.@]+|[%g][^%g]+[%g])(?:[%s]*,[%s]*(?:[%pLN_.@]+|[%g][^%g]+[%g]))*)[%s]*(?:(\\[\\[.*?\\]\\]))?[%s]*(#\\w+)?$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_ref(line)\n            }",
+    "maker_handler": "ref_buffer",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_70_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_70_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_70_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_70_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandReferenceMultilinesOverSeveral variant is recognized but unimplemented at line 5: REF\u00a0over Juniper,Kestrel\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_70_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_70_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@ref over Juniper,Kestrel@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 71,
+    "class_name": "CommandAutonumber",
+    "rust_pattern": "^autonumber[%s]*(\\d(?:(?:[^%pLN%s]+|\\d+)*\\d)?)?(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?[%s]*$",
+    "java_pattern": "^autonumber[%s]*(\\d(?:(?:[^%pLN%s]+|\\d+)*\\d)?)?(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?[%s]*$",
+    "signature": 6930508,
+    "java_signature": 6930508,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_autonumber(line)\n            }",
+    "maker_handler": "try_autonumber",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_71_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_71_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_71_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_71_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: AUTONUMBER\u00a06 2 \"<b>00</b>\"\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_71_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_71_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@autonumber 6 2 \\\"<b>00</b>\\\"@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 72,
+    "class_name": "CommandAutonumberStop",
+    "rust_pattern": "^autonumber[%s]+stop[%s]*$",
+    "java_pattern": "^autonumber[%s]+stop[%s]*$",
+    "signature": 8110157,
+    "java_signature": 8110157,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_autonumber(line)\n            }",
+    "maker_handler": "try_autonumber",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_72_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_72_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_72_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_72_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: AUTONUMBER\nwarning: sequence command CommandAutonumberStop variant is recognized but unimplemented at line 6: autonumber\u00a0stop\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_72_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_72_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@autonumber@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 73,
+    "class_name": "CommandAutonumberResume",
+    "rust_pattern": "^autonumber[%s]+resume[%s]*(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?$",
+    "java_pattern": "^autonumber[%s]+resume[%s]*(?:[%s]+(\\d+))?(?:[%s]+[%g]([^%g]+)[%g])?$",
+    "signature": 7979085,
+    "java_signature": 7979085,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_autonumber(line)\n            }",
+    "maker_handler": "try_autonumber",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_73_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_73_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_73_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_73_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: AUTONUMBER\u00a06\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_73_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_73_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@autonumber 6@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 74,
+    "class_name": "CommandAutonumberIncrement",
+    "rust_pattern": "^autonumber[%s]+inc(?:[%s]+([A-Za-z]))?[%s]*$",
+    "java_pattern": "^autonumber[%s]+inc(?:[%s]+([A-Za-z]))?[%s]*$",
+    "signature": 6931549,
+    "java_signature": 6931549,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_74_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_74_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 3.2\nwarning: sequence command CommandAutonumberIncrement is recognized but unimplemented at line 5: autonumber inc A\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_74_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_74_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: AUTONUMBER\u00a03.2\nwarning: sequence command CommandAutonumberIncrement is recognized but unimplemented at line 6: autonumber inc A\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_74_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_74_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@autonumber 3.2@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 75,
+    "class_name": "CommandAutoactivate",
+    "rust_pattern": "^autoactivate[%s]+(off|on)$",
+    "java_pattern": "^autoactivate[%s]+(off|on)$",
+    "signature": 14746709,
+    "java_signature": 14746709,
+    "support_flag": true,
+    "actual_handler": "self.try_autoactivate(line),",
+    "maker_handler": "try_autoactivate",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_75_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_75_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_75_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_75_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandAutoactivate variant is recognized but unimplemented at line 5: AUTOACTIVATE\u00a0on\n",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_75_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_75_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@autoactivate on@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 76,
+    "class_name": "CommandFootbox",
+    "rust_pattern": "^(hide|show)?[%s]*footbox$",
+    "java_pattern": "^(hide|show)?[%s]*footbox$",
+    "signature": 35717256,
+    "java_signature": 35717256,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_hide(line)\n            }",
+    "maker_handler": "try_hide",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_76_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_76_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_76_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_76_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_76_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_76_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@hide footbox@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 77,
+    "class_name": "CommandDelay",
+    "rust_pattern": "^(?:\\.{3}|\u2026)(?:(.*)(?:\\.{3}|\u2026))?$",
+    "java_pattern": "^(?:\\.{3}|\u2026)(?:(.*)(?:\\.{3}|\u2026))?$",
+    "signature": 0,
+    "java_signature": 0,
+    "support_flag": true,
+    "actual_handler": "self.try_delay(line),",
+    "maker_handler": "try_delay",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_77_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_77_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_77_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_77_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_77_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_77_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@... Walnut ...@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 78,
+    "class_name": "CommandFootboxOld",
+    "rust_pattern": "^footbox[%s]*(on|off)?[%s]*$",
+    "java_pattern": "^footbox[%s]*(on|off)?[%s]*$",
+    "signature": 35717256,
+    "java_signature": 35717256,
+    "support_flag": true,
+    "actual_handler": "{\n                self.try_hide(line)\n            }",
+    "maker_handler": "try_hide",
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_78_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_78_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_78_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_78_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "",
+        "whole_output": 0
+      },
+      {
+        "name": "bd087_reg_78_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_78_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@footbox off@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 79,
+    "class_name": "CommandUrl",
+    "rust_pattern": "^url[%s]*(?:of|for)?[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]+(?:is)?[%s]*(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\])$",
+    "java_pattern": "^url[%s]*(?:of|for)?[%s]+([%pLN_.@]+|[%g][^%g]+[%g])[%s]+(?:is)?[%s]*(\\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\]|\\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\]|\\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\]|\\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\]|\\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\])$",
+    "signature": 4726785,
+    "java_signature": 4726785,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_79_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_79_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandUrl is recognized but unimplemented at line 4: url of Juniper is [[https://example.org/walnut]]\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_79_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_79_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandUrl is recognized but unimplemented at line 5: URL\u00a0of Juniper is [[https://example.org/cypress]]\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_79_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_79_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@url of Juniper is [[https://example.org/walnut]]@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  },
+  {
+    "index": 80,
+    "class_name": "CommandLinkAnchor",
+    "rust_pattern": "^\\{([%pLN_]+)\\}[%s]*\\<-\\>[%s]*\\{([%pLN_]+)\\}[%s]*(?::[%s]*(.*))?$",
+    "java_pattern": "^\\{([%pLN_]+)\\}[%s]*\\<-\\>[%s]*\\{([%pLN_]+)\\}[%s]*(?::[%s]*(.*))?$",
+    "signature": 354042744143874,
+    "java_signature": 354042744143874,
+    "support_flag": false,
+    "actual_handler": null,
+    "maker_handler": null,
+    "reconstructed_raw_equal": true,
+    "signature_equal": true,
+    "probes": [
+      {
+        "name": "bd087_reg_80_plain",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_80_plain.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 4: {first} Juniper -> Kestrel: first\nwarning: sequence command CommandArrow variant is recognized but unimplemented at line 5: {second} Kestrel -> Juniper: second\nwarning: sequence command CommandLinkAnchor is recognized but unimplemented at line 6: {first} <-> {second}: span\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_80_unusual",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_80_unusual.puml",
+        "java_valid": true,
+        "java_exit": 0,
+        "cli_exit": 0,
+        "cli_diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 5: {first}\u00a0Juniper -> Kestrel: first\nwarning: sequence command CommandArrow variant is recognized but unimplemented at line 6: {second} Kestrel -> Juniper: second\nwarning: sequence command CommandLinkAnchor is recognized but unimplemented at line 7: {first} <-> {second}: span\n",
+        "whole_output": 1
+      },
+      {
+        "name": "bd087_reg_80_near_miss",
+        "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_80_near_miss.puml",
+        "java_valid": false,
+        "java_exit": 200,
+        "cli_exit": 1,
+        "cli_diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"@{first} Juniper -> Kestrel: first@@\"\n",
+        "whole_output": 2
+      }
+    ]
+  }
+]

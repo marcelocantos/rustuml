@@ -1,0 +1,8 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+ref over Alder
+' not a comment?
+end ref
+@enduml

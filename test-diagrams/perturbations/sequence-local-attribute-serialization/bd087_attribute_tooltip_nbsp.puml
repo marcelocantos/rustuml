@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+participant Walnut [[https://example.org/tool{Birch Harbor}]]
+Kestrel --> Juniper: receipt
+@enduml

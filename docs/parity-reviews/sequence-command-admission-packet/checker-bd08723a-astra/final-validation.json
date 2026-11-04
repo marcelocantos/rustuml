@@ -1,0 +1,60 @@
+{
+  "review_records": 7,
+  "new_pair_entries": 577,
+  "unique_fresh_source_hashes": 571,
+  "approved_exception_entries": 15,
+  "approved_exception_distinct_hashes": 14,
+  "approved_exception_multiset_matches": true,
+  "full_review_exception_entries": 16,
+  "full_review_exception_distinct_hashes": 15,
+  "protected_tracked_changes": [],
+  "capture_archive_files": 141814,
+  "relay_hashes": {
+    "relay-main/reference-results.json.gz": "097cb49d26998ad15b36c1e068a4afe90d6e929dfe8780b952e73d753152e436",
+    "relay-main/reference-transport.json": "73e9033ec52542c4bc3a82b9b5970a9d727a5fd4ffd672446c98e17fafdb1201",
+    "relay-supplement/reference-results.json.gz": "db32a7b2b5a27a372c964c281be7e5d7346b764a2f270c73645d62d896df4631",
+    "relay-supplement/reference-transport.json": "53c758faa06a25912769dbda4f400d865550718f49f98828cebbb5d2e8300262"
+  },
+  "post_registration": {
+    "corpus_entries": 3259,
+    "failures": 1441,
+    "guards_passed": 4,
+    "guards_total": 6,
+    "own_review_schema_defects": 0
+  },
+  "reviews": [
+    {
+      "path": "docs/parity-reviews/sequence-registered-command-rejection/review.json",
+      "sha256": "dde3d789bb1974e44948c86cff44801f68adb38a78c0161882a59af65f680aa6"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-command-color-execution/review.json",
+      "sha256": "f79105f382af8bd1abf8069800220654e8edd68d35423ab566d259bebbc8b606"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-footbox-command-consumption/review.json",
+      "sha256": "8091eea7b5d92227c3e80a216870decc19fce0b95e174e5a6cc2bf38e54c6676"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-local-attribute-serialization/review.json",
+      "sha256": "b391dca98b266d2102299a9b3c7aaeb27ca5f4e50a873f4fccb897551358f568"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-resume-citation-correction/review.json",
+      "sha256": "0263b8a4209c0a9baf37930668e5ac3696f77637ae87268c1e41078d82cac131"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-command-size-admission/review.json",
+      "sha256": "f882b0d6bd67df3ce38be404558fc931c52ff38ece45711b4ef03306595bd411"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-command-size-dispatch-correction/review.json",
+      "sha256": "b0e569a7cdc3b25aed21c78b0665e1ffbf715da5aaeca5cdd9c2ba9c6224a292"
+    }
+  ],
+  "staged_whitespace_check": {
+    "exit": 2,
+    "output": "docs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:8: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:978: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1063: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1068: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1128: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1162: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1186: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1269: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1273: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1293: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1302: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1364: trailing whitespace.\n+ \ndocs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra/production.diff:1378: trailing whitespace.\n+ \ntest-diagrams/perturbations/sequence-registered-command-rejection/bd087_comment_blank.puml:10: trailing whitespace.\n+\t\n",
+    "disposition": "Preserved byte-exact evidence: unified diff blank context lines and an intentional tab-only blank-input control. No production whitespace change."
+  }
+}

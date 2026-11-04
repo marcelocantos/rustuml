@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-size-admission",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A29fed3c4-f6f1-48fa-9925-601e7b0c6dcb",
+    "model": "gpt-6-astra; high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+    "branch": "review/sequence-admission-bd08723a",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "8efd66082c108fb0b46439665363fe9a8ce827d4",
+  "implementation_commit": "ba3d0196bcb11829a3e114871976faaa695c7025",
+  "implementation_commits": [
+    "ba3d0196bcb11829a3e114871976faaa695c7025"
+  ],
+  "tested_rust_revision": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "production_revision": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "baseline_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE/target-before cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one at dc438fd0cd0f5edd44816db81f0d765bf48ce4e6; independently repeat at c6295ccdef39719b60f0e88dfd9555919523c961 with target-after.",
+    "rustc --edition=2024 docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs -L dependency=PRIVATE_TARGET/release/deps --extern rustuml_oracle=EXACT_RLIB -o PRIVATE_BIN/compare_cli (exact binding records retained).",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT REPO_CWD; retained3569 and fresh509+62 before/after.",
+    "replay.py before|after golden|retained|fresh-main|fresh-supplement: actual rustuml -tsvg/-ttxt/--ast/--yaml -pipe; full byte captures and unchanged compare_cli.",
+    "Parent existing Monkey Man relay batches AH/AI only; [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]. No local Java/javac, SSH, runner or child was launched.",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render; cargo test --release -p rustuml --test pipe_mode; cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (stable broad run once; exact logs preserved).",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO NEGATIVES BEFORE_CLI AFTER_CLI OUTPUT; historical, prior-fresh, exporter and fresh-checker cohorts separately.",
+    "xml.etree.ElementTree.fromstring over every nonempty CLI SVG capture and every new reference, with empty/error outcomes retained separately."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2000_False.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2000_False.svg",
+      "axes": [
+        "2000 UTF16",
+        "arrow-only factory fallthrough",
+        "ASCII"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "20184b58026e78ec8dc731e10f89e555207c8fc826c00aedf2cdee44193e4f9f",
+      "golden_sha256": "a5628a85f176e0893926e8cc839db57ece347a9f007222645249748b67869853",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2000_True.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2000_True.svg",
+      "axes": [
+        "2000 UTF16",
+        "arrow-only factory fallthrough",
+        "astral"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "7575c78aa62c15db0181b4da89d8d01ada6df4918436bdad940195afab86a5f4",
+      "golden_sha256": "ff7dadead32fe27005993ba8ccda8f073b391d55ecf7a33d12244728ad582f80",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2001_False.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2001_False.svg",
+      "axes": [
+        "2001 UTF16",
+        "arrow-only factory fallthrough",
+        "ASCII"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "03b635acb927210d586dffa8171e30618c40b015fc02a93edba727d596ded03b",
+      "golden_sha256": "32d0f2458961a06f4aa7bc106fed7b950fa91e11e4fbf7bde2d322e9d82f880c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "CLASS",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2001_True.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-size-admission/bd087_s_size_arrow_only_2001_True.svg",
+      "axes": [
+        "2001 UTF16",
+        "arrow-only factory fallthrough",
+        "astral"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "382ac695daa52269c4460acf6d651882b4530768bf5959ae796e880559bacd11",
+      "golden_sha256": "954a6ca31e251488a6ee4ee19c3dbaee5feb6084577742e8154569eff5925b76",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "CLASS",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "REJECT / withdrawn hypothesis: this implementation was reverted exactly before final production. A sequence-command protectSize rejection cannot be promoted to a global syntax rejection: arrow-only2001-unit programs are accepted by ClassDiagramFactory. Four independent arrow-only controls and the original eight demonstrate the factory distinction.",
+    "The original account, failed implementation, mistaken intended-invalid flags, eight references and failed-guard diagnostics remain unchanged. No acceptance claim is made for code that is absent from the final tree. Final unresolved wrong-family behavior is recorded under the correction review."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output and rejection-contract acceptance; bounded support is not a waiver. Source-correct or reverted portions are distinguished in findings.",
+  "fresh_counts": null,
+  "evidence": "docs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra",
+  "bounded_next_obligations": [
+    "REJECT / withdrawn hypothesis: this implementation was reverted exactly before final production. A sequence-command protectSize rejection cannot be promoted to a global syntax rejection: arrow-only2001-unit programs are accepted by ClassDiagramFactory. Four independent arrow-only controls and the original eight demonstrate the factory distinction."
+  ],
+  "limits": [
+    "No shared-SVG combined correctness claim.",
+    "Java argv is wrapper-derived, not process-traced.",
+    "No baseline/comparator/skip/allow-list/target changes.",
+    "Prior accepted exceptions remain exactly15 frozen entries (14 distinct source hashes); fresh sprite loss is an unapproved16th error, not silently added to that set."
+  ]
+}

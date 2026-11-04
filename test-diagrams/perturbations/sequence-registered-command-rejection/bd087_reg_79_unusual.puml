@@ -1,0 +1,8 @@
+@startuml
+Juniper -> Juniper: calibration
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+URL of Juniper is [[https://example.org/cypress]]
+Kestrel --> Juniper: receipt
+@enduml

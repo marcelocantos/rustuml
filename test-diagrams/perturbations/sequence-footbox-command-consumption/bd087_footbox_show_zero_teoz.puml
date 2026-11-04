@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+hide footbox
+showfootbox
+Juniper -> Juniper: own tail
+Kestrel --> Juniper: receipt
+@enduml

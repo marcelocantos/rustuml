@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+@skinparam SequenceArrowColor Olive@@
+Kestrel --> Juniper: receipt
+@enduml

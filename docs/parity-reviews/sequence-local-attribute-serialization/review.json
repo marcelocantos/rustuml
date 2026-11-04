@@ -1,0 +1,966 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-local-attribute-serialization",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A29fed3c4-f6f1-48fa-9925-601e7b0c6dcb",
+    "model": "gpt-6-astra; high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-bd08723a",
+    "branch": "review/sequence-admission-bd08723a",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+  "implementation_commit": "4ac3ccba2b8e7b02559cd4166f088c5eea3da8a0",
+  "implementation_commits": [
+    "4ac3ccba2b8e7b02559cd4166f088c5eea3da8a0"
+  ],
+  "tested_rust_revision": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "production_revision": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "baseline_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "baseline_production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE/target-before cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one at dc438fd0cd0f5edd44816db81f0d765bf48ce4e6; independently repeat at c6295ccdef39719b60f0e88dfd9555919523c961 with target-after.",
+    "rustc --edition=2024 docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs -L dependency=PRIVATE_TARGET/release/deps --extern rustuml_oracle=EXACT_RLIB -o PRIVATE_BIN/compare_cli (exact binding records retained).",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT REPO_CWD; retained3569 and fresh509+62 before/after.",
+    "replay.py before|after golden|retained|fresh-main|fresh-supplement: actual rustuml -tsvg/-ttxt/--ast/--yaml -pipe; full byte captures and unchanged compare_cli.",
+    "Parent existing Monkey Man relay batches AH/AI only; [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]. No local Java/javac, SSH, runner or child was launched.",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render; cargo test --release -p rustuml --test pipe_mode; cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (stable broad run once; exact logs preserved).",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO NEGATIVES BEFORE_CLI AFTER_CLI OUTPUT; historical, prior-fresh, exporter and fresh-checker cohorts separately.",
+    "xml.etree.ElementTree.fromstring over every nonempty CLI SVG capture and every new reference, with empty/error outcomes retained separately."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_accent.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_accent.svg",
+      "axes": [
+        "tooltip",
+        "accent",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "c7483af91091aa171097a5f5124f07d5e880de7c8c15da5f87fd931895b33d81",
+      "golden_sha256": "3d5c73b212cf7393c5fa15c7cc6cee21fc163e29b0a6ef518e3d06468f303f70",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_accent.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_accent.svg",
+      "axes": [
+        "url",
+        "accent",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "15f2bd96fc70be3f38dd003aa70d1f915d79d1aaf16ce89997a384cb3086e4d0",
+      "golden_sha256": "7b50e423a0724ddfe8c1a2e307a7d61a34cae45153b25ba80d0bcc8470a7a206",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_accent.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_accent.svg",
+      "axes": [
+        "id",
+        "accent",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "7c5018fb433a89ad54e9cd92c6a17d6c8f8297552fd60151fb7ecb4f6f701ff0",
+      "golden_sha256": "a19e60dbfe83c6be2eaabfcf87e302a7fb9df1448258e5dc62be56f17e3366b8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_nbsp.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_nbsp.svg",
+      "axes": [
+        "tooltip",
+        "nbsp",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "b7f44f587134934d7000ad65b6d5be0eed45da9b0f0824475797bfb54d41df39",
+      "golden_sha256": "2597e6b61e85c7fe5c78c279d9dd58a52e01333bb8b7298aa9631299868cfee8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_nbsp.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_nbsp.svg",
+      "axes": [
+        "url",
+        "nbsp",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "0b020687efe004175f9553cc3776520ae42004e8b4939f62797668695289c07f",
+      "golden_sha256": "b80fd2ba190b242fecc7874c95b14655d46dd07305bfbc0b78bcf7b22e7f8cb8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_nbsp.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_nbsp.svg",
+      "axes": [
+        "id",
+        "nbsp",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "bcb72ee88c37a5e9edcbff1fcfdb4785157d05912f4693b3905dc5b54b032cd0",
+      "golden_sha256": "d64217622b8316426815c2a4eed0e4cbf27cec49433327f6121106ed49f76f47",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_astral.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_astral.svg",
+      "axes": [
+        "tooltip",
+        "astral",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "0ca3d1964075ab50a48b8a140a2d206923954ef5a3849976522607b7d170acc1",
+      "golden_sha256": "531cbfbc3799df4dac9eabe574300c8ff796c749a3b4cf2ffe74ffdda15b6353",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_astral.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_astral.svg",
+      "axes": [
+        "url",
+        "astral",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "341f379b103297019fa502ffe518451e224b0d1175e1c0030e550b4d46db21e6",
+      "golden_sha256": "799cf81b2ffee2490c908fb5e9654c9be6236bd25789bee33cad15422727c5ab",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_astral.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_astral.svg",
+      "axes": [
+        "id",
+        "astral",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "63712e3f603237c5bccecb030a8acb044e2487445afb98e70f7752824583cf24",
+      "golden_sha256": "0609addbe80392aa628298384aaf562f49351bf72d1e19a13215a439fe407ff8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_tab.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_tab.svg",
+      "axes": [
+        "tooltip",
+        "tab",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "ae005e3afb25eaa421cdf1bddb2b04b53458962bf553f8b4cd27de72d9f662f3",
+      "golden_sha256": "6c1de772d243c625b10b91872b967a31b842b057cf161aa1e9249084731d75d5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_tab.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_tab.svg",
+      "axes": [
+        "url",
+        "tab",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "f00fc6e0dac14c95a40676160d225708c3d0151ea040642edddb1d1b075f4304",
+      "golden_sha256": "fd2ff840133d016183bb37bc2f20351547b2d2731b936e2bcbdd0a1961fd1d42",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_tab.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_tab.svg",
+      "axes": [
+        "id",
+        "tab",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "c13d5b1e5121d43aa254f6b039d3218e3555dd3cc2eda53b2e0ad5290db61621",
+      "golden_sha256": "ff3debbf64446b756b178afd961a32400c34476b004600f66860fe7be7e30b44",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_cr.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_cr.svg",
+      "axes": [
+        "tooltip",
+        "cr",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "ccc776e0a2c109795df6864703eaada6d35ba2e67d7ef844b496c4a10b426e8c",
+      "golden_sha256": "ff769b8351807e5a70c4ca44a7279e813f92573af469a8dec926a2016443c95d",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_cr.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_cr.svg",
+      "axes": [
+        "url",
+        "cr",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "c078b3e5151a278e46262aca1779d2437183535607f21f279c92b1e3491aa960",
+      "golden_sha256": "fa3974ec60b402ad80066a800e90c3f8c68bd5bb6ea39095e47d6dea09e95e77",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_cr.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_cr.svg",
+      "axes": [
+        "id",
+        "cr",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "9f5e51739f6b27f71cd82617b4b59baae02d90918b57ffc4c1a107d6e86ade69",
+      "golden_sha256": "4b1bd1699745f7a0b1c01173268441f153a456bdcdca065ad829a140cd947fa7",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 0,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_lf.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_lf.svg",
+      "axes": [
+        "tooltip",
+        "lf",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "58a7b318217e4edb35222f73f41dec26d8cf040295d3f6b68f2838f181b34047",
+      "golden_sha256": "ff769b8351807e5a70c4ca44a7279e813f92573af469a8dec926a2016443c95d",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_lf.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_lf.svg",
+      "axes": [
+        "url",
+        "lf",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "646484fe62ad2fe3b9f32385717a8c446699461c2f9359319faed2e9e38efce6",
+      "golden_sha256": "fa3974ec60b402ad80066a800e90c3f8c68bd5bb6ea39095e47d6dea09e95e77",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_lf.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_lf.svg",
+      "axes": [
+        "id",
+        "lf",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "1a5381bbb86ca1d4302eee4f21125256958daa6da7515b448a995eaa5e9cc349",
+      "golden_sha256": "4b1bd1699745f7a0b1c01173268441f153a456bdcdca065ad829a140cd947fa7",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_amp.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_amp.svg",
+      "axes": [
+        "tooltip",
+        "amp",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "41c718d9c113634cdb181e0b8b4b541004007b83f2f27ebcbf369d33d1916d8b",
+      "golden_sha256": "3ff605220b5cb137f2a099e105cc40526907b00ba0767ada4723665a7f109651",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_amp.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_amp.svg",
+      "axes": [
+        "url",
+        "amp",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "f508f73e9b555424ecad5f25e5c313ecb9f1c40f3326589415623345da61c970",
+      "golden_sha256": "27c60b1ac8ab2aabc4a8812be340dce9669c9311c3714577b93ee3a4bec04b28",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_amp.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_amp.svg",
+      "axes": [
+        "id",
+        "amp",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d879fb22d992ec1d26844bdd7e30096685db9344e38a4988dee420237163f514",
+      "golden_sha256": "e261b1269d3f351d8932b9edc2b17b394e97cc90f162fbdca303b30368babda9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_lt.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_lt.svg",
+      "axes": [
+        "tooltip",
+        "lt",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "371db9be46bcb23c5d602f174bc32a9ede010748b2aad6e32918a551dae44a91",
+      "golden_sha256": "522d4a5a7b08fb15b5d35f6569dd56de0a37c698de2de51740c4d1bc45c5a717",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_lt.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_lt.svg",
+      "axes": [
+        "url",
+        "lt",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "679f030b90391dcafaed1fd22c18d7d5d84d1957bf6e7fc9ebd5ec1f1d2743cc",
+      "golden_sha256": "4a575a229bcf29b67a17ffeb32bca968eacf1c80f74a21ff13c4dec0ee3bf2df",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_lt.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_lt.svg",
+      "axes": [
+        "id",
+        "lt",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "206c6e3d5831c1bf9b15e52208a2118114417fb6ed3c95231f36a9e6673a2deb",
+      "golden_sha256": "7ec2c287fa3ff1a515dced69fb6aa4b561c285a721af490b49e74db19c920da7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_gt.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_gt.svg",
+      "axes": [
+        "tooltip",
+        "gt",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "cd91073987cb6354f7a6b41e1f5f3ec2e94df6b8e032ef86612d49fa81e8d0ac",
+      "golden_sha256": "60d5a7a9c4d6410d9aaa4d96ef5e27908c80e61df70bac8b8a2045c9146807cf",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_gt.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_gt.svg",
+      "axes": [
+        "url",
+        "gt",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "4bf2584a4c010b3c80ad542acf486ecd0c550bf190c08cf1e8862e4c65b4dd7f",
+      "golden_sha256": "9b53eeec5855659de77456c0efb37d55cd6f9263a3732ffc2df4578e3f74bf2b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_gt.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_gt.svg",
+      "axes": [
+        "id",
+        "gt",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "ecfbf01f7e473a4e16a9c63cf582d0d542f3e62642c11bb85b0afa4800b50d3a",
+      "golden_sha256": "6d6499ae840a4d6c4899d7bd674d2b9b8b9cb36745cb13e8b170af7b9bd8a8de",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_quot.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_quot.svg",
+      "axes": [
+        "tooltip",
+        "quot",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d4e82cba4c57e24b9fdd9c21b55de5ed6aa7d4fa921aa071d72cbbe4e06511ac",
+      "golden_sha256": "7af0e6cf40be1793c9527bf78d494f732e10c86df88c2a186e5fa980f7e2cbda",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_quot.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_quot.svg",
+      "axes": [
+        "url",
+        "quot",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "f1eea4e94f63005c47895ebf926eb8ffa25dbda75aab6fb20fd69d8940a83d6e",
+      "golden_sha256": "8f42676eee31e7c75633f16eab5c0c3cca7cebecdf10ff19c774cedb7c062168",
+      "intended_valid": true,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_quot.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_quot.svg",
+      "axes": [
+        "id",
+        "quot",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "12528e26323ca7e65f467b8b5996756f5d58fff73920b021e608a170e12e8f87",
+      "golden_sha256": "ea930d04cb48a68537b6a1691f99bd4a05cad0f3c26f087621f58aad1498d7ce",
+      "intended_valid": false,
+      "observed_valid": false,
+      "java_exit": 200,
+      "java_family": null,
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_apos.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_apos.svg",
+      "axes": [
+        "tooltip",
+        "apos",
+        "participant and message attributes"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d3c852023d923ecff82addc681dae08ecd9e7dc20674620c490c64b2e260484d",
+      "golden_sha256": "aa6542c7647e0b9b913ee9901e583db23d81d3e9fe21e88510cc35306dd1395f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_apos.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_apos.svg",
+      "axes": [
+        "url",
+        "apos",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "5c5e7be7493987ef5748b9fee5670b5f84519d35b368173e8e541e7dc406a139",
+      "golden_sha256": "649103941a9e59f36e9d307f2e5c6c7206dbcef86635d0288c196d35c38ca2b8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_apos.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_id_apos.svg",
+      "axes": [
+        "id",
+        "apos",
+        "participant and message attributes"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "2747b279468c102a5601c00d541b33c0dea09d4c5ef6e22bb118b2d1ac2fca14",
+      "golden_sha256": "ec1fb99af6ac1d81d19e0af1911e5548d30e69b6b6ae6b3a8d508a45751cd895",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_43.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_43.svg",
+      "axes": [
+        "quoted_identifier",
+        "escaped content \\n"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "eb2ce4a4a9946529cde57e630ed2473f76934cc1b4cc4abfb642baeecd99b8a2",
+      "golden_sha256": "3333c9674d3c29d9ea99541712a76aeda8ce08deb1fa85a4eac36d5d83125476",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_44.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_44.svg",
+      "axes": [
+        "quoted_url",
+        "escaped content \\n"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "a7003a1606f6bf46bc38e599d162769d9cfcd5f7bf325cd3f77c032a83635ecb",
+      "golden_sha256": "aba1ae8a59972bb3e9a5264249060575f6d22e8a1800c5f309f26ae28ddbf278",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_45.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_45.svg",
+      "axes": [
+        "tooltip",
+        "escaped content \\n"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "3f9b46b5816e12c8b25cd4687e64a4562fce9cbfd706c3071ef0acfeddc4e377",
+      "golden_sha256": "4237856b32d043d320491359f154b192c40bfaae7c4112ac224966e08a3a1ad0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_46.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_46.svg",
+      "axes": [
+        "quoted_identifier",
+        "escaped content \\t"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "a0b25947dcecd03c332a508da62244185f4a6a274321bbb7cd3f5bb34b1e0c21",
+      "golden_sha256": "c3885236fef3f0975c33e0569ad1171bb5b16efc8d3954c22e590ac56da994f2",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_47.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_47.svg",
+      "axes": [
+        "quoted_url",
+        "escaped content \\t"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "e0bb7e4fd68cbe218fa29c8e8c238dc45dff137bc88b7b70f51429eefa0ea8bb",
+      "golden_sha256": "c165c73134d6b7f24e8191621bf4425e7ecc70027e3651cdc98ed21d9ab8893b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_48.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_48.svg",
+      "axes": [
+        "tooltip",
+        "escaped content \\t"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "228756ed979168a736901a8db22ff918fb5de857b6d59140c81ed7be2a289dde",
+      "golden_sha256": "82eec0b70258cb51ee0417110c8d79330821cacda8c51519dbed82892c2cdc27",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_49.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_49.svg",
+      "axes": [
+        "quoted_identifier",
+        "escaped content &#10;"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "8696a8768c21be0cb5cd821e2c6a4efabf1747f8f8bd454fc4fecac3a4a1d8c6",
+      "golden_sha256": "0372453024124025faccc690e786f660fde606f745329a76dc75e74558a5c419",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_50.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_50.svg",
+      "axes": [
+        "quoted_url",
+        "escaped content &#10;"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "ab9435e2b5718c7745af08e8bcffd2c56809b4f165676f83ab0473cb05cf0343",
+      "golden_sha256": "9190adc55f7a93ddc8ddcd475a358a28c0c5bfd4b897999bf575ba1ef037470f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_51.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_51.svg",
+      "axes": [
+        "tooltip",
+        "escaped content &#10;"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d63a00271c56051f34c52793e691a9dbcda592bc51f2b65dc1e2248620bdb542",
+      "golden_sha256": "16829d045d68cae1b011277079eefe194264957162879407efb12f7b9e9983d5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_52.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_52.svg",
+      "axes": [
+        "quoted_identifier",
+        "escaped content \u00e9\ud83e\udd89"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "c7efb1c4a46e779770bcc364574fca71878fd26ab2d9e98b92115b522b45b447",
+      "golden_sha256": "664a894afd5e5cbc7aee1f701a4cfd009002ec67b9822c9aba48510301297dba",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_53.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_53.svg",
+      "axes": [
+        "quoted_url",
+        "escaped content \u00e9\ud83e\udd89"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "c66e8943affbe262048c05bbde8e0ba51c3e1d1496b595023fa80ae6c245e5f4",
+      "golden_sha256": "2364031b39680e7641b98ca6c26685f3618f697f307faa5f2c027d2c653c9e52",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_54.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_54.svg",
+      "axes": [
+        "tooltip",
+        "escaped content \u00e9\ud83e\udd89"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "1ca6284c769ddc3efe05a636a134672635792e76215b613205e1aaf7cd0ef250",
+      "golden_sha256": "aedddaba0284e45aca4e206c70da1a479710fa875809a1628b8d4034e887b84a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_55.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_identifier_55.svg",
+      "axes": [
+        "quoted_identifier",
+        "escaped content '&<>"
+      ],
+      "result": "pass",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "bacba5a8a8dee976907ac510255956601b4e3e4b7c95c6473a21d0fbd8e9e80d",
+      "golden_sha256": "797d03a4a0e0b61534f3c5b47b79fbb1ad2ad13bfba773f426d37b47e64ebd00",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_56.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_56.svg",
+      "axes": [
+        "quoted_url",
+        "escaped content '&<>"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "4b6316da03bdbe7b8b1a2121efb47a1648d1063f1743b74602111aa6ce2e6ac1",
+      "golden_sha256": "33c096098363ac2572e3352663b60eb65b68bd321e305ecab92ac5861ff7aa79",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_57.puml",
+      "golden": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_57.svg",
+      "axes": [
+        "tooltip",
+        "escaped content '&<>"
+      ],
+      "result": "fail",
+      "result_semantics": "whole output for valid reference; explicit rejection for Java200; exporter failure never positive",
+      "source_sha256": "d21b8cbd0d2dc6392d7ef9769afff0136b13d94d6703e6addd1efa27f2f42be5",
+      "golden_sha256": "66df19758d06785602f4eb8b9b2f9dc2be6ab10b9a69cc3d6aeaf2675951fcd3",
+      "intended_valid": true,
+      "observed_valid": true,
+      "java_exit": 0,
+      "java_family": "SEQUENCE",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "The changed helper follows pinned SvgGraphics US-ASCII -> JAXP -> OpenJDK21.0.5 ToStream.writeAttrString/accumDefaultEscape: entities for ampersand/angles/double quote, literal apostrophe, decimal LF/CR/TAB and Unicode scalar references. All five retained JDK source hashes match. The non-BMP path emits one scalar reference. Text-node consumers remain separate.",
+    "Callsites reviewed: warning polygon/style/textLength attributes; participant and lifeline data-qualified-name/generated uid/id; hyperlink href/title/xlink variants; message endpoint metadata. Generated uid/id values are ASCII allocations, not arbitrary user strings. Direct image href values are internally generated math/welcome data URIs, outside user-attribute escaping. Fresh label/link/tooltip/escaped-control cases exercise reachable inputs; raw LF/CR in source is separately classified as input syntax.",
+    "REJECT whole output:18/48 fresh entries match,22 valid mismatches,8 nonpositives. Existing participant URL extraction loses explicit tooltip content and whitespace/link semantics before escaping. Three embedded-CR inputs falsely succeed. All992 nonempty fresh CLI SVGs and31616 retained/golden outputs strictly parse; malformed XML was not observed. Correct local byte mapping does not imply complete link/metadata product parity.",
+    "No shared svg.rs/text_render.rs changes are imported and no combined correctness is claimed."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output and rejection-contract acceptance; bounded support is not a waiver. Source-correct or reverted portions are distinguished in findings.",
+  "fresh_counts": {
+    "before": {
+      "entries": 48,
+      "mismatch": 22,
+      "match": 18,
+      "nonpositive": 8
+    },
+    "after": {
+      "entries": 48,
+      "mismatch": 22,
+      "match": 18,
+      "nonpositive": 8
+    }
+  },
+  "evidence": "docs/parity-reviews/sequence-command-admission-packet/checker-bd08723a-astra",
+  "bounded_next_obligations": [
+    "REJECT whole output:18/48 fresh entries match,22 valid mismatches,8 nonpositives. Existing participant URL extraction loses explicit tooltip content and whitespace/link semantics before escaping. Three embedded-CR inputs falsely succeed. All992 nonempty fresh CLI SVGs and31616 retained/golden outputs strictly parse; malformed XML was not observed. Correct local byte mapping does not imply complete link/metadata product parity."
+  ],
+  "limits": [
+    "No shared-SVG combined correctness claim.",
+    "Java argv is wrapper-derived, not process-traced.",
+    "No baseline/comparator/skip/allow-list/target changes.",
+    "Prior accepted exceptions remain exactly15 frozen entries (14 distinct source hashes); fresh sprite loss is an unapproved16th error, not silently added to that set."
+  ]
+}

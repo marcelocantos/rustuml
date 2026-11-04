@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+note over Kestrel #text:application: paint
+Kestrel --> Juniper: receipt
+@enduml

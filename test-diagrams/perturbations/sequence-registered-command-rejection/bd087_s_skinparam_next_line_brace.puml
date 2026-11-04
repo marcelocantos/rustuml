@@ -1,0 +1,9 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+skinparam sequence
+{
+ArrowColor Olive
+}
+@enduml

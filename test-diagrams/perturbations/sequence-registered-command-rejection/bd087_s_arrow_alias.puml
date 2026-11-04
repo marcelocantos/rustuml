@@ -1,0 +1,6 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+"Cedar Branch" as Cedar -> Alder: renamed
+@enduml

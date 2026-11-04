@@ -1,0 +1,8 @@
+@startuml
+participant Alder
+participant Osprey
+Alder -> Osprey: audit
+legend
+title Audit
+end legend
+@enduml

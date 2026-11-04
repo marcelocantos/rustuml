@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: checkpoint
+@url of Juniper is [[https://example.org/walnut]]@@
+Kestrel --> Juniper: receipt
+@enduml
