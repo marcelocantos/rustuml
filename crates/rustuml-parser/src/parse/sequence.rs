@@ -13,30 +13,44 @@ use super::ParseError;
 use crate::diagram::DiagramMeta;
 use crate::diagram::sequence::*;
 
-static INLINE_ARROW_STYLE: LazyLock<Regex> = LazyLock::new(|| {
+// Pattern2#QUOTED_REPLACEMENTS expands %s to Java \s plus NBSP;
+// compileInternal uses CASE_INSENSITIVE without UNICODE_CHARACTER_CLASS.
+// RegexLeaf.spaceOneOrMore/spaceZeroOrMore and sequence command factories all
+// use this class. Keep negation consistent for command token boundaries.
+fn sequence_regex(pattern: &str) -> Result<Regex, regex::Error> {
+    const JAVA_SPACE: &str = r"[\x09-\x0d \u{00a0}]";
+    const JAVA_NON_SPACE: &str = r"[^\x09-\x0d \u{00a0}]";
     Regex::new(
+        &pattern
+            .replace("[^%s]", JAVA_NON_SPACE)
+            .replace("[%s]", JAVA_SPACE),
+    )
+}
+
+static INLINE_ARROW_STYLE: LazyLock<Regex> = LazyLock::new(|| {
+    sequence_regex(
         r"\[((?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\]",
     )
     .unwrap()
 });
 
 static MESSAGE_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r#"^("(?:[^"]+)"|\w+)\s*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*("(?:[^"]+)"|\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$"#,
+    sequence_regex(
+        r#"^("(?:[^"]+)"|\w+)[%s]*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)[%s]*("(?:[^"]+)"|\w+)[%s]*(?:((?:\+\+|--|!!))[%s]*(#[^%s]+)?[%s]*)?(?::[%s]*(.*))?$"#,
     )
     .unwrap()
 });
 
 static EXTERNAL_MESSAGE_IN_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r"^([\[\]])([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+    sequence_regex(
+        r"^([\[\]])([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)[%s]*(\w+)[%s]*(?:((?:\+\+|--|!!))[%s]*(#[^%s]+)?[%s]*)?(?::[%s]*(.*))?$",
     )
     .unwrap()
 });
 
 static EXTERNAL_MESSAGE_OUT_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r"^(\w+)\s*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)([\[\]])\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+    sequence_regex(
+        r"^(\w+)[%s]*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)([\[\]])[%s]*(?:((?:\+\+|--|!!))[%s]*(#[^%s]+)?[%s]*)?(?::[%s]*(.*))?$",
     )
     .unwrap()
 });
@@ -498,7 +512,7 @@ impl SeqParser {
             // FactorySequenceNote{,Across,OverSeveral}Command#END accepts all
             // three shape names; FactorySequenceNoteOnArrowCommand#END only note.
             static NOTE_END: LazyLock<Regex> =
-                LazyLock::new(|| Regex::new(r"(?i)^end\s?(note|hnote|rnote)$").unwrap());
+                LazyLock::new(|| sequence_regex(r"(?i)^end[%s]?(note|hnote|rnote)$").unwrap());
             let closes = NOTE_END
                 .captures(trimmed)
                 .is_some_and(|caps| !note.on_message || caps[1].eq_ignore_ascii_case("note"));
@@ -627,8 +641,8 @@ impl SeqParser {
         //   4. keyword SimpleName             <<stereotype>>
         //   5. keyword "Long Label"           <<stereotype>>  (no alias; id = label)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|(\w+)\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+(\d+))?"#,
+            sequence_regex(
+                r#"^(participant|actor|boundary|control|entity|database|collections|queue)[%s]+(?:"([^"]+)"[%s]+as[%s]+(\w+)|(\w+)[%s]+as[%s]+"([^"]+)"|(\w+)[%s]+as[%s]+(\w+)|"([^"]+)"|(\w+))(?:[%s]+<<([^>]+)>>)?(?:[%s]+(#[^%s]+))?(?:[%s]+order[%s]+(\d+))?"#,
             )
             .unwrap()
         });
@@ -886,7 +900,7 @@ impl SeqParser {
         // Allow optional color (#xxx) after participant list.
         // Capture shape prefix (h/r/note), position, participants, color, inline text.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(#\S+)?\s*(?::\s*(.*))?$").unwrap()
+            sequence_regex(r"^(h|r)?note[%s]+(left|right|over)[%s]*(?:of[%s]+)?(\w+(?:[%s]*,[%s]*\w+)*)?[%s]*(#[^%s]+)?[%s]*(?::[%s]*(.*))?$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -964,9 +978,10 @@ impl SeqParser {
 
     fn try_group(&mut self, line: &str) -> bool {
         static RE_START: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(alt|opt|loop|par|break|critical|group)\s*(.*)$").unwrap()
+            sequence_regex(r"^(alt|opt|loop|par|break|critical|group)[%s]*(.*)$").unwrap()
         });
-        static RE_ELSE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^else\s*(.*)$").unwrap());
+        static RE_ELSE: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"^else[%s]*(.*)$").unwrap());
 
         if line == "end" {
             self.events.push(Event::GroupEnd);
@@ -1020,7 +1035,8 @@ impl SeqParser {
     }
 
     fn try_divider(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^==\s*(.*?)\s*==$").unwrap());
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"^==[%s]*(.*?)[%s]*==$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             self.events.push(Event::Divider(caps[1].trim().to_string()));
@@ -1031,7 +1047,8 @@ impl SeqParser {
     }
 
     fn try_delay(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\.\.\.(.*?)\.\.\.$").unwrap());
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"^\.\.\.(.*?)\.\.\.$").unwrap());
 
         if line == "..." {
             self.events.push(Event::Delay(None));
@@ -1049,7 +1066,7 @@ impl SeqParser {
     }
 
     fn try_space(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\|\|(\d+)\|\|$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| sequence_regex(r"^\|\|(\d+)\|\|$").unwrap());
 
         if line == "|||" {
             self.events.push(Event::Space(None));
@@ -1066,10 +1083,11 @@ impl SeqParser {
 
     fn try_autonumber(&mut self, line: &str) -> bool {
         static RE_START: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^autonumber(?:\s+(\d+))?(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
+            sequence_regex(r#"^autonumber(?:[%s]+(\d+))?(?:[%s]+(\d+))?(?:[%s]+"([^"]*)")?$"#)
+                .unwrap()
         });
         static RE_RESUME: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^autonumber\s+resume(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
+            sequence_regex(r#"^autonumber[%s]+resume(?:[%s]+(\d+))?(?:[%s]+"([^"]*)")?$"#).unwrap()
         });
 
         if line == "autonumber stop" {
@@ -1119,8 +1137,9 @@ impl SeqParser {
     }
 
     fn try_activate_deactivate(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(activate|deactivate)\s+(\w+)(?:\s+(#\S+))?").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(activate|deactivate)[%s]+(\w+)(?:[%s]+(#[^%s]+))?").unwrap()
+        });
 
         if let Some(caps) = RE.captures(line) {
             let id = self.ensure_participant(&caps[2]);
@@ -1170,13 +1189,13 @@ impl SeqParser {
 
     fn try_create_destroy(&mut self, line: &str) -> bool {
         static KW: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(create|destroy)\s+(.*)$").unwrap());
+            LazyLock::new(|| sequence_regex(r"^(create|destroy)[%s]+(.*)$").unwrap());
         // Identifier extraction from a participant declaration tail. Mirrors the
         // forms in `try_participant_decl`; the id is the alias when `as` is
         // present, otherwise the simple name (or quoted label).
         static REST: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^(?:participant|actor|boundary|control|entity|database|collections|queue)?\s*(?:"[^"]+"\s+as\s+(\w+)|(\w+)\s+as\s+(?:"[^"]+"|\w+)|"([^"]+)"|(\w+))"#,
+            sequence_regex(
+                r#"^(?:participant|actor|boundary|control|entity|database|collections|queue)?[%s]*(?:"[^"]+"[%s]+as[%s]+(\w+)|(\w+)[%s]+as[%s]+(?:"[^"]+"|\w+)|"([^"]+)"|(\w+))"#,
             )
             .unwrap()
         });
@@ -1220,7 +1239,7 @@ impl SeqParser {
             // CommandReturn#getRegexConcat captures COLOR only when #\w+
             // is followed by whitespace; a terminal #word remains label text.
             static COLOR: LazyLock<Regex> =
-                LazyLock::new(|| Regex::new(r"^(#\w+)\s+(.*)$").unwrap());
+                LazyLock::new(|| sequence_regex(r"^(#\w+)[%s]+(.*)$").unwrap());
             let rest = rest.trim_start();
             let (color, label) = if let Some(caps) = COLOR.captures(rest) {
                 (Some(caps[1].to_owned()), caps[2].to_owned())
@@ -1242,11 +1261,12 @@ impl SeqParser {
     fn try_ref(&mut self, line: &str) -> bool {
         // Inline: ref over A, B : text
         static RE_INLINE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*:\s*(.+)$").unwrap()
+            sequence_regex(r"^ref[%s]+over[%s]+(\w+(?:[%s]*,[%s]*\w+)*)[%s]*:[%s]*(.+)$").unwrap()
         });
         // Multiline start: ref over A, B  (no colon)
-        static RE_START: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*$").unwrap());
+        static RE_START: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^ref[%s]+over[%s]+(\w+(?:[%s]*,[%s]*\w+)*)[%s]*$").unwrap()
+        });
 
         if let Some(caps) = RE_INLINE.captures(line) {
             let participants: Vec<String> = caps[1]
@@ -1411,8 +1431,8 @@ impl SeqParser {
         // selector and updates SequenceDiagram#hiddenPortions, shared by every
         // Participant#getDisplay. Its PORTION accepts singular and plural.
         static STEREOTYPE_VISIBILITY: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"(?i)^(hide|show)\s+(?:(?:[\p{L}\p{N}_.]+|"[^"]+"|<<.*>>)\s+)*?stereotypes?$"#,
+            sequence_regex(
+                r#"(?i)^(hide|show)[%s]+(?:(?:[\p{L}\p{N}_.]+|"[^"]+"|<<.*>>)[%s]+)*?stereotypes?$"#,
             )
             .unwrap()
         });
@@ -2721,6 +2741,35 @@ Gate -> Mail: enqueue"#
                     matches!(&d.events[1], Event::Message(message) if message.label == "after")
                 );
             }
+        }
+    }
+    #[test]
+    fn java_pattern2_whitespace_is_shared_across_sequence_commands() {
+        for (space, valid) in [
+            (' ', true),
+            ('\t', true),
+            ('\u{00a0}', true),
+            ('\u{2003}', false),
+            ('\u{202f}', false),
+        ] {
+            let mut parser = SeqParser::new();
+            assert_eq!(
+                parser.try_participant_decl(&format!("participant{space}Birch")),
+                valid
+            );
+            assert_eq!(
+                parser.try_message(&format!("Birch{space}->{space}Elm")),
+                valid
+            );
+            let body = format!("participant Birch\nrnote over Birch\nbody\nend{space}rnote");
+            let lines = body.lines().map(str::to_owned).collect::<Vec<_>>();
+            assert_eq!(parse_sequence(&lines).is_ok(), valid, "{body:?}");
+        }
+        let whitespace = sequence_regex(r"^[%s]$").unwrap();
+        let non_whitespace = sequence_regex(r"^[^%s]$").unwrap();
+        for character in ['\t', '\n', '\u{000b}', '\u{000c}', '\r', ' ', '\u{00a0}'] {
+            assert!(whitespace.is_match(&character.to_string()));
+            assert!(!non_whitespace.is_match(&character.to_string()));
         }
     }
 }
