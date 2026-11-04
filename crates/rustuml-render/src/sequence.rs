@@ -7938,10 +7938,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .sum::<f64>()
             + TITLE_BOTTOM_PAD
     };
-    // Named participant boxes add a title band above the participant heads.
-    // Most titled boxes reserve text_height(13) + 5; titled boxes containing a
-    // queue omit the extra 5px gap and let the queue's own pill offset clear
-    // the label.
+    // Participant englobers have their own title preferred dimensions.
+    // Their composition with heads differs between the legacy and tile engines.
     let participant_boxes: Vec<_> = diagram
         .boxes
         .iter()
@@ -8008,13 +8006,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     };
     let participant_inner_pad = BOX_TEXT_X_PAD + global_padding;
     let teoz_top_pad = if diagram.teoz { 5.0 } else { 0.0 };
-    let head_box_y = HEAD_BOX_Y
-        + handwritten_warning_band_h
-        + teoz_top_pad
-        + theme_top_padding
-        + title_band_h
-        + box_band_h
-        + header_band_h;
     let note_content_width_padded = |max_text_w: f64, shape: NoteShape, align: MessageAlign| {
         aligned_note_content_width(max_text_w, shape, align) + 2.0 * note_global_padding
     };
@@ -8397,6 +8388,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .iter()
         .map(participant_head_band)
         .fold(0.0_f64, f64::max);
+    // DrawableSet#getHeadHeight maximizes getHeadAndEngloberHeight(p):
+    // compose the member's own head and enclosing component before selection.
+    // Teoz instead composes LivingSpaces' max head with Dolls' separate offset.
+    let composed_head_band = if diagram.teoz {
+        max_head_band + box_band_h
+    } else {
+        participants
+            .iter()
+            .map(|p| {
+                let englober = participant_boxes
+                    .iter()
+                    .find(|b| b.members.contains(&p.decl_idx));
+                let title_height = englober
+                    .map(|b| {
+                        // ComponentRoseEnglober: TextBlock + 2*marginY1 + trailing3.
+                        // AbstractTextualComponent makes an empty title TextBlockEmpty.
+                        let text_height = if b.title.is_empty() {
+                            0.0
+                        } else {
+                            plantuml_metrics::text_height(BOX_TITLE_FONT_SIZE as f64)
+                        };
+                        text_height + 2.0 * 1.0 + 3.0 + 2.0 * global_padding
+                    })
+                    .unwrap_or(0.0);
+                participant_head_band(p) + title_height
+            })
+            .fold(0.0_f64, f64::max)
+    };
+    let head_box_y = HEAD_BOX_Y
+        + handwritten_warning_band_h
+        + teoz_top_pad
+        + theme_top_padding
+        + title_band_h
+        + header_band_h
+        + composed_head_band
+        - max_head_band;
     let shadow_vertical_pad = max_head_band - max_box_h;
     let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET + shadow_vertical_pad;
 
