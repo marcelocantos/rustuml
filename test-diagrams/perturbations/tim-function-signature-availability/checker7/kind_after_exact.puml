@@ -1,0 +1,10 @@
+@startuml
+!function $choose(a,b="fallback")
+!return a+b
+!endfunction
+!procedure $choose(a)
+class Never
+!endprocedure
+!$answer=$choose("elm")
+class Survivor
+@enduml

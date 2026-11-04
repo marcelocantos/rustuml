@@ -1,0 +1,10 @@
+@startuml
+!if 0
+!procedure $unused()
+!startsub stash
+class Node
+!endsub
+!endprocedure
+!endif
+!includesub stash
+@enduml

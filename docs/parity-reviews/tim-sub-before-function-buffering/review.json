@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-sub-before-function-buffering",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A797285a5-2bc0-46e3-b562-d8c4c8bcf12c",
+    "model": "gpt-6-astra, high reasoning, Codex in T3",
+    "independent": true,
+    "children": []
+  },
+  "account_commit": "4652860936464f02d80584ef158a29a4a1c13cd1",
+  "implementation_commit": "55de7dd6cb090d86febc1e5e3f57804134429a19",
+  "candidate_commit": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67",
+  "before_commit": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+  "production_parent_commit": "329c39f48eccddfbb4896f1710dd97ddd1c1f2e8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=<private>/target-before cargo build --release -p rustuml (cwd: git archive of exact before)",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=<private>/target-after cargo build --release -p rustuml (cwd: isolated candidate checkout)",
+    "uv run --no-project python <private>/replay.py",
+    "uv run --no-project python <private>/fresh.py",
+    "Fresh Java through parent existing Monkey Man runner only: exact wrapper/Java argv, cwd and env in checker7-support/remote-request.json and measurements.tar.gz/fresh-references/*/commands.json",
+    "All final gate argv, cwd, env, real exits in checker7-support/gates2.json; executed once before evidence packaging"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_procedure.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_procedure.svg",
+      "axes": [
+        "collector kind",
+        "uncalled storage versus located inclusion"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "4f6e9e22abc753336c283697f44a1e9fdbd3fe37e4415d3b5d02408693082511",
+      "golden_sha256": "35ffa62ae2b4cdad5d721b402b427c395f906a805d959261cc4a6472129fb225"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_function.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_function.svg",
+      "axes": [
+        "collector kind",
+        "uncalled storage versus located inclusion"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "ebd8a13103dd7bcd5a0731b0a8a47c07b80cadad6668005879c062bccd187fe8",
+      "golden_sha256": "61e301bbad845ac810dd4b1e51f9bb5e7b73d1e439ccbed820536b8ff7f02ede"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_definelong.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_definelong.svg",
+      "axes": [
+        "collector kind",
+        "uncalled storage versus located inclusion"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "d34f9c68a6faf7a35de38cf3da17b7d6b4a8c43bdb3a4990ade96c4fd2eda679",
+      "golden_sha256": "edc05123b4a678ea64ff990761f59ea4c8342af0e7c92de771591d3f19bf5251"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_effects.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_effects.svg",
+      "axes": [
+        "no early effects",
+        "stored and called replay count"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "f0f87cff60771378123dc234a2c31c2c5baf8a63989a03d971e800026095945d",
+      "golden_sha256": "0cd2dc4ea7da23901b3354a59309b521810cb6cd49fbb20908f4db3875c3b26b"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_inactive.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_inactive.svg",
+      "axes": [
+        "inactive declaration",
+        "sub availability before conditional collector"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "0dfab3bff8f53585c211b879758cff7eeb8299a9586377dec00399c2a4a06841",
+      "golden_sha256": "3b5201ba51a7b27f372f42bed3839cc15fcee92a739e8b210965b39916377644"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_nested_negative.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_nested_negative.svg",
+      "axes": [
+        "nested validation inside uncalled collector",
+        "error precedence before body effects"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_negative",
+      "observed_classification": {
+        "intended": "intended_negative",
+        "observed_valid": false,
+        "svg_exit": 200,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": null,
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": false,
+        "source_has_end": false,
+        "comparator_rejects_reference": true,
+        "reference_category": "syntax_error",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": null,
+      "svg_match": false,
+      "semantic_control_pass": true,
+      "source_sha256": "1c7495c0f63e9f6b021763781f364f7bcbfe9755dcf4db34a92ec1b2d5c58357",
+      "golden_sha256": "a7aeec619c4be661b19d4b4dcb87ec396486abe31a1ee040ca7e59f96bb15d7a"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_empty_0.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_empty_0.svg",
+      "axes": [
+        "empty stored body",
+        "top-level versus pending function"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid_or_empty_truncation",
+      "observed_classification": {
+        "intended": "intended_valid_or_empty_truncation",
+        "observed_valid": false,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": null,
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": false,
+        "comparator_rejects_reference": true,
+        "reference_category": "welcome_after_empty_sub_truncation",
+        "semantic_outcome_equal": false
+      },
+      "exact_source_equal": false,
+      "svg_match": false,
+      "semantic_control_pass": false,
+      "source_sha256": "21a60743ab97bfb7e23f8fc61ebde473cddd6c08bb53792186d0c1c75419079e",
+      "golden_sha256": "a93a53962c596959c7ec507b03687a80420005b69240c34f90b6f9b4d1a3527d"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_empty_1.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_empty_1.svg",
+      "axes": [
+        "empty stored body",
+        "top-level versus pending function"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid_or_empty_truncation",
+      "observed_classification": {
+        "intended": "intended_valid_or_empty_truncation",
+        "observed_valid": false,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": null,
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": false,
+        "comparator_rejects_reference": true,
+        "reference_category": "welcome_after_empty_sub_truncation",
+        "semantic_outcome_equal": false
+      },
+      "exact_source_equal": false,
+      "svg_match": false,
+      "semantic_control_pass": false,
+      "source_sha256": "5cef28d2919a29a03a2cc774ec1a9d83049d078828e292b8621e10e8026727dc",
+      "golden_sha256": "dcc3c8a8bceb3fcccdeac132d2dbec2c2bdac3aa8d27c23bcd0da7a68e8e26f4"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_comment_origin.puml",
+      "golden": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_comment_origin.svg",
+      "axes": [
+        "comment handling before sub collector",
+        "located replay after uncalled procedure"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_classification": {
+        "intended": "intended_valid",
+        "observed_valid": true,
+        "svg_exit": 0,
+        "source_exit": 0,
+        "xml_valid": true,
+        "factory": "CLASS",
+        "svg_empty": false,
+        "source_empty": false,
+        "source_has_class": true,
+        "source_has_end": true,
+        "comparator_rejects_reference": false,
+        "reference_category": "valid_class",
+        "semantic_outcome_equal": true
+      },
+      "exact_source_equal": true,
+      "svg_match": true,
+      "semantic_control_pass": true,
+      "source_sha256": "6b82bafc7551aef86f5c353c8a1d543616b176fc7695cf713d853219760c50fc",
+      "golden_sha256": "c5d4b220b1ff9437b4a1b7c54eb21366eeafed5e447b1616790723f4d16309ab"
+    }
+  ],
+  "findings": [
+    "Java TContext.buildCodeIterator puts CodeIteratorSub before return-function, procedure, conditional and legacy-definition collectors. Fresh nonempty function/procedure/definelong, side-effect timing, inactive collection, and located comment cases all match source and SVG after correction (six valid cases); nested-sub negative is now rejected.",
+    "Empty sub cases sub_empty_0 and sub_empty_1 disprove complete iterator equivalence. CodeIteratorSub installs an empty replay iterator; peek returns null, so TContext.executeLines stops before the tail and @enduml. Java emits welcome SVG and truncated source @startuml plus class Anchor. Rust resumes after the empty vector, emits Tail and its edge, and accepts a class diagram.",
+    "The two empty cases were intended valid-or-empty-truncation probes, not established class positives. SourceProbe exits 0 for both; the SVG process also exits 0 but has no CLASS factory and is rejected by the unchanged comparator. Both complete captures and intended/observed classifications are retained.",
+    "Standing gates are not waived: main product and assisted library diagnostics, standing perturbations, guards and clippy remain failing. Preserve historical class-body, Unicode IntVal, sequence panics, and all 27 environment discrepancies.",
+    "No fixture-shaped branches, golden reads, or SVG output surgery were found in the production diff. Candidate production is identical to final production 55de7dd6; filename dispatch is restored verbatim and its original CLI regression passes."
+  ],
+  "repair_obligations": [
+    "Model empty sub replay termination, including the truncated source reaching BlockUml/factory selection, without manufacturing an empty positive diagram.",
+    "Preserve nonempty collection ordering, delayed effects, nested rejection and located replay while correcting the empty case."
+  ],
+  "verdict": "rejected",
+  "evidence": "docs/parity-reviews/tim-exact-memory-identities/checker7-support/README.md",
+  "nonpositive_result_policy": "result is pass only for a valid Java reference matching the unchanged SVG comparator. Properly rejected negative controls are recorded separately and do not become positive suite passes."
+}

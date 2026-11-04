@@ -1,0 +1,9 @@
+@startuml
+class Anchor
+!procedure $unused()
+!startsub empty
+!endsub
+!endprocedure
+class Tail
+Anchor --> Tail
+@enduml

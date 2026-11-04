@@ -1,0 +1,9 @@
+@startuml
+!procedure $unused()
+!startsub stash
+/' hidden marker !startsub ignored '/
+class "source origin" as Node
+!endsub
+!endprocedure
+!includesub stash
+@enduml

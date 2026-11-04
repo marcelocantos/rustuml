@@ -1,0 +1,9 @@
+@startuml
+!function $unused()
+!startsub stash
+class "retained" as Node
+!endsub
+!return 1
+!endfunction
+!includesub stash
+@enduml

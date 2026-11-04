@@ -1,0 +1,5 @@
+@startuml
+!$ignored=%set_variable_value("a$b","spruce")
+!$answer=%get_variable_value("a$b")
+class "$answer / a$b / %variable_exists("a$b")" as Node
+@enduml

@@ -1,0 +1,147 @@
+[
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/preproc/Sub.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "938f58861fb5d7f87c169cb079492f2c7e10d3facf244f9cab12c56aac1ad5ae"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/Eater.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "ee84c533c2c5215630017deb9a7878f69dd460af609c230bae09f65db666d2b9"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/EaterAffectation.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "3284a8881be62f6793cdfc9b62087a29388602737ab6f2c7cb831852b803f0b1"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/EaterAffectationDefine.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "bfb2f95678525172c2d24072b0169882a17aa974208e0ba49c58dddc5eb8e65c"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/EaterFunctionCall.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "548cdca832b885d45ae05d5489bdf745eba610b74ef704ed5c2aa8ca10810d79"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/EaterUndef.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "3080082acbafcfa7ccaaffeb2bbbe4228c2aaedf32f636bdb2a9c42a89a76c7c"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/FunctionsSet.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "77a5d083f4fae245d7a900c94907a53a03ec54e190f223f6334a99ef482fde7e"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TContext.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "e8c9c33121a33c2180c808838ca594e2cae5046600581dab10ec5738e2e102f6"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TFunctionArgument.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "3646c20c4b5ec1c9e58e24724c1acc6560ec711cf1c3d12c17b633a9571cc5c0"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TFunctionImpl.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "2fb675caeb10d02f667f1197c25e15634d1eeba71ae44e60bd24c60943a23f0e"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TFunctionSignature.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "5c75d0967deee51a7f217079b0961df7ca96bb1ded00918a814061acd4a11c06"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TMemoryGlobal.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "1205dbd6dc246d0c29ca8bbaa472f78d5a1c03fb8f6d695adaee443af74d04f9"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TMemoryLocal.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "169ed33858db073617cd5bf57a7e4058de5e029a39ec0d97b4828cb5c6d3ea74"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TrieImpl.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "fea5cb67cd4e17f0dcdba157963283bce69c4a829d6ced9d4aaa6b4660e94668"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/VariableManager.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "b48ed68ef49f7217cc7f9ea50509fe1c1c18f0ffb7bacb14aa11fe1f10039643"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/builtin/Filename.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "1715d15eeae54258b53be521a4bce0ee9f9c9ecdaf0da23b952e4d194a8dc534"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/builtin/GetVariableValue.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "df4e0a1012d686aeae9db691cde276f36da7aa81365d8267e3f0589792b55cd1"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/builtin/SetVariableValue.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "4f41026b7218b639e5b86e883d879bfa816c1dfb7772756c2d031f3da97de27e"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/builtin/VariableExists.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "b0627688f7fce6ef6de8fbb2f2d8cf652c55e57f301a035636643ca99b1b9871"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/expression/ReversePolishInterpretor.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "65a8c0c37c2005ee5aeb7035632393c3e4320468f090513c555a8cd180617a80"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/expression/ShuntingYard.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "a0b8c0de4cfdda3b2a2027f952879ccedb4369e170fe58c2e1ccd495e930e8af"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorLegacyDefine.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "c388a72cc5088c1751d304f6d8837e0ddff96290fcf2ee5a7f4744b42e2e345a"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorProcedure.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "44142bf2af297083ecb58c171cdd9ce2980db0d073574945ba598d7ee7ec708d"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorReturnFunction.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "af7f4f81a441dd38cd74527821da000b7510dc59da13bd83101d1451936f2d0e"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorSub.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "987727071e2b7287cc28bdd7398686ad8009cc5b00aa4988b3d3ce9ce06c9362"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/BlockUml.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "b3416aec8f83e6e5e398b5a07c4631441db9d2dd534523d9ebe01fbf8d39b618"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/tim/TimLoader.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "76e15e0ff013456fa749bf30df577fc9fd7cc2229865ebe8bd57cf6aba1798f6"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "fc54ae0fee21d32b68b2a3c920427d3e04066769eeb7db80f66ffd819d3147b3"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "742fc602d073e06b494e24b4d932db4cfded4c6ae98bf463648854e7a2c0a19d"
+  }
+]

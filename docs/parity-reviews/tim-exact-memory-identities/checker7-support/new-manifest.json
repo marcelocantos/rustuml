@@ -1,0 +1,324 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/dual_cedar.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "renamed exact keys",
+      "local override removal and display boundary"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/dual_birch.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "renamed exact keys",
+      "local override removal and display boundary"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/defaults_siblings.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "captured defaults versus mutated global",
+      "sibling frame versus overrides"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/builtin_global_remove.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "global builtin assignment",
+      "override removal and exact existence"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/key_dollar.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "builtin-created exact name",
+      "text trie versus direct lookup"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/key_combining.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "builtin-created exact name",
+      "text trie versus direct lookup"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/parameter_duplicate.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "duplicate declared parameter keys",
+      "named versus positional assignment"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/select_0.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "declaration order",
+      "exact arity versus named fallback and bare boundary"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/select_1.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "declaration order",
+      "exact arity versus named fallback and bare boundary"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/pending_replace.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "pending defaults call completed signature",
+      "replacement preserves other arity"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/kind_after_exact.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": true,
+    "intended_validity": "intended_negative",
+    "axes": [
+      "exact versus compatible fallback",
+      "procedure rejected by expression kind"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/named_coverage.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "multiple compatible arities",
+      "named-key coverage filters candidates"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/capacity_20.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "ordinary HashMap size96 versus97",
+      "bucket order differs from declaration order"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/capacity_21.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "ordinary HashMap size96 versus97",
+      "bucket order differs from declaration order"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_procedure.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "collector kind",
+      "uncalled storage versus located inclusion"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_function.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "collector kind",
+      "uncalled storage versus located inclusion"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_definelong.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "collector kind",
+      "uncalled storage versus located inclusion"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_effects.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "no early effects",
+      "stored and called replay count"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_inactive.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "inactive declaration",
+      "sub availability before conditional collector"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_nested_negative.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": true,
+    "intended_validity": "intended_negative",
+    "axes": [
+      "nested validation inside uncalled collector",
+      "error precedence before body effects"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_empty_0.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid_or_empty_truncation",
+    "axes": [
+      "empty stored body",
+      "top-level versus pending function"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_empty_1.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid_or_empty_truncation",
+    "axes": [
+      "empty stored body",
+      "top-level versus pending function"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-checker/new/sub_comment_origin.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "axes": [
+      "comment handling before sub collector",
+      "located replay after uncalled procedure"
+    ],
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

@@ -1,0 +1,11 @@
+@startuml
+!birch="bare"
+!$birch="cash"
+!function $frame(birch="007",$birch="09")
+!local birch=birch+2
+!undef $birch
+!return birch+"/"+$birch+"/"+%get_variable_value("birch")
+!endfunction
+!$answer=$frame()
+class "$answer / birch / $birch / xbirch / x$birch" as Node
+@enduml
