@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "c51bb7686a96ac775d481273dfcf373402531524",
+  "verification_plan": "Frozen 1826 entries (1752 unique source hashes), real CLI and unchanged comparator, before/after YAML and UID/URL ownership; fresh immutable source-guided parent relay controls with invalid references classified separately. Focused iteration then stable library/CLI/main product+assisted/standing perturbation/guards/fmt/clippy gates. Preserve all failures, prior records and chronology defects; no acceptance claim.",
+  "mechanism": "class-attached-note-consuming-url-grammar",
+  "java_locations": [
+    "command/note/CommandFactoryNoteOnEntity#createSingleLine,createMultiLine,executeInternal",
+    "classdiagram/command/NameAndCodeParser#codeForClass",
+    "regex/Pattern2 %g",
+    "url/UrlBuilder#getRegexp,getUrl,withTopUrl",
+    "utils/StringUtils#isDoubleQuote",
+    "net/atmp/CucaDiagram#cleanId"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#try_note,try_url,resolve_quark_path"
+  ],
+  "invariant": "Attached-note targets consume Pattern2 quote tokens before identity resolution, with StringUtils cleanup distinct from recognition. Strict UrlBuilder alternatives consume the full URL including quoted spaces and tooltip; single-line syntax validates but passes null URL, multiline preserves it. Existing owners, body and UID events survive.",
+  "causal_divergence": "Attached-note target and URL extraction use ASCII-only target cleanup and an unrelated whitespace URL extractor, unlike standalone CommandUrl. This rejects smart-quoted targets and truncates valid quoted URLs.",
+  "planned_change": "Share the existing class-local strict UrlBuilder implementation between standalone URL and attached note commands. Expand only the owning attached target grammar to %g and clean ASCII/curly token delimiters at the parser boundary. Validate URLs even when single-line semantics discard them. Preserve named-note inline URL negatives and malformed alternatives.",
+  "perturbation_axes": [
+    "ASCII/curly/mixed/Jaws quote tokens, URL spaces/tooltips/topurl and invalid quoted inputs",
+    "single-line/braced/end-note bodies, scoped aliases and command order"
+  ]
+}
