@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "c51bb7686a96ac775d481273dfcf373402531524",
+  "verification_plan": "Frozen 1826 entries (1752 unique source hashes), real CLI and unchanged comparator, before/after YAML and UID/URL ownership; fresh immutable source-guided parent relay controls with invalid references classified separately. Focused iteration then stable library/CLI/main product+assisted/standing perturbation/guards/fmt/clippy gates. Preserve all failures, prior records and chronology defects; no acceptance claim.",
+  "mechanism": "class-note-svek-paint-inventory",
+  "java_locations": [
+    "svek/GraphvizImageBuilder#printGroups,printGroup,printEntities,buildImage",
+    "svek/Bibliotekon#createNode,allNodes",
+    "svek/SvekResult#drawU",
+    "dot/DotData#isDegeneratedWithFewEntities",
+    "svek/image/EntityImageEmptyPackage#calculateDimensionSlow,drawU",
+    "klimt/drawing/LimitFinder#drawUPath,drawRectangle"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#SvekEmissionOrder,svek_node_emission_order,render_plantuml_svg,render_with_oracle_uid_origin,render_notes_only,uses_degenerated_entity,empty_package_dims"
+  ],
+  "invariant": "Paint traverses group-owned leaves before root-owned leaves, preserving insertion order within each owner and all existing UID allocations. Degenerated eligibility requires zero groups, zero links and the appropriate leaf count. Empty-package images participate in the ordinary preferred and painted inventory.",
+  "causal_divergence": "Note leaves are absent from the shared SVEK inventory and are merged by numeric UID at paint time, confusing allocation with drawing. Notes-only fast paths test only entities and notes and can discard a retained empty group. Existing empty-package envelope/cluster mismatches are separate until source-derived.",
+  "planned_change": "Add owned note leaves to the recursive paint inventory and consume it directly without SVG reorder or UID changes. Keep layout solver contracts separate and explicit. Require complete-model no-group eligibility for degenerated paths, retaining existing EntityImageEmptyPackage dimensions and primitive envelope flow. Investigate remaining empty-package extrema without coordinate compensation.",
+  "perturbation_axes": [
+    "root/local note and native entity declaration order, distinct same short names and UID retention",
+    "empty versus populated groups, namespace separators, multiple notes and attached versus named notes"
+  ]
+}
