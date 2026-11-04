@@ -742,12 +742,10 @@ impl SeqParser {
             return true;
         }
         if let Some(caps) = RE.captures(line) {
-            let text = caps[1].trim();
-            self.events.push(Event::Delay(if text.is_empty() {
-                None
-            } else {
-                Some(text.to_string())
-            }));
+            // CommandDelay#executeArg passes LABEL verbatim to Display.
+            // Spacer atoms still contribute to the component preferred width
+            // (account a21a0275); only the undelimited `...` has no label.
+            self.events.push(Event::Delay(Some(caps[1].to_string())));
             true
         } else {
             false
@@ -1037,7 +1035,10 @@ impl SeqParser {
                     None => (stripped.to_string(), ""),
                 }
             } else {
-                (String::new(), rest)
+                // CommandBoxStart#getRegexConcat NAME2 captures the unquoted
+                // title up to the optional color (account 55e88b2a).
+                let end = rest.find('#').unwrap_or(rest.len());
+                (rest[..end].to_string(), &rest[end..])
             };
             let color = after_title
                 .split_whitespace()
@@ -1770,6 +1771,35 @@ mod tests {
         assert!(matches!(d.events[1], Event::Delay(Some(_))));
         if let Event::Delay(Some(text)) = &d.events[1] {
             assert_eq!(text, "5 minutes later");
+        }
+    }
+
+    #[test]
+    fn delay_preserves_component_label_whitespace() {
+        for label in ["  wait ", "wait   ", ""] {
+            let diagram = parse(&format!("A -> B : before\n...{label}...\nA -> B : after"));
+            assert!(matches!(&diagram.events[1], Event::Delay(Some(text)) if text == label));
+        }
+        assert!(matches!(parse("A -> B\n...").events[1], Event::Delay(None)));
+    }
+
+    #[test]
+    fn box_title_quote_forms_retain_label_color_and_membership() {
+        for title in ["Outer domain", "\"Outer domain\""] {
+            let diagram = parse(&format!(
+                "box {title} #lightblue\nparticipant Oak\nend box\nparticipant Elm\nOak -> Elm : request"
+            ));
+            assert_eq!(diagram.boxes.len(), 1);
+            assert_eq!(
+                diagram.boxes[0].title,
+                if title.starts_with('"') {
+                    "Outer domain"
+                } else {
+                    "Outer domain "
+                }
+            );
+            assert_eq!(diagram.boxes[0].color.as_deref(), Some("#lightblue"));
+            assert_eq!(diagram.boxes[0].members, vec![0]);
         }
     }
 

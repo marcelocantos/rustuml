@@ -3028,23 +3028,6 @@ struct SequenceLifeLines {
 }
 
 impl SequenceLifeLines {
-    fn max_depth(&self, participant: &str) -> usize {
-        // LivingSpace#getPosC2 / LiveBoxes#getMaxPosition: half-width times
-        // maximum accepted level across the complete event history.
-        let mut depth = 0_usize;
-        let mut maximum = 0;
-        if let Some(variations) = self.variations.get(participant) {
-            for variation in variations {
-                match variation.kind {
-                    LifeVariationKind::Open => depth += 1,
-                    LifeVariationKind::Close => depth = depth.saturating_sub(1),
-                }
-                maximum = maximum.max(depth);
-            }
-        }
-        maximum
-    }
-
     fn return_context(&self, event_index: usize) -> Option<&SequenceReturnContext> {
         self.return_context_by_event
             .get(event_index)
@@ -3727,6 +3710,326 @@ fn attach_sequence_lifecycle_event(
     {
         y_offset[event_index] = SAME_MESSAGE_LIFECYCLE_ROW;
         row_after_message[message_index] = SAME_MESSAGE_LIFECYCLE_ROW;
+    }
+}
+
+// Account 836f9c0d: Teoz LiveBoxes history is raw source-event history, not
+// legacy LifeLine's accepted ordinate variations. Message suffixes are LifeEvents
+// immediately following the message in SequenceDiagram#activate.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum TeozHistoryMode {
+    IgnoreFutureActivate,
+    IgnoreFutureDeactivate,
+    ConsiderFutureDeactivate,
+}
+
+struct TeozHistoryItem {
+    source: usize,
+    life: Option<(String, ActivationChange, Option<String>)>,
+    owner: Option<usize>,
+    implicit: bool,
+}
+
+#[derive(Clone, Copy)]
+enum TeozNoteAllocation {
+    CapturedBounds,
+    Paint,
+}
+
+struct TeozHistory {
+    items: Vec<TeozHistoryItem>,
+    source_position: Vec<usize>,
+}
+
+impl TeozHistory {
+    fn new(events: &[Event], owners: &[Option<usize>]) -> Self {
+        let mut items = Vec::new();
+        let mut source_position = vec![0; events.len()];
+        for (index, event) in events.iter().enumerate() {
+            source_position[index] = items.len();
+            let life = match event {
+                Event::Activate(id, color) => {
+                    Some((id.clone(), ActivationChange::Activate, color.clone()))
+                }
+                Event::Deactivate(id) => Some((id.clone(), ActivationChange::Deactivate, None)),
+                Event::Destroy(id) => Some((id.clone(), ActivationChange::Destroy, None)),
+                _ => None,
+            };
+            items.push(TeozHistoryItem {
+                source: index,
+                life,
+                owner: owners[index],
+                implicit: false,
+            });
+            if let Event::Message(message) = event
+                && let Some(change) = message.activation
+            {
+                // CommandExoArrowAny applies life flags to its real participant.
+                let participant = if matches!(message.from.as_str(), "[" | "]") {
+                    &message.to
+                } else if matches!(message.to.as_str(), "[" | "]")
+                    || change == ActivationChange::Deactivate
+                {
+                    &message.from
+                } else {
+                    &message.to
+                };
+                items.push(TeozHistoryItem {
+                    source: index,
+                    life: Some((
+                        participant.clone(),
+                        change,
+                        message.activation_color.clone(),
+                    )),
+                    owner: Some(index),
+                    implicit: true,
+                });
+            }
+        }
+        Self {
+            items,
+            source_position,
+        }
+    }
+
+    fn level(
+        &self,
+        events: &[Event],
+        participant: &str,
+        source: usize,
+        mode: TeozHistoryMode,
+    ) -> usize {
+        self.level_at_position(events, participant, self.source_position[source], mode)
+    }
+
+    fn level_at_position(
+        &self,
+        events: &[Event],
+        participant: &str,
+        position: usize,
+        mode: TeozHistoryMode,
+    ) -> usize {
+        // LiveBoxes#getLevelAtInternal includes the queried LifeEvent itself.
+        let mut level = 0usize;
+        for item in &self.items[..=position] {
+            if let Some((id, change, _)) = &item.life
+                && id == participant
+            {
+                if *change == ActivationChange::Activate {
+                    level += 1;
+                } else {
+                    level = level.saturating_sub(1);
+                }
+            }
+        }
+        let current = &self.items[position];
+        if current.life.is_some() {
+            return level;
+        }
+        let Event::Message(message) = &events[current.source] else {
+            return level;
+        };
+        if message.from != participant && message.to != participant {
+            return level;
+        }
+        let (mut opened, mut closed) = (false, false);
+        for item in &self.items[position + 1..] {
+            if let Some((id, change, _)) = &item.life {
+                if item.owner != Some(current.source) || id != participant {
+                    continue;
+                }
+                if *change == ActivationChange::Activate
+                    && mode != TeozHistoryMode::IgnoreFutureActivate
+                {
+                    opened = true;
+                    if closed {
+                        break;
+                    }
+                    level += 1;
+                }
+                if *change != ActivationChange::Activate
+                    && mode == TeozHistoryMode::ConsiderFutureDeactivate
+                {
+                    closed = true;
+                    if opened {
+                        break;
+                    }
+                    level = level.saturating_sub(1);
+                }
+            } else if !matches!(events[item.source], Event::Message(_) | Event::Note(_)) {
+                break;
+            }
+        }
+        level
+    }
+
+    fn max_depth(&self, participant: &str) -> usize {
+        // LiveBoxes#getMaxValue intentionally differs from getLevelAt: it scans
+        // signed raw life depth and records maxima immediately after opens.
+        let (mut depth, mut maximum) = (0i32, 0i32);
+        for item in &self.items {
+            if let Some((id, change, _)) = &item.life
+                && id == participant
+            {
+                if *change == ActivationChange::Activate {
+                    depth += 1;
+                }
+                maximum = maximum.max(depth);
+                if *change != ActivationChange::Activate {
+                    depth -= 1;
+                }
+            }
+        }
+        maximum as usize
+    }
+
+    fn segments(
+        &self,
+        events: &[Event],
+        participant: &str,
+        message_states: &[MessageLifecycleState],
+        ordinates: &[f64],
+        tile_ends: &[f64],
+        end_y: f64,
+    ) -> Vec<(usize, f64, f64, Option<String>, usize)> {
+        let mut callbacks = vec![None; self.items.len()];
+        let mut record_callbacks = || {
+            for (position, item) in self.items.iter().enumerate() {
+                let callback = if let Some((id, change, _)) = &item.life {
+                    if id != participant {
+                        continue;
+                    }
+                    let mut y = if item.implicit {
+                        tile_ends[item.source]
+                    } else {
+                        ordinates[item.source]
+                    };
+                    // LiveBoxes#addStep: only DEACTIVATE and only an actual callback
+                    // ordinate collision gets the five-pixel stagger.
+                    if *change == ActivationChange::Deactivate && callbacks.contains(&Some(y)) {
+                        y += ACTIVATION_HALF_W;
+                    }
+                    Some(y)
+                } else if let Event::Message(message) = &events[item.source] {
+                    if message.from != participant && message.to != participant {
+                        continue;
+                    }
+                    let state = &message_states[item.source];
+                    if message.from != message.to {
+                        Some(ordinates[item.source])
+                    } else if state.has_activate {
+                        Some(ordinates[item.source] + SELF_MSG_DROP)
+                    } else if state.has_deactivate {
+                        Some(ordinates[item.source])
+                    } else if state.has_closing_type {
+                        Some(ordinates[item.source] + SELF_MSG_DROP)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                };
+                callbacks[position] = callback;
+            }
+        };
+        // Account 7ddde171: LiveBoxes retains eventsStep through the actual
+        // PlayingSpaceWithParticipants render lifecycle. Each measurement
+        // traverses tiles, so the previous pass participates in collisions.
+        record_callbacks(); // calculateDimensionSlow -> getPreferredHeight
+        record_callbacks(); // drawU -> getPreferredHeight
+        record_callbacks(); // drawBackground, before drawLifeLines
+        // drawForeground occurs after the bars and cannot change this snapshot.
+        let mut stairs: Vec<(usize, f64, usize, Option<String>)> = Vec::new();
+        let (mut last_message, mut position_y) = (None, None);
+        let (mut seen_open, mut seen_close) = (false, false);
+        let mut indent = 0;
+        for (position, item) in self.items.iter().enumerate() {
+            if matches!(&events[item.source], Event::Note(note) if note.on_message) {
+                continue;
+            }
+            if matches!(events[item.source], Event::Note(_)) {
+                last_message = None;
+                seen_open = false;
+                seen_close = false;
+            }
+            let potential = callbacks[position];
+            if position_y.is_none() || last_message.is_none() {
+                position_y = potential;
+            } else if let Some((id, change, _)) = &item.life {
+                if id != participant {
+                    continue;
+                }
+                let opening = *change == ActivationChange::Activate;
+                if item.owner.is_none()
+                    || item.owner != last_message
+                    || (opening && seen_close)
+                    || (!opening && seen_open)
+                {
+                    position_y = potential;
+                }
+                seen_open |= opening;
+                seen_close |= *change == ActivationChange::Deactivate;
+            } else {
+                position_y = potential;
+            }
+            if item.life.is_none() && matches!(events[item.source], Event::Message(_)) {
+                seen_open = false;
+                seen_close = false;
+                last_message = Some(item.source);
+            }
+            if let Some(y) = position_y {
+                indent = self.level_at_position(
+                    events,
+                    participant,
+                    position,
+                    TeozHistoryMode::ConsiderFutureDeactivate,
+                );
+                let color = if let Some((_, ActivationChange::Activate, color)) = &item.life {
+                    color.clone()
+                } else if item.life.is_none() {
+                    self.items[position + 1..]
+                        .iter()
+                        .take_while(|next| {
+                            next.life.is_some() || matches!(events[next.source], Event::Note(_))
+                        })
+                        .find_map(|next| match &next.life {
+                            Some((id, ActivationChange::Activate, color))
+                                if id == participant && next.owner == Some(item.source) =>
+                            {
+                                color.clone()
+                            }
+                            _ => None,
+                        })
+                } else {
+                    None
+                };
+                // Stairs#addStep rejects decreasing y, retaining equal-y changes.
+                if stairs.last().is_none_or(|step| y >= step.1) {
+                    stairs.push((item.source, y, indent, color));
+                }
+            }
+        }
+        if stairs.last().is_none_or(|step| end_y >= step.1) {
+            stairs.push((events.len(), end_y, indent, None));
+        }
+        let maximum = stairs.iter().map(|step| step.2).max().unwrap_or(0);
+        let mut segments = Vec::new();
+        // LiveBoxes#drawOneLevel may reopen a level; it starts only at equality,
+        // not whenever a higher level happens to be present.
+        for level in 1..=maximum {
+            let mut start = None;
+            for (index, step) in stairs.iter().enumerate() {
+                if start.is_none() && step.2 == level {
+                    start = Some(step);
+                } else if let Some(first) = start
+                    && (index + 1 == stairs.len() || step.2 < level)
+                {
+                    segments.push((first.0, first.1, step.1, first.3.clone(), level - 1));
+                    start = None;
+                }
+            }
+        }
+        segments
     }
 }
 
@@ -6805,10 +7108,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             BOX_TITLE_HEAD_GAP
         };
-        plantuml_metrics::text_height(BOX_TITLE_FONT_SIZE as f64) + title_gap
+        // ComponentRoseEnglober#getPreferredHeight consumes getTextHeight,
+        // including AbstractTextualComponent's top/bottom global padding.
+        plantuml_metrics::text_height(BOX_TITLE_FONT_SIZE as f64) + title_gap + 2.0 * global_padding
     } else {
-        // Untitled boxes only contribute their top margin, no title line.
-        BOX_TITLE_HEAD_GAP
+        // Empty Display still has the component's padding and vertical margins.
+        BOX_TITLE_HEAD_GAP + 2.0 * global_padding
     };
     // A `header` directive reserves a band above the heads: the header text
     // sits at the top (baseline y≈14.668), with literal `\n` adding more
@@ -7147,6 +7452,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let lifecycle_y_offset = lifecycle.y_offset;
     let lifecycle_row_after_message = lifecycle.row_after_message;
     let lifecycle_message_states = lifecycle.message_states;
+    let teoz_history = diagram
+        .teoz
+        .then(|| TeozHistory::new(&diagram.events, &lifecycle_owner));
     let create_msg_idx = sequence_create_message_indices(&diagram.events);
     // Map creating-message event index -> extra vertical advance for that event:
     // the base advance plus any extent by which a tall inline head shape (actor,
@@ -7267,13 +7575,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             0.0
                         };
-                        let extra = if legacy_self_note {
+                        let extra = if legacy_self_note
+                            || (diagram.teoz && note.shape == NoteShape::Note)
+                        {
                             // ArrowAndNoteBox centers the arrow within max(Ha,Hn).
                             // Rose self: text + marginY*2 + deltaY + loop + paddingY*2.
                             let arrow_height = owner_text_height
                                 + 2.0
                                 + ARROW_HALF_H
-                                + SELF_MSG_DROP
+                                + if matches!(&diagram.events[owner], Event::Message(msg) if msg.from == msg.to)
+                                {
+                                    SELF_MSG_DROP
+                                } else {
+                                    0.0
+                                }
                                 + 2.0 * ARROW_HALF_H
                                 + 2.0 * global_padding;
                             // Rose note: text + marginY*2 + paddingY*2 + shadow.
@@ -7319,6 +7634,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `GraphicalNewpage`/`ComponentRoseNewpage`.
     // Groups add header/else/end vertical space.
     let mut event_y_positions: Vec<f64> = Vec::new();
+    let mut teoz_tile_ends = Vec::new();
     let mut msg_count: u32 = 0;
     let last_effective_y;
     let mut first_page_end = None;
@@ -7343,12 +7659,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         y += msg_step(has_text, event_text_height) + message_vertical_padding;
                     }
-                    if let Some(extra) = note_extra {
+                    if let Some(extra) = note_extra
+                        && !diagram.teoz
+                    {
                         y += extra;
                     }
                     event_y_positions.push(y);
                     if let Some(extra) = note_extra {
-                        y += extra;
+                        // Teoz CommunicationTile*Note shares the tile origin;
+                        // preferred height is max(arrow, note), with no centering.
+                        y += if diagram.teoz { 2.0 * extra } else { extra };
                     }
                     if let Some(extra) = msg_note_tail_extra.get(&idx).copied() {
                         y += extra;
@@ -7363,7 +7683,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     if let Some(&extra) = create_msg_extra.get(&idx) {
                         y += extra;
                     }
-                    y += lifecycle_row_after_message[idx];
+                    // LifeEventTile has zero preferred height. The legacy
+                    // Step1Message combined row is not part of the Teoz model.
+                    if !diagram.teoz {
+                        y += lifecycle_row_after_message[idx];
+                    }
                     msg_count += 1;
                 }
                 Event::Return(_) => {
@@ -7470,7 +7794,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 diagram.events.get(owner),
                                 Some(Event::Message(msg)) if msg.from == msg.to
                             );
-                        let note_top = if legacy_self_note {
+                        let note_top = if diagram.teoz {
+                            // CommunicationTileSelfNoteLeft/Right and
+                            // CommunicationTileNoteLeft/Right draw both children
+                            // from the same tile origin; Rose note adds paddingY.
+                            let (_, text_height) =
+                                event_message_text_height(&diagram.events[owner]);
+                            arrow_y - (text_height + 2.0 + ARROW_HALF_H + 2.0 * global_padding)
+                                + ROSE_NOTE_PADDING_Y
+                        } else if legacy_self_note {
                             let (_, text_height) =
                                 event_message_text_height(&diagram.events[owner]);
                             let arrow_height = text_height
@@ -7643,10 +7975,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     msg_count += 1;
                 }
                 Event::Activate(_, _) | Event::Deactivate(_) | Event::Destroy(_) => {
-                    let event_y = lifecycle_owner[idx]
-                        .and_then(|owner| event_y_positions.get(owner).copied())
-                        .map(|owner_y| owner_y + lifecycle_y_offset[idx])
-                        .unwrap_or(y);
+                    let event_y = if diagram.teoz {
+                        // Arrow preferred height ends deltaY(4)+paddingY(4)
+                        // below the arrow endpoint; y includes the self loop.
+                        y + 2.0 * ARROW_HALF_H
+                            // PlayingSpace starts at 8. Before the first message,
+                            // the shared cursor has not consumed the difference
+                            // between first_msg_offset and msg_step; LifeEventTile
+                            // still starts at that initial origin (7ddde171).
+                            + if msg_count == 0 {
+                                MSG_BASE_FIRST_OFFSET - MSG_BASE_STEP
+                            } else {
+                                0.0
+                            }
+                    } else {
+                        lifecycle_owner[idx]
+                            .and_then(|owner| event_y_positions.get(owner).copied())
+                            .map(|owner_y| owner_y + lifecycle_y_offset[idx])
+                            .unwrap_or(y)
+                    };
                     event_y_positions.push(event_y);
                 }
                 Event::NewPage(_) => {
@@ -7664,6 +8011,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     event_y_positions.push(y);
                 }
             }
+            // Rose arrow preferred height extends paddingY*2 below its
+            // endpoint; a following zero-height LifeEventTile starts there.
+            teoz_tile_ends.push(y + 2.0 * ARROW_HALF_H);
         }
         // The first `newpage` reserves NEWPAGE_SEPARATOR_HEIGHT in the page-1
         // flow (Java `prepareNewpage` advances `freeY2` by the separator
@@ -7838,7 +8188,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 // doubled — Teoz tracks one absolute right edge per
                                 // lifeline rather than a symmetric shift).
                                 arrow_only_w
-                                    + horizontal_life_lines.max_depth(&msg.from) as f64
+                                    + teoz_history.as_ref().unwrap().max_depth(
+                                        if reverse && fi > 0 {
+                                            &participants[fi - 1].id
+                                        } else {
+                                            &msg.from
+                                        },
+                                    ) as f64
                                         * ACTIVATION_HALF_W
                             } else {
                                 // Legacy Step1Message.getConstraintAfter:
@@ -7893,8 +8249,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .get(event_idx)
                             .copied()
                             .unwrap_or_default();
-                        let from_depth = horizontal_life_lines.depth_before(&msg.from, ordinate);
-                        let to_depth = horizontal_life_lines.depth_before(&msg.to, ordinate);
+                        let from_depth = teoz_history.as_ref().map_or_else(
+                            || horizontal_life_lines.depth_before(&msg.from, ordinate),
+                            |history| {
+                                history.level(
+                                    &diagram.events,
+                                    &msg.from,
+                                    event_idx,
+                                    TeozHistoryMode::IgnoreFutureDeactivate,
+                                )
+                            },
+                        );
+                        let to_depth = teoz_history.as_ref().map_or_else(
+                            || horizontal_life_lines.depth_before(&msg.to, ordinate),
+                            |history| {
+                                history.level(
+                                    &diagram.events,
+                                    &msg.to,
+                                    event_idx,
+                                    TeozHistoryMode::IgnoreFutureDeactivate,
+                                )
+                            },
+                        );
 
                         // Teoz target livebox level (`livingSpace2.getLevelAt(...,
                         // IGNORE_FUTURE_DEACTIVATE)`) includes a level activated by
@@ -7934,8 +8310,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 } else {
                                     0.0
                                 };
-                                let target_level =
-                                    to_depth.max(horizontal_life_lines.depth_at(&msg.to, ordinate));
+                                let target_level = to_depth;
                                 let tgt_live = target_level as f64 * ACTIVATION_HALF_W;
                                 (src_live, tgt_live)
                             }
@@ -8185,6 +8560,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
         if let Event::Note(note) = event
             && !legacy_groups
+            && (!diagram.teoz || note.shape != NoteShape::Note)
+            && !(note.shape == NoteShape::Note && note.position == NotePosition::Left)
         {
             // A message-attached Left note anchors to the leftmost endpoint by
             // index; otherwise the first listed participant.
@@ -8276,8 +8653,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             } else {
                 0.0
             };
-            min_first_center_x =
-                min_first_center_x.max(autonumber_extra + label_w + 24.0 + group_pad);
+            min_first_center_x = min_first_center_x.max(
+                autonumber_extra
+                    + label_w
+                    + 2.0 * MSG_TEXT_LEFT_PAD
+                    + ARROW_SIZE
+                    + if diagram.teoz {
+                        HEAD_BOX_Y + 2.0 * constraint_global_padding
+                    } else {
+                        group_pad
+                    },
+            );
         }
         if matches!(event, Event::Message(_) | Event::Return(_)) {
             min_scan_auto.advance();
@@ -8307,6 +8693,32 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let participant_box_member = |idx: usize| -> Option<usize> {
         participant_box_members.iter().copied().nth(idx).flatten()
     };
+    // Doll#addInternalConstraints captures these margins before Real compile,
+    // when posB..posD is the contiguous preferred head span (account 3c9a9e67).
+    // Its title component has marginX1=marginX2=3, and Doll adds 10 to it.
+    let mut teoz_box_margins = vec![(0.0_f64, 0.0_f64); n];
+    if diagram.teoz {
+        for b in &participant_boxes {
+            let member_indices = participants
+                .iter()
+                .enumerate()
+                .filter(|(_, p)| b.members.contains(&p.decl_idx))
+                .map(|(index, _)| index)
+                .collect::<Vec<_>>();
+            if let (Some(&first), Some(&last)) = (member_indices.first(), member_indices.last()) {
+                let width = participants[first..=last]
+                    .iter()
+                    .map(|p| p.preferred_width)
+                    .sum::<f64>();
+                let title_width = bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64)
+                    + 2.0 * 3.0
+                    + 2.0 * global_padding;
+                let margin = ((title_width + TEOZ_BOX_BOUNDARY_GAP - width) / 2.0).max(0.0);
+                teoz_box_margins[first].0 = teoz_box_margins[first].0.max(margin);
+                teoz_box_margins[last].1 = teoz_box_margins[last].1.max(margin);
+            }
+        }
+    }
     let min_gap_boxes_for_pair = |i: usize| -> f64 {
         let teoz_box_gap = if diagram.teoz
             && has_boxes
@@ -8320,6 +8732,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             + participant_layout_halves[i + 1]
             + participant_box_gap
             + teoz_box_gap
+            + teoz_box_margins[i].1
+            + teoz_box_margins[i + 1].0
     };
     for &(left, right, needed) in &multi_span_constraints {
         let mut cumulative = 0.0_f64;
@@ -8386,6 +8800,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             + participant_outer_padding
             + group_shift
             + teoz_box_shift
+            + teoz_box_margins[0].0
             + participant_layout_halves[0];
         participants[0].center_x = default_center.max(min_first_center_x);
         participants[0].box_x = participants[0].center_x - participant_layout_halves[0];
@@ -8410,7 +8825,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // Titled participant boxes feed back into layout: when the title is
         // wider than the enclosed heads, Java widens the frame and recentres
         // the member heads under it, pushing later participants right.
-        if has_boxes {
+        if has_boxes && !diagram.teoz {
             for b in participant_boxes.iter().copied() {
                 if b.title.is_empty() {
                     continue;
@@ -8458,7 +8873,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // participant constraints, then prepareMissingSpace translates the
         // whole set by the group-header deficit represented by group_shift.
         for &(participant_idx, needed) in &left_border_constraints {
-            let required_center = needed + group_shift;
+            // CommunicationExoTile constrains against xOrigin; the legacy
+            // border has no Teoz body inset.
+            let required_center =
+                needed + group_shift + if diagram.teoz { HEAD_BOX_Y } else { 0.0 };
             let deficit = required_center - participants[participant_idx].center_x;
             if deficit > 0.0 {
                 for participant in participants.iter_mut().skip(participant_idx) {
@@ -8477,6 +8895,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         for event in &diagram.events {
             if let Event::Note(note) = event
                 && !legacy_groups
+                && (!diagram.teoz || note.shape != NoteShape::Note)
                 && note.position == NotePosition::Over
                 && (note.participants.is_empty() || note.participants.len() >= 2)
             {
@@ -8626,7 +9045,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let self_right = if diagram.teoz {
                             // CommunicationTileSelf#getMaxX uses posC2 + component width.
                             cx_base
-                                + horizontal_life_lines.max_depth(&msg.from) as f64
+                                + teoz_history.as_ref().unwrap().max_depth(&msg.from) as f64
                                     * ACTIVATION_HALF_W
                                 + if msg.arrow.direction == ArrowDirection::RightToLeft {
                                     0.0
@@ -8651,8 +9070,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Step1Abstract#createNoteBox pushes a right self-note by
                         // the full MessageSelfArrow preferred width. Its live edge
                         // is resolved below after NoteBox top/bottom sampling.
-                        self_msg_right_note_left_by_event
-                            .insert(idx, cx_base.trunc() + model.width + ROSE_NOTE_PADDING_X);
+                        if msg.arrow.direction != ArrowDirection::RightToLeft {
+                            self_msg_right_note_left_by_event
+                                .insert(idx, cx_base.trunc() + model.width + ROSE_NOTE_PADDING_X);
+                        }
                     }
                     extent_auto.advance();
                 }
@@ -8727,6 +9148,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             if let Event::Note(note) = &diagram.events[*note_index]
                 && note.position == NotePosition::Right
                 && let Some(model) = self_arrow_by_event.get(owner)
+                && matches!(&diagram.events[*owner], Event::Message(message) if message.arrow.direction != ArrowDirection::RightToLeft)
                 && let Some(participant) =
                     note.participants.first().and_then(|id| id_to_idx.get(id))
             {
@@ -8742,6 +9164,163 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
+
+    // Step1Abstract#createNoteBox pushes reverse self left notes by the
+    // negative arrow preferred width AFTER NoteBox truncates its origin.
+    let legacy_left_note_delta = |index: usize| -> f64 {
+        if diagram.teoz {
+            return 0.0;
+        }
+        note_owner
+            .get(&index)
+            .and_then(
+                |owner| match (&diagram.events[*owner], self_arrow_by_event.get(owner)) {
+                    (Event::Message(message), Some(model))
+                        if message.arrow.direction == ArrowDirection::RightToLeft =>
+                    {
+                        Some(-model.width)
+                    }
+                    _ => None,
+                },
+            )
+            .unwrap_or(0.0)
+    };
+
+    // Account 81acbf50: Teoz NoteTile and message-note wrappers retain Real
+    // coordinates. Resolve the same component allocation for bounds and paint.
+    let teoz_note_geometry = |event_index: usize,
+                              participants: &[ParticipantLayout],
+                              phase: TeozNoteAllocation|
+     -> Option<(f64, f64, f64, f64)> {
+        if !diagram.teoz || participants.is_empty() {
+            return None;
+        }
+        let Event::Note(note) = &diagram.events[event_index] else {
+            return None;
+        };
+        if note.shape != NoteShape::Note {
+            return None;
+        }
+        let indices: Vec<_> = note
+            .participants
+            .iter()
+            .filter_map(|id| id_to_idx.get(id).copied())
+            .collect();
+        let (lo, hi) = if note.position == NotePosition::Over && !note.on_message {
+            (
+                indices.first().copied().unwrap_or(0),
+                indices.last().copied().unwrap_or(participants.len() - 1),
+            )
+        } else {
+            (
+                indices.iter().min().copied().unwrap_or(0),
+                indices
+                    .iter()
+                    .max()
+                    .copied()
+                    .unwrap_or(participants.len() - 1),
+            )
+        };
+        let preferred = folded_note_component_width(
+            note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family),
+            note_global_padding,
+            note_shadow_delta,
+        );
+        let history = teoz_history.as_ref().unwrap();
+        let owner = note_owner.get(&event_index).copied();
+        let sample = owner.unwrap_or(event_index);
+        let mut width = preferred;
+        let x = if let Some(owner) = owner
+            && let Some(model) = self_arrow_by_event.get(&owner)
+        {
+            let Event::Message(message) = &diagram.events[owner] else {
+                return None;
+            };
+            let center = participants[id_to_idx[&message.from]].center_x;
+            let reverse = message.arrow.direction == ArrowDirection::RightToLeft;
+            // CommunicationTileSelfNote{Left,Right}: attach to tile min/max.
+            if note.position == NotePosition::Left {
+                center
+                    - preferred
+                    - if reverse {
+                        model.width - model.segment_length
+                            + if history.level(
+                                &diagram.events,
+                                &message.from,
+                                owner,
+                                TeozHistoryMode::IgnoreFutureActivate,
+                            ) > 0
+                            {
+                                ACTIVATION_HALF_W
+                            } else {
+                                0.0
+                            }
+                    } else {
+                        0.0
+                    }
+            } else {
+                center
+                    + history.max_depth(&message.from) as f64 * ACTIVATION_HALF_W
+                    + if reverse {
+                        0.0
+                    } else {
+                        model.width - model.segment_length
+                    }
+            }
+        } else {
+            match note.position {
+                NotePosition::Left => participants[lo].center_x - width,
+                NotePosition::Right => {
+                    participants[hi].center_x
+                        + history.level(
+                            &diagram.events,
+                            &participants[hi].id,
+                            sample,
+                            TeozHistoryMode::IgnoreFutureDeactivate,
+                        ) as f64
+                            * ACTIVATION_HALF_W
+                }
+                NotePosition::Over => {
+                    if note.participants.is_empty() || note.participants.len() > 1 {
+                        // Account a5a826c2: NoteTile bound Real expressions
+                        // capture allocation before addConstraints/compileNow.
+                        let span = match phase {
+                            TeozNoteAllocation::CapturedBounds => {
+                                let initial_right: f64 = participants
+                                    .iter()
+                                    .take(hi + 1)
+                                    .map(|p| p.preferred_width)
+                                    .sum();
+                                let initial_left: f64 = participants
+                                    .iter()
+                                    .take(lo)
+                                    .map(|p| p.preferred_width)
+                                    .sum();
+                                initial_right - initial_left
+                            }
+                            TeozNoteAllocation::Paint => {
+                                participants[hi].box_x + participants[hi].preferred_width
+                                    - participants[lo].box_x
+                            }
+                        };
+                        width = width.max(span);
+                    }
+                    (participants[lo].center_x + participants[hi].center_x) / 2.0 - width / 2.0
+                }
+            }
+        };
+        let (min, max) = if note.position == NotePosition::Over
+            && (note.participants.is_empty() || note.participants.len() > 1)
+        {
+            (
+                x.min(participants[lo].box_x),
+                (x + width).max(participants[hi].box_x + participants[hi].preferred_width),
+            )
+        } else {
+            (x, x + width)
+        };
+        Some((x, width, min, max))
+    };
 
     // -----------------------------------------------------------------------
     // Phase 5.5: Pre-compute group frames
@@ -8773,6 +9352,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // the InGroupable extent, then draws the visible note with snapped geometry.
             // Returns `None` for notes with no resolvable anchor.
             let note_group_extent = |event_idx: usize, note: &Note| -> Option<(f64, f64)> {
+                if let Some((_, _, min, max)) =
+                    teoz_note_geometry(event_idx, participants, TeozNoteAllocation::CapturedBounds)
+                {
+                    return Some((min, max));
+                }
                 let max_text_w = note_max_line_width_with_family(
                     &note.text,
                     note_font_size_f,
@@ -8810,42 +9394,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     })
                     .collect();
-                // NoteTile#getX/getUsedWidth uses fractional Real coordinates;
-                // LEFT never applies a live-left shift, RIGHT uses its level.
-                if diagram.teoz && !note.on_message && note.shape == NoteShape::Note {
-                    let mut width = folded_note_component_width(
-                        max_text_w,
-                        note_global_padding,
-                        note_shadow_delta,
-                    );
-                    let lo = anchor_idxs.iter().min().copied().unwrap_or(0);
-                    let hi = anchor_idxs
-                        .iter()
-                        .max()
-                        .copied()
-                        .unwrap_or(participants.len().checked_sub(1)?);
-                    let left = match note.position {
-                        NotePosition::Left => participants[lo].center_x - width,
-                        NotePosition::Right => {
-                            participants[lo].center_x
-                                + note_right_live_shift_by_event
-                                    .get(&event_idx)
-                                    .copied()
-                                    .unwrap_or(0.0)
-                        }
-                        NotePosition::Over => {
-                            if note.participants.is_empty() || note.participants.len() > 1 {
-                                width = width.max(
-                                    participants[hi].box_x + participants[hi].preferred_width
-                                        - participants[lo].box_x,
-                                );
-                            }
-                            (participants[lo].center_x + participants[hi].center_x) / 2.0
-                                - width / 2.0
-                        }
-                    };
-                    return Some((left, left + width));
-                }
                 // NoteBox#getStartingX casts the component origin toward zero. Its
                 // getMinX/getMaxX expose that origin and full component preferred width,
                 // not the visible polygon inset by Rose's horizontal padding.
@@ -8865,6 +9413,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let left = match note.position {
                         NotePosition::Left => {
                             (anchor_xs.iter().copied().reduce(f64::min)? - width).trunc()
+                                + legacy_left_note_delta(event_idx)
                         }
                         NotePosition::Right => anchor_xs.iter().copied().reduce(f64::max)?.trunc(),
                         NotePosition::Over => {
@@ -8936,7 +9485,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             anchor_xs.first().copied()?
                         };
                         let gap = left_note_lifeline_gap(
-                            &participants,
+                            participants,
                             note.shape,
                             anchor_idxs.first().copied(),
                             note.on_message,
@@ -9016,7 +9565,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     )
                                 };
                                 let geom = over_several_note_geometry(
-                                    &participants,
+                                    participants,
                                     lo,
                                     hi,
                                     component_pref_w,
@@ -9117,19 +9666,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // accepted variations in event order, not by ordinate: several
                 // zero-height life events can share an ordinate.
                 let mut life_tile_bounds: HashMap<usize, (f64, f64)> = HashMap::new();
-                if diagram.teoz {
-                    for (participant, variations) in &horizontal_life_lines.variations {
-                        let mut level = 0_usize;
-                        for variation in variations {
-                            match variation.kind {
-                                LifeVariationKind::Open => level += 1,
-                                LifeVariationKind::Close => level = level.saturating_sub(1),
-                            }
+                if let Some(history) = &teoz_history {
+                    for (position, item) in history.items.iter().enumerate() {
+                        if let Some((participant, _, _)) = &item.life {
+                            let level = history.level_at_position(
+                                &diagram.events,
+                                participant,
+                                position,
+                                TeozHistoryMode::IgnoreFutureActivate,
+                            );
                             let center = center_of(participant);
                             let left = center - if level > 0 { ACTIVATION_HALF_W } else { 0.0 };
                             let right = center + level as f64 * ACTIVATION_HALF_W;
                             life_tile_bounds
-                                .entry(variation.event_index)
+                                .entry(item.source)
                                 .and_modify(|bounds| {
                                     bounds.0 = bounds.0.min(left);
                                     bounds.1 = bounds.1.max(right);
@@ -9164,6 +9714,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         for group in &mut group_start_stack {
                             group.min_live_left = group.min_live_left.min(left);
                             group.max_live_right = group.max_live_right.max(right);
+                            group.members.push(SequenceGroupMemberBounds {
+                                min: left,
+                                max: right,
+                                kind: SequenceGroupMemberKind::Ordinary,
+                            });
                         }
                     }
                     match event {
@@ -9187,8 +9742,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         Event::GroupEnd => {
                             if let Some(group) = group_start_stack.pop() {
-                                let min_idx = group.min_idx;
-                                let max_idx = group.max_idx;
                                 let start_idx = group.start_idx;
                                 let frame_top = event_y_positions
                                     .get(start_idx)
@@ -9279,239 +9832,75 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     continue;
                                 }
 
-                                // Account for nested child frames already computed. Because
-                                // every parent frame extends GROUP_FRAME_MARGIN beyond its
-                                // direct child on each side, the direct child is always the
-                                // most extreme enclosed frame, so taking the min/max over all
-                                // enclosed frames (start event index strictly between this
-                                // group's start and end) yields the direct child's extent.
-                                let mut child_left = f64::INFINITY;
-                                let mut child_right = f64::NEG_INFINITY;
-                                for cf in &group_frames {
-                                    if cf.event_idx > start_idx && cf.event_idx < ev_idx {
-                                        child_left = child_left.min(cf.left);
-                                        child_right = child_right.max(cf.right);
-                                    }
-                                }
-                                let has_child = child_left.is_finite();
-                                let has_msgs = min_idx <= max_idx && !participants.is_empty();
-                                let has_note = group.note_left.is_finite();
-                                let has_ref = group.ref_left.is_finite();
-                                let has_message_right = group.message_right.is_finite();
-                                let has_external_left = group.external_left.is_finite();
-                                let has_external_right = group.external_right.is_finite();
-
-                                // Compute the participant-based frame left first, then derive
-                                // the header right edge from the *final* left (so the guard
-                                // label measurement matches the tab that is actually drawn).
-                                // A group with no direct messages contributes no participant
-                                // extent of its own; its left/right come purely from any
-                                // enclosed child frame (each parent extends GROUP_FRAME_MARGIN
-                                // beyond its direct child). Only a group with neither direct
-                                // messages nor children falls back to the empty-group estimate.
-                                // Teoz uses GroupingTile.MARGINX (16) measured from the
-                                // involved-participant *lifeline centres*, not from box
-                                // edges: frame_left = min_center - 16, and the body floor
-                                // for the right edge is max_center + 16 (see Teoz branch
-                                // for frame_right below).
-                                let mut frame_left = if diagram.teoz {
-                                    let part_left = if has_msgs {
-                                        participants[min_idx].center_x - TEOZ_GROUP_MARGIN_X
-                                    } else if !participants.is_empty() {
-                                        participants[0].center_x - TEOZ_GROUP_MARGIN_X
-                                    } else {
-                                        HEAD_BOX_Y
+                                // Account bf4f0c14: GroupingTile composes actual
+                                // child tiles. Participant head boxes are not
+                                // implicit children, and notes retain Real origins.
+                                let frame_left = group
+                                    .members
+                                    .iter()
+                                    .map(|member| member.min - TEOZ_GROUP_MARGIN_X)
+                                    .reduce(f64::min)
+                                    .unwrap_or(HEAD_BOX_Y + TEOZ_PARTICIPANT_SHIFT);
+                                let mut frame_right = group
+                                    .members
+                                    .iter()
+                                    .map(|member| member.max + TEOZ_GROUP_MARGIN_X)
+                                    .fold(f64::NEG_INFINITY, f64::max);
+                                if let Event::GroupStart(start) = &diagram.events[start_idx] {
+                                    let kind = match start.kind {
+                                        GroupKind::Alt => "alt",
+                                        GroupKind::Opt => "opt",
+                                        GroupKind::Loop => "loop",
+                                        GroupKind::Par => "par",
+                                        GroupKind::Break => "break",
+                                        GroupKind::Critical => "critical",
+                                        GroupKind::Group => "group",
                                     };
-                                    if has_child {
-                                        // Parent encloses child via `child.getMinX() - MARGINX`,
-                                        // and child.getMinX() = child.min - EXTERNAL_MARGINX1, so
-                                        // the parent rect sits MARGINX + EXTERNAL_MARGINX1 left of
-                                        // the child rect.
-                                        part_left.min(
-                                            child_left
-                                                - TEOZ_GROUP_MARGIN_X
-                                                - TEOZ_GROUP_EXTERNAL_MARGIN_X1,
-                                        )
-                                    } else {
-                                        part_left
-                                    }
-                                } else if has_msgs {
-                                    let part_left =
-                                        participants[min_idx].box_x - group_frame_margin;
-                                    if has_child {
-                                        part_left.min(child_left - group_frame_margin)
-                                    } else {
-                                        part_left
-                                    }
-                                } else if has_child {
-                                    child_left - group_frame_margin
-                                } else if !has_note && !has_ref && !participants.is_empty() {
-                                    participants[0].box_x + group_frame_margin
-                                } else {
-                                    f64::INFINITY
-                                };
-                                if diagram.teoz {
-                                    // GroupingTile encloses LifeEventTile just like any child.
-                                    frame_left =
-                                        frame_left.min(group.min_live_left - TEOZ_GROUP_MARGIN_X);
-                                }
-                                // An enclosed note that overhangs the messages widens the
-                                // frame to cover it: the frame's InGroupable left edge sits
-                                // GROUP_FRAME_MARGIN beyond the note's drawn left. In Teoz
-                                // the frame is measured from `NoteTile.getMinX()`
-                                // (`centerX - componentWidth / 2`) minus MARGINX rather than
-                                // from the snapped visible left, so it reaches a further
-                                // `(componentWidth - visibleWidth) / 2 = 5px` plus MARGINX
-                                // (16) left of the drawn note edge.
-                                if has_note {
-                                    let note_margin = if diagram.teoz {
-                                        // `note_group_extent` already converts the
-                                        // visible folded-note body to NoteTile's
-                                        // component bounds. GroupingTile then applies
-                                        // only its own MARGINX around that tile.
-                                        TEOZ_GROUP_MARGIN_X
-                                    } else {
-                                        group_frame_margin
-                                    };
-                                    frame_left = frame_left.min(group.note_left - note_margin);
-                                }
-                                if has_ref {
-                                    frame_left = frame_left.min(group.ref_left);
-                                }
-                                if has_external_left {
-                                    frame_left = frame_left.min(group.external_left);
-                                }
-
-                                // Compute the header text right edge (group kind label + guard)
-                                // anchored at the final frame left.
-                                let header_right =
-                                    if let Event::GroupStart(g) = &diagram.events[start_idx] {
-                                        let kind_str = match g.kind {
-                                            GroupKind::Alt => "alt",
-                                            GroupKind::Opt => "opt",
-                                            GroupKind::Loop => "loop",
-                                            GroupKind::Par => "par",
-                                            GroupKind::Break => "break",
-                                            GroupKind::Critical => "critical",
-                                            GroupKind::Group => "group",
-                                        };
-                                        let (tab_text, guard_label, _) =
-                                            group_header_parts(g.kind, kind_str, g.label.as_ref());
-                                        let mut kw = bold_text_width_with_family(
-                                            tab_text,
-                                            group_header_font_size_f,
-                                            &group_header_font_family,
-                                        );
-                                        if g.kind == GroupKind::Group && guard_label.is_some() {
-                                            kw += bold_text_width_with_family(
-                                                " ",
-                                                group_header_font_size_f,
-                                                &group_header_font_family,
-                                            );
-                                        }
-                                        if diagram.teoz {
-                                            // Teoz header floor (GroupingTile: `min + width + 16`):
-                                            // width = ComponentRoseGroupingHeader.getPreferredWidth
-                                            //       = getTextWidth(tab) + marginX1 + comment_width
-                                            //       = (kw + 45) + 15 + comment_w.
-                                            let comment_w = guard_label
-                                                .map(|label| {
-                                                    group_guard_width_with_family(
-                                                        label,
-                                                        &group_header_font_family,
-                                                    )
-                                                })
-                                                .unwrap_or(0.0);
-                                            frame_left + kw + 60.0 + comment_w + TEOZ_GROUP_MARGIN_X
-                                        } else {
-                                            let tab_right = frame_left + kw + 45.0;
-                                            if let Some(label) = guard_label {
-                                                let gw = group_guard_width_with_family(
+                                    let (text, guard, _) =
+                                        group_header_parts(start.kind, kind, start.label.as_ref());
+                                    // ComponentRoseGroupingHeader: text margins15+30;
+                                    // optional comment adds marginX1 and its padded block.
+                                    let header = bold_text_width_with_family(
+                                        text,
+                                        group_header_font_size_f,
+                                        &group_header_font_family,
+                                    ) + 45.0
+                                        + 2.0 * global_padding
+                                        + guard.map_or(0.0, |label| {
+                                            15.0 + 2.0 * global_padding
+                                                + group_guard_width_with_family(
                                                     label,
                                                     &group_header_font_family,
-                                                );
-                                                tab_right + 15.0 + gw + 5.0
-                                            } else {
-                                                tab_right + 5.0
-                                            }
-                                        }
-                                    } else {
-                                        0.0
-                                    };
-
-                                // Compute frame right based on which participants are inside,
-                                // the header, and any enclosed child frame. A group with no
-                                // direct messages contributes no participant right of its own.
-                                let part_right = if diagram.teoz {
-                                    if has_msgs {
-                                        // The frame covers the rightmost endpoint's livebox
-                                        // right edge (`getMaxX` over inner tiles), not just the
-                                        // bare lifeline centre, then adds GroupingTile.MARGINX.
-                                        participants[max_idx].center_x.max(group.max_live_right)
-                                            + TEOZ_GROUP_MARGIN_X
-                                    } else if has_child {
-                                        f64::NEG_INFINITY
-                                    } else if !participants.is_empty() {
-                                        participants[n - 1].center_x + TEOZ_GROUP_MARGIN_X
-                                    } else {
-                                        100.0
-                                    }
-                                } else if has_msgs {
-                                    participants[max_idx].box_x
-                                        + participants[max_idx].box_width
-                                        + group_frame_margin
-                                } else if has_child {
-                                    f64::NEG_INFINITY
-                                } else if !has_note && !has_ref && !participants.is_empty() {
-                                    let last = &participants[n - 1];
-                                    last.box_x + last.box_width + group_frame_margin
-                                } else {
-                                    f64::NEG_INFINITY
-                                };
-                                let mut frame_right = part_right.max(header_right);
-                                if has_child {
-                                    // Parent encloses child via `child.getMaxX() + MARGINX`, and
-                                    // child.getMaxX() = child.max + EXTERNAL_MARGINX2, so the
-                                    // parent rect sits MARGINX + EXTERNAL_MARGINX2 right of the
-                                    // child rect (Teoz); legacy uses the box-edge margin.
-                                    let child_margin = if diagram.teoz {
-                                        TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X2
-                                    } else {
-                                        group_frame_margin
-                                    };
-                                    frame_right = frame_right.max(child_right + child_margin);
-                                }
-                                if has_note {
-                                    frame_right = frame_right.max(
-                                        group.note_right
-                                            + if diagram.teoz {
-                                                TEOZ_GROUP_MARGIN_X
-                                            } else {
-                                                group_frame_margin
-                                            },
-                                    );
-                                }
-                                if group.on_msg_note_frame_right.is_finite() {
-                                    // A `note right` on a message reserves its preferred
-                                    // width as `hack2`; the frame right is already the
-                                    // absolute candidate (message region + pref width).
-                                    frame_right = frame_right.max(group.on_msg_note_frame_right);
-                                }
-                                if has_ref {
-                                    frame_right = frame_right.max(group.ref_right);
-                                }
-                                if has_message_right {
+                                                )
+                                        });
                                     frame_right =
-                                        // GroupingTile wraps every child tile by MARGINX.
-                                        frame_right.max(group.message_right + if diagram.teoz { TEOZ_GROUP_MARGIN_X } else { group_frame_margin });
+                                        frame_right.max(frame_left + header + TEOZ_GROUP_MARGIN_X);
                                 }
-                                if has_external_right {
-                                    // `InGroupableList#getMaxXInternal` uses an exo
-                                    // arrow's own max and applies its dedicated -3
-                                    // margin instead of the ordinary member margin.
-                                    frame_right = frame_right.max(group.external_right);
+                                let mut nested = 0usize;
+                                for child in
+                                    &diagram.events[start_idx + 1..ev_idx.min(diagram.events.len())]
+                                {
+                                    match child {
+                                        Event::GroupStart(_) => nested += 1,
+                                        Event::GroupEnd => nested = nested.saturating_sub(1),
+                                        Event::GroupElse(label) if nested == 0 => {
+                                            // ElseTile#getMaxX starts at parent.getMinX
+                                            // (including external left margin). Rose else
+                                            // preferred width adds the 2*marginX=10 block.
+                                            let width =
+                                                label.label.as_deref().map_or(0.0, |text| {
+                                                    group_guard_width_with_family(
+                                                        text,
+                                                        &group_header_font_family,
+                                                    ) + 2.0 * global_padding
+                                                }) + 10.0;
+                                            frame_right = frame_right.max(
+                                                frame_left - TEOZ_GROUP_EXTERNAL_MARGIN_X1 + width,
+                                            );
+                                        }
+                                        _ => {}
+                                    }
                                 }
-
                                 group_frames.push(GroupFrame {
                                     top: frame_top,
                                     bottom: frame_bottom,
@@ -9520,6 +9909,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     event_idx: start_idx,
                                     closed: ev_idx < diagram.events.len(),
                                 });
+                                if let Some(parent) = group_start_stack.last_mut() {
+                                    parent.members.push(SequenceGroupMemberBounds {
+                                        min: frame_left - TEOZ_GROUP_EXTERNAL_MARGIN_X1,
+                                        max: frame_right + TEOZ_GROUP_EXTERNAL_MARGIN_X2,
+                                        kind: SequenceGroupMemberKind::Ordinary,
+                                    });
+                                }
                             }
                         }
                         Event::Message(msg) => {
@@ -9528,8 +9924,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let self_message_right =
                                 self_arrow_by_event.get(&ev_idx).map(|model| {
                                     if diagram.teoz {
-                                        center_of(&msg.from) + model.width - model.segment_length
-                                            + horizontal_life_lines.max_depth(&msg.from) as f64
+                                        // CommunicationTileSelf#getMaxX excludes
+                                        // component width for reverse loops.
+                                        center_of(&msg.from)
+                                            + if msg.arrow.direction == ArrowDirection::RightToLeft
+                                            {
+                                                0.0
+                                            } else {
+                                                model.width - model.segment_length
+                                            }
+                                            + teoz_history.as_ref().unwrap().max_depth(&msg.from)
+                                                as f64
                                                 * ACTIVATION_HALF_W
                                     } else {
                                         center_of(&msg.from) + model.max_x()
@@ -9630,16 +10035,92 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 }
                                 _ => None,
                             };
-                            if let Some(mut member) = group_arrow_member {
+                            if let Some(history) = &teoz_history {
+                                let raw = match (fi, ti) {
+                                    (Some(from), Some(to)) if from == to => {
+                                        let model = self_arrow_by_event[&ev_idx];
+                                        let center = participants[from].center_x;
+                                        let reverse =
+                                            msg.arrow.direction == ArrowDirection::RightToLeft;
+                                        let width = model.width - model.segment_length;
+                                        let before = history.level(
+                                            &diagram.events,
+                                            &msg.from,
+                                            ev_idx,
+                                            TeozHistoryMode::IgnoreFutureActivate,
+                                        );
+                                        (
+                                            center
+                                                - if reverse {
+                                                    width
+                                                        + if before > 0 {
+                                                            ACTIVATION_HALF_W
+                                                        } else {
+                                                            0.0
+                                                        }
+                                                } else {
+                                                    0.0
+                                                },
+                                            center
+                                                + history.max_depth(&msg.from) as f64
+                                                    * ACTIVATION_HALF_W
+                                                + if reverse { 0.0 } else { width },
+                                        )
+                                    }
+                                    (Some(from), Some(to)) => {
+                                        let a = participants[from].center_x;
+                                        let b = if create_msg_idx.get(&msg.to) == Some(&ev_idx) {
+                                            participants[to].box_x
+                                                + if from > to {
+                                                    participants[to].preferred_width
+                                                } else {
+                                                    0.0
+                                                }
+                                        } else {
+                                            participants[to].center_x
+                                        };
+                                        (a.min(b), a.max(b))
+                                    }
+                                    (Some(index), None) | (None, Some(index)) => {
+                                        let center = participants[index].center_x;
+                                        let width = message_label_width(&process_label(&msg.label))
+                                            + 2.0 * MSG_TEXT_LEFT_PAD
+                                            + ARROW_SIZE
+                                            + 2.0 * constraint_global_padding;
+                                        if msg.from == "[" || msg.to == "[" {
+                                            (center - width, center)
+                                        } else {
+                                            (center, center + width)
+                                        }
+                                    }
+                                    _ => (0.0, 0.0),
+                                };
+                                group_arrow_member = Some(SequenceGroupMemberBounds {
+                                    min: raw.0,
+                                    max: raw.1,
+                                    kind: SequenceGroupMemberKind::Ordinary,
+                                });
+                            }
+                            if let Some(mut member) = group_arrow_member
+                                && !diagram.teoz
+                            {
                                 let arrow_actual_width = member.max - member.min;
+                                // ArrowAndNoteBox#getPreferredWidth asks the
+                                // actual arrow component; self arrows omit the
+                                // straight-arrow head-width term (ComponentRoseSelfArrow).
                                 let mut preferred_width =
-                                    (message_label_width(&process_label(&msg.label))
+                                    self_arrow_by_event.get(&ev_idx).map_or_else(
+                                        || {
+                                            (message_label_width(&process_label(&msg.label))
                                         + 2.0 * MSG_TEXT_LEFT_PAD
                                         + ARROW_SIZE
                                         // ArrowAndNoteBox uses the arrow component's
                                         // preferred width; Display#create0 pads its text.
                                         + 2.0 * constraint_global_padding)
-                                        .max(arrow_actual_width);
+                                                .max(arrow_actual_width)
+                                        },
+                                        |model| model.width.max(arrow_actual_width),
+                                    );
                                 let mut start = member.min;
                                 let mut has_attached_note = false;
                                 for (note_event_idx, note_event) in
@@ -9708,12 +10189,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 if let Some(fi) = fi {
                                     top.min_idx = top.min_idx.min(fi);
                                     top.max_idx = top.max_idx.max(fi);
-                                    top.members.push(living_participant_group_member(fi));
+                                    if !diagram.teoz {
+                                        top.members.push(living_participant_group_member(fi));
+                                    }
                                 }
                                 if let Some(ti) = ti {
                                     top.min_idx = top.min_idx.min(ti);
                                     top.max_idx = top.max_idx.max(ti);
-                                    top.members.push(living_participant_group_member(ti));
+                                    if !diagram.teoz {
+                                        top.members.push(living_participant_group_member(ti));
+                                    }
                                 }
                                 if msg.from == "[" || msg.to == "[" {
                                     top.external_left =
@@ -9771,7 +10256,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // non-list max element). The note's preferred width is
                             // `textWidth(=pure+marginX1+marginX2) + 2*paddingX`:
                             // marginX1=6 (LEFT)/15 (CENTER), marginX2=15, paddingX=5.
-                            let on_msg_right = note.on_message
+                            let on_msg_right = !diagram.teoz
+                                && note.on_message
                                 && note.position == NotePosition::Right
                                 && note.shape == NoteShape::Note;
                             if on_msg_right {
@@ -9811,7 +10297,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     top.note_right = top.note_right.max(nr);
                                 }
                             }
-                            if !note.on_message
+                            if (!note.on_message || diagram.teoz)
                                 && let Some((left, right)) = note_group_extent(ev_idx, note)
                             {
                                 for top in group_start_stack.iter_mut() {
@@ -9821,6 +10307,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         kind: SequenceGroupMemberKind::Ordinary,
                                     });
                                 }
+                            }
+                        }
+                        Event::Delay(label) if diagram.teoz && !participants.is_empty() => {
+                            // DelayTile bounds use the first/last center midpoint
+                            // and ComponentRoseDelayText's pure padded text width.
+                            let middle =
+                                (participants[0].center_x + participants[n - 1].center_x) / 2.0;
+                            let width = label.as_deref().map_or(0.0, |text| {
+                                text_width_with_family(
+                                    text,
+                                    DELAY_LABEL_FONT_SIZE as f64,
+                                    &message_font_family,
+                                ) + 2.0 * global_padding
+                            });
+                            for group in &mut group_start_stack {
+                                group.members.push(SequenceGroupMemberBounds {
+                                    min: middle - width / 2.0,
+                                    max: middle + width / 2.0,
+                                    kind: SequenceGroupMemberKind::Ordinary,
+                                });
                             }
                         }
                         Event::Ref(r) if !group_start_stack.is_empty() => {
@@ -9885,6 +10391,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let Event::Note(note) = event else {
             continue;
         };
+        if diagram.teoz && note.shape == NoteShape::Note {
+            continue;
+        }
         if legacy_groups
             && !note.on_message
             && note.shape == NoteShape::Note
@@ -9974,7 +10483,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let note_left = if note.shape == NoteShape::Note && !diagram.teoz {
             let component_left = (ll_x
                 - folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta))
-            .trunc();
+            .trunc()
+                + legacy_left_note_delta(event_index);
             left_missing_space = left_missing_space.max(-component_left);
             continue;
         } else if note.on_message {
@@ -10014,49 +10524,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         for frame in &group_frames {
             min_tile = min_tile.min(frame.left - TEOZ_GROUP_EXTERNAL_MARGIN_X1);
         }
-        for (event_index, event) in diagram.events.iter().enumerate() {
-            let Event::Note(note) = event else {
-                continue;
-            };
-            if note.on_message || note.shape != NoteShape::Note {
-                continue;
+        for event_index in 0..diagram.events.len() {
+            if let Some((_, _, min, _)) = teoz_note_geometry(
+                event_index,
+                &participants,
+                TeozNoteAllocation::CapturedBounds,
+            ) {
+                min_tile = min_tile.min(min);
             }
-            let indices: Vec<_> = note
-                .participants
-                .iter()
-                .filter_map(|id| id_to_idx.get(id).copied())
-                .collect();
-            let lo = indices.iter().min().copied().unwrap_or(0);
-            let hi = indices
-                .iter()
-                .max()
-                .copied()
-                .unwrap_or(participants.len() - 1);
-            let mut width = folded_note_component_width(
-                note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family),
-                note_global_padding,
-                note_shadow_delta,
-            );
-            let origin = match note.position {
-                NotePosition::Left => participants[lo].center_x - width,
-                NotePosition::Right => {
-                    participants[lo].center_x
-                        + note_right_live_shift_by_event
-                            .get(&event_index)
-                            .copied()
-                            .unwrap_or(0.0)
-                }
-                NotePosition::Over => {
-                    if note.participants.is_empty() || note.participants.len() > 1 {
-                        width = width.max(
-                            participants[hi].box_x + participants[hi].preferred_width
-                                - participants[lo].box_x,
-                        );
-                    }
-                    (participants[lo].center_x + participants[hi].center_x) / 2.0 - width / 2.0
-                }
-            };
-            min_tile = min_tile.min(origin);
         }
         // CommunicationTileSelf#getMinX: reverse tile starts left of the
         // center by preferred component width and an active half-live width.
@@ -10065,8 +10540,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 && message.arrow.direction == ArrowDirection::RightToLeft
                 && let Some(&index) = id_to_idx.get(message.from.as_str())
             {
-                let depth = horizontal_life_lines
-                    .depth_before(&message.from, horizontal_event_y_positions[event_index]);
+                let depth = teoz_history.as_ref().unwrap().level(
+                    &diagram.events,
+                    &message.from,
+                    event_index,
+                    TeozHistoryMode::IgnoreFutureActivate,
+                );
                 min_tile = min_tile.min(
                     participants[index].center_x
                         - (model.width - model.segment_length)
@@ -10147,6 +10626,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut max_arrow_note_right: f64 = 0.0;
     for (event_idx, event) in diagram.events.iter().enumerate() {
         if let Event::Note(note) = event {
+            if let Some((_, _, _, max)) =
+                teoz_note_geometry(event_idx, &participants, TeozNoteAllocation::CapturedBounds)
+            {
+                // The common envelope restores the trailing component unit;
+                // PlayingSpace uses the complete preferred tile boundary.
+                max_note_right = max_note_right.max(max - 1.0);
+                continue;
+            }
             let max_line_width =
                 note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
             let note_content_w =
@@ -10160,13 +10647,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         && note.shape == NoteShape::Note
                         && let Some(owner) = note_owner.get(&event_idx)
                         && let Some(model) = self_arrow_by_event.get(owner)
-                        && let Some(&note_left) = self_msg_right_note_left_by_event.get(owner)
                         && let Event::Message(message) = &diagram.events[*owner]
                     {
                         // ArrowAndNoteBox#getStartingX/getPreferredWidth uses raw
                         // component origins and widths, then NoteBox#getRightShift
                         // at the arrow start. Rounding belongs only to note painting.
                         let center = participants[id_to_idx[&message.from]].center_x;
+                        let note_left = self_msg_right_note_left_by_event
+                            .get(owner)
+                            .copied()
+                            .unwrap_or_else(|| {
+                                let shift = note_right_live_shift_by_event
+                                    .get(&event_idx)
+                                    .copied()
+                                    .unwrap_or(0.0);
+                                (center + shift).trunc() + ROSE_NOTE_PADDING_X
+                            });
                         let start = (center + model.start).min(note_left - ROSE_NOTE_PADDING_X);
                         let depth = horizontal_life_lines
                             .depth_before(&message.from, horizontal_event_y_positions[*owner]);
@@ -10387,6 +10883,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .get(event_idx)
                     .copied()
                     .unwrap_or(last_effective_y);
+                if diagram.teoz && (msg.from == "]" || msg.to == "]") {
+                    // CommunicationExoTile#getPoint2/getMaxX excludes live
+                    // paint shifts; its component width already includes padding.
+                    let participant = if msg.from == "]" { &msg.to } else { &msg.from };
+                    if let Some(&index) = id_to_idx.get(participant) {
+                        max_lost_right = max_lost_right.max(
+                            participants[index].center_x
+                                + numbered_label_w
+                                + 2.0 * MSG_TEXT_LEFT_PAD
+                                + ARROW_SIZE
+                                + 2.0 * constraint_global_padding,
+                        );
+                    }
+                    lost_scan_auto.advance();
+                    continue;
+                }
                 let source_live_depth = life_lines.depth_at(&msg.from, ordinate);
                 if msg.to == "]"
                     && let Some(&fi) = id_to_idx.get(msg.from.as_str())
@@ -10438,12 +10950,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             let box_left = members
                 .iter()
-                .map(|p| p.box_x)
+                .map(|p| p.box_x - teoz_box_margins[id_to_idx[p.id.as_str()]].0)
                 .fold(f64::INFINITY, f64::min)
                 - BOX_SIDE_MARGIN;
             let box_right = members
                 .iter()
-                .map(|p| p.box_x + p.box_width)
+                .map(|p| {
+                    p.box_x
+                        + if diagram.teoz {
+                            p.preferred_width
+                        } else {
+                            p.box_width
+                        }
+                        + teoz_box_margins[id_to_idx[p.id.as_str()]].1
+                })
                 .fold(f64::NEG_INFINITY, f64::max)
                 + BOX_SIDE_MARGIN;
             let title_w = if b.title.is_empty() {
@@ -10451,7 +10971,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             } else {
                 bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64)
             };
-            let title_extra = (title_w + 6.0 - (box_right - box_left)).max(0.0);
+            // Teoz frame anchors already include Doll margins; legacy expands
+            // the frame from the englober component preferred width.
+            let title_extra = if diagram.teoz {
+                0.0
+            } else {
+                (title_w + 6.0 - (box_right - box_left)).max(0.0)
+            };
             // Teoz reserves a boundary lane on the right of the rightmost box,
             // mirroring the left-side `teoz_box_shift` applied to participant 0.
             let teoz_box_right_gap = if diagram.teoz {
@@ -10522,7 +11048,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             svg_width_exact = svg_width_exact.max(orc.canvas_width);
         }
     }
-    let svg_width = svg_width_exact.ceil() as u32;
     // A `footer` directive reserves a band below the content (text_height(10)
     // + 1.0 = 12.777), growing the canvas; the footer text sits in that band.
     let footer_band_h = if diagram.meta.footer.is_some() {
@@ -10564,10 +11089,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 max_box_h + 1.0 + shadow_vertical_pad
             }
             + HEAD_BOX_Y
+            // SequenceDiagramFileMakerTeoz sets heightEnglober2=10 whenever
+            // Dolls#getOffsetForEnglobers is nonzero, then includes that band
+            // in the raw TextBlock before chrome composition.
+            + if box_band_h > 0.0 { f64::from(TEOZ_BOX_CANVAS_BOTTOM_EXTRA) } else { 0.0 }
     } else if diagram.hide_footbox {
         lifeline_bottom - 10.0 + 1.0
     } else {
         pre_caption_height - footer_band_h - HEAD_BOX_Y
+    };
+    // Legacy drawable extent includes the englober rectangle's trailing
+    // pixel; compose decorations after that complete component boundary.
+    let raw_body_bottom = if has_boxes && !diagram.teoz {
+        let frame_bottom = if diagram.hide_footbox {
+            lifeline_bottom - 6.0
+        } else {
+            tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
+        };
+        raw_body_bottom.max(frame_bottom + 1.0)
+    } else {
+        raw_body_bottom
     };
     let legend_block_height = if legend_lines.is_empty() {
         0.0
@@ -10585,7 +11126,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut svg_height = (footer_top + footer_band_h + HEAD_BOX_Y)
         .max(lifeline_bottom)
         .ceil() as u32;
-    const FOOTER_BASELINE_AFTER_TAIL: f64 = 11.6679;
     // Named boxes extend below the foot boxes; the frame bottom plus its own
     // bottom margin must fit inside the canvas.
     if has_boxes {
@@ -10642,7 +11182,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
-    {
+    if let Some(history) = &teoz_history {
+        for participant in &participants {
+            for (start_event_idx, start_y, end_y, color, depth) in history.segments(
+                &diagram.events,
+                &participant.id,
+                &lifecycle_message_states,
+                &event_y_positions,
+                &teoz_tile_ends,
+                // LiveBoxes#getStairs appends PlayingSpace preferred height,
+                // which reaches the participant tail; the shared ordinate
+                // representation is shifted by the first/next step difference.
+                tail_box_y + MSG_BASE_FIRST_OFFSET - MSG_BASE_STEP,
+            ) {
+                activation_bars.push(ActivationBar {
+                    participant_id: participant.id.clone(),
+                    start_event_idx,
+                    start_y,
+                    end_y,
+                    color,
+                    depth,
+                    ends_at_page_boundary: false,
+                });
+            }
+        }
+    } else {
         for (participant_id, variations) in &horizontal_life_lines.variations {
             let mut open: Vec<(usize, f64, Option<String>, usize)> = Vec::new();
             for variation in variations {
@@ -10773,60 +11337,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     }
 
-    // PlantUML lays the title/header/footer bands out against the whole sequence
-    // area width (`SequenceDiagramArea.getWidth`). When group frames are present
-    // that area spans the outermost frame, not just the participant boxes:
-    // getWidth = frame_left + frame_right - 1. Centre/right-align bands on it
-    // (non-Teoz; Teoz routes group geometry differently). Without groups the
-    // bands keep their participant-box references below.
-    let group_band_get_width: Option<f64> =
-        if !diagram.teoz && !group_frames.is_empty() && !participants.is_empty() {
-            // PlantUML lays the bands out against the sequence area width. When an
-            // outermost group frame wraps the *full* participant range, that frame
-            // (not the participant boxes) is the content extent — e.g. a trailing
-            // queue widens the frame past the last box (seq_combo_everything). Then
-            // getWidth = frame_left + frame_right - 1. A group covering only a
-            // sub-range (edge_misc/edge_mixed) leaves the participant boxes as the
-            // content edges, so the bands keep their participant-span reference.
-            let part_left = participants.first().unwrap().box_x;
-            let last = participants.last().unwrap();
-            let part_right = last.box_x + last.box_width;
-            let frame_left = group_frames
-                .iter()
-                .map(|f| f.left)
-                .fold(f64::INFINITY, f64::min);
-            let frame_right = group_frames
-                .iter()
-                .map(|f| f.right)
-                .fold(f64::NEG_INFINITY, f64::max);
-            // An OPEN group (its `end` consumed by a `break`) draws no frame yet
-            // still bounds the sequence area on the right. PlantUML's
-            // `SequenceDiagramArea.getWidth` then spans from the diagram's left
-            // margin (RIGHT_MARGIN) to that open-group right edge plus the same
-            // margin: getWidth = open_group_right + RIGHT_MARGIN - 1 (the `==`
-            // strip reaches open_group_right + RIGHT_MARGIN; getWidth is one less).
-            if open_group_right.is_finite() && open_group_right + GROUP_FRAME_MARGIN >= frame_right
-            {
-                Some(open_group_right + RIGHT_MARGIN - 1.0)
-            } else {
-                let frame_spans_all = frame_left.is_finite()
-                    && frame_right.is_finite()
-                    && frame_left <= part_left
-                    && frame_right >= part_right;
-                if frame_spans_all {
-                    Some(frame_left + frame_right - 1.0)
-                } else {
-                    None
-                }
-            }
-        } else {
-            None
-        };
-
     // Recalculate svg_width after group frames are computed, since the frame
     // right edges may exceed the initial estimate (e.g., when group labels extend
     // beyond participant boxes).
-    let svg_width = if !group_frames.is_empty() {
+    if !group_frames.is_empty() {
         let max_frame_right = group_frames
             .iter()
             .map(|f| f.right)
@@ -10848,10 +11362,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // lists for both layout engines. Every later element, including exo
         // arrows and dividers, consumes this one unrounded area width.
         svg_width_exact = svg_width_exact.max(from_participants.max(from_frames));
-        svg_width_exact.ceil() as u32
-    } else {
-        svg_width
-    };
+    }
 
     // DiagramChromeFactory12026 wraps body -> legend -> title -> caption ->
     // header/footer. DecorateEntityImage centers the child in each maximum width.
@@ -10903,7 +11414,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             *left += page_body_shift;
         }
         legend_left += outer_left + (decorated_width - legend_width) / 2.0;
-        page_text_center = Some(outer_left + (decorated_width - 1.0) / 2.0);
+        page_text_center = outer_left + (decorated_width - 1.0) / 2.0;
         body_right = body_width + outer_left + page_body_shift;
         svg_width_exact = decorated_width + outer_left + LEGACY_SEQUENCE_RIGHT_MARGIN;
         svg_width_exact.ceil() as u32
@@ -10992,17 +11503,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         for (i, line) in header_lines.iter().enumerate() {
             let text_length =
                 text_width_with_family(line, HEADER_FONT_SIZE as f64, &page_font_family);
-            // PlantUML `SequenceDiagramArea.getHeaderX(RIGHT) = getWidth - headerWidth`.
-            // With group frames the band reference is the full sequence area width;
-            // otherwise it is the canvas-derived `svg_width_exact - 6` inset.
-            let x = if let Some(center) = page_text_center {
-                2.0 * center - text_length - if diagram.teoz { HEAD_BOX_Y } else { 0.0 }
-            } else {
-                match group_band_get_width {
-                    Some(gw) => gw - text_length,
-                    None => svg_width_exact - text_length - 6.0,
-                }
-            };
+            // TextBlockBordered header aligns to the decorated inner width.
+            let x =
+                2.0 * page_text_center - text_length - if diagram.teoz { HEAD_BOX_Y } else { 0.0 };
             text_render::emit_text(
                 &mut svg.buf,
                 line,
@@ -11030,38 +11533,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // participant's box left edge and the last participant's box right edge
     // (minus 0.5 px), and each baseline uses the rendered line's ascent.
     if !title_lines.is_empty() {
-        // Actor-to-database endpoint spans in Java land 7.5px left of the
-        // generic box-edge midpoint (edge_mixed_sequence_all_features).
-        const ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST: f64 = 7.5;
-        let title_center = if let Some(center) = page_text_center {
-            center
-        } else if let Some(gw) = group_band_get_width {
-            // PlantUML `SequenceDiagramArea.getTitleX`: title centred on the
-            // whole sequence area width (which, with group frames, spans the
-            // outermost frame: getWidth = frame_left + frame_right - 1).
-            gw / 2.0
-        } else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
-            let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-            let center =
-                if first.kind == ParticipantKind::Actor && last.kind == ParticipantKind::Database {
-                    center - ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST
-                } else {
-                    center
-                };
-            if diagram.teoz {
-                // Java `SequenceDiagramArea.getTitleX` centres on
-                // `getWidth/2`, where getWidth is the full sequence-body
-                // width (= svg_width_exact - 1). In teoz the body can extend
-                // beyond the participant span (self-message loopbacks,
-                // over-several notes), so the span midpoint undercounts; take
-                // the wider of the two (the `max` is inherent in getWidth).
-                center.max((svg_width_exact - 1.0) / 2.0)
-            } else {
-                center
-            }
-        } else {
-            svg_width as f64 / 2.0 - 0.5
-        };
+        let title_center = page_text_center;
         let title_line = diagram.meta.title_line.unwrap_or(1);
         svg.buf.push_str(&format!(
             r#"<g class="title" data-source-line="{title_line}">"#
@@ -11152,12 +11624,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
             let box_left = members
                 .iter()
-                .map(|p| p.box_x)
+                .map(|p| p.box_x - teoz_box_margins[id_to_idx[p.id.as_str()]].0)
                 .fold(f64::INFINITY, f64::min)
                 - BOX_SIDE_MARGIN;
             let box_right = members
                 .iter()
-                .map(|p| p.box_x + p.box_width)
+                .map(|p| {
+                    p.box_x
+                        + if diagram.teoz {
+                            p.preferred_width
+                        } else {
+                            p.box_width
+                        }
+                        + teoz_box_margins[id_to_idx[p.id.as_str()]].1
+                })
                 .fold(f64::NEG_INFINITY, f64::max)
                 + BOX_SIDE_MARGIN;
             let title_w = if b.title.is_empty() {
@@ -11167,7 +11647,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             };
             let title_needed_w = title_w + 6.0;
             let frame_w = box_right - box_left;
-            let title_extra = (title_needed_w - frame_w).max(0.0);
+            // Doll#drawMe uses posA-4 and posE+4 without further title expansion.
+            let title_extra = if diagram.teoz {
+                0.0
+            } else {
+                (title_needed_w - frame_w).max(0.0)
+            };
             let box_left = box_left - title_extra / 2.0;
             let box_right = box_right + title_extra / 2.0;
             let fill = b
@@ -11188,10 +11673,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             if !b.title.is_empty() {
                 text_render::emit_text(
                     &mut svg.buf,
-                    &b.title,
+                    b.title.trim_end(),
                     &TextBase {
                         x: box_left + (box_right - box_left - title_w) / 2.0,
-                        y: box_top + plantuml_metrics::ascent(BOX_TITLE_FONT_SIZE as f64),
+                        // ComponentRoseEnglober draws its padded TextBlock at y=0.
+                        y: box_top
+                            + global_padding
+                            + plantuml_metrics::ascent(BOX_TITLE_FONT_SIZE as f64),
                         font_size: BOX_TITLE_FONT_SIZE,
                         font_family: "sans-serif",
                         fill: "#000000",
@@ -11280,6 +11768,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // `<g><title>…</title>…</g>` wrapper (matching `ComponentRoseActiveLine`).
         let n = segments.len();
         for (i, &(s1, s2)) in segments.iter().enumerate() {
+            // ComponentRoseActiveLine#drawInternalU returns before startGroup
+            // when the component height is zero.
+            if s1 == s2 {
+                continue;
+            }
             let close_up = i == 0;
             let close_down = i == n - 1;
             svg.buf.push_str("<g>");
@@ -11641,10 +12134,52 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     center_of(&msg.from)
                 };
                 let ordinate = event_y_positions[ev_idx];
-                let from_depth = life_lines.depth_before(&msg.from, ordinate);
-                let from_live_depth = life_lines.depth_at(&msg.from, ordinate);
-                let to_depth = life_lines.depth_before(&msg.to, ordinate);
-                let to_live_depth = life_lines.depth_at(&msg.to, ordinate);
+                // CommunicationTile/Self/Exo use explicit LiveBoxes history
+                // modes, not extrema of legacy accepted LifeLine variations.
+                let from_depth = teoz_history.as_ref().map_or_else(
+                    || life_lines.depth_before(&msg.from, ordinate),
+                    |history| {
+                        history.level(
+                            &diagram.events,
+                            &msg.from,
+                            ev_idx,
+                            TeozHistoryMode::IgnoreFutureActivate,
+                        )
+                    },
+                );
+                let from_live_depth = teoz_history.as_ref().map_or_else(
+                    || life_lines.depth_at(&msg.from, ordinate),
+                    |history| {
+                        history.level(
+                            &diagram.events,
+                            &msg.from,
+                            ev_idx,
+                            TeozHistoryMode::IgnoreFutureDeactivate,
+                        )
+                    },
+                );
+                let to_depth = teoz_history.as_ref().map_or_else(
+                    || life_lines.depth_before(&msg.to, ordinate),
+                    |history| {
+                        history.level(
+                            &diagram.events,
+                            &msg.to,
+                            ev_idx,
+                            TeozHistoryMode::IgnoreFutureActivate,
+                        )
+                    },
+                );
+                let to_live_depth = teoz_history.as_ref().map_or_else(
+                    || life_lines.depth_at(&msg.to, ordinate),
+                    |history| {
+                        history.level(
+                            &diagram.events,
+                            &msg.to,
+                            ev_idx,
+                            TeozHistoryMode::IgnoreFutureDeactivate,
+                        )
+                    },
+                );
                 let lost_live_shift = if msg.to == "]" {
                     from_live_depth as f64 * ACTIVATION_HALF_W
                 } else {
@@ -11731,6 +12266,40 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             right: source,
                         }
                     })
+                } else if diagram.teoz && !is_self {
+                    // CommunicationExoTile#drawU: long border arrows paint
+                    // across PlayingSpace's border while text keeps its own
+                    // preferred-width origin. Live depth affects only the real end.
+                    if msg.from == "[" || msg.to == "[" {
+                        let level = if msg.from == "[" {
+                            to_live_depth
+                        } else {
+                            from_live_depth
+                        };
+                        let center = if msg.from == "[" { to_x } else { from_x };
+                        Some(SequenceArrowEndpoints {
+                            left: HEAD_BOX_Y + TEOZ_PARTICIPANT_SHIFT + page_body_shift,
+                            right: center
+                                + if level > 0 {
+                                    (level as f64 - 2.0) * ACTIVATION_HALF_W
+                                } else {
+                                    0.0
+                                },
+                        })
+                    } else if msg.from == "]" || msg.to == "]" {
+                        let level = if msg.from == "]" {
+                            to_live_depth
+                        } else {
+                            from_live_depth
+                        };
+                        let center = if msg.from == "]" { to_x } else { from_x };
+                        Some(SequenceArrowEndpoints {
+                            left: center + level as f64 * ACTIVATION_HALF_W,
+                            right: body_right - HEAD_BOX_Y,
+                        })
+                    } else {
+                        None
+                    }
                 } else {
                     None
                 };
@@ -11822,11 +12391,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // edge (lifeline center + ACTIVATION_HALF_W).
                     let reverse = msg.arrow.direction == ArrowDirection::RightToLeft;
                     let existing_depth = from_depth;
-                    let self_final_depth = life_lines
-                        .depth_at(&msg.from, ordinate + SELF_MSG_DROP - ACTIVATION_HALF_W);
-                    let activates_self = matches!(msg.activation, Some(ActivationChange::Activate));
-                    let deactivates_self =
-                        matches!(msg.activation, Some(ActivationChange::Deactivate));
+                    let considered_depth = teoz_history.as_ref().map(|history| {
+                        history.level(
+                            &diagram.events,
+                            &msg.from,
+                            ev_idx,
+                            TeozHistoryMode::ConsiderFutureDeactivate,
+                        )
+                    });
+                    let component_delta = considered_depth
+                        .map_or(self_arrow_by_event[&ev_idx].component_delta_y, |level| {
+                            (existing_depth as f64 - level as f64) * ACTIVATION_HALF_W
+                        });
                     let active_anchor = if !diagram.teoz {
                         from_x + self_arrow_by_event[&ev_idx].start
                     } else if reverse {
@@ -11838,47 +12414,29 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             } else {
                                 0.0
                             }
-                    } else if activates_self {
-                        from_x + (existing_depth + 1) as f64 * ACTIVATION_HALF_W
-                    } else if deactivates_self && existing_depth > 0 {
-                        from_x + existing_depth as f64 * ACTIVATION_HALF_W
-                    } else if self_final_depth > 0 {
-                        // The loopback springs from the *deepest* livebox edge.
-                        // With nested activations that is `posC + level*LIVE_DELTA`
-                        // (Java); using a single ACTIVATION_HALF_W mis-anchors a
-                        // self-message sent while the participant is multiply
-                        // activated. `existing_depth` is >= 1 here (the participant
-                        // is active), so depth==1 keeps the prior single-level x.
-                        from_x + self_final_depth as f64 * ACTIVATION_HALF_W
                     } else {
+                        // CommunicationTileSelf#drawU uses the greater level
+                        // for translation and passes their signed difference.
                         from_x
+                            + existing_depth.max(considered_depth.unwrap()) as f64
+                                * ACTIVATION_HALF_W
                     };
-                    let mut start_x = if !diagram.teoz {
-                        // ComponentRoseSelfArrow#drawRightSide: x1 = min(deltaY, 0).
-                        active_anchor + self_arrow_by_event[&ev_idx].component_delta_y.min(0.0)
-                    } else if activates_self {
-                        from_x + existing_depth as f64 * ACTIVATION_HALF_W
-                    } else {
-                        active_anchor
-                    };
+                    let mut start_x = active_anchor + component_delta.min(0.0);
                     let draw_y = if diagram.teoz {
                         // CommunicationTileSelf#drawU leaves the component Y unchanged.
                         msg_y
                     } else {
                         msg_y + self_arrow_by_event[&ev_idx].component_delta_y
                     };
-                    let mut special_return_tip = if !diagram.teoz {
-                        // ComponentRoseSelfArrow#drawRightSide: x2 is -deltaY
-                        // when positive, otherwise one; ASYNC adjusts the stroke later.
-                        let delta = self_arrow_by_event[&ev_idx].component_delta_y;
-                        Some(active_anchor + if delta > 0.0 { -delta } else { 1.0 })
-                    } else if deactivates_self && existing_depth > 0 {
-                        Some(from_x + (existing_depth - 1) as f64 * ACTIVATION_HALF_W)
-                    } else if activates_self {
-                        Some(active_anchor + 1.0)
-                    } else {
-                        None
-                    };
+                    // ComponentRoseSelfArrow#drawRightSide, shared by both engines.
+                    let mut special_return_tip = Some(
+                        active_anchor
+                            + if component_delta > 0.0 {
+                                -component_delta
+                            } else {
+                                1.0
+                            },
+                    );
                     let mut loop_right = active_anchor + SELF_MSG_EXTEND;
                     let mut reverse_return_stroke = None;
                     if reverse {
@@ -11888,12 +12446,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let model = self_arrow_by_event[&ev_idx];
                         let pref = model.width - model.segment_length;
                         let level = existing_depth;
-                        let delta = if diagram.teoz {
-                            (i32::from(deactivates_self) - i32::from(activates_self)) as f64
-                                * ACTIVATION_HALF_W
-                        } else {
-                            model.component_delta_y
-                        };
+                        let delta = component_delta;
                         let indent = level as f64 * ACTIVATION_HALF_W;
                         let (mut x1, mut x2) = (0.0, 1.0);
                         if delta < 0.0 {
@@ -12250,6 +12803,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             }
                     } else {
                         to_x + target_shift + LEFT_ARROW_TEXT_PAD + 1.0 + global_padding
+                    };
+
+                    let text_x = if diagram.teoz && (msg.from == "[" || msg.to == "[") {
+                        let center = center_of(if msg.from == "[" { &msg.to } else { &msg.from });
+                        let preferred = message_label_width(&process_label(&msg.label))
+                            + autonumber_info
+                                .as_ref()
+                                .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP)
+                            + 2.0 * MSG_TEXT_LEFT_PAD
+                            + ARROW_SIZE
+                            + 2.0 * constraint_global_padding;
+                        let border = HEAD_BOX_Y + TEOZ_PARTICIPANT_SHIFT + page_body_shift;
+                        text_x + (center - preferred - border).max(0.0)
+                    } else {
+                        text_x
                     };
 
                     if is_right {
@@ -13042,11 +13610,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     + DELAY_BAND_TOP_PAD
                     + MSG_BASE_STEP
                     + ascent_with_family(DELAY_LABEL_FONT_SIZE as f64, &message_font_family);
+                // CommandDelay preserves spacer atoms. SVG emits the ink text
+                // after leading spacers, while allocation includes both sides.
+                let leading = &t[..t.len() - t.trim_start().len()];
+                let leading_width = text_width_with_family(
+                    leading,
+                    DELAY_LABEL_FONT_SIZE as f64,
+                    &message_font_family,
+                );
                 text_render::emit_text(
                     &mut svg.buf,
-                    t,
+                    t.trim(),
                     &TextBase {
-                        x: mid_x - label_w / 2.0,
+                        x: mid_x - label_w / 2.0 + leading_width,
                         y: label_y,
                         font_size: DELAY_LABEL_FONT_SIZE,
                         font_family: &message_font_family,
@@ -13130,225 +13706,246 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // note anchors to the leftmost (Left) / rightmost (Right) endpoint
                 // of the message by screen position; a participant note uses its
                 // single anchor.
-                let (note_left, note_right) = match note.position {
-                    NotePosition::Right => {
-                        if note.on_message
-                            && let Some(&left) = note_owner
-                                .get(&ev_idx)
-                                .and_then(|owner| self_msg_right_note_left_by_event.get(owner))
-                        {
-                            (left, left + note_content_w)
-                        } else {
+                let (note_left, note_right) = if let Some((x, used_width, _, _)) =
+                    teoz_note_geometry(ev_idx, &participants, TeozNoteAllocation::Paint)
+                {
+                    let preferred = folded_note_component_width(
+                        max_text_w,
+                        note_global_padding,
+                        note_shadow_delta,
+                    );
+                    // ComponentRoseNote#drawInternalU truncates only the polygon
+                    // width. AbstractComponent adds paddingX to the Real origin.
+                    let visible = if used_width > preferred {
+                        (used_width - 2.0 * ROSE_NOTE_PADDING_X).trunc()
+                    } else {
+                        note_content_w
+                    };
+                    (x + ROSE_NOTE_PADDING_X, x + ROSE_NOTE_PADDING_X + visible)
+                } else {
+                    match note.position {
+                        NotePosition::Right => {
+                            if note.on_message
+                                && let Some(&left) = note_owner
+                                    .get(&ev_idx)
+                                    .and_then(|owner| self_msg_right_note_left_by_event.get(owner))
+                            {
+                                (left, left + note_content_w)
+                            } else {
+                                let ll_x = if note.on_message {
+                                    anchor_xs.iter().copied().fold(f64::MIN, f64::max)
+                                } else {
+                                    anchor_xs.first().copied().unwrap_or(50.0)
+                                };
+                                let ll_x = if ll_x == f64::MIN { 50.0 } else { ll_x };
+                                let gap = if note.on_message {
+                                    NOTE_LIFELINE_GAP - 1.0
+                                } else {
+                                    NOTE_LIFELINE_GAP
+                                };
+                                let left = if !diagram.teoz && note.shape == NoteShape::Note {
+                                    // NoteBox truncates the raw origin before Rose padding.
+                                    body_trunc(ll_x) + ROSE_NOTE_PADDING_X
+                                } else if note.on_message {
+                                    body_ceil(ll_x) + gap
+                                } else if diagram.teoz {
+                                    ll_x + gap
+                                } else {
+                                    body_floor(ll_x + gap)
+                                };
+                                (left, left + note_content_w)
+                            }
+                        }
+                        NotePosition::Left => {
                             let ll_x = if note.on_message {
-                                anchor_xs.iter().copied().fold(f64::MIN, f64::max)
+                                anchor_xs.iter().copied().fold(f64::MAX, f64::min)
                             } else {
                                 anchor_xs.first().copied().unwrap_or(50.0)
                             };
-                            let ll_x = if ll_x == f64::MIN { 50.0 } else { ll_x };
-                            let gap = if note.on_message {
-                                NOTE_LIFELINE_GAP - 1.0
-                            } else {
-                                NOTE_LIFELINE_GAP
-                            };
-                            let left = if !diagram.teoz && note.shape == NoteShape::Note {
-                                // NoteBox truncates the raw origin before Rose padding.
-                                body_trunc(ll_x) + ROSE_NOTE_PADDING_X
-                            } else if note.on_message {
-                                body_ceil(ll_x) + gap
-                            } else if diagram.teoz {
-                                ll_x + gap
-                            } else {
-                                body_floor(ll_x + gap)
-                            };
-                            (left, left + note_content_w)
-                        }
-                    }
-                    NotePosition::Left => {
-                        let ll_x = if note.on_message {
-                            anchor_xs.iter().copied().fold(f64::MAX, f64::min)
-                        } else {
-                            anchor_xs.first().copied().unwrap_or(50.0)
-                        };
-                        let ll_x = if ll_x == f64::MAX { 50.0 } else { ll_x };
-                        // hnote/rnote box right edge sits 1px closer to the lifeline
-                        // than a standard note (same shape offset used elsewhere).
-                        let gap = left_note_lifeline_gap(
-                            &participants,
-                            note.shape,
-                            anchor_idxs.first().copied(),
-                            note.on_message,
-                            note.color.is_some(),
-                            note.text.lines().count(),
-                        );
-                        if note.shape == NoteShape::Note && diagram.teoz && !note.on_message {
-                            let left =
-                                ll_x - folded_note_component_width(
-                                    max_text_w,
-                                    note_global_padding,
-                                    note_shadow_delta,
-                                ) + ROSE_NOTE_PADDING_X;
-                            (left, left + note_content_w)
-                        } else if note.shape == NoteShape::Note && !diagram.teoz {
-                            let component_width = folded_note_component_width(
-                                max_text_w,
-                                note_global_padding,
-                                note_shadow_delta,
-                            );
-                            let component_left = body_trunc(ll_x - component_width);
-                            let left = component_left + ROSE_NOTE_PADDING_X;
-                            (left, left + note_content_w)
-                        } else if note.on_message {
-                            let right = body_floor(ll_x) - gap;
-                            (right - note_content_w, right)
-                        } else {
-                            let preferred_width = single_note_visible_raw_width(
-                                max_text_w,
+                            let ll_x = if ll_x == f64::MAX { 50.0 } else { ll_x };
+                            // hnote/rnote box right edge sits 1px closer to the lifeline
+                            // than a standard note (same shape offset used elsewhere).
+                            let gap = left_note_lifeline_gap(
+                                &participants,
                                 note.shape,
-                                note_global_padding,
+                                anchor_idxs.first().copied(),
+                                note.on_message,
+                                note.color.is_some(),
+                                note.text.lines().count(),
                             );
-                            let left = body_trunc(ll_x - gap - preferred_width);
-                            (left, left + note_content_w)
-                        }
-                    }
-                    NotePosition::Over => {
-                        if note.participants.is_empty() {
-                            // "note across" — spans all participants. Java NoteBox
-                            // OVER_SEVERAL: preferredWidth = max(content, lifeline
-                            // span + 25); centre = midpoint of first/last box
-                            // centers; xStart = (int)(centre - preferredWidth/2).
-                            if participants.is_empty() {
-                                (HEAD_BOX_Y, HEAD_BOX_Y + note_content_w)
-                            } else {
-                                let first_ll = participants[0].lifeline_line_x;
-                                let last_ll = participants[participants.len() - 1].lifeline_line_x;
-                                let span = last_ll - first_ll;
-                                let pw_raw = note_content_width_raw_padded(
-                                    max_text_w,
-                                    note.shape,
-                                    note_text_align,
-                                )
-                                .max(span.round() + ACROSS_NOTE_MARGIN);
-                                let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
-                                let centre = (participants[0].center_x
-                                    + participants[participants.len() - 1].center_x)
-                                    / 2.0;
-                                let left = note_across_left(centre - page_body_shift, pw_raw)
-                                    + page_body_shift;
-                                (left, left + pw)
-                            }
-                        } else if note.participants.len() == 1 {
-                            // Java NoteBox.getStartingX: xStart = (int)(box centerX
-                            // - preferredWidth/2). Centered on the participant box
-                            // center (not the integer lifeline x), truncated toward
-                            // zero (floor for non-negative coords).
-                            let cx = note
-                                .participants
-                                .first()
-                                .and_then(|id| id_to_idx.get(id.as_str()))
-                                .map(|&i| participants[i].center_x)
-                                .unwrap_or(50.0);
-                            // Java NoteBox.getStartingX centers on the
-                            // UN-truncated preferred width (raw text width + the
-                            // component's horizontal margins), then truncates the
-                            // resulting left edge: xStart = (int)(cx - rawW/2).
-                            // note_content_w is the ALREADY-truncated box width, so
-                            // halving it discards the fractional component and can
-                            // push the left edge 1px right (e.g. cx=83.3618,
-                            // text=61.7754 -> raw 82.7754: (int)(83.3618-41.3877)=41,
-                            // but floor(83.3618-41)=42). Recover the raw width from
-                            // the raw text width + per-shape margin sum: Note=6+15=21,
-                            // hnote=12+12=24, rnote=4+4=8 (= note_content_width's
-                            // additive constant + 1). The drawn box width stays
-                            // note_content_w (= floor(rawW)).
-                            let raw_w = single_note_visible_raw_width(
-                                max_text_w,
-                                note.shape,
-                                note_global_padding,
-                            );
-                            // Teoz routes notes through NoteTile, which keeps the
-                            // fractional Real x of the lifeline centre; the classic
-                            // renderer truncates with `(int)` (floor). Only floor
-                            // in the classic path (seq_all_features_01).
-                            // NoteBox#getStartingX centers the full preferred component,
-                            // including shadow; AbstractComponent then adds paddingX.
-                            let shadow = if note.shape == NoteShape::Note {
-                                note_shadow_delta
-                            } else {
-                                0.0
-                            };
-                            let left =
-                                (cx - (raw_w + shadow) / 2.0).max(HEAD_BOX_Y + page_body_shift);
-                            let left = if diagram.teoz { left } else { body_floor(left) };
-                            (left, left + note_content_w)
-                        } else {
-                            // Note over multiple participants (OVER_SEVERAL).
-                            // Java NoteBox stretches standard folded notes to the
-                            // participant-box span before ComponentRoseNote draws
-                            // the visible polygon inside that allocated area.
-                            let first_idx = note
-                                .participants
-                                .first()
-                                .and_then(|id| id_to_idx.get(id.as_str()))
-                                .copied()
-                                .unwrap_or(0);
-                            let last_idx = note
-                                .participants
-                                .last()
-                                .and_then(|id| id_to_idx.get(id.as_str()))
-                                .copied()
-                                .unwrap_or(participants.len().saturating_sub(1));
-                            let (lo, hi) = if first_idx <= last_idx {
-                                (first_idx, last_idx)
-                            } else {
-                                (last_idx, first_idx)
-                            };
-                            if note.shape == NoteShape::Note
-                                || (diagram.teoz
-                                    && matches!(
-                                        note.shape,
-                                        NoteShape::Hexagonal | NoteShape::Rectangular
-                                    ))
-                            {
-                                let component_pref_w = if note.shape == NoteShape::Note {
-                                    folded_note_component_width(
+                            if note.shape == NoteShape::Note && diagram.teoz && !note.on_message {
+                                let left =
+                                    ll_x - folded_note_component_width(
                                         max_text_w,
                                         note_global_padding,
                                         note_shadow_delta,
-                                    )
+                                    ) + ROSE_NOTE_PADDING_X;
+                                (left, left + note_content_w)
+                            } else if note.shape == NoteShape::Note && !diagram.teoz {
+                                let component_width = folded_note_component_width(
+                                    max_text_w,
+                                    note_global_padding,
+                                    note_shadow_delta,
+                                );
+                                let component_left = body_trunc(ll_x - component_width)
+                                    + legacy_left_note_delta(ev_idx);
+                                let left = component_left + ROSE_NOTE_PADDING_X;
+                                (left, left + note_content_w)
+                            } else if note.on_message {
+                                let right = body_floor(ll_x) - gap;
+                                (right - note_content_w, right)
+                            } else {
+                                let preferred_width = single_note_visible_raw_width(
+                                    max_text_w,
+                                    note.shape,
+                                    note_global_padding,
+                                );
+                                let left = body_trunc(ll_x - gap - preferred_width);
+                                (left, left + note_content_w)
+                            }
+                        }
+                        NotePosition::Over => {
+                            if note.participants.is_empty() {
+                                // "note across" — spans all participants. Java NoteBox
+                                // OVER_SEVERAL: preferredWidth = max(content, lifeline
+                                // span + 25); centre = midpoint of first/last box
+                                // centers; xStart = (int)(centre - preferredWidth/2).
+                                if participants.is_empty() {
+                                    (HEAD_BOX_Y, HEAD_BOX_Y + note_content_w)
                                 } else {
-                                    note_content_width_raw_padded(
+                                    let first_ll = participants[0].lifeline_line_x;
+                                    let last_ll =
+                                        participants[participants.len() - 1].lifeline_line_x;
+                                    let span = last_ll - first_ll;
+                                    let pw_raw = note_content_width_raw_padded(
                                         max_text_w,
                                         note.shape,
                                         note_text_align,
                                     )
-                                };
-                                let geom = over_several_note_geometry(
-                                    &participants,
-                                    lo,
-                                    hi,
-                                    component_pref_w,
-                                    note_content_w,
-                                    diagram.teoz,
-                                    page_body_shift,
-                                );
-                                (geom.visible_left, geom.visible_left + geom.visible_width)
-                            } else {
-                                let first_ll = participants[lo].lifeline_line_x;
-                                let last_ll = participants[hi].lifeline_line_x;
-                                let span = last_ll - first_ll;
-                                let min_width = span.round() + OVER_SEVERAL_NOTE_MARGIN;
-                                let centre =
-                                    (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                                let pw_raw = over_several_shape_position_width_raw_padded(
+                                    .max(span.round() + ACROSS_NOTE_MARGIN);
+                                    let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                                    let centre = (participants[0].center_x
+                                        + participants[participants.len() - 1].center_x)
+                                        / 2.0;
+                                    let left = note_across_left(centre - page_body_shift, pw_raw)
+                                        + page_body_shift;
+                                    (left, left + pw)
+                                }
+                            } else if note.participants.len() == 1 {
+                                // Java NoteBox.getStartingX: xStart = (int)(box centerX
+                                // - preferredWidth/2). Centered on the participant box
+                                // center (not the integer lifeline x), truncated toward
+                                // zero (floor for non-negative coords).
+                                let cx = note
+                                    .participants
+                                    .first()
+                                    .and_then(|id| id_to_idx.get(id.as_str()))
+                                    .map(|&i| participants[i].center_x)
+                                    .unwrap_or(50.0);
+                                // Java NoteBox.getStartingX centers on the
+                                // UN-truncated preferred width (raw text width + the
+                                // component's horizontal margins), then truncates the
+                                // resulting left edge: xStart = (int)(cx - rawW/2).
+                                // note_content_w is the ALREADY-truncated box width, so
+                                // halving it discards the fractional component and can
+                                // push the left edge 1px right (e.g. cx=83.3618,
+                                // text=61.7754 -> raw 82.7754: (int)(83.3618-41.3877)=41,
+                                // but floor(83.3618-41)=42). Recover the raw width from
+                                // the raw text width + per-shape margin sum: Note=6+15=21,
+                                // hnote=12+12=24, rnote=4+4=8 (= note_content_width's
+                                // additive constant + 1). The drawn box width stays
+                                // note_content_w (= floor(rawW)).
+                                let raw_w = single_note_visible_raw_width(
                                     max_text_w,
                                     note.shape,
-                                    note_text_align,
-                                    min_width,
-                                    centre,
+                                    note_global_padding,
                                 );
-                                let pw = note_content_w.max(min_width);
-                                let left = body_floor(centre - pw_raw / 2.0);
-                                (left, left + pw)
+                                // Teoz routes notes through NoteTile, which keeps the
+                                // fractional Real x of the lifeline centre; the classic
+                                // renderer truncates with `(int)` (floor). Only floor
+                                // in the classic path (seq_all_features_01).
+                                // NoteBox#getStartingX centers the full preferred component,
+                                // including shadow; AbstractComponent then adds paddingX.
+                                let shadow = if note.shape == NoteShape::Note {
+                                    note_shadow_delta
+                                } else {
+                                    0.0
+                                };
+                                let left =
+                                    (cx - (raw_w + shadow) / 2.0).max(HEAD_BOX_Y + page_body_shift);
+                                let left = if diagram.teoz { left } else { body_floor(left) };
+                                (left, left + note_content_w)
+                            } else {
+                                // Note over multiple participants (OVER_SEVERAL).
+                                // Java NoteBox stretches standard folded notes to the
+                                // participant-box span before ComponentRoseNote draws
+                                // the visible polygon inside that allocated area.
+                                let first_idx = note
+                                    .participants
+                                    .first()
+                                    .and_then(|id| id_to_idx.get(id.as_str()))
+                                    .copied()
+                                    .unwrap_or(0);
+                                let last_idx = note
+                                    .participants
+                                    .last()
+                                    .and_then(|id| id_to_idx.get(id.as_str()))
+                                    .copied()
+                                    .unwrap_or(participants.len().saturating_sub(1));
+                                let (lo, hi) = if first_idx <= last_idx {
+                                    (first_idx, last_idx)
+                                } else {
+                                    (last_idx, first_idx)
+                                };
+                                if note.shape == NoteShape::Note
+                                    || (diagram.teoz
+                                        && matches!(
+                                            note.shape,
+                                            NoteShape::Hexagonal | NoteShape::Rectangular
+                                        ))
+                                {
+                                    let component_pref_w = if note.shape == NoteShape::Note {
+                                        folded_note_component_width(
+                                            max_text_w,
+                                            note_global_padding,
+                                            note_shadow_delta,
+                                        )
+                                    } else {
+                                        note_content_width_raw_padded(
+                                            max_text_w,
+                                            note.shape,
+                                            note_text_align,
+                                        )
+                                    };
+                                    let geom = over_several_note_geometry(
+                                        &participants,
+                                        lo,
+                                        hi,
+                                        component_pref_w,
+                                        note_content_w,
+                                        diagram.teoz,
+                                        page_body_shift,
+                                    );
+                                    (geom.visible_left, geom.visible_left + geom.visible_width)
+                                } else {
+                                    let first_ll = participants[lo].lifeline_line_x;
+                                    let last_ll = participants[hi].lifeline_line_x;
+                                    let span = last_ll - first_ll;
+                                    let min_width = span.round() + OVER_SEVERAL_NOTE_MARGIN;
+                                    let centre = (participants[lo].center_x
+                                        + participants[hi].center_x)
+                                        / 2.0;
+                                    let pw_raw = over_several_shape_position_width_raw_padded(
+                                        max_text_w,
+                                        note.shape,
+                                        note_text_align,
+                                        min_width,
+                                        centre,
+                                    );
+                                    let pw = note_content_w.max(min_width);
+                                    let left = body_floor(centre - pw_raw / 2.0);
+                                    (left, left + pw)
+                                }
                             }
                         }
                     }
@@ -13583,7 +14180,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // every line starts at the same x: note_left + marginX1 + diffX/2.
                 // (When the note text is wider than the span, diffX <= 0 and the
                 // text simply sits at the left text pad, handled by `text_x`.)
-                let over_several_text_x = if over_several
+                let over_several_text_x = if let Some((_, width, _, _)) =
+                    teoz_note_geometry(ev_idx, &participants, TeozNoteAllocation::Paint)
+                {
+                    let preferred = folded_note_component_width(
+                        max_text_w,
+                        note_global_padding,
+                        note_shadow_delta,
+                    );
+                    Some(
+                        note_left
+                            + NOTE_TEXT_X_PAD
+                            + (width - preferred) / 2.0
+                            + note_global_padding,
+                    )
+                } else if over_several
                     && diagram.teoz
                     && matches!(note.shape, NoteShape::Hexagonal | NoteShape::Rectangular)
                 {
@@ -14252,7 +14863,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // split into separate `<text>` elements at calculated x offsets.
     if diagram.meta.caption.is_some() {
         let src_line = diagram.meta.caption_line.unwrap_or(1);
-        let caption_x = page_text_center.unwrap_or(0.0) - caption_text_width / 2.0;
+        let caption_x = page_text_center - caption_text_width / 2.0;
         write!(
             svg.buf,
             r#"<g class="caption" data-source-line="{src_line}">"#
@@ -14295,65 +14906,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // centred on the participant span.
     if let Some(footer) = &diagram.meta.footer {
         const FOOTER_FONT_SIZE: u32 = 10;
-        // The footer is centred on the participant-span midpoint
-        // `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`. When the
-        // footer is wider than the span the diagram was already shifted right
-        // (see meta_shift), so this resolves to x=0 for the widest band and to a
-        // positive inset for narrower footers (seq_footer_variant_02..04).
-        let footer_x = {
-            let w = text_width_with_family(footer, FOOTER_FONT_SIZE as f64, &page_font_family);
-            // PlantUML `getFooterX(CENTER) = (getWidth - footerWidth) / 2`. With
-            // group frames the sequence area width spans the outermost frame.
-            if let Some(center) = page_text_center {
-                center - w / 2.0
-            } else if let Some(gw) = group_band_get_width {
-                ((gw - w) / 2.0).max(0.0)
-            } else if diagram.teoz {
-                // Teoz centres the footer on the same area width as the title /
-                // header (`getWidth = svg_width_exact - 1`), which spans the
-                // group frames rather than the participant boxes
-                // (seq_all_features_01).
-                ((svg_width_exact - 1.0 - w) / 2.0).max(0.0)
-            } else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
-                let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-                (center - w / 2.0).max(0.0)
-            } else {
-                0.0
-            }
-        };
+        let footer_x = page_text_center
+            - text_width_with_family(footer, FOOTER_FONT_SIZE as f64, &page_font_family) / 2.0;
         let footer_line = diagram.meta.footer_line.unwrap_or(1);
         write!(
             svg.buf,
             r#"<g class="footer" data-source-line="{footer_line}">"#
         )
         .unwrap();
-        let footer_y = if diagram.meta.caption.is_some() || !legend_lines.is_empty() {
-            footer_top + ascent_with_family(FOOTER_FONT_SIZE as f64, &page_font_family)
-        } else if diagram.hide_footbox {
-            if diagram.teoz && has_boxes {
-                // Teoz sizes the named-box frame 6px below the lifeline tail
-                // (see box_bottom above) and stacks the footer band beneath the
-                // frame. The footer baseline lands 9px below the frame bottom
-                // plus one ascent: lifeline_bottom + 6 + 9 + ascent(10)
-                // (seq_all_features_01).
-                lifeline_bottom + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64) + 15.0
-            } else {
-                // With no foot boxes the footer sits in its band just below the
-                // lifelines, not below the (hidden) tail boxes. Baseline =
-                // lifeline_bottom + ascent(10) - 5 (seq_combo_everything).
-                lifeline_bottom + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64) - 5.0
-            }
-        } else if has_boxes {
-            // Named boxes extend the content below the foot boxes; the footer
-            // band is reserved beneath the box frame. The band starts 1px
-            // below the box frame bottom (the +1.0 in footer_band_h) and the
-            // text baseline sits one ascent into the band
-            // (seq_kitchen_sink_01).
-            let box_bottom = tail_box_y + max_box_h + BOX_BOTTOM_MARGIN;
-            box_bottom + 1.0 + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64)
-        } else {
-            tail_box_y + max_box_h + FOOTER_BASELINE_AFTER_TAIL
-        };
+        // DiagramChromeFactory12026 adds header/footer outside the complete
+        // legend/title/caption composition; baseline is this block's ascent.
+        let footer_y = footer_top + ascent_with_family(FOOTER_FONT_SIZE as f64, &page_font_family);
         text_render::emit_text(
             &mut svg.buf,
             footer,
@@ -14379,6 +14942,83 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn teoz_history_modes_preserve_source_order_and_message_ownership() {
+        // LiveBoxes#getLevelAtInternal includes all preceding LifeEvents, then
+        // samples same-owner future events according to the requested mode.
+        // Standalone notes affect stairs, but are skipped by this level scan.
+        for declarations in [
+            "participant Caller\nparticipant Worker\n",
+            "participant Worker\nparticipant Caller\n",
+        ] {
+            for depth in 1..=4 {
+                for first_open in [false, true] {
+                    for note in ["", "note over Worker : intervening tile\n"] {
+                        let life = if first_open {
+                            format!("activate Worker\n{note}deactivate Worker\n")
+                        } else {
+                            format!("deactivate Worker\n{note}activate Worker\n")
+                        };
+                        let source = format!(
+                            "@startuml\n!pragma teoz true\n{declarations}{}Worker -> Worker : point\n{life}Worker -> Caller : after\n@enduml\n",
+                            "Caller -> Worker ++ : enter\n".repeat(depth)
+                        );
+                        let rustuml_parser::diagram::Diagram::Sequence(diagram) =
+                            rustuml_parser::parse::parse(&source).unwrap()
+                        else {
+                            panic!("sequence expected")
+                        };
+                        let lifecycle =
+                            sequence_lifecycle_layout(&diagram.events, diagram.events.len());
+                        let history =
+                            TeozHistory::new(&diagram.events, &lifecycle.attachment_owner);
+                        let index = diagram.events.iter().position(|event| matches!(event, Event::Message(message) if message.label == "point")).unwrap();
+                        assert_eq!(
+                            history.level(
+                                &diagram.events,
+                                "Worker",
+                                index,
+                                TeozHistoryMode::IgnoreFutureActivate
+                            ),
+                            depth
+                        );
+                        assert_eq!(
+                            history.level(
+                                &diagram.events,
+                                "Worker",
+                                index,
+                                TeozHistoryMode::IgnoreFutureDeactivate
+                            ),
+                            depth + 1
+                        );
+                        assert_eq!(
+                            history.level(
+                                &diagram.events,
+                                "Worker",
+                                index,
+                                TeozHistoryMode::ConsiderFutureDeactivate
+                            ),
+                            if first_open { depth + 1 } else { depth - 1 }
+                        );
+                        assert_eq!(
+                            history.level(
+                                &diagram.events,
+                                "Caller",
+                                index,
+                                TeozHistoryMode::ConsiderFutureDeactivate
+                            ),
+                            0
+                        );
+                        assert_eq!(
+                            history.max_depth("Worker"),
+                            if first_open { depth + 1 } else { depth }
+                        );
+                    }
+                }
+            }
+        }
+    }
 
     #[test]
     fn returns_share_message_constraints_live_endpoints_and_arrow_configuration() {
