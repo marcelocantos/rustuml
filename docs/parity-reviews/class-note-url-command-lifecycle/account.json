@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "07d00af240c9938b63b7672d67f285a53a1d536d",
+  "verification_plan": "Retained1649+26+86 including invalid references and missing allowmixing; frozen CLI/comparator; exact models/UIDs/URL owners; fresh source-guided relay controls, final main tiers/libs/CLI/guards once stable. No local JVM/SSH, child, native/fault work, shared metric/style changes or acceptance.",
+  "mechanism": "class-note-url-command-lifecycle",
+  "java_locations": [
+    "command/note/CommandFactoryNoteOnEntity#createSingleLine,createMultiLine,executeInternal",
+    "svek/image/EntityImageNote#drawU",
+    "svek/EntityImageDegenerated#drawU",
+    "abel/Entity#addUrl"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#try_note",
+    "crates/rustuml-render/src/class.rs#render_notes_only,render_single_named_note,note_anchor"
+  ],
+  "invariant": "Single-line attached note consumes optional URL syntax but passes null URL; multiline owns URL. Named-note URL replacement remains model state, rendered inside its entity group even when alone/degenerated.",
+  "causal_divergence": "Review F3/F9: lone named note drops model URL in rendering; single-line attached note incorrectly stores URL. Multiline group geometry remains independently wrong.",
+  "planned_change": "Select URL ownership in the consuming note command by Java command form; keep renderer driven only by note model. Open/close note_anchor inside existing lone-note group. Preserve normal note primitives and URL replacement behavior; no group geometry adjustment.",
+  "perturbation_axes": [
+    "single-line versus braced/end-note body, leaf/group targets",
+    "lone versus linked named note, URL replacement/tooltip/target and source order"
+  ]
+}
