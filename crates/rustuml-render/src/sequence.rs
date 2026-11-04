@@ -3186,6 +3186,8 @@ struct ParticipantLayout {
     kind: ParticipantKind,
     /// Optional stereotype text
     stereotype: Option<String>,
+    /// Participant#getDisplay after visibility filtering and declaration order.
+    display: Vec<(String, bool)>,
     /// Text width at the participant label font size.
     text_width: f64,
     /// Participant#getUsedStyles resolves this kind's font before measure/paint.
@@ -5891,38 +5893,29 @@ impl PlantUmlSvg {
         box_x: f64,
         base_y: f64,
         box_w: f64,
-        text_x: f64,
         text_top: f64,
-        text_content: &str,
-        text_len: f64,
+        display: &[(String, bool)],
         fill_color: &str,
         border_color: &str,
         queue_head_offset: f64,
-        stereo: Option<(&str, f64)>,
-        line_h: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
-        // Participant#getDisplay supplies stereotype and name as one text block;
-        // ComponentRoseQueue passes it to USymbolQueue as the label.
-        let stereo_shift = stereo
-            .map(|(text, _)| {
-                ParticipantTextBlock::new(
-                    &format!("«{text}»"),
-                    self.participant_font_size as f64,
-                    &self.participant_font_family,
-                    false,
+        // ComponentRoseQueue passes Participant#getDisplay as one ordered label.
+        // Reuse that filtered structure for the pill and every painted stripe.
+        let blocks: Vec<_> = display
+            .iter()
+            .map(|(text, stereotype)| {
+                (
+                    ParticipantTextBlock::new(
+                        text,
+                        self.participant_font_size as f64,
+                        &self.participant_font_family,
+                        !stereotype && self.participant_font_bold,
+                    ),
+                    *stereotype,
                 )
-                .height
             })
-            .unwrap_or(0.0);
-        let label = ParticipantTextBlock::new(
-            text_content,
-            self.participant_font_size as f64,
-            &self.participant_font_family,
-            self.participant_font_bold,
-        );
-        let _ = line_h;
-
+            .collect();
         // Pill shape: rounded left side, right side with inner curve
         // From golden SVG for queue "Alice":
         // Main body: M10,10 L52.7236,10 C57.7236,10 57.7236,23.2441 57.7236,23.2441
@@ -5939,7 +5932,7 @@ impl PlantUmlSvg {
         let inner_left = left + cap_r;
         let inner_right = right - cap_r;
         // ComponentRoseQueue -> USymbolQueue uses Display height + margins5/5.
-        let pill_h = label.height + stereo_shift + 5.0 + 5.0;
+        let pill_h = blocks.iter().map(|(block, _)| block.height).sum::<f64>() + 5.0 + 5.0;
         let top = if position == "tail" {
             base_y
         } else {
@@ -5981,37 +5974,30 @@ impl PlantUmlSvg {
             &format!("stroke:{border_color};stroke-width:0.5;"),
         );
 
-        // ComponentRoseQueue supplies the complete Display label to USymbolQueue;
-        // its margin translates both stripes, each with its own ascent.
-        let text_y = text_top + stereo_shift + label.lines[0].2.ascent;
-        if let Some((st_text, st_width)) = stereo {
-            let inner_w = box_w - QUEUE_TEXT_H_PAD;
-            let st_display = format!("\u{ab}{st_text}\u{bb}");
-            let st_x = box_x + QUEUE_TEXT_X_PAD + (inner_w - st_width) / 2.0;
-            let stereotype = ParticipantTextBlock::new(
-                &st_display,
-                self.participant_font_size as f64,
-                &self.participant_font_family,
-                false,
-            );
-            stereotype.draw(
+        // USymbolQueue#asSmall translates the complete label by its margin;
+        // each child starts at its accumulated top and uses its own ascent.
+        let inner_w = box_w - QUEUE_TEXT_H_PAD;
+        let mut stripe_top = text_top;
+        for (block, stereotype) in &blocks {
+            block.draw(
                 &mut self.buf,
                 &TextBase {
-                    x: st_x,
-                    y: text_top + stereotype.lines[0].2.ascent,
+                    x: box_x + QUEUE_TEXT_X_PAD + (inner_w - block.width) / 2.0,
+                    y: stripe_top + block.lines[0].2.ascent,
                     font_size: self.participant_font_size,
                     font_family: &self.participant_font_family,
-                    fill: "#000000",
-                    bold: false,
-                    italic: true,
+                    fill: if *stereotype {
+                        "#000000"
+                    } else {
+                        &self.participant_font_color
+                    },
+                    bold: !stereotype && self.participant_font_bold,
+                    italic: *stereotype,
                     underline: false,
                     skip_underline: false,
                 },
             );
-            let name_x = box_x + QUEUE_TEXT_X_PAD + (inner_w - text_len) / 2.0;
-            self.participant_text(name_x, text_y, text_content, text_len);
-        } else {
-            self.participant_text(text_x, text_y, text_content, text_len);
+            stripe_top += block.height;
         }
 
         self.participant_group_close();
@@ -7107,7 +7093,6 @@ fn render_participant_shape(
             );
         }
         ParticipantKind::Queue => {
-            let text_x = p.box_x + QUEUE_TEXT_X_PAD;
             // Queue pill is shorter and offset; text baseline tracks the pill mid.
             let pill_top = if position == "tail" {
                 base_y
@@ -7124,19 +7109,11 @@ fn render_participant_shape(
                 p.box_x,
                 base_y,
                 p.box_width,
-                text_x,
                 text_top,
-                &p.label,
-                p.text_width,
+                &p.display,
                 fill_color,
                 border_color,
                 queue_head_offset,
-                // Participant#getDisplay includes stereotype regardless of box;
-                // ComponentRoseQueue passes that complete block as its label.
-                p.stereotype
-                    .as_ref()
-                    .map(|s| (s.as_str(), p.stereotype_width)),
-                figure_line_h,
             );
         }
         ParticipantKind::Participant => {
@@ -8073,7 +8050,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .unwrap_or(PARTICIPANT_FONT_SIZE as u32);
             let participant_font_size_f = font_size as f64;
 
-            let st = p.stereotype.clone();
+            // Participant#getDisplay filters the shared hiddenPortions before
+            // any component measures or paints the Display (all participant kinds).
+            let st = p.stereotype.clone().filter(|_| !diagram.hide_stereotypes);
             let st_display = st.as_ref().map(|s| format!("\u{ab}{s}\u{bb}"));
             let st_w = st_display
                 .as_ref()
@@ -8109,6 +8088,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .height
                 })
                 .unwrap_or(0.0);
+            let mut display = vec![(label.clone(), false)];
+            if let Some(text) = &st_display {
+                // Participant#getDisplay: addFirst for top, add for bottom.
+                let index = usize::from(p.stereotype_position_bottom);
+                display.insert(index, (text.clone(), true));
+            }
             // Box width must accommodate the display label (and stereotype if separate)
             let max_text_w = tw.max(st_w);
 
@@ -8197,6 +8182,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 label,
                 kind: p.kind,
                 stereotype: st,
+                display,
                 text_width: tw,
                 font_size,
                 // ComponentRoseParticipant applies marginY7 before its text block.
@@ -17260,6 +17246,7 @@ mod tests {
                     kind: ParticipantKind::Participant,
                     order: Some(0),
                     stereotype: None,
+                    stereotype_position_bottom: false,
                     url: None,
                     color: None,
                     source_line: 1,
@@ -17270,6 +17257,7 @@ mod tests {
                     kind: ParticipantKind::Participant,
                     order: Some(1),
                     stereotype: None,
+                    stereotype_position_bottom: false,
                     url: None,
                     color: None,
                     source_line: 1,
@@ -17298,6 +17286,7 @@ mod tests {
             })],
             autonumber: None,
             hide_footbox: false,
+            hide_stereotypes: false,
             teoz: false,
             boxes: Vec::new(),
         }

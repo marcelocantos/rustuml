@@ -16,6 +16,9 @@ pub struct SequenceDiagram {
     /// Whether `hide footbox` was specified — suppresses tail participant boxes.
     #[serde(default)]
     pub hide_footbox: bool,
+    /// SequenceDiagram#hiddenPortions: final diagram-wide stereotype visibility.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub hide_stereotypes: bool,
     /// Whether `!pragma teoz true` was specified.
     #[serde(default)]
     pub teoz: bool,
@@ -45,6 +48,9 @@ pub struct Participant {
     pub order: Option<usize>,
     /// Optional UML stereotype text, e.g. `<<service>>` → `"service"`.
     pub stereotype: Option<String>,
+    /// CommandParticipant captures SkinParam#stereotypePositionTop at declaration.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub stereotype_position_bottom: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// Optional background color (e.g., "#red", "#FF0000").

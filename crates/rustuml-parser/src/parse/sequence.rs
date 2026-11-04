@@ -364,6 +364,7 @@ struct SeqParser {
     in_legend: bool,
     /// Whether `hide footbox` was specified.
     hide_footbox: bool,
+    hide_stereotypes: bool,
     /// Whether `!pragma teoz true` was specified.
     teoz: bool,
     /// Whether `autoactivate on` is active for subsequent messages.
@@ -409,6 +410,7 @@ impl SeqParser {
             last_message: None,
             in_legend: false,
             hide_footbox: false,
+            hide_stereotypes: false,
             teoz: false,
             autoactivate: false,
             current_line: 0,
@@ -426,6 +428,7 @@ impl SeqParser {
             events: self.events,
             autonumber: self.autonumber,
             hide_footbox: self.hide_footbox,
+            hide_stereotypes: self.hide_stereotypes,
             teoz: self.teoz,
             boxes: self.boxes,
         }
@@ -445,6 +448,7 @@ impl SeqParser {
                 kind: ParticipantKind::default(),
                 order: Some(self.participants.len()),
                 stereotype: None,
+                stereotype_position_bottom: false,
                 url: None,
                 color: None,
                 source_line,
@@ -664,6 +668,17 @@ impl SeqParser {
                 .map(|m| m.as_str().to_string())
                 .or(label_stereotype);
 
+            // CommandParticipant#executeArg calls setStereotype only when the
+            // declaration has one; SkinParam#stereotypePositionTop is captured.
+            let stereotype_position_bottom = stereotype.is_some()
+                && self
+                    .meta
+                    .skinparams
+                    .iter()
+                    .rev()
+                    .find(|param| param.key.eq_ignore_ascii_case("stereotypePosition"))
+                    .is_some_and(|param| param.value.eq_ignore_ascii_case("bottom"));
+
             let color = caps.get(11).map(|m| m.as_str().to_string());
 
             // Explicit `order N` sets the layout sort key; otherwise it defaults
@@ -682,6 +697,7 @@ impl SeqParser {
                     kind,
                     order: Some(explicit_order.unwrap_or(idx)),
                     stereotype,
+                    stereotype_position_bottom,
                     url,
                     color,
                     source_line: self.current_line,
@@ -1378,6 +1394,19 @@ impl SeqParser {
     fn try_hide(&mut self, line: &str) -> bool {
         if line == "hide footbox" {
             self.hide_footbox = true;
+            return true;
+        }
+        // CommandHideShowByGender#executeSequenceDiagram ignores the gender
+        // selector and updates SequenceDiagram#hiddenPortions, shared by every
+        // Participant#getDisplay. Its PORTION accepts singular and plural.
+        static STEREOTYPE_VISIBILITY: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"(?i)^(hide|show)\s+(?:(?:[\p{L}\p{N}_.]+|"[^"]+"|<<.*>>)\s+)*?stereotypes?$"#,
+            )
+            .unwrap()
+        });
+        if let Some(caps) = STEREOTYPE_VISIBILITY.captures(line) {
+            self.hide_stereotypes = caps[1].eq_ignore_ascii_case("hide");
             return true;
         }
         line.starts_with("hide ")
@@ -2597,5 +2626,45 @@ Gate -> Mail: enqueue"#
         let d = parse("participant Alice\nparticipant Bob\nAlice -> Bob : hi");
         assert_eq!(d.participants[0].url, None);
         assert_eq!(d.participants[1].url, None);
+    }
+    #[test]
+    fn participant_display_visibility_and_declaration_order() {
+        let d = parse(
+            "skinparam stereotypePosition bottom\nqueue Mail <<work>>\nskinparam stereotypePosition top\nqueue Other <<role>>\nMail -> Other\nhide stereotypes",
+        );
+        assert!(d.hide_stereotypes);
+        assert!(d.participants[0].stereotype_position_bottom);
+        assert!(!d.participants[1].stereotype_position_bottom);
+        assert_eq!(d.participants[0].stereotype.as_deref(), Some("work"));
+        let d = parse(
+            "hide stereotype\nactor Gate <<role>>\nparticipant Hub <<service>>\nHub -> Gate\nshow stereotypes",
+        );
+        assert!(!d.hide_stereotypes);
+    }
+
+    #[test]
+    fn participant_display_default_serialization_is_backward_compatible() {
+        let d = parse("queue Mail <<work>>\nHub -> Mail");
+        let yaml = serde_yml::to_string(&d).unwrap();
+        assert!(!yaml.contains("hide_stereotypes"));
+        assert!(!yaml.contains("stereotype_position_bottom"));
+        // An old model has neither key. Defaults must not change its full YAML.
+        let legacy: SequenceDiagram = serde_yml::from_str(&yaml).unwrap();
+        assert!(!legacy.hide_stereotypes);
+        assert!(
+            legacy
+                .participants
+                .iter()
+                .all(|p| !p.stereotype_position_bottom)
+        );
+        assert_eq!(serde_yml::to_string(&legacy).unwrap(), yaml);
+        let d = parse(
+            "skinparam stereotypePosition bottom\nqueue Mail <<work>>\nHub -> Mail\nhide stereotype",
+        );
+        let yaml = serde_yml::to_string(&d).unwrap();
+        let restored: SequenceDiagram = serde_yml::from_str(&yaml).unwrap();
+        assert!(restored.hide_stereotypes);
+        assert!(restored.participants[0].stereotype_position_bottom);
+        assert_eq!(serde_yml::to_string(&restored).unwrap(), yaml);
     }
 }
