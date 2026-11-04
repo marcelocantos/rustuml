@@ -1,0 +1,4 @@
+@startuml
+skinparam ArrowFontStyle italic
+Oriole -> Finch : a<img:checker-ae47-absent.png>b
+@enduml

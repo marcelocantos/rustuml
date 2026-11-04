@@ -1,0 +1,27 @@
+{
+  "cargo": [
+    "cargo",
+    "build",
+    "-p",
+    "rustuml-oracle",
+    "--release",
+    "-j",
+    "4"
+  ],
+  "rustc": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/probe.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-before/release/deps",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-before/release/librustuml_oracle.rlib",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/target-before/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-creole-fallback-checker-ae47/probe"
+  ],
+  "exit": 0,
+  "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "binary_sha256": "9365fb74b54dc2ac1075f7dbefb3e0ef5e695dd7b6f57bc8c63270b38ba24db0"
+}

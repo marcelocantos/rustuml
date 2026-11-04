@@ -1,0 +1,37 @@
+{
+  "production_files": [
+    "crates/rustuml-render/src/creole.rs"
+  ],
+  "account_precedes_draft": true,
+  "production_parent": "f977806cef5a90a868175e8e707a89d4d791d29d",
+  "implementation_message": "Apply command-specific color and image fallback configurations\n\nFollow precommitted accounts f977806ce. Invalid color commands retain current color; unresolved backgrounds use white. Missing-image fallback constructs independent plain black monospaced text. Preserve strict candidate grammar, aliases and throwing-font negative contract; alpha and consumer inheritance stay outside scope.\n\nCo-Authored-By: OpenAI Codex <noreply@openai.com>\n\n",
+  "legacy_tspans_unchanged": true,
+  "style_public_api_unchanged": true,
+  "base_files": 10721,
+  "imports": [
+    {
+      "revision": "83469a4832cf20b8e2e57514841e5c46adf63a6e",
+      "files": 118
+    },
+    {
+      "revision": "521fe226d428c01128f4379bb7342584772924d7",
+      "files": 96
+    },
+    {
+      "revision": "5ec48be56c4bce12ec646c29ed8e6d4be5e8518b",
+      "files": 135
+    },
+    {
+      "revision": "4e2918c608c9845751c937088dd1a68631657316",
+      "files": 100
+    },
+    {
+      "revision": "f6c84a6215e734955890f6058c309423cf228f1d",
+      "files": 120
+    }
+  ],
+  "java_files": 56,
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "fixture_shaped_production_logic": false,
+  "new_constants_provenance": "HColorSet.parseSimpleColor widths 1/3/6/8; HColors.WHITE; ColorTrieNode seven Archimate names and absence of RebeccaPurple; AtomImg.create monospaced(14) blackBlueTrue. No numerical layout tuning."
+}
