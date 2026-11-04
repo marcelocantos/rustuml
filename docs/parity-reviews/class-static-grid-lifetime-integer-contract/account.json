@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-static-grid-lifetime-integer-contract",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "2eaccb21af562b53fe28b00c22942007ca7e0786",
+  "java_locations": [
+    "svek/SvekNode.java#appendLabelHtml,appendTd",
+    "Graphviz lib/common/htmllex.c#doInt,widthfn,heightfn",
+    "Graphviz lib/common/htmltable.c#free_html_tbl,free_html_label"
+  ],
+  "rust_locations": [
+    "vendor/graphviz/lib/rustuml_helpers.c#rustuml_make_empty_grid_label"
+  ],
+  "invariant": "Every published table cell array is NULL-terminated, including at allocation-failure cleanup. WIDTH/HEIGHT use base-10 integer-prefix conversion followed by inclusive unsigned-short bounds, as in htmllex.doInt.",
+  "causal_divergence": "The helper grows the cell array even after cell allocation fails and publishes uninitialized storage before cleanup. The checker failure at allocation 3 reaches an uninitialized sentinel in free_html_label. Separately strtod with complete-token validation makes 1e2 equal 100 rather than 1, rejects 65535.9 before integer conversion, and accepts empty numeric text as zero.",
+  "planned_change": "Allocate the cell before growing the array, terminate the successfully grown array before publication, and preserve cleanup ownership on every failure. Replace floating conversion with source-equivalent strtol prefix parsing, no-digits rejection and integer bounds. Keep unsupported HTML fallback and all layout computations unchanged.",
+  "perturbation_axes": [
+    "Allocation failure position across cell, array, port and row/column buffers in single-cell and multi-row grids; malformed partial grids",
+    "Numeric syntax (fractional, exponent, whitespace, signs and empty) crossed with zero/maximum/out-of-range dimensions and WIDTH/HEIGHT"
+  ],
+  "prior_evidence": "../class-command-quark-note-ownership/checker-support/allocation-results.json and native-safety-results.json",
+  "verification_plan": "ASan/UBSan helper harness with every reachable allocation failure; preserved native bounded controls; explicit numeric expectations from pinned htmllex.doInt; real CLI retained shield pairs. Maker evidence only, independent review required."
+}
