@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant A
+participant B
+group shapes
+hnote over A,B: across
+A -> B : body
+end
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant A
+participant B
+A -> B ++ : enter
+group done
+B -> A : close
+end
+destroy B
+A -> A : after
+@enduml

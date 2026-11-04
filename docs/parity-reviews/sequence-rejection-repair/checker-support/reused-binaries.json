@@ -1,0 +1,26 @@
+{
+  "revision": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "comparator_command": [
+    "rustc",
+    "--edition=2024",
+    "docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs",
+    "--extern",
+    "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-sequence-repair/target/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-sequence-repair/target/release/deps",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-repair/bin/compare_cli"
+  ],
+  "binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "b9accff9c5036985205417f39a106d27db84cb89824a80957878e1384b88246b",
+    "rustuml": "eb6f4b5e35c28d3cf3899e1c97c08683411f615e89bb461ddca8ab05ffd73184"
+  },
+  "source_files": {
+    "crates/rustuml-parser/src/parse/sequence.rs": "47fbe29e0884d3e7abaa13020bec990acd419137f9d04f79c0f25d9aecfa468d",
+    "crates/rustuml-render/src/sequence.rs": "615afcfa9d28f4abb953512270b6e49e8ddab874470670ea27aa9628c5755e7b",
+    "docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+    "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9"
+  },
+  "verification": "Every recorded binary and source SHA256 checked before copy; these early replays use maker binary. Final gates use independently rebuilt candidate."
+}

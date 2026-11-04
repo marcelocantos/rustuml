@@ -1,0 +1,470 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+    "source_sha256": "bd459ece56c5d2936bb3aac851a20a1ec98a3dda83aefe583b48a75d3f2747fc",
+    "golden_sha256": "03e5e09df57d391ace81d9ce74ede33bf9b2b7aa0dc5ecb4333786816540d052",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "a62c4693094c9fbbfaecaeaedeb339a8fa2ba18ce79cb5b17dcf96d8a1305db7",
+      "svg": "8181db51241aee4b6f9a.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+    "source_sha256": "2234390984d7f1897ab96421b5ee920fb9bcf7673faf4441fffdb1e99ab56f0d",
+    "golden_sha256": "84b9fa2fcf7c4905b9b7f43b1c6ac6c4cb40b3267ddf3fa48d5cb18a4dcf58e0",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "16cf4ecd6dea92d6ba7b2098550f8bd463628fb3546e22d1379a9fb972ec413d",
+      "svg": "70596ac25bf77f279ce7.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "source_sha256": "ff9a71a022e2e9572d0d7d26a2a3f1f991f51461665e71535dd0203f4b0e0444",
+    "golden_sha256": "4aa141f851a45a5d0f0ea2e510de31a8bc3e9d5b6e7477d3cf122c3f602603b6",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "svg": "50fd3b91b5dbb7dfab0d.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+    "source_sha256": "b94a48a13ee2b8601b80040fca6464a18146ef53bbd830f07eae2b6f90bfc78a",
+    "golden_sha256": "c2e0c937576a87e29da5dca74f137e77fb5e696759ba6ec2c56d834e624d5a41",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "51903eb92a1070a0ac7ea54e55260f32a61aa30d0b71d42ab8b76bccdf051be1",
+      "svg": "20f2785140ca3ea681ae.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+    "source_sha256": "dfa5b14281e9b8555d63c87ad0f18ff74f5c2c7d683988eb33ea8cf33999f3e2",
+    "golden_sha256": "26ff429511d73f5443c677e3ff0baab17bf3f6a6a7f32204acbbd024eea1ddd5",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "6ba30f5bcdcc69efbc35ad8c465822348739deeed9f1d8dec404358a14724143",
+      "svg": "bb2f6d223694748b26c1.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "source_sha256": "ac95b61ab59c0bb4ce966eed0196cc3b521d01b28d972b98c273e8be3a574bf6",
+    "golden_sha256": "ff77cc49e87715c66c8e39233f368f225e2f84572f7d763d2cbd042024bcc909",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "c1e59dde54aacf3352f5b85981df4c5fabd73bae216bf11404eddb5319662eeb",
+      "svg": "510b1ffd85639a42b856.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "source_sha256": "bdabbc27dcb8454179d80c7af6c5581ffeff2cf1bf591a66cc6313df9699ee7d",
+    "golden_sha256": "cdce326e26f0a4aaf1c75fdd15b89ecfeb23978c5e8f141d448a3601e1857de7",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "fdda826d0a16c68e79fc8247ce292caaeac3441d6a235d89234c2c770bbd88f2",
+      "svg": "609b3dce74964cd669aa.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "source_sha256": "f15f329c74d6dc30b1d8bf7719e87689c7f10dae627d48e60958b8a0543edc95",
+    "golden_sha256": "077250790d9a8af47a18e001d523a558952af13366916386caaeb5e06f612e39",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "1657ca02a9b90d90be285830cbe451b7980bb3b6fa4ea260864870fbac158447",
+      "svg": "cfac8123dd4f01af274f.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "parent-added145"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "source_sha256": "e4b7a8ea2482d5e18e80974b4000946a7b421aa5e2aa1069958764b1c0b82046",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "59149bd297de823a1be03683a65531e5d44ff91a4f86762d012ef9c6a00029e6",
+      "svg": "6d91548d31e343a3353c.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "parent-added145"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "source_sha256": "0feb1fb4b863b31d30ae1f8051e69e6582e0fedcb9568e069340d51ec081dce6",
+    "golden_sha256": "02c917510a0c0b837ef0933316e7c0f406b21089aba50e8d2dc33cd864a80139",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "37544ea51a3c910dd28cd71dbccd8d3ac96df40825ada9394d388077dfda5596",
+      "svg": "ada1e217e87cf8ee8a5b.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "parent955.json",
+    "cohort": "parent-added145"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "source_sha256": "912dc57c2bcc8b7758c1333a0aff748c367ff384d078763926c6d8f40bf1f92e",
+    "golden_sha256": "2b85f6343d1f3756f2a74ed5de20b024a2a1477748e15e8023d0cff79a53c035",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 4: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "ea3d1b606cc3baf677c8.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "generated.json",
+    "cohort": "checker-sequence-self-return-message-model"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "source_sha256": "82e0d1a8cba230ec2da2bf01d70aec66b148cfda3f0fe22a6b9c757d804ee7d3",
+    "golden_sha256": "de45b18e491222e9151f4748438f1bec1b5766d913094250b6cef73c6e6acfa8",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 5: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "d57b928acde383d9e984.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "generated.json",
+    "cohort": "checker-sequence-self-return-message-model"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.puml",
+    "source_sha256": "465bbadd39eb080fe3df6c40dcfaca52a8fb42d2a71d184c4fa60c3835f9b896",
+    "golden_sha256": "52094ec5eb61ccf528752065a2b9676da68c5b41998aea06490339fd5ae85a4e",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 4: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "54566fd053186ebac60d.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-return-configuration"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.puml",
+    "source_sha256": "fee8ffdd30d197b2035c6adb2b877b429499ee60b41db6418146736c541c2b73",
+    "golden_sha256": "4e8756ab4c8837f0d2507ee5a2fc52bb4c4626b4070f7caf9480dd80d7d152e6",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 5: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "7e5276389e6c07e1acf1.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-return-configuration"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.puml",
+    "source_sha256": "c5616fb1e5e6491bca636b53461f87b5048e2d98a2eb7452575fb7765a66c3a7",
+    "golden_sha256": "3527f3c7d9651d834e1a454a741f3a5dcb8ad761325f943a62910b32e428c2dc",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 2: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "df707fad695eedb67e67.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-return-configuration"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.puml",
+    "source_sha256": "a0f00e67e30a4399c88f34532abf136ae8a3c039fe5d3d99f044944958a15cb1",
+    "golden_sha256": "779eeb22035282efbbb55235582788ae1e51524833be6ecb54c61be7609a8836",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 3: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "c1e88f9ac7dc6391170f.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-return-configuration"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+    "source_sha256": "b842715aae16ab703afcb8514db1375a69fb38c11000da5f511fd20171010705",
+    "golden_sha256": "cd74f21866960d2b7e3044c433718e77c7af2b34ad7c855b0c9b56c66de0fa4f",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "58c86d2e9899b4d54ee16862a10d9b94bb947286ea11deeac02bbbf67cb3e024",
+      "svg": "270df9a75807e1e16357.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+    "source_sha256": "08e04ed2e19c2bd216108c6589259a3fb57c5e905d848e1354c4df85122b3841",
+    "golden_sha256": "7aa6068babe657f16319df1b990b35091567ba5418ba9935508002a087327f14",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "ff5d9a488a8c23ec1b9b0850b88b3191e75287bc0ff6f7263620eb9436aaf3b7",
+      "svg": "27eef9da246e0190ec95.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+    "source_sha256": "137f00e4dfd6e9c8437a92c1f77b021ab6cbb7573e2d62042f4bf9006fbc7348",
+    "golden_sha256": "e74d55d6d289f57944c97735c14f3ade68a697803bc9f501c73f299cd4f22460",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "7be8ab43eea496043c14c0994afc6e891386f3e2ec9a8b1c014dc04b1a14e6fe",
+      "svg": "78ad7416f803cdb87ca7.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+    "source_sha256": "085fbc299fe5eb3f88106e6697051dcbf2c7e4b96922ac995bb2690c7b8e349c",
+    "golden_sha256": "ee72bd138bcb1d44994d2943facc9e2fcbeda56c3fea57aca3283bc3e69661af",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "f88b7ba99d4870427f9980f4c0650bc11f16a20e46711a82dbb575c84d7750bf",
+      "svg": "1c576b6625fb89c4a067.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+    "source_sha256": "75ea2ef2813dc501b4e9ac40be5fb901148954c25c6120fddb512e6784f638e3",
+    "golden_sha256": "8437657fef860cb4fd13fb5428aef2a3ed99f9bab6266dedab9c125d36579118",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "4ef8d4d6877b5e38183e32da6f70e3c86e84b2468dee9ca4b508b6f4d18d3e56",
+      "svg": "21f920f2b804713e57a7.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+    "source_sha256": "3640807699c61a1087c69209b2569fa1802e5331a8aa9de8425a93828869f4e3",
+    "golden_sha256": "83d6de6bef2eede4f4e1b47bf8aee7be0586e4cc66f3fbd6306cae6656e718ea",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "99377478a093ed7ea1904bf00a405a32d9535dc51b341a2d18766ee7579142f1",
+      "svg": "aa03946f82fe8c2e32e7.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+    "source_sha256": "dee174cfcd0e4bebeaf7937c2fe8aaa5d4530fbd49d0625654c250a55df70a0a",
+    "golden_sha256": "7391e4c4dce734fba3469b5690daee43d1eef1871caf8d3ee1c7107812b59833",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "bd44007597fffb578bd046e35699a3520ba336565fa40bc766458ecacb1de8f2",
+      "svg": "f40f26a7fba7bb792551.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+    "source_sha256": "69d10ae38e0b1e7f73397f049cd887a0cce26837a38f44a50c2d4e76cd75c959",
+    "golden_sha256": "d87b19c152cebbe578c7a2695d13cd01dd8d0631be3b6bd1189e8612db9943b7",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "c7e270e5c1badab611d98411621a800d7fd179d2b6f1165679efaaf423134acd",
+      "svg": "40a16aeb8c5cd5711b19.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+    "source_sha256": "ca187f5a0759def9b58b65c0aef65812caa85f65fc2db2ae87141138e684d8a0",
+    "golden_sha256": "43e8e4fd00f22bc322a53ad446a8e7619ac08ea8bdd20ab1ddec8bec96477b59",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "513ef52091ecfa4a41fe6d35eed975156b48d28b7d6e5fa09c00552ed1840e87",
+      "svg": "448783247848809c0304.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+    "source_sha256": "23f5f72e76a5e313cd30af94258b63fe4343023522b6ed43786d051cac9de9b8",
+    "golden_sha256": "8103dddc303742187bb5430e95c188d2142a67b789430ee48e8cbbfd34619391",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "46aaa241929df440f6478a95f6d57afe72b749f5d64495bffb792510bcc2e714",
+      "svg": "cdce03301c3c82887b62.rust.svg"
+    },
+    "comparator": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "frozen_inventory": "new54",
+    "cohort": "fresh-sequence-teoz-event-history"
+  }
+]

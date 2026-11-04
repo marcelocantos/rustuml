@@ -1,0 +1,5 @@
+@startuml
+!pragma teoz true
+A -> B ++ : enter
+return #notacolor777 done
+@enduml
