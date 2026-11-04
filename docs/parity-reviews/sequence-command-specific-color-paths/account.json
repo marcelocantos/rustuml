@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "baseline": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "imported_rejection": "a2f0aa4083b8e1195f19e9434b6d6a4be7e407f9",
+  "status": "preimplementation hypothesis; independent review required",
+  "mechanism": "sequence-command-specific-color-paths",
+  "java_locations": [
+    "sequencediagram.command.CommandParticipant#executeArg",
+    "sequencediagram.command.CommandParticipantMultilines#executeNow",
+    "sequencediagram.command.CommandBoxStart#executeArg",
+    "sequencediagram.command.FactorySequenceNoteCommand#executeInternal",
+    "klimt.color.HColorSet#parseColor / parseSimpleColor",
+    "klimt.color.Colors#Colors",
+    "command.SingleLineCommand2#execute"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::RegisteredSequenceCommand::validate_colors",
+    "crates/rustuml-parser/src/parse/sequence.rs::parse_sequence"
+  ],
+  "invariant": "Validation follows the selected command execution path: participant single-line COLOR is one HColorSet token, notes/boxes use Colors, and unused captures are not executed. All four HColorSet gradient separators remain valid and visibly unsupported if not painted faithfully.",
+  "causal_divergence": "Generic Colors validation accepts participant composite tokens that Java rejects. Warning detection omits the hyphen gradient separator. Participant execution returns early for an already-declared CODE; multiline participant execution never reads COLOR, so imposing uniform validation also risks rejecting valid programs.",
+  "planned_change": "Dispatch validation by command class and command execution state. Preserve valid direct HColorSet gradients; reject whole participant composite tokens via No such color, retain note/box Colors behavior and ignore unused multiline participant COLOR. Where complete participant identity is recoverable, preserve existing-participant early return. Include hyphen in unsupported-gradient reporting.",
+  "perturbation_axes": [
+    "same color token on participant versus note/box and multiline participant",
+    "four gradient separators and fresh versus repeated participant identity"
+  ],
+  "source_correction": "The request phrase composite or gradient participant colours fail is too broad: HColorSet.parseColor explicitly accepts - / | and backslash gradients with valid parseSimpleColor endpoints; the independent checker confirms hyphen gradients are Java-valid. No valid grammar narrowing is planned."
+}

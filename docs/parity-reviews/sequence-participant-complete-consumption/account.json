@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "baseline": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "imported_rejection": "a2f0aa4083b8e1195f19e9434b6d6a4be7e407f9",
+  "status": "preimplementation hypothesis; independent review required",
+  "mechanism": "sequence-participant-complete-consumption",
+  "java_locations": [
+    "sequencediagram.command.CommandParticipantA#getRegexConcat",
+    "sequencediagram.command.CommandParticipantA2#getRegexConcat",
+    "sequencediagram.command.CommandParticipantA3#getRegexConcat",
+    "sequencediagram.command.CommandParticipantA4#getRegexConcat",
+    "sequencediagram.command.CommandParticipant#getOrderRegex / executeArg",
+    "stereo.StereotypePattern#optional"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_participant_decl_in_command",
+    "crates/rustuml-parser/src/parse/sequence.rs::parse_sequence"
+  ],
+  "invariant": "A handler reports support only after consuming the complete admitted declaration and retaining its identity/options. Unsupported variants produce explicit command residue rather than silently truncating identifiers or suffixes.",
+  "causal_divergence": "The partial declaration regex ends before the end of line, accepts only word identifiers, requires spaces before stereotypes/colors and puts order after color. Java identities include dot/@ and optional stereotypes can touch the identity; ORDER precedes URL/COLOR. Negative order cannot be represented in the current usize model.",
+  "planned_change": "Anchor the supported declaration language, retain complete Java identity characters and compact options in their source order, preserve existing full-label handling. Reject unsupported handler variants before mutation so the existing registered-command warning reports them nonfatally. Keep negative order as explicit unsupported execution rather than a silently ignored sort key. Do not expand renderer sorting or family dispatch.",
+  "perturbation_axes": [
+    "dotted/@ identity and quoted/reversed aliases",
+    "compact stereotype/color and positive/negative order with declaration topology"
+  ]
+}

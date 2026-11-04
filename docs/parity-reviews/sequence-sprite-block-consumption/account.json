@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "baseline": "c6295ccdef39719b60f0e88dfd9555919523c961",
+  "imported_rejection": "a2f0aa4083b8e1195f19e9434b6d6a4be7e407f9",
+  "status": "preimplementation hypothesis; independent review required",
+  "mechanism": "sequence-sprite-block-consumption",
+  "java_locations": [
+    "command.CommandSpriteSvg#getRegexConcat",
+    "command.CommandSpriteSvgMultiline#getRegexConcat / END",
+    "command.CommandFactorySprite#multiline / END / executeInternal",
+    "command.CommandMultilines2#isValid",
+    "regex.Pattern2#transform",
+    "regex.RegexConcat#match",
+    "regex.FoxSignature#getMask"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext (field and initializer)",
+    "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::process_one_line (sprite body 785-803 and declaration 873-904 only)"
+  ],
+  "invariant": "A recognized sprite declaration owns its entire body through its command-specific terminator, independent of keyword case or Pattern2 separators. Consuming a sprite must not expose its XML/pixels as diagram commands or consume following diagram commands.",
+  "causal_divergence": "The preprocessor blanks only lowercase literal-space/tab headers. It has a boolean pixel state closed only by }, so multiline SVG XML escapes to strict sequence admission. Uppercase/NBSP equivalents instead reach the registry. This introduced a valid-input error and lost whole match.",
+  "planned_change": "Replace the boolean with an optional small SVG/pixel block-kind enum; update its initializer and only the two authorized consumption/declaration blocks. Match source command grammars with ASCII case folding and Java %s. SVG closes on whole trimmed line ending </svg>; pixel closes on } or end[%s]?sprite (Matcher.matches). Keep inline SVG separate, preserve blank placeholders and existing pixel data collection. Explicitly warn for consumed unsupported SVG/single-line sprite execution. Do not alter TIM, source identity, global readers or rendering.",
+  "perturbation_axes": [
+    "SVG versus pixel and inline versus multiline closure, followed by real commands",
+    "keyword case/NBSP and participant/class/state diagram consumers"
+  ],
+  "ownership_authorization": "User explicitly authorized exactly enum/type/initializer plus existing body/declaration blocks; no other preprocessing edits. The final diff is retained with implementation evidence.",
+  "limitations": [
+    "Existing pixel decoding is partial; SVG materialization remains unsupported. This packet repairs block ownership, not sprite rendering.",
+    "Unclosed/malformed sprite admission and all-family factory contracts must remain observable; no claim of global sprite completeness."
+  ]
+}
