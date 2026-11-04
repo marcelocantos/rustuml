@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "c51bb7686a96ac775d481273dfcf373402531524",
+  "verification_plan": "Frozen 1826 entries (1752 unique source hashes), real CLI and unchanged comparator, before/after YAML and UID/URL ownership; fresh immutable source-guided parent relay controls with invalid references classified separately. Focused iteration then stable library/CLI/main product+assisted/standing perturbation/guards/fmt/clippy gates. Preserve all failures, prior records and chronology defects; no acceptance claim.",
+  "mechanism": "class-normalized-shadow-style-consumer",
+  "java_locations": [
+    "style/FromSkinparamToStyle#convertNow,getShadowingValue",
+    "style/ValueImpl#asDoubleDefaultTo",
+    "style/Style#getShadowing",
+    "svek/image/EntityImageClass#drawInternal,calculateDimension",
+    "klimt/drawing/LimitFinder#drawRectangle",
+    "decoration/symbol/USymbolBoundary#getSkinParameter,asSmall"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#style_shadowing_delta,ClassFontOverrides::from_diagram_entity,render_plantuml_svg,entity_painted_extent",
+    "crates/rustuml-parser/src/parse/style.rs#normalize_legacy_value,push_skinparam (read-only existing conversion)"
+  ],
+  "invariant": "Mapped skinparam values are converted once at declaration creation and then consumed by ValueImpl numeric semantics. Native class painting and painted maxima use the same resolved entity shadow while preferred dimensions stay unchanged. Boundary normalization and note/description consumers retain their own semantics.",
+  "causal_divergence": "Renderer reinterprets all skinparam-origin yes/no values as fallback toggles even though mapped actor keys only convert true/false. Native classes use a global boolean shadow filter and fixed extent instead of resolved per-entity numeric shadow, losing negative-sign digit extraction and override identity.",
+  "planned_change": "Consume already-normalized style declaration values through fashion_shadowing_delta regardless of origin. Retain legacy fallback conversion only for genuinely raw fallback reads. Resolve native class shadow through its existing class signature, source-line and stereotype cascade; pass its numeric value to filter selection and rectangle extrema. No shared style edits, token exceptions or preferred-size compensation.",
+  "perturbation_axes": [
+    "global versus mapped actor/class/note keys, true/false/yes/no/numeric/sign/unit values",
+    "mixed versus native class topology, stereotype overrides, declaration order and degenerated single leaf"
+  ]
+}
