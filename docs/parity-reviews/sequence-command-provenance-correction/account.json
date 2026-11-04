@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "evidence_import": "e654acb9ba31aec53329c739e8151d5bf46659f7",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-command-provenance-correction",
+  "java_locations": [
+    "sequencediagram.command.CommandParticipantA#getRegexConcat",
+    "sequencediagram.command.CommandParticipant#getRegexType/getOrderRegex/executeArg",
+    "sequencediagram.graphic.DrawableSetInitializer#prepareParticipant"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render participant layout comment"
+  ],
+  "invariant": "Source citations must identify methods present at the pinned revision.",
+  "causal_divergence": "Historical accounts cited nonexistent CommandParticipant#getRegexConcat and DrawableSetInitializer#createParticipant. Declaration grammars are subclass methods; initializer method is prepareParticipant (598-656), passing Participant#getDisplay at 630-634.",
+  "planned_change": "Correct the adjacent renderer comment only; preserve all earlier accounts unchanged. This new evidence is not retroactive provenance and makes no acceptance claim.",
+  "perturbation_axes": [
+    "inspect base/subclass declaration ownership",
+    "inspect head/tail initializer consumers"
+  ]
+}
