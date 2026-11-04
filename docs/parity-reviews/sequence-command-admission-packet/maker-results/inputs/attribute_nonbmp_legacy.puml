@@ -1,0 +1,4 @@
+@startuml
+participant "North" as N [[https://example.test/😀?q=𐐀]]
+N -> South: seed
+@enduml

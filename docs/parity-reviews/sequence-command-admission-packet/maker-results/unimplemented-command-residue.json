@@ -1,0 +1,761 @@
+{
+  "by_class": {
+    "CommandExoArrowLeft": 10,
+    "CommandExoArrowRight": 8,
+    "FactorySequenceNoteCommand": 10,
+    "FactorySequenceNoteAcrossCommand": 4,
+    "CommandActivate": 8,
+    "CommandAutonumberStop": 4,
+    "CommandAutonumber": 12,
+    "CommandAutonumberIncrement": 4,
+    "CommandBoxEnd": 6,
+    "CommandNewpage": 6,
+    "CommandSkinParam": 4,
+    "CommandArrow": 12,
+    "CommandAutoNewpage": 2,
+    "CommandIgnoreNewpage": 4,
+    "CommandHideUnlinked": 2,
+    "CommandActivate2": 8,
+    "CommandDeactivateShort": 4,
+    "CommandUrl": 2,
+    "CommandParticipantMultilines": 4,
+    "CommandLinkAnchor": 4,
+    "CommandGrouping": 1,
+    "CommandAssumeTransparent": 3
+  },
+  "entries": [
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 4: ?-> Osprey: near"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 5: ?-> Osprey: near"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_out_legacy.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 4: Osprey ->?: near"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_out_teoz.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 5: Osprey ->?: near"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_arrow_21_legacy.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 4: ?->\u00a0Juniper: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_arrow_21_teoz.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 5: ?->\u00a0Juniper: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_arrow_22_legacy.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 4: Juniper\u00a0->?: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_arrow_22_teoz.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 5: Juniper\u00a0->?: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_arrow_21_legacy.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 4: ?->\u000bJuniper: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_arrow_21_teoz.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 5: ?->\u000bJuniper: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_arrow_22_legacy.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 4: Juniper\u000b->?: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_arrow_22_teoz.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 5: Juniper\u000b->?: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_arrow_21_legacy.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 4: ?->\fJuniper: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_arrow_21_teoz.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 5: ?->\fJuniper: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_arrow_22_legacy.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 4: Juniper\f->?: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_arrow_22_teoz.puml",
+      "command_class": "CommandExoArrowRight",
+      "diagnostic": "warning: sequence command CommandExoArrowRight variant is recognized but unimplemented at line 5: Juniper\f->?: arrow"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_shape_stereo_legacy.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 variant is recognized but unimplemented at line 4: rnote <<hint>> over Juniper #pink: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_shape_stereo_teoz.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 variant is recognized but unimplemented at line 5: rnote <<hint>> over Juniper #pink: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_post_stereo_legacy.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 variant is recognized but unimplemented at line 4: note over Juniper <<hint>>: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_post_stereo_teoz.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 variant is recognized but unimplemented at line 5: note over Juniper <<hint>>: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_url_legacy.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 variant is recognized but unimplemented at line 4: note over Juniper [[https://example.test/n]]: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_url_teoz.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 variant is recognized but unimplemented at line 5: note over Juniper [[https://example.test/n]]: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_across_stereo_legacy.puml",
+      "command_class": "FactorySequenceNoteAcrossCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteAcrossCommand$1 variant is recognized but unimplemented at line 4: note <<hint>> across: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_across_stereo_teoz.puml",
+      "command_class": "FactorySequenceNoteAcrossCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteAcrossCommand$1 variant is recognized but unimplemented at line 5: note <<hint>> across: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_across_url_legacy.puml",
+      "command_class": "FactorySequenceNoteAcrossCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteAcrossCommand$1 variant is recognized but unimplemented at line 4: note across [[https://example.test/n]]: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_across_url_teoz.puml",
+      "command_class": "FactorySequenceNoteAcrossCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteAcrossCommand$1 variant is recognized but unimplemented at line 5: note across [[https://example.test/n]]: prose"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_global_legacy.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 3: activate\u000b\"South Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_global_legacy.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 4: deactivate\u000b\"South Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_global_teoz.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 4: activate\u000b\"South Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/vt_global_teoz.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 5: deactivate\u000b\"South Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_ff_legacy.puml",
+      "command_class": "CommandAutonumberStop",
+      "diagnostic": "warning: sequence command CommandAutonumberStop variant is recognized but unimplemented at line 6: autonumber\fstop"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_ff_teoz.puml",
+      "command_class": "CommandAutonumberStop",
+      "diagnostic": "warning: sequence command CommandAutonumberStop variant is recognized but unimplemented at line 7: autonumber\fstop"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_space_legacy.puml",
+      "command_class": "CommandAutonumberStop",
+      "diagnostic": "warning: sequence command CommandAutonumberStop variant is recognized but unimplemented at line 6: autonumber\u000b stop"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_stop_vt_space_teoz.puml",
+      "command_class": "CommandAutonumberStop",
+      "diagnostic": "warning: sequence command CommandAutonumberStop variant is recognized but unimplemented at line 7: autonumber\u000b stop"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_legacy.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 1.2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_teoz.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 1.2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_legacy.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 1.2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_legacy.puml",
+      "command_class": "CommandAutonumberIncrement",
+      "diagnostic": "warning: sequence command CommandAutonumberIncrement is recognized but unimplemented at line 5: autonumber\finc\fA"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_teoz.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 1.2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_ff_teoz.puml",
+      "command_class": "CommandAutonumberIncrement",
+      "diagnostic": "warning: sequence command CommandAutonumberIncrement is recognized but unimplemented at line 6: autonumber\finc\fA"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_legacy.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 1.2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_legacy.puml",
+      "command_class": "CommandAutonumberIncrement",
+      "diagnostic": "warning: sequence command CommandAutonumberIncrement is recognized but unimplemented at line 5: autonumber\u000b inc\u000b A"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_teoz.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 1.2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_increment_vt_space_teoz.puml",
+      "command_class": "CommandAutonumberIncrement",
+      "diagnostic": "warning: sequence command CommandAutonumberIncrement is recognized but unimplemented at line 6: autonumber\u000b inc\u000b A"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_legacy.puml",
+      "command_class": "CommandBoxEnd",
+      "diagnostic": "warning: sequence command CommandBoxEnd variant is recognized but unimplemented at line 6: end\u000bbox"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_teoz.puml",
+      "command_class": "CommandBoxEnd",
+      "diagnostic": "warning: sequence command CommandBoxEnd variant is recognized but unimplemented at line 7: end\u000bbox"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_ff_legacy.puml",
+      "command_class": "CommandBoxEnd",
+      "diagnostic": "warning: sequence command CommandBoxEnd variant is recognized but unimplemented at line 6: end\fbox"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_ff_teoz.puml",
+      "command_class": "CommandBoxEnd",
+      "diagnostic": "warning: sequence command CommandBoxEnd variant is recognized but unimplemented at line 7: end\fbox"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_space_legacy.puml",
+      "command_class": "CommandBoxEnd",
+      "diagnostic": "warning: sequence command CommandBoxEnd variant is recognized but unimplemented at line 6: end\u000b box"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_end_vt_space_teoz.puml",
+      "command_class": "CommandBoxEnd",
+      "diagnostic": "warning: sequence command CommandBoxEnd variant is recognized but unimplemented at line 7: end\u000b box"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_legacy.puml",
+      "command_class": "CommandNewpage",
+      "diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 4: newpage\u000bSecond"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_teoz.puml",
+      "command_class": "CommandNewpage",
+      "diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 5: newpage\u000bSecond"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_ff_legacy.puml",
+      "command_class": "CommandNewpage",
+      "diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 4: newpage\fSecond"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_ff_teoz.puml",
+      "command_class": "CommandNewpage",
+      "diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 5: newpage\fSecond"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_space_legacy.puml",
+      "command_class": "CommandNewpage",
+      "diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 4: newpage\u000b Second"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_newpage_vt_space_teoz.puml",
+      "command_class": "CommandNewpage",
+      "diagnostic": "warning: sequence command CommandNewpage variant is recognized but unimplemented at line 5: newpage\u000b Second"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_ff_legacy.puml",
+      "command_class": "CommandSkinParam",
+      "diagnostic": "warning: sequence command CommandSkinParam variant is recognized but unimplemented at line 4: skinparam\fsequenceMessageAlign\fright"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_ff_teoz.puml",
+      "command_class": "CommandSkinParam",
+      "diagnostic": "warning: sequence command CommandSkinParam variant is recognized but unimplemented at line 5: skinparam\fsequenceMessageAlign\fright"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_space_legacy.puml",
+      "command_class": "CommandSkinParam",
+      "diagnostic": "warning: sequence command CommandSkinParam variant is recognized but unimplemented at line 4: skinparam\u000b sequenceMessageAlign\u000b right"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_skinparam_vt_space_teoz.puml",
+      "command_class": "CommandSkinParam",
+      "diagnostic": "warning: sequence command CommandSkinParam variant is recognized but unimplemented at line 5: skinparam\u000b sequenceMessageAlign\u000b right"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_0_legacy.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 3.7"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_0_teoz.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 3.7"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_1_legacy.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 3:7"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_1_teoz.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 3:7"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_2_legacy.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 4: autonumber 3-7"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_2_teoz.puml",
+      "command_class": "CommandAutonumber",
+      "diagnostic": "warning: sequence command CommandAutonumber variant is recognized but unimplemented at line 5: autonumber 3-7"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_0_legacy.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 2: \"Depot label\"\u000bas\u000bDock -> Vale: introduced"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_0_teoz.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 3: \"Depot label\"\u000bas\u000bDock -> Vale: introduced"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_1_legacy.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 2: \"Depot label\"\fas\fDock -> Vale: introduced"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_tail_arrow_alias_1_teoz.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 3: \"Depot label\"\fas\fDock -> Vale: introduced"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_ff_legacy.puml",
+      "command_class": "CommandAutoNewpage",
+      "diagnostic": "warning: sequence command CommandAutoNewpage is recognized but unimplemented at line 4: autonewpage\f90"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_auto_newpage_ff_teoz.puml",
+      "command_class": "CommandAutoNewpage",
+      "diagnostic": "warning: sequence command CommandAutoNewpage is recognized but unimplemented at line 5: autonewpage\f90"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_vt_legacy.puml",
+      "command_class": "CommandIgnoreNewpage",
+      "diagnostic": "warning: sequence command CommandIgnoreNewpage is recognized but unimplemented at line 4: ignore\u000bnewpage"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_vt_teoz.puml",
+      "command_class": "CommandIgnoreNewpage",
+      "diagnostic": "warning: sequence command CommandIgnoreNewpage is recognized but unimplemented at line 5: ignore\u000bnewpage"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_ff_legacy.puml",
+      "command_class": "CommandIgnoreNewpage",
+      "diagnostic": "warning: sequence command CommandIgnoreNewpage is recognized but unimplemented at line 4: ignore\fnewpage"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_ignore_newpage_ff_teoz.puml",
+      "command_class": "CommandIgnoreNewpage",
+      "diagnostic": "warning: sequence command CommandIgnoreNewpage is recognized but unimplemented at line 5: ignore\fnewpage"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_ff_legacy.puml",
+      "command_class": "CommandHideUnlinked",
+      "diagnostic": "warning: sequence command CommandHideUnlinked is recognized but unimplemented at line 5: hide\funlinked"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_hide_unlinked_ff_teoz.puml",
+      "command_class": "CommandHideUnlinked",
+      "diagnostic": "warning: sequence command CommandHideUnlinked is recognized but unimplemented at line 6: hide\funlinked"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_legacy.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 4: Vale\u000b++"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_legacy.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 6: Vale\u000b--"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_teoz.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 5: Vale\u000b++"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_vt_teoz.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 7: Vale\u000b--"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_legacy.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 4: Vale\f++"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_legacy.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 6: Vale\f--"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_teoz.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 5: Vale\f++"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_activate_short_ff_teoz.puml",
+      "command_class": "CommandActivate2",
+      "diagnostic": "warning: sequence command CommandActivate2 is recognized but unimplemented at line 7: Vale\f--"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_vt_legacy.puml",
+      "command_class": "CommandDeactivateShort",
+      "diagnostic": "warning: sequence command CommandDeactivateShort is recognized but unimplemented at line 5: deactivate\u000b"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_vt_teoz.puml",
+      "command_class": "CommandDeactivateShort",
+      "diagnostic": "warning: sequence command CommandDeactivateShort is recognized but unimplemented at line 6: deactivate\u000b"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_ff_legacy.puml",
+      "command_class": "CommandDeactivateShort",
+      "diagnostic": "warning: sequence command CommandDeactivateShort is recognized but unimplemented at line 5: deactivate\f"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_deactivate_short_ff_teoz.puml",
+      "command_class": "CommandDeactivateShort",
+      "diagnostic": "warning: sequence command CommandDeactivateShort is recognized but unimplemented at line 6: deactivate\f"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_ff_legacy.puml",
+      "command_class": "CommandUrl",
+      "diagnostic": "warning: sequence command CommandUrl is recognized but unimplemented at line 4: url\fof\fVale\fis\f[[https://example.invalid/berth]]"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_url_ff_teoz.puml",
+      "command_class": "CommandUrl",
+      "diagnostic": "warning: sequence command CommandUrl is recognized but unimplemented at line 5: url\fof\fVale\fis\f[[https://example.invalid/berth]]"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_legacy.puml",
+      "command_class": "CommandParticipantMultilines",
+      "diagnostic": "warning: sequence command CommandParticipantMultilines is recognized but unimplemented at line 4: participant\fDepot["
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_participant_multiline_ff_teoz.puml",
+      "command_class": "CommandParticipantMultilines",
+      "diagnostic": "warning: sequence command CommandParticipantMultilines is recognized but unimplemented at line 5: participant\fDepot["
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_legacy.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 4: {first} Quartz -> Vale: ping"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_legacy.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 5: {last} Vale -> Quartz: pong"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_legacy.puml",
+      "command_class": "CommandLinkAnchor",
+      "diagnostic": "warning: sequence command CommandLinkAnchor is recognized but unimplemented at line 6: {first}\u000b<->\u000b{last}:link"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_teoz.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 5: {first} Quartz -> Vale: ping"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_teoz.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 6: {last} Vale -> Quartz: pong"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_vt_teoz.puml",
+      "command_class": "CommandLinkAnchor",
+      "diagnostic": "warning: sequence command CommandLinkAnchor is recognized but unimplemented at line 7: {first}\u000b<->\u000b{last}:link"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_legacy.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 4: {first} Quartz -> Vale: ping"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_legacy.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 5: {last} Vale -> Quartz: pong"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_legacy.puml",
+      "command_class": "CommandLinkAnchor",
+      "diagnostic": "warning: sequence command CommandLinkAnchor is recognized but unimplemented at line 6: {first}\f<->\f{last}:link"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_teoz.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 5: {first} Quartz -> Vale: ping"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_teoz.puml",
+      "command_class": "CommandArrow",
+      "diagnostic": "warning: sequence command CommandArrow variant is recognized but unimplemented at line 6: {last} Vale -> Quartz: pong"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "test-diagrams/perturbations/sequence-command-fox-space/c2b0_factory_link_anchor_ff_teoz.puml",
+      "command_class": "CommandLinkAnchor",
+      "diagnostic": "warning: sequence command CommandLinkAnchor is recognized but unimplemented at line 7: {first}\f<->\f{last}:link"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_short_legacy.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 2: ?-> N: short"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_short_teoz.puml",
+      "command_class": "CommandExoArrowLeft",
+      "diagnostic": "warning: sequence command CommandExoArrowLeft variant is recognized but unimplemented at line 3: ?-> N: short"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_quoted_activation_legacy.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 3: activate \"North Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_quoted_activation_legacy.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 5: deactivate \"North Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_quoted_activation_teoz.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 4: activate \"North Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_quoted_activation_teoz.puml",
+      "command_class": "CommandActivate",
+      "diagnostic": "warning: sequence command CommandActivate variant is recognized but unimplemented at line 6: deactivate \"North Pier\""
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_participant_block_legacy.puml",
+      "command_class": "CommandParticipantMultilines",
+      "diagnostic": "warning: sequence command CommandParticipantMultilines is recognized but unimplemented at line 1: participant N ["
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/known_participant_block_teoz.puml",
+      "command_class": "CommandParticipantMultilines",
+      "diagnostic": "warning: sequence command CommandParticipantMultilines is recognized but unimplemented at line 2: participant N ["
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_valid_legacy.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 has an execution-valid composite/gradient color; complete style materialization remains unsupported at line 2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_composite_valid_teoz.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 has an execution-valid composite/gradient color; complete style materialization remains unsupported at line 3"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_gradient_legacy.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 has an execution-valid composite/gradient color; complete style materialization remains unsupported at line 2"
+    },
+    {
+      "cohort": "retained3569",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/reference-inputs/color_gradient_teoz.puml",
+      "command_class": "FactorySequenceNoteCommand",
+      "diagnostic": "warning: sequence command FactorySequenceNoteCommand$2 has an execution-valid composite/gradient color; complete style materialization remains unsupported at line 3"
+    },
+    {
+      "cohort": "golden12550",
+      "source": "test-diagrams/golden/edge-cases/edge_boundary_empty_note.puml",
+      "command_class": "CommandGrouping",
+      "diagnostic": "warning: sequence command CommandGrouping variant is recognized but unimplemented at line 3: end note"
+    },
+    {
+      "cohort": "golden12550",
+      "source": "test-diagrams/golden/preprocessing/preproc_theme_aws_orange_sequence.puml",
+      "command_class": "CommandAssumeTransparent",
+      "diagnostic": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 11: !assume transparent light"
+    },
+    {
+      "cohort": "golden12550",
+      "source": "test-diagrams/golden/preprocessing/preproc_theme_black_knight_sequence.puml",
+      "command_class": "CommandAssumeTransparent",
+      "diagnostic": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 9: !assume transparent dark"
+    },
+    {
+      "cohort": "golden12550",
+      "source": "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_sequence.puml",
+      "command_class": "CommandAssumeTransparent",
+      "diagnostic": "warning: sequence command CommandAssumeTransparent is recognized but unimplemented at line 11: !assume transparent light"
+    }
+  ],
+  "note": "Counts are CLI warning instances; input overlap retained. Recognized but unsupported commands are not counted as syntax errors or claimed implemented."
+}

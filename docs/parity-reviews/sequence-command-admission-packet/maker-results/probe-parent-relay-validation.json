@@ -1,0 +1,17 @@
+{
+  "validated": true,
+  "cases": 1,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.R67JYJDU",
+  "hashes": {
+    "probe-reference-results.json.gz": "ce1cfbfba5d8bb77827ba043233f0324b552ab8249d2824ccb3992827f1cd476",
+    "probe-reference-transport.json": "272ecf220a82972be17006584312d27f1e01dbf4a75dd90815392e5451ac796d"
+  },
+  "remote_names": {
+    "probe-reference-results.json.gz": "reference-results.json.gz",
+    "probe-reference-transport.json": "reference-transport.json"
+  },
+  "exit_code": 0,
+  "stdout_json_commands": 81,
+  "launch_note": "wrapper uses Java source-file mode with pinned JAR on classpath; no separate javac (runner report)"
+}

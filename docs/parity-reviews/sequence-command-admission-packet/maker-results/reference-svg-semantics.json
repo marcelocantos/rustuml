@@ -1,0 +1,346 @@
+[
+  {
+    "name": "attribute_nonbmp_legacy",
+    "svg_sha256": "362bd23ef0a577b9e93c310e3aa0a58a0065977d0e2197639bc023eeade5a773",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "attribute_nonbmp_teoz",
+    "svg_sha256": "c45c41ea65b3545ac841a3f05590ec0f3b46180d96e1f9522ef7bec0ab19dc75",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "attribute_unicode_legacy",
+    "svg_sha256": "40db9475bfcbe95d1dc8f7754aea2b17aa14a828007d8b6f99236b2582aeb88e",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "attribute_unicode_teoz",
+    "svg_sha256": "d10a3661d4dc765ed2b14a0bf3f94971b1454469d988a84ea37a99046d88bfc7",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "color_composite_terminator_legacy",
+    "svg_sha256": "24802f76d12556e1be2a6120ccfa4094d7cb236ea3fe5efe47a86f0612c52b7b",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "No such color (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 24
+  },
+  {
+    "name": "color_composite_terminator_teoz",
+    "svg_sha256": "ff6f894933e2e6ad98382e68d7aa8b4d08b3b1844bdd972ed11b37b5eb01c7c2",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "No such color (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 8
+  },
+  {
+    "name": "color_composite_valid_legacy",
+    "svg_sha256": "1fe8bbfa61de678a4299840d3147447de1bcbd32dc37a73fe00962f9573d4e02",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "color_composite_valid_teoz",
+    "svg_sha256": "e96125c716fa581c9122bd8b1d3ce7c9ebc816bb488eb25c246dea8f4b431b03",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "color_gradient_legacy",
+    "svg_sha256": "825925b99d8c2936e1b5a66ee00b1aaf672c5f3b28264699557536bf2cf5bfc8",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "color_gradient_teoz",
+    "svg_sha256": "509b2003a31a13ecc6b1f784236412a604258075b8b0f181c65791ee28b3db59",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "color_simple_invalid_legacy",
+    "svg_sha256": "6fb7dad886ba7a8f61300fcb4914a13150b2610bdfd2cd2551a44823ec2120ab",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "No such color (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 24
+  },
+  {
+    "name": "color_simple_invalid_teoz",
+    "svg_sha256": "0b00904d9e3a16510faf53266f40a5493519e23270e3ddfaa3e571887c11874f",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "No such color (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 8
+  },
+  {
+    "name": "footbox_compact_legacy",
+    "svg_sha256": "fac7e11dc5a2e9fff669375859b77a94096bfcb210ade422a284172381a69287",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "footbox_compact_teoz",
+    "svg_sha256": "10b56d8e15b469287fe8eeec9740a572b8f6ac763cf8b41e7e65a45a23df0f10",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "footbox_vt_legacy",
+    "svg_sha256": "5fd2112789067f9c9f53395c3e7a92602bb628f3a05fc6dc3f6aa5ac25716ff6",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 3
+  },
+  {
+    "name": "footbox_vt_teoz",
+    "svg_sha256": "a1bf665b4ba9fa3fca55b9363dc38e86352f67ea1dc59396429ceeec453bf4de",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 3
+  },
+  {
+    "name": "invalid_gap_legacy",
+    "svg_sha256": "c1d205c475f0ec99b926937ca4fdd915279360d835ea964d9e7adab46b1b4ae1",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 8
+  },
+  {
+    "name": "invalid_gap_teoz",
+    "svg_sha256": "6665f5def719689d54964e7af97f2fd9101baa89878c686beac19fabe2710e61",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 9
+  },
+  {
+    "name": "invalid_suffix_legacy",
+    "svg_sha256": "3f9f7b4960f221f5cb44b0a17051f5fd3574743c229ea0a8181f5c1145a58ee9",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 24
+  },
+  {
+    "name": "invalid_suffix_teoz",
+    "svg_sha256": "0fa8ba965de7231d6be349b360f6170f5d6793339ab13d6cac27a0503970501d",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 8
+  },
+  {
+    "name": "known_participant_block_legacy",
+    "svg_sha256": "2444082a84c127bbe604dcf73fb6ca4676c4b52aabca9b3da79c07d36bced043",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 7
+  },
+  {
+    "name": "known_participant_block_teoz",
+    "svg_sha256": "52e9c416ba37ff9db2cd37794920d2d4e507a192fc7fe0a379ca4ebe5e64a75c",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 7
+  },
+  {
+    "name": "known_quoted_activation_legacy",
+    "svg_sha256": "183ba5b08a470a8da123753301ff3e1ad28ea116532e1a9ecc7641f00bba2617",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "known_quoted_activation_teoz",
+    "svg_sha256": "d31de9aeaa27b425d2b95d243af14cc34eca56dc26de837253f824e6d0e52c8e",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "known_short_legacy",
+    "svg_sha256": "b341920faa800593471054946f30f4a60daf7bb6e18359088e4156fbfc092624",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "known_short_teoz",
+    "svg_sha256": "0f6cb0f2d4d08246ac69941bb5e006f710d4217d566196a94f6c6f485872ca16",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 6
+  },
+  {
+    "name": "size_ascii_2000_legacy",
+    "svg_sha256": "a3737e8e290b1f1bcc56cdb9845eb0fbe5ace2efdca52ff10dd3894f0dfb3977",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "size_ascii_2000_teoz",
+    "svg_sha256": "deea86712a85328072165168119ae57961efa09c13eb455e5cf76861d677dcdd",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "size_ascii_2001_legacy",
+    "svg_sha256": "c92f8a1aa11ce6307d4a8bf23d1a1518ccd7d04f5c4547173dd6d4c2a7ecdfbc",
+    "xml_valid": true,
+    "diagram_type": "CLASS",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 3
+  },
+  {
+    "name": "size_ascii_2001_teoz",
+    "svg_sha256": "e4d3e90967afa8759f9f5e43b016fee17603244f05698e9f65397168d2d43e70",
+    "xml_valid": true,
+    "diagram_type": "CLASS",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 3
+  },
+  {
+    "name": "size_nonbmp_2000_legacy",
+    "svg_sha256": "23a5892d41a4ee2ed7ca5bf15d2178753483f07f163bc3b0b2c590f1a2277df9",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "size_nonbmp_2000_teoz",
+    "svg_sha256": "e8f7ca1d1a615275ca789afac322806945201851f0db31bc3783cd58c500bc28",
+    "xml_valid": true,
+    "diagram_type": "SEQUENCE",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 5
+  },
+  {
+    "name": "size_nonbmp_2001_legacy",
+    "svg_sha256": "1665dcc510e220a52e953f0886733c6cb268cdb2bca9a554ff4fbabf7d92400a",
+    "xml_valid": true,
+    "diagram_type": "CLASS",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 3
+  },
+  {
+    "name": "size_nonbmp_2001_teoz",
+    "svg_sha256": "fc78dea2d22e902adc18ae445fcbc2ebae31d266e3f310f42700ad3c54ad2860",
+    "xml_valid": true,
+    "diagram_type": "CLASS",
+    "error_text": [],
+    "observed_valid": true,
+    "text_count": 3
+  },
+  {
+    "name": "unknown_command_legacy",
+    "svg_sha256": "957ec40c1971e37d962f3f3d03d9a084fae4013b97fff10d965dfb5c94f2bf6d",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 24
+  },
+  {
+    "name": "unknown_command_teoz",
+    "svg_sha256": "1288440ad47db8e468b2fd53f50084578624138aa4fb119ab541cd2f40f0b19a",
+    "xml_valid": true,
+    "diagram_type": null,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "observed_valid": false,
+    "text_count": 8
+  }
+]

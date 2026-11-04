@@ -1,0 +1,7 @@
+@startuml
+participant N [
+Northern
+Pier
+]
+N -> S: seed
+@enduml

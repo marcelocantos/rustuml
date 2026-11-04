@@ -1,0 +1,44 @@
+{
+  "retained3569:model": {
+    "entries": 3569,
+    "stdout_changes": 129,
+    "diagnostic_changes": 273,
+    "new_errors": 107,
+    "new_successes": 0
+  },
+  "retained3569:ascii": {
+    "entries": 3569,
+    "stdout_changes": 103,
+    "diagnostic_changes": 273,
+    "new_errors": 107,
+    "new_successes": 0
+  },
+  "retained3569:yaml": {
+    "entries": 3569,
+    "stdout_changes": 121,
+    "diagnostic_changes": 328,
+    "new_errors": 99,
+    "new_successes": 0
+  },
+  "golden12550:model": {
+    "entries": 12550,
+    "stdout_changes": 132,
+    "diagnostic_changes": 129,
+    "new_errors": 125,
+    "new_successes": 0
+  },
+  "golden12550:ascii": {
+    "entries": 12550,
+    "stdout_changes": 111,
+    "diagnostic_changes": 129,
+    "new_errors": 125,
+    "new_successes": 0
+  },
+  "golden12550:yaml": {
+    "entries": 12550,
+    "stdout_changes": 119,
+    "diagnostic_changes": 277,
+    "new_errors": 113,
+    "new_successes": 0
+  }
+}

@@ -1,0 +1,4 @@
+@startuml
+N -> S: seed
+hnote over N #back:LightBlue : cargo
+@enduml

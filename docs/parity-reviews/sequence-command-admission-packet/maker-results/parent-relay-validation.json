@@ -1,0 +1,46 @@
+{
+  "validated": true,
+  "cases": 28,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.fas7QMki",
+  "hashes": {
+    "reference-results.json.gz": "0240e3dbdb0ff6139c1afb08885c9e3235ce4e94bd02003ab15350279ec6abb9",
+    "reference-transport.json": "25bd071bba7ec25649785894e342ec96500410ff1cda64a92eca663b676d3035"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "200": 10,
+    "0": 18
+  },
+  "intended_invalid": [
+    "color_composite_terminator_legacy",
+    "color_composite_terminator_teoz",
+    "color_simple_invalid_legacy",
+    "color_simple_invalid_teoz",
+    "invalid_gap_legacy",
+    "invalid_gap_teoz",
+    "invalid_suffix_legacy",
+    "invalid_suffix_teoz",
+    "unknown_command_legacy",
+    "unknown_command_teoz"
+  ],
+  "intended_invalid_exit0": [],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "color_composite_terminator_legacy",
+    "color_composite_terminator_teoz",
+    "color_simple_invalid_legacy",
+    "color_simple_invalid_teoz",
+    "invalid_gap_legacy",
+    "invalid_gap_teoz",
+    "invalid_suffix_legacy",
+    "invalid_suffix_teoz",
+    "unknown_command_legacy",
+    "unknown_command_teoz"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

@@ -1,0 +1,5 @@
+@startuml
+!pragma teoz true
+N -> S: seed
+note over N #LightBlue/Yellow: cargo
+@enduml

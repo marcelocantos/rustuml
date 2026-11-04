@@ -1,0 +1,4 @@
+@startuml
+N -> S: seed
+note over N #CeruleanTypo: bad
+@enduml

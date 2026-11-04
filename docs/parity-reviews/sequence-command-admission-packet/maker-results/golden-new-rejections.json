@@ -1,0 +1,1127 @@
+[
+  {
+    "source": "test-diagrams/golden/edge-cases/edge_nwdiag_groups.puml",
+    "source_sha256": "62e28db5d45f878a2cbaf0d3ef64bc1eea4fa0bd336aafbd13f0ea648040f18d",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"nwdiag {\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/edge-cases/edge_seq_fragment_alt.puml",
+    "source_sha256": "f1cc31d6035f232e4dd7ad97c9c3e287d637eae46e23beb1bced3a51d036e17b",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"condition B\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/edge-cases/edge_seq_fragment_neg.puml",
+    "source_sha256": "658bca38fabaf4105f38d972295497828117f44b2d67d0497e50798cc68ecd5c",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"neg negative\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/edge-cases/edge_seq_note_shapes.puml",
+    "source_sha256": "4b524262f24affd01bd89495bfd4d7b18106b118fbf47a253c980540653f7cba",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"/ note\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_set_variable_value_basic.puml",
+    "source_sha256": "af7a2632ba5a29e13563ed80f2cf9d80c66a83c25dab188e7213b83d5ffb1b23",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"!\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_set_variable_value_overwrite.puml",
+    "source_sha256": "594c0c982a3e64060d0975ebd1aff942ec51f3c0a8bac80b37cc837b41d122e2",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"!\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_func_generate_note.puml",
+    "source_sha256": "ea55d9c92d8324ffcb12cf6651de41d08ed5a087d143c62ef7a637c3b1f350a3",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 10: Syntax error: no registered sequence command accepts \"!\\u{1e}RSL:2\\u{1f}  note over Bob : step one\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_nested.puml",
+    "source_sha256": "852c48166290896ddad296915426958e2c561be03ec862c9ec04e1cf8ef10f40",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"ClientA -> $server : connect\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_all_features_02.puml",
+    "source_sha256": "15cbc3c1d0d627f4e807d8ac59771f55918617454745c98fd210796cae4d8c8e",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"<<actor>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain.puml",
+    "source_sha256": "c8f399a7db75e1d6f2db0ec81601155ccc8983d77d5dbd4bb3cc4f68ba412511",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_2parts.puml",
+    "source_sha256": "7b301614e24604d39d1035c77d4d27d4d3a7a2602b608407a62faa5bb36f4178",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_3parts.puml",
+    "source_sha256": "24d4050cf4b692f390a5eb5920c6efb60cfb2e24316aa0cf18e45aaf3dd1e7f3",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_4parts.puml",
+    "source_sha256": "af2e4dfbad49de670baad79f31ad792bbd6fa066249e92e6fb9284cded642a98",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_autonumber_fmt_plain_5parts.puml",
+    "source_sha256": "e7efddb2c3eea3a10dfbf2193bf512182565ed0f565ea7f85a34e18fb1f7b2dd",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"autonumber \\\"\\\"\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_box_1boxes_par.puml",
+    "source_sha256": "fbd8321657c423c7502ab6f6d205ffed23d2931e0c3e23968efed2f21723d10c",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 10: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_box_2boxes_par.puml",
+    "source_sha256": "18a75145c64d67c6c4b318e5a20bbb80df2ff80b17c3013a3ac58345645db381",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 15: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_box_3boxes_par.puml",
+    "source_sha256": "58e12b745e5d643a2969db68e02101a0f7762851226bc4228d4c9fc808ce8e7f",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 20: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mg_hex9900FF.puml",
+    "source_sha256": "9af2d2b0c89481c2bf5ccf071717e62decb516eb43deca13771a0c800461061f",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]> Bob : colored ->\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mg_hexFF8800.puml",
+    "source_sha256": "b18e8b632b55fffc2af4e8d065cbb420252d60867b38cb98e304c125c2a5267b",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]> Bob : colored ->\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mgg_hex9900FF.puml",
+    "source_sha256": "dcd394a90cb8670fee6cd9d2598c76ac5a5875a8c5e7e2859be2eebf978ccda5",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]>> Bob : colored ->>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mgg_hexFF8800.puml",
+    "source_sha256": "524b858a4a3190733c18fd0923742b3d13deeaea080df076bceaa9947d3f6d1a",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]>> Bob : colored ->>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmg_hex9900FF.puml",
+    "source_sha256": "346ec3d97c9241c9a64ef73b0942c6978d4efc76403e5d1b393f6c28c1799fe9",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]-> Bob : colored -->\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmg_hexFF8800.puml",
+    "source_sha256": "f1204f28184ef3b2b6a816d26c81315c0a556997aa09f8a53b0d68fb1fc10b0f",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]-> Bob : colored -->\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmgg_hex9900FF.puml",
+    "source_sha256": "150080ba12010c63444ec18f52d111ddecea5e48cd685f50d88bdd3cee7b1264",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##9900FF]->> Bob : colored -->>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_colored_arrow_mmgg_hexFF8800.puml",
+    "source_sha256": "2ff38de22460bb2650c0ed2e5739ddd4e4485f401cbb5ad1e98a6ecb5ac1ff2a",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]->> Bob : colored -->>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_combo_actor_full.puml",
+    "source_sha256": "c03d153b3e70883dc71cb460dc279754fa169022e4a57c28fd86df4e4b956c2e",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"actor \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_combo_boundary_full.puml",
+    "source_sha256": "44852cb4f77bcc4de9e2de98381bcd10e827dce179a79e9951e501ca0a15146a",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"boundary \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_combo_control_full.puml",
+    "source_sha256": "5713d3404da8bb5ad380f7326e4878b5708d356fead123af9774764f03b17a1e",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"control \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_combo_database_full.puml",
+    "source_sha256": "21fd17a60170d1252de0141bd1b3857cfcc4703423655fadfed28e839a501489",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"database \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_combo_entity_full.puml",
+    "source_sha256": "d1657c92c6cb97ee37be3d90e81a3447c4130602de1b340b4503360f70705dd3",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 2: Syntax error: no registered sequence command accepts \"entity \\\"Alice Smith\\\" as A <<user>> #lightblue order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_combo_skinparam_complex.puml",
+    "source_sha256": "2dcdb1befbcbbbe0e6485178a4639e5235738e22f7b5d589e3ca3704b3dec532",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 13: Syntax error: no registered sequence command accepts \"aut\u043e\u043dumber\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_decl_form_actor_color_stereo.puml",
+    "source_sha256": "57b6c7baa004a10883d1e48f15aa20df1e931977bd325bb0358e23eb11b55737",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor Alice #green <<user>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_decl_form_full.puml",
+    "source_sha256": "720eebbe499683010df50c086f15c262946dc1aa5f10d7af319f97b2b89f106c",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Alice Smith\\\" as A #blue <<ext>> order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth4.puml",
+    "source_sha256": "c9f756cac16e71b0d845edb70bf6c5ce8b59d0da60c7371010fdb0f355b98d71",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth5.puml",
+    "source_sha256": "1df7bb02e7a9ffd5fefc396be50d86d64b8375ae56e6929d48bf3d5c1b5a4e29",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth6.puml",
+    "source_sha256": "b05e58d39c1a1e5491d4f304429802a10133fd286171f2683fda3408197248f9",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_deep_nest_depth7.puml",
+    "source_sha256": "30aedabd9dd9d985e5544e32c1c431ceb50f5de5dd98f7a956c8a270b9e55aba",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_found_lost_unknown_dest.puml",
+    "source_sha256": "f70830f2e01587446425aa4c8de57caad221e4985c619cfe1a88d41791349bdc",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 3: Syntax error: no registered sequence command accepts \"[->] : unknown destination\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_blue_external_20.puml",
+    "source_sha256": "6027b91ce9a555970a57eee5e4d113a5e8364accb632722784387ccf34e2d486",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #blue <<external>> order 20\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_green_service_5.puml",
+    "source_sha256": "8017aa690a6bc8ce6b449df160282ba4a6cb5b475504a78d19eca42ed81f22f1",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #green <<service>> order 5\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_orange_new_25.puml",
+    "source_sha256": "3777f2350ae1e0b513bc079a3d924461f9b0824110c54d8ec9a282b4bd79a746",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #orange <<new>> order 25\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_red_internal_10.puml",
+    "source_sha256": "6830de58dd3599e0af9afbea594893af792e5a73637d56bfb0071dc707264925",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #red <<internal>> order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_actor_yellow_legacy_15.puml",
+    "source_sha256": "4686f7ef6b3c30a4613f4bf36baddfb99febc5505d08af470a67950f7ed73151",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_blue_external_20.puml",
+    "source_sha256": "47fce0b123906bac38ccf7cb34682f83903b510305109ce1037a98075aee5460",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #blue <<external>> order 20\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_green_service_5.puml",
+    "source_sha256": "64f9bc2d0c083ff82cac1754da003a02d9ea103c15f7460ecc854153cd313839",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #green <<service>> order 5\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_orange_new_25.puml",
+    "source_sha256": "9f41b66d68eec5a17ef0abb4b185a773c79ce3351621b166cd44174ef9e8572d",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #orange <<new>> order 25\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_red_internal_10.puml",
+    "source_sha256": "48b836b2ed988c34e6ef9e6298ab01a9298eeef9d539cdf10d7c8ab7790d52cc",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #red <<internal>> order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_boundary_yellow_legacy_15.puml",
+    "source_sha256": "0d20700a471240b71b1aa8be9e725c4ea9f1217d484dcea38eaac89cda105771",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_blue_external_20.puml",
+    "source_sha256": "1a6cc6dc1cf52e604aec065f201ade7a0479bce9cf17ca2c6632624c0df0e9d7",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #blue <<external>> order 20\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_green_service_5.puml",
+    "source_sha256": "18ce7d5ac03768309d3e35a64ca1a881e7708f3523c14dfbeda35d25e9ea9788",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #green <<service>> order 5\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_orange_new_25.puml",
+    "source_sha256": "04463b0f37b7ccc16d6a83c7eec4e56cc676dfcad454cf24ba1ca32e93328da6",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #orange <<new>> order 25\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_red_internal_10.puml",
+    "source_sha256": "b5708794595d79e25712b96a59d5f681311a8a19c204c0d8ba6f2fad23a907d0",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #red <<internal>> order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_control_yellow_legacy_15.puml",
+    "source_sha256": "2d366ebd6705b4310139f343b5f15a537e62a725e7f6c9c00b8a7b0365d667dc",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_blue_external_20.puml",
+    "source_sha256": "de93f39e1fcdcdbaa22ad933e697ddf4dd9925ca793b95f9791dbf0784d88207",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #blue <<external>> order 20\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_green_service_5.puml",
+    "source_sha256": "c0fb71308b72626976b52005f759194d95ec788bbef1992aeb435fc632c4aa1e",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #green <<service>> order 5\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_orange_new_25.puml",
+    "source_sha256": "e7d44ea07753f6fd71fe7387c153459af000c69d5fe47e040b5b0bc46b68014b",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #orange <<new>> order 25\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_red_internal_10.puml",
+    "source_sha256": "435d18b081f4d23fcb0c60a610a99d8cfa61e1c9518dd338ff129c57cec4d4b3",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #red <<internal>> order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_full_decl_participant_yellow_legacy_15.puml",
+    "source_sha256": "6e98dd7425b6f1f8f294973b0361f1284e07edc6006f7f0ae51734425cd6505d",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Name\\\" as N #yellow <<legacy>> order 15\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_all_types_nested.puml",
+    "source_sha256": "323d26b3f37360941aeb38ddedb70e00cc0d6f4e2854c775296ed4e104c08383",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_nested_5deep.puml",
+    "source_sha256": "6d9615292413a53690f5c69e0a8ba69d4057aa0257f80be29bcf7363e72633e1",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 8: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_activate_note.puml",
+    "source_sha256": "99a64eaff31ad86447df7600c7d29022fc843a3f14d05833515efc0700a40a20",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_dotted.puml",
+    "source_sha256": "278ccf30ade7bc6b52581b3783c0b746722edf8bf5947028ef754c78ab0999c3",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_solid.puml",
+    "source_sha256": "1935b335cc7527349e09f9daf53add50f28eaa7b56294a37688ae3d6ec5fdabf",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_thin_dotted.puml",
+    "source_sha256": "789ec2f7aeccb657115e4afa50b37955ec1d4b8e6537706a4ea4fcd324216929",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_arrow_thin_solid.puml",
+    "source_sha256": "41732534ea45e3aec7bd6996aaaa6f365345465411a7da9be8e1bf6c7550a0e5",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_autonumber_bold.puml",
+    "source_sha256": "67e4f644ee0ce3212f830b09dc3ebd35953f80588a7f09efa7743a8a5e4e1308",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_autonumber_default.puml",
+    "source_sha256": "3fddc257a9c7a1c640f20b6d471bd160e6ded78399ed1ee7ac0ed1d8b514e420",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_autonumber_parens.puml",
+    "source_sha256": "eb946d02212f678528198da5a0a5b0e8131a611e120e32cf833d4658c9f4d474",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_basic.puml",
+    "source_sha256": "c70fd8ebd5016a5b912e2c59e49a0f62ce060b963ae88a31b44dd3e36470de77",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_standalone.puml",
+    "source_sha256": "73b0945eb97668dbf510db02eb4a99bcfd18e267959387dcbba033a9544d9c96",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_group_par_three.puml",
+    "source_sha256": "5440643a6c2a50e9553537c992d4150dc70227ab0ed762a83014ed7cc739a8ea",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_hide_footbox_group_par_v2.puml",
+    "source_sha256": "724a5110a7d7cd1114f32a786a67cad6d08e1fc79f628a19a29566176fd24296",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_02.puml",
+    "source_sha256": "c407529d32518548a73fcaa67021c9dc6caf9ee55b34c8ca7069a607ef3b767f",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 22: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_04.puml",
+    "source_sha256": "4abf978ed705f415d348637ebf4039f039721e18662eac5f5d9f0506a9837173",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"participant \\\"<<Component>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_06.puml",
+    "source_sha256": "acc5f87300b8a2b821b678fd9d9ab16b45d228dc0bebd109ae96030c1e60b5a9",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 57: Syntax error: no registered sequence command accepts \"and notification\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_09.puml",
+    "source_sha256": "abf88112f4ef590c6f604a15b40575a1a844cbcafb6fb10ab0cfef4e833d0518",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 28: Syntax error: no registered sequence command accepts \"and background sync\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_kitchen_sink_10.puml",
+    "source_sha256": "c8c97d3e025b5ca75d96e7f618be798b2cee4d5a133d9e522d90b7134fd187a0",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 32: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_mega_combo_02.puml",
+    "source_sha256": "f1ebe3d34e47fa34cca1b679934de2d2163927ae1e1caea6e0fa7c40b663c133",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 23: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_msg_color_hexFF8800.puml",
+    "source_sha256": "eb09c808a6bc0a66db45a4a1448ae0e81d09a13edf5f224dede13cc0298b4d56",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -[##FF8800]> Bob : colored #FF8800\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_msg_dotted_noarrow.puml",
+    "source_sha256": "660c6b8bdf4a22298c29cf3598c070d1e3eca2faca6fa699525fcc23ea0f02d3",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice -->) Bob : dotted_noarrow message\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_msg_solid_noarrow.puml",
+    "source_sha256": "b43218d6171d27bbbe34d4c28b13dc18362ab664d67c56b52c983f08eb36ec8a",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"Alice ->) Bob : solid_noarrow message\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_nested_par_critical.puml",
+    "source_sha256": "a3d0fb96481250d0add9c0a683b4ab82fbb712dbeb7792013aba87771c9e4aa4",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 7: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_color_format_named_aliceblue.puml",
+    "source_sha256": "6e1211b857c04938ce4782d889450419343f6f4b9ba3e753fb70d77fc90c256e",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice AliceBlue\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_color_format_named_lightblue.puml",
+    "source_sha256": "4c60657d06f27fb8c45e5be3dbb5f34871e0491d938503a25cbc5ba032f744c3",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice lightblue\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_color_format_named_red.puml",
+    "source_sha256": "eb993247d71220c76e408d813419234436b7564411f55282447cb8042e642fde",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice red\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_order_ascending.puml",
+    "source_sha256": "4e155eebb3237f326dfc36ec48dc81af327320619d0e81a8e2d8c9004f08997b",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_order_descending.puml",
+    "source_sha256": "9bb823e72daeaf0c1e30eb23b3e7ad5eb3de4810df29f1cfb3fff90927517c11",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_order_large_gaps.puml",
+    "source_sha256": "791f5b4b1d378bf90df7ad155b98b1a93e6552a2c11b32c6659e381cc23e8094",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_order_mixed.puml",
+    "source_sha256": "4042aef1c3f0e4f759565ae20ad33325a93a1c318a40433130b6aebc4154aa22",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_participant_order_same_order.puml",
+    "source_sha256": "b099ba0a7583ce73213a4ad7753b34c2e4958db44566871ec0279712f1ed7732",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 4: Syntax error: no registered sequence command accepts \"A\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cblue_stereo_external_group.puml",
+    "source_sha256": "686607b81d4ceebc7efc4e61b80d075fb79a279d605f33bd42abea118c526a78",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #blue <<external>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cblue_stereo_internal_group.puml",
+    "source_sha256": "c57f42b7dadfe90cec7b93e83d661ae10454cef8b09ff964728a55b012c3eb25",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #blue <<internal>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_pcolor_clightgreen_stereo_external_group.puml",
+    "source_sha256": "eb2059bcc24553a715025dd3b3c83a2a4ab5b89bb051702405d3dace0332e3ff",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #lightgreen <<external>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_pcolor_clightgreen_stereo_internal_group.puml",
+    "source_sha256": "f7f67bef4bd8e9fa448713282c812e3bc97491f38effac32837456e755928f13",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #lightgreen <<internal>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cred_stereo_external_group.puml",
+    "source_sha256": "77f0da8ba6da73a44c22fd5eb8e191b52ea100ce5873bfc67682b8b7e3ac69b0",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #red <<external>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_pcolor_cred_stereo_internal_group.puml",
+    "source_sha256": "e2ea80137f129bb06c08a1a78745ec7e38553a896340089d49ca86bd321c0e7c",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant Alice #red <<internal>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_actor_full_decl.puml",
+    "source_sha256": "0db62a256cbe02c88ff93d29845249a80dc76113dd7fefb990e5405e9b3a8e3b",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 20\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_actor_group_par.puml",
+    "source_sha256": "799d480030e559a1b0a36a440d86d71e6d877ba909ee8442890ca29c5cd92faf",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_boundary_full_decl.puml",
+    "source_sha256": "6e516e447b6dea8566121495279234db8ca6df97df9f0834ab4fba0cb9819e60",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"boundary \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 30\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_boundary_group_par.puml",
+    "source_sha256": "a1f31c0c667876e1506b32619c8de0a76681205bc16434b2648ad42509c84ca0",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_collections_full_decl.puml",
+    "source_sha256": "7de82beefda2ef6965780e523f522bc5291eef517ce3f9b27cb12348539017fc",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"collections \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 70\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_collections_group_par.puml",
+    "source_sha256": "81c3b7258c82bc51c704e4435160accb85492a9a295193165c9635ab5b5974be",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_combo_colors_green_yellow.puml",
+    "source_sha256": "d2fd408da1044d352ccdd8160f57d85a04784589f16db43e2e11e22045e8b385",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant A <<svc>> #green order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_combo_colors_orange_purple.puml",
+    "source_sha256": "9ee6cc3ba99da81e2f3e3cae8df2ef5797ad85f67cad5cabb625945466fbe79e",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant A <<svc>> #orange order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_combo_colors_red_blue.puml",
+    "source_sha256": "91f1dd5c24e8d26c1371f3f1d1283bd438b0b33e729cb33bb62bb6e7d2241fd5",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant A <<svc>> #red order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_control_full_decl.puml",
+    "source_sha256": "4f86c3b3e72cd9900a414d210a846610c4ebf8dacb933a21ea755ad962156d38",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"control \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 40\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_control_group_par.puml",
+    "source_sha256": "b1c88c39f53fa09b3876d7c9f81775ce70a2d54aca52eb7773409a5d6bbc3db7",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_database_full_decl.puml",
+    "source_sha256": "c3d451a016743dae5417a3239de4e0cb916ae2acf56bd91af5244e6d8c4166bc",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"database \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 60\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_database_group_par.puml",
+    "source_sha256": "3921dc4f890b8924a15f85d2d59e811892aa3ba6ef2276e3986ed82d12a5c64f",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_entity_full_decl.puml",
+    "source_sha256": "cd6ea725f38531ccf521033998d2d5b132442dbfec330fcce9fd5fa12bad39b2",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"entity \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 50\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_entity_group_par.puml",
+    "source_sha256": "6161ab3ac6fc92d24b42a0e6a5ca1abc598e52913c3dd59bc6cff69a7c9799fb",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_participant_full_decl.puml",
+    "source_sha256": "88695db1790f650441d66b5adf7e89e1adf077f8f7fa748424d5188bafc2c455",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 10\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_participant_group_par.puml",
+    "source_sha256": "f2c511b091744a91feffcd52e22ae9b8a5f85bec48aeb71b160a764931ca5f16",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_queue_full_decl.puml",
+    "source_sha256": "69611e08a1b345f38ebb3b1433e7562ee997ddd2515319e436eb350d6c650b09",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"queue \\\"P1\\\" as P1 <<stereotype1>> #lightblue order 80\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ptype_queue_group_par.puml",
+    "source_sha256": "a04eecae57a94de05851997c1dd288ac87b180ad35c604947e217af36ba3f1df",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"and\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ref_2_participants.puml",
+    "source_sha256": "7617a53b073e98ac551c2dfeff0053da5758dc4eb32fbac69364b3487d971225",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 5: Syntax error: no registered sequence command accepts \"ref over P0 P1 : Reference diagram 2\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/sequence/seq_ref_3_participants.puml",
+    "source_sha256": "11f8fd42205d56a8ad637558305df680cd46ad27e0eb36f7a485e4a070ab8156",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 6: Syntax error: no registered sequence command accepts \"ref over P0 P1 P2 : Reference diagram 3\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/skinparam/skin_sequence_numbering_true.puml",
+    "source_sha256": "087507112fe1812e1426452a38e94bb615066a064426559ce4cc0e76d425979c",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"skinparam autonumber\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/type-detection/ambiguous_nwdiag_in_startuml.puml",
+    "source_sha256": "366f355992558b4ee352afdf428225d7cf170acb6763327a40f11e82d8f388a5",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"nwdiag {\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightBlue_optional.puml",
+    "source_sha256": "49ec5d7506a1e9363cdc6e1a59c089fb44e0f8b1f6486bc595caa358e2d521a7",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightBlue_primary.puml",
+    "source_sha256": "d72ee5f0683580b07c05773a9c234bc36a37e9ff24210a9945bd7adc04df2183",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightGreen_optional.puml",
+    "source_sha256": "0aaa8f48f300e6db60f41c2244073aea332c9c0c6449dda1ccfcb2b07247c2d7",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_LightGreen_primary.puml",
+    "source_sha256": "4b2703899e52b32d67681db22cf8be5b324d0571cd159d214124876b1c8aad05",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_Pink_optional.puml",
+    "source_sha256": "f91fbd877b61ae58162561c2891a3ab5788971a2683aeb417765b7453afcaf4a",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n"
+  },
+  {
+    "source": "test-diagrams/golden/usecase/usecase_extra_all_Pink_primary.puml",
+    "source_sha256": "0713b869afdbbb112b067ea72ece833b7452da4b3fbac5f3842d7e075b9afa1e",
+    "before_exit": 0,
+    "after_exit": 1,
+    "before_comparison": 2,
+    "after_comparison": 2,
+    "diagnostic": "parse error: line 1: Syntax error: no registered sequence command accepts \"actor User #Orange <<human>>\"\n"
+  }
+]

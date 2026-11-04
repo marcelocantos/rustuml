@@ -1,0 +1,13 @@
+{
+  "revision": "268fa9f8b700ba08579efc603e4d0e92b4313e5f",
+  "binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "41b28accef2b60b68116a9a8a3c5f0eb40a13d2b94e324a6f4736ccb2dd483e9",
+    "rustuml": "43fb43f696136b3a83d2a09044a7a7e1080781a3b18f068565c27b826a7a2958"
+  },
+  "source_files": {
+    "crates/rustuml-parser/src/diagram/sequence.rs": "1f28f3d69b9a1c770d085ab1b0cbf0a8215beb5be1d650eb8d74487183a4de10",
+    "crates/rustuml-parser/src/parse/sequence.rs": "5dd86b771151f979dacdff1fd4cf6a6b7f5ab8fd0768c7af202eaf67fa061b6a",
+    "crates/rustuml-render/src/sequence.rs": "6e601b545dff3f9dc64591adb9bbe4ab1957d8e97a10d09ef8fe65810d9eccc8"
+  }
+}

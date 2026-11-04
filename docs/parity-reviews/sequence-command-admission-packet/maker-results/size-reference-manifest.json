@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "purpose": "Source-discovered CommandArrow protectSize(2000) admission boundary",
+  "cases": [
+    {
+      "name": "size_ascii_2000_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_ascii_2000_legacy.puml",
+      "source_sha256": "6743742cc62acdc423bca78540097bdf6ca52e77cce39160d9306137d999c1bf",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "ASCII",
+        "2000"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "size_ascii_2001_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_ascii_2001_legacy.puml",
+      "source_sha256": "4e1aee05e44b538f1baaccf841e8a53d7d9478431829c9c8adcf9efed5c490d3",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "ASCII",
+        "2001"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "size_nonbmp_2000_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_nonbmp_2000_legacy.puml",
+      "source_sha256": "0f4e9b31c06f69e853967d8f1408eebd2587b33a677d5515b2bad0e0edcb3077",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "non-BMP",
+        "2000"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "size_nonbmp_2001_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_nonbmp_2001_legacy.puml",
+      "source_sha256": "990183d72e39e54696453310dd69af2724d538e2bfcccc6baf3dcc3ba1178a94",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "non-BMP",
+        "2001"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "size_ascii_2000_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_ascii_2000_teoz.puml",
+      "source_sha256": "64d7687b639815e0422ec7427dbe6af3d14bfd77659d51f848fb7ff4119b1d0b",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "ASCII",
+        "2000"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "size_ascii_2001_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_ascii_2001_teoz.puml",
+      "source_sha256": "04ad2210edf2193e2600e9516a73731b9cea6a6216a30a50e206e74dccef5a3e",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "ASCII",
+        "2001"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "size_nonbmp_2000_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_nonbmp_2000_teoz.puml",
+      "source_sha256": "30652389e135fc066ce97c2763e1eb4b55c7e78708189862812ee469b1e1ce16",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "non-BMP",
+        "2000"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "size_nonbmp_2001_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/size-inputs/size_nonbmp_2001_teoz.puml",
+      "source_sha256": "aadb16fd9173a9e4c32a6bbfacf38d65748fecb94b81a94240129421085374d8",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "UTF-16 command admission length",
+        "non-BMP",
+        "2001"
+      ],
+      "intended_valid": false
+    }
+  ]
+}

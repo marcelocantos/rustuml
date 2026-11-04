@@ -1,0 +1,237 @@
+{
+  "target": "T14.21",
+  "status": "source-traced dependency; dispatch ownership withdrawn by parent; no dispatch edits",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_source": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+  "java_sha256": "1c679f6535e60079fc34f11bc31e9676e203b2ad1297b5313dce67be525527f1",
+  "factory_order": [
+    "PSystemWelcomeFactory",
+    "PSystemColorsFactory",
+    "SequenceDiagramFactory",
+    "ClassDiagramFactory",
+    "ActivityDiagramFactory",
+    "DescriptionDiagramFactory",
+    "StateDiagramFactory",
+    "ActivityDiagramFactory3",
+    "BpmDiagramFactory",
+    "PSystemLicenseFactory",
+    "PSystemVersionFactory",
+    "PSystemDonorsFactory",
+    "PSystemSkinparameterListFactory",
+    "PSystemListFontsFactory",
+    "PSystemListEmojiFactory",
+    "PSystemOpenIconicFactory",
+    "PSystemListOpenIconicFactory",
+    "PSystemListArchimateSpritesFactory",
+    "PSystemSaltFactory",
+    "PSystemDotFactory",
+    "NwDiagramFactory",
+    "MindMapDiagramFactory",
+    "WBSDiagramFactory",
+    "ChartDiagramFactory",
+    "PacketDiagramFactory",
+    "PSystemSudokuFactory",
+    "PSystemDitaaFactory",
+    "PSystemDefinitionFactory",
+    "ListSpriteDiagramFactory",
+    "PSystemMathFactory",
+    "PSystemLatexFactory",
+    "PSystemCreoleFactory",
+    "PSystemEggFactory",
+    "PSystemAppleTwoFactory",
+    "PSystemRIPFactory",
+    "PSystemPathFactory",
+    "PSystemCharlieFactory",
+    "GanttDiagramFactory",
+    "FlowDiagramFactory",
+    "PSystemDedicationFactory",
+    "TimingDiagramFactory",
+    "HelpFactory",
+    "WireDiagramFactory",
+    "JsonDiagramFactory",
+    "GitDiagramFactory",
+    "FilesDiagramFactory",
+    "BoardDiagramFactory",
+    "YamlDiagramFactory",
+    "HclDiagramFactory",
+    "PSystemEbnfFactory",
+    "PSystemRegexFactory",
+    "ChenEerDiagramFactory"
+  ],
+  "dispatch": "PSystemBuilder#createPSystem lines 230\u2013255 tries eligible factories in registration order; isOk rejects null/PSystemError/PSystemUnsupported; after all fail PSystemErrorUtils.merge retains a syntax/execution error.",
+  "rust_dependencies": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "locations": [
+        "parse_class:32\u201351",
+        "ClassParser::parse_line:674\u2013676"
+      ],
+      "finding": "unrecognized lines return Ok; parse_class always finishes a model",
+      "sha256": "434ee97977df8071b7140af7fb0b621b2fea01b92919f34e84b9dc22ad2d314d"
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "locations": [
+        "parse_component:208\u20131069"
+      ],
+      "finding": "unrecognized lines fall through its loop; unconditional Ok(ComponentDiagram)",
+      "sha256": "4138e5ecd3fc171b76080d96bc9c2e165bfa2298fb852194e155e70760c27a66"
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/state.rs",
+      "locations": [
+        "parse_state:15\u201334",
+        "StateParser::parse_line:511"
+      ],
+      "finding": "unrecognized lines return Ok; parse_state finishes model",
+      "sha256": "72039c02874605acf85032a98bb909cfe7444d0df3e9ca4251759db587d53845"
+    }
+  ],
+  "blocked_change": "Calling Class next accepts malformed Sequence input, suppresses desired errors and prevents later Description/State factories from being tried. Complete family admission contracts are required; no heuristics or retries were added.",
+  "exception_sources": [
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+      "source_sha256": "1befbb61b49a99f7592466a1d69f5d8b784c3f680ba2bf38e6a96e236ad66ea8",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe\\t\\\"Polar Harbor\\\" {\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+      "source_sha256": "02c522dfe074c914991ffe236b1e169c2c70152b005a74f7f7d1d7588bbd3641",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+      "source_sha256": "bea6c0fc90f90c420514300a9f8a761e1052ff67d79aa002a7f5d5ed1e72134f",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "source_sha256": "d4e171580077b8d814abdbddea3a525915faeb20dc56a0735534eed7ce281f61",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "source_sha256": "8449f98653643212786ff1fee583efc415ee9338b1ad7aae9d841da44ea49c78",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "source_sha256": "cc05d08eb6cdec982ae573fdfe81eb2f6bae3ae9b26536be787136d61e0dacae",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+      "source_sha256": "d6d42c559dbe4e35637746c00994455c36ad7c2f68e545bc12d361c5c7436733",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "source_sha256": "eec9ba45fa3f8964486488631f1228ef7dcc3ff6eeef0c319fde4c57ed6c8615",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+      "source_sha256": "ddfb1ecacd856a2ef06afe346f02f36793633e6db91b18bc21e4363d30846268",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"top to bottom direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+      "source_sha256": "4fabd1f9953a2ce3b46796759b4e362f5595f07d91c9f8b83b29448c1fe086d3",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "source_sha256": "849853b2a109c4c6faadf0097cdb67f6dd2080f6c40627776c3ba58e65623970",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"NoDe \\\"Runtime Mesh\\\" as Mesh {\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "source_sha256": "d08d89bee079d61530b8c655923c47d43461e651a77151d45179daea837206cc",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 1: Syntax error: no registered sequence command accepts \"left to right direction\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    },
+    {
+      "source": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+      "source_sha256": "ed347a84eda7f93341b417a0f013204e3342de91756e3bb1c01c430c522d8db6",
+      "owner": "T14.21",
+      "parent_approved": true,
+      "exception": "new valid-input CLI error caused by upstream misdispatch, T14.21, parent-approved",
+      "before_family": "Sequence",
+      "after_error": "parse error: line 6: Syntax error: no registered sequence command accepts \"state StartGate <<start>>\"\n",
+      "dispatch_cause": "parse::detect_uml_subtype selects Sequence for Java Class/Description/State source; other Rust factories do not reject unconsumed commands",
+      "before_whole_match": false
+    }
+  ],
+  "factory_order_condition": "PSystemPathFactory is conditional on UNSECURE; diagram types filter every factory"
+}

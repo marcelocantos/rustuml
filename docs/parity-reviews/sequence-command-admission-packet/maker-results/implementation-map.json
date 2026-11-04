@@ -1,0 +1,68 @@
+{
+  "production": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+  "mechanisms": [
+    {
+      "mechanism": "sequence-registered-command-rejection",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "ebbbe28c09c11c9fd3c720b8bbc3a56dda71af29"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-command-color-execution",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "d10628bd7845a77832a5a682b87bbfa4e1b7419e",
+        "268fa9f8b700ba08579efc603e4d0e92b4313e5f"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-footbox-command-consumption",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-local-attribute-serialization",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "4ac3ccba2b8e7b02559cd4166f088c5eea3da8a0"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-resume-citation-correction",
+      "account_commit": "3b38384b3642db119ce39bb4051e6103632f51fc",
+      "implementation_commits": [
+        "2cc081521f08ab928ba7e48f92a67acd1ebc6c6c"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-command-size-admission",
+      "account_commit": "8efd66082c108fb0b46439665363fe9a8ce827d4",
+      "implementation_commits": [
+        "ba3d0196bcb11829a3e114871976faaa695c7025"
+      ],
+      "status": "reverted; not part of final behavior"
+    },
+    {
+      "mechanism": "sequence-command-size-dispatch-correction",
+      "account_commit": "297c7a1eacfff66445700496190630b891eb3ee7",
+      "implementation_commits": [
+        "c525fd32ae97b642b440a161140e9457f29bcfc8"
+      ],
+      "status": "requires NEW independent checker"
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ownership": "Sequence parse/render only. No model, ASCII, parse/mod, shared style/text/font, other-family, target, harness or baseline edits.",
+  "no_acceptance": true
+}

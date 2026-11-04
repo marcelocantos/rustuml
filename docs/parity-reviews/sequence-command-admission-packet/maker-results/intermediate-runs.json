@@ -1,0 +1,23 @@
+{
+  "candidate1": "candidate1/new-valid-errors.json in captures.tar.gz; all15 preserved and later exactly parent-approved; no positive pass lost.",
+  "candidate2": "All5082 inputs captured (3533 retained +28 maker +1521 sequence goldens), source/binary binding and output preserved.",
+  "initial_unit_failures": [
+    "registry compiler lowercase named-group syntax, registry-unit-first.log and full draft source",
+    "legacy note-on-link test asserted an unregistered sequence command; corrected to reject, full second log preserved",
+    "legacy error-string expectation retained No such color",
+    "footbox routing initially shadowed by permissive message handler; initial log and corrected routing preserved"
+  ],
+  "size_guard": {
+    "account": "8efd66082c108fb0b46439665363fe9a8ce827d4",
+    "implementation": "ba3d0196bcb11829a3e114871976faaa695c7025",
+    "correction_account": "297c7a1eacfff66445700496190630b891eb3ee7",
+    "revert": "c525fd32ae97b642b440a161140e9457f29bcfc8",
+    "introduced_valid_errors": 4,
+    "retained_final_valid_errors": 0,
+    "source_equivalence": "final-source-identity.json",
+    "controls": "size-diagnostics.json.gz"
+  },
+  "broad_runs": 1,
+  "broad_revision": "268fa9f8b700ba08579efc603e4d0e92b4313e5f",
+  "reason_not_repeated": "Exact reversal restored all production/build/test source bytes. Broad gates remain bound to the original tested revision, with explicit identity proof."
+}

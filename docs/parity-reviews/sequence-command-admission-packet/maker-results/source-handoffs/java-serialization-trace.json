@@ -1,0 +1,55 @@
+{
+  "pinned_java_runtime": "OpenJDK21.0.5 Homebrew per retained raw environment provenance",
+  "jdk_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToStream.java",
+      "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/ToStream.java",
+      "sha256": "5579427642883c4f0666e96eb66197c66bbe9ec109eb870ba9b4f02597262ca2"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToXMLStream.java",
+      "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/ToXMLStream.java",
+      "sha256": "06e8db7295be573a20c27ec21a5c0d3a8832c745ece706880238ed62307f2323"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/CharInfo.java",
+      "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/CharInfo.java",
+      "sha256": "8743d68a994e3c10beb75c08a8a861cb04f1e16fddd18d2fc997a3412354e868"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/Encodings.java",
+      "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/Encodings.java",
+      "sha256": "3d219f0fe726939f26b5ad4a4c7fd24d22b257946065a462244f163d48c0dfa1"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/XMLEntities.properties",
+      "file": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/jdk-source/XMLEntities.properties",
+      "sha256": "5c210d775b6f68feae7b3c83b2de1e33ce55c2af02b729111a56d2b59735e105"
+    }
+  ],
+  "call_chain": [
+    "SvgGraphics DOM setAttribute",
+    "SvgGraphics.getTransformer sets OutputKeys.ENCODING=us-ascii",
+    "XmlFactories.newTransformer uses default JAXP provider",
+    "OpenJDK Transformer identity output to ToXMLStream/ToStream",
+    "ToStream.writeAttrString \u2192 CharInfo \u2192 accumDefaultEntity/accumDefaultEscape"
+  ],
+  "provider_limit": "Default-provider source trace derived from pinned runtime; fresh wrapper process is not traced and no local JVM was run.",
+  "mapping": {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "'",
+    "LF": "&#10;",
+    "CR": "&#13;",
+    "TAB": "&#9;",
+    "NBSP": "&#160;",
+    "non_ASCII": "decimal character reference",
+    "non_BMP": "one decimal Unicode scalar reference",
+    "other_C0": "SAXException for invalid XML1.0 scalars; T14.20 negative-contract dependency"
+  },
+  "font_family": "UFontImpl replaces doublequote with apostrophe before DOM serialization. No alias/logical-name/metrics changes.",
+  "identity_domain": "All printable ASCII except ampersand/angles/doublequote maps byte-identically. Numeric d/points/textLength/rx/ry/font-size actual value classes consist only of this identity domain. Exact before-corpus domain census retained; new values outside that domain still encode to the same decoded attribute value.",
+  "sequence": "sequence.rs:2756 local escape_xml handles ampersand,angles,doublequote and guillemets. It differs from Java on LF/CR/TAB (literal vs numericrefs), NBSP and other non-ASCII (literal vs decimalrefs). No change here; exact callsites in classified inventory tagged sequence-owned."
+}

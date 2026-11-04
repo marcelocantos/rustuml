@@ -1,0 +1,30 @@
+{
+  "entries": 3569,
+  "unique_paths": 3569,
+  "unique_source_hashes": 3517,
+  "duplicate_source_entries": 52,
+  "cohorts": {
+    "frozen3111": {
+      "entries": 3111,
+      "unique_source_hashes": 3059,
+      "overlap_prior_source_hashes": 0
+    },
+    "checker422": {
+      "entries": 422,
+      "unique_source_hashes": 422,
+      "overlap_prior_source_hashes": 0
+    },
+    "maker28": {
+      "entries": 28,
+      "unique_source_hashes": 28,
+      "overlap_prior_source_hashes": 0
+    },
+    "size8": {
+      "entries": 8,
+      "unique_source_hashes": 8,
+      "overlap_prior_source_hashes": 0
+    }
+  },
+  "overlap_golden_source_hashes": 1,
+  "note": "3111+422+28+8=3569; duplicates retained, not deduplicated or added to parent current corpus. Parent measures integration separately."
+}

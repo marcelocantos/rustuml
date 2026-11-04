@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant N
+participant S
+N -> S: seed
+@enduml

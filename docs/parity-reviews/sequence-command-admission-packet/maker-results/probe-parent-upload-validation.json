@@ -1,0 +1,10 @@
+{
+  "remote_input": "/Users/marcelo/rustuml-reference/scratch/transfer.sdaO5iJR/input-bundle.json.gz",
+  "input_sha256": "2d5fb612be7f94bf365181d01e1cf0d9fb942f5799dcd62ec4fe5fda17db7179",
+  "original_input_sha256": "1aa3cc0ad9409f1b7d119ed138f99980cb1a76ae759ea0740f56a53061f34f8d",
+  "manifest_sha256": "0afb3cabfa8fd5984a7c05a91064a59ecb3d6670add9e1322ff29c3a62042c96",
+  "cases": 1,
+  "probe_source_sha256": "fc2dca31605b2a85c94a01f1a5bc5de84bb3a89c8dfb2987462f4c901e444f96",
+  "probe_reviewed": "parent read SequenceCommandsProbe.java: reflection-only read of SequenceDiagramFactory.initCommandsList fields and patterns; prints JSON; no file/network writes",
+  "mapping": "original bundle content unchanged plus exact manifest bytes base64"
+}
