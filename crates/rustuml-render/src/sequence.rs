@@ -8227,22 +8227,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // ParticipantBox/PlayingSpaceWithParticipants reserve the tallest complete
     // head, not a global shadow boolean. Non-rectangular Rose components retain
     // their existing kind-specific geometry pending its separate audit.
-    let shadow_vertical_pad = participants
+    // ParticipantBox#drawHeadTailU and LivingSpaces#drawHeads subtract the
+    // resolved component height from the shared head-band bottom. Keep this
+    // same band for reservation and paint (account 00845306).
+    let participant_head_band = |p: &ParticipantLayout| {
+        p.box_height
+            + if p.kind == ParticipantKind::Participant {
+                participant_shadow_delta
+            } else if p.kind == ParticipantKind::Actor {
+                p.shadow_delta
+            } else if sequence_shadowing {
+                SHADOW_VERTICAL_PAD
+            } else {
+                0.0
+            }
+    };
+    let max_head_band = participants
         .iter()
-        .map(|p| {
-            p.box_height
-                + if p.kind == ParticipantKind::Participant {
-                    participant_shadow_delta
-                } else if p.kind == ParticipantKind::Actor {
-                    p.shadow_delta
-                } else if sequence_shadowing {
-                    SHADOW_VERTICAL_PAD
-                } else {
-                    0.0
-                }
-        })
-        .fold(0.0_f64, f64::max)
-        - max_box_h;
+        .map(participant_head_band)
+        .fold(0.0_f64, f64::max);
+    let shadow_vertical_pad = max_head_band - max_box_h;
     let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET + shadow_vertical_pad;
 
     let event_message_text_height = |event: &Event| -> (bool, f64) {
@@ -12988,7 +12992,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             created_inline.insert(ev_idx, (i, fill_color.clone(), draw_control_glyph));
         } else {
             // Head: base_y is where this participant's shape starts (bottom-aligned).
-            let head_base_y = head_box_y + (max_box_h - p.box_height);
+            let head_base_y = head_box_y + max_head_band - participant_head_band(p);
 
             render_participant_shape(
                 &mut svg,
