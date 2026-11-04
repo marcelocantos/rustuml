@@ -1,0 +1,7 @@
+{
+  "records": 15,
+  "pairs": 110,
+  "schema_and_pair_paths": "validated",
+  "latest_acceptance_gate": "red by deliberate rejected verdicts and retained failures; unchanged guard",
+  "new_record_unexpected_guard_errors": []
+}

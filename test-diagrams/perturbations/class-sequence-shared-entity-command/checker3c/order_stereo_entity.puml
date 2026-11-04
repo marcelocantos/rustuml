@@ -1,0 +1,5 @@
+@startuml
+entity E <<store>> order 7 #pink
+entity F
+E -> F : step
+@enduml

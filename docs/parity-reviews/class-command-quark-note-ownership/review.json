@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-command-quark-note-ownership",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "8a7bfb71cb202caecfdb9c33a099f0c32c726571",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_False.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_False.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "9ee3c448b65a50f04fe897ae4f07d3c881e09d45d5a57e1abf9a51b5d0d53890",
+      "java_sha256": "e36e7899c6192833039c20fad61e5befd8b0321cf2dde3fa6e56a95021a735e8",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_True.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_True.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "403d4b927336b1cfd46d379c7ab78606ac61ff8c2e46d5c050115a8432bd4adc",
+      "java_sha256": "9ca8d2c8b8fd47ce2c04e1d66bf4c46846fe7eb36f921489ced10bff3d8b1d12",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_False.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_False.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "4ad4cdb844cb8bd674b4d2e760ccca6d5c9b09abca68cb78823aa03df8766e97",
+      "java_sha256": "f1d02f5d5130d7b0a3b2e56549739af71eca7f67166af0e7afed7fd1ba9a9296",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_True.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_True.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "92f73ddc152f5991ad4ac89b6a1d102e38183baf0e3fab6570fe64d7bb36da11",
+      "java_sha256": "b9ec83c776006107b7a216e4d212caa4fa0fba5faf1b4a79bded8e027b1959ad",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_False.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_False.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "715febb4c80e7b161d19546b49243de7978000841ad9abe9e7dda67094e3e498",
+      "java_sha256": "2655f204a1b46c02b3a923d0a28bc382aa7f96ca0d7aec150aec19dd7e105653",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_True.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_True.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "7563fd5a968b0886da4aa29eb670391616537822d4d17e34e264ec9d3adaa2ad",
+      "java_sha256": "0feebbb8073d97e2cce6ded588600f0a8600b8f70675b19998657f7d4a5d7d00",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/nested_brace.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/nested_brace.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "21aa80a9abf4c4535467faa63b50d0758e2c1e8a4760ccece6f52594dfc246c0",
+      "java_sha256": "274f22a1fa8d21b0bb4c993802a8400840b529232a0e5c9a42c909bf6a09b05b",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/note_peer.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "process_error",
+      "before_status": "process_error",
+      "source_sha256": "afac6c73f77ac1620dc21a9363ef1d354d30b88b53ceea5e9320f332e1a100dc",
+      "java_sha256": "ed6185025c7391a35fbef2e49a3f9bc47befe310beeb427ba28e836b638d825c",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 1,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/qualified_reopen.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/qualified_reopen.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "651abcc96bd41f4d71363e38acceb81a0e18ce15967d027d5736dbfc9f821451",
+      "java_sha256": "dc90c3b53e777b93bb9af1bbadcd6923471eab764a3cdbfe31e6fbcd5f85326c",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/stereo_brace.puml",
+      "golden": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/stereo_brace.svg",
+      "axes": [
+        "root/native kinds versus nested groups and declaration order",
+        "brace versus end-note ownership with command-looking body text",
+        "qualified aliases, package visibility and mixing order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "e46e65ec98f9254e90ee81572a7bbff74435217c2a7d1f82e0f14472ef4fd961",
+      "java_sha256": "1b93a41e3e9101c487ced5614058583f64d9a3beb749c671987c6bc12b36e7c9",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "CommandFactoryNoteOnEntity.executeInternal resolves Quark<Entity>.getData without restricting leaf kind. Rust try_note searches entity_by_path and package_by_path only. The preserved Java-valid note_peer is rejected with unknown note target: M.",
+    "The Java bracket-note grammar permits stereotype, tags and URL before the brace. Rust ATTACHED_ML_RE omits these; stereo_brace succeeds through the wrong Description fallback and loses the class/note model. This is model loss despite CLI exit zero.",
+    "push_note materializes phantom packages before the named note. qualified_reopen retains objects but reverses the note/group UIDs and retains the implicit group's source line instead of the explicit package command. Named quark existence and entity materialization need separate ordering.",
+    "nested_brace correctly retains entity Fake and end note as text and keeps one record plus two notes. Its remote-reference geometry still differs; that comparison is not waived."
+  ],
+  "bounded_repair_guidance": "Resolve every materialized quark kind through one ownership model; consume the full note modifier grammar; separate quark creation from group materialization and source attribution.",
+  "source_audit": {
+    "java_locations": [
+      "classdiagram/ClassDiagramFactory#initCommandsList",
+      "command/note/CommandFactoryNoteOnEntity#createMultiLine,executeInternal",
+      "command/note/CommandFactoryNote#getRegexConcat,executeInternal",
+      "command/CommandPackage#getRegexConcat,executeArg"
+    ],
+    "rust_locations": [
+      "crates/rustuml-parser/src/parse/class.rs#native_container_candidate,parse_line,try_note,try_package",
+      "crates/rustuml-parser/src/diagram/class.rs#Package",
+      "crates/rustuml-render/src/class.rs#attached note endpoint layout"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-ribbon-empty-stripe",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "372a84d6abb20df41a3690ba5ee5774b1ed03998",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_left.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_left.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "0e851c4712faf6d63f47b7cb0f3eb757df78ac0bef3f19fb04a31bc070b258a5",
+      "java_sha256": "8ffa63e84081e511d51a91f8140280bc736649c702eca9c27b70a60452534b24",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_right.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c-retained-maker/empty_ribbon_right.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "25b886f3b23ba377844c1ba00038bbe30d7c480d1d679e652b33ab2b7d1e0911",
+      "java_sha256": "4f3ba8afd704293162824ce33854434c4a3222f49636ae76164561f1ef2fab6b",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_right.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_right.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "invalid_reference",
+      "before_status": "invalid_reference",
+      "source_sha256": "d24260fe8ab99276a8cbc138b72096cad41a7a2a8877daa2164b320d75e2c24b",
+      "java_sha256": "d1ccad85d46c81f7a1013508b9a23d411400977101f3cf92035f012a77060857",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_valid.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/footer_valid.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "5e624f21ccd4bceb1f68f7dda2bee224e0ea5770e796fbdcfaeb14d9a9db3e13",
+      "java_sha256": "1b4fe4a25db4a4ffb7078130564c7ef1c9a60baab832e0d711515aa0342008fb",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_left.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_left.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "invalid_reference",
+      "before_status": "invalid_reference",
+      "source_sha256": "579e42629d0612fc769e71551d99c5bfbbddb3e2fd18d4078a7b05542c9ac025",
+      "java_sha256": "6417a18b92a5e4c87bbeec906c9d72c5459468dfe5ecdafcb74061636f30bed1",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 1,
+      "comparator_exit": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_valid.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/header_valid.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "04638028a8ced7a1ca18e6d747961a79dc1630e149f9b913a9f7bd7628de6fc7",
+      "java_sha256": "3951bbcd93f66e66e453235d9b2cbddfff2a9d2e8c191252932ec8bcde19b7d1",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_footer_styled.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_footer_styled.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "00aaaeb3d767635a6575f985d6d5db5eb74d72bcd1b978409c6f36d65415023e",
+      "java_sha256": "5f64910849900a5f4e64d259f1ab37e1e05a66df8db70b65f9ee8874876a7706",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_header.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/only_blank_header.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "216942c1fa8f66ae5810b65ff6aecec73d305fff028c5a3b02ffc7ecea75c20a",
+      "java_sha256": "49f9bd5a5f2c9ee78094a0ca66074078e53f96c7c17caa37dee4f2f7b6edffca",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/title_center.puml",
+      "golden": "test-diagrams/perturbations/class-ribbon-empty-stripe/checker3c/title_center.svg",
+      "axes": [
+        "left/right/center ribbon alignment",
+        "empty middle lines and changed font sizes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "039ea3b76b44e2b9d4310262ab5ae6920d40244d7c6c7f2bd0396502380181b5",
+      "java_sha256": "5e23b7f2d6a9db1b737dd119f3e7ad9ff42751b3f38203d5ad88aee9ed6767a1",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    }
+  ],
+  "findings": [
+    "StripeSimple.getAtoms inserts one space for an empty stripe. Valid mixed-content header/footer/title cases now pass with that behavior.",
+    "only_blank_header and only_blank_footer_styled remain mismatches: DecorationLayout filters empty strings before layout and emit returns early, so a present blank-only ribbon never reaches the fallback atom. The two malformed outer-alignment controls are invalid Java references, preserved as negative evidence and never counted as passes."
+  ],
+  "bounded_repair_guidance": "Distinguish an absent ribbon from a present ribbon containing empty stripes before filtering; retain command syntax negatives.",
+  "source_audit": {
+    "java_locations": [
+      "klimt/creole/legacy/StripeSimple#getAtoms"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

@@ -1,0 +1,217 @@
+[
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+    "sha256": "fb03251ba79946fbcfd137b677cefa2b0d279c88fa79253188a9b58ae91e6dc0",
+    "bytes": 15437
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/allocation-results.json",
+    "sha256": "d13b6287a3e1e6b815ea73e094f0806522b2883f0069a50dc238b6f421ce9244",
+    "bytes": 3724
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/assisted-failures.txt",
+    "sha256": "7e9d9bde3f6f37aea867dd2afa700a4a5492a23c41770d4433b49a7112c0a246",
+    "bytes": 24350
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/build-provenance.json",
+    "sha256": "3706bf40862b97547b13c92e59cbe511df1960bd4768fccc1ed587cffe421c24",
+    "bytes": 1285
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/chronology.json",
+    "sha256": "db30a303078ad66fa5408e18c65be1fed3e27fa94a9beee27f9a2822ed39d6fc",
+    "bytes": 5119
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/cohorts.json",
+    "sha256": "223b2c9747b945a59ae37537d76db9da1921614f3d5202b1894366531697a6ec",
+    "bytes": 3550
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/collateral-errors.json",
+    "sha256": "07ef64cbce84146c9b28a794b8139e9be072c73533585ff22f8a434262e3acf8",
+    "bytes": 24505
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/copied-pairs.json",
+    "sha256": "cdbb81fec9e712b2711c4dc9ad61c41ced4c93c7c56d048b662248f976c1a3c6",
+    "bytes": 142407
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/cwd-difference.json",
+    "sha256": "f2b22524d865f9ef3fd0521687fbec157c69b2fc22f2008143935ccc377cf1cf",
+    "bytes": 246
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/gates.json",
+    "sha256": "950ce02356300ab4c0a8bfeca570bf584d596b984f45d842f477cba1ae0eb75d",
+    "bytes": 2889
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/invalidated-replay.json",
+    "sha256": "e1e0ff12f080fc06735cbab62dbe7964f694546a7bd71e3b5a11e5fad678fdaf",
+    "bytes": 679
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/main-failure-delta.json",
+    "sha256": "fa3ae82dae1e1fb467745bb508cfacd25f87b1731156015c98b6710c7df56c84",
+    "bytes": 1847
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/model-retention.json",
+    "sha256": "7ce189601e2ff9c886c96da8320aaf6b56ba7dfe4c332757123e7e8124c13721",
+    "bytes": 4525
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/models.json.gz",
+    "sha256": "d20b17a719961a3e49c77bf81336d9b30c5910cd553ec4fda1a7f23fb373f1e8",
+    "bytes": 1427924
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/native-differential.json",
+    "sha256": "82c5b139b3452fe0bf19931774ec0235aa5c6a7a32de419cb67e9087b9e6a886",
+    "bytes": 5330
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/native-safety-results.json",
+    "sha256": "da597b0eb6977e220bdd121affaf5f1eef24bbe4df0b01e1a04a87bfa5575a69",
+    "bytes": 32121
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/no_oracle-failures.txt",
+    "sha256": "d4205645dc52907cab9b6638622fad866b884215f6065ff4d3edcdf1b31c9814",
+    "bytes": 2453
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/pair-verification.json",
+    "sha256": "443562ba7ce99d0790949e93b1308f8b017a2f5c77f55fef1dbbb772ec8bc9f4",
+    "bytes": 23251
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/record-validation.json",
+    "sha256": "8b20950a38cdadb21c6eb5a8179ce8d1d59bc783479a452d98809934656b3954",
+    "bytes": 226
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/replay-artifacts.tar.gz",
+    "sha256": "dfbc09ff9ce8ef004cb6b3807d7bbbe1a71c80bbd7f5ec28e9bdf16b01a0c256",
+    "bytes": 9068931
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/results.json.gz",
+    "sha256": "5fd44a8cc160fc994d2371a4dd44c70c320bb18b797a61fe98db8483793de69e",
+    "bytes": 366608
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/scope-summary.json",
+    "sha256": "e6a1414d30e1eb093b3aa51a31e5e0bddcbae6538ed016e7c55e4b0e52641987",
+    "bytes": 4287
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/scripts/gates.py",
+    "sha256": "1df67c97aa5befb2f7e41e691c42586024b9147c14dedb7a2054f4ff7fb1b33f",
+    "bytes": 1355
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/scripts/models.py",
+    "sha256": "d110f1e0375ee632469f54538b07b39645f64bc7bac1e0b6ab75aa299071a36c",
+    "bytes": 1994
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/scripts/native_checks.py",
+    "sha256": "498476167a2d216af3fa93019624acc49a8eb67b649e85d8e187f0dcd2cb3c92",
+    "bytes": 1935
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/scripts/native_safety.c",
+    "sha256": "d0e747d90449dc60f70205929300d65a41cfd0d4cd7a71cb12044d3891a21177",
+    "bytes": 1342
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/scripts/replay.py",
+    "sha256": "21fcf99f848d49ab6bc10350dd942ae08c4b8e547a1afbd27d2dc72f2e0d7cf7",
+    "bytes": 2518
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/source-audit.json",
+    "sha256": "476c4ecc43efea818c488dbf4c92e032b1158ba2f2112af1ffad141f24f0c033",
+    "bytes": 5493
+  },
+  {
+    "path": "docs/parity-reviews/class-boundary-primitive-paint-order/review.json",
+    "sha256": "4289df09b46e64510b358dfe24c37869a2e1178e35ac826c95f3fc0382c4bdf9",
+    "bytes": 8088
+  },
+  {
+    "path": "docs/parity-reviews/class-command-quark-note-ownership/review.json",
+    "sha256": "c412b7bef8d4efa6e8a46ec3a82646b0d9821698d165c4e73134b3890f0183f8",
+    "bytes": 15546
+  },
+  {
+    "path": "docs/parity-reviews/class-current-document-ribbon-style/review.json",
+    "sha256": "7cae89ca6f50a25dd7560116732e7e52e30447d96da96cac4aa871c0bfd351d8",
+    "bytes": 10611
+  },
+  {
+    "path": "docs/parity-reviews/class-description-body-symbol-choice/review.json",
+    "sha256": "d7bc4ceb00650ada4bfcb401d42012b78b12e7cb6b1f4d2c98f8e7953c83e445",
+    "bytes": 10556
+  },
+  {
+    "path": "docs/parity-reviews/class-description-mixed-symbol-images/review.json",
+    "sha256": "56c2c648795009b224ea705947da94d93ec52ca37d4b2ffc27680f5462e5fcd4",
+    "bytes": 14937
+  },
+  {
+    "path": "docs/parity-reviews/class-empty-symbol-painted-frontier/review.json",
+    "sha256": "d744a1f10c06f19523045c272497b1af950849a5be426b091baf5a87817c2cfb",
+    "bytes": 11724
+  },
+  {
+    "path": "docs/parity-reviews/class-final-svek-cluster-origin/review.json",
+    "sha256": "2fa4d2c371742faea96320768d93bbe7cf5b93c060e56f6de677d49db76f2c49",
+    "bytes": 7401
+  },
+  {
+    "path": "docs/parity-reviews/class-member-visibility-even-image/review.json",
+    "sha256": "2478420d6240c6a0d5084f83b84260c94f4f2ee1d0d41f49a1039c67a83656cd",
+    "bytes": 13124
+  },
+  {
+    "path": "docs/parity-reviews/class-note-leaf-emission-and-group-links/review.json",
+    "sha256": "6c6565ae81e32ee4ab77a902bc65b1d47b6e3a94a23b409a76d11c6e3f45f337",
+    "bytes": 7295
+  },
+  {
+    "path": "docs/parity-reviews/class-package-visibility-title-image/review.json",
+    "sha256": "31d0b6258b65464a6224811e63039de7007361131787576c7c2918923b8eae9a",
+    "bytes": 12995
+  },
+  {
+    "path": "docs/parity-reviews/class-painted-frontier-union/review.json",
+    "sha256": "7a5d07b76e5d176a4f7ba7a37edbefa308ed785ae81179daa0bfdb1fcb748302",
+    "bytes": 10310
+  },
+  {
+    "path": "docs/parity-reviews/class-ribbon-empty-stripe/review.json",
+    "sha256": "aa5ef1bfc9c15c02e3f86b3e64b4c4033259923a8dbea57f58053a3da6d8ed72",
+    "bytes": 12236
+  },
+  {
+    "path": "docs/parity-reviews/class-sequence-shared-entity-command/review.json",
+    "sha256": "154503a60afffbdac7af727f38ee4e9cfc5a9cff165f44cf24730e9ad392086d",
+    "bytes": 17209
+  },
+  {
+    "path": "docs/parity-reviews/class-simple-actor-image/review.json",
+    "sha256": "8163825b95658e42724ab6a14cab6d68d26c89598bb352c07f24f6d17bc29327",
+    "bytes": 9650
+  },
+  {
+    "path": "docs/parity-reviews/class-static-shield-cell-grid/review.json",
+    "sha256": "cc2cb7ae6bf180af712029924ba0f8df4faaf838117305a0208a84e01877d3ee",
+    "bytes": 13207
+  }
+]

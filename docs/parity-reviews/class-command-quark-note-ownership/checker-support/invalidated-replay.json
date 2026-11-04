@@ -1,0 +1,10 @@
+{
+  "reason": "Baseline source archive verified, but shared Cargo target reused candidate parser artifact: build log compiled only layout/render/binary, and baseline retained candidate-only brace-note/family behavior. Reject this mixed binary and every before count derived from it. Rebuilding baseline with a fully separate target. Candidate original build and copies preceded contamination and remain valid.",
+  "invalidated": [
+    "invalidated-before.json",
+    "invalidated-before-models.json",
+    "scope-summary.json",
+    "model-retention.json"
+  ],
+  "followup": "Separate before-target; invalidate only owned crates in candidate target before final remaining gates."
+}

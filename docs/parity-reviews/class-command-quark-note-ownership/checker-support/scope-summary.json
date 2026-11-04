@@ -1,0 +1,88 @@
+{
+  "frozen1192": {
+    "entries": 1192,
+    "before": {
+      "mismatch": 429,
+      "pass": 726,
+      "process_error": 24,
+      "invalid_reference": 13
+    },
+    "candidate": {
+      "mismatch": 348,
+      "pass": 814,
+      "invalid_reference": 13,
+      "process_error": 17
+    },
+    "lost_passes": [],
+    "new_errors": [],
+    "repaired_errors": [
+      "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_class.puml",
+      "test-diagrams/perturbations/class-command-grammar-closure/dependencies/named-note-scoped-identity-closure__qualified_0.puml",
+      "test-diagrams/perturbations/class-command-grammar-closure/dependencies/package-command-precedence-closure__visibility_public.puml",
+      "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_0.puml",
+      "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_1.puml",
+      "test-diagrams/perturbations/class-package-command-precedence-closure/checker/visibility_private.puml",
+      "test-diagrams/perturbations/class-package-command-precedence-closure/checker/visibility_public.puml"
+    ]
+  },
+  "combined1449": {
+    "entries": 1449,
+    "before": {
+      "mismatch": 606,
+      "pass": 743,
+      "process_error": 67,
+      "invalid_reference": 33
+    },
+    "candidate": {
+      "mismatch": 525,
+      "pass": 831,
+      "invalid_reference": 33,
+      "process_error": 60
+    },
+    "lost_passes": [],
+    "new_errors": [],
+    "repaired_errors": [
+      "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_class.puml",
+      "test-diagrams/perturbations/class-command-grammar-closure/dependencies/named-note-scoped-identity-closure__qualified_0.puml",
+      "test-diagrams/perturbations/class-command-grammar-closure/dependencies/package-command-precedence-closure__visibility_public.puml",
+      "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_0.puml",
+      "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_1.puml",
+      "test-diagrams/perturbations/class-package-command-precedence-closure/checker/visibility_private.puml",
+      "test-diagrams/perturbations/class-package-command-precedence-closure/checker/visibility_public.puml"
+    ]
+  },
+  "new110": {
+    "entries": 110,
+    "before": {
+      "mismatch": 84,
+      "process_error": 16,
+      "pass": 8,
+      "invalid_reference": 2
+    },
+    "candidate": {
+      "pass": 77,
+      "mismatch": 30,
+      "process_error": 1,
+      "invalid_reference": 2
+    },
+    "lost_passes": [],
+    "new_errors": [],
+    "repaired_errors": [
+      "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/qualified_reopen.puml",
+      "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/empty_peer.puml",
+      "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/nested_group.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_package.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_private.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_protected.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c-retained-maker/visibility_public.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/empty_public.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/large_protected.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/stereo_package.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_node.puml",
+      "test-diagrams/perturbations/class-package-visibility-title-image/checker3c/style_rectangle.puml",
+      "test-diagrams/perturbations/class-painted-frontier-union/checker3c/cloud_nested.puml",
+      "test-diagrams/perturbations/class-painted-frontier-union/checker3c/root_note.puml",
+      "test-diagrams/perturbations/class-painted-frontier-union/checker3c/uml1_note.puml"
+    ]
+  }
+}

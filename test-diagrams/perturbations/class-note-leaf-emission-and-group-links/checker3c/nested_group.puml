@@ -1,0 +1,9 @@
+@startuml
+package Bay {
+class Seed
+note right of Seed : inner
+}
+note top of Bay : group
+note "external" as N
+N .. Bay
+@enduml

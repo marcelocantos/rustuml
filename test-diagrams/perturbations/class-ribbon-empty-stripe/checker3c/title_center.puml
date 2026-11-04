@@ -1,0 +1,15 @@
+@startuml
+<style>
+title {
+FontSize 14
+HorizontalAlignment center
+}
+</style>
+title
+Wide ribbon
+
+x
+
+end title
+class Sprout
+@enduml

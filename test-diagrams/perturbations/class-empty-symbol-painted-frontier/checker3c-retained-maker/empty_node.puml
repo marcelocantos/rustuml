@@ -1,0 +1,7 @@
+@startuml
+node "An empty instrument store" as Store {
+}
+node Dock {
+}
+Store --> Dock
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+node Harbor {
+entity "Mooring light" as Beacon
+}
+@enduml

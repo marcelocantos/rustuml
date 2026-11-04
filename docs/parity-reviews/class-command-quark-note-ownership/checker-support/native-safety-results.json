@@ -1,0 +1,1532 @@
+[
+  {
+    "name": "truncated_000",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_000.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_001",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_001.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_002",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_002.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_003",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_003.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_004",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_004.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_005",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_005.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_006",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_006.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_007",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_007.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_008",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_008.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_009",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_009.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_010",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_010.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_011",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_011.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_012",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_012.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_013",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_013.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_014",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_014.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_015",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_015.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_016",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_016.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_017",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_017.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_018",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_018.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_019",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_019.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_020",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_020.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_021",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_021.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_022",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_022.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_023",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_023.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_024",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_024.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_025",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_025.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_026",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_026.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_027",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_027.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_028",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_028.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_029",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_029.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_030",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_030.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_031",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_031.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_032",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_032.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_033",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_033.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_034",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_034.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_035",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_035.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_036",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_036.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_037",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_037.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_038",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_038.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_039",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_039.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_040",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_040.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_041",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_041.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_042",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_042.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_043",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_043.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_044",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_044.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_045",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_045.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_046",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_046.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_047",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_047.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_048",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_048.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_049",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_049.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_050",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_050.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_051",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_051.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_052",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_052.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_053",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_053.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_054",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_054.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_055",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_055.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_056",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_056.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_057",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_057.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_058",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_058.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_059",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_059.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_060",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_060.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_061",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_061.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_062",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_062.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_063",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_063.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_064",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_064.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_065",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_065.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_066",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_066.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_067",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_067.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_068",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_068.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_069",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_069.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_070",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_070.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_071",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_071.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_072",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_072.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_073",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_073.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_074",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_074.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_075",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_075.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_076",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_076.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_077",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_077.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_078",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_078.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_079",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_079.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_080",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_080.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_081",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_081.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_082",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_082.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_083",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_083.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_084",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_084.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_085",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_085.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_086",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_086.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_087",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_087.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_088",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_088.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_089",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_089.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_090",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_090.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_091",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_091.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_092",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_092.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_093",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_093.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_094",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_094.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_095",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_095.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_096",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_096.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_097",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_097.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_098",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_098.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_099",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_099.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_100",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_100.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_101",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_101.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_102",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_102.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_103",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_103.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_104",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_104.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_105",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_105.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_106",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_106.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_107",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_107.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_108",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_108.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_109",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_109.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_110",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_110.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_111",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_111.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_112",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_112.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_113",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_113.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_114",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_114.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_115",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_115.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_116",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_116.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_117",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_117.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_118",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_118.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_119",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_119.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_120",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_120.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_121",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_121.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_122",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_122.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_123",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_123.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_124",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_124.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_125",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_125.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_126",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_126.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_127",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_127.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_128",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_128.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_129",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_129.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_130",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_130.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_131",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_131.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_132",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_132.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_133",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_133.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_134",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_134.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_135",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_135.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_136",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_136.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_137",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_137.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_138",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_138.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "truncated_139",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/truncated_139.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "negative",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/negative.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "nan",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/nan.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "inf",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/inf.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "overflow",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/overflow.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "fraction",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/fraction.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "name": "exponent",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/exponent.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "name": "empty",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/empty.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "name": "max",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/max.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "name": "nearmax",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/nearmax.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "zero",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/zero.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "name": "ragged",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/ragged.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "duplicate_port",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/duplicate_port.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "name": "oversize_row",
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/native/oversize_row.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  }
+]

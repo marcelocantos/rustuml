@@ -1,0 +1,107 @@
+[
+  {
+    "original": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "previous": "f64cccbbab01d2fd7bfea5cc5689a7655e4f96fe",
+    "recovery": "71eeddd20c600d8be17be8435f884fe470b06679",
+    "subject": "fix: share consuming class commands between factory trials and execution",
+    "stable_patch_id": "45edeae425c5acb95de7911ef62a12950aac1112"
+  },
+  {
+    "original": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "previous": "17825e594b760400a6dea5257dd6d8109e3c1107",
+    "recovery": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+    "subject": "fix: close consuming class grammar and share the painted SVEK model",
+    "stable_patch_id": "f0005ad00cc9db4bdcc8c92e3bff40c45286c6b5"
+  },
+  {
+    "original": "8a7bfb71cb202caecfdb9c33a099f0c32c726571",
+    "previous": "84c4ea68f3eaae4ab95d0e57814dc81ef28c6450",
+    "recovery": "d7c6758ba85ffd2f22356c98038a5f0027a3f0a2",
+    "subject": "docs: account for native command note ownership and final cluster origin",
+    "stable_patch_id": "0d3a60594b1d595032b38e89627af8c1a0981473"
+  },
+  {
+    "original": "3e6ccb6cd4cdb9c015d5e5a83c997a0d05a1fecf",
+    "previous": "fa73593a53701dcd1e9f13cddfa5d369e9232758",
+    "recovery": "285db4a04857df6d48090eb2af5dca7a6de5f8c9",
+    "subject": "docs: account for static shield cell grid and native HTML ports",
+    "stable_patch_id": "292a5b9b769e7a368a41f53da58bf1484fdb9ec2"
+  },
+  {
+    "original": "92f3bdc9e90fc24b14d6af8563c6a7bd78016194",
+    "previous": "ece9e4ce0860d4b56cab6c2aedaa36e332b7834f",
+    "recovery": "ce617fb62b1ea3df22a70da416cd86648383720e",
+    "subject": "docs: account for description body alignment and selected component symbol",
+    "stable_patch_id": "1b0e262c932d544fe013bacc8261ecdee5d78d7a"
+  },
+  {
+    "original": "de192dc216b6795b6d820c240e82234988d1f39d",
+    "previous": "c5318992cb7b53d715cf2c2de493848fb5f10db9",
+    "recovery": "3e9e245e28947acfecc59f695cc7338604753111",
+    "subject": "docs: account for painted frontier union and package visibility title",
+    "stable_patch_id": "ac8e8c2a550f3c9a276e3232b67e05d8e4cf2790"
+  },
+  {
+    "original": "1051c34cc9ac39115368720fa8e5ed44ebdbadc5",
+    "previous": "efd293d2f02bdba030ce246c06fe134eb2d608bc",
+    "recovery": "7da082631530a6da99d6cf27691fe71cca5aaef8",
+    "subject": "docs: account for current document ribbon font and alignment",
+    "stable_patch_id": "89f91e7fd9be16dffd6d455495c8a024d2b7fce8"
+  },
+  {
+    "original": "a9a42c3a6b7f4e685b6e8ad6198b91612f571bf8",
+    "previous": "6ff3427ec978becf174e93e6323de2597542bbe4",
+    "recovery": "7fc2a6a818cfa6864edf49ca77eb37ec203cb668",
+    "subject": "docs: account for note leaf emission and correct boundary paint order",
+    "stable_patch_id": "e153798ddde7d10f914adbd4afac86d271a96d84"
+  },
+  {
+    "original": "3518e81fcfa3c88340f84cfdf6f25a13068ff3d7",
+    "previous": "34289555f695904be27c52c941ad750561956598",
+    "recovery": "47bff648f68009fff3dcbf1f5d6d419316d05f70",
+    "subject": "docs: account for member glyph sizing and mixed symbol images",
+    "stable_patch_id": "8c79bb3d7031f230ea4f13e59c8dd339f6e8e824"
+  },
+  {
+    "original": "372a84d6abb20df41a3690ba5ee5774b1ed03998",
+    "previous": "98f520ec10ae5e3359bc847d910ee81b6491ad37",
+    "recovery": "bc3e722846a9575cb589c0d629e8dcece2278aa4",
+    "subject": "docs: account for simple actor, empty symbol frontiers and ribbon stripes",
+    "stable_patch_id": "130811e481f0984bc0c93c0b1291017d07548421"
+  },
+  {
+    "original": "2c778f1d341684d1912be60f533404af394f4a49",
+    "previous": "520631e8cbf0451bd6660c154c01cbb91b21b2da",
+    "recovery": "49e682661a47ae3864fe42d935b5714039953e27",
+    "subject": "fix: consume native class commands and retain symbol image ownership",
+    "stable_patch_id": "ce0304315572df5b5b19497b1d8925fc55ebf147"
+  },
+  {
+    "original": "f805738ac5af84ef8c8ef3e3803f6d52d6d16081",
+    "previous": "bebcb4caf0386289dcd6ea8dba7fe3774fe18dd6",
+    "recovery": "df8d5d41a8f300194be1fa4ec80fda4d572d1a8a",
+    "subject": "refactor: remove lint issues in the class image packet",
+    "stable_patch_id": "c1a632ec9c969c96a74c42430adc74428bab8c33"
+  },
+  {
+    "original": "4fd5d7039d9b8f27bda1712aaa0d1b8d5399311d",
+    "previous": "e394816ce69b70dcc3dabe60e1843663c59c5087",
+    "recovery": "1e60c618e86dafdfe52c4710bd85309f57b5f8e9",
+    "subject": "docs: account for sequence ownership of shared entity commands",
+    "stable_patch_id": "651d240fab13bd7a8690ebaafb188f8abe668056"
+  },
+  {
+    "original": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+    "previous": "812b09097c70bc3ccbd5b021d273cd60bfe91d62",
+    "recovery": "cfc933f0c7a5b9be93f2f7fa556d9afebae57aed",
+    "subject": "fix: retain earlier factory ownership for shared entity declarations",
+    "stable_patch_id": "ac3b5c96a651245f7ceb3e2df497adb6427a98a2"
+  },
+  {
+    "original": "e91215877b0951038e8dc59b5130526dbdf7b00b",
+    "previous": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+    "recovery": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "subject": "test: preserve class recovery maker evidence and remaining counterexamples",
+    "stable_patch_id": "331a5c07007aa738f9b033ebbf1b7a3ebf0b8d2a"
+  }
+]

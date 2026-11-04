@@ -1,0 +1,5 @@
+@startuml
+record "Blue record" as R <<archive>>
+struct S
+R --> S
+@enduml

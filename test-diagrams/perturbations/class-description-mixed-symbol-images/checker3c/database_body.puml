@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+class Seed
+package Bay {
+database "Long symbol title\nx" as Leaf
+}
+Leaf --> Seed
+@enduml

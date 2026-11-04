@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-description-body-symbol-choice",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "92f3bdc9e90fc24b14d6af8563c6a7bd78016194",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_rectangle.puml",
+      "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_rectangle.svg",
+      "axes": [
+        "componentStyle uml1/uml2/rectangle and explicit style alignment",
+        "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "8be77e8876c13b415acbe7d1fab5b37a086717e7be64e505f04971e4cbee5b12",
+      "java_sha256": "9aa34168d032649980f41f90c365e429817056d9f80217ec21cb84aad2eac274",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml1.puml",
+      "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml1.svg",
+      "axes": [
+        "componentStyle uml1/uml2/rectangle and explicit style alignment",
+        "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "09cd2d99095a4173db46fe4f6572cf0913ccde72ea057044bd70636f4ea7559a",
+      "java_sha256": "9fc0873133e43f09a3d51dc7acfd75a23beb0ca30d46e1d0f9cb7800b6d1058b",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml2.puml",
+      "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c-retained-maker/component_uml2.svg",
+      "axes": [
+        "componentStyle uml1/uml2/rectangle and explicit style alignment",
+        "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "6c541dc338179f4b099c95a752808d6ee42cf37185e7e2b9b18e9cf3dd3266aa",
+      "java_sha256": "4732519ab4a8bf6121a45c7b178cca07b04ce4e68713070ed4896fff6bdba655",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/rectangle_left.puml",
+      "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/rectangle_left.svg",
+      "axes": [
+        "componentStyle uml1/uml2/rectangle and explicit style alignment",
+        "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "349196e44a3e4bba7ae21cb34f1236d8cb1affda0c29f6d700fedc714be9cf58",
+      "java_sha256": "a7d647433f620404eb8fa5892213f228fee8dc3df852047078c1c45b55efc686",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml1_right.puml",
+      "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml1_right.svg",
+      "axes": [
+        "componentStyle uml1/uml2/rectangle and explicit style alignment",
+        "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "b2fc6b5a5bae89c6fd69567866d5deb21abcc9d132de6dc21cad1c560eced52b",
+      "java_sha256": "0ae960a37c711674b16ec98f31c8e992a5fd5d56a6a1a3cef9f5fb8382f9d695",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml2_center.puml",
+      "golden": "test-diagrams/perturbations/class-description-body-symbol-choice/checker3c/uml2_center.svg",
+      "axes": [
+        "componentStyle uml1/uml2/rectangle and explicit style alignment",
+        "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "74ba6485c82d3cd71606ca1e1d9d82ce883764bf0b6b2d3dd16b6a43732ac9b3",
+      "java_sha256": "d2a7b7d66a6807bd880269d193b5458f4aa4a97f0346e6ea34f4e9241b89ed72",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    }
+  ],
+  "findings": [
+    "ComponentStyle selection and Component1/2 margins and tab primitives trace to the named USymbols. Fresh UML1/right and UML2/center examples pass.",
+    "rectangle_left fails only at the stereotype x position: reference 18, candidate 66.769. USymbolRectangle.asSmall merges stereotype and label using stereoAlignment; Rust always centers the stereotype within text_width and does not retain independent stereotype alignment. The same gap appears in the mixed rectangle account."
+  ],
+  "bounded_repair_guidance": "Carry title/body alignment and stereotype merge alignment separately through the selected symbol's measured text composition.",
+  "source_audit": {
+    "java_locations": [
+      "svek/image/EntityImageDescription#getUSymbol,constructor",
+      "cucadiagram/BodyFactory#create3",
+      "cucadiagram/BodyEnhanced2#getTextBlock",
+      "decoration/symbol/USymbolComponent1#getMargin,drawComponent1",
+      "decoration/symbol/USymbolComponent2#getMargin,drawComponent2",
+      "decoration/symbol/USymbolBoundary#asSmall",
+      "svek/Boundary#drawU"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs#DescriptionLeafStyle,calc_entity_dims,render_description_leaf,ClassFontOverrides::from_diagram_for_entity"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

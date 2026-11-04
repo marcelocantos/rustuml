@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+component Hub
+interface "Wide protocol" as P
+P --> P
+Hub --> P
+@enduml

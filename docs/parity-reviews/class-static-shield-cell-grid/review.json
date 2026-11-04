@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-static-shield-cell-grid",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "3e6ccb6cd4cdb9c015d5e5a83c997a0d05a1fecf",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py",
+    "clang -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer -Ivendor/graphviz/include -Ivendor/graphviz/lib/ -Ivendor/graphviz/lib/common -Ivendor/graphviz/lib/gvc -Ivendor/graphviz/lib/cgraph -Ivendor/graphviz/lib/pathplan -Ivendor/graphviz/lib/pack -Ivendor/graphviz/lib/cdt -Ivendor/graphviz/lib/label /tmp/rustuml-review-cbd/native_safety.c /tmp/rustuml-review-cbd/target/release/build/rustuml-layout-2d2dc6e5d94b037d/out/libgraphviz.a -o /tmp/rustuml-review-cbd/native_safety",
+    "/tmp/rustuml-review-cbd/native_safety 3 /tmp/rustuml-review-cbd/allocation-control.html",
+    "/tmp/rustuml-review-cbd/raw_dot /tmp/rustuml-review-cbd/native/exponent.dot",
+    "/opt/homebrew/bin/dot -Tplain /tmp/rustuml-review-cbd/native/exponent.dot"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_False.puml",
+      "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_False.svg",
+      "axes": [
+        "LR/TB and reversed endpoint order",
+        "fractional label width, stereotype height, declaration order, multiple shields"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "c277a8f21d656ebe6cfb7c5875574e5a2fe2fa1b8d50b7221c5a5b67a93facdb",
+      "java_sha256": "cbb2b9ed09ad6f7b606554f98ee7f370e9e1aaffc1aaf1661ca95d767d543dbe",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_True.puml",
+      "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_lef_True.svg",
+      "axes": [
+        "LR/TB and reversed endpoint order",
+        "fractional label width, stereotype height, declaration order, multiple shields"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "9ad8db821d3a0bd920bac7d5747bacdbcb69755022388280620d0961ca646abf",
+      "java_sha256": "7ab1d20443f4b034f48a4176ead22fcd15fdb678cae95ec42771fda7da9be797",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_False.puml",
+      "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_False.svg",
+      "axes": [
+        "LR/TB and reversed endpoint order",
+        "fractional label width, stereotype height, declaration order, multiple shields"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "3b534b2d005b4e327163a4b3047c5643c5c9a6fa0fdab723527606863fe7e6d3",
+      "java_sha256": "c59f9b8f424cd569276211bbce1ecc3486613f3effa27cfc92c626a4a75e39ae",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_True.puml",
+      "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c-retained-maker/shield_top_True.svg",
+      "axes": [
+        "LR/TB and reversed endpoint order",
+        "fractional label width, stereotype height, declaration order, multiple shields"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "5cea7ef1193fccaffa1dd700bfc2602e9206c6a77ffe86310ef4c7c06318a37a",
+      "java_sha256": "4fada3842550297d266976201b11d75903d076f144e2a898b67f43b3512e13ef",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/group_cross.puml",
+      "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/group_cross.svg",
+      "axes": [
+        "LR/TB and reversed endpoint order",
+        "fractional label width, stereotype height, declaration order, multiple shields"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "41c1aeb60dec5dbcc2e216799004239015a07bfdc512f9e310c8a1ffcdd0dbcb",
+      "java_sha256": "8f08d6ab587c4401c9a461fcec8acabd43042d40f6d54d44f9869e0a33891419",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/multi_tb.puml",
+      "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/multi_tb.svg",
+      "axes": [
+        "LR/TB and reversed endpoint order",
+        "fractional label width, stereotype height, declaration order, multiple shields"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "4f8e57eccf13009fa29a2b8f6e8a3be68f4ecdbbf075d65bfa47ac98b6c11435",
+      "java_sha256": "34002993708d895aa900ad3e92f6037a5c7935588df4ec283426df73b0beb210",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/self_lr.puml",
+      "golden": "test-diagrams/perturbations/class-static-shield-cell-grid/checker3c/self_lr.svg",
+      "axes": [
+        "LR/TB and reversed endpoint order",
+        "fractional label width, stereotype height, declaration order, multiple shields"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "4d16b2ca6098d8dd6709a67269d8a40ffc8799d0e707f5ec127b4bd499635232",
+      "java_sha256": "0164170f95aa292c2da5e6757e8656f5227b0fa74cb805e3f1432d1f8fd3537f",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    }
+  ],
+  "findings": [
+    "SvekNode.appendLabelHtml/appendTd emit the fractional 3x3 plaintext grid and h central port now emitted by Rust. Fresh multiple-node, self-link, cross-group and direction/width cases pass, as do the four retained maker shields.",
+    "The native parser's first cell allocation failure followed by successful realloc stores an unterminated array, then free_html_label traverses uninitialized pointers. Fault-injection index 3 reproduces an AddressSanitizer SEGV against the exact helper translation unit. This is an allocation-failure path, not a normal-input crash in the shipped CLI.",
+    "htmllex.doInt uses strtol and then range-checks the integer. The helper uses strtod, requires the complete token, and range-checks before truncation. Exact DOT probes show WIDTH=1e2 means 100 here versus 1 in Graphviz; WIDTH=65535.9 is rejected here but truncated to 65535 externally, losing the native h port on fallback. Empty width is accepted here despite doInt rejecting it. These are distinct from the ordinary fractional cases that pass.",
+    "153 bounded malformed/truncated/numeric/ragged/duplicate-port/oversize-row probes have no non-injected sanitizer crash. Row/column maxima, fixed-cell centering and ordinary fractional grid node dimensions agree with external 16.1 on tested inputs. The parser remains a general native entrypoint, so passing 3x3 production examples does not excuse malformed-input or numeric-contract failures.",
+    "The shipping binary links only libSystem and libiconv on macOS; no JVM, external Graphviz, Expat or font-library dependency was introduced. This is host linkage evidence, not a claim that the macOS executable has literally no dynamic OS libraries."
+  ],
+  "bounded_repair_guidance": "Make partial allocations cleanup-safe before exposing an array; implement doInt's exact numeric contract or deliberately reject the unsupported subset without claiming parity. Keep central-port geometry and non-class callers covered.",
+  "source_audit": {
+    "java_locations": [
+      "svek/SvekNode#appendHtml,appendLabelHtml,appendTd",
+      "svek/image/EntityImageDescription#getShield",
+      "Graphviz common/htmllex.c#doInt,widthfn,heightfn",
+      "Graphviz common/htmltable.c#size_html_tbl,pos_html_tbl,pos_html_cell,html_port",
+      "Graphviz common/shapes.c#poly_init,poly_port"
+    ],
+    "rust_locations": [
+      "crates/rustuml-layout/src/graph.rs#svek_shielded_node_table,create_node",
+      "vendor/graphviz/lib/rustuml_helpers.c#rustuml_make_fixed_html_table_label"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

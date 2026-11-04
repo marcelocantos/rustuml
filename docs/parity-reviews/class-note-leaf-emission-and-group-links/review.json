@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-leaf-emission-and-group-links",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "a9a42c3a6b7f4e685b6e8ad6198b91612f571bf8",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/before_after.puml",
+      "golden": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/before_after.svg",
+      "axes": [
+        "mixed attached/named note order and nested owners",
+        "group target shape and endpoint side with multiline notes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "a44cb8befe47b3f9039aed1f17790f75415f24cdeab7467dad816c02bc473549",
+      "java_sha256": "831f799844251db7525f351b0dbacf4c7b271c4bcd4d18f5031097d72fbac4f8",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/empty_peer.puml",
+      "golden": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/empty_peer.svg",
+      "axes": [
+        "mixed attached/named note order and nested owners",
+        "group target shape and endpoint side with multiline notes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "b882e815ee0b937bc86491b5d08573901a64aed1ea5c43423d068110705b0c0c",
+      "java_sha256": "e3b37b3a76a34e3371e5bace86bdb3f0487608262c576297f2a6bbc5f77aad8a",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/nested_group.puml",
+      "golden": "test-diagrams/perturbations/class-note-leaf-emission-and-group-links/checker3c/nested_group.svg",
+      "axes": [
+        "mixed attached/named note order and nested owners",
+        "group target shape and endpoint side with multiline notes"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "849867ac20500213e0a774c1ca023ad8180899bc4152bf1d2d2d088644e3ac8d",
+      "java_sha256": "1588dc896214956c47a3785ae06fff4b11ea77c38e29e70f91fa1b5f5f4837f9",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "The merged note emission stream follows Bibliotekon order; before_after passes. GraphvizImageBuilder requires an actual peer SvekNode before setting Opale, consistent with the new nonempty-cluster guard.",
+    "nested_group and empty_peer remain mismatches. Empty package role is a layout leaf, but leaf existence alone does not prove equivalent image/connector behavior; the latter has missing primitives as well as geometry differences. Group-point runtime differences are a separate uncertainty for populated groups."
+  ],
+  "bounded_repair_guidance": "Audit empty-group peer images and actual Bibliotekon node eligibility, then connector clipping and magnetic-border order, without waiving unresolved group reference differences.",
+  "source_audit": {
+    "java_locations": [
+      "svek/SvekResult#drawU",
+      "svek/GraphvizImageBuilder#isOpalisable,buildImage",
+      "svek/SvekEdge#drawU",
+      "svek/Cluster#getMagneticBorder"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs#render_plantuml_svg,floating_note_opale_relationship,render_no_oracle_attached_note_connector"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

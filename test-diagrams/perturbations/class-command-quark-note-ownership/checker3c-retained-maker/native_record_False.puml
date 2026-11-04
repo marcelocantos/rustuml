@@ -1,0 +1,7 @@
+@startuml
+record "Ridge as [Depot]" as Ridge
+note right of Ridge {
+component this is note text
+end note
+}
+@enduml

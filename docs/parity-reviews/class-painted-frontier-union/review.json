@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-painted-frontier-union",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "de192dc216b6795b6d820c240e82234988d1f39d",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_cloud.puml",
+      "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_cloud.svg",
+      "axes": [
+        "root notes versus nested cloud/rectangle groups",
+        "TB/LR wide and narrow interface labels, component styles and endpoint order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "60ceaccf28c6d3a280310f6aac495cb43e27c9c9422bc9ceb8ce788ffb7bd45f",
+      "java_sha256": "a29b773b02b42d643c1b1a189024e8c7d50e6e64dfc1a5af02b5e6d4f977677a",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_node.puml",
+      "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_node.svg",
+      "axes": [
+        "root notes versus nested cloud/rectangle groups",
+        "TB/LR wide and narrow interface labels, component styles and endpoint order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "0f944237b69a4d2055c497d85c0ae0aaaf555e709d963fb0f0413e26941ca7be",
+      "java_sha256": "b7ac3baaf24ff24358b21b678ec2346b9e773608680f7448fb5efeb10570a2b8",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_rectangle.puml",
+      "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c-retained-maker/note_frontier_rectangle.svg",
+      "axes": [
+        "root notes versus nested cloud/rectangle groups",
+        "TB/LR wide and narrow interface labels, component styles and endpoint order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "41adc5c3e9acef7b7263441b33a1136b1ac34898c15d48095ae03b4ef0b2e0d4",
+      "java_sha256": "887dcbca19d7e428532addb1e91953056d9696c1def0565520c6ba8897a45d5e",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/cloud_nested.puml",
+      "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/cloud_nested.svg",
+      "axes": [
+        "root notes versus nested cloud/rectangle groups",
+        "TB/LR wide and narrow interface labels, component styles and endpoint order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "ccc2bd6f4dcfee0c593df0b13889fde2add3555b576ac244c749a93847764f9b",
+      "java_sha256": "d24a6697ab7b4e23e4036bf2c62befef5d7d6374c5359643057ee292db9486f6",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/root_note.puml",
+      "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/root_note.svg",
+      "axes": [
+        "root notes versus nested cloud/rectangle groups",
+        "TB/LR wide and narrow interface labels, component styles and endpoint order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "10bbb572b3711e289fa0ff06db68568996a4ee5b3447bf1617716a974aec42ea",
+      "java_sha256": "0032a96ad0ee584171e7c39d3c768a4f952e9de5a1ee6ef57d66254a39666de5",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/uml1_note.puml",
+      "golden": "test-diagrams/perturbations/class-painted-frontier-union/checker3c/uml1_note.svg",
+      "axes": [
+        "root notes versus nested cloud/rectangle groups",
+        "TB/LR wide and narrow interface labels, component styles and endpoint order"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "process_error",
+      "source_sha256": "26f7b33697dc684a48b1da100bb6ff03e6d5a5b99e64d5585894c38f2a1507b4",
+      "java_sha256": "106f84d57b2fa5ea7bf5e42d8e691d3d74f2c881f5e9f2b14b3eef49b706d3b6",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    }
+  ],
+  "findings": [
+    "Removing the raw note-box correction and zero/clamped minimum seed follows SvekResult/LimitFinder's union of painted primitives. The component interface label and UML1 protruding tabs now contribute to the minimum.",
+    "All three fresh paired comparisons remain red; the retained root_note_rectangle and cloud outline failures also remain executable. A model-shaped correction is not full frontier coverage. Cloud path construction, attached-note geometry and remote group-point layout are separate unresolved contributors; no measured offset is proposed."
+  ],
+  "bounded_repair_guidance": "Trace the failing primitive extrema and Opale/group image contributions independently; resolve environment-sensitive DOT differences before changing final translation.",
+  "source_audit": {
+    "java_locations": [
+      "svek/SvekResult#calculateDimension",
+      "klimt/drawing/LimitFinder#drawU",
+      "svek/image/EntityImageDescription#drawU",
+      "svek/image/EntityImageNote#drawU",
+      "svek/Opale#drawU"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs#svek_layout_x_bias,svek_layout_y_bias,entity_frontier_min",
+      "crates/rustuml-render/src/component.rs#component_svek_translation"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

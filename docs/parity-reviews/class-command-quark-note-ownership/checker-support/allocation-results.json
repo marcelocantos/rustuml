@@ -1,0 +1,101 @@
+[
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "0",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "1",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "2",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "3",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": -6,
+    "stderr": "AddressSanitizer:DEADLYSIGNAL\n=================================================================\n==42431==ERROR: AddressSanitizer: SEGV on unknown address 0xbebebebebebebf36 (pc 0x000104380bb8 bp 0x00016baa9910 sp 0x00016baa98c0 T0)\n==42431==The signal is caused by a READ memory access.\n    #0 0x000104380bb8 in free_html_label+0x20 (native_safety:arm64+0x10002cbb8)\n    #1 0x000104380c00 in free_html_label+0x68 (native_safety:arm64+0x10002cc00)\n    #2 0x00010435a16c in rustuml_make_empty_grid_label rustuml_helpers.c:261\n    #3 0x00010435dff4 in main native_safety.c:28\n    #4 0x00018721cd78 in start+0x19f8 (dyld:arm64e+0x31d78)\n\n==42431==Register values:\n x[0] = 0xbebebebebebebf2e   x[1] = 0x0000000000000000   x[2] = 0x00000001872ecc28   x[3] = 0x00006020000009a0  \n x[4] = 0x0000000000000049   x[5] = 0x0000000000000001   x[6] = 0x0000000000000000   x[7] = 0x0000000000000001  \n x[8] = 0x0000000000000001   x[9] = 0x0000000000000011  x[10] = 0x000000000000004d  x[11] = 0x00000fffffffffff  \nx[12] = 0x0000000000000000  x[13] = 0x0000000000000001  x[14] = 0x0000000000000000  x[15] = 0x00007fffffffffff  \nx[16] = 0x0000000104a75488  x[17] = 0x00000001e8e6d1a8  x[18] = 0x0000000000000000  x[19] = 0xbebebebebebebf2e  \nx[20] = 0x0000000000000000  x[21] = 0x0000611000000040  x[22] = 0xbebebebebebebebe  x[23] = 0x0000602000000998  \nx[24] = 0x0000008000020000  x[25] = 0x000000016baa9980  x[26] = 0x000060d000000088  x[27] = 0x00000c2200000016  \nx[28] = 0x0000000000000000     fp = 0x000000016baa9910     lr = 0x0000000104380c04     sp = 0x000000016baa98c0  \nAddressSanitizer can not provide additional info.\nSUMMARY: AddressSanitizer: SEGV (native_safety:arm64+0x10002cbb8) in free_html_label+0x20\n==42431==ABORTING\n"
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "4",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "5",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "6",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "7",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 10,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "8",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "9",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/rustuml-review-cbd/native_safety",
+      "10",
+      "/tmp/rustuml-review-cbd/allocation-control.html"
+    ],
+    "exit": 0,
+    "stderr": ""
+  }
+]

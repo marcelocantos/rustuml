@@ -1,0 +1,5 @@
+@startuml
+entity E order 17
+entity F order 2
+E -> F : pulse
+@enduml

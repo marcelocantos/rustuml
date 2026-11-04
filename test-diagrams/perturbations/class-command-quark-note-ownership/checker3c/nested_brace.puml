@@ -1,0 +1,10 @@
+@startuml
+package Dock {
+record Cargo
+note left of Cargo {
+entity Fake
+end note
+}
+}
+note right of Dock : outer
+@enduml

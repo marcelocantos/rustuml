@@ -1,0 +1,7 @@
+@startuml
+skinparam packageStyle node
+skinparam classAttributeIconSize 17
+-package Archive {
+class Elm
+}
+@enduml

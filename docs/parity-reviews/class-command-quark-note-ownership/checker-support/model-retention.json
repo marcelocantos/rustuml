@@ -1,0 +1,117 @@
+{
+  "scope": "1559 preserved paths; same-Class IDs/member/note/link counts; diagnostic YAML independent of SVG comparisons",
+  "lost": [],
+  "family_changes": [
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_record.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_struct.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_interface.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__bare_native_record.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__braced_note_interface.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/note-target-quark__group_target_left.puml",
+      "before": "Deployment",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_record.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_record.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_struct.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-target-quark/checker/group_target_bottom.puml",
+      "before": "Deployment",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-target-quark/checker/group_target_left.puml",
+      "before": "Deployment",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_False.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_protocol_True.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_False.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_record_True.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_False.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c-retained-maker/native_struct_True.puml",
+      "before": "Component",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-quark-note-ownership/checker3c/nested_brace.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_body.puml",
+      "before": "Deployment",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/generic_entity.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_note.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_stereo.puml",
+      "before": "Sequence",
+      "candidate": "Class"
+    }
+  ],
+  "java_model_probe_residue": "Prior live Java ModelProbe output lost; remote host unavailable in recovery. Java source and preserved SVG identities/text inspected, not represented as a live Java AST census."
+}

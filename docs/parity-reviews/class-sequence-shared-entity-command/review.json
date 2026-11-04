@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-sequence-shared-entity-command",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "4fd5d7039d9b8f27bda1712aaa0d1b8d5399311d",
+  "implementation_commit": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+  "prepared_implementation_commit": "cfc933f0c7a5b9be93f2f7fa556d9afebae57aed",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_body.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_body.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "c01ff0c94d531c973556c2a677f1bcd5d1ebf934f784b4cd8eecf1066a2a9fa3",
+      "java_sha256": "35badae811ce5a0ce42af868edee392ba9b1a0ce5c75539e2f37b081de5abde6",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_nested.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_nested.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "0cf981bc5351f5c8994075ea00b5647839c042565608c9e1a79735efde3cfa00",
+      "java_sha256": "f671aa03ca1bc5fbc7a61b4a14f5268f6acbeb0f7f78706e8cb4bd91e2e51c59",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_self.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/entity_self.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "b44bd7e54766b3a5d38805f5489b28945bfe793ee64beeffc1291b8c7e9a8704",
+      "java_sha256": "be0904d5bf42d8749bac5992b0da7ed0b7a8b7a5cc22674e1e2d07a93007f699",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/root_record_peer.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c-retained-maker/root_record_peer.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "27f7a04e84903709a44fc6ab8dcbe8374bfcf372645df95c57c3d7b4251119a7",
+      "java_sha256": "dc61662f87427309980ab1b3266e015e8bb50f9876c927c854142f06b0252205",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_order.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_order.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "42c958abba14a58657817b396302a572e06d880156a098030775b563150b699c",
+      "java_sha256": "0bb83d295ff5346ed3ca3af0ca682a01abaa7919414bc8eecfec5a5fc3e511f8",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_quoted.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_quoted.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "4102dec03d0b6170a14a8d6efe32e6d910e9c319a13860d0aa96b539d1cf7328",
+      "java_sha256": "d433a00be85b73b7fc7f624ba9ceced4a5b74a5a49d39b6b7f0bedc7689d478c",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/entity_url.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/entity_url.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "3298bd1cbe7b6e41a0e43a30ad49339e91241171defcaa0efa90a8a87f8bb465",
+      "java_sha256": "eed39e5e44003a85a5b42ebe244a09c27df6ca3e4417c5787b24969c3ee19a47",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/generic_entity.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/generic_entity.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "63f1709b50632b73c45f14cd0395fad1080896839141cad4cf29865feab4b0e1",
+      "java_sha256": "660bbd8a4529396c17ac401cfa733fe2606bf60f47f8400da705a5df1128a702",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/group_shared.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/group_shared.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "cd5c4b3a1a95bd1ac04655b42500f3599cad17195c07550b6f4d1b28345b26fe",
+      "java_sha256": "ad880289104c6a77b2681ee09823a9d27904714225bada435f5f294a237bcd57",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_note.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_note.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "05e9b2b28e3b44df0de531e58121209ef7504df8216397da9046252287bf7673",
+      "java_sha256": "97e2d0b4975191c431346af4d507d912f47a90d61c404866fba102bb3ff5590f",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_stereo.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/native_stereo.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "b926d63c56dcc858f7a3878818983e73e80463f2a599390470feb7efd76e0c98",
+      "java_sha256": "f034dfa4409bde8eb9f9e89c3166d7ea3067eada64f9968291809ef74c7b793b",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/order_stereo_entity.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/order_stereo_entity.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "b5d406bce365362a00d9d30bc30ee0ab13ce83f2f02278d4d0e6c4825398d62b",
+      "java_sha256": "7fd376de09549ae93ea49ab05438b20278905c4b5c27c2259aa4f2494662c86b",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/root_brace.puml",
+      "golden": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/root_brace.svg",
+      "axes": [
+        "root entity versus record/struct and braced/native modifiers",
+        "self messages versus nested ownership and quoted displays"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "pass",
+      "source_sha256": "d63c8676e1d49e54bd1016e133036f7d7fd61a16c43ab3ee2b8bcfc051ffa902",
+      "java_sha256": "ee2c254e08697e5d49cffe717ce79151d00a461239392aa73ce88cfb30ab1d1c",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    }
+  ],
+  "findings": [
+    "PSystemBuilder gives Sequence priority; the candidate tests parsed declaration kind/modifiers and opaque quoted display rather than keyword scores. Root/group/braced/native/order/URL/generic cases exercise that boundary.",
+    "Seven fresh comparisons pass; bare_quoted and order_stereo_entity remain Sequence in both Java SVG and Rust AST, but the product omits stereotype text. YAML confirms order_stereo_entity retains stereotype store and order 7, locating this residue downstream of parsing. A family-label-only check would incorrectly certify the full image. Full model/image parity remains rejected even where the precedence decision is correct.",
+    "The main failure inventory contains none of the 14 transient losses. This review does not authorize extracting this small correction from the tested full packet."
+  ],
+  "bounded_repair_guidance": "Preserve parser ownership evidence while tracing the already-retained participant stereotype through Sequence rendering; verify model content and emitted images, not only selected family.",
+  "source_audit": {
+    "java_locations": [
+      "PSystemBuilder#createPSystem (Sequence before Class)",
+      "sequencediagram/command/CommandParticipant#getRegexType",
+      "sequencediagram/command/CommandParticipantA,A2,A3,A4#getRegexConcat",
+      "classdiagram/command/CommandCreateClass#getRegexConcat"
+    ],
+    "rust_locations": [
+      "crates/rustuml-parser/src/parse/class.rs#native_container_candidate,try_class_decl"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

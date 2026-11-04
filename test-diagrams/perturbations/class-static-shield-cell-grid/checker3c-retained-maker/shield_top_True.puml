@@ -1,0 +1,6 @@
+@startuml
+top to bottom direction
+component "Harbor client" as Client
+interface "Extremely wide transport port" as Port
+Port --> Client
+@enduml

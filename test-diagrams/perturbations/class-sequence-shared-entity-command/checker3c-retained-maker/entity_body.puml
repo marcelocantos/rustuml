@@ -1,0 +1,5 @@
+@startuml
+entity "Mooring light" as Beacon {
++signal:int
+}
+@enduml

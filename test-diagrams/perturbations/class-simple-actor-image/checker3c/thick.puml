@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+<style>
+actor {
+LineThickness 3
+}
+</style>
+class Seed
+actor "Keeper" as A <<human>>
+A --> Seed
+@enduml

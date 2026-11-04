@@ -1,0 +1,6 @@
+@startuml
+class Seed
+note "memo" as M
+note right of M : second
+M .. Seed
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+skinparam componentStyle uml2
+class Linden
+component "Telemetry dispatch\nshort" as Relay <<meter>>
+Linden --> Relay
+@enduml

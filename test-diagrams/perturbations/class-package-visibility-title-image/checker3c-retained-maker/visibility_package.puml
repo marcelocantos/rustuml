@@ -1,0 +1,8 @@
+@startuml
+skinparam classAttributeIconSize 12
+~package "North Valley" as Valley {
+class Linden
+}
+note "Qualified memo" as Valley.Memo
+Valley.Memo .. Valley.Linden
+@enduml

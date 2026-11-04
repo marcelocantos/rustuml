@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-simple-actor-image",
+  "reviewer": {
+    "task_id": "t3-cbd5e1b6-independent-class-review-recovery",
+    "model": "gpt-6-astra, high reasoning, Codex harness through T3 Code",
+    "role": "Independent recovery checker; no production edits or children",
+    "prior_checker": "t3-3cfc50f2 / gpt-6-astra / Codex; authored 62 fresh cases, preserved 48 maker cases, interrupted before verdict"
+  },
+  "account_commit": "372a84d6abb20df41a3690ba5ee5774b1ed03998",
+  "implementation_commit": "2c778f1d341684d1912be60f533404af394f4a49",
+  "prepared_implementation_commit": "49e682661a47ae3864fe42d935b5714039953e27",
+  "rust_revision": "5233a26ab8aa96852aa542a9334958fb7d0f906c",
+  "rust_tree": "b38b69de1486799889e34e496faad0a5d9916317",
+  "before_revision": "928831ff7c21a5cf90ffc6305a6bb3bc62dca501",
+  "previous_prepared_revision": "9a6db29e221ff5803facd8bfe7fe0d2a00cf704a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_environment": {
+    "checker": "raw pipe on Monkey Man, OpenJDK 21.0.5, Graphviz 12.2.0, GMT+11:00; attribution recovered from prior transcript, no regeneration",
+    "retained_maker": "Per-file original provenance in maker-evidence/inputs; 24 local 21.0.13/16.1 and 24 remote 21.0.5/12.2 captures. Do not conflate these environments.",
+    "recovery": "No Java/javac launched. Remote SSH host unavailable; prior Java ModelProbe result and per-call capture logs lost. Preserved SVGs replayed unchanged."
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py candidate /tmp/rustuml-review-cbd/candidate-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 5233a26ab8aa96852aa542a9334958fb7d0f906c",
+    "CARGO_TARGET_DIR=/tmp/rustuml-review-cbd/before-target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --manifest-path /tmp/rustuml-review-cbd/before-src/Cargo.toml",
+    "uv run --no-project python /tmp/rustuml-review-cbd/replay.py before /tmp/rustuml-review-cbd/before-rustuml /tmp/rustuml-review-cbd/candidate-paths.json 928831ff",
+    "uv run --no-project python /tmp/rustuml-review-cbd/models.py",
+    "uv run --no-project python /tmp/rustuml-review-cbd/gates.py"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_False.puml",
+      "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_False.svg",
+      "axes": [
+        "multiline/stereotype and renamed display",
+        "nested/root ownership and edge/declaration direction"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "387ea71a49f19a11385dc480a3ff4754ad461a31b9236590795b17c0508e26df",
+      "java_sha256": "0a2a5b46ed8f418d3b8586f3060af42bf43297c9c4c25ab5793ce315f6b80d57",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_True.puml",
+      "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c-retained-maker/mixed_actor_True.svg",
+      "axes": [
+        "multiline/stereotype and renamed display",
+        "nested/root ownership and edge/declaration direction"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "2ffdef85a3a04c21c328513cce2a1f78ede3934205f6b2e485fcfd076fc15159",
+      "java_sha256": "6dd8b446e599862d6966cc9a05a428370ae3be3eaad6449a673d14c9538caa4a",
+      "original_author": "class maker t3-cff2cd0e (see original maker-evidence)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/nested_stereo.puml",
+      "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/nested_stereo.svg",
+      "axes": [
+        "multiline/stereotype and renamed display",
+        "nested/root ownership and edge/declaration direction"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "cfdc3ea13da9a0dbd35bce5cef4f4b3f216aea0fd5df846da6147a59edba3801",
+      "java_sha256": "22407b91d1e1296e271343d9211e3b0e6d38d759d5550e616973ba79501373c8",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/plain.puml",
+      "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/plain.svg",
+      "axes": [
+        "multiline/stereotype and renamed display",
+        "nested/root ownership and edge/declaration direction"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "221f0244ca3cc3d475dad6c826209aa04d8fadd99c8423ed585e9bad29733137",
+      "java_sha256": "ee8475dfd8771e3d6e5e6b75608baaf35996ba35fc12ab28a572fa87e9a2817f",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/shadow.puml",
+      "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/shadow.svg",
+      "axes": [
+        "multiline/stereotype and renamed display",
+        "nested/root ownership and edge/declaration direction"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "fail",
+      "observed_status": "mismatch",
+      "before_status": "mismatch",
+      "source_sha256": "43042b2af26b5617ecd23b4f1983cb411f2554467016f85460b7f13dd8dda1dd",
+      "java_sha256": "3d36b3c7bc2578caf1cb696bba6d62fdddea6f7f794139da615f9fb956b58f1b",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/class-simple-actor-image/checker3c/thick.puml",
+      "golden": "test-diagrams/perturbations/class-simple-actor-image/checker3c/thick.svg",
+      "axes": [
+        "multiline/stereotype and renamed display",
+        "nested/root ownership and edge/declaration direction"
+      ],
+      "axes_provenance": "Reconstructed by recovery reviewer from preserved inputs and account; original per-call generation metadata lost.",
+      "result": "pass",
+      "observed_status": "pass",
+      "before_status": "mismatch",
+      "source_sha256": "8e6623c8b2e74b61dbead0963626d30893d978b56d708119e057ec3e6fecdf0c",
+      "java_sha256": "dbb5cd5dac84017b8b9562c4b911384f0a7249f150341d0436a614f27daf5440",
+      "original_author": "independent checker t3-3cfc50f2 (gpt-6-astra/Codex)",
+      "cli_exit": 0,
+      "comparator_exit": 0
+    }
+  ],
+  "findings": [
+    "ActorStickMan's 16px head, 27px body, 13px half-arm width, 15px legs and stroke-dependent dimensions justify the default geometry. Three fresh plain/nested/thick controls pass.",
+    "shadow fails. ActorStickMan.getPreferredHeight adds fashion.getDeltaShadow and drawU applies shadow to head and path. Rust DescriptionLeafStyle carries no shadow, calc_entity_dims omits it and actor paint emits no shadow. This is a source-confirmed model omission, not an external-dot hypothesis."
+  ],
+  "bounded_repair_guidance": "Retain shadow in the selected image's measured fashion and paint, including its contribution to preferred dimensions and final bounds.",
+  "source_audit": {
+    "java_locations": [
+      "skin/ActorStickMan#getPreferredWidth,getPreferredHeight,drawU",
+      "decoration/symbol/USymbolSimpleAbstract#asSmall"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "scope": "Full continuation production diff inspected; named Java/source mechanisms checked; no fixture-shaped branches or shipping fixture data observed. No baseline/comparator/frozen-rule edits."
+  },
+  "verdict": "rejected",
+  "acceptance_scope": "No acceptance or extraction authorization. A corrected sub-invariant or matching cohort does not waive valid failing pairs or native safety failures.",
+  "support": "docs/parity-reviews/class-command-quark-note-ownership/checker-support/REPORT.md",
+  "reference_generation_command_attributed": "Historical checker3c command, not rerun: ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.tA33AM9B --timezone GMT+11:00 -- -pipe -tsvg (exact argv and input body construction archived in historical-transcript/transcript-045.txt)"
+}

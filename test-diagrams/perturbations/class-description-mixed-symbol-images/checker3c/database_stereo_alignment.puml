@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+<style>
+database {
+HorizontalAlignment right
+}
+</style>
+class Seed
+database "Wide symbolic display\nx" as A <<service>>
+A --> Seed
+@enduml
