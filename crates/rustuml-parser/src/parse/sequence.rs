@@ -493,9 +493,16 @@ impl SeqParser {
         }
 
         // Handle multiline note buffering.
-        if self.note_buffer.is_some() {
+        if let Some(note) = &self.note_buffer {
             let trimmed = line.trim();
-            if trimmed == "endnote" || trimmed == "end note" {
+            // FactorySequenceNote{,Across,OverSeveral}Command#END accepts all
+            // three shape names; FactorySequenceNoteOnArrowCommand#END only note.
+            static NOTE_END: LazyLock<Regex> =
+                LazyLock::new(|| Regex::new(r"(?i)^end\s?(note|hnote|rnote)$").unwrap());
+            let closes = NOTE_END
+                .captures(trimmed)
+                .is_some_and(|caps| !note.on_message || caps[1].eq_ignore_ascii_case("note"));
+            if closes {
                 let buf = self.note_buffer.take().unwrap();
                 let text = note_text_from_lines(&buf.lines);
                 self.events.push(Event::Note(Note {
@@ -2688,6 +2695,31 @@ Gate -> Mail: enqueue"#
                 assert_eq!(note.participants, [from, to]);
                 assert_eq!(note.text, "current");
                 assert_eq!(d.participants.len(), 2, "border is not a participant");
+            }
+        }
+    }
+    #[test]
+    fn standalone_note_terminators_consume_the_complete_command() {
+        for shape in ["note", "rnote", "hnote"] {
+            for ending in [
+                "endnote",
+                "end note",
+                "endrnote",
+                "end rnote",
+                "endhnote",
+                "end hnote",
+            ] {
+                let d = parse(&format!(
+                    "participant Hub\n{shape} over Hub\none\ntwo\n{ending}\nHub -> Hub: after"
+                ));
+                assert_eq!(d.events.len(), 2);
+                let Event::Note(note) = &d.events[0] else {
+                    panic!("missing note")
+                };
+                assert_eq!(note.text, "one\ntwo");
+                assert!(
+                    matches!(&d.events[1], Event::Message(message) if message.label == "after")
+                );
             }
         }
     }
