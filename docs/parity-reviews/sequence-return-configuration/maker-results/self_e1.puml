@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Node -> Node ++ : inspect
+return #purple complete
+return again
+@enduml

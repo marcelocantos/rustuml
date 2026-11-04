@@ -1,0 +1,19 @@
+@startuml
+!pragma teoz true
+participant Pine as P
+participant Cedar as Q
+group envelope
+P -> Q : rendezvous
+activate Q
+activate Q
+activate Q
+activate Q
+note over P : alternate ownership
+deactivate Q
+deactivate Q
+deactivate Q
+deactivate Q
+Q -> P : finish
+end
+P -> Q : after
+@enduml

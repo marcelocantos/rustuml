@@ -1,0 +1,66 @@
+[
+  {
+    "mechanism": "Logical font mapping, metrics and shared family serialization",
+    "target": "T14.11",
+    "status": "Unresolved; not waived",
+    "sources": [
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_sansserif.puml",
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_serif.puml"
+    ],
+    "finding": "SansSerif control has identical geometry but quoted versus unquoted SVG family attributes. Serif control differs in metrics, component geometry and family. No geometry tuning or host font import attempted.",
+    "consumers": [
+      "crates/rustuml-render/src/text_render.rs::metric_family",
+      "crates/rustuml-render/src/plantuml_metrics.rs Serif tables",
+      "sequence.rs family consumers"
+    ],
+    "ownership": "Shared font/text infrastructure requires parent ownership; fresh font checker needed"
+  },
+  {
+    "mechanism": "Physical font and shared hyperlink/raw-text serialization",
+    "status": "Existing independent failures retained",
+    "sources": [
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review4_chrome_visible_physical_font.puml",
+      "test-diagrams/perturbations/svg-link-title-normalization/sequence_mixed_generic_link_runs.puml"
+    ],
+    "ownership": "Shared text consumer path; no changes made"
+  },
+  {
+    "mechanism": "Invalid lifecycle and reverse-border source rejection",
+    "status": "Unresolved negative semantics; not counted as valid parity",
+    "sources": [
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml"
+    ],
+    "finding": "Eight new sources reactivate after closure on the same self-message: AbstractMessage#addLifeEvent rejects via noActivationAuthorized2. Two use invalid spaced right-border syntax. Java exits 200; current Rust CLI emits SVG. These inputs remain invalid negative evidence, not waived successes."
+  },
+  {
+    "mechanism": "Relative include working directory",
+    "target": "T14.6.2",
+    "status": "Parent/TIM dependency, independently demonstrated",
+    "sources": [
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml"
+    ],
+    "finding": "Pinned support file restored. Same binary passes from repository root and fails from Cargo package cwd. Both outputs preserved; builtin failure remains."
+  },
+  {
+    "mechanism": "Other frozen family mismatches and invalid reference contracts",
+    "status": "Nonaccepted dependencies, no exclusions or baselines altered",
+    "valid_mismatch_count": 542,
+    "invalid_reference_count": 26,
+    "full_inventory": "remaining-failures.json.gz",
+    "finding": "All 542 valid failures remain within the frozen parent955 inventory. Six sequence orphan-return negatives now fail parsing as Java does. Twenty other invalid references still yield successful Rust SVG; detailed statuses preserved. One empty Java reference causes diff_one adapter panic; the CLI does not panic."
+  },
+  {
+    "mechanism": "Independent review and existing repository gates",
+    "status": "Required before acceptance",
+    "finding": "All previous rejections remain unchanged. New accounts have no checker reviews. Guards are 4/6, including existing decimal ratchet failures outside sequence. Clippy remains red on existing source; two new needless borrows were corrected. No target mutations."
+  }
+]

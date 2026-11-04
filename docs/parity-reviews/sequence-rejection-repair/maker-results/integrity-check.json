@@ -1,0 +1,15 @@
+{
+  "verified_at_utc": "2026-11-04T06:57:42.920724+00:00",
+  "normalized_accounts": 12,
+  "frozen955_files_hashed": 1910,
+  "new_source_reference_pairs_hashed": 70,
+  "immutable_checker_review_fixture_files": 2577,
+  "production_revision": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "production_unchanged_since_build": true,
+  "original_grouped_note": {
+    "entries": 41,
+    "match": 39,
+    "mismatch": 2
+  },
+  "local_jvm_launched": false
+}

@@ -1,0 +1,12 @@
+@startuml
+skinparam Shadowing false
+skinparam Padding 1
+participant "Cedar relay" as C
+participant "Finch" as F
+C -> F ++ : dispatch
+group bounds
+note over C,F : small
+... wait ...
+F --> C -- : completed
+end
+@enduml
