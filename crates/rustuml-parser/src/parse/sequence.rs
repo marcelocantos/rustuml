@@ -352,10 +352,19 @@ fn valid_sequence_color(color: &str) -> bool {
     if valid_return_color(color) {
         return true;
     }
+    // HColorSet#parseColor resolves gradient endpoints with parseSimpleColor,
+    // which excludes the transparent/background/automatic HColor symbols.
+    let simple = |part: &str| {
+        valid_return_color(part)
+            && !matches!(
+                part.trim_start_matches('#').to_ascii_lowercase().as_str(),
+                "transparent" | "background" | "automatic"
+            )
+    };
     color.char_indices().any(|(index, ch)| {
         matches!(ch, '-' | '\\' | '|' | '/')
-            && valid_return_color(&color[..index])
-            && valid_return_color(&color[index + ch.len_utf8()..])
+            && simple(&color[..index])
+            && simple(&color[index + ch.len_utf8()..])
     })
 }
 
@@ -2878,6 +2887,9 @@ mod tests {
 
     #[test]
     fn registered_color_execution_uses_complete_leaf_boundaries() {
+        assert!(super::valid_sequence_color("LightBlue/Yellow"));
+        assert!(!super::valid_sequence_color("transparent/Yellow"));
+        assert!(super::valid_sequence_color("transparent"));
         for color in [
             "#back:LightBlue: cargo",
             "#CeruleanTypo: cargo",
