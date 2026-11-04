@@ -1348,7 +1348,7 @@ fn parameter_command(tag: &str) -> Option<ParameterCommand<'_>> {
 // HColorSet.parseColor/parseSimpleColor separate resolution from command syntax.
 // Valid values retain their existing emission path; this predicate only decides
 // which command-specific failure behavior applies.
-fn is_resolvable_color(color: &str) -> bool {
+pub(crate) fn is_resolvable_color(color: &str) -> bool {
     fn simple(color: &str) -> bool {
         let color = color.strip_prefix('#').unwrap_or(color);
         if matches!(color.len(), 1 | 3 | 6 | 8)

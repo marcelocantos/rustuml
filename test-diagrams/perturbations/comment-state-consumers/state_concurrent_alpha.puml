@@ -1,0 +1,8 @@
+@startuml
+skinparam stateBackgroundColor #34567801
+state Grove {
+state Leaf : detail
+--
+state Twig : detail
+}
+@enduml

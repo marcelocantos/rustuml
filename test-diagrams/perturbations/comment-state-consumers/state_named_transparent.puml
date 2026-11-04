@@ -1,0 +1,4 @@
+@startuml
+skinparam stateBackgroundColor transparent
+state Willow : detail
+@enduml

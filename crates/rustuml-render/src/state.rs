@@ -45,9 +45,29 @@ fn split_state_gradient(value: &str) -> Option<(&str, &str, char)> {
     None
 }
 
+// EntityImageStateCommon.applyColor:122–135 -> ValueImpl.asColor:90–103
+// resolves style BACK separately from stroke. HColorSet.getColorOrWhite uses
+// the pinned palette; CSS4-only names are not accepted there.
+fn resolve_state_fill_color(value: &str) -> String {
+    let value = value.trim();
+    if value.eq_ignore_ascii_case("none") {
+        return "none".to_string();
+    }
+    if value.eq_ignore_ascii_case("automatic") {
+        // T14.15 owns background-aware automatic selection; retain the
+        // existing consumer behavior until that context is available.
+        return crate::sequence::resolve_color(value);
+    }
+    if crate::creole::is_resolvable_color(value) {
+        text_render::normalize_color(value)
+    } else {
+        "#FFFFFF".to_string()
+    }
+}
+
 fn resolve_state_paint(value: &str) -> String {
     split_state_gradient(value).map_or_else(
-        || crate::sequence::resolve_color(value),
+        || resolve_state_fill_color(value),
         |(color1, color2, policy)| {
             format!(
                 "{}{policy}{}",
@@ -59,11 +79,7 @@ fn resolve_state_paint(value: &str) -> String {
 }
 
 fn resolve_pseudo_state_color(value: &str) -> String {
-    if value.trim().eq_ignore_ascii_case("transparent") {
-        "none".to_string()
-    } else {
-        crate::sequence::resolve_color(value)
-    }
+    resolve_state_fill_color(value)
 }
 
 fn state_gradients(diagram: &StateDiagram) -> Vec<StateGradient> {
@@ -100,7 +116,7 @@ fn state_gradients(diagram: &StateDiagram) -> Vec<StateGradient> {
 
 fn state_gradient_fill(value: &str, gradients: &[StateGradient]) -> String {
     let Some((raw1, raw2, policy)) = split_state_gradient(value) else {
-        return crate::sequence::resolve_color(value);
+        return resolve_state_fill_color(value);
     };
     let color1 = crate::sequence::resolve_color(raw1);
     let color2 = crate::sequence::resolve_color(raw2);
@@ -1597,8 +1613,8 @@ fn arial_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
 fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning) {
     write!(
         svg,
-        r#"<polygon fill="{}" points="{}""#,
-        crate::svg::escape_attribute(&warning.polygon.fill),
+        r#"<polygon {} points="{}""#,
+        crate::svg::fill_attributes(&warning.polygon.fill),
         crate::svg::escape_attribute(&warning.polygon.points),
     )
     .unwrap();
@@ -1629,8 +1645,8 @@ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning
 fn emit_entity_polygon(svg: &mut String, polygon: &EntityPolygon) {
     write!(
         svg,
-        r#"<polygon fill="{}" points="{}""#,
-        crate::svg::escape_attribute(&polygon.fill),
+        r#"<polygon {} points="{}""#,
+        crate::svg::fill_attributes(&polygon.fill),
         crate::svg::escape_attribute(&polygon.points),
     )
     .unwrap();
@@ -1643,9 +1659,9 @@ fn emit_entity_polygon(svg: &mut String, polygon: &EntityPolygon) {
 fn emit_entity_path(svg: &mut String, path: &EntityPath) {
     write!(
         svg,
-        r#"<path d="{}" fill="{}""#,
+        r#"<path d="{}" {}"#,
         crate::svg::escape_attribute(&path.d),
-        crate::svg::escape_attribute(&path.fill),
+        crate::svg::fill_attributes(&path.fill),
     )
     .unwrap();
     if let Some(style) = path.style.as_deref() {
@@ -3742,6 +3758,17 @@ fn autonomous_endpoint_svg_name(endpoint: &str, is_source: bool) -> String {
     }
 }
 
+// StateDiagram.getHistorical/getDeepHistory:125–182 constructs these
+// synthetic local Quark names. Keep this projection out of path/layout IDs.
+fn state_comment_endpoint(endpoint: &str, is_source: bool) -> String {
+    for (marker, name) in [("[H*]", "*deephistory*"), ("[H]", "*historical*")] {
+        if let Some(scope) = endpoint.strip_prefix(marker) {
+            return format!("{name}{}", scope.rsplit('.').next().unwrap_or(scope));
+        }
+    }
+    autonomous_endpoint_svg_name(endpoint, is_source)
+}
+
 fn emit_autonomous_scope_entities(
     svg: &mut String,
     context: &AutonomousRenderContext<'_>,
@@ -3795,17 +3822,18 @@ fn emit_autonomous_scope_entities(
                 let fill = state
                     .fill
                     .as_deref()
-                    .map(crate::sequence::resolve_color)
+                    .map(resolve_state_fill_color)
                     .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" {fill}{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     crate::svg::escape_attribute(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
-                    fmt_f(cy), fill = crate::svg::escape_attribute(&fill),
-)
+                    fmt_f(cy),
+                    fill = crate::svg::fill_attributes(&fill),
+                )
                 .unwrap();
                 continue;
             }
@@ -3813,19 +3841,20 @@ fn emit_autonomous_scope_entities(
                 let fill = state
                     .fill
                     .as_deref()
-                    .map(crate::sequence::resolve_color)
+                    .map(resolve_state_fill_color)
                     .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" {fill} rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     crate::svg::escape_attribute(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
                     fmt_f(cx),
-                    fmt_f(cy), fill = crate::svg::escape_attribute(&fill),
-)
+                    fmt_f(cy),
+                    fill = crate::svg::fill_attributes(&fill),
+                )
                 .unwrap();
                 continue;
             }
@@ -3833,11 +3862,11 @@ fn emit_autonomous_scope_entities(
                 let fill = state
                     .fill
                     .as_deref()
-                    .map(crate::sequence::resolve_color)
+                    .map(resolve_state_fill_color)
                     .unwrap_or_else(|| context.skin.state_fill.clone());
                 write!(
                     svg,
-                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
+                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon {fill} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
                     crate::svg::escape_attribute(&state.id),
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
@@ -3850,8 +3879,9 @@ fn emit_autonomous_scope_entities(
                     fmt_f(cy),
                     fmt_f(cx),
                     fmt_f(cy - CHOICE_SIZE),
-                    crate::svg::escape_attribute(&context.skin.stroke), fill = crate::svg::escape_attribute(&fill),
-)
+                    crate::svg::escape_attribute(&context.skin.stroke),
+                    fill = crate::svg::fill_attributes(&fill),
+                )
                 .unwrap();
                 continue;
             }
@@ -3859,16 +3889,17 @@ fn emit_autonomous_scope_entities(
                 let fill = state
                     .fill
                     .as_deref()
-                    .map(crate::sequence::resolve_color)
+                    .map(resolve_state_fill_color)
                     .unwrap_or_else(|| BAR_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<rect fill="{fill}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                    r#"<rect {fill} height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
                     fmt_f(*height),
                     fmt_f(*width),
                     fmt_f(cx - width / 2.0),
-                    fmt_f(cy - height / 2.0), fill = crate::svg::escape_attribute(&fill),
-)
+                    fmt_f(cy - height / 2.0),
+                    fill = crate::svg::fill_attributes(&fill),
+                )
                 .unwrap();
                 continue;
             }
@@ -3881,21 +3912,22 @@ fn emit_autonomous_scope_entities(
                 let fill = state
                     .fill
                     .as_deref()
-                    .map(crate::sequence::resolve_color)
+                    .map(resolve_state_fill_color)
                     .unwrap_or_else(|| context.skin.state_fill.clone());
                 write!(
                     svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
+                    r#"<ellipse cx="{}" cy="{}" {fill} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
                     fmt_f(cx),
                     fmt_f(cy),
-                    crate::svg::escape_attribute(&context.skin.stroke), fill = crate::svg::escape_attribute(&fill),
-)
+                    crate::svg::escape_attribute(&context.skin.stroke),
+                    fill = crate::svg::fill_attributes(&fill),
+                )
                 .unwrap();
                 let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
                 write!(
                     svg,
-                    r#"<text fill="{}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
-                    crate::svg::escape_attribute(&context.skin.text_color),
+                    r#"<text {} font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+                    crate::svg::fill_attributes(&context.skin.text_color),
                     fmt_f(text_width),
                     fmt_f(cx - text_width / 2.0),
                     fmt_f(cy + HISTORY_LABEL_BASELINE_OFFSET),
@@ -3910,7 +3942,7 @@ fn emit_autonomous_scope_entities(
                 let fill = state
                     .fill
                     .as_deref()
-                    .map(crate::sequence::resolve_color)
+                    .map(resolve_state_fill_color)
                     .unwrap_or_else(|| style.fill.clone());
                 let (image_width, image_height) = entity_position.dimensions();
                 let label_width = style.title.width(&state.label);
@@ -3943,22 +3975,24 @@ fn emit_autonomous_scope_entities(
                 ) {
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{STATE_BORDER_RADIUS}" ry="{STATE_BORDER_RADIUS}" style="stroke:{};stroke-width:1.5;"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" {fill} rx="{STATE_BORDER_RADIUS}" ry="{STATE_BORDER_RADIUS}" style="stroke:{};stroke-width:1.5;"/>"#,
                         fmt_f(cx),
                         fmt_f(cy),
-                        crate::svg::escape_attribute(&style.stroke), fill = crate::svg::escape_attribute(&fill),
-)
+                        crate::svg::escape_attribute(&style.stroke),
+                        fill = crate::svg::fill_attributes(&fill),
+                    )
                     .unwrap();
                 } else {
                     write!(
                         svg,
-                        r#"<rect fill="{fill}" height="{}" style="stroke:{};stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
+                        r#"<rect {fill} height="{}" style="stroke:{};stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
                         fmt_f(image_height),
                         crate::svg::escape_attribute(&style.stroke),
                         fmt_f(image_width),
                         fmt_f(image_x),
-                        fmt_f(image_y), fill = crate::svg::escape_attribute(&fill),
-)
+                        fmt_f(image_y),
+                        fill = crate::svg::fill_attributes(&fill),
+                    )
                     .unwrap();
                 }
                 if entity_position == StateEntityPosition::ExitPoint {
@@ -4013,7 +4047,7 @@ fn emit_autonomous_scope_entities(
         let fill = state
             .fill
             .as_deref()
-            .map(crate::sequence::resolve_color)
+            .map(resolve_state_fill_color)
             .unwrap_or_else(|| style.fill.clone());
         let stroke = state
             .stroke
@@ -4029,7 +4063,7 @@ fn emit_autonomous_scope_entities(
         let divider_y = box_y + 5.0 + style.title.height(&state.label) + 5.0;
         write!(
             svg,
-            r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            r#"<g class="entity" data-qualified-name="{}" id="{}"><rect {fill}{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
             crate::svg::escape_attribute(&state.id),
             autonomous_entity_id(context.entity_ids, id),
             fmt_f(*height),
@@ -4039,8 +4073,10 @@ fn emit_autonomous_scope_entities(
             fmt_f(box_x),
             fmt_f(box_x + width),
             fmt_f(divider_y),
-            fmt_f(divider_y), fill = crate::svg::escape_attribute(&fill), stroke_style = crate::svg::escape_attribute(&stroke_style),
-)
+            fmt_f(divider_y),
+            fill = crate::svg::fill_attributes(&fill),
+            stroke_style = crate::svg::escape_attribute(&stroke_style),
+        )
         .unwrap();
         let text_width = style.title.width(&state.label);
         style.title.emit(
@@ -4114,7 +4150,9 @@ fn emit_autonomous_scope_links(
                 svg,
                 "<!--{svg_comment}-->",
                 svg_comment = crate::svg::comment_text(&format!(
-                    "reverse link {edge_from_name} to {edge_to_name}"
+                    "reverse link {} to {}",
+                    state_comment_endpoint(edge_from_name, true),
+                    state_comment_endpoint(edge_to_name, false)
                 )),
             )
             .unwrap();
@@ -4122,8 +4160,11 @@ fn emit_autonomous_scope_links(
             write!(
                 svg,
                 "<!--{svg_comment}-->",
-                svg_comment =
-                    crate::svg::comment_text(&format!("link {edge_from_name} to {edge_to_name}")),
+                svg_comment = crate::svg::comment_text(&format!(
+                    "link {} to {}",
+                    state_comment_endpoint(edge_from_name, true),
+                    state_comment_endpoint(edge_to_name, false)
+                )),
             )
             .unwrap();
         }
@@ -4323,10 +4364,10 @@ fn emit_autonomous_empty_concurrent_state(
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect {}{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         crate::svg::escape_attribute(id),
         autonomous_entity_id(context.entity_ids, id),
-        crate::svg::escape_attribute(&style.fill),
+        crate::svg::fill_attributes(&style.fill),
         fmt_f(height),
         crate::svg::escape_attribute(&style.stroke),
         style.border_thickness,
@@ -4370,7 +4411,7 @@ fn emit_autonomous_composite(
         .state
         .fill
         .as_deref()
-        .map(crate::sequence::resolve_color)
+        .map(resolve_state_fill_color)
         .unwrap_or_else(|| style.fill.clone());
     let stroke = composite
         .state
@@ -4397,7 +4438,7 @@ fn emit_autonomous_composite(
     }
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" {}/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         fmt_f(box_x + STATE_RX),
         fmt_f(box_y),
         fmt_f(right - STATE_RX),
@@ -4412,7 +4453,7 @@ fn emit_autonomous_composite(
         fmt_f(box_y + STATE_RX),
         fmt_f(box_x + STATE_RX),
         fmt_f(box_y),
-        crate::svg::escape_attribute(&header_fill),
+        crate::svg::fill_attributes(&header_fill),
         fmt_f(composite.height),
         fmt_f(composite.width),
         fmt_f(box_x),
@@ -4420,8 +4461,9 @@ fn emit_autonomous_composite(
         fmt_f(box_x),
         fmt_f(right),
         fmt_f(header_divider_y),
-        fmt_f(header_divider_y), stroke_style = crate::svg::escape_attribute(&stroke_style),
-)
+        fmt_f(header_divider_y),
+        stroke_style = crate::svg::escape_attribute(&stroke_style),
+    )
     .unwrap();
     if composite.attribute_height > 0.0 {
         write!(
@@ -5462,6 +5504,16 @@ fn emit_root_state_cluster(
     let divider_y = y + CLUSTER_HEADER_DIVIDER_OFFSET;
     let style = autonomous_state_style(context.diagram, context.skin, Some(composite));
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+    // Cluster.drawU:309–311 uses the local Quark name and hides ## groups.
+    let comment_name = autonomous_endpoint_svg_name(&composite.id, false);
+    if !comment_name.starts_with("##") {
+        write!(
+            svg,
+            "<!--{}-->",
+            crate::svg::comment_text(&format!("cluster {comment_name}"))
+        )
+        .unwrap();
+    }
     write!(
         svg,
         r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
@@ -5485,7 +5537,7 @@ fn emit_root_state_cluster(
     }
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" {}/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         fmt_f(x + STATE_RX),
         fmt_f(y),
         fmt_f(right - STATE_RX),
@@ -5500,7 +5552,7 @@ fn emit_root_state_cluster(
         fmt_f(y + STATE_RX),
         fmt_f(x + STATE_RX),
         fmt_f(y),
-        crate::svg::escape_attribute(&style.fill),
+        crate::svg::fill_attributes(&style.fill),
         fmt_f(height),
         crate::svg::escape_attribute(&style.stroke),
         style.border_thickness,
@@ -6765,8 +6817,9 @@ pub fn render_with_oracle(
     if has_explicit_background && bg_color != "#FFFFFF" {
         write!(
             svg,
-            r#"<rect fill="{bg_color}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#, bg_color = crate::svg::escape_attribute(&bg_color),
-)
+            r#"<rect {bg_color} height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
+            bg_color = crate::svg::fill_attributes(&bg_color),
+        )
         .unwrap();
     }
 
@@ -6954,11 +7007,13 @@ pub fn render_with_oracle(
                 emit_entity_polygon(&mut svg, polygon);
             } else {
                 write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{start_fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:1;"/>"#,
-                        fmt_f(*cx),
-                        fmt_f(*cy), start_fill = crate::svg::escape_attribute(start_fill), start_stroke = crate::svg::escape_attribute(start_stroke),
-)
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" {start_fill}{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:1;"/>"#,
+                    fmt_f(*cx),
+                    fmt_f(*cy),
+                    start_fill = crate::svg::fill_attributes(start_fill),
+                    start_stroke = crate::svg::escape_attribute(start_stroke),
+                )
                 .unwrap();
             }
             svg.push_str("</g>");
@@ -6993,11 +7048,13 @@ pub fn render_with_oracle(
                 emit_entity_polygon(&mut svg, polygon);
             } else {
                 write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{end_inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
-                        fmt_f(*cx),
-                        fmt_f(*cy), end_inner_fill = crate::svg::escape_attribute(end_inner_fill), end_stroke = crate::svg::escape_attribute(end_stroke),
-)
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" {end_inner_fill} rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
+                    fmt_f(*cx),
+                    fmt_f(*cy),
+                    end_inner_fill = crate::svg::fill_attributes(end_inner_fill),
+                    end_stroke = crate::svg::escape_attribute(end_stroke),
+                )
                 .unwrap();
             }
             svg.push_str("</g>");
@@ -7014,8 +7071,10 @@ pub fn render_with_oracle(
                 .unwrap_or((*cx, *cy));
             write!(
                 svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
-                fmt_f(px), fmt_f(py),
+                r#"<ellipse cx="{}" cy="{}" {STATE_FILL} rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                fmt_f(px),
+                fmt_f(py),
+                STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),
             )
             .unwrap();
             let label = history_marker_label(id);
@@ -7042,7 +7101,7 @@ pub fn render_with_oracle(
                     // color set before falling back to the merged style.
                     let parser_fill = state_def
                         .and_then(|state| state.fill.as_deref())
-                        .map(crate::sequence::resolve_color);
+                        .map(resolve_state_fill_color);
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
@@ -7060,10 +7119,11 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="{fill_color}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" {fill_color} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                             fmt_f(*cx),
-                            fmt_f(*cy), fill_color = crate::svg::escape_attribute(&fill_color),
-)
+                            fmt_f(*cy),
+                            fill_color = crate::svg::fill_attributes(&fill_color),
+                        )
                         .unwrap();
                     }
                     svg.push_str("</g>");
@@ -7078,7 +7138,7 @@ pub fn render_with_oracle(
                     // ellipse while retaining the style's line color.
                     let parser_fill = state_def
                         .and_then(|state| state.fill.as_deref())
-                        .map(crate::sequence::resolve_color);
+                        .map(resolve_state_fill_color);
                     let inner_fill: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
@@ -7107,10 +7167,11 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" {inner_fill} rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                             fmt_f(*cx),
-                            fmt_f(*cy), inner_fill = crate::svg::escape_attribute(&inner_fill),
-)
+                            fmt_f(*cy),
+                            inner_fill = crate::svg::fill_attributes(&inner_fill),
+                        )
                         .unwrap();
                     }
                     svg.push_str("</g>");
@@ -7137,13 +7198,19 @@ pub fn render_with_oracle(
                         .unwrap_or_else(|| STATE_FILL.to_string());
                     write!(
                         svg,
-                        r#"<polygon fill="{fill_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
-                        fmt_f(*cx), fmt_f(top),
-                        fmt_f(right), fmt_f(*cy),
-                        fmt_f(*cx), fmt_f(bottom),
-                        fmt_f(left), fmt_f(*cy),
-                        fmt_f(*cx), fmt_f(top), fill_color = crate::svg::escape_attribute(&fill_color),
-)
+                        r#"<polygon {fill_color} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        fmt_f(*cx),
+                        fmt_f(top),
+                        fmt_f(right),
+                        fmt_f(*cy),
+                        fmt_f(*cx),
+                        fmt_f(bottom),
+                        fmt_f(left),
+                        fmt_f(*cy),
+                        fmt_f(*cx),
+                        fmt_f(top),
+                        fill_color = crate::svg::fill_attributes(&fill_color),
+                    )
                     .unwrap();
                     svg.push_str("</g>");
                 }
@@ -7196,8 +7263,10 @@ pub fn render_with_oracle(
                         .unwrap_or((*cx, *cy));
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
-                        fmt_f(px), fmt_f(py),
+                        r#"<ellipse cx="{}" cy="{}" {STATE_FILL} rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        fmt_f(px),
+                        fmt_f(py),
+                        STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),
                     )
                     .unwrap();
                     let tw = text_render::measure("H", STATE_FONT_SIZE, false);
@@ -7236,8 +7305,10 @@ pub fn render_with_oracle(
                         .unwrap_or((*cx, *cy));
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
-                        fmt_f(px), fmt_f(py),
+                        r#"<ellipse cx="{}" cy="{}" {STATE_FILL} rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        fmt_f(px),
+                        fmt_f(py),
+                        STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),
                     )
                     .unwrap();
                     let tw = text_render::measure("H*", STATE_FONT_SIZE, false);
@@ -7501,8 +7572,8 @@ pub fn render_with_oracle(
                             };
                             write!(
                                 svg,
-                                r#"<text fill="{}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                crate::svg::escape_attribute(&title_style.color),
+                                r#"<text {} font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                crate::svg::fill_attributes(&title_style.color),
                                 title_style.size as u32,
                                 fmt_f(text_w),
                                 fmt_f(text_x),
@@ -7604,8 +7675,8 @@ pub fn render_with_oracle(
                                 );
                                 write!(
                                     svg,
-                                    r#"<text fill="{}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                    crate::svg::escape_attribute(&attribute_style.color),
+                                    r#"<text {} font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                    crate::svg::fill_attributes(&attribute_style.color),
                                     attribute_style.size as u32,
                                     fmt_f(width),
                                     fmt_f(desc_x),
@@ -8015,7 +8086,14 @@ pub fn render_with_oracle(
                     "<!--{svg_comment}-->",
                     svg_comment = crate::svg::comment_text(&format!(
                         "reverse link {} to {}",
-                        edge_from_name, edge_to_name
+                        state_comment_endpoint(
+                            if solved_reversed { &t.to } else { &t.from },
+                            !solved_reversed
+                        ),
+                        state_comment_endpoint(
+                            if solved_reversed { &t.from } else { &t.to },
+                            solved_reversed
+                        )
                     )),
                 )
                 .unwrap();
@@ -8025,7 +8103,14 @@ pub fn render_with_oracle(
                     "<!--{svg_comment}-->",
                     svg_comment = crate::svg::comment_text(&format!(
                         "link {} to {}",
-                        edge_from_name, edge_to_name
+                        state_comment_endpoint(
+                            if solved_reversed { &t.to } else { &t.from },
+                            !solved_reversed
+                        ),
+                        state_comment_endpoint(
+                            if solved_reversed { &t.from } else { &t.to },
+                            solved_reversed
+                        )
                     )),
                 )
                 .unwrap();
@@ -8259,17 +8344,17 @@ pub fn render_with_oracle(
             }
             let note = &diagram.notes[position.note_index];
             write!(
-svg,
-r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="{}"><path d="{d}" fill="none" id="{from_attr}-{to_attr}" style="stroke:{};stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
-endpoint_id(from),
-endpoint_id(to),
-note.source_line,
-crate::svg::escape_attribute(&spec.link_id),
-crate::svg::escape_attribute(&skin.stroke),
-from_attr = crate::svg::escape_attribute(from),
-to_attr = crate::svg::escape_attribute(to),
-svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
-)
+                svg,
+                r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="{}"><path d="{d}" fill="none" id="{from_attr}-{to_attr}" style="stroke:{};stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
+                endpoint_id(from),
+                endpoint_id(to),
+                note.source_line,
+                crate::svg::escape_attribute(&spec.link_id),
+                crate::svg::escape_attribute(&skin.stroke),
+                from_attr = crate::svg::escape_attribute(from),
+                to_attr = crate::svg::escape_attribute(to),
+                svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+            )
             .unwrap();
         }
     }
@@ -8477,14 +8562,21 @@ fn render_arrowhead(
     let points = arrowhead_points(control, endpoint);
     write!(
         svg,
-        r#"<polygon fill="{color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{color};stroke-width:{};"/>"#,
-        fmt_f(points[0].0), fmt_f(points[0].1),
-        fmt_f(points[1].0), fmt_f(points[1].1),
-        fmt_f(points[2].0), fmt_f(points[2].1),
-        fmt_f(points[3].0), fmt_f(points[3].1),
-        fmt_f(points[4].0), fmt_f(points[4].1),
-        fmt_f(thickness), color = crate::svg::escape_attribute(color),
-)
+        r#"<polygon {state_fill_0} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{color};stroke-width:{};"/>"#,
+        fmt_f(points[0].0),
+        fmt_f(points[0].1),
+        fmt_f(points[1].0),
+        fmt_f(points[1].1),
+        fmt_f(points[2].0),
+        fmt_f(points[2].1),
+        fmt_f(points[3].0),
+        fmt_f(points[3].1),
+        fmt_f(points[4].0),
+        fmt_f(points[4].1),
+        fmt_f(thickness),
+        color = crate::svg::escape_attribute(color),
+        state_fill_0 = crate::svg::fill_attributes(color),
+    )
     .unwrap();
 }
 
@@ -8826,8 +8918,8 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             write!(
                 svg,
-                r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
-                fill = crate::svg::escape_attribute(fill),
+                r#"<polygon {fill} points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::fill_attributes(fill),
                 poly_style = crate::svg::escape_attribute(poly_style),
             )
             .unwrap();
@@ -9083,8 +9175,8 @@ fn emit_oracle_edge_verbatim(svg: &mut String, edge: &OracleEdgePath) {
             .unwrap_or("stroke:#181818;stroke-width:1;");
         write!(
             svg,
-            r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
-            fill = crate::svg::escape_attribute(fill),
+            r#"<polygon {fill} points="{points}" style="{poly_style}"/>"#,
+            fill = crate::svg::fill_attributes(fill),
             poly_style = crate::svg::escape_attribute(poly_style),
         )
         .unwrap();
@@ -9196,12 +9288,15 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             let inner_fill = rect.fill.as_deref().unwrap_or(PSEUDO_COLOR);
             write!(
                 svg,
-                r#"<g class="end_entity" data-qualified-name="{qname}" data-source-line="{source_line}" id="{entity_id}"><ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                r#"<g class="end_entity" data-qualified-name="{qname}" data-source-line="{source_line}" id="{entity_id}"><ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" {inner_fill} rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                 fmt_f(cx),
                 fmt_f(cy),
                 fmt_f(cx),
-                fmt_f(cy), qname = crate::svg::escape_attribute(qname), entity_id = crate::svg::escape_attribute(entity_id), inner_fill = crate::svg::escape_attribute(inner_fill),
-)
+                fmt_f(cy),
+                qname = crate::svg::escape_attribute(qname),
+                entity_id = crate::svg::escape_attribute(entity_id),
+                inner_fill = crate::svg::fill_attributes(inner_fill),
+            )
             .unwrap();
         }
         true
@@ -9267,12 +9362,12 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 .unwrap_or("stroke:#181818;stroke-width:1.5;");
             write!(
                 svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="{style}"/>"#,
+                r#"<ellipse cx="{}" cy="{}" {fill} rx="{}" ry="{}" style="{style}"/>"#,
                 fmt_f(cx),
                 fmt_f(cy),
                 fmt_f(rxy),
                 fmt_f(rxy),
-                fill = crate::svg::escape_attribute(fill),
+                fill = crate::svg::fill_attributes(fill),
                 style = crate::svg::escape_attribute(style),
             )
             .unwrap();
@@ -9313,22 +9408,25 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             let h_text = DEFAULT_TEXT_COLOR;
             write!(
                 svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{h_fill}" rx="{}" ry="{}" style="stroke:{h_stroke};stroke-width:0.5;"/>"#,
+                r#"<ellipse cx="{}" cy="{}" {h_fill} rx="{}" ry="{}" style="stroke:{h_stroke};stroke-width:0.5;"/>"#,
                 fmt_f(px),
                 fmt_f(py),
                 fmt_f(h_radius),
-                fmt_f(h_radius), h_fill = crate::svg::escape_attribute(h_fill), h_stroke = crate::svg::escape_attribute(h_stroke),
-)
+                fmt_f(h_radius),
+                h_fill = crate::svg::fill_attributes(h_fill),
+                h_stroke = crate::svg::escape_attribute(h_stroke),
+            )
             .unwrap();
             let tw = text_render::measure(label, STATE_FONT_SIZE, false);
             let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
             write!(
                 svg,
-                r#"<text fill="{h_text}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+                r#"<text {h_text} font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
                 fmt_f(tw),
                 fmt_f(px - tw / 2.0),
-                fmt_f(text_y), h_text = crate::svg::escape_attribute(h_text),
-)
+                fmt_f(text_y),
+                h_text = crate::svg::fill_attributes(h_text),
+            )
             .unwrap();
             return;
         }
@@ -9349,14 +9447,21 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             let fill = rect.fill.as_deref().unwrap_or(DEFAULT_STATE_FILL);
             write!(
                 svg,
-                r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/></g>"#,
+                r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><polygon {fill} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/></g>"#,
                 crate::svg::escape_attribute(&st.id),
-                fmt_f(cx), fmt_f(top),
-                fmt_f(right), fmt_f(cy),
-                fmt_f(cx), fmt_f(bottom),
-                fmt_f(left), fmt_f(cy),
-                fmt_f(cx), fmt_f(top), entity_id = crate::svg::escape_attribute(entity_id), fill = crate::svg::escape_attribute(fill),
-)
+                fmt_f(cx),
+                fmt_f(top),
+                fmt_f(right),
+                fmt_f(cy),
+                fmt_f(cx),
+                fmt_f(bottom),
+                fmt_f(left),
+                fmt_f(cy),
+                fmt_f(cx),
+                fmt_f(top),
+                entity_id = crate::svg::escape_attribute(entity_id),
+                fill = crate::svg::fill_attributes(fill),
+            )
             .unwrap();
             return;
         }
@@ -9393,13 +9498,16 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let ry = rect.rect_ry.as_deref().unwrap_or("12.5");
         write!(
             svg,
-            r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><rect fill="{fill}" height="{}" rx="{rx}" ry="{ry}" style="{style}" width="{}" x="{}" y="{}"/>"#,
+            r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><rect {fill} height="{}" rx="{rx}" ry="{ry}" style="{style}" width="{}" x="{}" y="{}"/>"#,
             crate::svg::escape_attribute(&st.id),
             fmt_f(rect.height),
             fmt_f(rect.width),
             fmt_f(rect.x),
-            fmt_f(rect.y), entity_id = crate::svg::escape_attribute(entity_id), fill = crate::svg::escape_attribute(fill), style = crate::svg::escape_attribute(style),
-)
+            fmt_f(rect.y),
+            entity_id = crate::svg::escape_attribute(entity_id),
+            fill = crate::svg::fill_attributes(fill),
+            style = crate::svg::escape_attribute(style),
+        )
         .unwrap();
         // Divider line(s) and name/description text come from the oracle's
         // captured children for byte-exact placement.
@@ -9831,6 +9939,16 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let cluster_wrapped = rect.entity_id.is_some();
         if cluster_wrapped {
             let source_line = rect.source_line.as_deref().unwrap_or("0");
+            // Cluster.drawU:309–311 uses the local Quark name and hides ## groups.
+            let comment_name = autonomous_endpoint_svg_name(&st.id, false);
+            if !comment_name.starts_with("##") {
+                write!(
+                    svg,
+                    "<!--{}-->",
+                    crate::svg::comment_text(&format!("cluster {comment_name}"))
+                )
+                .unwrap();
+            }
             write!(
                 svg,
                 r#"<g class="cluster" data-qualified-name="{}" data-source-line="{source_line}" id="{}">"#,
@@ -9845,8 +9963,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             let (d, fill) = raw.split_once("#FILL#").unwrap_or((raw, "#F1F1F1"));
             write!(
                 svg,
-                r##"<path d="{d}" fill="{fill}"/>"##,
-                fill = crate::svg::escape_attribute(fill),
+                r##"<path d="{d}" {fill}/>"##,
+                fill = crate::svg::fill_attributes(fill),
             )
             .unwrap();
         }
@@ -10344,6 +10462,32 @@ fn short_name_match(ep: &str, edge_id: &str, is_from: bool) -> bool {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn state_fill_roles_preserve_transparency_and_pinned_palette() {
+        assert_eq!(super::resolve_state_fill_color("transparent"), "#00000000");
+        assert_eq!(super::resolve_state_fill_color("none"), "none");
+        assert_eq!(super::resolve_state_fill_color("RebeccaPurple"), "#FFFFFF");
+        assert_eq!(super::resolve_state_fill_color("BUSINESS"), "#FFFFCC");
+        assert_eq!(super::resolve_state_fill_color("#9b4"), "#99BB44");
+        assert_eq!(super::resolve_state_fill_color("#3456787f"), "#3456787F");
+    }
+
+    #[test]
+    fn state_comment_names_do_not_change_layout_endpoint_projection() {
+        assert_eq!(
+            super::state_comment_endpoint("[H]Grove", false),
+            "*historical*Grove"
+        );
+        assert_eq!(
+            super::state_comment_endpoint("[H*]Grove", true),
+            "*deephistory*Grove"
+        );
+        assert_eq!(
+            super::autonomous_endpoint_svg_name("[H*]Grove", true),
+            "[H*]Grove"
+        );
+    }
+
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
 

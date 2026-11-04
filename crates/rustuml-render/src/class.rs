@@ -3959,6 +3959,18 @@ fn package_qualified_name(
     chain.join(".")
 }
 
+// Cluster.drawU:309 uses Entity.getName, before SVG metadata translation.
+// T14.23 owns nested/local identity and ambiguous translated-name recovery.
+fn root_package_comment_name<'a>(diagram: &'a ClassDiagram, qualified: &'a str) -> &'a str {
+    let mut roots = diagram.packages.iter().filter(|package| {
+        package.parent.is_none() && translate_qualified_name(&package.name) == qualified
+    });
+    match (roots.next(), roots.next()) {
+        (Some(package), None) => &package.name,
+        _ => qualified,
+    }
+}
+
 fn relationship_endpoint_name<'a>(
     diagram: &'a ClassDiagram,
     id: &'a str,
@@ -5283,7 +5295,10 @@ fn render_plantuml_svg(
         write!(
             svg,
             "<!--{svg_comment}-->",
-            svg_comment = crate::svg::comment_text(&format!("cluster {}", cluster.qualified_name)),
+            svg_comment = crate::svg::comment_text(&format!(
+                "cluster {}",
+                root_package_comment_name(diagram, &cluster.qualified_name)
+            )),
         )
         .unwrap();
         let cluster_id = cluster.entity_id.as_deref().unwrap_or("ent0002");
@@ -5488,13 +5503,19 @@ fn render_plantuml_svg(
             continue;
         }
 
-        // HTML comment before entity.
-        write!(
-            svg,
-            "<!--{svg_comment}-->",
-            svg_comment = crate::svg::comment_text(&format!("class {}", entity.label)),
-        )
-        .unwrap();
+        // GeneralImageBuilder:180 selects EntityImageObject for OBJECT;
+        // that image emits no UComment, unlike EntityImageClass:141.
+        if entity.kind != EntityKind::Object {
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!(
+                    "class {}",
+                    relationship_endpoint_name(diagram, &entity.id)
+                )),
+            )
+            .unwrap();
+        }
 
         // Entity group wrapper.
         write!(
@@ -5847,6 +5868,8 @@ fn render_plantuml_svg(
 }
 
 struct LayoutPackageCluster {
+    // Root Quark name is recoverable; nested identity remains T14.23.
+    comment_name: Option<String>,
     package_idx: usize,
     kind: PackageKind,
     qualified_name: String,
@@ -5914,6 +5937,7 @@ fn layout_package_clusters(
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
             Some(LayoutPackageCluster {
+                comment_name: pkg.parent.is_none().then(|| pkg.name.clone()),
                 package_idx: idx,
                 kind,
                 qualified_name: package_qualified_name(diagram, &package_render.parent_pkg, idx),
@@ -5952,6 +5976,8 @@ fn package_cluster_depth_first_order(package_render: &PackageRenderModel) -> Vec
 }
 
 struct EmptyPackageLayout {
+    // Root Quark name is recoverable; nested identity remains T14.23.
+    comment_name: Option<String>,
     package_idx: usize,
     qualified_name: String,
     source_line: usize,
@@ -5999,6 +6025,7 @@ fn layout_empty_packages(
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
             Some(EmptyPackageLayout {
+                comment_name: package.parent.is_none().then(|| package.name.clone()),
                 package_idx,
                 qualified_name: package_qualified_name(
                     diagram,
@@ -6025,7 +6052,13 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
     write!(
         svg,
         "<!--{svg_comment}-->",
-        svg_comment = crate::svg::comment_text(&format!("entity {}", &package.qualified_name)),
+        svg_comment = crate::svg::comment_text(&format!(
+            "entity {}",
+            package
+                .comment_name
+                .as_deref()
+                .unwrap_or(&package.qualified_name)
+        )),
     )
     .unwrap();
     write!(
@@ -6483,7 +6516,13 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     write!(
         svg,
         "<!--{svg_comment}-->",
-        svg_comment = crate::svg::comment_text(&format!("cluster {}", &cluster.qualified_name)),
+        svg_comment = crate::svg::comment_text(&format!(
+            "cluster {}",
+            cluster
+                .comment_name
+                .as_deref()
+                .unwrap_or(&cluster.qualified_name)
+        )),
     )
     .unwrap();
     write!(

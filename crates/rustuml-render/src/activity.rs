@@ -28372,6 +28372,13 @@ svg_comment = crate::svg::comment_text(&format!("cluster {}" , label)),
 
 #[allow(clippy::approx_constant)]
 fn emit_legacy_v1_start_edge(out: &mut String, target: &str, x: f64, target_y: f64) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link start to {}", target))
+    )
+    .unwrap();
     write!(
         out,
         r##"<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="1" id="lnk4"><path d="M{},26.33 C{},36.59 {},47.28 {},{}" fill="none" id="start-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
@@ -28397,6 +28404,13 @@ fn emit_legacy_v1_start_edge(out: &mut String, target: &str, x: f64, target_y: f
 
 #[allow(clippy::approx_constant)]
 fn emit_legacy_v1_partition_start_edge(out: &mut String, target: &str, x: f64, target_y: f64) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link start to {}", target))
+    )
+    .unwrap();
     write!(
         out,
         r##"<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="2" id="lnk5"><path d="M{},61.33 C{},71.59 {},82.28 {},{}" fill="none" id="start-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
@@ -28421,6 +28435,13 @@ fn emit_legacy_v1_partition_start_edge(out: &mut String, target: &str, x: f64, t
 }
 
 fn emit_legacy_v1_up_start_edge(out: &mut String, target: &str, x: f64, target_y: f64) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link start to {}", target))
+    )
+    .unwrap();
     // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_arrow_up.svg.
     write!(
         out,
@@ -28456,6 +28477,13 @@ fn emit_legacy_v1_action_edge(
     to_y: f64,
     action_h: f64,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link {} to {}", from, to))
+    )
+    .unwrap();
     let source_line = idx + 2;
     let from_ent = format!("ent{:04}", 3 + idx * 2);
     let to_ent = format!("ent{:04}", 5 + idx * 2);
@@ -28506,6 +28534,13 @@ fn emit_legacy_v1_action_edge_numbered(
     to_y: f64,
     action_h: f64,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link {} to {}", from, to))
+    )
+    .unwrap();
     let bottom = from_y + action_h;
     write!(
         out,
@@ -28545,6 +28580,13 @@ fn emit_legacy_v1_up_edge(
     to: &LegacyActionNode,
     action_h: f64,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("reverse link {} to {}", from.label, to.label))
+    )
+    .unwrap();
     // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_arrow_up.svg.
     let source_line = idx + 2;
     let from_ent = format!("ent{:04}", 5 + idx * 2);
@@ -28593,6 +28635,13 @@ fn emit_legacy_v1_right_edge(
     to: &LegacyActionNode,
     action_h: f64,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link {} to {}", from.label, to.label))
+    )
+    .unwrap();
     let source_line = idx + 2;
     let from_ent = format!("ent{:04}", 3 + idx * 2);
     let to_ent = format!("ent{:04}", 5 + idx * 2);
@@ -28647,6 +28696,13 @@ fn emit_legacy_v1_left_edge(
     to: &LegacyActionNode,
     action_h: f64,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("reverse link {} to {}", to.label, from.label))
+    )
+    .unwrap();
     let source_line = idx + 2;
     let from_ent = format!("ent{:04}", 5 + idx * 2);
     let to_ent = format!("ent{:04}", 3 + idx * 2);
@@ -28699,6 +28755,13 @@ fn emit_legacy_v1_up_end_edge(
     action_h: f64,
     end_cy: f64,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link {} to end", &from.label))
+    )
+    .unwrap();
     // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_arrow_up.svg.
     let from_ent = format!("ent{:04}", 3 + idx * 2);
     let end_ent = format!("ent{:04}", 6 + idx * 2);
@@ -28745,6 +28808,13 @@ fn emit_legacy_v1_end_edge(
     end_cy: f64,
     id_bump: usize,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link {} to end", &from.label))
+    )
+    .unwrap();
     let from_ent = format!("ent{:04}", 3 + idx * 2);
     let end_ent = format!("ent{:04}", 5 + idx * 2 + id_bump);
     let link = format!("lnk{}", 6 + idx * 2 + id_bump);
@@ -28792,6 +28862,13 @@ fn emit_legacy_v1_end_edge_numbered(
     action_h: f64,
     end_cy: f64,
 ) {
+    // SvekEdge.drawU:837 emits Link.commentForSvg before the edge elements.
+    write!(
+        out,
+        "<!--{}-->",
+        crate::svg::comment_text(&format!("link {} to end", &from.label))
+    )
+    .unwrap();
     let bottom = from.y + action_h;
     write!(
         out,

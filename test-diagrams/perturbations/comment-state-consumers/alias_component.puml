@@ -1,0 +1,5 @@
+@startuml
+component "Visible Unit" as U
+component "Visible Peer" as V
+U --> V
+@enduml

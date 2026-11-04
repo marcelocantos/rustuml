@@ -1,0 +1,5 @@
+@startuml
+node "Visible Host" as H
+node "Visible Disk" as D
+H --> D
+@enduml

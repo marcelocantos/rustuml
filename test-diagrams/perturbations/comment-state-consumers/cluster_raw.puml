@@ -1,0 +1,5 @@
+@startuml
+package "Shelf<!--]]>--" {
+class Seed
+}
+@enduml

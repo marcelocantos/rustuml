@@ -1,0 +1,7 @@
+@startuml
+package "Outer Display" as O {
+package "Inner Display" as I {
+class Leaf
+}
+}
+@enduml

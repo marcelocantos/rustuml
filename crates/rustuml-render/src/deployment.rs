@@ -443,6 +443,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             .unwrap_or_else(|| format!("lnk{}", i));
         render_connection(
             &mut svg,
+            diagram,
             conn,
             oracle,
             &id_for_node,
@@ -784,6 +785,26 @@ fn own_qname(node: &DeploymentNode) -> String {
     }
 }
 
+// EntityImageDescription.drawU:289 / Cluster.drawU:309 use the local Quark
+// name, not the display or metadata-translated name. T14.23 owns the
+// remaining explicit-alias/derived-id ambiguity in DeploymentNode.
+fn deployment_comment_name(node: &DeploymentNode) -> &str {
+    if label_to_id(&node.label) == node.id {
+        &node.label
+    } else {
+        &node.id
+    }
+}
+
+fn deployment_comment_endpoint<'a>(diagram: &'a DeploymentDiagram, id: &'a str) -> &'a str {
+    diagram
+        .nodes
+        .iter()
+        .find(|node| node.id == id)
+        .map(deployment_comment_name)
+        .unwrap_or(id)
+}
+
 struct OracleRenderContext<'a> {
     oracle: &'a OracleLayout,
     id_for_node: &'a HashMap<String, String>,
@@ -819,7 +840,8 @@ fn emit_clusters_dfs(
                 .unwrap_or_else(|| node.source_line.to_string());
             svg.raw(&format!(
                 "<!--{svg_comment}-->",
-                svg_comment = crate::svg::comment_text(&format!("cluster {}", node.label)),
+                svg_comment =
+                    crate::svg::comment_text(&format!("cluster {}", deployment_comment_name(node))),
             ));
             svg.raw(&format!(
                 r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
@@ -965,7 +987,8 @@ fn emit_entity(
             .unwrap_or_else(|| node.source_line.to_string());
         svg.raw(&format!(
             "<!--{svg_comment}-->",
-            svg_comment = crate::svg::comment_text(&format!("entity {}", node.label)),
+            svg_comment =
+                crate::svg::comment_text(&format!("entity {}", deployment_comment_name(node))),
         ));
         svg.raw(&format!(
             r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
@@ -3321,6 +3344,7 @@ fn find_oracle_connection_edge<'a>(
 
 fn render_connection(
     svg: &mut SvgBuilder,
+    diagram: &DeploymentDiagram,
     conn: &DeploymentConnection,
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
@@ -3381,10 +3405,12 @@ fn render_connection(
     let is_reverse = oracle_edge
         .map(|e| e.id.contains("-backto-"))
         .unwrap_or(false);
+    let from_comment = deployment_comment_endpoint(diagram, &conn.from);
+    let to_comment = deployment_comment_endpoint(diagram, &conn.to);
     let (comment_from, comment_to) = if is_reverse {
-        (&to_qname, &from_qname)
+        (to_comment, from_comment)
     } else {
-        (&from_qname, &to_qname)
+        (from_comment, to_comment)
     };
     let prefix = if is_reverse { "reverse link" } else { "link" };
     svg.raw(&format!(
@@ -5732,14 +5758,20 @@ fn render_no_oracle_edges(
         if reversed {
             svg.raw(&format!(
                 "<!--{svg_comment}-->",
-                svg_comment =
-                    crate::svg::comment_text(&format!("reverse link {} to {}", conn.to, conn.from)),
+                svg_comment = crate::svg::comment_text(&format!(
+                    "reverse link {} to {}",
+                    deployment_comment_endpoint(diagram, &conn.to),
+                    deployment_comment_endpoint(diagram, &conn.from)
+                )),
             ));
         } else {
             svg.raw(&format!(
                 "<!--{svg_comment}-->",
-                svg_comment =
-                    crate::svg::comment_text(&format!("link {} to {}", conn.from, conn.to)),
+                svg_comment = crate::svg::comment_text(&format!(
+                    "link {} to {}",
+                    deployment_comment_endpoint(diagram, &conn.from),
+                    deployment_comment_endpoint(diagram, &conn.to)
+                )),
             ));
         }
         let link_type = if conn.arrow_at_start || conn.arrow_at_end {
