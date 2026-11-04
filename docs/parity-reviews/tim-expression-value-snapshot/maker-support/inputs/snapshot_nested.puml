@@ -1,0 +1,10 @@
+@startuml
+!$n=1
+!function $advance()
+!$n=$n+1
+!return 1
+!endfunction
+!$a=%substr("abcdefgh",$advance()+$n,1)+$n
+!$b=%get_variable_value("$n")
+class "$a / $b" as Snapshot
+@enduml

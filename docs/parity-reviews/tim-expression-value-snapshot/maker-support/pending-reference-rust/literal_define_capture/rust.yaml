@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "OLD / new / 1" as Captured
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Captured
+  entities:
+  - id: Captured
+    label: OLD / new / 1
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 10
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

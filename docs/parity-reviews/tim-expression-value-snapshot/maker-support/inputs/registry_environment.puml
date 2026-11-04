@@ -1,0 +1,6 @@
+@startuml
+!$a=%getenv("path.separator")
+!$b=%strlen(%getenv("line.separator"))
+!$c=%getenv("plantuml.rustuml.tim4.absent")
+class "$a / $b / [$c]" as Environment
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!$data={"z":"007","a":2}
+!$text=""
+!foreach $key in $data
+!$text=$text+$key
+!endfor
+class "$text / $key" as Keys
+@enduml

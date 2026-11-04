@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "fo / 80000000 / 0 / ab / 6" as Window
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Window
+  entities:
+  - id: Window
+    label: fo / 80000000 / 0 / ab / 6
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,12 @@
+@startuml
+!$count=0
+!function $tick()
+!$count=$count+1
+!return "OLD"
+!endfunction
+!define TOKEN $tick()
+!define COPY TOKEN
+!define TOKEN new
+!define OLD changed
+class "COPY / TOKEN / $count" as Captured
+@enduml

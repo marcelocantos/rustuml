@@ -1,0 +1,10 @@
+@startuml
+!$n=0
+!startsub	local
+!$n=$n+1
+!endsub
+!$which="local"
+!includesub $which
+!includesub local
+class "$n" as Replayed
+@enduml

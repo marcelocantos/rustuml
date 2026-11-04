@@ -1,0 +1,10 @@
+@startuml
+!$hi=%substr("😀",0,1)
+!$lo=%substr("😀",1,1)
+!$whole=$hi+$lo
+!$a=%strlen($hi)
+!$b=%strlen($lo)
+!$c=%strlen($whole)
+!$d=%strpos($whole,"😀")
+class "$a / $b / $c / $d" as Units
+@enduml
