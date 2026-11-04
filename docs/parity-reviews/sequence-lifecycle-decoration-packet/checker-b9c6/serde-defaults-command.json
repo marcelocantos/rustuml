@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/serde_defaults.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/target-after/release/deps",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "--extern",
+    "serde_json=/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/target-after/release/deps/libserde_json-4a753cf8612a29da.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/serde_defaults"
+  ],
+  "run": [
+    "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/serde_defaults"
+  ],
+  "exit": 0
+}

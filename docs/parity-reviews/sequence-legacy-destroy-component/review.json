@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-legacy-destroy-component",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A185d7cbb-70b4-4f24-9abb-f542386743b4",
+    "model": "gpt-6-astra / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "bc18300d13f13f31b50018abe57bfff4bec637db",
+  "implementation_commit": "19074587f391b3b0bd5306cdce116fb564d06f97",
+  "implementation_commits": [
+    "19074587f391b3b0bd5306cdce116fb564d06f97"
+  ],
+  "tested_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "production_revision": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+  "before_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "cargo check -p rustuml-parser -p rustuml-render",
+    "cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one (separate private before/after source and target directories; checks.json)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT (exact invocations in replay-commands.json/fresh-commands.json/supplement-commands.json)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent relay; per-case exact substituted argv in provenance and raw results)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "cargo test --release -p rustuml-oracle --test parity_perturbations -- --nocapture",
+    "rustfmt --check --edition 2024 crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/ascii.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k0.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k0.svg",
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "e3a935719e9c2b522c881278d6d9863b5168c939cef6bbe115235364494aa2e6",
+      "golden_sha256": "de4cb7ff391e18a67344faf4cc0e36a14a544f80302b037f74a18e75fac2ca77",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k1.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k1.svg",
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "ad051c5d362d35e32134feef30e1de2deae16f98b0a3155b009da0832aaa45c4",
+      "golden_sha256": "1895c845e69018508f65c5c7182f223cf34c60e0e4b330baf4a740d42cef9377",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k2.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k2.svg",
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "613ba34418bf46c4ff817973f90b8114e6765fe5c96e31992116ebb4befb74f3",
+      "golden_sha256": "f4a8c8cf5bec6663c40a42605f6ec78ed91d83bc9aa045c5fac5a44143474fb7",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k2.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k2.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k3.puml",
+      "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k3.svg",
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "0d1cd14db61ee90ebd87dbda4ae3186f2f00827517ee1b6b48c42326b33b44a7",
+      "golden_sha256": "2b9744c277a236bae50636aaa21f33f9fbb77ad3569d353187e10aa80e2d0209",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k3.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k3.before.svg"
+    }
+  ],
+  "findings": [
+    "Accepted only legacy attached-destroy end-level placement and standalone preferred-height allocation at the full tested candidate, including self depth2, notes, group END, CREATE, repeated standalone destroys. Does not accept Teoz destruction ordering, arbitrary styled destruction, or full legacy life variation/finish semantics.",
+    "All source accounts and refinements precede their implementation commits; source audit found no fixture-label matching, golden reads in shipping additions, branch-count ladders, or coordinate-keyed output surgery. The moved generic created-head group unwrapping existed before this packet. Constants and remaining style provenance limitations are recorded in source-audit.json.",
+    "Independent1828 CLI replay: before1208 matches/581 valid mismatches/39 invalid; after1232/557/39;24 gains,0 lost passes,0 valid CLI errors/panics/timeouts. Both source/reference and before/after output hashes match archived evidence. Duplicate48 entries retained; frozen955=403 matches/542 mismatches/10 invalid. Nineteen corrected negative rejections are separate from positive matches.",
+    "Main library tiers:11181/11251 product and10497/11251 assisted, sequence1411/1411; units567 parser+783 renderer and13 CLI pass. Both main tiers exit101; guards4/6 exit101; changed-file formatting exits0. Initial main-tier invocation failed setup on the empty submodule before rendering; exact pinned golden archive restored and one populated-corpus run performed. All nonzero test exits retained.",
+    "Standing perturbations after49 fresh additions:637/1240 match,603 fail, exit101. Invalid Java references count as failures in that unchanged positive suite. The six new mechanism reviews do not supersede any historical rejection; fifteen deferred checker mismatches, prior542 failures, remaining negative semantics, shared fonts/styles/entities and cwd dependencies remain active. Parent1449 overlaps1123 paths;326 parent-only inputs remain unmeasured here."
+  ],
+  "verdict": "accepted",
+  "acceptance_scope": "Accepted only legacy attached-destroy end-level placement and standalone preferred-height allocation at the full tested candidate, including self depth2, notes, group END, CREATE, repeated standalone destroys. Does not accept Teoz destruction ordering, arbitrary styled destruction, or full legacy life variation/finish semantics.",
+  "evidence": "docs/parity-reviews/sequence-lifecycle-decoration-packet/checker-b9c6/README.md",
+  "reference_provenance": {
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "timezone": "GMT+11:00",
+    "frontend": "raw pipe; no GET or source normalization",
+    "runtime": "Remote Homebrew Java21.0.5 / Graphviz12.2.0, source-pinned jar differs from historical binary; font/Graphviz equivalence is not universal",
+    "raw_batches": [
+      "reference-results.json.gz",
+      "supplement-results.json.gz"
+    ]
+  },
+  "historical_reviews_unchanged": true
+}

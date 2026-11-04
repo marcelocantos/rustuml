@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-event-identity",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A185d7cbb-70b4-4f24-9abb-f542386743b4",
+    "model": "gpt-6-astra / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+  "implementation_commit": "e6a4d41b3a2210cc5c0a8f6047d25edd39bbb07d",
+  "implementation_commits": [
+    "e6a4d41b3a2210cc5c0a8f6047d25edd39bbb07d"
+  ],
+  "tested_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "production_revision": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+  "before_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "cargo check -p rustuml-parser -p rustuml-render",
+    "cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one (separate private before/after source and target directories; checks.json)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT (exact invocations in replay-commands.json/fresh-commands.json/supplement-commands.json)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent relay; per-case exact substituted argv in provenance and raw results)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "cargo test --release -p rustuml-oracle --test parity_perturbations -- --nocapture",
+    "rustfmt --check --edition 2024 crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/ascii.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e0.svg",
+      "axes": [
+        "parallel ancestry length three",
+        "destroy with nested return ownership",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "6d2ba0afac189e3a64d8677b83ca11eb98f447785a4ab7dc201633b376bc35bd",
+      "golden_sha256": "755ff8db293affe7517fddf26154e76b9d4b78f7bb680c3feeccf13f3483d7db",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.svg",
+      "axes": [
+        "external return ownership",
+        "RGBA return color",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "3cd01fd4d3c37f8c4d9824b096ca1fbaaf1b1670c3fefc2c40ba8330205a0b3e",
+      "golden_sha256": "9d58f138f5ccb5c885577a2d6b5d473715afab360c19b5847da481fcb6bfdc0c",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.svg",
+      "axes": [
+        "activation close",
+        "symbolic valid return color",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "3309b5a0ce2912abdb3fee47e3e4cfa591dab862a7631f1bb5fcd68b3bd4a074",
+      "golden_sha256": "1e7f96b3ada29b8614832e4ee6d877ffed7b98796f2f387334b1859636582140",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.svg",
+      "axes": [
+        "fallback repeated return",
+        "one and eight digit valid colors",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "ce156cb4d7d2966496368a2b5c8b544868057c2cc41146312a3b93174709f285",
+      "golden_sha256": "2956dc5ede18f7db5fedbb5516227e15326be30ea484c42db214306eddeea4f7",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.svg",
+      "axes": [
+        "self event ignores other participant prohibition",
+        "command stack owns unrelated activation",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "34c87ccc0905ce78936bc35eff392161cb1b14a0791d59b3a0f1ba33aeef60c8",
+      "golden_sha256": "79ba3829cd07d83e90fcae83e5cc99708036e86a9190a71baeb8c69249ef9bba",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.svg",
+      "axes": [
+        "negative same-message reactivation",
+        "note preserves owner",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "f8ef2f25d7d3724bab9c050e8731ebf65b1e5154631244aef5ff6c1d36d48df9",
+      "golden_sha256": "182873cd84c7f7858494b929245eacc938db7deddf5466583e6079ec2954361c",
+      "java_exit": 200,
+      "rust_cli_exit": 1,
+      "comparator_exit": 2,
+      "reference_validity": "invalid Java error output; excluded from positive parity",
+      "negative_semantics": "both reject; correct negative behavior, not an SVG pass",
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.svg",
+      "axes": [
+        "negative unknown return color",
+        "internal fallback",
+        "engine=0"
+      ],
+      "result": "fail",
+      "source_sha256": "62ed277b2e6b93229110c0b637cecf73541d64291429cbf104a51e9111d5c30f",
+      "golden_sha256": "63de38a5837d67923611eb8ad5a09cb82adbf473bce9207652bc405815c40faa",
+      "java_exit": 200,
+      "rust_cli_exit": 1,
+      "comparator_exit": 2,
+      "reference_validity": "invalid Java error output; excluded from positive parity",
+      "negative_semantics": "both reject; correct negative behavior, not an SVG pass",
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.svg",
+      "axes": [
+        "parallel ancestry length three",
+        "destroy with nested return ownership",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "6762d26901f4babef9d6bacdeb43966091c22ea57c56400dadfe15973587ac8a",
+      "golden_sha256": "b4b976bfe73ea29e2c7be4684acfc6215ffc6e2652d5917dcbdde879f2fe86e9",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.svg",
+      "axes": [
+        "external return ownership",
+        "RGBA return color",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "0c78713272fa350cc28db4115b9664baf76d433754cec77a89d1538e6d21b8a6",
+      "golden_sha256": "097f9eb4acbaf18fe52d3d3f0fd00f194ba573f958661d5938925b99be7d095b",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.svg",
+      "axes": [
+        "activation close",
+        "symbolic valid return color",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "7dc206004d4d560ff1b09c24fc24ec21fba41ae359f90ba49f0c768523c5db5f",
+      "golden_sha256": "96a713158896c5ef88a005d6e8be4eab79f3db373029032f97558e7141bfd702",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.svg",
+      "axes": [
+        "fallback repeated return",
+        "one and eight digit valid colors",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "69e93a6d30f3929e8dc5bbc160330591b547561a7338b60cc74fed434280c48d",
+      "golden_sha256": "93018a6428ce0d786f4a51952a52a6aa119308085293e37935e2865fc0f78123",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 1,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e1.svg",
+      "axes": [
+        "self event ignores other participant prohibition",
+        "command stack owns unrelated activation",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "eccb7a3c19a95e32c767c620c606986161a5c304fd7b2073cc027bd20a8124dd",
+      "golden_sha256": "1cce3420c65e18bf820aecf94bffba7c9e5df37af27aa92e62ddaa11c92884b6",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.svg",
+      "axes": [
+        "negative same-message reactivation",
+        "note preserves owner",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "371a9b045223378f2a6ad8a8fa2ca6186ce1e62d225fd941ac01a7f7b3688129",
+      "golden_sha256": "2e6c92f4dbbc2fc0e75e7811ab1ef81e893910ed27761fc744e724bb3a9b206a",
+      "java_exit": 200,
+      "rust_cli_exit": 1,
+      "comparator_exit": 2,
+      "reference_validity": "invalid Java error output; excluded from positive parity",
+      "negative_semantics": "both reject; correct negative behavior, not an SVG pass",
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.svg",
+      "axes": [
+        "negative unknown return color",
+        "internal fallback",
+        "engine=1"
+      ],
+      "result": "fail",
+      "source_sha256": "99fbae871ab4a5a856f0bf2ffc0c842fc3c4eb25a63f990063c21bde89e37c98",
+      "golden_sha256": "bd81d883c551717a10a7c9db8663ca971a58825b547456661e30d742b175d1c3",
+      "java_exit": 200,
+      "rust_cli_exit": 1,
+      "comparator_exit": 2,
+      "reference_validity": "invalid Java error output; excluded from positive parity",
+      "negative_semantics": "both reject; correct negative behavior, not an SVG pass",
+      "rust_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.before.svg"
+    }
+  ],
+  "findings": [
+    "B9-COLOR: The validator correctly admits the pinned 157 names/symbols and 1/3/6/8-digit hex grammar, but the resolved return carries an untyped color string into a renderer handling only 3/6-digit hex and a subset of named colors. Java returns HColorNone for transparent and an XColor with alpha for eight digits; Rust emits white for transparent, literal #a instead of #AAAAAA, and an unexpanded RGBA fill without Java's fill-opacity. External return destinations and geometry match in the isolated RGBA controls; these are shared color-model failures, not evidence that command ownership is wrong. Next repair: Preserve normalized color semantics through the sequence return arrow configuration and SVG color writer, including no-paint, single-nibble gray and alpha; do not weaken comparison or reject these valid Java colors. Keep the command validation improvement bounded and retain this downstream dependency.",
+    "B9-LEGACY-LIFE: A self message permits a different participant's deactivate/activate pair and still owns the command stack entry. The new resolver preserves that correctly. Java LifeLine.finish counts raw accepted LARGER minus SMALLER variations, so an unmatched earlier close cancels the later open in its missing-close count; getSegment then ends the final unclosed opening at the last variation itself, yielding a zero-height Cedar segment. Rust's open-stack painter discards the unmatched close and unconditionally closes the remaining open at the diagram tail, emitting an extra Cedar activation bar. The Teoz counterpart passes because it uses the separate stairs model. Next repair: Model legacy finish/getSegment from the accepted ordered variation stream, including unmatched-close history; keep that paint history separate from the now-correct return owner stack.",
+    "B9-PARALLEL-CONTACT: Rust uses event_y_positions (message stroke/callback ordinate) as the common parallel contact for all message kinds. Java aligns component getYPoint, which for a self component is text height plus half of the 13-unit loop plus paddingX, whereas ordinary arrows use text height plus paddingY. These are separate from the self callback's activation-dependent p1/p2. The fresh chain and multiline controls leave ordinary messages and their activation starts 2.5 units too high while the self component matches. This is not a label-metric discrepancy. Next repair: Represent tile contact, drawing origin, callback ordinates and extent below contact separately, and compose their maxima exactly as TileParallel; do not add a case-specific 2.5 offset.",
+    "Parser serialization probe independently confirms both parallel fields preserve true and default absent old JSON fields to false. The color name/symbol set exactly equals157 Java registrations/symbols. Four fresh invalid controls reject correctly. Command stack ownership is distinct from paint acceptance, but the declared product mechanism still has live rendering dependencies; validation success alone is not acceptance.",
+    "All source accounts and refinements precede their implementation commits; source audit found no fixture-label matching, golden reads in shipping additions, branch-count ladders, or coordinate-keyed output surgery. The moved generic created-head group unwrapping existed before this packet. Constants and remaining style provenance limitations are recorded in source-audit.json.",
+    "Independent1828 CLI replay: before1208 matches/581 valid mismatches/39 invalid; after1232/557/39;24 gains,0 lost passes,0 valid CLI errors/panics/timeouts. Both source/reference and before/after output hashes match archived evidence. Duplicate48 entries retained; frozen955=403 matches/542 mismatches/10 invalid. Nineteen corrected negative rejections are separate from positive matches.",
+    "Main library tiers:11181/11251 product and10497/11251 assisted, sequence1411/1411; units567 parser+783 renderer and13 CLI pass. Both main tiers exit101; guards4/6 exit101; changed-file formatting exits0. Initial main-tier invocation failed setup on the empty submodule before rendering; exact pinned golden archive restored and one populated-corpus run performed. All nonzero test exits retained.",
+    "Standing perturbations after49 fresh additions:637/1240 match,603 fail, exit101. Invalid Java references count as failures in that unchanged positive suite. The six new mechanism reviews do not supersede any historical rejection; fifteen deferred checker mismatches, prior542 failures, remaining negative semantics, shared fonts/styles/entities and cwd dependencies remain active. Parent1449 overlaps1123 paths;326 parent-only inputs remain unmeasured here."
+  ],
+  "verdict": "rejected",
+  "acceptance_scope": "Rejected at the product path; bounded improvements are not full closure. Shared dependencies remain part of the claim.",
+  "evidence": "docs/parity-reviews/sequence-lifecycle-decoration-packet/checker-b9c6/README.md",
+  "reference_provenance": {
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "timezone": "GMT+11:00",
+    "frontend": "raw pipe; no GET or source normalization",
+    "runtime": "Remote Homebrew Java21.0.5 / Graphviz12.2.0, source-pinned jar differs from historical binary; font/Graphviz equivalence is not universal",
+    "raw_batches": [
+      "reference-results.json.gz",
+      "supplement-results.json.gz"
+    ]
+  },
+  "historical_reviews_unchanged": true
+}

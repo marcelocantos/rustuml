@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "purpose": "Independent boundary discrimination: separate style/alignment from escaped multiline Display handling",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "cases": [
+    {
+      "name": "checker_b9c6_alignment_k0_single",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k0_single.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k0_single.puml",
+      "source_sha256": "cbd8697d21f3e381e96d7332218c66b6e1614b0a09231b2359d8a89cf02563b9",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k1_single",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k1_single.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k1_single.puml",
+      "source_sha256": "53c1a9117e7d9b28cf66b856f84d651521c5e571b39f2783bf140f969dabc0b3",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k2_single",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k2_single.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k2_single.puml",
+      "source_sha256": "4eba3428f8fdfc24d76c182922562eb5542d0c3439fbc4e31b1102abaf2d6583",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k3_single",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k3_single.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k3_single.puml",
+      "source_sha256": "0316c83984bd74c0a1f8ff1d47f5c40308177b702981a43c542ee2ed8ab16cdc",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k4_single",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k4_single.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k4_single.puml",
+      "source_sha256": "14ec0d39f60747c4b89022e5d0bece436293441d1e909c02414662e36e6fdd1a",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0",
+        "single-line control isolates escaped-note dependency"
+      ]
+    },
+    {
+      "name": "checker_b9c6_envelope_escaped",
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_envelope_escaped.puml",
+      "remote_relative_name": "checker_b9c6_envelope_escaped.puml",
+      "source_sha256": "bcd1ca1f6089bd448e6151559d35234e4408acfefc97ef0a026163579ff559e3",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "multiline via escaped Display versus block",
+        "reverse arrow and active endpoint"
+      ]
+    },
+    {
+      "name": "checker_b9c6_envelope_block",
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_envelope_block.puml",
+      "remote_relative_name": "checker_b9c6_envelope_block.puml",
+      "source_sha256": "c986e7a6879b8bdc9bc3a42da5d854c9006e52c305826b8fd98cf02112cce2db",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "multiline via escaped Display versus block",
+        "reverse arrow and active endpoint"
+      ]
+    }
+  ]
+}

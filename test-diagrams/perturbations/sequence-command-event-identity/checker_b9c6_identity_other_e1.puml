@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : enter
+Birch -> Birch : self
+deactivate Cedar
+activate Cedar
+return leave
+@enduml

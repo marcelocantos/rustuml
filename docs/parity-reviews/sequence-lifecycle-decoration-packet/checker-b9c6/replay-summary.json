@@ -1,0 +1,84 @@
+{
+  "entries": 1828,
+  "before": {
+    "1": 581,
+    "0": 1208,
+    "2": 39
+  },
+  "after": {
+    "1": 557,
+    "0": 1232,
+    "2": 39
+  },
+  "gains": [
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth1.puml",
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_parallel.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_parallel.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_create_then_destroy.puml",
+    "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_standalone_destroy.puml",
+    "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_cross.puml",
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_nested_after_destroy.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e0_d3.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e0_p1.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d2.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_note.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_group.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d1.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d3.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e1_p1.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d2.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_note.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_group.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d2.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d2.puml"
+  ],
+  "lost": [],
+  "corrected_negatives": [
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.puml"
+  ],
+  "valid_cli_errors": [],
+  "panics": [],
+  "timeouts": [],
+  "archive_status_errors": [],
+  "hash_errors": [],
+  "product_library": {
+    "1": 557,
+    "0": 1232,
+    "2": 38,
+    "101": 1
+  },
+  "assisted_library": {
+    "1": 600,
+    "0": 1189,
+    "2": 38,
+    "101": 1
+  },
+  "valid_cli_equals_product_library": 1789,
+  "frozen955": {
+    "1": 542,
+    "0": 403,
+    "2": 10
+  }
+}
