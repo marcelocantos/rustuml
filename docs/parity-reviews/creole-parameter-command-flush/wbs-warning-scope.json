@@ -1,0 +1,27 @@
+{
+  "base_revision": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "status": "Research handoff only; no warning implementation drafted",
+  "java_locations": [
+    "wbs/CommandWBSItemOld.java:115 diagram.addWarning",
+    "TitledDiagram.java:310-316 pragma collection and preprocessing warnings merged",
+    "TitledDiagram.java:462 DiagramChromeFactory12026.create",
+    "core/DiagramChromeFactory12026.java:138-148 warning decoration before frame/title/header/footer;155-245 WarningBannerBlock measurement, painting and child translation"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/mod.rs::DiagramMeta lacks shared warning metadata",
+    "crates/rustuml-render/src/lib.rs shared diagram dispatch/decorations outside ownership",
+    "crates/rustuml-render/src/wbs.rs no warning collection or shared chrome"
+  ],
+  "scope_proposal": "Separate shared warning metadata with backward-compatible empty serialization, source-directed warning collection at parse/wbs.rs old-order selection, and renderer-wide warning block composition before existing title/frame decorations. Requires ownership of diagram/mod.rs and shared decoration/dispatch module after exact tracing by owner. Do not synthesize warning from label/source or add WBS coordinate offsets. Existing four owned files alone do not provide the common model/composition boundary.",
+  "retained_failures": [
+    "checker30/shape_colors_old",
+    "supplement8/s_shape_color_literals",
+    "new15/wbs_shape_color"
+  ],
+  "invariants": [
+    "New-order shape/color parsing and whitespace literal labels remain independent",
+    "Existing Box serialization omission/default and None representation unchanged",
+    "No geometry compensation or WBS-only SVG surgery"
+  ]
+}
