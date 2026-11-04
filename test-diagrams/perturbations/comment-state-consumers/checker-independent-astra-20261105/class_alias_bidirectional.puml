@@ -1,0 +1,6 @@
+@startuml
+class "Copper Lantern" as Lantern
+interface "Glass Beacon" as Beacon
+Lantern --> Beacon
+Lantern <.. Beacon
+@enduml

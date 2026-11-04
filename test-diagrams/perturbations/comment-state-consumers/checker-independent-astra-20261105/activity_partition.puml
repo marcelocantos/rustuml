@@ -1,0 +1,7 @@
+@startuml
+partition "Copper Room" {
+(*) --> "Weigh brass"
+--> "Polish silver"
+--> (*)
+}
+@enduml

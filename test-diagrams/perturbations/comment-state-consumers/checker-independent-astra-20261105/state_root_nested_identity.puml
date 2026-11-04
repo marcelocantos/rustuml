@@ -1,0 +1,13 @@
+@startuml
+state "Public Harbor" as Harbor {
+state "Inner Dock" as Dock {
+state "Private Berth" as Berth
+}
+state "Open Water" as Water
+Dock --> Water
+}
+state "Other Harbor" as Other {
+state Pier
+}
+Harbor --> Other
+@enduml

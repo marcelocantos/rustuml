@@ -1,0 +1,14 @@
+[
+  {
+    "archive": "metadata",
+    "entries": 146,
+    "sha256": "b54df940fef409c36de94969541186cd5b964fbeddc80daeef094a71252adae6",
+    "verified": true
+  },
+  {
+    "archive": "frozen-inputs",
+    "entries": 28352,
+    "sha256": "afe5d5eeef0d7565ddc420265133fbf9e2146bb95ee933dca2dfb93cd7b20fe9",
+    "verified": true
+  }
+]

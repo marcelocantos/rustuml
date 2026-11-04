@@ -1,0 +1,28 @@
+[
+  {
+    "action": "git submodule update --init test-diagrams/golden",
+    "error": "fatal: transport 'file' not allowed",
+    "log": "logs/submodule-setup.log",
+    "resolution": "Command-scoped git -c protocol.file.allow=always submodule update --init; exact pinned commit checked."
+  },
+  {
+    "action": "prepare_replay.py initial attempt",
+    "error": "KeyError: ('retained', 'collateral/1289-checker2_raw_blank_crlf', 'reference_source')",
+    "resolution": "Frozen archive contains source and golden only; optional expanded-source diagnostic omitted, actual source/reference hashes unchanged. Full CLI/YAML output retained."
+  },
+  {
+    "action": "target context at a42acf204",
+    "error": "KeyError: 'T14.21'",
+    "resolution": "Read target context from 9874a537e3bf18628377f525692103815f429982; parent confirmed integration-ledger context."
+  },
+  {
+    "action": "json dump of YAML target context",
+    "error": "TypeError: Object of type date is not JSON serializable",
+    "resolution": "Metadata dates serialized with default=str; target YAML untouched."
+  },
+  {
+    "action": "assisted probe link selection",
+    "error": "AssertionError: two rustuml_render rlibs exist",
+    "resolution": "Select exact oracle-layout rlib via Cargo fingerprint; record hash and successful rustc argv in assisted-probe-build.json."
+  }
+]

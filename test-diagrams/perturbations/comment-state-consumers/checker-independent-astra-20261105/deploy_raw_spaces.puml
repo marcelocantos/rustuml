@@ -1,0 +1,5 @@
+@startuml
+node "Copper Bay"
+node "Far Pier"
+"Copper Bay" --> "Far Pier"
+@enduml

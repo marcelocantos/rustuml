@@ -1,0 +1,9 @@
+@startuml
+partition "West Bench" {
+(*) --> "Turn wheel"
+}
+partition "East Bench" {
+--> "Read gauge"
+--> (*)
+}
+@enduml
