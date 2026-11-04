@@ -884,7 +884,6 @@ const NOTE_TABLE_BODY_EXTRA: f64 = 4.0;
 const NOTE_RULE_TEXT_X: f64 = 8.5;
 const NOTE_RULE_LEFT_PAD: f64 = 5.0;
 const NOTE_RULE_SEGMENT_W: f64 = 13.5;
-const NOTE_RULE_BASELINE_DROP: f64 = 4.4131;
 const NOTE_RULE_WIDTH_EXTRA: f64 = 8.0;
 const NOTE_HLINE_HEIGHT: f64 = 8.0;
 const NOTE_HLINE_COMPACT_HEIGHT: f64 = 4.0;
@@ -1075,23 +1074,6 @@ fn mixed_super_line_metrics_with_family(
     })
 }
 
-fn pure_underline_message_flow_extra(text: &str) -> f64 {
-    text.split("\\n")
-        .filter(|line| note_separator_label(line).is_some())
-        .count() as f64
-        * PURE_UNDERLINE_MESSAGE_FLOW_EXTRA
-}
-
-fn event_pure_underline_flow_extra(event: &Event) -> f64 {
-    match event {
-        Event::Message(msg) => pure_underline_message_flow_extra(&process_label(&msg.label)),
-        Event::Return(ret) if !ret.label.is_empty() => {
-            pure_underline_message_flow_extra(&decode_backslash_escapes(&ret.label))
-        }
-        _ => 0.0,
-    }
-}
-
 fn rendered_line_metrics_with_family(
     content: &str,
     font_size: f64,
@@ -1111,7 +1093,6 @@ fn note_line_metrics_with_family(
     font_size: f64,
     font_family: &str,
 ) -> RenderedLineMetrics {
-    const SEPARATOR_HEIGHT_EXTRA: f64 = 7.6553;
     const SEPARATOR_ASCENT_ADJUST: f64 = -0.5;
 
     if is_single_hline(content) {
@@ -1125,7 +1106,12 @@ fn note_line_metrics_with_family(
     let label = styled_label.unwrap_or(content);
     let mut metrics = rendered_line_metrics_with_family(label, font_size, font_family);
     if styled_label.is_some() {
-        metrics.height += SEPARATOR_HEIGHT_EXTRA;
+        // ComponentRoseNote uses BodyEnhanced2. BodyEnhancedAbstract#decorate
+        // wraps an empty body with titleHeight/2 above and 4 below;
+        // TextBlockLineBefore raises that to at least titleHeight, then an
+        // outer top margin adds titleHeight/2. Account 6e9c711d.
+        let title_height = metrics.height;
+        metrics.height = title_height.max(title_height / 2.0 + 4.0) + title_height / 2.0;
         metrics.ascent += SEPARATOR_ASCENT_ADJUST;
     }
     metrics
@@ -1268,8 +1254,9 @@ fn message_label_block_height_with_family(text: &str, font_size: f64, font_famil
             {
                 metrics.height
             } else {
+                // AtomText#calculateDimensionSlow measures the styled font,
+                // with no underline-specific flow height (account 54fb67fc).
                 rendered_line_metrics_with_family(line, font_size, font_family).height
-                    + pure_underline_message_flow_extra(line)
             }
         })
         .sum()
@@ -1563,7 +1550,12 @@ fn emit_note_line(
             number_counters.clear();
 
             let text_x = base.x + NOTE_RULE_TEXT_X;
-            let line_y = base.y - NOTE_RULE_BASELINE_DROP;
+            // UHorizontalLine#drawTitleInternal places the title at
+            // ruleY - titleHeight/2 - 0.5. Invert that from its text baseline;
+            // the same title metrics drive BodyEnhanced's preferred height.
+            let title =
+                rendered_line_metrics_with_family(label, base.font_size as f64, base.font_family);
+            let line_y = base.y - title.ascent + title.height / 2.0 + 0.5;
             write!(
                 buf,
                 r#"<line style="stroke:{};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -1605,7 +1597,12 @@ fn emit_note_line(
         _ if let Some(label) = whole_strike_label_inner(line.trim()) => {
             number_counters.clear();
             let text_x = base.x + NOTE_RULE_TEXT_X;
-            let line_y = base.y - NOTE_RULE_BASELINE_DROP;
+            // UHorizontalLine#drawTitleInternal places the title at
+            // ruleY - titleHeight/2 - 0.5. Invert that from its text baseline;
+            // the same title metrics drive BodyEnhanced's preferred height.
+            let title =
+                rendered_line_metrics_with_family(label, base.font_size as f64, base.font_family);
+            let line_y = base.y - title.ascent + title.height / 2.0 + 0.5;
             write!(
                 buf,
                 r#"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -7921,11 +7918,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let e = msg_note_extra.entry(owner).or_insert(0.0);
                         *e = e.max(extra);
                         msg_note_y_adjust.insert(owner, y_adjust);
-                        if note
-                            .text
-                            .lines()
-                            .next()
-                            .is_some_and(|line| note_separator_label(line).is_some())
+                        // Complete folded-note child allocation already reserves
+                        // its rule title height; the old separate tail would count
+                        // it twice. Other note kinds retain their legacy scheduler.
+                        if note.shape != NoteShape::Note
+                            && note
+                                .text
+                                .lines()
+                                .next()
+                                .is_some_and(|line| note_separator_label(line).is_some())
                         {
                             let e = msg_note_tail_extra.entry(owner).or_insert(0.0);
                             *e = e.max(PURE_UNDERLINE_MESSAGE_FLOW_EXTRA);
@@ -7984,10 +7985,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     }
                     if msg_count == 0 || (joining && parallel_first) {
-                        y += first_msg_offset(
-                            has_text,
-                            event_text_height - event_pure_underline_flow_extra(event),
-                        ) + message_vertical_padding;
+                        y += first_msg_offset(has_text, event_text_height)
+                            + message_vertical_padding;
                     } else {
                         y += msg_step(has_text, event_text_height) + message_vertical_padding;
                     }
@@ -8093,10 +8092,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 Event::Return(_) => {
                     let note_extra = msg_note_extra.get(&idx).copied();
                     if msg_count == 0 {
-                        y += first_msg_offset(
-                            has_text,
-                            event_text_height - event_pure_underline_flow_extra(event),
-                        ) + message_vertical_padding;
+                        y += first_msg_offset(has_text, event_text_height)
+                            + message_vertical_padding;
                     } else {
                         y += msg_step(has_text, event_text_height) + message_vertical_padding;
                     }
@@ -15803,6 +15800,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn underline_message_component_uses_the_same_font_height() {
+        for size in [11.0, 13.0, 20.0] {
+            assert_eq!(
+                message_label_block_height_with_family("__label__", size, "sans-serif"),
+                message_label_block_height_with_family("label", size, "sans-serif"),
+            );
+        }
+    }
 
     #[test]
     fn circle_paint_preserves_heads_for_ordinary_and_recursive_messages() {
