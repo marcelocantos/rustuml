@@ -739,8 +739,10 @@ const ARROW_TIP_GAP: f64 = 2.0;
 
 /// Horizontal extension of the self-message loopback from center_x.
 const SELF_MSG_EXTEND: f64 = 42.0;
-/// Vertical drop of the self-message loopback.
+/// ComponentRoseSelfArrow#getArrowOnlyHeight: vertical loopback drop.
 const SELF_MSG_DROP: f64 = 13.0;
+/// AbstractComponentRoseArrow#getPaddingY, distinct from arrow-head height.
+const ROSE_ARROW_PADDING_Y: f64 = 4.0;
 /// `DrawableSetInitializer#prepareLiveEvent` closes an attached self-message
 /// activation seven pixels above the loopback end.
 const SELF_MSG_LIFELINE_CLOSE_INSET: f64 = 7.0;
@@ -3823,9 +3825,14 @@ enum TeozNoteAllocation {
     Paint,
 }
 
+enum TeozLifePaintOperation {
+    Bar(usize),
+    Destroy { y: f64, depth: usize },
+}
+
 struct TeozLifePainting {
     segments: Vec<(usize, f64, f64, Option<String>, usize)>,
-    destroys: Vec<(f64, usize)>,
+    order: Vec<TeozLifePaintOperation>,
 }
 
 struct TeozHistory {
@@ -4152,10 +4159,15 @@ impl TeozHistory {
         }
         let maximum = stairs.iter().map(|step| step.2).max().unwrap_or(0);
         let mut segments = Vec::new();
-        let mut destroys = Vec::new();
+        let mut order = Vec::new();
         // LiveBoxes#drawBoxes paints destroy-only stairs only at max indent 0.
         if maximum == 0 {
-            destroys.extend(stairs.iter().filter(|step| step.4).map(|step| (step.1, 0)));
+            order.extend(stairs.iter().filter(|step| step.4).map(|step| {
+                TeozLifePaintOperation::Destroy {
+                    y: step.1,
+                    depth: 0,
+                }
+            }));
         }
         // LiveBoxes#drawOneLevel may reopen a level; it starts only at equality,
         // not whenever a higher level happens to be present.
@@ -4167,15 +4179,21 @@ impl TeozHistory {
                 } else if let Some(first) = start
                     && (index + 1 == stairs.len() || step.2 < level)
                 {
+                    // LiveBoxes#drawOneLevel paints its bar and closing decoration
+                    // before the next level. Preserve that traversal order.
+                    order.push(TeozLifePaintOperation::Bar(segments.len()));
                     segments.push((first.0, first.1, step.1, first.3.clone(), level - 1));
                     if step.4 {
-                        destroys.push((step.1, level - 1));
+                        order.push(TeozLifePaintOperation::Destroy {
+                            y: step.1,
+                            depth: level - 1,
+                        });
                     }
                     start = None;
                 }
             }
         }
-        TeozLifePainting { segments, destroys }
+        TeozLifePainting { segments, order }
     }
 }
 
@@ -7894,11 +7912,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                     if diagram.teoz {
                         if joining {
-                            let contact = event_y_positions[idx].max(parallel_contact);
+                            // ComponentRoseSelfArrow#getYPoint is the loop midpoint
+                            // plus paddingX(0); getStartPoint is text+paddingY(4).
+                            // Ordinary ComponentRoseArrow uses the same contact
+                            // and start point. Keep alignment separate from paint.
+                            let own_contact = event_y_positions[idx]
+                                + if is_self {
+                                    SELF_MSG_DROP / 2.0 - ROSE_ARROW_PADDING_Y
+                                } else {
+                                    0.0
+                                };
+                            let contact = own_contact.max(parallel_contact);
                             let old_shift = contact - parallel_contact;
-                            let new_shift = contact - event_y_positions[idx];
+                            let new_shift = contact - own_contact;
                             for &member in &parallel_members {
-                                if matches!(diagram.events[member], Event::Message(_)) {
+                                if matches!(
+                                    diagram.events[member],
+                                    Event::Message(_) | Event::Note(_)
+                                ) {
                                     event_y_positions[member] += old_shift;
                                     // Its suffix LifeEventTile is now captured in
                                     // TileParallel, whose life contact is zero.
@@ -7911,7 +7942,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             y = (y + new_shift).max(parallel_bottom + old_shift);
                             parallel_contact = contact;
                         } else {
-                            parallel_contact = event_y_positions[idx];
+                            // Tile contact is not necessarily the message callback.
+                            // ComponentRoseSelfArrow#getYPoint/getStartPoint.
+                            parallel_contact = event_y_positions[idx]
+                                + if is_self {
+                                    SELF_MSG_DROP / 2.0 - ROSE_ARROW_PADDING_Y
+                                } else {
+                                    0.0
+                                };
                         }
                         parallel_bottom = y;
                         parallel_members.push(idx);
@@ -8071,6 +8109,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         event_y_positions.push(note_event_y);
                         // Do not advance y or increment msg_count.
                     } else {
+                        if diagram.teoz {
+                            // GroupingTile#moveRecentParallelTilesToPending captures
+                            // the immediate graphical predecessor, including NoteTile.
+                            parallel_members.clear();
+                            parallel_members.push(idx);
+                            parallel_base = y;
+                            parallel_first = msg_count == 0;
+                        }
                         // Standalone note: consumes vertical space. The note top is
                         // positioned relative to the current y cursor. After the
                         // note, subsequent events use msg_step (note counts as an event).
@@ -8088,6 +8134,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // NoteBox#getPreferredHeight delegates to the note
                         // component, including the padded body text block.
                         y = note_event_y + note_shadow_delta + 2.0 * note_global_padding;
+                        if diagram.teoz {
+                            // NoteTile#getContactPointRelative is half its complete
+                            // preferred component height. Event y encodes the note
+                            // text/body bottom, not that contact or tile origin.
+                            let preferred_height = metrics.total_height
+                                + 4.0 * ROSE_NOTE_PADDING_Y
+                                + 2.0 * note_global_padding
+                                + note_shadow_delta;
+                            parallel_contact =
+                                note_top - ROSE_NOTE_PADDING_Y + preferred_height / 2.0;
+                            parallel_bottom = y;
+                        }
                         msg_count += 1; // note counts as an event for spacing
                     }
                 }
@@ -8268,7 +8326,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         | Event::Create(_)
                 ) {
                     parallel_members.push(idx);
-                } else if !matches!(event, Event::Note(note) if note.on_message) {
+                } else if let Event::Note(note) = event {
+                    if note.on_message {
+                        // Attached note paint translates with its owning tile.
+                        parallel_members.push(idx);
+                    }
+                } else {
                     parallel_members.clear();
                 }
             }
@@ -11482,7 +11545,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
-    let mut teoz_destroys: HashMap<String, Vec<(f64, usize)>> = HashMap::new();
+    let mut teoz_paint_order: HashMap<String, Vec<TeozLifePaintOperation>> = HashMap::new();
     if let Some(history) = &teoz_history {
         for participant in &participants {
             let painting = history.segments(
@@ -11506,7 +11569,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     tail_box_y + MSG_BASE_FIRST_OFFSET - MSG_BASE_STEP,
                 ),
             );
-            teoz_destroys.insert(participant.id.clone(), painting.destroys);
+            let first_bar = activation_bars.len();
+            teoz_paint_order.insert(
+                participant.id.clone(),
+                painting
+                    .order
+                    .into_iter()
+                    .map(|operation| match operation {
+                        TeozLifePaintOperation::Bar(index) => {
+                            TeozLifePaintOperation::Bar(first_bar + index)
+                        }
+                        other => other,
+                    })
+                    .collect(),
+            );
             for (start_event_idx, start_y, end_y, color, depth) in painting.segments {
                 activation_bars.push(ActivationBar {
                     participant_id: participant.id.clone(),
@@ -12196,21 +12272,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             &delay_bands,
         );
         if diagram.teoz {
-            for bar in activation_bars
-                .iter()
-                .filter(|bar| bar.participant_id == p.id)
-            {
-                draw_activation_bar(&mut svg, bar);
-            }
-            for &(y, depth) in &teoz_destroys[&p.id] {
-                let cx = p.center_x + depth as f64 * ACTIVATION_HALF_W;
-                let cy = y - 2.0; // Same Rose marginY*2 coordinate as liveboxes.
-                for (y1, y2) in [
-                    (cy - DESTROY_CROSS_HALF, cy + DESTROY_CROSS_HALF),
-                    (cy + DESTROY_CROSS_HALF, cy - DESTROY_CROSS_HALF),
-                ] {
-                    write!(svg.buf, r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            for operation in &teoz_paint_order[&p.id] {
+                match *operation {
+                    TeozLifePaintOperation::Bar(index) => {
+                        draw_activation_bar(&mut svg, &activation_bars[index])
+                    }
+                    TeozLifePaintOperation::Destroy { y, depth } => {
+                        let cx = p.center_x + depth as f64 * ACTIVATION_HALF_W;
+                        let cy = y - 2.0; // Same Rose marginY*2 coordinate as liveboxes.
+                        for (y1, y2) in [
+                            (cy - DESTROY_CROSS_HALF, cy + DESTROY_CROSS_HALF),
+                            (cy + DESTROY_CROSS_HALF, cy - DESTROY_CROSS_HALF),
+                        ] {
+                            write!(svg.buf, r##"<line style="stroke:#A80036;stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                         fmt_coord(cx - DESTROY_CROSS_HALF), fmt_coord(cx + DESTROY_CROSS_HALF), fmt_coord(y1), fmt_coord(y2)).unwrap();
+                        }
+                    }
                 }
             }
         }
