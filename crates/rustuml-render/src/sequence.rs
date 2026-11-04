@@ -6076,22 +6076,32 @@ impl PlantUmlSvg {
         autonumber: Option<(&str, f64, &AutoNumberStyle)>,
         align: MessageAlign,
     ) {
-        let source_head = arrow.source_dressing.unwrap_or(arrow.head);
+        // CommandArrow starts with destination dressing2; withPart changes
+        // that dressing only (ArrowConfiguration#withPart). Physical reversal
+        // moves the complete head/part pair, not the part to both endpoints.
+        let source = (
+            arrow.source_dressing.unwrap_or(arrow.head),
+            arrow.source_circle,
+            None,
+        );
+        let target = (
+            if arrow.thin_head {
+                ArrowHead::Open
+            } else {
+                arrow.head
+            },
+            arrow.target_circle,
+            arrow.head_half,
+        );
         let endpoints = if is_right {
-            [
-                (source_head, arrow.source_circle),
-                (arrow.head, arrow.target_circle),
-            ]
+            [source, target]
         } else {
-            [
-                (arrow.head, arrow.target_circle),
-                (source_head, arrow.source_circle),
-            ]
+            [target, source]
         };
         self.message_group_open(entity1, entity2, source_line, msg_id);
         let mut line_start = left;
         let mut line_end = right - 1.0;
-        for (index, (head, circle)) in endpoints.into_iter().enumerate() {
+        for (index, (head, circle, part)) in endpoints.into_iter().enumerate() {
             let inward = if index == 0 { 1.0 } else { -1.0 };
             let mut tip = if index == 0 { left + 1.0 } else { right - 2.0 };
             // Rose drawDressing1/2: diamCircle=8, thinCircle=1.5. Head and
@@ -6115,7 +6125,7 @@ impl PlantUmlSvg {
             let wing = tip + inward * ARROW_SIZE;
             if head == ArrowHead::Open {
                 for half in [ArrowHalf::Top, ArrowHalf::Bottom] {
-                    if arrow.head_half.is_some_and(|part| part != half) {
+                    if part.is_some_and(|part| part != half) {
                         continue;
                     }
                     let dy = if half == ArrowHalf::Top {
@@ -6132,7 +6142,7 @@ impl PlantUmlSvg {
                     );
                 }
             } else {
-                let points = match arrow.head_half {
+                let points = match part {
                     Some(ArrowHalf::Top) => vec![(wing, y - ARROW_HALF_H), (tip, y), (wing, y)],
                     Some(ArrowHalf::Bottom) => vec![(wing, y), (tip, y), (wing, y + ARROW_HALF_H)],
                     None => vec![
@@ -6149,7 +6159,7 @@ impl PlantUmlSvg {
                     .join(",");
                 self.write_polygon(color, &points, &format!("stroke:{color};stroke-width:1;"));
                 // drawInternalU shortens FULL NORMAL by arrowDeltaX/2.
-                if arrow.head_half.is_none() {
+                if part.is_none() {
                     if index == 0 {
                         line_start += ARROW_SIZE / 2.0;
                     } else {
@@ -13805,6 +13815,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // ComponentRoseSelfArrow#drawRightSide paints dressing1
                     // after the three body strokes and before dressing2.
                     if is_bidirectional {
+                        // ArrowConfiguration#withPart selected dressing2;
+                        // the self start dressing remains FULL.
+                        let head_half: Option<ArrowHalf> = None;
                         let head = msg.arrow.source_dressing.unwrap_or(msg.arrow.head);
                         if head == ArrowHead::Open {
                             for (half, dy) in [

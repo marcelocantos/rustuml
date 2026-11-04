@@ -141,7 +141,9 @@ pub struct Arrow {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
     /// Half-arrowhead modifier from `/` (bottom half) or `\` (top half).
-    /// `None` for a normal full arrowhead.
+    /// Destination dressing only: CommandArrow starts with dressing2 present,
+    /// so ArrowConfiguration#withPart leaves the source head FULL.
+    /// `None` for a normal full destination arrowhead.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub head_half: Option<ArrowHalf>,
     /// True when the arrowhead is drawn as a thin open stroke rather than a

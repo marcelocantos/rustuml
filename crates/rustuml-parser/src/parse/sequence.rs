@@ -1448,8 +1448,9 @@ fn parse_arrow(s: &str) -> Arrow {
     } else {
         s.ends_with('o')
     };
-    // CommandArrow computes sync1/sync2 independently, then assigns the part
-    // to both dressings. ArrowConfiguration keeps decorations separate.
+    // CommandArrow computes sync1/sync2 independently. ArrowConfiguration
+    // #withPart modifies destination dressing2, which is initially present;
+    // source dressing1 stays FULL. Physical reversal swaps the whole dressing.
     let (source, target) = if reverse {
         (right, left)
     } else {
