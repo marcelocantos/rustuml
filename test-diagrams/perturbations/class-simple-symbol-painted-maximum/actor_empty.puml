@@ -1,0 +1,13 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+actor {
+FontSize 9
+
+}
+</style>
+class Station
+actor "" as Beacon
+Station --> Beacon
+@enduml

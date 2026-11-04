@@ -1,0 +1,17 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+boundary {
+FontSize 21
+LineThickness 3
+}
+</style>
+package Harbor {
+package Channel {
+boundary "Tide\nClock" as Beacon <<watch>>
+}
+}
+class Station
+Station --> Beacon
+@enduml

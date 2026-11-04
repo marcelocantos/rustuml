@@ -1,0 +1,49 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: svglinktarget
+      value: _blank
+    source: |
+      @startuml
+      skinparam svgLinkTarget _blank
+      class Station
+      note top of Station $watch <<memo>> #LightYellow [[https://example.org/tide?port=7&day=2{Inspect top}]]
+      Observation top
+      class is prose
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Station
+  - !Note 0
+  entities:
+  - id: Station
+    label: Station
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - Observation top
+    - class is prose
+    target: Station
+    position: Top
+    alias: null
+    stereotypes:
+    - memo
+    tags:
+    - watch
+    url: https://example.org/tide?port=7&day=2
+    url_tooltip: Inspect top
+    color: '#LightYellow'
+    source_line: 4
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

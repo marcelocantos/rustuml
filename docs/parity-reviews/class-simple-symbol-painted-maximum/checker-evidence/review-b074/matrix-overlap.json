@@ -1,0 +1,11 @@
+{
+  "new_entries": 34,
+  "new_distinct_source_hashes": 34,
+  "new_intersection_with_existing": {
+    "preserved1559": 0,
+    "prior36": 0,
+    "maker20": 0,
+    "golden12550": 0
+  },
+  "note": "Preserved1559 has explicit duplicates and overlapping smaller cohorts; no sums of overlapping inventories are used."
+}

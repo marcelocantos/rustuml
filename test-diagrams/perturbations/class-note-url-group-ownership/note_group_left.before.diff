@@ -1,0 +1,13 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "199px"), ("preserveAspectRatio", "none"), ("style", "width:316px;height:199px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 316 199"), ("width", "316px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "199px"), ("preserveAspectRatio", "none"), ("style", "width:313px;height:199px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 313 199"), ("width", "313px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M154.4,69.04 L250.8707,69.04 A3.75,3.75 0 0 1 253.3707,71.54 L260.3707,91.5283 L299.4,91.5283 A2.5,2.5 0 0 1 301.9,94.0283 L301.9,181.54 A2.5,2.5 0 0 1 299.4,184.04 L154.4,184.04 A2.5,2.5 0 0 1 151.9,181.54 L151.9,71.54 A2.5,2.5 0 0 1 154.4,69.04"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M154.4036,69.04 L250.8743,69.04 A3.75,3.75 0 0 1 253.3743,71.54 L260.3743,91.5283 L296.4036,91.5283 A2.5,2.5 0 0 1 298.9036,94.0283 L298.9036,181.54 A2.5,2.5 0 0 1 296.4036,184.04 L154.4036,184.04 A2.5,2.5 0 0 1 151.9036,181.54 L151.9036,71.54 A2.5,2.5 0 0 1 154.4036,69.04"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [14] tag mismatch: expected <g>, got <a>
+  [15] tag mismatch: expected <a>, got <g>
+  [21] <path> attr mismatch:
+    expected: [("d", "M79.49,115.32 C97.35,88.16 132.89,41.77 177.4,23.04 C208.95,9.77 224.73,6 254.4,23.04 C264.7975,29.01 272.4088,38.075 277.9625,48.5262 C280.7394,53.7519 283.0019,59.3241 284.8411,65.0292 C285.071,65.7424 285.2943,66.4576 285.5111,67.1745 C285.6196,67.5329 285.7264,67.8918 285.8316,68.251 C285.8842,68.4306 285.9364,91.0986 285.9883,91.2784"), ("fill", "none"), ("id", "GMN4-Harbor"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+    actual:   [("d", "M79.49,115.32 C97.35,88.16 132.89,41.77 177.4,23.04 C208.95,9.77 224.73,6 254.4,23.04 C265.305,29.3025 273.0856,38.9962 278.6117,50.1305 C281.3748,55.6976 283.5742,61.6248 285.3187,67.6633 C285.4277,68.0407 285.535,90.9068 285.6405,91.285"), ("fill", "none"), ("id", "GMN4-Harbor"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+

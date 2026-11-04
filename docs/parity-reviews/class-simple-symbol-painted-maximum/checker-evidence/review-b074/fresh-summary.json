@@ -1,0 +1,59 @@
+{
+  "counts": {
+    "before": {
+      "mismatch": 23,
+      "invalid_reference": 4,
+      "pass": 5,
+      "process_error": 2
+    },
+    "after": {
+      "pass": 12,
+      "mismatch": 16,
+      "invalid_reference": 4,
+      "process_error": 2
+    }
+  },
+  "mechanisms": {
+    "class-simple-symbol-painted-maximum": {
+      "before": {
+        "mismatch": 15,
+        "invalid_reference": 2,
+        "pass": 3
+      },
+      "after": {
+        "pass": 6,
+        "mismatch": 12,
+        "invalid_reference": 2
+      }
+    },
+    "class-note-url-group-ownership": {
+      "before": {
+        "mismatch": 8,
+        "pass": 2,
+        "invalid_reference": 2,
+        "process_error": 2
+      },
+      "after": {
+        "pass": 6,
+        "mismatch": 4,
+        "invalid_reference": 2,
+        "process_error": 2
+      }
+    }
+  },
+  "negative_reference_cases": [
+    "actor_empty.puml",
+    "boundary_empty.puml",
+    "note_named_False_True.puml",
+    "note_named_True_True.puml"
+  ],
+  "note": "Initial28 and supplemental6 are disjoint new source hashes. Four initial generated syntaxes proved invalid in Java and remain negative evidence, not passes. Both valid CommandUrl cases produce Rust parser errors before and after. No negative reference or process error is counted as a match.",
+  "all_34_yaml_outputs_byte_identical": true,
+  "model_retention": {
+    "valid_reference_successful_yaml_models": 28,
+    "successful_yaml_outputs_including_java_negative_controls": 30,
+    "failed_yaml_outputs": 4,
+    "all_outputs_byte_identical_before_after": true,
+    "interpretation": "Four empty parser-error outputs are not successful models. Valid retained model count is 28/30 valid references; two valid CommandUrl inputs fail parsing in both revisions."
+  }
+}

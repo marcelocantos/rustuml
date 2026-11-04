@@ -1,0 +1,100 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: shadowing
+      value: 'true'
+    style_program:
+      declarations:
+      - selector:
+        - root
+        property: shadowing
+        value: '3'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+      - selector:
+        - boundary
+        property: fontsize
+        value: '7'
+        source_line: 3
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: shadowing
+        value: '18'
+        source_line: 3
+        epoch: 2
+        priority: 2
+        origin:
+          kind: user_style
+      - selector:
+        - boundary
+        property: linethickness
+        value: '5'
+        source_line: 3
+        epoch: 3
+        priority: 3
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      skinparam shadowing true
+      <style>
+      boundary {
+      FontSize 7
+      Shadowing 18
+      LineThickness 5
+      }
+      </style>
+      class Station
+      boundary "i" as Beacon
+      Station --> Beacon
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Station
+  - !Entity Beacon
+  - !Relationship 0
+  entities:
+  - id: Station
+    label: Station
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 10
+  - id: Beacon
+    label: i
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 11
+  relationships:
+  - from: Station
+    to: Beacon
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 12
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

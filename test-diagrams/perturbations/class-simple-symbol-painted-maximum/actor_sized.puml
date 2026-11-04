@@ -1,0 +1,13 @@
+@startuml
+allowmixing
+
+<style>
+actor {
+FontSize 13
+
+}
+</style>
+class Station
+actor "<size:31>Signal</size>\n<sub>tide</sub>" as Beacon
+Station --> Beacon
+@enduml

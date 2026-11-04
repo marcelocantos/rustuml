@@ -1,0 +1,4 @@
+SVG structural differences:
+  [10] tag mismatch: expected <g>, got <a>
+  [11] tag mismatch: expected <a>, got <g>
+

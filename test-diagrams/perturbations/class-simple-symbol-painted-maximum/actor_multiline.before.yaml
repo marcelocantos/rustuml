@@ -1,0 +1,89 @@
+type: Class
+diagram:
+  meta:
+    style_program:
+      declarations:
+      - selector:
+        - actor
+        property: fontsize
+        value: '25'
+        source_line: 3
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        property: fontstyle
+        value: bold
+        source_line: 3
+        epoch: 1
+        priority: 1
+        origin:
+          kind: user_style
+      - selector:
+        - actor
+        property: horizontalalignment
+        value: right
+        source_line: 3
+        epoch: 2
+        priority: 2
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      left to right direction
+      <style>
+      actor {
+      FontSize 25
+      FontStyle bold
+      HorizontalAlignment right
+      }
+      </style>
+      class Station
+      actor "North pier\nSignal mast\nTerminal" as Beacon <<watch>>
+      Station --> Beacon
+      @enduml
+  direction: LeftToRight
+  uid_events:
+  - !Entity Station
+  - !Entity Beacon
+  - !Relationship 0
+  entities:
+  - id: Station
+    label: Station
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 10
+  - id: Beacon
+    label: North pier\nSignal mast\nTerminal
+    explicit_alias: true
+    kind: Actor
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes:
+    - watch
+    source_line: 11
+  relationships:
+  - from: Station
+    to: Beacon
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 12
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

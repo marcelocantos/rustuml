@@ -1,0 +1,76 @@
+type: Class
+diagram:
+  meta:
+    title: Beacon register
+    footer: Coast footer
+    caption: Harbor caption
+    style_program:
+      declarations:
+      - selector:
+        - boundary
+        property: fontsize
+        value: '19'
+        source_line: 5
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_style
+    source: |
+      @startuml
+      allowmixing
+      title Beacon register
+      caption Harbor caption
+      footer Coast footer
+      <style>
+      boundary {
+      FontSize 19
+      }
+      </style>
+      class Mooring
+      boundary "Horizon\n" as Beacon
+      Mooring --> Beacon
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Mooring
+  - !Entity Beacon
+  - !Relationship 0
+  entities:
+  - id: Mooring
+    label: Mooring
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 10
+  - id: Beacon
+    label: Horizon\n
+    explicit_alias: true
+    kind: Boundary
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 11
+  relationships:
+  - from: Mooring
+    to: Beacon
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 12
+  packages: []
+  notes: []
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null
+  footer_line: 4
+  title_line: 2
+  caption_line: 3

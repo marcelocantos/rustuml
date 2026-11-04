@@ -1,0 +1,64 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: svglinktarget
+      value: _self
+    source: |
+      @startuml
+      skinparam svgLinkTarget _self
+      package "Harbor office" as Harbor {
+      class Station
+      }
+      note left of Harbor $watch <<memo>> #LightYellow [[https://example.org/tide?port=7&day=2{Inspect left}]] {
+      Observation left
+      class is prose
+      }
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Package Harbor
+  - !Entity Harbor.Station
+  - !Note 0
+  entities:
+  - id: Harbor.Station
+    label: Station
+    explicit_alias: false
+    kind: Class
+    is_static: false
+    visibility: Default
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages:
+  - visibility: Default
+    tags: []
+    url: null
+    url_tooltip: null
+    name: Harbor
+    kind: Package
+    color: null
+    entities:
+    - Harbor.Station
+    source_line: 2
+    stereotypes: []
+    display_name: Harbor office
+  notes:
+  - lines:
+    - Observation left
+    - class is prose
+    target: Harbor
+    position: Left
+    alias: null
+    stereotypes:
+    - memo
+    tags:
+    - watch
+    url: https://example.org/tide?port=7&day=2
+    url_tooltip: Inspect left
+    color: '#LightYellow'
+    source_line: 6
+  hide_show: []
+  header_alignment: null
+  footer_alignment: null

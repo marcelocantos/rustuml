@@ -1,0 +1,134 @@
+{
+  "scope": "Independent renderer-only source/model review at exact candidate; no production/parser/shared metrics/layout/native/sequence/TIM changes, target edits, baseline/comparator/skip changes or historical review edits. No local JVM/javac/SSH, children, remote agents, pushes/PRs/releases.",
+  "model_data_flow": [
+    "class.rs::render Phase1 obtains dims from calc_entity_dims; unchanged Graphviz node sizing and solved node positions precede render_plantuml_svg. The only new entity_painted_extent calls are in body/chrome and final canvas unions. EntityImageDegenerated retains dims. Java SvekResult.calculateDimension measures TextBlockUtils.getMinMax and returns delta(15,15), while EntityImageDegenerated.calculateDimension uses orig preferred dimensions + 2*7.",
+    "Java USymbolSimpleAbstract.asSmall centers independent symbol/label/stereotype blocks, offsets symbol by stereotype height and label by stereotype+symbol preferred height. ActorStickMan path extremities and ellipse, Boundary path/ellipse, and LimitFinder UText maxima are distinct primitive contributions. Rust duplicates this shape rather than replaying fixtures, but its text approximation and Boundary Fashion input are incomplete.",
+    "All plain, multiline, shadow, and no-chrome fresh simple-symbol interior primitive rows are byte-equivalent as parsed XML before/after. Degenerate controls and subgroup controls are byte-identical before/after. Title/caption/footer probes show differences in chrome placement; raw primitive observations preserve coordinates. This supports unchanged preferred layout across the change, not correctness of existing preferred sizes for all styled text.",
+    "Both note functions now emit g,a,image,/a,/g. Leaf targets take the Opale attached path; group_peer deliberately takes render_floating_note_entity. Fresh four-position leaf/group matrix therefore covers both changed functions. note_anchor, metadata, URL attributes, parser model, and drawing primitives are unchanged by diff and by eight full non-g/a XML comparisons."
+  ],
+  "constant_and_boundary_audit": [
+    {
+      "rust": "entity_painted_extent Actor arm/leg13, head diameter16/radius8, body27/legs15, label offset59+2*thickness+shadow",
+      "java": "skin.ActorStickMan fields, drawU, getPreferredWidth/getPreferredHeight",
+      "verdict": "Correct provenance:59=16+27+15+1. UPath maxima exclude shadow; head ellipse includes -1+2*shadow."
+    },
+    {
+      "rust": "Boundary margin4, radius12, arm17, preferred49x32",
+      "java": "svek.Boundary fields/drawU/calculateDimension",
+      "verdict": "Geometry constants derived correctly, but missing upstream USymbolBoundary.getDrawing normalization to deltaShadow=4.0 when enabled."
+    },
+    {
+      "rust": "ellipse -1+2*shadow and UText baseline+1.5",
+      "java": "klimt.drawing.LimitFinder.drawEllipse/drawUPath/drawText",
+      "verdict": "Primitive formula itself correct; the supplied Boundary shadow and the chosen text baselines are not always the emitted primitives."
+    },
+    {
+      "rust": "if line.is_empty() { continue; }",
+      "java": "klimt.creole.legacy.StripeSimple.getAtoms creates AtomTextUtils.createLegacy(\" \", fontConfiguration) when empty",
+      "verdict": "Rejected: source-backed counterexample, no justification for the new empty-stripe skip."
+    },
+    {
+      "rust": "label_y + i*label_height(\"X\") + label_ascent(line) +1.5",
+      "java": "klimt.creole.Sea.doAlign/translateMinYto, legacy.AtomText.drawU; USymbolSimpleAbstract draws actual TextBlocks",
+      "verdict": "Rejected for variable-height lines and subscript runs. Rust emit_text/emit_segment can add baseline offsets after this estimate; helper is not a union over actual runs."
+    },
+    {
+      "rust": "stereotype width measure(...false) and italic text inherited in render_description_leaf",
+      "java": "svek.image.EntityImageDescription fcStereo from styleStereo",
+      "verdict": "Existing hardcoded stereotype style does not follow inherited bold style; fresh multiline cases expose the dependency. No repair attempted."
+    },
+    {
+      "rust": "generic_right>0, simple Actor|Boundary selection, uses_degenerated_entity bypass, preserved rectangle/class shadow fallback",
+      "java": "USymbol families, HeaderLayout UEmpty overhang, GraphvizImageBuilder degenerate path, SvekResult/EntityImageDegenerated",
+      "verdict": "Scope and unchanged fallback algebra audited. No fixture-name/font-specific branches, coordinate string surgery, per-count ladders or unexplained precision constants were added."
+    },
+    {
+      "rust": "note group opening/closing boundaries",
+      "java": "svek.image.EntityImageNote.drawU startGroup/startUrl/Opale-or-normal/closeUrl/closeGroup",
+      "verdict": "Source and direct DOM ownership diagnostic pass; relevant group-target visual geometry still fails, so no whole mechanism or packet acceptance."
+    }
+  ],
+  "findings": [
+    {
+      "id": "P1-empty-stripe",
+      "mechanism": "class-simple-symbol-painted-maximum",
+      "cases": [
+        "actor_blanktail",
+        "boundary_blanktail",
+        "actor_chrome_False",
+        "boundary_chrome_False"
+      ],
+      "causal": "The new empty-line branch discards a Java space atom while Rust still emits an empty text element. Last baseline remains unchanged but canvas is shortened. Actor Java232/before234/after227; boundary Java204/before206/after199.",
+      "next_repair": "Port StripeSimple empty-stripe atom behavior and include every emitted UText baseline in the painted union. Do not subtract a font-specific correction."
+    },
+    {
+      "id": "P1-boundary-shadow-input",
+      "mechanism": "class-simple-symbol-painted-maximum",
+      "cases": [
+        "boundary_shadow"
+      ],
+      "causal": "USymbolBoundary.getDrawing converts nonzero Fashion shadow to4; Rust helper consumes raw18 and its existing boundary emitter omits both shadow filters. Java106x170, before106x172, after117x193. The actor raw-shadow control passes, proving the policies differ by symbol.",
+      "next_repair": "Apply the Boundary symbol factory shadow policy before measurement/drawing, propagate that same Fashion to path/ellipse emission, then measure their distinct LimitFinder extrema."
+    },
+    {
+      "id": "P1-emitted-text-max",
+      "mechanism": "class-simple-symbol-painted-maximum",
+      "cases": [
+        "actor_sized",
+        "boundary_sized",
+        "actor_chrome_True",
+        "boundary_chrome_True"
+      ],
+      "causal": "The estimator uses a fixed plain-font line advance and one anchor ascent. emit_text emits shifted subscript runs; Java Sea/AtomText uses actual per-stripe dimensions/positions. actor_sized emitted Rust final baseline209.5117 gives max211.0117, but after canvas222 fails even its own expected envelope226; Java final baseline221.1777/canvas237. Both preferred-height and painted-run dependencies remain.",
+      "next_repair": "Keep preferred dimensions and painted bounds as separate results of a common positioned text/symbol model. Union actual run baselines after markup offsets; route prerequisite shared text/model repairs separately, without doing them in this review."
+    },
+    {
+      "id": "P2-stereotype-style",
+      "mechanism": "class-simple-symbol-painted-maximum",
+      "cases": [
+        "actor_multiline",
+        "boundary_multiline"
+      ],
+      "causal": "Java inherits bold FontStyle for stereotype; Rust retains italic and narrower measurement. Only the stereotype node differs in these controls.",
+      "next_repair": "Resolve/measure/emit the actual stereotype style from EntityImageDescription styleStereo; preserve label styling independently."
+    },
+    {
+      "id": "P2-degenerate-residue",
+      "mechanism": "class-simple-symbol-painted-maximum",
+      "cases": [
+        "actor_degenerate"
+      ],
+      "causal": "Actor preferred-size degenerate control has an existing position/stereotype residual; before/after bytes are identical. Boundary degenerate passes. This is outside the new non-degenerated-max computation and is retained without claiming a fix.",
+      "next_repair": "Investigate the degenerate actor/stereotype model separately; do not alter the preserved exception to disguise this residual."
+    },
+    {
+      "id": "N1-group-geometry",
+      "mechanism": "class-note-url-group-ownership",
+      "cases": [
+        "note_group_left",
+        "note_group_top",
+        "note_group_right",
+        "note_group_bottom"
+      ],
+      "causal": "Eight URL anchors match Java parentage and attributes exactly after the change. All non-g/a XML nodes are unchanged before/after. Four fresh group targets still have outline/edge/note geometry differences: right case Java group right156 vsRust153, note x182.36 vs180.36, canvas328 vs326. Correct nesting does not establish visual correctness.",
+      "next_repair": "Trace group cluster preferred border/envelope and note-edge handoff through the Java Svek cluster/Opale pipeline; resolve the existing layout/environment dependency with a separate account and calibrated evidence, not coordinate nudges or this ownership-only change."
+    },
+    {
+      "id": "N2-named-url-dependency",
+      "mechanism": "class-note-url-group-ownership",
+      "cases": [
+        "note_url_command_False",
+        "note_url_command_True"
+      ],
+      "causal": "Both references are valid Java CommandUrl outputs; both Rust revisions reject the url of Memo command at parse time. Unsupported inline named-note URL attempts remain invalid-Java negatives. This parser dependency prevents this named-note ownership journey, but is not attributed to the changed renderer.",
+      "next_repair": "A separately authorized parser/model change must retain note entity URLs assigned through CommandUrl; do not attempt it in this renderer-only review."
+    }
+  ],
+  "limitations": [
+    "No whole-class acceptance. Every fresh relevant valid mismatch remains rejecting evidence. DOM ownership is a separately supported diagnostic, not a scope waiver.",
+    "Historical GET corpus is unchanged at its gitlink; new Java SVGs use raw -pipe -tsvg wrapper policy and explicit GMT+11:00. Fonts, host environment, Graphviz12.2.0 vs vendored layout global equivalence remain unproven.",
+    "Native cleanup/fault-injection work explicitly excluded and not resumed. Native/layout, shared text metrics/glyph, class parser and other old failures remain unaccepted dependencies.",
+    "Cargo test rebuilt the CLI binary without any source change. Exact hashes and consumers are recorded; no claim of binary identity across build invocations.",
+    "No new target or policy/skip/comparator/baseline edit; recommendations are causal next repairs only."
+  ]
+}

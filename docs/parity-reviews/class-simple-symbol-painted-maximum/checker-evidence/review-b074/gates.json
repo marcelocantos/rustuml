@@ -1,0 +1,176 @@
+[
+  {
+    "name": "format",
+    "command": [
+      "cargo",
+      "fmt",
+      "--check"
+    ],
+    "exit": 0,
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c",
+    "started_unix": 1793784091.3958368,
+    "seconds": 1.2008261680603027,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    }
+  },
+  {
+    "name": "libs",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--release",
+      "--lib",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c",
+    "started_unix": 1793784092.5969641,
+    "seconds": 59.21479082107544,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    }
+  },
+  {
+    "name": "cli",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--release",
+      "--test",
+      "pipe_mode",
+      "--test",
+      "error_paths",
+      "--test",
+      "doc_claims",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c",
+    "started_unix": 1793784151.811967,
+    "seconds": 5.21543025970459,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    }
+  },
+  {
+    "name": "product",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c",
+    "started_unix": 1793784157.027641,
+    "seconds": 1.0690808296203613,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    }
+  },
+  {
+    "name": "assisted",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c",
+    "started_unix": 1793784158.096958,
+    "seconds": 1.2092349529266357,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    }
+  },
+  {
+    "name": "guards",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c",
+    "started_unix": 1793784159.306453,
+    "seconds": 1.083799123764038,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    }
+  },
+  {
+    "name": "clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--release",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 101,
+    "revision": "b074d2082cb9ed2b9460f79a32b170e31cc1ab5e",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c",
+    "started_unix": 1793784160.39049,
+    "seconds": 18.228469133377075,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-review-b074/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    }
+  }
+]

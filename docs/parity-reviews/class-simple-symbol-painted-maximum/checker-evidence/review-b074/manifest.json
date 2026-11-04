@@ -1,0 +1,390 @@
+[
+  {
+    "name": "actor_plain.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_plain.puml",
+    "source_sha256": "08493b8d3feb2548fad63d7c46a07d4e462aee22aed9176167faddf30ea48c08",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "plain",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "actor_multiline.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_multiline.puml",
+    "source_sha256": "1a3faf656e5c7b3f04faf809fc1e02aa81dc5a320d627f964a3ddd42948f47a0",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "multiline",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "actor_sized.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_sized.puml",
+    "source_sha256": "9813431dee89f6040fabffdc2aa7935408af8d51bee94125ca6ceab80d8f9b81",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "sized",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "actor_blanktail.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_blanktail.puml",
+    "source_sha256": "91fd316879dcc02efce61a02108ce03fc2ac4ebd729f6aad583ae5b647039ae0",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "blanktail",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "actor_empty.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_empty.puml",
+    "source_sha256": "e05c768f958f1a4071ab3919a4ddcd6fffd6a15cce84fff6656e920c4dd11574",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "empty",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "actor_shadow.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_shadow.puml",
+    "source_sha256": "c39813430c6a5ffcc48547daa6e0c8084ecd70864c097a35eefff471ef3fac93",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "shadow",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "actor_subgroup.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_subgroup.puml",
+    "source_sha256": "a09412beb3b5e5cc845247850490bcebbdc8c58e3c7c0bc3a21df51c3db99ded",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "subgroup",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "actor_degenerate.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/actor_degenerate.puml",
+    "source_sha256": "c5e9799e7521921f965dd818a352548fcc6b8389b246c547a070fd5bb2b738b0",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "degenerate",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_plain.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_plain.puml",
+    "source_sha256": "1dfc008ea7b32e981a6476795ba4d1676586deb56159877998950dc2e4074376",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "plain",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_multiline.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_multiline.puml",
+    "source_sha256": "2d6cd817dd2572281512d4b1a84d7c6a77583f65dd05e751126413bf7542197e",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "multiline",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_sized.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_sized.puml",
+    "source_sha256": "09d49187d7b1eb999f99172d74f4489616e2b62a0d4751ff98b98f6bf5cb47e8",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "sized",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_blanktail.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_blanktail.puml",
+    "source_sha256": "2261d0df20d9ca4e1e60cfb29a2e2ee270325a1811cd33ab99f9ed82151172ac",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "blanktail",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_empty.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_empty.puml",
+    "source_sha256": "b765712c0fc94cd4d386fcd623e102aa65495dc1c79c95fdaaa8aae2d804e9fd",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "empty",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_shadow.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_shadow.puml",
+    "source_sha256": "4d400358e5c2532b0424e71510e5bb1128b1808de200653c80d0aa3ee630e4ae",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "shadow",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_subgroup.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_subgroup.puml",
+    "source_sha256": "8e58c485ba988a26a835f65f9e2a62af47bbf6c6437135f33c687d66d803e928",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "subgroup",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "boundary_degenerate.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/boundary_degenerate.puml",
+    "source_sha256": "4bce5716f2512c9531d554a126ddb6880cb6d0f0861644b6b95ed78195c8af83",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-simple-symbol-painted-maximum",
+    "axes": [
+      "symbol",
+      "degenerate",
+      "font size",
+      "topology"
+    ]
+  },
+  {
+    "name": "note_leaf_left.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_leaf_left.puml",
+    "source_sha256": "0909761140c36cb42f019967b6ff9f85fb0b09a1b1f897798036db541fc6090b",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_leaf_top.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_leaf_top.puml",
+    "source_sha256": "83d6d82599582d1ed97bebdb2e657620d082fba8aa971839cbb57c774d3915a7",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_leaf_right.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_leaf_right.puml",
+    "source_sha256": "cac33beb6fe66b906831795330f692d5a41358d5f9f5f609f8b432e9fe2b84ad",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_leaf_bottom.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_leaf_bottom.puml",
+    "source_sha256": "b80f8b27705992ea78d4cc41b76584814e4b9ac23779d228fa18e9a564614d11",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_group_left.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_group_left.puml",
+    "source_sha256": "6ca81576ef51e6fc66f380a56ef5c1bb455b56ff5058347aa36f872eced8aa88",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_group_top.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_group_top.puml",
+    "source_sha256": "367d04781f71fe2256191f7d4bebb7662f5b0af254623e69b2bb2906ea95282c",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_group_right.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_group_right.puml",
+    "source_sha256": "938bcd37bca2ec1910ad5348884c4b062ed4b33e28ae43c686a9b599559b9d34",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_group_bottom.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_group_bottom.puml",
+    "source_sha256": "5884aac3582d79185235e42f7877d829acea8e990a35126c8303d97ddffeb7e9",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "target kind",
+      "position",
+      "delimiter",
+      "URL target/tooltip"
+    ]
+  },
+  {
+    "name": "note_named_False_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_named_False_False.puml",
+    "source_sha256": "41729a24274e0a175a138d74931fc9a069832637d31899b303a7ce95b38934e0",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "named floating note",
+      "link topology",
+      "URL present/absent"
+    ]
+  },
+  {
+    "name": "note_named_False_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_named_False_True.puml",
+    "source_sha256": "0ff7ee9397d7826f12c815efc71c65174fdb3bff3a5829c95518be0f1eb0f4c0",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "named floating note",
+      "link topology",
+      "URL present/absent"
+    ]
+  },
+  {
+    "name": "note_named_True_False.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_named_True_False.puml",
+    "source_sha256": "f12fef957e2a9a2ff1eb0bb5590d4204583aaf9be7efa39b2220cacac8460aa5",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "named floating note",
+      "link topology",
+      "URL present/absent"
+    ]
+  },
+  {
+    "name": "note_named_True_True.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-b074/sources/note_named_True_True.puml",
+    "source_sha256": "1ed9e03b338afa7b56cff72c7c28fd15ec9f31f6f39f7ecbf946125ec42fc168",
+    "timezone": "GMT+11:00",
+    "resources": [],
+    "mechanism": "class-note-url-group-ownership",
+    "axes": [
+      "named floating note",
+      "link topology",
+      "URL present/absent"
+    ]
+  }
+]

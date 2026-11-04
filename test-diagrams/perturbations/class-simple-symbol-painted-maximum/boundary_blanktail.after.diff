@@ -1,0 +1,8 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "204px"), ("preserveAspectRatio", "none"), ("style", "width:132px;height:204px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 132 204"), ("width", "132px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "199px"), ("preserveAspectRatio", "none"), ("style", "width:132px;height:199px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 132 199"), ("width", "132px"), ("zoomAndPan", "magnify")]
+  [14] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "19"), ("lengthAdjust", "spacing"), ("textLength", "6.0117"), ("x", "6"), ("y", "187.7461")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "19"), ("lengthAdjust", "spacing"), ("textLength", "0"), ("x", "6"), ("y", "187.7461")]
+

@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+left to right direction
+<style>
+actor {
+FontSize 25
+FontStyle bold
+HorizontalAlignment right
+}
+</style>
+class Station
+actor "North pier\nSignal mast\nTerminal" as Beacon <<watch>>
+Station --> Beacon
+@enduml

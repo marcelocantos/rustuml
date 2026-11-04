@@ -1,0 +1,14 @@
+   Compiling bitflags v2.11.0
+   Compiling rustybuzz v0.20.1
+   Compiling png v0.18.1
+   Compiling pdf-writer v0.12.1
+   Compiling image v0.25.10
+   Compiling tiny-skia v0.12.0
+   Compiling usvg v0.45.1
+   Compiling resvg v0.45.1
+   Compiling usvg v0.47.0
+   Compiling resvg v0.47.0
+   Compiling svg2pdf v0.13.0
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c/crates/rustuml-render)
+   Compiling rustuml v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-bec9b97c/crates/rustuml)
+    Finished `release` profile [optimized] target(s) in 31.11s
