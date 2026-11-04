@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Remote
+participant of
+of -> Remote: inbound
+hnote left of of: margin
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Remote
+participant "Harbour 7" as end
+Remote -> end: inbound
+rnote over end: ledger
+end -> Remote: outward
+@enduml

@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "uv",
+    "run",
+    "--no-project",
+    "python",
+    "docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py",
+    "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/negative-independent.json",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/before-bin/rustuml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/after-bin/rustuml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-command-checker-2b056ca1/rejection-independent.json"
+  ],
+  "exit": 1
+}

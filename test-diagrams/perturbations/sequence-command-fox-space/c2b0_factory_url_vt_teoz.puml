@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+urlofValeis[[https://example.invalid/berth]]
+@enduml

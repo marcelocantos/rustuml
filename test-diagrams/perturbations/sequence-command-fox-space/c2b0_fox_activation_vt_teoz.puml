@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+activateVale
+Vale -> Quartz: echo
+deactivateVale
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+newpageSecond
+Vale -> Quartz: next
+@enduml

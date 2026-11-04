@@ -1,0 +1,7 @@
+@startuml
+participant Remote
+participant "Harbour 5" as across
+Remote -> across: inbound
+hnote over across: ledger
+across -> Remote: outward
+@enduml
