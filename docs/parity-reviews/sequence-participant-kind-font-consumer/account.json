@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-participant-kind-font-consumer",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.Participant#getUsedStyles",
+    "skin.rose.Rose#createComponentParticipant",
+    "skin.AbstractTextualComponent#constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render",
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout"
+  ],
+  "invariant": "Each participant kind resolves its own font size before measuring and painting the complete Display; a participant sibling override does not change a queue or actor.",
+  "causal_divergence": "The owned renderer uses participant_font_size for every kind; fresh queue_display font17 has Java queuefont14 but Rust17.",
+  "planned_change": "Materialize per-kind font size in ParticipantLayout from the existing sparse style cascade and default font size, and use it for component measure and paint. No font mapping, metrics or shared style edits.",
+  "perturbation_axes": [
+    "participant-only versus default/kind font size",
+    "queue/actor/rectangle, creation and engines"
+  ],
+  "before_revision": "71422f1b",
+  "account_date": "2026-11-04",
+  "evidence": "Preserved display62 focused captures; complete Display draft already exists under earlier bf400d84 account. This account precedes these additional corrections."
+}
