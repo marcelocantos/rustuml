@@ -1,0 +1,3 @@
+@startuml
+class "A<#é$north>B<$north{color=é}>!" as Review
+@enduml

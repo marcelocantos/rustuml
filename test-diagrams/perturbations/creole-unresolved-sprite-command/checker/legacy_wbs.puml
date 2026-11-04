@@ -1,0 +1,6 @@
+@startuml
+@startwbs
+* A<$north>B
+** C<$south>D
+@endwbs
+@enduml

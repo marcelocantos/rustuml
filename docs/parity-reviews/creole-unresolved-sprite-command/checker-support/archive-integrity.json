@@ -1,0 +1,16 @@
+{
+  "sha256": "fb38366b3ac1d1230151e0a95dc73569edcb48f037b564e0ed1109bca5b710c3",
+  "bytes": 15896628,
+  "restore_root": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker",
+  "excluded": [
+    "__pycache__",
+    "after-rustuml",
+    "before-rustuml",
+    "legacy-probe",
+    "probe",
+    "source-probe",
+    "standing-slice",
+    "target-after",
+    "target-before"
+  ]
+}

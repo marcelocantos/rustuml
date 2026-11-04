@@ -1,0 +1,233 @@
+[
+  {
+    "name": "library",
+    "argv": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--lib",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 52.689996582994354
+  },
+  {
+    "name": "cli",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 1.2374438750121044
+  },
+  {
+    "name": "main-product",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 5.451378499987186
+  },
+  {
+    "name": "main-assisted",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 4.073828042004607
+  },
+  {
+    "name": "standing",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 2.917153332993621
+  },
+  {
+    "name": "guards",
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 1.4520516249904176
+  },
+  {
+    "name": "clippy",
+    "argv": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 101,
+    "seconds": 10.378287208004622
+  },
+  {
+    "name": "format",
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 1,
+    "seconds": 1.222016875006375
+  },
+  {
+    "name": "touched-format",
+    "argv": [
+      "rustfmt",
+      "--edition",
+      "2024",
+      "--check",
+      "--config",
+      "skip_children=true",
+      "crates/rustuml-render/src/creole.rs",
+      "crates/rustuml-render/src/text_render.rs"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 0.037575207999907434
+  },
+  {
+    "name": "diff",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "exit": 0,
+    "seconds": 0.029170957990572788
+  }
+]

@@ -1,0 +1,3 @@
+@startuml
+Birch -> Larch : first\n<$north>\n\n<size:29><$south></size>\nlast
+@enduml

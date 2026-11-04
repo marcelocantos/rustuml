@@ -1,0 +1,3 @@
+@startuml
+Birch -> Larch : [[https://example.test/review Fir<$north>Elm]]
+@enduml

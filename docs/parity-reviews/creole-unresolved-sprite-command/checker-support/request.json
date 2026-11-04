@@ -1,0 +1,887 @@
+{
+  "manifest_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/manifest.json",
+  "manifest_sha256": "7ec9ad75a80a2ee2bbba7f16e31936953ab80f61ec5d5b34acde51ecd835669f",
+  "case_count": 38,
+  "resources": [
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/case_keywords.puml",
+      "remote_relative_path": "new/case_keywords.puml",
+      "sha256": "46ef3a7e2545de98caf7b81a97c94d1f2e926fd899b53413ca07fe6d04d678d0",
+      "bytes": 78
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/class_defined.puml",
+      "remote_relative_path": "new/class_defined.puml",
+      "sha256": "87fad1cd968f483676a0b1d6980177fbbd4e800c2821b150a649922628d550d6",
+      "bytes": 92
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/color_separator.puml",
+      "remote_relative_path": "new/color_separator.puml",
+      "sha256": "a107da99446d925ea77590d7793086b70ce5591d7d09ee3acffd2c14dbf5b9f5",
+      "bytes": 93
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/deploy_defined.puml",
+      "remote_relative_path": "new/deploy_defined.puml",
+      "sha256": "ea83f673d12496fc2ec4fde449d1935a952ec3395fd5fec19e13f3e2d97de006",
+      "bytes": 96
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/double_escape.puml",
+      "remote_relative_path": "new/double_escape.puml",
+      "sha256": "97a72f5273ad64f44833d030039ee506a57b3f5491207a7c30f9396e25af04f7",
+      "bytes": 51
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_adjacent.puml",
+      "remote_relative_path": "new/empty_adjacent.puml",
+      "sha256": "d165348c238e42004682250488f7eb7808c5af6290995afd5585307b96bde552",
+      "bytes": 75
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_closed.puml",
+      "remote_relative_path": "new/empty_closed.puml",
+      "sha256": "df44068ac0dfd0780dfa48eed9f73cfa9b505a6f917e52e93849308afb505c1b",
+      "bytes": 86
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_diagram.puml",
+      "remote_relative_path": "new/empty_diagram.puml",
+      "sha256": "9812077fc7bcbff0d46cabe21ede1b5186a4e35d0dc966d587a6a08c338e0eea",
+      "bytes": 19
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_eol.puml",
+      "remote_relative_path": "new/empty_eol.puml",
+      "sha256": "f6b6a7875f973d10778d0c8ae2650a126deea5a31290e959753b107b2d401a77",
+      "bytes": 67
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_lines.puml",
+      "remote_relative_path": "new/empty_lines.puml",
+      "sha256": "9a08dad4fa8fb8f50b1a8f6eb291a536e04044053083403609266378935b5a41",
+      "bytes": 85
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_link.puml",
+      "remote_relative_path": "new/empty_link.puml",
+      "sha256": "46b45c13f4aea38af67fcc9cbefe6a2097a5367035bd37fb116078b98ca9ab9e",
+      "bytes": 76
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/entity_escape.puml",
+      "remote_relative_path": "new/entity_escape.puml",
+      "sha256": "1379e3626d655954c676199f150621dd90b4795aeca4bf5fa32e56552f43683c",
+      "bytes": 53
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/escaped.puml",
+      "remote_relative_path": "new/escaped.puml",
+      "sha256": "7be6796801f6932e1efc679adb686db65ca3a27fada6c65bdf828fdb67722847",
+      "bytes": 67
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/legacy_title.puml",
+      "remote_relative_path": "new/legacy_title.puml",
+      "sha256": "5e00233b24123fc3e45fe629015761217f58a5919b92d739d05414086cd66271",
+      "bytes": 47
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/legacy_wbs.puml",
+      "remote_relative_path": "new/legacy_wbs.puml",
+      "sha256": "e12c67e998248869fc298e4db2f1635edf654ba0f753f6c72d757f7e4b850813",
+      "bytes": 63
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/malformed_names.puml",
+      "remote_relative_path": "new/malformed_names.puml",
+      "sha256": "aba99f7e548b18fdd0dd8e8ed17980e237cf58b69247bd1d866e43b44f48e849",
+      "bytes": 82
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/missing_close.puml",
+      "remote_relative_path": "new/missing_close.puml",
+      "sha256": "14a167ea5dcf97868845cf3d265c109ecd8cfdfd48632827268f787627ed6ae3",
+      "bytes": 47
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/nested_angle.puml",
+      "remote_relative_path": "new/nested_angle.puml",
+      "sha256": "29d1d398f56f2e5e2e8889368c11dcbcf49ba29fc7276b241864d975b7c5bb79",
+      "bytes": 63
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/note_defined.puml",
+      "remote_relative_path": "new/note_defined.puml",
+      "sha256": "7dc6138f644d2a940ed676b21e4f4aba1c40561ce953e35f911a2df5c929e7fe",
+      "bytes": 116
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/note_defined_scale.puml",
+      "remote_relative_path": "new/note_defined_scale.puml",
+      "sha256": "c7a93fc16ef2981d631ba7d10800d2ec9d96ee721b429dce065d4fc42244ecb0",
+      "bytes": 126
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/note_undefined.puml",
+      "remote_relative_path": "new/note_undefined.puml",
+      "sha256": "26cfa8601c8a05c922de3d7fb0e77c9a634d09c1ed80d8488d47f9429aa46c16",
+      "bytes": 79
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/optional_braces.puml",
+      "remote_relative_path": "new/optional_braces.puml",
+      "sha256": "faac266275b83272676aecd0b1fb60cdd8f7a59e28730e45ed8060d776e111ec",
+      "bytes": 67
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/run_edges.puml",
+      "remote_relative_path": "new/run_edges.puml",
+      "sha256": "59dd767f2fd0da709290acd57a4acaae25cce79a37da383bad055f0890f468b5",
+      "bytes": 74
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/run_spaces.puml",
+      "remote_relative_path": "new/run_spaces.puml",
+      "sha256": "d4f5c3aba83f9e6dbfb3f01d7f83efeacbd7211bcc2731171ca320cb722fa802",
+      "bytes": 66
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_dot.puml",
+      "remote_relative_path": "new/scale_dot.puml",
+      "sha256": "b8529478239b51bce6819aa10e115114893e19a0592131c4c99c06ec17b85695",
+      "bytes": 49
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_doubledot.puml",
+      "remote_relative_path": "new/scale_doubledot.puml",
+      "sha256": "2ea5ed435df361d211e19b2c5820fe6601b81f44c2742fa538164d71e7625d5a",
+      "bytes": 59
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_negative.puml",
+      "remote_relative_path": "new/scale_negative.puml",
+      "sha256": "b38ddf056fba36be2f67c08e276bfc7ee7f8b61d68ba10d26fc9275a32e2fd36",
+      "bytes": 57
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_overflow.puml",
+      "remote_relative_path": "new/scale_overflow.puml",
+      "sha256": "5b4ce665e4fad0974c21afe6eb73ae17520127c497418efed430c1571370f736",
+      "bytes": 368
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_zero.puml",
+      "remote_relative_path": "new/scale_zero.puml",
+      "sha256": "552b079c447c0f09d1e9b607297e846dddc60932e3f0730c36086f771ab3ed23",
+      "bytes": 49
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/seq_defined.puml",
+      "remote_relative_path": "new/seq_defined.puml",
+      "sha256": "670d046d4cfd8c333e121063cc2e8534310a01cd11946986c5620a896ba85e5e",
+      "bytes": 92
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/style_nested.puml",
+      "remote_relative_path": "new/style_nested.puml",
+      "sha256": "2b050c48ae24da1d09a7fde306a0fc3398fda64ef620024998dc1431440c989d",
+      "bytes": 107
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/style_same.puml",
+      "remote_relative_path": "new/style_same.puml",
+      "sha256": "aa394d0d2b834abfd97ac32a4b2238ab7d8bdcac4f43ebd0c222cd3f132440fe",
+      "bytes": 66
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/syntax_negative.puml",
+      "remote_relative_path": "new/syntax_negative.puml",
+      "sha256": "6d729ef4c8b80ff56f3bbdf620655d2ac0907d7a9c1db42a3d8a71fdec42c33c",
+      "bytes": 26
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/unicode_color.puml",
+      "remote_relative_path": "new/unicode_color.puml",
+      "sha256": "fb0a947e36bef437b7b46413ffaac8f8a4773030304c1003bb7b228b5282159f",
+      "bytes": 69
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/unicode_name.puml",
+      "remote_relative_path": "new/unicode_name.puml",
+      "sha256": "60d898121c676cf70432b82efb9a1ed3ffdb4cfb742091bb27e41cd51283463b",
+      "bytes": 67
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/url_after.puml",
+      "remote_relative_path": "new/url_after.puml",
+      "sha256": "f2d7798ca08704296cd21ac3918261a64579f4337fe858cf5e3f8dde0d90e37d",
+      "bytes": 83
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/url_label.puml",
+      "remote_relative_path": "new/url_label.puml",
+      "sha256": "af64f70f85cbcb783916fc30e7c07cea341f75944a8f2f63ecd6a07b32957e32",
+      "bytes": 82
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/wbs.puml",
+      "remote_relative_path": "new/wbs.puml",
+      "sha256": "5d906fa5f2337c0220be8f4d8bb445675446139b8a9320dd73c8920e04485c61",
+      "bytes": 45
+    }
+  ],
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "case_contracts": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/run_edges.puml",
+      "source_sha256": "59dd767f2fd0da709290acd57a4acaae25cce79a37da383bad055f0890f468b5",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/run_spaces.puml",
+      "source_sha256": "d4f5c3aba83f9e6dbfb3f01d7f83efeacbd7211bcc2731171ca320cb722fa802",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/style_same.puml",
+      "source_sha256": "aa394d0d2b834abfd97ac32a4b2238ab7d8bdcac4f43ebd0c222cd3f132440fe",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/style_nested.puml",
+      "source_sha256": "2b050c48ae24da1d09a7fde306a0fc3398fda64ef620024998dc1431440c989d",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_closed.puml",
+      "source_sha256": "df44068ac0dfd0780dfa48eed9f73cfa9b505a6f917e52e93849308afb505c1b",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_eol.puml",
+      "source_sha256": "f6b6a7875f973d10778d0c8ae2650a126deea5a31290e959753b107b2d401a77",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_adjacent.puml",
+      "source_sha256": "d165348c238e42004682250488f7eb7808c5af6290995afd5585307b96bde552",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_lines.puml",
+      "source_sha256": "9a08dad4fa8fb8f50b1a8f6eb291a536e04044053083403609266378935b5a41",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/case_keywords.puml",
+      "source_sha256": "46ef3a7e2545de98caf7b81a97c94d1f2e926fd899b53413ca07fe6d04d678d0",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/optional_braces.puml",
+      "source_sha256": "faac266275b83272676aecd0b1fb60cdd8f7a59e28730e45ed8060d776e111ec",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/color_separator.puml",
+      "source_sha256": "a107da99446d925ea77590d7793086b70ce5591d7d09ee3acffd2c14dbf5b9f5",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/unicode_name.puml",
+      "source_sha256": "60d898121c676cf70432b82efb9a1ed3ffdb4cfb742091bb27e41cd51283463b",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/unicode_color.puml",
+      "source_sha256": "fb0a947e36bef437b7b46413ffaac8f8a4773030304c1003bb7b228b5282159f",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/malformed_names.puml",
+      "source_sha256": "aba99f7e548b18fdd0dd8e8ed17980e237cf58b69247bd1d866e43b44f48e849",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/nested_angle.puml",
+      "source_sha256": "29d1d398f56f2e5e2e8889368c11dcbcf49ba29fc7276b241864d975b7c5bb79",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/missing_close.puml",
+      "source_sha256": "14a167ea5dcf97868845cf3d265c109ecd8cfdfd48632827268f787627ed6ae3",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/escaped.puml",
+      "source_sha256": "7be6796801f6932e1efc679adb686db65ca3a27fada6c65bdf828fdb67722847",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/double_escape.puml",
+      "source_sha256": "97a72f5273ad64f44833d030039ee506a57b3f5491207a7c30f9396e25af04f7",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/entity_escape.puml",
+      "source_sha256": "1379e3626d655954c676199f150621dd90b4795aeca4bf5fa32e56552f43683c",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_dot.puml",
+      "source_sha256": "b8529478239b51bce6819aa10e115114893e19a0592131c4c99c06ec17b85695",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_doubledot.puml",
+      "source_sha256": "2ea5ed435df361d211e19b2c5820fe6601b81f44c2742fa538164d71e7625d5a",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_zero.puml",
+      "source_sha256": "552b079c447c0f09d1e9b607297e846dddc60932e3f0730c36086f771ab3ed23",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_negative.puml",
+      "source_sha256": "b38ddf056fba36be2f67c08e276bfc7ee7f8b61d68ba10d26fc9275a32e2fd36",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/scale_overflow.puml",
+      "source_sha256": "5b4ce665e4fad0974c21afe6eb73ae17520127c497418efed430c1571370f736",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/url_label.puml",
+      "source_sha256": "af64f70f85cbcb783916fc30e7c07cea341f75944a8f2f63ecd6a07b32957e32",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/url_after.puml",
+      "source_sha256": "f2d7798ca08704296cd21ac3918261a64579f4337fe858cf5e3f8dde0d90e37d",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_link.puml",
+      "source_sha256": "46b45c13f4aea38af67fcc9cbefe6a2097a5367035bd37fb116078b98ca9ab9e",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/note_undefined.puml",
+      "source_sha256": "26cfa8601c8a05c922de3d7fb0e77c9a634d09c1ed80d8488d47f9429aa46c16",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/note_defined.puml",
+      "source_sha256": "7dc6138f644d2a940ed676b21e4f4aba1c40561ce953e35f911a2df5c929e7fe",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/note_defined_scale.puml",
+      "source_sha256": "c7a93fc16ef2981d631ba7d10800d2ec9d96ee721b429dce065d4fc42244ecb0",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/deploy_defined.puml",
+      "source_sha256": "ea83f673d12496fc2ec4fde449d1935a952ec3395fd5fec19e13f3e2d97de006",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/class_defined.puml",
+      "source_sha256": "87fad1cd968f483676a0b1d6980177fbbd4e800c2821b150a649922628d550d6",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/seq_defined.puml",
+      "source_sha256": "670d046d4cfd8c333e121063cc2e8534310a01cd11946986c5620a896ba85e5e",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/legacy_title.puml",
+      "source_sha256": "5e00233b24123fc3e45fe629015761217f58a5919b92d739d05414086cd66271",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/legacy_wbs.puml",
+      "source_sha256": "e12c67e998248869fc298e4db2f1635edf654ba0f753f6c72d757f7e4b850813",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/wbs.puml",
+      "source_sha256": "5d906fa5f2337c0220be8f4d8bb445675446139b8a9320dd73c8920e04485c61",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/empty_diagram.puml",
+      "source_sha256": "9812077fc7bcbff0d46cabe21ede1b5186a4e35d0dc966d587a6a08c338e0eea",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/new/syntax_negative.puml",
+      "source_sha256": "6d729ef4c8b80ff56f3bbdf620655d2ac0907d7a9c1db42a3d8a71fdec42c33c",
+      "cwd": "<worker>/new",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/new",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ]
+    }
+  ],
+  "output_contract": "Preserve raw stdout/stderr/status including all empty or negative outputs; actual wrapper and Java argv, cwd, env, hashes, pinned headless runtime provenance. No source normalization. SVG-only; SourceProbe optional not required."
+}
