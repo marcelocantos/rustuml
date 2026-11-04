@@ -20,7 +20,7 @@ use rustuml_layout::graph::{
     LayoutGraph, NodePosition,
 };
 use rustuml_parser::diagram::class::*;
-use rustuml_parser::diagram::style::{StyleOrigin, StyleScheme};
+use rustuml_parser::diagram::style::StyleScheme;
 use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment, SpriteData};
 
 use crate::layout_oracle::{
@@ -2271,19 +2271,6 @@ fn last_background_value(diagram: &ClassDiagram) -> Option<String> {
         .or(compatibility)
 }
 
-fn has_shadowing_skinparam(diagram: &ClassDiagram) -> bool {
-    diagram
-        .meta
-        .skinparams
-        .iter()
-        .rev()
-        .find(|sp| {
-            sp.key.eq_ignore_ascii_case("shadowing")
-                || sp.key.eq_ignore_ascii_case("classShadowing")
-        })
-        .is_some_and(|sp| sp.value.trim().eq_ignore_ascii_case("true"))
-}
-
 fn fashion_shadowing_delta(value: &str) -> f64 {
     // Style#getShadowing -> ValueImpl#asDoubleDefaultTo(1.5) extracts only
     // ASCII digits and dots. A sign or unit is not part of the numeric value;
@@ -2307,16 +2294,11 @@ fn parse_shadowing_delta(value: &str) -> f64 {
 }
 
 fn style_shadowing_delta(style: &ResolvedStyle<'_>) -> Option<f64> {
-    style
-        .declaration("shadowing")
-        .map(|declaration| match declaration.origin {
-            StyleOrigin::UserSkinParam | StyleOrigin::ThemeSkinParam { .. } => {
-                parse_shadowing_delta(&declaration.value)
-            }
-            StyleOrigin::UserStyle | StyleOrigin::ThemeStyle { .. } => {
-                fashion_shadowing_delta(&declaration.value)
-            }
-        })
+    // FromSkinparamToStyle#convertNow maps true/false for mapped keys, but
+    // getShadowingValue also maps yes/no only for the unmapped global/note
+    // fallback. parse/style.rs has already made that distinction. Style then
+    // applies ValueImpl to the resulting declaration regardless of its origin.
+    style.property("shadowing").map(fashion_shadowing_delta)
 }
 
 fn resolved_note_shadowing(diagram: &ClassDiagram) -> f64 {
@@ -2437,7 +2419,12 @@ fn render_with_oracle_uid_origin(
         // Java `GraphvizImageBuilder.buildImage` takes its degenerate image
         // path only when the diagram has exactly one leaf. Multiple note
         // entities still flow through SVEK like ordinary graph nodes.
-        if diagram.notes.len() == 1 {
+        // DotData.isDegeneratedWithFewEntities also requires zero groups and
+        // links. Empty package leaves must reach EntityImageEmptyPackage/SVEK.
+        if diagram.notes.len() == 1
+            && diagram.packages.is_empty()
+            && diagram.relationships.is_empty()
+        {
             return render_notes_only(diagram, cs, oracle);
         }
         if diagram.notes.is_empty()
@@ -2567,7 +2554,12 @@ fn render_with_oracle_uid_origin(
         .filter_map(|(idx, note)| (note.target.is_none() && note.alias.is_some()).then_some(idx))
         .collect::<Vec<_>>();
     let mut next_layout_slot = 0;
-    let svek_nodes = svek_node_emission_order(diagram);
+    // Paint inventory includes NOTE leaves. Graph nodes retain the existing
+    // separate floating/attached-note slot and edge ownership contract below.
+    let svek_nodes = svek_node_emission_order(diagram)
+        .into_iter()
+        .filter(|node| !matches!(node, SvekNodeEmission::Note(_)))
+        .collect::<Vec<_>>();
     let root_start = svek_nodes
         .iter()
         .position(|node| {
@@ -2592,7 +2584,7 @@ fn render_with_oracle_uid_origin(
                 *idx,
                 ClassLayoutNodeEmission::Svek(*node),
             )),
-            SvekNodeEmission::EmptyPackage(_) => None,
+            SvekNodeEmission::EmptyPackage(_) | SvekNodeEmission::Note(_) => None,
         })
         .chain(diagram.notes.iter().enumerate().filter_map(|(idx, note)| {
             (note.target.is_none() && note.alias.is_some()).then_some((
@@ -2627,6 +2619,9 @@ fn render_with_oracle_uid_origin(
                 let (width, height) = empty_package_dims(&diagram.packages[idx]);
                 layout.add_node(&empty_package_layout_id(idx), "", width, height);
                 empty_package_layout_slots[idx] = Some(next_layout_slot);
+            }
+            ClassLayoutNodeEmission::Svek(SvekNodeEmission::Note(_)) => {
+                unreachable!("notes use their own layout slots")
             }
             ClassLayoutNodeEmission::FloatingNote(idx) => {
                 let note = &diagram.notes[idx];
@@ -3071,6 +3066,9 @@ fn add_square_invisible_links(layout: &mut LayoutGraph, entities: &[&str]) {
 /// text black, 14px, plain by default).
 #[derive(Default, Clone)]
 struct ClassFontOverrides {
+    /// EntityImageClass.drawInternal resolves this class style's shadow; the
+    /// preferred calculateDimension is independent of the painted shadow.
+    shadow: f64,
     /// Global `skinparam padding`. Java `Display.create8` passes this through
     /// `SkinParam.getPadding` to `SheetBlock1`, which expands each class text
     /// block by this amount on all four sides.
@@ -3259,6 +3257,8 @@ impl ClassFontOverrides {
         } else {
             cascade.resolve(&class_signature, StyleScheme::Regular)
         };
+        // Style#getShadowing returns zero when the property is absent.
+        font.shadow = style_shadowing_delta(&class_style).unwrap_or(0.0);
         let header_paint_style = if let Some(entity) = entity {
             cascade.resolve_entity_at_source_line(
                 &header_signature,
@@ -3609,6 +3609,7 @@ impl ClassFontOverrides {
             .unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE);
         let default_font_color = find(&["defaultFontColor"]);
         Self {
+            shadow: 0.0,
             text_padding: params
                 .iter()
                 .filter(|sp| sp.key.eq_ignore_ascii_case("padding"))
@@ -4875,6 +4876,7 @@ struct SvekEmissionOrder<'a> {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum SvekNodeEmission {
     Entity(usize),
+    Note(usize),
     EmptyPackage(usize),
 }
 
@@ -4885,12 +4887,55 @@ enum ClassLayoutNodeEmission {
 }
 
 impl SvekEmissionOrder<'_> {
+    fn collect_leaves(&mut self, owner: Option<usize>) {
+        // GraphvizImageBuilder.printEntities uses insertion-ordered leaf data
+        // for each owner; Bibliotekon insertion is paint order, not UID order
+        // across groups. Preserve the parser's actual allocation stream within
+        // each owner, with source order only for manually constructed ASTs.
+        let mut leaves = self
+            .diagram
+            .entities
+            .iter()
+            .enumerate()
+            .filter(|(idx, _)| self.innermost_pkg[*idx] == owner)
+            .map(|(idx, entity)| (SvekNodeEmission::Entity(idx), entity.source_line))
+            .chain(
+                self.diagram
+                    .notes
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(idx, note)| {
+                        let note_owner = note.owner_package.as_ref().and_then(|id| {
+                            self.diagram
+                                .packages
+                                .iter()
+                                .position(|package| &package.name == id)
+                        });
+                        (note_owner == owner && (note.alias.is_some() || note.target.is_some()))
+                            .then_some((SvekNodeEmission::Note(idx), note.source_line))
+                    }),
+            )
+            .collect::<Vec<_>>();
+        leaves.sort_by_key(|&(node, line)| {
+            let event = self
+                .diagram
+                .uid_events
+                .iter()
+                .position(|event| match (node, event) {
+                    (SvekNodeEmission::Entity(idx), ClassUidEvent::Entity(id)) => {
+                        self.diagram.entities[idx].id == *id
+                    }
+                    (SvekNodeEmission::Note(idx), ClassUidEvent::Note(other)) => idx == *other,
+                    _ => false,
+                });
+            (event.unwrap_or(usize::MAX), line)
+        });
+        self.node_order
+            .extend(leaves.into_iter().map(|(node, _)| node));
+    }
+
     fn collect_package(&mut self, pkg_idx: usize) {
-        for (entity_idx, _) in self.diagram.entities.iter().enumerate() {
-            if self.innermost_pkg[entity_idx] == Some(pkg_idx) {
-                self.node_order.push(SvekNodeEmission::Entity(entity_idx));
-            }
-        }
+        self.collect_leaves(Some(pkg_idx));
         for child_idx in 0..self.diagram.packages.len() {
             if self.parent_pkg[child_idx] != Some(pkg_idx) {
                 continue;
@@ -4931,19 +4976,7 @@ fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
         }
     }
 
-    let mut root_entities = diagram
-        .entities
-        .iter()
-        .enumerate()
-        .filter(|(idx, _)| package_render.innermost_pkg[*idx].is_none())
-        .map(|(idx, entity)| (entity.source_line, idx))
-        .collect::<Vec<_>>();
-    root_entities.sort_by_key(|&(source_line, idx)| (source_line, idx));
-    emission.node_order.extend(
-        root_entities
-            .into_iter()
-            .map(|(_, idx)| SvekNodeEmission::Entity(idx)),
-    );
+    emission.collect_leaves(None);
 
     emission.node_order
 }
@@ -4991,7 +5024,7 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         .into_iter()
         .filter_map(|node| match node {
             SvekNodeEmission::Entity(idx) => Some(idx),
-            SvekNodeEmission::EmptyPackage(_) => None,
+            SvekNodeEmission::EmptyPackage(_) | SvekNodeEmission::Note(_) => None,
         })
         .collect();
 
@@ -5236,9 +5269,18 @@ fn render_plantuml_svg(
 
     let font = ClassFontOverrides::from_diagram(diagram);
     let document_margin = class_document_margin(diagram);
-    let class_shadow_filter_id = has_shadowing_skinparam(diagram).then(|| {
-        crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
-    });
+    // EntityImageClass.drawInternal sets the resolved rectangle delta;
+    // DriverRectangleSvg emits a shadow filter only for a positive delta.
+    let class_shadow_filter_id = diagram
+        .entities
+        .iter()
+        .any(|entity| {
+            let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+            font.description.is_none() && font.shadow > 0.0
+        })
+        .then(|| {
+            crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
+        });
     let note_shadow_filter_id = (resolved_note_shadowing(diagram) > 0.0
         && !diagram.notes.is_empty())
     .then(|| crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or("")));
@@ -5381,12 +5423,7 @@ fn render_plantuml_svg(
         let (painted_width, painted_height) = if uses_degenerated_entity {
             (dims[i].width, dims[i].height)
         } else {
-            entity_painted_extent(
-                diagram,
-                &diagram.entities[i],
-                &dims[i],
-                class_shadow_filter_id.is_some(),
-            )
+            entity_painted_extent(diagram, &diagram.entities[i], &dims[i])
         };
         // HeaderLayout's generic UEmpty overhang remains an independent maximum.
         let right = if generic_right > 0.0 {
@@ -5588,12 +5625,7 @@ fn render_plantuml_svg(
             let (painted_width, painted_height) = if uses_degenerated_entity {
                 (dims[i].width, dims[i].height)
             } else {
-                entity_painted_extent(
-                    diagram,
-                    &diagram.entities[i],
-                    &dims[i],
-                    class_shadow_filter_id.is_some(),
-                )
+                entity_painted_extent(diagram, &diagram.entities[i], &dims[i])
             };
             // HeaderLayout's generic UEmpty overhang remains an independent maximum.
             let right = if generic_right > 0.0 {
@@ -5991,18 +6023,8 @@ fn render_plantuml_svg(
         2 + oracle_pkg_clusters.len() + layout_pkg_clusters.len() + layout_empty_packages.len();
 
     let node_emission_order = svek_node_emission_order(diagram);
-    let emission_order = node_emission_order
-        .iter()
-        .filter_map(|node| match node {
-            SvekNodeEmission::Entity(idx) => Some(*idx),
-            SvekNodeEmission::EmptyPackage(_) => None,
-        })
-        .collect::<Vec<_>>();
-    let mut node_emission_cursor = 0;
     let mut non_opale_attached_notes = Vec::new();
-    // SvekResult draws all NOTE leaves in Bibliotekon order regardless of the
-    // source command used to create them (attached versus named).
-    let mut layout_floating_notes = floating_notes
+    let note_slots = floating_notes
         .iter()
         .copied()
         .chain(
@@ -6010,14 +6032,7 @@ fn render_plantuml_svg(
                 .iter()
                 .map(|&(note_idx, node_idx, _)| (note_idx, node_idx)),
         )
-        .filter_map(|(note_idx, node_idx)| {
-            svek_ids.note_ids[note_idx]
-                .as_deref()
-                .map(|entity_id| (note_idx, node_idx, entity_id))
-        })
         .collect::<Vec<_>>();
-    layout_floating_notes.sort_by_key(|(_, _, entity_id)| ent_id_seq(Some(entity_id)));
-    let mut layout_note_cursor = 0;
 
     // Cursor over `oracle_note_entities` (already sorted by emission counter).
     // `emit_note` writes one note's `<g class="entity">…</g>` wrapper; the loop
@@ -6029,27 +6044,48 @@ fn render_plantuml_svg(
             emit_oracle_note_entity(svg, note, "#181818", "#FEFFDD", 13, "sans-serif", "#000000");
     };
 
-    // Render each entity.
-    for &i in &emission_order {
-        while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
-            node_emission_order.get(node_emission_cursor).copied()
-        {
-            if let Some(empty) = layout_empty_packages
-                .iter()
-                .find(|empty| empty.package_idx == package_idx)
-            {
-                let entity_id = svek_ids.package_ids[package_idx]
-                    .as_deref()
-                    .unwrap_or("ent0002");
-                emit_layout_empty_package(&mut svg, empty, entity_id);
+    // SvekResult.drawU consumes Bibliotekon's group-before-root inventory.
+    // UID allocation is independent and remains unchanged.
+    for node in node_emission_order {
+        let i = match node {
+            SvekNodeEmission::Entity(i) => i,
+            SvekNodeEmission::EmptyPackage(package_idx) => {
+                if let Some(empty) = layout_empty_packages
+                    .iter()
+                    .find(|empty| empty.package_idx == package_idx)
+                {
+                    let entity_id = svek_ids.package_ids[package_idx]
+                        .as_deref()
+                        .unwrap_or("ent0002");
+                    emit_layout_empty_package(&mut svg, empty, entity_id);
+                }
+                continue;
             }
-            node_emission_cursor += 1;
-        }
-        debug_assert_eq!(
-            node_emission_order.get(node_emission_cursor),
-            Some(&SvekNodeEmission::Entity(i))
-        );
-        node_emission_cursor += 1;
+            SvekNodeEmission::Note(note_idx) => {
+                if oracle.is_none()
+                    && let Some((_, node_idx)) = note_slots.iter().find(|(idx, _)| *idx == note_idx)
+                    && let Some(pos) = positions.get(*node_idx)
+                    && let Some(entity_id) = svek_ids.note_ids[note_idx].as_deref()
+                    && render_svek_note(
+                        &mut svg,
+                        diagram,
+                        note_idx,
+                        pos,
+                        entity_id,
+                        &svek_ids,
+                        edge_paths,
+                        &resolved_relationship_edges,
+                        floating_note_opale_relationships[note_idx],
+                        layout_x_bias,
+                        body_dx,
+                        body_dy,
+                    )
+                {
+                    non_opale_attached_notes.push(note_idx);
+                }
+                continue;
+            }
+        };
 
         let entity = &diagram.entities[i];
         let (x, y) = entity_positions[i];
@@ -6114,31 +6150,6 @@ fn render_plantuml_svg(
         // Flush any note entities whose emission counter precedes this entity's
         // (e.g. a `note … as N` declared before the first `entity`).
         let cur_seq = ent_id_seq(Some(&current_ent_id));
-        while oracle.is_none()
-            && layout_note_cursor < layout_floating_notes.len()
-            && ent_id_seq(Some(layout_floating_notes[layout_note_cursor].2)) < cur_seq
-        {
-            let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
-            if let Some(pos) = positions.get(node_idx)
-                && render_svek_note(
-                    &mut svg,
-                    diagram,
-                    note_idx,
-                    pos,
-                    entity_id,
-                    &svek_ids,
-                    edge_paths,
-                    &resolved_relationship_edges,
-                    floating_note_opale_relationships[note_idx],
-                    layout_x_bias,
-                    body_dx,
-                    body_dy,
-                )
-            {
-                non_opale_attached_notes.push(note_idx);
-            }
-            layout_note_cursor += 1;
-        }
         while note_cursor < oracle_note_entities.len()
             && ent_id_seq(oracle_note_entities[note_cursor].entity_id.as_deref()) < cur_seq
         {
@@ -6240,7 +6251,9 @@ fn render_plantuml_svg(
             body_gradient_fill.as_deref(),
             header_gradient_fill.as_deref(),
             entity_suppress_header_icon,
-            class_shadow_filter_id.as_deref(),
+            class_shadow_filter_id
+                .as_deref()
+                .filter(|_| entity_font.shadow > 0.0),
             &diagram.meta.sprites,
         );
 
@@ -6284,45 +6297,6 @@ fn render_plantuml_svg(
             }
         }
     }
-
-    while oracle.is_none() && layout_note_cursor < layout_floating_notes.len() {
-        let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
-        if let Some(pos) = positions.get(node_idx)
-            && render_svek_note(
-                &mut svg,
-                diagram,
-                note_idx,
-                pos,
-                entity_id,
-                &svek_ids,
-                edge_paths,
-                &resolved_relationship_edges,
-                floating_note_opale_relationships[note_idx],
-                layout_x_bias,
-                body_dx,
-                body_dy,
-            )
-        {
-            non_opale_attached_notes.push(note_idx);
-        }
-        layout_note_cursor += 1;
-    }
-
-    while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
-        node_emission_order.get(node_emission_cursor).copied()
-    {
-        if let Some(empty) = layout_empty_packages
-            .iter()
-            .find(|empty| empty.package_idx == package_idx)
-        {
-            let entity_id = svek_ids.package_ids[package_idx]
-                .as_deref()
-                .unwrap_or("ent0002");
-            emit_layout_empty_package(&mut svg, empty, entity_id);
-        }
-        node_emission_cursor += 1;
-    }
-    debug_assert_eq!(node_emission_cursor, node_emission_order.len());
 
     // Emit any remaining note entities whose emission counter follows every
     // regular entity (notes declared after the last `entity`). The interleave
@@ -13979,7 +13953,6 @@ fn entity_painted_extent(
     diagram: &ClassDiagram,
     entity: &ClassEntity,
     dim: &EntityDims,
-    class_shadow: bool,
 ) -> (f64, f64) {
     let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
     if let Some(style) = &font.description {
@@ -14035,13 +14008,10 @@ fn entity_painted_extent(
         }
         return (dim.width, dim.height);
     }
-    // FromSkinparamToStyle maps enabled class shadowing to deltaShadow=3;
-    // LimitFinder.drawRectangle adds 2*deltaShadow-1 to its maxima.
-    let extra = if class_shadow {
-        (parse_shadowing_delta("true") * 2.0 - 1.0).max(0.0)
-    } else {
-        0.0
-    };
+    // EntityImageClass.drawInternal puts the resolved Style#getShadowing on
+    // its rectangle. LimitFinder.drawRectangle adds 2*deltaShadow-1; other
+    // existing preferred contributors prevent a negative envelope extension.
+    let extra = (font.shadow * 2.0 - 1.0).max(0.0);
     (dim.width + extra, dim.height + extra)
 }
 
@@ -14285,11 +14255,14 @@ fn svek_layout_y_bias(
 }
 
 fn uses_degenerated_entity(diagram: &ClassDiagram, cluster_positions: &[ClusterPosition]) -> bool {
+    // DotData.isDegeneratedWithFewEntities counts all groups, including those
+    // later muted into EntityImageEmptyPackage leaves by printGroups.
     let has_layout_note = diagram.notes.iter().any(|note| {
         (note.target.is_some() && note.position.is_some())
             || (note.target.is_none() && note.alias.is_some())
     });
     cluster_positions.is_empty()
+        && diagram.packages.is_empty()
         && diagram.relationships.is_empty()
         && !has_layout_note
         && diagram.entities.len() == 1
@@ -15463,6 +15436,7 @@ fn render_notes_only(
     }
 
     if diagram.notes.len() == 1
+        && diagram.packages.is_empty()
         && diagram.relationships.is_empty()
         && diagram.notes[0].alias.is_some()
     {
@@ -19010,6 +18984,9 @@ mod tests {
             .into_iter()
             .map(|node| match node {
                 SvekNodeEmission::Entity(idx) => diagram.entities[idx].label.as_str(),
+                SvekNodeEmission::Note(idx) => {
+                    diagram.notes[idx].alias.as_deref().unwrap_or("attached")
+                }
                 SvekNodeEmission::EmptyPackage(idx) => {
                     package_display_label(&diagram.packages[idx])
                 }
@@ -21502,5 +21479,79 @@ mod tests {
         };
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains("<svg"));
+    }
+
+    #[test]
+    fn svek_note_paint_owner_order_is_independent_of_uid_allocation() {
+        let input = "@startuml\nnote \"root\" as Ledger\npackage Bay {\nclass Dock\nnote \"local\" as Ledger\n}\n@enduml";
+        let rustuml_parser::diagram::Diagram::Class(d) =
+            rustuml_parser::parse::parse(input).unwrap()
+        else {
+            panic!("class");
+        };
+        let ids = svek_id_allocation(&d);
+        assert_eq!(ids.note_ids[0].as_deref(), Some("ent0002"));
+        assert_eq!(ids.note_ids[1].as_deref(), Some("ent0005"));
+        assert_eq!(
+            svek_node_emission_order(&d),
+            [
+                SvekNodeEmission::Entity(0),
+                SvekNodeEmission::Note(1),
+                SvekNodeEmission::Note(0)
+            ]
+        );
+        let svg = render(&d, &Theme::default());
+        assert!(
+            svg.find("data-qualified-name=\"Bay.Ledger\"").unwrap()
+                < svg.find("data-qualified-name=\"Ledger\"").unwrap()
+        );
+    }
+
+    #[test]
+    fn empty_group_prevents_notes_only_degenerated_image() {
+        let input = "@startuml\nset namespaceSeparator none\nnote \"memo\" as Ledger\npackage Bay {\nurl Ledger [[docs]]\n}\n@enduml";
+        let rustuml_parser::diagram::Diagram::Class(d) =
+            rustuml_parser::parse::parse(input).unwrap()
+        else {
+            panic!("class");
+        };
+        assert_eq!(d.packages.len(), 1);
+        let svg = render(&d, &Theme::default());
+        assert!(svg.contains("<!--entity Bay-->"), "{svg}");
+        assert!(svg.contains("data-qualified-name=\"Ledger\""), "{svg}");
+        assert!(svg.contains("xlink:href=\"docs\""), "{svg}");
+    }
+
+    #[test]
+    fn normalized_shadow_declarations_preserve_mapping_path_and_native_value() {
+        for (key, value, actor, native) in [
+            ("actorShadowing", "yes", 1.5, 0.0),
+            ("actorShadowing", "no", 1.5, 0.0),
+            ("actorShadowing", "true", 3.0, 0.0),
+            ("shadowing", "yes", 3.0, 3.0),
+            ("shadowing", "-1.25", 1.25, 1.25),
+        ] {
+            let input = format!(
+                "@startuml\nallowmixing\nskinparam {key} {value}\nactor Reader\nclass Ledger\nReader --> Ledger\n@enduml"
+            );
+            let rustuml_parser::diagram::Diagram::Class(d) =
+                rustuml_parser::parse::parse(&input).unwrap()
+            else {
+                panic!("class");
+            };
+            let a = ClassFontOverrides::from_diagram_for_entity(&d, &d.entities[0]);
+            let c = ClassFontOverrides::from_diagram_for_entity(&d, &d.entities[1]);
+            assert_eq!(a.description.unwrap().shadow, actor, "{input}");
+            assert_eq!(c.shadow, native, "{input}");
+            let svg = render(&d, &Theme::default());
+            let class_svg = svg
+                .split("data-qualified-name=\"Ledger\"")
+                .nth(1)
+                .unwrap()
+                .split("</g>")
+                .next()
+                .unwrap();
+            assert_eq!(class_svg.contains("filter=\"url("), native > 0.0, "{input}");
+        }
     }
 }

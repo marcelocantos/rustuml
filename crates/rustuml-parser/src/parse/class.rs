@@ -1812,43 +1812,9 @@ impl ClassParser {
         // short-name quark, then resolves relative to the current group.
         let path = self.resolve_quark_path(code, QuarkLookup::ReuseUnique)?;
         let id = self.path_id(&path);
-        // UrlBuilder#getRegexp/getUrl tests these strict alternatives in order.
-        // Keep this consuming grammar local: older declaration extractors are
-        // not a validator for a standalone CommandUrl.
-        static BUILDERS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
-            [
-            r#"^\[\[\s*["“”\u{e121}](?P<link>[^"“”\u{e121}]+)["“”\u{e121}](?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
-            r"^\[\[\s*\{(?P<tip>.*)\}\s*\]\]$",
-            r"^\[\[\s*\{(?P<tip>[^{}]*)\}\s*[^\s{}\[\]][^\[\]]*\s*\]\]$",
-            r#"^\[\[\s*(?P<link>[^\s"“”\u{e121}{}\[\]]+?)\s*\{(?P<tip>.+)\}\s*\]\]$"#,
-            r#"^\[\[\s*(?P<link>[^\s"“”\u{e121}\[\]]+?)(?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
-        ].into_iter().map(|pattern| Regex::new(pattern).unwrap()).collect()
-        });
-        let Some(value) = BUILDERS
-            .iter()
-            .find_map(|pattern| pattern.captures(&caps["url"]))
-        else {
+        let Some((url, tooltip)) = self.parse_note_or_command_url(&caps["url"]) else {
             return Ok(false);
         };
-        let mut url = value
-            .name("link")
-            .map_or(String::new(), |m| m.as_str().to_string());
-        let tooltip = value.name("tip").map(|m| m.as_str().to_string());
-        // UrlBuilder.withTopUrl prefixes everything except these three schemes;
-        // tooltip-only alternatives bypass that helper altogether.
-        if value.name("link").is_some()
-            && !["http:", "https:", "file:"]
-                .iter()
-                .any(|scheme| url.starts_with(scheme))
-            && let Some(top) = self
-                .meta
-                .skinparams
-                .iter()
-                .rev()
-                .find(|p| p.key.eq_ignore_ascii_case("topurl"))
-        {
-            url = format!("{}{url}", top.value);
-        }
         let url = Some(url);
         if let Some(&index) = self.entity_by_path.get(&path) {
             self.entities[index].url = url;
@@ -1872,13 +1838,51 @@ impl ClassParser {
         Ok(true)
     }
 
+    fn parse_note_or_command_url(&self, text: &str) -> Option<(String, Option<String>)> {
+        // UrlBuilder#getRegexp/getUrl tests these strict alternatives in order.
+        // Keep this consuming grammar local: older declaration extractors are
+        // not a validator for a standalone CommandUrl.
+        static BUILDERS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
+            [
+            r#"^\[\[\s*["“”\u{e121}](?P<link>[^"“”\u{e121}]+)["“”\u{e121}](?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
+            r"^\[\[\s*\{(?P<tip>.*)\}\s*\]\]$",
+            r"^\[\[\s*\{(?P<tip>[^{}]*)\}\s*[^\s{}\[\]][^\[\]]*\s*\]\]$",
+            r#"^\[\[\s*(?P<link>[^\s"“”\u{e121}{}\[\]]+?)\s*\{(?P<tip>.+)\}\s*\]\]$"#,
+            r#"^\[\[\s*(?P<link>[^\s"“”\u{e121}\[\]]+?)(?:\s*\{(?P<tip>[^{}]*)\})?(?:\s[^\s{}\[\]][^\[\]]*)?\s*\]\]$"#,
+        ].into_iter().map(|pattern| Regex::new(pattern).unwrap()).collect()
+        });
+        let value = BUILDERS.iter().find_map(|pattern| pattern.captures(text))?;
+        let mut url = value
+            .name("link")
+            .map_or(String::new(), |m| m.as_str().to_string());
+        let tooltip = value.name("tip").map(|m| m.as_str().to_string());
+        // UrlBuilder.withTopUrl prefixes everything except these three schemes;
+        // tooltip-only alternatives bypass that helper altogether.
+        if value.name("link").is_some()
+            && !["http:", "https:", "file:"]
+                .iter()
+                .any(|scheme| url.starts_with(scheme))
+            && let Some(top) = self
+                .meta
+                .skinparams
+                .iter()
+                .rev()
+                .find(|p| p.key.eq_ignore_ascii_case("topurl"))
+        {
+            url = format!("{}{url}", top.value);
+        }
+        Some((url, tooltip))
+    }
+
     fn try_note(&mut self, line: &str) -> Result<bool, ParseError> {
         // CommandFactoryNoteOnEntity owns the same ordered modifiers for
         // single-line, end-note and braced bodies. A recognized start consumes
         // its complete body in parse_line, including command-looking text.
+        // NameAndCodeParser.codeForClass uses Pattern2 %g for both quote
+        // boundaries and bare-token exclusions; cleanId below is a separate step.
         static ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-            r#"(?i)^note\s+(?P<position>top|bottom|left|right)(?:\s+of\s+(?P<target>"[^"]+"|[^\s{}"<>]+))?\s*(?P<tags1>(?:\$[^\s{}"<>$]+\s*)*)(?:<<(?P<stereo>.+?)>>)?\s*(?P<tags2>(?:\$[^\s{}"<>$]+\s*)*)(?P<color>#[^\s{}]+)?\s*(?P<url>\[\[.*?\]\])?\s*(?:(?P<brace>\{)|:\s*(?P<text>.*))?$"#
+            r#"(?i)^note\s+(?P<position>top|bottom|left|right)(?:\s+of\s+(?P<target>["“”\u{e121}][^"“”\u{e121}]+["“”\u{e121}]|[^\s{}"“”\u{e121}<>]+))?\s*(?P<tags1>(?:\$[^\s{}"<>$]+\s*)*)(?:<<(?P<stereo>.+?)>>)?\s*(?P<tags2>(?:\$[^\s{}"<>$]+\s*)*)(?P<color>#[^\s{}]+)?\s*(?P<url>\[\[.*?\]\])?\s*(?:(?P<brace>\{)|:\s*(?P<text>.*))?$"#
         ).unwrap()
         });
         // CommandFactoryNote has a named NOTE code, not a class display name;
@@ -1892,7 +1896,7 @@ impl ClassParser {
             let attached = caps.name("position").is_some();
             let target = if let Some(target) = caps.name("target") {
                 let path = self.resolve_quark_path(
-                    target.as_str().trim_matches('"'),
+                    target.as_str().trim_matches(['"', '“', '”']),
                     QuarkLookup::ReuseUnique,
                 )?;
                 let id = self.path_id(&path);
@@ -1920,12 +1924,20 @@ impl ClassParser {
             };
             // CommandFactoryNoteOnEntity#createSingleLine passes null to
             // executeInternal; only its multiline command constructs a Url.
-            let url_text = if attached && caps.name("text").is_some() {
-                ""
+            // UrlBuilder#getRegexp is part of both command grammars, even
+            // when createSingleLine deliberately passes null to executeInternal.
+            let (mut url, mut tooltip) = if let Some(value) = caps.name("url") {
+                let Some((url, tooltip)) = self.parse_note_or_command_url(value.as_str()) else {
+                    return Ok(false);
+                };
+                (Some(url), tooltip)
             } else {
-                caps.name("url").map_or("", |value| value.as_str())
+                (None, None)
             };
-            let (url, _) = super::extract_link_url(url_text);
+            if attached && caps.name("text").is_some() {
+                url = None;
+                tooltip = None;
+            }
             let mut note = Note {
                 target,
                 position: caps
@@ -1944,7 +1956,7 @@ impl ClassParser {
                     .map(|tag| tag.trim_start_matches('$').to_string())
                     .collect(),
                 url,
-                url_tooltip: super::extract_link_tooltip(url_text),
+                url_tooltip: tooltip,
                 source_line: self.current_line,
                 ..Note::default()
             };
@@ -4739,6 +4751,47 @@ mod tests {
             let lines = input.lines().map(str::to_string).collect::<Vec<_>>();
             assert!(parse_class(&lines).is_err());
             assert!(!native_container_candidate(&lines));
+        }
+    }
+
+    #[test]
+    fn attached_note_pattern2_target_and_url_share_consuming_grammar() {
+        for (left, right) in [('"', '"'), ('“', '”'), ('”', '"')] {
+            for (body, has_url) in [
+                (" : memo", false),
+                ("\nmemo\nend note", true),
+                (" {\nmemo\n}", true),
+            ] {
+                let d = parse(&format!(
+                    "skinparam topurl https://example.org/\npackage Bay {{\nclass Dock\nnote right of {left}Dock{right} [[{left}local docs{right}{{read}}]]{body}\n}}"
+                ));
+                assert_eq!(d.entities.len(), 1);
+                assert_eq!(d.notes.len(), 1);
+                let note = &d.notes[0];
+                assert_eq!(note.target.as_deref(), Some("Bay.Dock"));
+                assert_eq!(note.owner_package.as_deref(), Some("Bay"));
+                assert_eq!(note.lines, ["memo"]);
+                assert_eq!(
+                    note.url.as_deref(),
+                    has_url.then_some("https://example.org/local docs")
+                );
+                assert_eq!(note.url_tooltip.as_deref(), has_url.then_some("read"));
+                assert!(matches!(d.uid_events.last(), Some(ClassUidEvent::Note(0))));
+            }
+        }
+    }
+
+    #[test]
+    fn attached_url_validation_precedes_single_line_null_url_semantics() {
+        for command in [
+            "note right of Dock [[“”]] : memo",
+            "note right of “Dock : memo",
+            "note right of \u{e121}Dock\u{e121} : memo",
+            "note \"memo\" as Archive [[docs]]",
+        ] {
+            let input = format!("class Dock\n{command}");
+            let lines = input.lines().map(str::to_string).collect::<Vec<_>>();
+            assert!(parse_class(&lines).is_err(), "{input}");
         }
     }
 }
