@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-hsl-typed-alpha",
+  "rust_revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/builtin/HslColor.java:executeReturnFunction",
+    "tim/expression/TValue.java:toInt",
+    "klimt/color/HSLColor.java:toRGB,HueToRGB",
+    "klimt/awt/XColor.java:fromFloat",
+    "klimt/color/HColorSimple.java:asString,isTransparent"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "HslColor reads each operand through TValue.toInt, applies optional alpha percentage, clamps S/L/alpha, computes Java float HSL conversion and serializes transparent, opaque uppercase RGB or lowercase ARGB.",
+  "causal_divergence": "Existing body parses display strings as floats and ignores fourth alpha. It also uses the unrelated f64 lighten/darken helper.",
+  "planned_change": "Add a builtin-local typed f32 HSL conversion following cited equations and rounding; constants 360,100,1/3,2/3,6,2,3,0.5,255 derive directly from those methods. Keep unrelated color/renderer helpers unchanged.",
+  "perturbation_axes": [
+    "Integer versus string/JSON channel operands",
+    "Hue wrap, clamping, transparent/partial/opaque alpha and rounding"
+  ],
+  "prior_evidence": "5d37f60cbce90a3f3a9efb199c75285d6b7b859f (import 079c1bc1); prior accounts and rejected implementations remain immutable",
+  "oracle_plan": [
+    "Replay unchanged 1516/31/29 and maker15/prior17 memberships with overlap explicit; actual CLI, exact source/model, status/error/XML separate.",
+    "Compact source-guided remote relay controls; no local JVM or SSH. Preserve every failed iteration and negative reference.",
+    "Final main tiers, parser/CLI, guards/standing once stabilized. No acceptance claim; fresh independent checker required."
+  ]
+}

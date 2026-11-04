@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-local-sub-collection",
+  "rust_revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/iterator/CodeIteratorSub.java:peek",
+    "tim/TContext.java:executeLines"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Local subblock collection rejects nested STARTSUB before replaying any buffered body; diagnostics point at the outer declaration. TIM comment execution remains distinct from external raw Sub.fromFile validation.",
+  "causal_divergence": "The local collector buffers nested markers and interprets them on replay, which can silently swallow subsequent model lines.",
+  "planned_change": "Retain outer origin in collector state and detect nested start markers immediately. Emit first fatal diagnostic before buffered effects. Leave external raw selection and comment handling unchanged.",
+  "perturbation_axes": [
+    "Nested sub inside inactive condition and preceding side effects",
+    "Commented markers versus actual nested marker and outer-origin reporting"
+  ],
+  "prior_evidence": "5d37f60cbce90a3f3a9efb199c75285d6b7b859f (import 079c1bc1); prior accounts and rejected implementations remain immutable",
+  "oracle_plan": [
+    "Replay unchanged 1516/31/29 and maker15/prior17 memberships with overlap explicit; actual CLI, exact source/model, status/error/XML separate.",
+    "Compact source-guided remote relay controls; no local JVM or SSH. Preserve every failed iteration and negative reference.",
+    "Final main tiers, parser/CLI, guards/standing once stabilized. No acceptance claim; fresh independent checker required."
+  ]
+}
