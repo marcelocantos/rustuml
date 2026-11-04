@@ -1,0 +1,8 @@
+@startuml
+participant Mint
+participant Roe
+create Roe
+create Roe
+Mint -> Roe: first
+Mint -> Roe: second
+@enduml

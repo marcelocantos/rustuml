@@ -1,0 +1,8 @@
+@startuml
+skinparam participantFontSize 25
+participant "Plain\nhead" as P
+queue "Queue\nhead" as Q
+actor "Actor\nhead" as A
+P -> Q: relay
+Q -> A: forward
+@enduml

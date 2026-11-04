@@ -1,0 +1,17 @@
+{
+  "first62_losses": [
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/dressing_self_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-component-672/reference-inputs/dressing_self_teoz.puml"
+  ],
+  "first_binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "241497f0cc8bf15cf54554ec1e200fa4c66fde0a1110490a817887b37352875f",
+    "rustuml": "60d9263123ef05e22a9043efe5a93060dd03479e07b94b99d65bfc7720b2c805"
+  },
+  "display_binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "76eff8f69662f531ecb93ff65ee1f246d52ecb9a7b346dd888300df4fe71fb33",
+    "rustuml": "bb2cd14d6f92ed0f90ba6c260edd38eb99a4d992b12285e3d1a34bb0ce0c0202"
+  },
+  "classification": "Historical maker captures only, not independent exact-source executions. Display-bin lacks simultaneous full source binding and remains unbound. No retrospective acceptance."
+}

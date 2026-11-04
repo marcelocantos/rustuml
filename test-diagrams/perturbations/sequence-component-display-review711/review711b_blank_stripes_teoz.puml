@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant "\n\n" as P
+queue "\n" as Q
+P -> Q: blank stripe controls
+@enduml

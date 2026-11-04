@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+queue "Blue\nMailbox" as Box
+participant Mint
+create Box
+Box <- Mint: first
+Box --> Mint: acknowledgement
+create Box
+Box <- Mint ++: second
+Box --> Mint --: finish
+@enduml

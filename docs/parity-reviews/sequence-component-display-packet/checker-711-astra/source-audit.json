@@ -1,0 +1,82 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "production": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "packet": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "method": "Read mapped accounts, full production diff, named Java consumers and relevant Rust dataflow; independently generated and executed counterexamples.",
+  "fixture_shaped_logic": "No added fixture-label keyed branch, golden embedding/read, per-count constant ladder or post-hoc SVG surgery found in the three-file production diff. This bounded source audit does not certify untouched renderer history.",
+  "serialized_contract": "diagram/sequence.rs change is documentation only. No serialized field, parse/mod.rs or ASCII file edit; parser Display changes observably affect model and ASCII outputs.",
+  "constants": [
+    {
+      "rust": "ACTOR_SYMBOL_HEIGHT",
+      "derivation": "16+27+15+2*0.5+1",
+      "java": "skin.ActorStickMan#getPreferredHeight and default stroke; dynamic shadow remains separate"
+    },
+    {
+      "rust": "CIRCLE_SYMBOL_HEIGHT",
+      "derivation": "2*radius12+2*margin4",
+      "java": "svek.Boundary/Control/EntityDomain#calculateDimension"
+    },
+    {
+      "rust": "queue text height/position",
+      "derivation": "USymbolQueue Margin(5,15,5,5)",
+      "java": "decoration.symbol.USymbolQueue#getMargin/#asSmall",
+      "defect": "Queue caller still uses base-font ascent for the first rendered stripe"
+    },
+    {
+      "rust": "participant/collections margins",
+      "derivation": "marginY7 and deltaCollection4",
+      "java": "skin.rose.ComponentRoseParticipant#constructor/#getDeltaCollection",
+      "defect": "New ComponentRoseCollections comment names nonexistent Java class"
+    },
+    {
+      "rust": "englober title band",
+      "derivation": "text+2*marginY1+3",
+      "java": "skin.rose.ComponentRoseEnglober#constructor/#getPreferredHeight",
+      "defect": "Display evaluation and nested Teoz summation remain incomplete"
+    }
+  ],
+  "findings": {
+    "sequence-dressing-owned-parts": [
+      "ArrowConfiguration.withPart mutates dressing2 when it has a head, otherwise dressing1; reverse swaps dressings. CommandArrow normalizes participants before configuring both/normal, async heads and withPart. Rust ordinary endpoint tuples now retain source FULL and destination head_half. Four new normalized ordinary forward/reversed combinations pass, as do external controls.",
+      "Whole reverse-self controls fail in both engines. Self is a distinct aggregate-part consumer; the triangle has identical vertex set but a different serialized point order from ComponentRoseSelfArrow.getPolygon for TOP_PART. Frozen comparator rejects it. No comparator relaxation or visual-equivalence waiver.",
+      "Original ordinary combined probes accidentally used invalid mixed endpoint syntax. Their Java exit200 pages and Rust accept0 remain preserved; the supplemental four valid inputs are new files, not edits or silent replacement."
+    ],
+    "sequence-created-image-event-ownership": [
+      "SequenceDiagram.activate assigns a single pendingCreate field; addMessage attaches and clears only that one event. Rust sequence_create_message_indices stores a Vec of pending IDs, so two consecutive creates are incorrectly queued and consumed by separate future messages. The account invariant that every pending CREATE survives is too strong.",
+      "Java-valid double-pending same-participant input has two Roe label occurrences (one created head plus tail); Rust before also has two, but candidate has three. This is an introduced semantic regression inside a case already failing whole SVG before: zero lost whole-case passes does not mean zero regressions. Different-participant pending overwrite fails in both engines too.",
+      "Repeated creates separated by compatible messages, three iterations, multiline actors, reverse queues and active group scope support the intended event-vs-lifeline separation. LifeLine.setCreate and LivingSpace.goCreate overwrite the final origin; CommunicationTile.drawU translates the complete head. Five of ten fresh whole cases pass; reverse created queue legacy still has width213 versus Java223."
+    ],
+    "sequence-complete-participant-display": [
+      "CommandParticipant evaluates Display before Participant storage; Rust now expands owned participant label escapes and keeps ID separate. New same-label/different-alias, multiline, rich-size later stripes, six figure kinds, present blank stripes, creation and tails provide broad positive support.",
+      "New firststripe_size inputs fail in both engines. render_participant_shape computes queue text_y with ascent_with_family at base participant font size; ParticipantTextBlock.draw then subtracts the actual first stripe ascent. A size25 first stripe is therefore translated upward by10.6348. Java USymbolQueue.asSmall places the complete block at marginY1=5. Model dimensions are correct but painted queue stripes are not.",
+      "Box/member and reverse creation canvas failures remain whole-case failures. Literal empty queue label is Java-invalid yet Rust accepts it; present blank-stripe supplemental cases are valid and pass. This does not certify shared absent-Display integration.",
+      "The new comment naming ComponentRoseCollections is not a Java class at the pinned revision. The actual source of margin7 and collection delta4 is Rose.createComponentParticipant -> ComponentRoseParticipant(collections=true), constructor/getPreferredHeight/getDeltaCollection. Numbers are attributable, but the adjacent class citation is inaccurate and should be corrected by the maker."
+    ],
+    "sequence-empty-rule-title-atom": [
+      "BodyEnhancedAbstract.getTitle trims the interior of a titled separator; StripeSimple.getAtoms inserts one space when atoms are empty. Rust EnhancedNoteBody normalizes Some(empty) to the same space at construction. Four fresh whitespace/rule/font-size/topology cases match in both engines.",
+      "This is bounded positive support for the atom correction, not acceptance of the packet or all enhanced-note composition. The existing centered-note canvas and shared rich-text failures remain. Required standing perturbations and guards are red; acceptance is withheld, with no fabricated local counterexample."
+    ],
+    "sequence-unclosed-note-command": [
+      "PSystemCommandFactory requires the multiline note command to finish. Rust now rejects a remaining note_buffer before finish. Two fresh unclosed-note Java exit200 controls are rejected by the actual CLI; positive closed notes and valid unclosed boxes still render.",
+      "Java-valid unclosed group controls remain whole-output failures in both engines. Legacy width158 versus173; Teoz148x162 versus167x176 and missing group elements. Grammar rejection is bounded support only; the requested closure contrast does not pass as a whole."
+    ],
+    "sequence-self-part-consumer": [
+      "ComponentRoseSelfArrow.drawRightSide/drawLeftSide consumes configuration.getPart, unlike ordinary independent dressings. Mixed bidirectional/open/half/circle self controls pass, supporting the separately preaccounted restoration.",
+      "New reversed filled half-self inputs fail in both engines because Rust emits wing-base, tip, wing-top for TOP_PART; Java getPolygon emits wing-top, tip, wing-base. This is an exact structural-order failure (same triangle vertex set), not evidence that independent source dressing ownership should be undone. Frozen comparator remains unchanged.",
+      "Historical first62 self regressions remain recorded; historical display-bin outputs are unbound drafts, not exact-source validation."
+    ],
+    "sequence-participant-kind-font-consumer": [
+      "Participant.getUsedStyles begins with getStyleSignature for the participant kind; sibling actor/queue styles do not inherit participantFontSize. Rust resolves component_style(kind).fontSize into ParticipantLayout and temporarily uses it for painting.",
+      "Four new mixed-kind multiline cases with participant-only override and unequal explicit actor/queue/participant sizes pass. This supports the font-size consumer narrowly. Logical-font mapping, per-stereotype style and other shared-style semantics are not proved. Global standing/guard gates remain red, so no acceptance is issued."
+    ],
+    "sequence-head-englober-component-height": [
+      "ComponentRoseEnglober passes marginY1 to AbstractTextualComponent and adds3 to preferred height, yielding text height+1+1+3. Queue kind does not delete this band; USymbolQueue margins5,15,5,5 are independently sourced.",
+      "Whole mixed Teoz box cases, multiline box titles and nested Teoz boxes still fail. Both engines use fixed text_height(13) rather than evaluated box-title Display; Teoz Dolls.getOffsetForEnglobers sums each ancestor title, whereas the Rust band retains one title height. Bounded legacy queue alignment recovery does not accept these cases."
+    ],
+    "sequence-englober-member-composition": [
+      "DrawableSet.getHeadHeight selects max(head(member)+that member englober). LivingSpaces.getHeadHeight and Dolls.getOffsetForEnglobers are separate Teoz maxima, with ancestor summation inside Dolls. Final legacy member composition is source-shaped and removes the type-specific queue compensation.",
+      "Independently built exact before/cf3/final binaries reproduce seq_box_with_queue pass/fail/pass; intermediate raises the head/body by5 and canvas201->206, final recovers201. Frozen70 main queue controls are68 valid matches and2 invalids after; this is a specific frozen selection, not a claim to enumerate every source containing queue.",
+      "Fresh legacy boxed/unboxed taller-member controls pass; Teoz mixed horizontal envelopes, multiline title and nested box inputs still fail. No final diagram offset was added and no nested-box failure is waived."
+    ]
+  }
+}
