@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "mechanism": "Three source-selected comment producers",
+  "base_revision": "27bb1c3ff",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "svek/Cluster.java:309\u2013311 emits cluster local name unless ## synthetic",
+    "svek/GeneralImageBuilder.java:180\u2013181 selects EntityImageObject for OBJECT; EntityImageObject.drawU emits no UComment",
+    "statediagram/StateDiagram.java:62 explicitly installs dot namespace separator; Entity.java:682\u2013684 \u2192 Quark.getName"
+  ],
+  "rust_locations": [
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "function": "emit_root_state_cluster",
+      "current_line": 5509
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "function": "render_composite_from_oracle local emit_cluster",
+      "current_line": 9934
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "function": "render_plantuml_svg entity comment",
+      "current_line": 5509
+    }
+  ],
+  "invariant": "Only Java producer kinds emit comments, at their existing element producer; state cluster comments use the local state Quark name. No geometry, elements, attributes or text change.",
+  "causal_divergence": "Both state cluster group emitters omit Cluster UComment. Class renderer emits EntityImageClass comment for Object-kind entities although Java selects EntityImageObject with no comment.",
+  "planned_change": "Add whole-body serialized cluster comment immediately before both existing cluster wrappers, gated by existing cluster_wrapped condition in the oracle caller; suppress ## synthetic names. Use existing state local-name projection, supported by pinned dot namespace and parse/state.rs:245\u2013271 qualification contract. Wrap existing class comment only in entity.kind != EntityKind::Object. Nothing else.",
+  "production_files": [
+    "crates/rustuml-render/src/state.rs",
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "perturbation_axes": [
+    "root versus nested state clusters and ordinary versus synthetic local names",
+    "mixed class/object entity kinds and aliases versus display labels"
+  ],
+  "validation": "Retain intermediate full golden/cohort/gate run. Repeat full golden and all retained/fresh cohorts after these edits; report newly matching comment lists separately, no comparator lost passes. Run broad gates once on final stable code.",
+  "residuals": [
+    "T14.23 nested class package O.I identity and namespace data",
+    "T14.17 empty object parser admission",
+    "Existing missing/reordered state element consumers and geometry are untouched"
+  ],
+  "source_files": [
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+      "sha256": "e1d04c9264cd4a0215581f30560917ff44aad2d70ecd7fe6c639dd8f7eec41d3"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+      "sha256": "b81129ac2c552c56fe4ca2d64edfad865778366118813ae6970cb126e6679f51"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageObject.java",
+      "sha256": "9afa2227c3801d4b595f34aa38e0fb13d653a9a712035784d4bb22e2c99d5072"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+      "sha256": "21ccc49da0f4a4aa7d0f44b80a2b2c093af03bef0a5319457c299604aab10db7"
+    }
+  ]
+}
