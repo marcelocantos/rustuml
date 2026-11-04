@@ -1,0 +1,3 @@
+!theme minty
+!$included_tone = "#123456"
+skinparam classBorderColor $included_tone
