@@ -557,7 +557,7 @@ impl SeqParser {
         if self.try_group(line) {
             return Ok(());
         }
-        if self.try_note(line) {
+        if self.try_note(line)? {
             return Ok(());
         }
         if self.try_divider(line) {
@@ -833,7 +833,7 @@ impl SeqParser {
         true
     }
 
-    fn try_note(&mut self, line: &str) -> bool {
+    fn try_note(&mut self, line: &str) -> Result<bool, ParseError> {
         // `note : text` — Java PlantUML creates a participant named "note" with
         // a note box above/beside it showing the text.  We declare the "note"
         // participant and emit a Note event.
@@ -850,14 +850,14 @@ impl SeqParser {
                     source_line: self.current_line,
                 }));
             }
-            return true;
+            return Ok(true);
         }
 
         // Note on link (attaches to previous message).
         if let Some(rest) = line.strip_prefix("note on link") {
             let text = rest.trim().trim_start_matches(':').trim().to_string();
             self.events.push(Event::NoteOnLink(text));
-            return true;
+            return Ok(true);
         }
 
         // Also handle "note across" (with optional color)
@@ -894,7 +894,7 @@ impl SeqParser {
                     source_line: self.current_line,
                 }));
             }
-            return true;
+            return Ok(true);
         }
 
         // Allow optional color (#xxx) after participant list.
@@ -915,6 +915,14 @@ impl SeqParser {
                 "over" => NotePosition::Over,
                 _ => NotePosition::Right,
             };
+            // FactorySequenceNoteOnArrowCommand has only left/right; the
+            // standalone over factories require a participant capture.
+            if position == NotePosition::Over && caps.get(3).is_none() {
+                return Err(ParseError {
+                    line: self.current_line,
+                    message: "A note over command requires a participant".into(),
+                });
+            }
             let inline_text = caps.get(5);
             let participant_source_line = if inline_text.is_some() {
                 self.current_line
@@ -945,7 +953,7 @@ impl SeqParser {
 
             if let Some(text_match) = inline_text {
                 if participants.is_empty() && position != NotePosition::Over && !on_message {
-                    return true;
+                    return Ok(true);
                 }
                 // Inline note: note right : text
                 let text = inline_sequence_display(text_match.as_str().trim());
@@ -970,9 +978,9 @@ impl SeqParser {
                     source_line: self.current_line,
                 });
             }
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
@@ -2770,6 +2778,33 @@ Gate -> Mail: enqueue"#
         for character in ['\t', '\n', '\u{000b}', '\u{000c}', '\r', ' ', '\u{00a0}'] {
             assert!(whitespace.is_match(&character.to_string()));
             assert!(!non_whitespace.is_match(&character.to_string()));
+        }
+    }
+    #[test]
+    fn note_over_requires_a_named_participant() {
+        for text in [
+            "note over: body",
+            "note over\nbody\nend note",
+            "rnote over: body",
+            "hnote over: body",
+        ] {
+            let lines = format!("[-> Birch: message\n{text}")
+                .lines()
+                .map(str::to_owned)
+                .collect::<Vec<_>>();
+            assert!(parse_sequence(&lines).is_err(), "{text}");
+        }
+        for text in [
+            "note over Birch: body",
+            "note over Birch,Elm: body",
+            "note across: body",
+            "note right: body",
+        ] {
+            let lines = format!("Birch -> Elm: message\n{text}")
+                .lines()
+                .map(str::to_owned)
+                .collect::<Vec<_>>();
+            assert!(parse_sequence(&lines).is_ok(), "{text}");
         }
     }
 }
