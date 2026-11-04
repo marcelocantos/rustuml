@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant @Ridge<<edge>>#Wheat
+participant Valley
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

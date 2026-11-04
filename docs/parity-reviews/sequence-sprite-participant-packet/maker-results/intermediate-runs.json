@@ -1,0 +1,11 @@
+{
+  "candidate1": "candidate1-binding.json, candidate1.patch and captures: zero golden byte changes, retained4140 no losses; maker30 lost participant_negative_legacy by removing its declaration. Restored via explicit partial signed-order reporting.",
+  "candidate2": "candidate2-binding.json, candidate2.patch and maker30 captures: restored lost match;23matches/5mismatches/2nonpositive.",
+  "first_stable": "d15d6eaf9: full4140,30,4,golden12550 and broad gates retained under first-stable-*. Missing-terminator controls all reject. No lost matches/rejections/new valid errors.",
+  "pending_span": "New unit proved included opening erased preceding declarations; pending-span-before.log fails and pending-span-after.log passes. Account2268b0ddf preceded correction ba2e6c2b7. Only authorized enum/sprite blocks changed.",
+  "final": "ba2e6c2b7: broad gates and complete CLI/model replay repeated because production changed. Failure-name files copied immediately for both broad revisions.",
+  "test_assertions_not_product_panics": [
+    "pending-span-before.log intentional newly exposing test assertion",
+    "standing required_perturbation_corpus_fails_when_missing_or_empty intentionally catches two panic assertions"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "purpose": "Missing sprite terminators remain nonpositive instead of disappearing during preprocessing",
+  "cases": [
+    {
+      "name": "svg_unclosed_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/svg_unclosed_legacy.puml",
+      "source_sha256": "f6abaedaaaee43d8fc85f5d0aa032fa43f45f9f2c4220fa101227b8bef5e7bdf",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "svg completion",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "svg_unclosed_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/svg_unclosed_teoz.puml",
+      "source_sha256": "3c49ece99978763c5c6ca1d423b5eeafbf4ed0dbb6256f346108352b27ea2d70",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "svg completion",
+        "teoz"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "pixel_unclosed_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_legacy.puml",
+      "source_sha256": "ea5d9a98a20defeac4f49c8cf26d7f5d1a04c04194c0b12047953ef2754baa73",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "pixel completion",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "pixel_unclosed_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_teoz.puml",
+      "source_sha256": "0fdfd36949e0dd70c3046097d5d861c327972a072b91d60ce9498e1d3b9ce896",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "pixel completion",
+        "teoz"
+      ],
+      "intended_valid": false
+    }
+  ]
+}

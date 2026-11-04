@@ -1,0 +1,49 @@
+{
+  "accepted": false,
+  "new_independent_check_required": true,
+  "complete_failure_inventory": "remaining-failures.json",
+  "remaining": {
+    "valid_mismatches": 1076,
+    "valid_errors": 17,
+    "nonpositive": 436
+  },
+  "dependencies": [
+    {
+      "target": "T14.21",
+      "cause": "13 exact parent-approved upstream dispatch errors. No parse/mod changes; permissive alternative factories still prevent faithful fallback."
+    },
+    {
+      "target": "T14.22",
+      "cause": "Two exact parent-approved TIM continuation errors. No continuation/TIM edits."
+    },
+    {
+      "target": "T14.20",
+      "cause": "35 inherited exporter-error references remain nonpositive; no Java crash reproduction."
+    },
+    {
+      "target": "T14.13",
+      "cause": "Shared headings/stripe semantics and note/divider controls remain failures."
+    },
+    {
+      "target": "T14.11",
+      "cause": "Logical font mapping/metrics remain outside ownership."
+    },
+    {
+      "cause": "Sprite SVG/file/stdlib/compressed/color execution remains unsupported and warned. This packet models block consumption, not rendering sprite definitions."
+    },
+    {
+      "cause": "Signed participant ORDER and Java default-zero stable insertion remain unsupported. Complete parsed declaration fields are retained with explicit warning; no negative-order parity claim. Re-declaration putParticipantInLast removes/reinserts in order and updates englober in Java; current Rust skips re-execution/color but does not implement these layout/box effects."
+    },
+    {
+      "cause": "Participant multiline body execution remains recognized unsupported; its unused COLOR no longer raises a false error. maker participant_multiline_color_legacy remains a whole-output mismatch."
+    },
+    {
+      "cause": "Valid gradient/composite style paint remains unsupported; participant gradients and note/box controls retain all five fresh whole-output mismatches."
+    },
+    {
+      "cause": "Reader/link/factory, note/box/group/envelope/page geometry, short external ?, styled stereotypes and frozen other-family failures remain executable."
+    }
+  ],
+  "approved_exception_set": "parent-approved-exceptions.json; unchanged15 exact source paths/14 hashes",
+  "new_exceptions": 0
+}

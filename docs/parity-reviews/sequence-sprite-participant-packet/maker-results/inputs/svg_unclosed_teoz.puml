@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Cliff
+participant Vale
+Cliff -> Vale: before
+sprite $cliff <svg width="2" height="2">
+<rect width="2" height="2"/>
+@enduml

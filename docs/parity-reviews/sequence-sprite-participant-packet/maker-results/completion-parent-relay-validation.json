@@ -1,0 +1,33 @@
+{
+  "validated": true,
+  "cases": 4,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.voJtthUp",
+  "hashes": {
+    "completion-reference-results.json.gz": "6170bdaf629cdd6305fc8d364992c3fbb12bdb46f181619f0cb561b4362e8469",
+    "completion-reference-transport.json": "49c60875fd8f384674068f5d82500b2be36b1a6a71050d7e29a0b4b146ece494"
+  },
+  "remote_names": {
+    "completion-reference-results.json.gz": "reference-results.json.gz",
+    "completion-reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "200": 4
+  },
+  "intended_invalid": [
+    "pixel_unclosed_legacy",
+    "pixel_unclosed_teoz",
+    "svg_unclosed_legacy",
+    "svg_unclosed_teoz"
+  ],
+  "intended_invalid_exit0": [],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "pixel_unclosed_legacy",
+    "pixel_unclosed_teoz",
+    "svg_unclosed_legacy",
+    "svg_unclosed_teoz"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

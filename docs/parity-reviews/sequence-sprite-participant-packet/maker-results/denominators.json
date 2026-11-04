@@ -1,0 +1,330 @@
+{
+  "entries": 4174,
+  "paths": 4174,
+  "distinct_source_hashes": 4122,
+  "duplicates": [
+    {
+      "sha256": "33f62c91d72f235df6856684d4cfe7d1881ea50683e4dc73b00d97ab12cf4e4b",
+      "sources": [
+        "test-diagrams/perturbations/class-named-note-quark-identity/duplicate_local_aliases_reopened_tb.puml",
+        "test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_local_aliases_reopened_tb.puml"
+      ]
+    },
+    {
+      "sha256": "abdf575dfdf4fb37862e4ef49587b42527128a4f9d435bcea6eee79cbc8b78e0",
+      "sources": [
+        "test-diagrams/perturbations/class-named-note-quark-identity/followup/namespace_separator_reopened_lr.puml",
+        "test-diagrams/perturbations/class-named-note-quark-identity/namespace_separator_reopened_lr.puml"
+      ]
+    },
+    {
+      "sha256": "ea36d208638a6d3af768180a17a6794a30b7c5a94bad3aa502da7026188c72c1",
+      "sources": [
+        "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_source_double_link_tb.puml",
+        "test-diagrams/perturbations/class-named-note-quark-identity/reopened_package_source_double_link_tb.puml"
+      ]
+    },
+    {
+      "sha256": "fbacaedf5fce06b46720e8c0a7eea9d97adac9edd188dea3114d2d03a7841a8f",
+      "sources": [
+        "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_target_double_link_lr.puml",
+        "test-diagrams/perturbations/class-named-note-quark-identity/reopened_package_target_double_link_lr.puml"
+      ]
+    },
+    {
+      "sha256": "276b21babc6f447225aed184acd50f9282adeec5a36d17cdea83053f973bac96",
+      "sources": [
+        "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_source_single_link_tb.puml",
+        "test-diagrams/perturbations/class-named-note-quark-identity/root_source_single_link_tb.puml"
+      ]
+    },
+    {
+      "sha256": "7ec26dcc0f2037ba86c0381563db3e216cc00a9765d0be9841b8685d3a2bfd3f",
+      "sources": [
+        "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_target_single_link_lr.puml",
+        "test-diagrams/perturbations/class-named-note-quark-identity/root_target_single_link_lr.puml"
+      ]
+    },
+    {
+      "sha256": "f2e8387b5c1096a6c0ab645aa03d802c90c9380ebf94c5f4f3992d795fdac473",
+      "sources": [
+        "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+        "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml"
+      ]
+    },
+    {
+      "sha256": "8a4fb5c87ce06a556210e263fa08918501876367856119d097a7126656aab218",
+      "sources": [
+        "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.puml",
+        "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml"
+      ]
+    },
+    {
+      "sha256": "c3c3aa1dc1f7d442de4f0662e166afbc5d4df42f0f8e711977b4206145ce49f7",
+      "sources": [
+        "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.puml",
+        "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml"
+      ]
+    },
+    {
+      "sha256": "5e2e311258edab80ecfb17e61395d27827d5338becec63d7f828e9f2bb52d4d5",
+      "sources": [
+        "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.puml",
+        "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml"
+      ]
+    },
+    {
+      "sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.puml"
+      ]
+    },
+    {
+      "sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.puml"
+      ]
+    },
+    {
+      "sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.puml"
+      ]
+    },
+    {
+      "sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.puml"
+      ]
+    },
+    {
+      "sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.puml"
+      ]
+    },
+    {
+      "sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.puml"
+      ]
+    },
+    {
+      "sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_left.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.puml"
+      ]
+    },
+    {
+      "sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_right.puml",
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.puml"
+      ]
+    },
+    {
+      "sha256": "92185eb1aff3ecbcc885e691671afaf01857728581be3f542cb97f8a71f10d05",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_0.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_0.puml"
+      ]
+    },
+    {
+      "sha256": "f02f4fb1f8339fa1ad40d0390bf78256eff6882c69dab270d2d9aee3dbd07ca7",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_1.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_1.puml"
+      ]
+    },
+    {
+      "sha256": "15a795ce707b9ee962ed691e4fdc5cfe5ac81452e19d4cef4649a1c488688395",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_10.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_10.puml"
+      ]
+    },
+    {
+      "sha256": "52b25f36a17230126e889aa88946709e5cf9c39ba87f2b87ca516fd1aa2f0529",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_11.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_11.puml"
+      ]
+    },
+    {
+      "sha256": "f6e0b708477ea9d8ff5b108d78b058b2871b5963e2c841e210990d1747819c36",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_12.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_12.puml"
+      ]
+    },
+    {
+      "sha256": "a57ea060ee9e5499b9e4dd72acb8965ab2f50ee17491f8f643110c6c32948902",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_13.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_13.puml"
+      ]
+    },
+    {
+      "sha256": "1f0d71ab322bc17f14e249e16aae0d69f3800787d0c93170ef71fa76a5fb2464",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_14.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_14.puml"
+      ]
+    },
+    {
+      "sha256": "0a678127e08c421cf9b539875264b2afdf2bc21427d65151ccb2a2f38243915e",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_15.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_15.puml"
+      ]
+    },
+    {
+      "sha256": "1f006bd536ee4c9b2b7893c63a7eee7c327ab5981ea751759b1f0df61940b159",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_16.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_16.puml"
+      ]
+    },
+    {
+      "sha256": "a2df1a9bf02c75190faadc54f8954bdff26cb319a6ae51b9084bb07c5f1b0b82",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_18.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_18.puml"
+      ]
+    },
+    {
+      "sha256": "ab97c7ba4031e48cd5bb5466ef4c0205da8b90e687d6f3a8e1ab463525b746cf",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_19.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_19.puml"
+      ]
+    },
+    {
+      "sha256": "e3aa7b27df55e8cfae7d26948898224684e5e690a232ff146c397f8d8bc5a9a0",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_2.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_2.puml"
+      ]
+    },
+    {
+      "sha256": "b5bb58e09f238d1a3861509d9f5582a3040a3525e70673044e34725ab90672b5",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_20.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_20.puml"
+      ]
+    },
+    {
+      "sha256": "3c55f88ac96f427c2269a5fead56386351078300d124d335cdd40aa2a6c0d29f",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_21.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_21.puml"
+      ]
+    },
+    {
+      "sha256": "c9633969dcca1745305b22154e811b0a9479fea59e61ccc0b694297e96256e3f",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_22.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_22.puml"
+      ]
+    },
+    {
+      "sha256": "650c0036bafae1c134846be71484030ba278e3afead751a823e5690760e97a4f",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_23.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_23.puml"
+      ]
+    },
+    {
+      "sha256": "886e41d3a17821f20d7498b201ce053c5fcedf4fcaf8a19876e9b3c5343e4b35",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_3.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_3.puml"
+      ]
+    },
+    {
+      "sha256": "fda1788fbb2588d6221e3e8d1e37c8c5034fef0fc49fe84fcc116b45ee2f850c",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_4.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_4.puml"
+      ]
+    },
+    {
+      "sha256": "4cfe2a11476240e81a56734bdd26f7825379e4fec53cae3aea7a671ed72c2e3a",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_6.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_6.puml"
+      ]
+    },
+    {
+      "sha256": "d3d0e7803bcc5a1fd3287cdf1b8284afd6b4d14070795659b4ba48930a74af74",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_7.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_7.puml"
+      ]
+    },
+    {
+      "sha256": "8b4e7420cb099463a4ad56a6a167460c1e57c6199076b2d47d4b06532b8eb3e6",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_8.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_8.puml"
+      ]
+    },
+    {
+      "sha256": "396a6b3924a72d65f09df0c057cda286a01135c98bd990e4e1c9051e240bca23",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_9.puml",
+        "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_9.puml"
+      ]
+    },
+    {
+      "sha256": "5d05b9ec4ea8f5ea93ecf084858a6e19d6c59fae4d3e087f56a0832c7cc28c96",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_rnote_left_over_legacy.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_rnote_right_over_legacy.puml"
+      ]
+    },
+    {
+      "sha256": "937c6dff04b2abc5882c87de7118428c12801bf59a5144d64bb1a4e0d828d0e7",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_rnote_left_over_teoz.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_rnote_right_over_teoz.puml"
+      ]
+    },
+    {
+      "sha256": "d60501560492f0fbec988576d17a1ae1d123f8b5eab143c717cd8b0eb8b829b2",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_hnote_left_over_legacy.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_hnote_right_over_legacy.puml"
+      ]
+    },
+    {
+      "sha256": "17fb2f39c9eb3110b7ea4b1459deb8c45a786e94eb03d11666e72962a08b615e",
+      "sources": [
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_hnote_left_over_teoz.puml",
+        "test-diagrams/perturbations/sequence-teoz-self-note-component/b4b6_self_hnote_right_over_teoz.puml"
+      ]
+    }
+  ],
+  "cohorts": {
+    "retained_previous": 3569,
+    "independent_checker_bd087": 571,
+    "new_maker": 34
+  },
+  "checker_standing_aliases_not_added": 6,
+  "rule": "Memberships retained; duplicates listed, never removed. Main goldens are a separate denominator."
+}

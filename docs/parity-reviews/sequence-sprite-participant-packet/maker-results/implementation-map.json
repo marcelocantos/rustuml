@@ -1,0 +1,63 @@
+{
+  "production": "ba2e6c2b79bb35841351ce2ed2e88e3a7abbe9d7",
+  "implementations": [
+    "d15d6eaf9",
+    "ba2e6c2b7"
+  ],
+  "mechanisms": [
+    {
+      "mechanism": "sequence-sprite-block-consumption",
+      "account_commit": "589b3d5e656a9a02b8e03f9f4fd103be084f2bef",
+      "implementation_commits": [
+        "d15d6eaf928d1b3eaf6aa49c9cf4d57b69e9caad"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-participant-complete-consumption",
+      "account_commit": "589b3d5e656a9a02b8e03f9f4fd103be084f2bef",
+      "implementation_commits": [
+        "d15d6eaf928d1b3eaf6aa49c9cf4d57b69e9caad"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-command-specific-color-paths",
+      "account_commit": "589b3d5e656a9a02b8e03f9f4fd103be084f2bef",
+      "implementation_commits": [
+        "d15d6eaf928d1b3eaf6aa49c9cf4d57b69e9caad"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-participant-residue-preservation",
+      "account_commit": "643f125a81867c6c492a59fd468346e31b18c3b1",
+      "implementation_commits": [
+        "d15d6eaf928d1b3eaf6aa49c9cf4d57b69e9caad"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-sprite-completion-admission",
+      "account_commit": "0d9e70030847b1479275b26b8965c8735d172cfe",
+      "implementation_commits": [
+        "d15d6eaf928d1b3eaf6aa49c9cf4d57b69e9caad",
+        "ba2e6c2b79bb35841351ce2ed2e88e3a7abbe9d7"
+      ],
+      "status": "requires NEW independent checker"
+    },
+    {
+      "mechanism": "sequence-sprite-pending-span",
+      "account_commit": "2268b0ddf9daf5752b885b14497dc80e7ea4e5fd",
+      "implementation_commits": [
+        "ba2e6c2b79bb35841351ce2ed2e88e3a7abbe9d7"
+      ],
+      "status": "requires NEW independent checker"
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "ownership": "Preprocess changes only enum replacing boolean, field initializer, existing sprite declaration/body blocks. No TIM, dispatch, ASCII, renderer/shared/style/font/target changes. Sequence tests are in parse/sequence.rs."
+}

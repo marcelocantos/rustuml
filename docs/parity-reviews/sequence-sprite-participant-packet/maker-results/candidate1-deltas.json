@@ -1,0 +1,31 @@
+{
+  "losses": [],
+  "new_errors": [
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_392.puml",
+      "comparison": 2,
+      "stderr": "parse error: line 4: No such color\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_398.puml",
+      "comparison": 2,
+      "stderr": "parse error: line 4: No such color\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_401.puml",
+      "comparison": 2,
+      "stderr": "parse error: line 4: No such color\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_404.puml",
+      "comparison": 2,
+      "stderr": "parse error: line 4: No such color\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_407.puml",
+      "comparison": 2,
+      "stderr": "parse error: line 4: No such color\n"
+    }
+  ],
+  "lost_rejections": []
+}

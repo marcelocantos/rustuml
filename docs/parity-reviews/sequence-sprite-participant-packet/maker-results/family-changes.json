@@ -1,0 +1,128 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+    "before_family": "error",
+    "after_family": "Sequence",
+    "before_status": "valid_error",
+    "after_status": "match"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_392.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_398.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_401.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_404.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_407.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_upper_end_legacy.puml",
+    "before_family": "Component",
+    "after_family": "Sequence",
+    "before_status": "mismatch",
+    "after_status": "match"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_upper_end_teoz.puml",
+    "before_family": "Component",
+    "after_family": "Sequence",
+    "before_status": "mismatch",
+    "after_status": "match"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_nbsp_brace_legacy.puml",
+    "before_family": "Component",
+    "after_family": "Sequence",
+    "before_status": "mismatch",
+    "after_status": "match"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_nbsp_brace_teoz.puml",
+    "before_family": "Component",
+    "after_family": "Sequence",
+    "before_status": "mismatch",
+    "after_status": "match"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_composite_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_composite_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_legacy.puml",
+    "before_family": "error",
+    "after_family": "Sequence",
+    "before_status": "valid_error",
+    "after_status": "match"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_teoz.puml",
+    "before_family": "error",
+    "after_family": "Sequence",
+    "before_status": "valid_error",
+    "after_status": "match"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_multiline_color_legacy.puml",
+    "before_family": "error",
+    "after_family": "Sequence",
+    "before_status": "valid_error",
+    "after_status": "mismatch"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_multiline_color_teoz.puml",
+    "before_family": "error",
+    "after_family": "Sequence",
+    "before_status": "valid_error",
+    "after_status": "match"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_legacy.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_teoz.puml",
+    "before_family": "Sequence",
+    "after_family": "error",
+    "before_status": "nonpositive",
+    "after_status": "nonpositive"
+  }
+]

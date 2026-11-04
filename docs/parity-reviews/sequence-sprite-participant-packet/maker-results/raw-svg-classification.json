@@ -1,0 +1,356 @@
+[
+  {
+    "name": "svg_upper_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "b1aaee705e4580a8ae139ff9b5beb5181cd01dfbb726249d3618459487e5c901"
+  },
+  {
+    "name": "svg_upper_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "3b92f16c7663c9304bb6968a57d94908518b4cd285eb980ca287aba5722f48ee"
+  },
+  {
+    "name": "svg_nbsp_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "0afa962f3219a06a91336fc207207bb52399d5ce7e973ff922642f53418d531c"
+  },
+  {
+    "name": "svg_nbsp_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "f2fcee8d37f4e27cb839e90d136035195552287122ce7c4403ddc34d41dffa12"
+  },
+  {
+    "name": "svg_inline_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "f0ed7619bf920f5716af377a1f2108cc586e88e904e6fac547e33698d9796838"
+  },
+  {
+    "name": "svg_inline_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "98d466fe0e6e755f5ca4cd5acf311d23df9d328c794bfe0d3f8934e4d60e732b"
+  },
+  {
+    "name": "pixel_upper_end_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "17ca2f293a1472fd2aef9bc436fd4a85cd8b90b45b94d8e30ee9cb807e641447"
+  },
+  {
+    "name": "pixel_upper_end_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "42831fe9bf6e46c52966882d14e7f3ecfd0ec85ff6289992db4d0273a21d245e"
+  },
+  {
+    "name": "pixel_nbsp_brace_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "c7ac69d9644993f3ab204fe0a775079c1a3f742f2ac3d23f59bb095fd937a30b"
+  },
+  {
+    "name": "pixel_nbsp_brace_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "e8573416ee40215ee82c42665b110438cb104677b3175ff54b83accb7b7c2535"
+  },
+  {
+    "name": "pixel_compact_end_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "144d2b4b7d99e3c563a6857adda659e335af0fa3ecb242622b9c1b1ed0276b93"
+  },
+  {
+    "name": "pixel_compact_end_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "a0ab3830f22898df90161fe6fc42c3f13cf6d98378e260da982a3f31077f9965"
+  },
+  {
+    "name": "participant_dotted_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 8,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "29b54aff95efb0e8d1362012e4ff888a0373a9e53e16b22af1a5d8147aba1918"
+  },
+  {
+    "name": "participant_dotted_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 8,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "bd03d16863402f51abb0b824b5c61f058c2e74a7418f1d25e877925bcf0a31fa"
+  },
+  {
+    "name": "participant_at_compact_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 10,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "4ee1ff22657081cf67b2514915ce94917b1d0b16b24ec6989e79569ee02013a2"
+  },
+  {
+    "name": "participant_at_compact_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 10,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "ea225dac0effd7f5e20c59301f94db952f69035c45e9a344a9c7ccf9a8062a40"
+  },
+  {
+    "name": "participant_negative_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "53a1571d43c850c9e77f2a3871adc19ba3fa8fc0ac85430eac4b547fc335ec9e"
+  },
+  {
+    "name": "participant_negative_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "9662e67d46bb6f55e1ff0cbdcbd15de6595c7e8ac24eaab5cc5204b634794b3d"
+  },
+  {
+    "name": "participant_composite_legacy",
+    "observed_valid": false,
+    "diagram_type": null,
+    "xml_text_count": 6,
+    "error_text": [
+      "No such color (Assumed diagram type: sequence)"
+    ],
+    "raw_exit": 200,
+    "stderr": "ERROR\n1\nNo such color (Assumed diagram type: sequence)\n",
+    "stdout_sha256": "de9e2a005bad7570355fb4049fa573c691345ddb95fdc1079c220b185bac6e89"
+  },
+  {
+    "name": "participant_composite_teoz",
+    "observed_valid": false,
+    "diagram_type": null,
+    "xml_text_count": 7,
+    "error_text": [
+      "No such color (Assumed diagram type: sequence)"
+    ],
+    "raw_exit": 200,
+    "stderr": "ERROR\n2\nNo such color (Assumed diagram type: sequence)\n",
+    "stdout_sha256": "e57585e846b40d192b91d07107efff76aaa03461d522fba34758093094f8e4ae"
+  },
+  {
+    "name": "participant_gradient_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "ddbfd7b635289cb40933550276d0cc415241b77390fcbe13568b8d0031ad8ae4"
+  },
+  {
+    "name": "participant_gradient_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "3be0b9bba6694f6bf1e0dc8c2f525d3c1850b0f7f7df51e912d3c4cea24cf1db"
+  },
+  {
+    "name": "participant_repeat_color_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "c59f2667d4c119c8fe650dac36afd95150fa31962defb0f236fc236929d27edd"
+  },
+  {
+    "name": "participant_repeat_color_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "ce741c2532b37e3d6ecc9a2f23dd3cc1379a971a584950e3abc73b43ec3f8f87"
+  },
+  {
+    "name": "participant_multiline_color_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "ca5ea2b88b128ad69d0737d8abf7a052e1078c933b8d4f7c8e296e8ec993ef18"
+  },
+  {
+    "name": "participant_multiline_color_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 6,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "b4c4816599ee8a77aa6fde03f3aa721f9a21179bb3cab87121fb063d88fe8c00"
+  },
+  {
+    "name": "note_box_colors_legacy",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 8,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "c76a9d19470257f377547d3f97ac7335d1357864598abcc852c21a93feb3f414"
+  },
+  {
+    "name": "note_box_colors_teoz",
+    "observed_valid": true,
+    "diagram_type": "SEQUENCE",
+    "xml_text_count": 8,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "5edc91c0f841278bfca97cae780a84dba6edc8e06f03c2c8be5cc0280332e586"
+  },
+  {
+    "name": "svg_class",
+    "observed_valid": true,
+    "diagram_type": "CLASS",
+    "xml_text_count": 2,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "b21518277806f7e3f8dbe7103b14ef9c048c08e4eaceeff8c38b0fb2396c9b40"
+  },
+  {
+    "name": "svg_state",
+    "observed_valid": true,
+    "diagram_type": "STATE",
+    "xml_text_count": 2,
+    "error_text": [],
+    "raw_exit": 0,
+    "stderr": "",
+    "stdout_sha256": "9765cdbf1ac5013b391bf3ac5ac8912dcf9fcc8af8b6d97cb83bbd2c410108d0"
+  },
+  {
+    "name": "svg_unclosed_legacy",
+    "observed_valid": false,
+    "diagram_type": null,
+    "xml_text_count": 9,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "raw_exit": 200,
+    "stderr": "ERROR\n4\nSyntax Error? (Assumed diagram type: sequence)\n",
+    "stdout_sha256": "b9d518a8f17c0ea840b87806b994e03a1382d5ac8437d341d81bb926ba7b29bf"
+  },
+  {
+    "name": "svg_unclosed_teoz",
+    "observed_valid": false,
+    "diagram_type": null,
+    "xml_text_count": 10,
+    "error_text": [
+      "Syntax Error? (Assumed diagram type: sequence)"
+    ],
+    "raw_exit": 200,
+    "stderr": "ERROR\n5\nSyntax Error? (Assumed diagram type: sequence)\n",
+    "stdout_sha256": "baadf61d0bc3568b034f908b71bc1e30c9db9a3b34f8044ce6ae9c1a21bdddd9"
+  },
+  {
+    "name": "pixel_unclosed_legacy",
+    "observed_valid": false,
+    "diagram_type": null,
+    "xml_text_count": 9,
+    "error_text": [
+      "Cannot read: [2x2/16] { (Assumed diagram type: sequence)"
+    ],
+    "raw_exit": 200,
+    "stderr": "ERROR\n4\nCannot read: [2x2/16] { (Assumed diagram type: sequence)\n",
+    "stdout_sha256": "82ccbb7a74139a35c68777c517312eac204ab9042dbf42061ab632806aa791ad",
+    "source_explanation": "CommandFactorySprite multiline candidate cannot complete; later registered CommandSpriteFile accepts the header as a file declaration and returns Cannot read. This is a command execution error, not the SVG unclosed syntax diagnostic. Rust also rejects, but diagnostic equivalence is not claimed."
+  },
+  {
+    "name": "pixel_unclosed_teoz",
+    "observed_valid": false,
+    "diagram_type": null,
+    "xml_text_count": 10,
+    "error_text": [
+      "Cannot read: [2x2/16] { (Assumed diagram type: sequence)"
+    ],
+    "raw_exit": 200,
+    "stderr": "ERROR\n5\nCannot read: [2x2/16] { (Assumed diagram type: sequence)\n",
+    "stdout_sha256": "8bb50f29eb537d32f541a17399f970a99597178102ea0210b6d8cb3c8b39a1c7",
+    "source_explanation": "CommandFactorySprite multiline candidate cannot complete; later registered CommandSpriteFile accepts the header as a file declaration and returns Cannot read. This is a command execution error, not the SVG unclosed syntax diagnostic. Rust also rejects, but diagnostic equivalence is not claimed."
+  }
+]

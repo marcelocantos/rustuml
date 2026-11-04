@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Ridge
+participant Ridge #NotAColourAtAll
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

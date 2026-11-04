@@ -1,0 +1,8 @@
+@startuml
+SPRITE $ridge [2x2/16] {
+FF
+F0
+END SPRITE
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

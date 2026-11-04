@@ -1,0 +1,32 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "files": {
+    "command/CommandSpriteSvg.java": "844f9180bfd10a6126d4ece42cadffd18a7a41f40cd004ddcd8f6182cc13b6d5",
+    "command/CommandSpriteSvgMultiline.java": "31479aa05dad54e1d62b39cc9935a30f8c1e6f86c619cb7374e999a3798a4a00",
+    "command/CommandFactorySprite.java": "d11e794549b2f8f2552cb99dd4ad07099e0d9b7234b8c299f0973927ddfd7815",
+    "command/CommandSpriteFile.java": "e1d4defb8c493d6ec590744d60941b898cadf7007ccf7c00a71674f0121b7814",
+    "command/CommandSpriteStdlib.java": "f2d9cdbeb60dfa43782485365348d77ac905a55589811d97930ff1595dc10dac",
+    "command/CommandSpriteStdlibSvg.java": "bd4caca79648b1f2935c92acadc5ba4532d56465674e86aa82be4c26c200e959",
+    "command/CommandMultilines2.java": "e92cf76aa5ae4aab8e1e911a6a158872c0c7b08151d7d1b988b854cb3cbb9d5a",
+    "sequencediagram/command/CommandParticipant.java": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+    "sequencediagram/command/CommandParticipantA.java": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597",
+    "sequencediagram/command/CommandParticipantA2.java": "04ef56cbcccf57d00ac734924789fd28035b30d6cea69cba566e0825e8bf06af",
+    "sequencediagram/command/CommandParticipantA3.java": "ed1f123de770356792aee51faa0baf1ceb2217cc2dc0d9371b2b30daa9427fa0",
+    "sequencediagram/command/CommandParticipantA4.java": "65d1e19a67935a50316be252968046d8baf7677378a56612e2fe0f079ddcff29",
+    "sequencediagram/command/CommandParticipantMultilines.java": "a9dcf9bc059e3c931048024b39aaf17a4e812c22ac8c039d004ac1b8fdd44508",
+    "sequencediagram/command/CommandBoxStart.java": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198",
+    "command/note/sequence/FactorySequenceNoteCommand.java": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+    "klimt/color/HColorSet.java": "cdd4b8ae6aaf39eebafb1107bab16184e671e639aafdc77fd925bc1b66597be1",
+    "klimt/color/Colors.java": "8a65832a713d37ddd8306d07dcaabd6958b14e03f3184c25ebd01d5277d67901",
+    "stereo/StereotypePattern.java": "9a6f47de3fc289c0211ac0ca78dafd3fb77a53e2a3d356bd09c506b274d9e17d",
+    "sequencediagram/SequenceDiagram.java": "e929fbe92bf0c987c0e5f0f9f6ae1f87e20a099bffb1a4026a3e2a97b35e2f17",
+    "regex/Pattern2.java": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+    "text/FoxSignature.java": "327ea8b237d3a2d65ebb0775087b5d9203a4bfd40b4cae27d3dcf3e120ad6985"
+  },
+  "citation_clarification": "FactorySequenceNoteCommand is command.note.sequence.FactorySequenceNoteCommand, not sequencediagram.command.FactorySequenceNoteCommand as abbreviated in the new color account. Original account remains unchanged.",
+  "ownership": {
+    "preprocess": "enum replacing bool, field/initializer, existing sprite body and declaration blocks only",
+    "sequence_parser": "complete participant execution, command-specific color validation, focused tests",
+    "other_production_files": "none"
+  }
+}

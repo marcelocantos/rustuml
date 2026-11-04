@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+sprite $cairn <svg width="8" height="8">
+<rect width="8" height="8"/>
+</svg>
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

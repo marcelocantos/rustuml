@@ -1,0 +1,99 @@
+{
+  "retained4140": {
+    "entries": 4140,
+    "before": {
+      "mismatch": 1077,
+      "match": 2615,
+      "nonpositive": 430,
+      "valid_error": 18
+    },
+    "after": {
+      "mismatch": 1071,
+      "match": 2622,
+      "nonpositive": 430,
+      "valid_error": 17
+    },
+    "gains": [
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_unusual.puml",
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_unusual.puml",
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_unusual.puml",
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_unusual.puml",
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_stereo.puml",
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_colour.puml"
+    ],
+    "lost_matches": [],
+    "new_valid_errors": [],
+    "lost_rejections": [],
+    "recovered_valid_errors": [
+      "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml"
+    ],
+    "new_rejections": [
+      "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_392.puml",
+      "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_398.puml",
+      "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_401.puml",
+      "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_404.puml",
+      "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_407.puml"
+    ]
+  },
+  "maker30": {
+    "entries": 30,
+    "before": {
+      "match": 10,
+      "mismatch": 14,
+      "nonpositive": 2,
+      "valid_error": 4
+    },
+    "after": {
+      "match": 23,
+      "nonpositive": 2,
+      "mismatch": 5
+    },
+    "gains": [
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_upper_end_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_upper_end_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_nbsp_brace_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_nbsp_brace_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_compact_end_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/pixel_compact_end_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_dotted_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_dotted_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_at_compact_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_at_compact_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_multiline_color_teoz.puml"
+    ],
+    "lost_matches": [],
+    "new_valid_errors": [],
+    "lost_rejections": [],
+    "recovered_valid_errors": [
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_repeat_color_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_multiline_color_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_multiline_color_teoz.puml"
+    ],
+    "new_rejections": [
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_composite_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/reference-inputs/participant_composite_teoz.puml"
+    ]
+  },
+  "completion4": {
+    "entries": 4,
+    "before": {
+      "nonpositive": 4
+    },
+    "after": {
+      "nonpositive": 4
+    },
+    "gains": [],
+    "lost_matches": [],
+    "new_valid_errors": [],
+    "lost_rejections": [],
+    "recovered_valid_errors": [],
+    "new_rejections": [
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-sprite-participant-c629/completion-inputs/pixel_unclosed_teoz.puml"
+    ]
+  }
+}

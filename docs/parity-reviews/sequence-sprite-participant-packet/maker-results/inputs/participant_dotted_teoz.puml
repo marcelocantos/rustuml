@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant "High cliff" as Ridge.Top
+participant Valley
+Ridge -> Valley: survey
+Valley --> Ridge: logged
+@enduml

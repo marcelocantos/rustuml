@@ -1,0 +1,7 @@
+@startuml
+SPRITE $peak <svg width="8" height="8">
+<rect width="8" height="8"/>
+</svg>
+[*] --> Ridge
+Ridge --> Valley
+@enduml
