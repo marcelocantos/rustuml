@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "07d00af240c9938b63b7672d67f285a53a1d536d",
+  "verification_plan": "Retained1649+26+86 including invalid references and missing allowmixing; frozen CLI/comparator; exact models/UIDs/URL owners; fresh source-guided relay controls, final main tiers/libs/CLI/guards once stable. No local JVM/SSH, child, native/fault work, shared metric/style changes or acceptance.",
+  "mechanism": "class-quark-context-checked-identity",
+  "java_locations": [
+    "net/atmp/CucaDiagram#quarkInContextSafe,badName,cleanId",
+    "classdiagram/command/CommandCreateClass#executeArg",
+    "command/note/CommandFactoryNote#executeInternal",
+    "classdiagram/command/CommandUrl#executeArg",
+    "regex/Pattern2 %g",
+    "jaws/Jaws#BLOCK_E1_INVISIBLE_QUOTE"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#split_identity,resolve_quark_path,resolve_group_path,try_url,push_note,try_entity_decl"
+  ],
+  "invariant": "Current-context declarations create local data even when a root short name exists. ReuseUnique excludes current group itself. Repeated/trailing separators and paths through non-group data fail before mutation. Pattern2 quote characters are syntax only at command token boundaries; quoted contents remain opaque. All accepted data and UID events survive.",
+  "causal_divergence": "Review F4-F7: ASCII-only URL grammar rejects smart quotes; split_identity drops empty components; unconditional root entity lookup merges native local declarations and rejects local named notes; unique reuse selects current group.",
+  "planned_change": "Introduce fallible shared identity resolution and propagate errors through class command execution, keeping command-owned body handling. Remove unconditional root short-name reuse, exclude current group, validate separators and group parents, preserve null-separator firstWithName behavior. Expand CommandUrl and its UrlBuilder quote grammar to Pattern2 %g without global text replacement. Reuse ordinary ASTs/UID creation. Preserve unresolved rooted CommandLinkClass multi-pass side effect; no invented url entity or parse/mod changes.",
+  "perturbation_axes": [
+    "root/local duplicates, unique/ambiguous/current-group lookup, declaration order and custom separators",
+    "ASCII/curly/invisible quoting, quoted URL contents, malformed separators and URL target lifecycle"
+  ]
+}

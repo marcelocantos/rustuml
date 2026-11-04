@@ -1,0 +1,22 @@
+{
+  "prior_packet": "eb09cecbc90f5690c4a09bf49118f2feff8c1c12",
+  "defect": "Three original account objects omit mechanism. Corrective accounts describing v1/v3 experiments were committed before final production commit but after draft implementation experiments. The previous report overclaimed a before-any-draft chronology. Original blobs/reviews are unchanged; this record does not retroactively satisfy chronology or normalize away rejection.",
+  "original_accounts": [
+    {
+      "path": "docs/parity-reviews/class-description-header-envelope-ownership/account.json",
+      "sha256": "8689c2084135394cf2ed4034c39ce806068060d1087c18cdda237630e45bcf77",
+      "missing_mechanism": true
+    },
+    {
+      "path": "docs/parity-reviews/class-command-url-builder-context/account.json",
+      "sha256": "cb7b060f310180e057b43c417711924e773b3435b441598b0d4b8aafdc58622c",
+      "missing_mechanism": true
+    },
+    {
+      "path": "docs/parity-reviews/class-description-stereotype-margin-envelope/account.json",
+      "sha256": "2d7a6ac8cf7df2c70b6710d4b444648aba7a2947744c454cb7d76cf69bb08adb",
+      "missing_mechanism": true
+    }
+  ],
+  "new_packet_boundary": "These new accounts are committed before any new draft production changes. Only read-only source/review inspection and evidence import preceded them."
+}
