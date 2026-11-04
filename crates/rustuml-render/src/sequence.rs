@@ -11521,45 +11521,64 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     } else {
         for (participant_id, variations) in &horizontal_life_lines.variations {
-            let mut open: Vec<(usize, f64, Option<String>, usize)> = Vec::new();
-            for variation in variations {
-                match variation.kind {
-                    LifeVariationKind::Open => {
-                        let color = match diagram.events.get(variation.event_index) {
-                            Some(Event::Message(message)) => message.activation_color.clone(),
-                            Some(Event::Activate(_, color)) => color.clone(),
-                            _ => None,
-                        };
-                        open.push((variation.event_index, variation.ordinate, color, open.len()));
+            // LifeLine#finish counts the raw accepted stream, not saturated
+            // visual depth. An unmatched close can cancel a later opening's
+            // synthetic close without removing that opening from getSegment.
+            let missing_closes = variations
+                .iter()
+                .fold(0_i32, |balance, variation| {
+                    balance
+                        + if variation.kind == LifeVariationKind::Open {
+                            1
+                        } else {
+                            -1
+                        }
+                })
+                .max(0) as usize;
+            let mut event_level = 0_usize;
+            for (index, variation) in variations.iter().enumerate() {
+                if variation.kind == LifeVariationKind::Close {
+                    event_level = event_level.saturating_sub(1);
+                    continue;
+                }
+                event_level += 1;
+                let color = match diagram.events.get(variation.event_index) {
+                    Some(Event::Message(message)) => message.activation_color.clone(),
+                    Some(Event::Activate(_, color)) => color.clone(),
+                    _ => None,
+                };
+                let mut balance = 1_usize;
+                let mut end_y = variations
+                    .last()
+                    .map_or(variation.ordinate, |last| last.ordinate);
+                let mut matched = false;
+                for next in &variations[index + 1..] {
+                    if next.kind == LifeVariationKind::Open {
+                        balance += 1;
+                    } else {
+                        balance -= 1;
                     }
-                    LifeVariationKind::Close => {
-                        let Some((start_event_idx, start_y, color, depth)) = open.pop() else {
-                            continue;
-                        };
-                        activation_bars.push(ActivationBar {
-                            participant_id: participant_id.clone(),
-                            start_event_idx,
-                            start_y,
-                            end_y: variation.ordinate,
-                            color,
-                            depth,
-                            ends_at_page_boundary: false,
-                        });
+                    if balance == 0 {
+                        end_y = next.ordinate;
+                        matched = true;
+                        break;
                     }
                 }
-            }
-
-            // `LifeLine#finish` closes every remaining level at the diagram's
-            // maximum Y. Keep the synthetic close separate from source events.
-            for (start_event_idx, start_y, color, depth) in open {
+                // getSegment scans the finish-appended SMALLER variations too.
+                // Keep a page-boundary close symbolic until its final y is known.
+                // If no balancing close exists, getSegment uses the final
+                // variation, including any finish-appended synthetic close.
+                let ends_at_page_boundary = !matched && missing_closes > 0;
+                let level = event_level
+                    .min(horizontal_life_lines.depth_at(participant_id, variation.ordinate));
                 activation_bars.push(ActivationBar {
                     participant_id: participant_id.clone(),
-                    start_event_idx,
-                    start_y,
-                    end_y: 0.0,
+                    start_event_idx: variation.event_index,
+                    start_y: variation.ordinate,
+                    end_y,
                     color,
-                    depth,
-                    ends_at_page_boundary: true,
+                    depth: level.saturating_sub(1),
+                    ends_at_page_boundary,
                 });
             }
         }
