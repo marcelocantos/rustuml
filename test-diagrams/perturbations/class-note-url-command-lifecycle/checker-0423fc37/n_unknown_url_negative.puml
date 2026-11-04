@@ -1,0 +1,4 @@
+@startuml
+note "memo" as Token
+url Absent [[https://example.org/missing]]
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+note "memorandum" as Token
+url “Token" [[”docs with spaces“{tip}]]
+@enduml

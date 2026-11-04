@@ -1,0 +1,7 @@
+@startuml
+enum Token
+package Cove {
+enum Token
+url Token [[https://example.org/local]]
+}
+@enduml

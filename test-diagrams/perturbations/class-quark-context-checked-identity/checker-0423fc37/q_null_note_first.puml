@@ -1,0 +1,7 @@
+@startuml
+set namespaceSeparator none
+note "root memorandum" as Token
+package Cove {
+url Token [[https://example.org/first]]
+}
+@enduml

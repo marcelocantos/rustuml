@@ -1,0 +1,4 @@
+@startuml
+class Beacon
+note bottom [[https://example.org/ignored{tip}]] : memorandum
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+note "first memo" as Token
+url Token [[https://example.org/first]]
+note "second memo" as Token
+@enduml

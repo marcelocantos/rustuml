@@ -1,0 +1,7 @@
+@startuml
+skinparam actorShadowing yes
+allowmixing
+actor "Reader" as Person
+class Beacon
+Person --> Beacon
+@enduml

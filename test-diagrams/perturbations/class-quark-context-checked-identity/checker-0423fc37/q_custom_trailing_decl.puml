@@ -1,0 +1,4 @@
+@startuml
+set namespaceSeparator ::
+class "Beacon" as Cove::
+@enduml

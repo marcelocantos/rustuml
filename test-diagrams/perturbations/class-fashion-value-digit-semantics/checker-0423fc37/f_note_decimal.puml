@@ -1,0 +1,9 @@
+@startuml
+<style>
+note {
+Shadowing -0.75px
+}
+</style>
+class Beacon
+note right of Beacon : memorandum
+@enduml

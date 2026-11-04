@@ -1,0 +1,4 @@
+@startuml
+skinparam noteShadowing no
+note "memorandum" as Token
+@enduml

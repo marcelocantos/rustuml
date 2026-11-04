@@ -1,0 +1,6 @@
+@startuml
+class Beacon
+note right of Beacon [[“docs with spaces”{tip}]]
+memorandum
+end note
+@enduml

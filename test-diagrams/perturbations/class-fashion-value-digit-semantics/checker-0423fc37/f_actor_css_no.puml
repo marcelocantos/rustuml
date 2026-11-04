@@ -1,0 +1,11 @@
+@startuml
+<style>
+actor {
+Shadowing no
+}
+</style>
+allowmixing
+actor "Reader" as Person
+class Beacon
+Person --> Beacon
+@enduml

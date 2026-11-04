@@ -1,0 +1,6 @@
+@startuml
+class Beacon
+note bottom [[https://example.org/kept{tip}]]
+memorandum
+end note
+@enduml

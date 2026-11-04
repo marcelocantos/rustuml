@@ -1,0 +1,7 @@
+@startuml
+package Cove {
+note "local memorandum" as Token
+}
+note "root memorandum" as Token
+url Token [[https://example.org/root]]
+@enduml

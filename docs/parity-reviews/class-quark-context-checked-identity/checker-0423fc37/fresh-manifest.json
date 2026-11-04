@@ -1,0 +1,515 @@
+{
+  "batch": "independent-class-review-0423fc37",
+  "candidate": "154d4c7fd58bc7a1b91df7d01f530b3ea911a5fc",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "wrapper_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timezone": "GMT+11:00",
+  "resources": [],
+  "inputs": [
+    {
+      "name": "q_native_enum_local.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_native_enum_local.puml",
+      "source_bytes": 97,
+      "source_sha256": "42c840b7ff457102b965ba6dadd3e4cfaa733facd4be758b16e19ea7defcd192",
+      "source_base64": "QHN0YXJ0dW1sCmVudW0gVG9rZW4KcGFja2FnZSBDb3ZlIHsKZW51bSBUb2tlbgp1cmwgVG9rZW4gW1todHRwczovL2V4YW1wbGUub3JnL2xvY2FsXV0KfQpAZW5kdW1sCg==",
+      "remote_name": "q_native_enum_local.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_root_note_local_note.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_root_note_local_note.puml",
+      "source_bytes": 140,
+      "source_sha256": "dd1b1b04a4f540c982c36f12b72ca205d3b823c463f4be22ae3da6ee5efc523e",
+      "source_base64": "QHN0YXJ0dW1sCm5vdGUgInJvb3QgbWVtb3JhbmR1bSIgYXMgVG9rZW4KcGFja2FnZSBDb3ZlIHsKbm90ZSAibG9jYWwgbWVtb3JhbmR1bSIgYXMgVG9rZW4KdXJsIFRva2VuIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9sb2NhbF1dCn0KQGVuZHVtbAo=",
+      "remote_name": "q_root_note_local_note.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_local_note_root_note.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_local_note_root_note.puml",
+      "source_bytes": 139,
+      "source_sha256": "f860093603b4bcecf1ea60cf97156ac1aeddd21fcdeb918066e98c9e23cf61f0",
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQ292ZSB7Cm5vdGUgImxvY2FsIG1lbW9yYW5kdW0iIGFzIFRva2VuCn0Kbm90ZSAicm9vdCBtZW1vcmFuZHVtIiBhcyBUb2tlbgp1cmwgVG9rZW4gW1todHRwczovL2V4YW1wbGUub3JnL3Jvb3RdXQpAZW5kdW1sCg==",
+      "remote_name": "q_local_note_root_note.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_current_inline_member.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_current_inline_member.puml",
+      "source_bytes": 101,
+      "source_sha256": "364c84c20af0294a22a5f66376fd23090592442b8199e08301c77e2d791c349b",
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQ292ZSB7CmNsYXNzIEJlYWNvbgpDb3ZlIDogYUZpZWxkCnVybCBDb3ZlIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9jaGlsZF1dCn0KQGVuZHVtbAo=",
+      "remote_name": "q_current_inline_member.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_current_supertype.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_current_supertype.puml",
+      "source_bytes": 101,
+      "source_sha256": "a46539ce7713db41f475ad7b4edbe6549f179cddf3f0dcffedc4430676a3c937",
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQ292ZSB7CmNsYXNzIEJlYWNvbiBleHRlbmRzIENvdmUKdXJsIENvdmUgW1todHRwczovL2V4YW1wbGUub3JnL3BhcmVudF1dCn0KQGVuZHVtbAo=",
+      "remote_name": "q_current_supertype.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_rootclass_localnote.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_rootclass_localnote.puml",
+      "source_bytes": 120,
+      "source_sha256": "0256ca39e69cdf6ce6fbe32312b6f9ec835d02c2656268dc3ae53a841c32820c",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIFRva2VuCnBhY2thZ2UgQ292ZSB7Cm5vdGUgImxvY2FsIG1lbW9yYW5kdW0iIGFzIFRva2VuCnVybCBUb2tlbiBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvbG9jYWxdXQp9CkBlbmR1bWwK",
+      "remote_name": "q_rootclass_localnote.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_null_note_first.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_null_note_first.puml",
+      "source_bytes": 135,
+      "source_sha256": "b23b50d6388a4f33936dc9e83df776c62dbf8bbb48ca26e6f3137ffa15160616",
+      "source_base64": "QHN0YXJ0dW1sCnNldCBuYW1lc3BhY2VTZXBhcmF0b3Igbm9uZQpub3RlICJyb290IG1lbW9yYW5kdW0iIGFzIFRva2VuCnBhY2thZ2UgQ292ZSB7CnVybCBUb2tlbiBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvZmlyc3RdXQp9CkBlbmR1bWwK",
+      "remote_name": "q_null_note_first.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_custom_trailing_decl.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_custom_trailing_decl.puml",
+      "source_bytes": 69,
+      "source_sha256": "84262ab75be06ee2a21567e1441851abb9b1a9fe92372ed84f7cfcfc8288362c",
+      "source_base64": "QHN0YXJ0dW1sCnNldCBuYW1lc3BhY2VTZXBhcmF0b3IgOjoKY2xhc3MgIkJlYWNvbiIgYXMgQ292ZTo6CkBlbmR1bWwK",
+      "remote_name": "q_custom_trailing_decl.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "custom separator",
+        "declaration rather than URL"
+      ],
+      "expected_java_valid": false,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_repeat_supertype.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_repeat_supertype.puml",
+      "source_bytes": 51,
+      "source_sha256": "bef0205ee44003425a32395a19e590860e3993dd4f83f75699aee236fbc952e5",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEJlYWNvbiBleHRlbmRzIENvdmUuLlRva2VuCkBlbmR1bWwK",
+      "remote_name": "q_repeat_supertype.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "repeated separator",
+        "supertype creation"
+      ],
+      "expected_java_valid": false,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_current_note_negative.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_current_note_negative.puml",
+      "source_bytes": 74,
+      "source_sha256": "0c1137a9325e62439b6a07e54c105a99d9b382f89b30421c6b70ef0da78f329b",
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQ292ZSB7CmNsYXNzIEJlYWNvbgpub3RlIHJpZ2h0IG9mIENvdmUgOiBtZW1vCn0KQGVuZHVtbAo=",
+      "remote_name": "q_current_note_negative.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "root/local or current-group resolution",
+        "declaration order and consuming command"
+      ],
+      "expected_java_valid": false,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_curly_url_mixed.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_curly_url_mixed.puml",
+      "source_bytes": 91,
+      "source_sha256": "7fb3f8e6709ddb8a85d9ff8df9583031734a7fa9a946ccd726de7981bb3c56e2",
+      "source_base64": "QHN0YXJ0dW1sCm5vdGUgIm1lbW9yYW5kdW0iIGFzIFRva2VuCnVybCDigJxUb2tlbiIgW1vigJ1kb2NzIHdpdGggc3BhY2Vz4oCce3RpcH1dXQpAZW5kdW1sCg==",
+      "remote_name": "q_curly_url_mixed.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "mixed delimiter pairs",
+        "lone note and URL spaces"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_curly_note_target.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_curly_note_target.puml",
+      "source_bytes": 78,
+      "source_sha256": "edee08685ab3980a3956bde2914fb21c155e854c30fccb03b4166576a7b8473f",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEJlYWNvbgpub3RlIHJpZ2h0IG9mIOKAnEJlYWNvbuKAnQptZW1vcmFuZHVtCmVuZCBub3RlCkBlbmR1bWwK",
+      "remote_name": "q_curly_note_target.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "smart quote delimiter",
+        "attached note sibling command"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "q_invisible_url_target.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/q_invisible_url_target.puml",
+      "source_bytes": 79,
+      "source_sha256": "8fc1f377f2a99272f5a11d20106e226cea53cd4fdc5de506caa2bd801851b5be",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEJlYWNvbgp1cmwg7oShQmVhY29u7oShIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9vcGFxdWVdXQpAZW5kdW1sCg==",
+      "remote_name": "q_invisible_url_target.puml",
+      "mechanism": "class-quark-context-checked-identity",
+      "axes": [
+        "internal quote delimiter",
+        "URL target cleanup"
+      ],
+      "expected_java_valid": false,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_implicit_single.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_implicit_single.puml",
+      "source_bytes": 93,
+      "source_sha256": "f2c9929e7ab321de06ae70090574abe1113273fc3dab4c1165db69df4c9cfb3f",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEJlYWNvbgpub3RlIGJvdHRvbSBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvaWdub3JlZHt0aXB9XV0gOiBtZW1vcmFuZHVtCkBlbmR1bWwK",
+      "remote_name": "n_implicit_single.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "single-line/braced/end-note command",
+        "implicit/named/group target and URL grammar"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_implicit_multi.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_implicit_multi.puml",
+      "source_bytes": 97,
+      "source_sha256": "1d4f93b9516b9e7712bed361e6ca384e41ba863ff62745402c851a856b1f7bce",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEJlYWNvbgpub3RlIGJvdHRvbSBbW2h0dHBzOi8vZXhhbXBsZS5vcmcva2VwdHt0aXB9XV0KbWVtb3JhbmR1bQplbmQgbm90ZQpAZW5kdW1sCg==",
+      "remote_name": "n_implicit_multi.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "single-line/braced/end-note command",
+        "implicit/named/group target and URL grammar"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_named_note_target.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_named_note_target.puml",
+      "source_bytes": 131,
+      "source_sha256": "7b9e2f1b96cb9a84fda9180389ba9067968dc52526c3cf38d973d67c320cf707",
+      "source_base64": "QHN0YXJ0dW1sCm5vdGUgIm5hbWVkIG1lbW9yYW5kdW0iIGFzIFRva2VuCm5vdGUgcmlnaHQgb2YgVG9rZW4gW1todHRwczovL2V4YW1wbGUub3JnL2F0dGFjaGVke3RpcH1dXSB7CnNlY29uZCBtZW1vcmFuZHVtCn0KQGVuZHVtbAo=",
+      "remote_name": "n_named_note_target.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "single-line/braced/end-note command",
+        "implicit/named/group target and URL grammar"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_group_single.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_group_single.puml",
+      "source_bytes": 111,
+      "source_sha256": "477e2655335588c8a937d0c41b4b62e7922bd66a6c8d7e37dcb4fa2fd6df1f32",
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQ292ZSB7CmNsYXNzIEJlYWNvbgp9Cm5vdGUgbGVmdCBvZiBDb3ZlIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9pZ25vcmVkXV0gOiBtZW1vcmFuZHVtCkBlbmR1bWwK",
+      "remote_name": "n_group_single.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "single-line/braced/end-note command",
+        "implicit/named/group target and URL grammar"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_group_multi.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_group_multi.puml",
+      "source_bytes": 115,
+      "source_sha256": "f3656ac70ad5c75e99201be0d7792c126b9f0211522b5a26a64124b83b5579a7",
+      "source_base64": "QHN0YXJ0dW1sCnBhY2thZ2UgQ292ZSB7CmNsYXNzIEJlYWNvbgp9Cm5vdGUgbGVmdCBvZiBDb3ZlIFtbaHR0cHM6Ly9leGFtcGxlLm9yZy9rZXB0XV0KbWVtb3JhbmR1bQplbmQgbm90ZQpAZW5kdW1sCg==",
+      "remote_name": "n_group_multi.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "single-line/braced/end-note command",
+        "implicit/named/group target and URL grammar"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_multiline_quoted_url.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_multiline_quoted_url.puml",
+      "source_bytes": 104,
+      "source_sha256": "ff88c7bfae3fa00551645541983038ecf501a652de5554a626e8da7dbadf5cdd",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIEJlYWNvbgpub3RlIHJpZ2h0IG9mIEJlYWNvbiBbW+KAnGRvY3Mgd2l0aCBzcGFjZXPigJ17dGlwfV1dCm1lbW9yYW5kdW0KZW5kIG5vdGUKQGVuZHVtbAo=",
+      "remote_name": "n_multiline_quoted_url.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "single-line/braced/end-note command",
+        "implicit/named/group target and URL grammar"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_lone_url_top_target.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_lone_url_top_target.puml",
+      "source_bytes": 189,
+      "source_sha256": "7afeabc4270b09c20b5178adafd42754cb3b04211a30e17e2fdf944aa83c7dc8",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSB0b3B1cmwgaHR0cHM6Ly9leGFtcGxlLm9yZy9iYXNlLwpza2lucGFyYW0gc3ZnTGlua1RhcmdldCBfc2VsZgpub3RlICJ3aWRlIG1lbW9yYW5kdW1cbnNlY29uZCByb3ciIGFzIFRva2VuCnVybCBUb2tlbiBbW29sZF1dCnVybCBUb2tlbiBbWyJuZXcgcGFnZSJ7ZmluYWwgdGlwfV1dCkBlbmR1bWwK",
+      "remote_name": "n_lone_url_top_target.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "URL replacement/base/target",
+        "lone multiline note"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_note_redeclare.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_note_redeclare.puml",
+      "source_bytes": 113,
+      "source_sha256": "b30448a18c0a11ae1668e468d3b55391740bf9accfe3e16f5c938888795fc8cc",
+      "source_base64": "QHN0YXJ0dW1sCm5vdGUgImZpcnN0IG1lbW8iIGFzIFRva2VuCnVybCBUb2tlbiBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvZmlyc3RdXQpub3RlICJzZWNvbmQgbWVtbyIgYXMgVG9rZW4KQGVuZHVtbAo=",
+      "remote_name": "n_note_redeclare.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "named note lifecycle",
+        "duplicate declaration after URL"
+      ],
+      "expected_java_valid": false,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "n_unknown_url_negative.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/n_unknown_url_negative.puml",
+      "source_bytes": 82,
+      "source_sha256": "fbde39171be90e51172cb50678aee4fc2bfa5af61a55f04981ba751ffa3dcc04",
+      "source_base64": "QHN0YXJ0dW1sCm5vdGUgIm1lbW8iIGFzIFRva2VuCnVybCBBYnNlbnQgW1todHRwczovL2V4YW1wbGUub3JnL21pc3NpbmddXQpAZW5kdW1sCg==",
+      "remote_name": "n_unknown_url_negative.puml",
+      "mechanism": "class-note-url-command-lifecycle",
+      "axes": [
+        "named note lifecycle",
+        "unknown URL owner"
+      ],
+      "expected_java_valid": false,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_note_css_false.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_note_css_false.puml",
+      "source_bytes": 87,
+      "source_sha256": "8854ecde0d9b85ab554112a1e2eaa4a5b090b783b890949950b137f28ebab1d5",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4Kbm90ZSB7ClNoYWRvd2luZyBmYWxzZQp9Cjwvc3R5bGU+Cm5vdGUgIm1lbW9yYW5kdW0iIGFzIFRva2VuCkBlbmR1bWwK",
+      "remote_name": "f_note_css_false.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_note_legacy_no.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_note_legacy_no.puml",
+      "source_bytes": 72,
+      "source_sha256": "beb33afadaf641b8e4ec9713b1e0723fb8f56abcaad5f13997b04cba326c3ce3",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBub3RlU2hhZG93aW5nIG5vCm5vdGUgIm1lbW9yYW5kdW0iIGFzIFRva2VuCkBlbmR1bWwK",
+      "remote_name": "f_note_legacy_no.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_note_legacy_yes.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_note_legacy_yes.puml",
+      "source_bytes": 73,
+      "source_sha256": "53156fe9dfd48a30f00cff6ed791e528e8ac64b5251da8644c995e237439555f",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBub3RlU2hhZG93aW5nIHllcwpub3RlICJtZW1vcmFuZHVtIiBhcyBUb2tlbgpAZW5kdW1sCg==",
+      "remote_name": "f_note_legacy_yes.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_note_decimal.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_note_decimal.puml",
+      "source_bytes": 109,
+      "source_sha256": "3ef7d8ef072178cce5b1e2e6a40f2f95669f95b63a14fb7d72f487b785e1c9ff",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4Kbm90ZSB7ClNoYWRvd2luZyAtMC43NXB4Cn0KPC9zdHlsZT4KY2xhc3MgQmVhY29uCm5vdGUgcmlnaHQgb2YgQmVhY29uIDogbWVtb3JhbmR1bQpAZW5kdW1sCg==",
+      "remote_name": "f_note_decimal.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_note_malformed.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_note_malformed.puml",
+      "source_bytes": 126,
+      "source_sha256": "4656ac906c81b3ce8c6d395b6c323b20523567df1ac5c73688b877e302267f83",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4Kbm90ZSB7ClNoYWRvd2luZyAxLjIuMwp9Cjwvc3R5bGU+Cm5vdGUgIm1lbW9yYW5kdW0iIGFzIFRva2VuCnVybCBUb2tlbiBbW2h0dHBzOi8vZXhhbXBsZS5vcmcvbm90ZV1dCkBlbmR1bWwK",
+      "remote_name": "f_note_malformed.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_note_zero.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_note_zero.puml",
+      "source_bytes": 111,
+      "source_sha256": "def89754b1b4bb26bac69dea82cad6dca2b75a88452dd2ad619d05f49beeeeb0",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4Kbm90ZSB7ClNoYWRvd2luZyAtMAp9Cjwvc3R5bGU+CmNsYXNzIEJlYWNvbgpub3RlIHJpZ2h0IG9mIEJlYWNvbgptZW1vcmFuZHVtCmVuZCBub3RlCkBlbmR1bWwK",
+      "remote_name": "f_note_zero.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_actor_css_no.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_actor_css_no.puml",
+      "source_bytes": 126,
+      "source_sha256": "43dc099be5815749444c6092a0030ce7968e6f309c965b84ac94cdaaf89d0ad0",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYWN0b3IgewpTaGFkb3dpbmcgbm8KfQo8L3N0eWxlPgphbGxvd21peGluZwphY3RvciAiUmVhZGVyIiBhcyBQZXJzb24KY2xhc3MgQmVhY29uClBlcnNvbiAtLT4gQmVhY29uCkBlbmR1bWwK",
+      "remote_name": "f_actor_css_no.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_boundary_fraction.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_boundary_fraction.puml",
+      "source_bytes": 134,
+      "source_sha256": "303111edbac5ce9b8b2fa5ecb379725ddacb43943f833f1475c1ba6eb2b3de64",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4KYm91bmRhcnkgewpTaGFkb3dpbmcgLS4yNXJlbQp9Cjwvc3R5bGU+CmFsbG93bWl4aW5nCmJvdW5kYXJ5ICJHYXRld2F5IiBhcyBQb3J0CmNsYXNzIEJlYWNvbgpQb3J0IC0tPiBCZWFjb24KQGVuZHVtbAo=",
+      "remote_name": "f_boundary_fraction.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_actor_legacy_yes.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_actor_legacy_yes.puml",
+      "source_bytes": 115,
+      "source_sha256": "fbab40dfdcad16e47aef4d2d8bc39056bdd9661246e8ec3e5eea7c142643b62e",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBhY3RvclNoYWRvd2luZyB5ZXMKYWxsb3dtaXhpbmcKYWN0b3IgIlJlYWRlciIgYXMgUGVyc29uCmNsYXNzIEJlYWNvbgpQZXJzb24gLS0+IEJlYWNvbgpAZW5kdW1sCg==",
+      "remote_name": "f_actor_legacy_yes.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_actor_legacy_negative.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_actor_legacy_negative.puml",
+      "source_bytes": 112,
+      "source_sha256": "7ac000dffcbec2027f3832721ba9f1d73b6d7de2c05f57a1ef75c6c3373da37b",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBzaGFkb3dpbmcgLTAuNzUKYWxsb3dtaXhpbmcKYWN0b3IgIlJlYWRlciIgYXMgUGVyc29uCmNsYXNzIEJlYWNvbgpQZXJzb24gLS0+IEJlYWNvbgpAZW5kdW1sCg==",
+      "remote_name": "f_actor_legacy_negative.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    },
+    {
+      "name": "f_note_cascade_origin.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-0423fc37/fresh/f_note_cascade_origin.puml",
+      "source_bytes": 115,
+      "source_sha256": "2ca746177671986968f91775456dde412b6b13a3c0dc3fa518cbc784f5fe028c",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBub3RlU2hhZG93aW5nIHllcwo8c3R5bGU+Cm5vdGUgewpTaGFkb3dpbmcgZmFsc2UKfQo8L3N0eWxlPgpub3RlICJtZW1vcmFuZHVtIiBhcyBUb2tlbgpAZW5kdW1sCg==",
+      "remote_name": "f_note_cascade_origin.puml",
+      "mechanism": "class-fashion-value-digit-semantics",
+      "axes": [
+        "numeric spelling and CSS/legacy origin",
+        "lone/attached note or actor/boundary kind"
+      ],
+      "expected_java_valid": true,
+      "timezone": "GMT+11:00"
+    }
+  ]
+}
