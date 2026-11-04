@@ -1,0 +1,9 @@
+@startuml
+allowmixing
+left to right direction
+skinparam shadowing true
+skinparam actorBorderThickness 2
+class Rivet
+actor "Caretaker\nStation" as Keeper <<operator>>
+Keeper --> Rivet
+@enduml

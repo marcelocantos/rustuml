@@ -1,0 +1,9 @@
+@startuml
+skinparam shadowing true
+class Spindle {
++head
++turn()
+}
+class Bearing
+Spindle --> Bearing
+@enduml

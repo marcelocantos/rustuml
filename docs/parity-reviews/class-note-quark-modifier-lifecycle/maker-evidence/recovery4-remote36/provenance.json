@@ -1,0 +1,15 @@
+{
+  "kind": "maker evidence only; no acceptance claim",
+  "original_snapshot_commit": "4419cf130ab8c4da3e81e4a29595c4dc801b42df",
+  "tested_production_revision": "7bd5c9f5d2f4dee23472ddc8e3ac4b96a3e196e3",
+  "java_source_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "new_rust_renders": 0,
+  "full_suite_reruns": 0,
+  "production_changes": 0,
+  "local_java_or_ssh_launches": 0,
+  "comparator_source": "docs/parity-reviews/class-command-grammar-closure/checker-support/scripts/check_svg.rs",
+  "comparator_source_sha256": "523e1750b056f05293b101b59ae9bb4a2aac8ffbe670eabf7cc6a13bbfaba033",
+  "compared_reference_count": 36,
+  "classification": "36 well-formed SVG roots; no frozen harness golden_has_syntax_error markers; all reference stderr empty; unchanged compare_svg_strict yields 28 match and 8 mismatch",
+  "source_pair_validation": "All source and Rust SVG hashes match pending-snapshot.json; both remote streams match supplied SHA256; base64 transport bytes equal .json.gz; gzip bytes decode exactly to raw .json."
+}

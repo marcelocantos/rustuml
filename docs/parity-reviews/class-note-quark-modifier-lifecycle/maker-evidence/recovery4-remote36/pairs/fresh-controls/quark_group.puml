@@ -1,0 +1,7 @@
+@startuml
+note "record" as Basin.Registry
+package Basin {
+class Rivet
+}
+note right of Basin.Registry : explanation
+@enduml

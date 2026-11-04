@@ -1,0 +1,7 @@
+@startuml
+skinparam shadowing false
+class Spindle {
++head
++turn()
+}
+@enduml

@@ -1,0 +1,224 @@
+[
+  {
+    "name": "fresh-controls/boundary_12_False.puml",
+    "comparison_status": "match",
+    "java_viewBox": "0 0 90 175",
+    "rust_viewBox": "0 0 90 176",
+    "java_label_baseline": 158.6016,
+    "rust_label_baseline": 158.6016,
+    "java_canvas_height_from_painted_text": 175
+  },
+  {
+    "name": "fresh-controls/boundary_12_True.puml",
+    "comparison_status": "match",
+    "java_viewBox": "0 0 90 189",
+    "rust_viewBox": "0 0 90 190",
+    "java_label_baseline": 172.7344,
+    "rust_label_baseline": 172.7344,
+    "java_canvas_height_from_painted_text": 189
+  },
+  {
+    "name": "fresh-controls/boundary_18_False.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 125 180",
+    "rust_viewBox": "0 0 125 183",
+    "java_label_baseline": 164.4023,
+    "rust_label_baseline": 164.4023,
+    "java_canvas_height_from_painted_text": 180
+  },
+  {
+    "name": "fresh-controls/boundary_18_True.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 125 202",
+    "rust_viewBox": "0 0 125 204",
+    "java_label_baseline": 185.6016,
+    "rust_label_baseline": 185.6016,
+    "java_canvas_height_from_painted_text": 202
+  },
+  {
+    "name": "fresh-controls/header_0_15.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 208 107",
+    "rust_viewBox": "0 0 208 107",
+    "java_circle": {
+      "cx": "26",
+      "cy": "42.6211",
+      "fill": "#ABCDEF",
+      "rx": "15",
+      "ry": "15",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "rust_circle": {
+      "cx": "26",
+      "cy": "42.6211",
+      "fill": "#ABCDEF",
+      "rx": "15",
+      "ry": "15",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "java_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQZ",
+    "rust_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQ"
+  },
+  {
+    "name": "fresh-controls/header_0_9.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 196 107",
+    "rust_viewBox": "0 0 196 107",
+    "java_circle": {
+      "cx": "20",
+      "cy": "42.6211",
+      "fill": "#ABCDEF",
+      "rx": "9",
+      "ry": "9",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "rust_circle": {
+      "cx": "20",
+      "cy": "42.6211",
+      "fill": "#ABCDEF",
+      "rx": "9",
+      "ry": "9",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "java_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQZ",
+    "rust_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQ"
+  },
+  {
+    "name": "fresh-controls/header_4_15.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 216 123",
+    "rust_viewBox": "0 0 216 123",
+    "java_circle": {
+      "cx": "26",
+      "cy": "50.6211",
+      "fill": "#ABCDEF",
+      "rx": "15",
+      "ry": "15",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "rust_circle": {
+      "cx": "26",
+      "cy": "50.6211",
+      "fill": "#ABCDEF",
+      "rx": "15",
+      "ry": "15",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "java_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQZ",
+    "rust_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQ"
+  },
+  {
+    "name": "fresh-controls/header_4_9.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 204 123",
+    "rust_viewBox": "0 0 204 123",
+    "java_circle": {
+      "cx": "20",
+      "cy": "50.6211",
+      "fill": "#ABCDEF",
+      "rx": "9",
+      "ry": "9",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "rust_circle": {
+      "cx": "20",
+      "cy": "50.6211",
+      "fill": "#ABCDEF",
+      "rx": "9",
+      "ry": "9",
+      "style": "stroke:#181818;stroke-width:1;"
+    },
+    "java_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQZ",
+    "rust_path_commands": "MQQQQQQQQQQLLZMQQQQQQQQ"
+  },
+  {
+    "name": "fresh-controls/modifier_bottom.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 191 170",
+    "rust_viewBox": "0 0 191 170",
+    "java_anchors": [
+      {
+        "path": [
+          "svg",
+          "g",
+          "g",
+          "a"
+        ],
+        "attributes": {
+          "href": "https://example.org/meridian",
+          "target": "_top",
+          "title": "context",
+          "{http://www.w3.org/1999/xlink}actuate": "onRequest",
+          "{http://www.w3.org/1999/xlink}href": "https://example.org/meridian",
+          "{http://www.w3.org/1999/xlink}show": "new",
+          "{http://www.w3.org/1999/xlink}title": "context",
+          "{http://www.w3.org/1999/xlink}type": "simple"
+        }
+      }
+    ],
+    "rust_anchors": [
+      {
+        "path": [
+          "svg",
+          "g",
+          "a"
+        ],
+        "attributes": {
+          "href": "https://example.org/meridian",
+          "target": "_top",
+          "title": "context",
+          "{http://www.w3.org/1999/xlink}actuate": "onRequest",
+          "{http://www.w3.org/1999/xlink}href": "https://example.org/meridian",
+          "{http://www.w3.org/1999/xlink}show": "new",
+          "{http://www.w3.org/1999/xlink}title": "context",
+          "{http://www.w3.org/1999/xlink}type": "simple"
+        }
+      }
+    ]
+  },
+  {
+    "name": "fresh-controls/modifier_left.puml",
+    "comparison_status": "mismatch",
+    "java_viewBox": "0 0 317 70",
+    "rust_viewBox": "0 0 317 70",
+    "java_anchors": [
+      {
+        "path": [
+          "svg",
+          "g",
+          "g",
+          "a"
+        ],
+        "attributes": {
+          "href": "https://example.org/meridian",
+          "target": "_top",
+          "title": "context",
+          "{http://www.w3.org/1999/xlink}actuate": "onRequest",
+          "{http://www.w3.org/1999/xlink}href": "https://example.org/meridian",
+          "{http://www.w3.org/1999/xlink}show": "new",
+          "{http://www.w3.org/1999/xlink}title": "context",
+          "{http://www.w3.org/1999/xlink}type": "simple"
+        }
+      }
+    ],
+    "rust_anchors": [
+      {
+        "path": [
+          "svg",
+          "g",
+          "a"
+        ],
+        "attributes": {
+          "href": "https://example.org/meridian",
+          "target": "_top",
+          "title": "context",
+          "{http://www.w3.org/1999/xlink}actuate": "onRequest",
+          "{http://www.w3.org/1999/xlink}href": "https://example.org/meridian",
+          "{http://www.w3.org/1999/xlink}show": "new",
+          "{http://www.w3.org/1999/xlink}title": "context",
+          "{http://www.w3.org/1999/xlink}type": "simple"
+        }
+      }
+    ]
+  }
+]

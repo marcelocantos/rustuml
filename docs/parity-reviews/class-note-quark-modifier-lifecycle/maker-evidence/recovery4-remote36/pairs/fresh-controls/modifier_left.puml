@@ -1,0 +1,7 @@
+@startuml
+class Meridian
+note left of Meridian $audit <<notice>> #pink [[https://example.org/meridian{context}]] {
+component is body text
+class still body text
+}
+@enduml
