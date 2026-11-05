@@ -870,413 +870,152 @@ fn sans_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     }
 }
 
-const ARIAL_WIDTH: [f64; 95] = [
-    0.277832031250,
-    0.277832031250,
-    0.354980468750,
-    0.556152343750,
-    0.556152343750,
-    0.889160156250,
-    0.666992187500,
-    0.190917968750,
-    0.333007812500,
-    0.333007812500,
-    0.389160156250,
-    0.583984375000,
-    0.277832031250,
-    0.333007812500,
-    0.277832031250,
-    0.277832031250,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.277832031250,
-    0.277832031250,
-    0.583984375000,
-    0.583984375000,
-    0.583984375000,
-    0.556152343750,
-    1.015136718750,
-    0.666992187500,
-    0.666992187500,
-    0.722167968750,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.777832031250,
-    0.722167968750,
-    0.277832031250,
-    0.500000000000,
-    0.666992187500,
-    0.556152343750,
-    0.833007812500,
-    0.722167968750,
-    0.777832031250,
-    0.666992187500,
-    0.777832031250,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.722167968750,
-    0.666992187500,
-    0.943847656250,
-    0.666992187500,
-    0.666992187500,
-    0.610839843750,
-    0.277832031250,
-    0.277832031250,
-    0.277832031250,
-    0.469238281250,
-    0.556152343750,
-    0.333007812500,
-    0.556152343750,
-    0.556152343750,
-    0.500000000000,
-    0.556152343750,
-    0.556152343750,
-    0.277832031250,
-    0.556152343750,
-    0.556152343750,
-    0.222167968750,
-    0.222167968750,
-    0.500000000000,
-    0.222167968750,
-    0.833007812500,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.333007812500,
-    0.500000000000,
-    0.277832031250,
-    0.556152343750,
-    0.500000000000,
-    0.722167968750,
-    0.500000000000,
-    0.500000000000,
-    0.500000000000,
-    0.333984375000,
-    0.259765625000,
-    0.333984375000,
-    0.583984375000,
+/// Printable-ASCII (U+0020..U+007E) advances, in font units, of the face
+/// JDK 21 measures for each style slot of a table-measured family: the
+/// face's own glyph advance (CTFontGetAdvancesForGlyphs at 2048 units per em)
+/// from `tools/font-chain-reference/ascii-advances-round11`
+/// (`tools/AsciiAdvanceExtract.swift`; gate `ascii_tables_are_the_extracted_faces`).
+/// Verdana-Italic and Verdana-BoldItalic have advances of their own
+/// (CFontManager registers them as the family's italic faces); Arial's
+/// italics happen to share the upright advances.
+const ASCII_UNITS_PER_EM: f64 = 2048.0;
+
+/// `ArialMT.plain.ascii.tsv`.
+const ARIAL_ASCII: [u16; 95] = [
+    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,
+    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,
+    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,
+    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,
 ];
 
-const ARIAL_BOLD_WIDTH: [f64; 95] = [
-    0.277832031250,
-    0.333007812500,
-    0.474121093750,
-    0.556152343750,
-    0.556152343750,
-    0.889160156250,
-    0.722167968750,
-    0.237792968750,
-    0.333007812500,
-    0.333007812500,
-    0.389160156250,
-    0.583984375000,
-    0.277832031250,
-    0.333007812500,
-    0.277832031250,
-    0.277832031250,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.556152343750,
-    0.333007812500,
-    0.333007812500,
-    0.583984375000,
-    0.583984375000,
-    0.583984375000,
-    0.610839843750,
-    0.975097656250,
-    0.722167968750,
-    0.722167968750,
-    0.722167968750,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.777832031250,
-    0.722167968750,
-    0.277832031250,
-    0.556152343750,
-    0.722167968750,
-    0.610839843750,
-    0.833007812500,
-    0.722167968750,
-    0.777832031250,
-    0.666992187500,
-    0.777832031250,
-    0.722167968750,
-    0.666992187500,
-    0.610839843750,
-    0.722167968750,
-    0.666992187500,
-    0.943847656250,
-    0.666992187500,
-    0.666992187500,
-    0.610839843750,
-    0.333007812500,
-    0.277832031250,
-    0.333007812500,
-    0.583984375000,
-    0.556152343750,
-    0.333007812500,
-    0.556152343750,
-    0.610839843750,
-    0.556152343750,
-    0.610839843750,
-    0.556152343750,
-    0.333007812500,
-    0.610839843750,
-    0.610839843750,
-    0.277832031250,
-    0.277832031250,
-    0.556152343750,
-    0.277832031250,
-    0.889160156250,
-    0.610839843750,
-    0.610839843750,
-    0.610839843750,
-    0.610839843750,
-    0.389160156250,
-    0.556152343750,
-    0.333007812500,
-    0.610839843750,
-    0.556152343750,
-    0.777832031250,
-    0.556152343750,
-    0.556152343750,
-    0.500000000000,
-    0.389160156250,
-    0.279785156250,
-    0.389160156250,
-    0.583984375000,
+/// `Arial-BoldMT.bold.ascii.tsv`.
+const ARIAL_BOLD_ASCII: [u16; 95] = [
+    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,
+    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,
+    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,
+    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,
 ];
 
-const VERDANA_WIDTH: [f64; 95] = [
-    0.351562500000,
-    0.393554687500,
-    0.458984375000,
-    0.818359375000,
-    0.635742187500,
-    1.076171875000,
-    0.726562500000,
-    0.268554687500,
-    0.454101562500,
-    0.454101562500,
-    0.635742187500,
-    0.818359375000,
-    0.363769531250,
-    0.454101562500,
-    0.363769531250,
-    0.454101562500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.635742187500,
-    0.454101562500,
-    0.454101562500,
-    0.818359375000,
-    0.818359375000,
-    0.818359375000,
-    0.545410156250,
-    1.000000000000,
-    0.683593750000,
-    0.685546875000,
-    0.698242187500,
-    0.770507812500,
-    0.632324218750,
-    0.574707031250,
-    0.775390625000,
-    0.751464843750,
-    0.420898437500,
-    0.454589843750,
-    0.692871093750,
-    0.556640625000,
-    0.842773437500,
-    0.748046875000,
-    0.787109375000,
-    0.603027343750,
-    0.787109375000,
-    0.695312500000,
-    0.683593750000,
-    0.616210937500,
-    0.731933593750,
-    0.683593750000,
-    0.988769531250,
-    0.685058593750,
-    0.615234375000,
-    0.685058593750,
-    0.454101562500,
-    0.454101562500,
-    0.454101562500,
-    0.818359375000,
-    0.635742187500,
-    0.635742187500,
-    0.600585937500,
-    0.623046875000,
-    0.520996093750,
-    0.623046875000,
-    0.595703125000,
-    0.351562500000,
-    0.623046875000,
-    0.632812500000,
-    0.274414062500,
-    0.344238281250,
-    0.591796875000,
-    0.274414062500,
-    0.972656250000,
-    0.632812500000,
-    0.606933593750,
-    0.623046875000,
-    0.623046875000,
-    0.426757812500,
-    0.520996093750,
-    0.394042968750,
-    0.632812500000,
-    0.591796875000,
-    0.818359375000,
-    0.591796875000,
-    0.591796875000,
-    0.525390625000,
-    0.634765625000,
-    0.454101562500,
-    0.634765625000,
-    0.818359375000,
+/// `Arial-ItalicMT.italic.ascii.tsv`.
+const ARIAL_ITALIC_ASCII: [u16; 95] = [
+    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,
+    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,
+    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,
+    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,
 ];
 
-const VERDANA_BOLD_WIDTH: [f64; 95] = [
-    0.341796875000,
-    0.402343750000,
-    0.587402343750,
-    0.867187500000,
-    0.710937500000,
-    1.271972656250,
-    0.862304687500,
-    0.332031250000,
-    0.543457031250,
-    0.543457031250,
-    0.710937500000,
-    0.867187500000,
-    0.361328125000,
-    0.479980468750,
-    0.361328125000,
-    0.689453125000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.710937500000,
-    0.402343750000,
-    0.402343750000,
-    0.867187500000,
-    0.867187500000,
-    0.867187500000,
-    0.616699218750,
-    0.963867187500,
-    0.776367187500,
-    0.761718750000,
-    0.723632812500,
-    0.830078125000,
-    0.683105468750,
-    0.650390625000,
-    0.811035156250,
-    0.837402343750,
-    0.545898437500,
-    0.555175781250,
-    0.770996093750,
-    0.637207031250,
-    0.947753906250,
-    0.846679687500,
-    0.850097656250,
-    0.732910156250,
-    0.850097656250,
-    0.782226562500,
-    0.710449218750,
-    0.681640625000,
-    0.812011718750,
-    0.763671875000,
-    1.128417968750,
-    0.763671875000,
-    0.736816406250,
-    0.691894531250,
-    0.543457031250,
-    0.689453125000,
-    0.543457031250,
-    0.867187500000,
-    0.710937500000,
-    0.710937500000,
-    0.667968750000,
-    0.699218750000,
-    0.588378906250,
-    0.699218750000,
-    0.664062500000,
-    0.422363281250,
-    0.699218750000,
-    0.712402343750,
-    0.341796875000,
-    0.402832031250,
-    0.670898437500,
-    0.341796875000,
-    1.058105468750,
-    0.712402343750,
-    0.686523437500,
-    0.699218750000,
-    0.699218750000,
-    0.497070312500,
-    0.593261718750,
-    0.455566406250,
-    0.712402343750,
-    0.649902343750,
-    0.979492187500,
-    0.668945312500,
-    0.650878906250,
-    0.596679687500,
-    0.710937500000,
-    0.543457031250,
-    0.710937500000,
-    0.867187500000,
+/// `Arial-BoldItalicMT.bolditalic.ascii.tsv`.
+const ARIAL_BOLD_ITALIC_ASCII: [u16; 95] = [
+    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,
+    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,
+    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,
+    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,
 ];
+
+/// `Verdana.plain.ascii.tsv`.
+const VERDANA_ASCII: [u16; 95] = [
+    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302,
+    1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048,
+    1400, 1404, 1430, 1578, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235,
+    1612, 1424, 1400, 1262, 1499, 1400, 2025, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302,
+    1230, 1276, 1067, 1276, 1220, 720, 1276, 1296, 562, 705, 1212, 562, 1992, 1296, 1243, 1276,
+    1276, 874, 1067, 807, 1296, 1212, 1676, 1212, 1212, 1076, 1300, 930, 1300, 1676,
+];
+
+/// `Verdana-Bold.bold.ascii.tsv`.
+const VERDANA_BOLD_ASCII: [u16; 95] = [
+    700, 824, 1203, 1776, 1456, 2605, 1766, 680, 1113, 1113, 1456, 1776, 740, 983, 740, 1412, 1456,
+    1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 824, 824, 1776, 1776, 1776, 1263, 1974,
+    1590, 1560, 1482, 1700, 1399, 1332, 1661, 1715, 1118, 1137, 1579, 1305, 1941, 1734, 1741, 1501,
+    1741, 1602, 1455, 1396, 1663, 1564, 2311, 1564, 1509, 1417, 1113, 1412, 1113, 1776, 1456, 1456,
+    1368, 1432, 1205, 1432, 1360, 865, 1432, 1459, 700, 825, 1374, 700, 2167, 1459, 1406, 1432,
+    1432, 1018, 1215, 933, 1459, 1331, 2006, 1370, 1333, 1222, 1456, 1113, 1456, 1776,
+];
+
+/// `Verdana-Italic.italic.ascii.tsv`.
+const VERDANA_ITALIC_ASCII: [u16; 95] = [
+    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302,
+    1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048,
+    1398, 1404, 1430, 1568, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235,
+    1612, 1424, 1400, 1262, 1499, 1398, 2028, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302,
+    1230, 1276, 1067, 1276, 1220, 720, 1273, 1296, 562, 705, 1202, 562, 1993, 1296, 1243, 1276,
+    1276, 874, 1067, 807, 1296, 1210, 1676, 1212, 1210, 1076, 1300, 930, 1300, 1676,
+];
+
+/// `Verdana-BoldItalic.bolditalic.ascii.tsv`.
+const VERDANA_BOLD_ITALIC_ASCII: [u16; 95] = [
+    700, 824, 1203, 1776, 1456, 2605, 1766, 680, 1113, 1113, 1456, 1776, 740, 983, 740, 1412, 1456,
+    1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 824, 824, 1776, 1776, 1776, 1263, 1974,
+    1590, 1560, 1482, 1700, 1399, 1332, 1661, 1715, 1118, 1137, 1579, 1305, 1941, 1734, 1741, 1501,
+    1741, 1602, 1455, 1396, 1663, 1564, 2311, 1564, 1509, 1417, 1113, 1412, 1113, 1776, 1456, 1456,
+    1368, 1432, 1205, 1432, 1360, 865, 1432, 1459, 700, 825, 1374, 700, 2167, 1459, 1404, 1432,
+    1432, 1018, 1215, 933, 1459, 1329, 2006, 1370, 1333, 1222, 1456, 1113, 1456, 1776,
+];
+
+/// The four style slots of a table-measured family.
+struct AsciiFaces {
+    plain: &'static [u16; 95],
+    bold: &'static [u16; 95],
+    italic: &'static [u16; 95],
+    bold_italic: &'static [u16; 95],
+}
+
+impl AsciiFaces {
+    /// The table of the face measured for (bold, italic), the same slot
+    /// `ChainFace::for_style` resolves.
+    fn slot(&self, bold: bool, italic: bool) -> &'static [u16; 95] {
+        match (bold, italic) {
+            (false, false) => self.plain,
+            (true, false) => self.bold,
+            (false, true) => self.italic,
+            (true, true) => self.bold_italic,
+        }
+    }
+}
+
+const ARIAL_FACES: AsciiFaces = AsciiFaces {
+    plain: &ARIAL_ASCII,
+    bold: &ARIAL_BOLD_ASCII,
+    italic: &ARIAL_ITALIC_ASCII,
+    bold_italic: &ARIAL_BOLD_ITALIC_ASCII,
+};
+
+const VERDANA_FACES: AsciiFaces = AsciiFaces {
+    plain: &VERDANA_ASCII,
+    bold: &VERDANA_BOLD_ASCII,
+    italic: &VERDANA_ITALIC_ASCII,
+    bold_italic: &VERDANA_BOLD_ITALIC_ASCII,
+};
 
 fn family_table_text_width(
     text: &str,
     font_size: f64,
     bold: bool,
-    plain_table: &[f64; 95],
-    bold_table: &[f64; 95],
-    face: ChainFace,
+    italic: bool,
+    family: ChainFamily,
+    faces: &AsciiFaces,
 ) -> f64 {
-    let table = if bold { bold_table } else { plain_table };
-    chain_text_width(text, font_size, bold, face, |c| {
-        let code = c as usize;
-        (32..=126)
-            .contains(&code)
-            .then(|| table[code - 32] * font_size)
-    })
+    let table = faces.slot(bold, italic);
+    chain_text_width(
+        text,
+        font_size,
+        bold,
+        ChainFace::for_style(family, bold, italic),
+        |c| {
+            let code = c as usize;
+            (32..=126)
+                .contains(&code)
+                .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * font_size)
+        },
+    )
 }
 
 const HELVETICA_UPM: f64 = 2048.0;
@@ -1438,18 +1177,18 @@ fn family_text_width(
             text,
             font_size,
             bold,
-            &ARIAL_WIDTH,
-            &ARIAL_BOLD_WIDTH,
-            ChainFace::for_style(ChainFamily::Arial, bold, italic),
+            italic,
+            ChainFamily::Arial,
+            &ARIAL_FACES,
         ),
         MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold, italic),
         MetricFamily::Verdana => family_table_text_width(
             text,
             font_size,
             bold,
-            &VERDANA_WIDTH,
-            &VERDANA_BOLD_WIDTH,
-            ChainFace::for_style(ChainFamily::Verdana, bold, italic),
+            italic,
+            ChainFamily::Verdana,
+            &VERDANA_FACES,
         ),
         MetricFamily::TimesNewRoman => {
             pm::times_new_roman_text_width(text, font_size, bold, italic)
@@ -2153,6 +1892,150 @@ mod tests {
         );
     }
 
+    /// Java's widths for the four alphabet runs at 14 pt in each Verdana
+    /// face (BT relay, `c10a_ft_vd_{italic,bolditalic,bold}.svg` textLength,
+    /// pinned Java 71806a23): the italic faces have advances of their own.
+    #[test]
+    fn verdana_faces_measure_java_widths() {
+        let runs = [
+            "ABCDEFGHIJKLM",
+            "NOPQRSTUVWXYZ",
+            "abcdefghijklm",
+            "nopqrstuvwxyz",
+        ];
+        for (bold, italic, java) in [
+            (false, true, ["119.4717", "130.3477", "98.3145", "106.0869"]),
+            (true, true, ["133.4307", "144.9082", "111.5557", "120.3945"]),
+            (
+                true,
+                false,
+                ["133.4307", "144.9082", "111.5557", "120.4219"],
+            ),
+        ] {
+            for (run, java) in runs.iter().zip(java) {
+                assert_eq!(
+                    pm::fmt_coord(measure_with_family_and_face(
+                        run, 14.0, bold, italic, "Verdana"
+                    )),
+                    java,
+                    "{run} bold={bold} italic={italic}"
+                );
+            }
+        }
+    }
+
+    /// Every ASCII table is its face's stored extraction
+    /// (tools/font-chain-reference/ascii-advances-round11, whose font files
+    /// hash as the reference host's), and each (bold, italic) slot reads its
+    /// own face's table.
+    #[test]
+    fn ascii_tables_are_the_extracted_faces() {
+        use sha2::{Digest, Sha256};
+        use std::collections::HashMap;
+        const DIR: &str = "tools/font-chain-reference/ascii-advances-round11";
+        const SHA256SUMS_SHA256: &str =
+            "1fa07b8c424f6f6e1d385cbdcd439d6f9d3dab5e0cd9096b0a66ac497ce845d4";
+        const REFERENCE_HOST_FONT_HASHES: &str =
+            "tools/font-chain-reference/monkeyman-round9/font-hashes.txt";
+        let hex = |bytes: &[u8]| {
+            Sha256::digest(bytes)
+                .iter()
+                .map(|b| format!("{b:02x}"))
+                .collect::<String>()
+        };
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let dir = root.join(DIR);
+        let sums = std::fs::read(dir.join("SHA256SUMS")).expect("stored SHA256SUMS");
+        assert_eq!(hex(&sums), SHA256SUMS_SHA256);
+        for line in String::from_utf8(sums).unwrap().lines() {
+            let (hash, name) = line.split_once("  ").expect("shasum line");
+            let data = std::fs::read(dir.join(name)).unwrap_or_else(|e| panic!("{name}: {e}"));
+            assert_eq!(hex(&data), hash, "{name}");
+        }
+        let font_hashes = |path: std::path::PathBuf| -> HashMap<String, String> {
+            std::fs::read_to_string(path)
+                .unwrap()
+                .lines()
+                .filter_map(|line| {
+                    let (hash, path) = line.split_once("  ")?;
+                    (hash.len() == 64).then(|| (path.to_string(), hash.to_string()))
+                })
+                .collect()
+        };
+        let here = font_hashes(dir.join("font-hashes.txt"));
+        let reference_host = font_hashes(root.join(REFERENCE_HOST_FONT_HASHES));
+        let mut slots = Vec::new();
+        for (faces, family, files) in [
+            (
+                &ARIAL_FACES,
+                "Arial",
+                [
+                    "ArialMT.plain",
+                    "Arial-BoldMT.bold",
+                    "Arial-ItalicMT.italic",
+                    "Arial-BoldItalicMT.bolditalic",
+                ],
+            ),
+            (
+                &VERDANA_FACES,
+                "Verdana",
+                [
+                    "Verdana.plain",
+                    "Verdana-Bold.bold",
+                    "Verdana-Italic.italic",
+                    "Verdana-BoldItalic.bolditalic",
+                ],
+            ),
+        ] {
+            let styles = [(false, false), (true, false), (false, true), (true, true)];
+            for ((bold, italic), file) in styles.into_iter().zip(files) {
+                let text = std::fs::read_to_string(dir.join(format!("{file}.ascii.tsv")))
+                    .unwrap_or_else(|e| panic!("{file}: {e}"));
+                let header = |key: &str| {
+                    text.lines()
+                        .find_map(|line| line.strip_prefix(key))
+                        .unwrap_or_else(|| panic!("{file}: no {key}"))
+                        .to_string()
+                };
+                assert!(header("#units_per_em\t").starts_with("2048\t"), "{file}");
+                let font_file = header("#file\t");
+                assert!(
+                    font_file.contains(family),
+                    "{file}: measured face file {font_file}"
+                );
+                assert_eq!(
+                    here.get(&font_file),
+                    reference_host.get(&font_file),
+                    "{font_file}: extraction host and reference host disagree"
+                );
+                assert!(reference_host.contains_key(&font_file), "{font_file}");
+                let units: Vec<u16> = text
+                    .lines()
+                    .filter_map(|line| line.strip_prefix("A\t"))
+                    .enumerate()
+                    .map(|(index, fields)| {
+                        let fields: Vec<&str> = fields.split('\t').collect();
+                        assert_eq!(
+                            u32::from_str_radix(fields[0], 16).unwrap(),
+                            0x20 + index as u32,
+                            "{file}"
+                        );
+                        let advance: f64 = fields[2].parse().unwrap();
+                        assert_eq!(advance.fract(), 0.0, "{file} {}", fields[0]);
+                        advance as u16
+                    })
+                    .collect();
+                assert_eq!(
+                    faces.slot(bold, italic).as_slice(),
+                    units.as_slice(),
+                    "{file}: bold={bold} italic={italic}"
+                );
+                slots.push(file);
+            }
+        }
+        assert_eq!(slots.len(), 8);
+    }
+
     #[test]
     fn awt_named_font_metrics_match_goldens() {
         assert_eq!(
@@ -2378,10 +2261,13 @@ mod tests {
     /// a string measures as it does in `ChainFace::for_style`'s face (JDK
     /// `FontFamily.getFont`), by the per-glyph rule of `chain_text_width`
     /// (own table, else the chain: mapped, `.notdef` or hidden) or the
-    /// monospaced cell rule. The strings that tell the italic face from the
-    /// face a dropped italic would pick are searched in the stored coverage
-    /// (each scalar from U+00A0 alone, after `a` and after a Hebrew base, so
-    /// both JDK paths are reached), not listed by hand. A slot with no such
+    /// monospaced cell rule. A character in the family's own table is
+    /// measured with the table of that very face (selected here, not through
+    /// the router under test), so a dropped italic table is caught. The
+    /// strings that tell the italic face from the face a dropped italic would
+    /// pick are searched in the stored tables and coverage (ASCII letters and
+    /// digits alone; each scalar from U+00A0 alone, after `a` and after a
+    /// Hebrew base, so both JDK paths are reached), not listed by hand. A slot with no such
     /// string fails unless it is in `EQUIVALENT`: a pair whose faces give
     /// every candidate the same width, so no output can tell the routes
     /// apart; the list fails when stale in either direction.
@@ -2394,46 +2280,81 @@ mod tests {
         // Menlo Bold Italic and Menlo Bold hide the same scalars in every
         // context (monospaced width counts cells only).
         const EQUIVALENT: [(&str, bool); 1] = [("Monospaced", true)];
+        // The face's own ASCII table, chosen by the face's own (bold, italic).
+        fn ascii(table: &[u16; 95], c: char) -> Option<f64> {
+            let code = c as usize;
+            (32..=126)
+                .contains(&code)
+                .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * SIZE)
+        }
+        type OwnWidth = fn(char, bool, bool) -> Option<f64>;
         // (family name as consumers pass it, chain family, own advance table)
-        let families: [(&str, ChainFamily, Option<fn(char) -> bool>); 5] = [
+        let families: [(&str, ChainFamily, Option<OwnWidth>); 5] = [
             (
                 "Arial",
                 ChainFamily::Arial,
-                Some(|c| (' '..='~').contains(&c)),
+                Some(|c, bold, italic| match (bold, italic) {
+                    (false, false) => ascii(&ARIAL_ASCII, c),
+                    (true, false) => ascii(&ARIAL_BOLD_ASCII, c),
+                    (false, true) => ascii(&ARIAL_ITALIC_ASCII, c),
+                    (true, true) => ascii(&ARIAL_BOLD_ITALIC_ASCII, c),
+                }),
             ),
             (
+                // Helvetica-Oblique and -BoldOblique share the upright
+                // advances (ascii-advances-round11); the upright tables
+                // themselves are T14.49.
                 "Helvetica",
                 ChainFamily::Helvetica,
-                Some(|c| helvetica_char_units(c).is_some()),
+                Some(|c, bold, _| {
+                    if bold {
+                        helvetica_bold_char_units(c)
+                    } else {
+                        helvetica_char_units(c)
+                    }
+                    .map(|units| units / HELVETICA_UPM * SIZE)
+                }),
             ),
             (
                 "Verdana",
                 ChainFamily::Verdana,
-                Some(|c| (' '..='~').contains(&c)),
+                Some(|c, bold, italic| match (bold, italic) {
+                    (false, false) => ascii(&VERDANA_ASCII, c),
+                    (true, false) => ascii(&VERDANA_BOLD_ASCII, c),
+                    (false, true) => ascii(&VERDANA_ITALIC_ASCII, c),
+                    (true, true) => ascii(&VERDANA_BOLD_ITALIC_ASCII, c),
+                }),
             ),
             ("Monospaced", ChainFamily::Menlo, None),
             ("Courier New", ChainFamily::CourierNew, None),
         ];
-        let candidates: Vec<String> = (0xA0_u32..=0x2_FFFF)
-            .filter_map(char::from_u32)
-            .flat_map(|c| [format!("{c}"), format!("a{c}"), format!("{HEBREW_ALEF}{c}")])
+        let candidates: Vec<String> = ('0'..='9')
+            .chain('A'..='Z')
+            .chain('a'..='z')
+            .map(String::from)
+            .chain(
+                (0xA0_u32..=0x2_FFFF)
+                    .filter_map(char::from_u32)
+                    .flat_map(|c| [format!("{c}"), format!("a{c}"), format!("{HEBREW_ALEF}{c}")]),
+            )
             .collect();
         for (name, family, own) in &families {
             for bold in [false, true] {
                 let public =
                     |text: &str| measure_with_family_and_face(text, SIZE, bold, true, name);
                 let cell = public("a");
-                // Width of `text` in `face`, per Java token of the string.
-                let in_face = |face: ChainFace, text: &str| -> f64 {
+                // Width of `text` in `face` (style `italic`), per Java token
+                // of the string.
+                let in_face = |face: ChainFace, italic: bool, text: &str| -> f64 {
                     let complexity = face.complexity_per_token(text);
                     text.chars()
                         .zip(complexity)
                         .map(|(c, complexity)| {
                             let glyph = face.resolve(c, complexity);
-                            match own {
+                            match own.map(|own| own(c, bold, italic)) {
                                 None => f64::from(u8::from(glyph != ChainGlyph::Hidden)) * cell,
-                                Some(own) if own(c) => public(c.encode_utf8(&mut [0_u8; 4])),
-                                Some(_) => match glyph {
+                                Some(Some(width)) => width,
+                                Some(None) => match glyph {
                                     ChainGlyph::Missing => face.notdef_per_em() * SIZE,
                                     ChainGlyph::Hidden => 0.0,
                                     ChainGlyph::Mapped => sans_text_width(
@@ -2450,7 +2371,9 @@ mod tests {
                 let dropped = ChainFace::for_style(*family, bold, false);
                 let probes: Vec<&String> = candidates
                     .iter()
-                    .filter(|text| (in_face(face, text) - in_face(dropped, text)).abs() > 1e-9)
+                    .filter(|text| {
+                        (in_face(face, true, text) - in_face(dropped, false, text)).abs() > 1e-9
+                    })
                     .take(MAX_PROBES)
                     .collect();
                 assert_eq!(
@@ -2466,11 +2389,11 @@ mod tests {
                 }
                 for text in probes {
                     assert!(
-                        (public(text) - in_face(face, text)).abs() < 1e-9,
+                        (public(text) - in_face(face, true, text)).abs() < 1e-9,
                         "{name} bold={bold} italic {text:?}: measured {}, {face:?} gives {}, {dropped:?} gives {}",
                         public(text),
-                        in_face(face, text),
-                        in_face(dropped, text),
+                        in_face(face, true, text),
+                        in_face(dropped, false, text),
                     );
                 }
             }
