@@ -1,0 +1,140 @@
+hb_ot_shape_planner_t::hb_ot_shape_planner_t (hb_face_t                     *face,
+					      const hb_segment_properties_t &props) :
+						face (face),
+						props (props),
+						map (face, props)
+#ifndef HB_NO_AAT_SHAPE
+						, aat_map (face, props)
+						, apply_morx (_hb_apply_morx (face, props))
+#endif
+{
+  shaper = hb_ot_shaper_categorize (props.script, props.direction, map.chosen_script[0]);
+
+  script_zero_marks = shaper->zero_width_marks != HB_OT_SHAPE_ZERO_WIDTH_MARKS_NONE;
+  script_fallback_position = shaper->fallback_position;
+
+#ifndef HB_NO_AAT_SHAPE
+  /* https://github.com/harfbuzz/harfbuzz/issues/1528 */
+  if (apply_morx && shaper != &_hb_ot_shaper_default)
+    shaper = &_hb_ot_shaper_dumber;
+#endif
+}
+hb_ot_shape_planner_t::compile (hb_ot_shape_plan_t           &plan,
+				const hb_ot_shape_plan_key_t &key)
+{
+  plan.props = props;
+  plan.shaper = shaper;
+  map.compile (plan.map, key);
+#ifndef HB_NO_AAT_SHAPE
+  if (apply_morx)
+    aat_map.compile (plan.aat_map);
+#endif
+
+#ifndef HB_NO_OT_SHAPE_FRACTIONS
+  plan.frac_mask = plan.map.get_1_mask (HB_TAG ('f','r','a','c'));
+  plan.numr_mask = plan.map.get_1_mask (HB_TAG ('n','u','m','r'));
+  plan.dnom_mask = plan.map.get_1_mask (HB_TAG ('d','n','o','m'));
+  plan.has_frac = plan.frac_mask || (plan.numr_mask && plan.dnom_mask);
+#endif
+
+  plan.rtlm_mask = plan.map.get_1_mask (HB_TAG ('r','t','l','m'));
+  plan.has_vert = !!plan.map.get_1_mask (HB_TAG ('v','e','r','t'));
+
+  hb_tag_t kern_tag = HB_DIRECTION_IS_HORIZONTAL (props.direction) ?
+		      HB_TAG ('k','e','r','n') : HB_TAG ('v','k','r','n');
+#ifndef HB_NO_OT_KERN
+  plan.kern_mask = plan.map.get_mask (kern_tag);
+  plan.requested_kerning = !!plan.kern_mask;
+#endif
+
+  bool has_gpos_kern = plan.map.get_feature_index (1, kern_tag) != HB_OT_LAYOUT_NO_FEATURE_INDEX;
+  bool disable_gpos = plan.shaper->gpos_tag &&
+		      plan.shaper->gpos_tag != plan.map.chosen_script[1];
+
+  /*
+   * Decide who provides glyph classes. GDEF or Unicode.
+   */
+
+  if (!hb_ot_layout_has_glyph_classes (face))
+    plan.fallback_glyph_classes = true;
+
+  /*
+   * Decide who does substitutions. GSUB, morx, or fallback.
+   */
+
+#ifndef HB_NO_AAT_SHAPE
+  plan.apply_morx = apply_morx;
+#endif
+
+  /*
+   * Decide who does positioning. GPOS, kerx, kern, or fallback.
+   */
+
+#ifndef HB_NO_AAT_SHAPE
+  bool has_kerx = hb_aat_layout_has_positioning (face);
+  bool has_gsub = !apply_morx && hb_ot_layout_has_substitution (face);
+#endif
+  bool has_gpos = !disable_gpos && hb_ot_layout_has_positioning (face);
+  if (false)
+    {}
+#ifndef HB_NO_AAT_SHAPE
+  /* Prefer GPOS over kerx if GSUB is present;
+   * https://github.com/harfbuzz/harfbuzz/issues/3008 */
+  else if (has_kerx && !(has_gsub && has_gpos))
+    plan.apply_kerx = true;
+#endif
+  else if (has_gpos)
+    plan.apply_gpos = true;
+
+  if (!plan.apply_kerx && (!has_gpos_kern || !plan.apply_gpos))
+  {
+    if (false) {}
+#ifndef HB_NO_AAT_SHAPE
+    else if (has_kerx)
+      plan.apply_kerx = true;
+#endif
+#ifndef HB_NO_OT_KERN
+    else if (hb_ot_layout_has_kerning (face))
+      plan.apply_kern = script_fallback_position; // Not all shapers apply legacy `kern`
+#endif
+    else {}
+  }
+
+  plan.apply_fallback_kern = script_fallback_position && !(plan.apply_gpos || plan.apply_kerx || plan.apply_kern);
+
+  plan.zero_marks = script_zero_marks &&
+		    !plan.apply_kerx &&
+		    (!plan.apply_kern
+#ifndef HB_NO_OT_KERN
+		     || !hb_ot_layout_has_machine_kerning (face)
+#endif
+		    );
+  plan.has_gpos_mark = !!plan.map.get_1_mask (HB_TAG ('m','a','r','k'));
+
+  plan.adjust_mark_positioning_when_zeroing = !plan.apply_gpos &&
+					      !plan.apply_kerx &&
+					      (!plan.apply_kern
+#ifndef HB_NO_OT_KERN
+					       || !hb_ot_layout_has_cross_kerning (face)
+#endif
+					      );
+
+  plan.fallback_mark_positioning = plan.adjust_mark_positioning_when_zeroing &&
+				   script_fallback_position;
+
+#ifndef HB_NO_AAT_SHAPE
+  /* If we're using morx shaping, we cancel mark position adjustment because
+     Apple Color Emoji assumes this will NOT be done when forming emoji sequences;
+     https://github.com/harfbuzz/harfbuzz/issues/2967. */
+  if (plan.apply_morx)
+    plan.adjust_mark_positioning_when_zeroing = false;
+
+  /* According to Ned, trak is applied by default for "modern fonts", as detected by presence of STAT table. */
+#ifndef HB_NO_STYLE
+  plan.apply_trak = hb_aat_layout_has_tracking (face) && face->table.STAT->has_data ();
+#else
+  plan.apply_trak = false;
+#endif
+
+#endif
+}

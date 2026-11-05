@@ -1,0 +1,7 @@
+@startyaml
+outer:
+  inner: |
+    a: |
+    b
+  side: q
+@endyaml

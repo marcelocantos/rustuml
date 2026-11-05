@@ -1,0 +1,6 @@
+# is_default_ignorable 10.0.1 -> 15.0.0
+13c13
+< 	case 0x18: return hb_in_range<hb_codepoint_t> (ch, 0x180Bu, 0x180Eu);
+---
+> 	case 0x18: return hb_in_range<hb_codepoint_t> (ch, 0x180Bu, 0x180Fu);
+# Mn 16.0.0 -> 18.0.0: 70 added (39 in 17.0, 31 in 18.0), 0 removed, 0 reclassified; Mn/Mc/Me added 79

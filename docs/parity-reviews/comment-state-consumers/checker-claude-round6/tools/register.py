@@ -7,7 +7,7 @@ REPO = pathlib.Path(sys.argv[1]); OUT = pathlib.Path(sys.argv[2])
 W = pathlib.Path.home() / "Library/Caches/rustuml-shared-svg-round6-claude-checker"
 CMP = W / "cmp/target/release/checker-cmp"
 BINS = {"base_8317cf006": W / "bin/rustuml-8317cf006", "merge_fc44ee58c": W / "bin/rustuml-fc44ee58c", "tip_7e9b16f52": W / "bin/rustuml-7e9b16f52"}
-C = re.compile(r"<!--(.*?)-->", re.S); ERRMARK = ["Syntax Error", "Welcome to PlantUML", "An error has occured", "[From string", "(Assumed diagram type:"]
+C = re.compile(r"<!--(.*?)-->", re.S); ERRMARK = ["Syntax Error", "Welcome to PlantUML", "An error has occured", "[From string", "(Assumed diagram type:", "does&#160;not&#160;sound&#160;like", "does not sound like"]
 DEBUG = "date=1774210426000,tz=AEDT+1100"; SUB = "checker-claude-round6"
 STDLIB = str(pathlib.Path.home() / "work/github.com/plantuml/plantuml-stdlib/stdlib")
 BATCHES = [a.split("=", 3) for a in sys.argv[3:]]
@@ -33,7 +33,7 @@ for label, B, sha, desc in BATCHES:
         d = REPO / "test-diagrams/perturbations" / mech / SUB
         if java_error or fmt != "-tsvg":
             row["registered"] = False
-            row["reason_not_registered"] = "Java export-crash page (parity_perturbations fails every preserved Java error page); evidence only"
+            row["reason_not_registered"] = "Java error page (exit " + str(r["exit_code"]) + ("; " + jt[jt.find("Your"):][:60] if "sound" in jt else "") + "); parity_perturbations fails every preserved Java error page; evidence only"
             cwd = W / "work" / f"cwd-{label}"; cwd.mkdir(parents=True, exist_ok=True)
         else:
             d.mkdir(parents=True, exist_ok=True); (d / f"{n}.puml").write_bytes(src); (d / f"{n}.svg").write_bytes(out)

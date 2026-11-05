@@ -1,0 +1,200 @@
+== y8_block_inner_pipe java_exit 0 
+  java  vb=0 0 219 62 [('32.0127', 'note'), ('138.7012', 'example: |\\nplain line'), ('34.2754', 'after'), ('8.5859', 'x')]
+  base  vb=0 0 226 62 [('32.0127', 'note'), ('149.7344', 'example: |\\nplain line\\n'), ('34.2754', 'after'), ('8.5859', 'x')]
+  merge vb=0 0 226 62 [('32.0127', 'note'), ('149.7344', 'example: |\\nplain line\\n'), ('34.2754', 'after'), ('8.5859', 'x')]
+  tip   vb=0 0 230 62 [('32.0127', 'note'), ('149.8301', 'example: |+\\nplain line'), ('34.2754', 'after'), ('8.5859', 'x')]
+== y8_block_relative_indent java_exit 0 
+  java  vb=0 0 187 62 [('32.0127', 'note'), ('106.7773', 'Moss\\nFern\\nReed'), ('34.2754', 'after'), ('8.5859', 'x')]
+  base  vb=0 0 206 62 [('32.0127', 'note'), ('129.9717', 'Moss\\n  Fern\\nReed\\n'), ('34.2754', 'after'), ('8.5859', 'x')]
+  merge vb=0 0 206 62 [('32.0127', 'note'), ('129.9717', 'Moss\\n  Fern\\nReed\\n'), ('34.2754', 'after'), ('8.5859', 'x')]
+  tip   vb=0 0 196 62 [('32.0127', 'note'), ('115.6367', 'Moss\\n  Fern\\nReed'), ('34.2754', 'after'), ('8.5859', 'x')]
+== y8_list_key_block java_exit 0 java.lang.UnsupportedOperationException: wip3 YamlLine(KEY_AND_BLOCK_STYLE indent=4, key=name, value=|) | 	at net.sourceforge.plantuml.yaml.parser.YamlP
+  java  vb=0 0 359 41 [('328.7197', 'Your&#160;data&#160;does&#160;not&#160;sound&#160;like&#160;YAML&#160;data')]
+  base  vb=0 0 286 42 [('39.9219', 'items'), ('13.2891', '&#160;&#160;&#160;'), ('13.2891', '&#160;&#160;&#160;'), ('39.2041', 'name'), ('34.9316', 'Moss')]
+  merge vb=0 0 286 42 [('39.9219', 'items'), ('13.2891', '&#160;&#160;&#160;'), ('13.2891', '&#160;&#160;&#160;'), ('39.2041', 'name'), ('34.9316', 'Moss')]
+  tip   vb=0 0 290 42 [('39.9219', 'items'), ('13.2891', '&#160;&#160;&#160;'), ('13.2891', '&#160;&#160;&#160;'), ('39.2041', 'name'), ('34.9316', 'Moss')]
+== y8_folded java_exit 0 java.lang.UnsupportedOperationException: wip4 YamlLine(KEY_AND_FOLDED_STYLE indent=0, key=note, value=>) | 	at net.sourceforge.plantuml.yaml.parser.Yaml
+  java  vb=0 0 359 41 [('328.7197', 'Your&#160;data&#160;does&#160;not&#160;sound&#160;like&#160;YAML&#160;data')]
+  base  vb=0 0 153 62 [('32.0127', 'note'), ('76.8154', 'Moss Fern\\n'), ('34.2754', 'after'), ('8.5859', 'x')]
+  merge vb=0 0 153 62 [('32.0127', 'note'), ('76.8154', 'Moss Fern\\n'), ('34.2754', 'after'), ('8.5859', 'x')]
+  tip   vb=0 0 149 62 [('32.0127', 'note'), ('69.084', 'Moss Fern'), ('34.2754', 'after'), ('8.5859', 'x')]
+== y8_escape_trailing java_exit 0 
+  java  vb=0 0 103 42 [('8.8594', 'k'), ('52.9854', 'abcm: \\')]
+  base  vb=0 0 86 62 [('8.8594', 'k'), ('31.0557', 'abc\\'), ('13.5762', 'm'), ('14.6836', '\\\\')]
+  merge vb=0 0 86 62 [('8.8594', 'k'), ('31.0557', 'abc\\'), ('13.5762', 'm'), ('14.6836', '\\\\')]
+  tip   vb=0 0 86 62 [('8.8594', 'k'), ('31.0557', 'abc\\'), ('13.5762', 'm'), ('7.3418', '\\')]
+== y8_real_tab_value java_exit 0 
+  java  vb=0 0 89 62 [('8.8594', 'k'), ('34.2617', 'a    b'), ('13.5762', 'm'), ('28.3896', 'lead')]
+  base  vb=0 0 83 62 [('8.8594', 'k'), ('24.2744', 'a\tb'), ('13.5762', 'm'), ('28.3896', 'lead')]
+  merge vb=0 0 83 62 [('8.8594', 'k'), ('24.2744', 'a\tb'), ('13.5762', 'm'), ('28.3896', 'lead')]
+  tip   vb=0 0 99 62 [('8.8594', 'k'), ('7.7314', 'a'), ('8.8115', 'b'), ('13.5762', 'm'), ('28.3896', 'lead')]
+== y8_flow_seq_escapes java_exit 0 
+  java  vb=0 0 136 83 [('8.8594', 'k'), ('13.2891', '&#160;&#160;&#160;'), ('25.2314', 'anb'), ('23.3242', 'c\\d'), ('18.1836', 'etf')]
+  base  vb=0 0 143 83 [('8.8594', 'k'), ('13.2891', '&#160;&#160;&#160;'), ('32.5732', 'a\\nb'), ('23.3242', 'c\\d'), ('25.5254', 'e\\tf')]
+  merge vb=0 0 143 83 [('8.8594', 'k'), ('13.2891', '&#160;&#160;&#160;'), ('32.5732', 'a\\nb'), ('23.3242', 'c\\d'), ('25.5254', 'e\\tf')]
+  tip   vb=0 0 151 99 [('8.8594', 'k'), ('13.2891', '&#160;&#160;&#160;'), ('7.7314', 'a'), ('8.8115', 'b'), ('23.3242', 'c\\d'), ('7.7998', 'e'), ('5.1475', 'f')]
+== y8_block_inner_pipe_end java_exit 0 
+  java  vb=0 0 163 62 [('30.3105', 'first'), ('8.5859', 'x'), ('32.0127', 'note'), ('84.793', 'Moss\\nratio: |')]
+  base  vb=0 0 162 62 [('30.3105', 'first'), ('8.5859', 'x'), ('32.0127', 'note'), ('88.0947', 'Moss\\nratio: |')]
+  merge vb=0 0 162 62 [('30.3105', 'first'), ('8.5859', 'x'), ('32.0127', 'note'), ('88.0947', 'Moss\\nratio: |')]
+  tip   vb=0 0 174 62 [('30.3105', 'first'), ('8.5859', 'x'), ('32.0127', 'note'), ('95.9219', 'Moss\\nratio: |+')]
+== y8_block_inner_pipe_nested java_exit 0 
+  java  vb=0 0 228 62 [('38.377', 'outer'), ('13.2891', '&#160;&#160;&#160;'), ('37.5088', 'inner'), ('35.0615', 'a: |\\nb'), ('29.9482', 'side'), ('8.8115', 'q')]
+  base  vb=0 0 234 62 [('38.377', 'outer'), ('13.2891', '&#160;&#160;&#160;'), ('37.5088', 'inner'), ('46.0947', 'a: |\\nb\\n'), ('29.9482', 'side'), ('8.8115', 'q')]
+  merge vb=0 0 234 62 [('38.377', 'outer'), ('13.2891', '&#160;&#160;&#160;'), ('37.5088', 'inner'), ('46.0947', 'a: |\\nb\\n'), ('29.9482', 'side'), ('8.8115', 'q')]
+  tip   vb=0 0 239 62 [('38.377', 'outer'), ('13.2891', '&#160;&#160;&#160;'), ('37.5088', 'inner'), ('46.1904', 'a: |+\\nb'), ('29.9482', 'side'), ('8.8115', 'q')]
+== s8_chr10_seq java_exit 200 ERROR | 1 | Syntax Error? (Assumed diagram type: sequence)
+  java  vb=0 0 585 344 [('136.4648', 'Welcome to PlantUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+  base  vb=0 0 115 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('32.4365', 'Moss')]
+  merge vb=0 0 115 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('32.4365', 'Moss')]
+  tip   vb=0 0 115 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('32.4365', 'Moss')]
+== s8_chr13_seq java_exit 200 ERROR | 1 | Syntax Error? (Assumed diagram type: sequence)
+  java  vb=0 0 585 328 [('136.4648', 'Welcome to PlantUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+  base  vb=0 0 150 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('67.2153', 'Moss\\rFern')]
+  merge vb=0 0 150 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('67.2153', 'Moss\\rFern')]
+  tip   vb=0 0 147 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('64.1494', 'Moss\\rFern')]
+== s8_chr13_class java_exit 200 ERROR | 1 | Syntax Error? (Assumed diagram type: sequence)
+  java  vb=0 0 585 328 [('136.4648', 'Welcome to PlantUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+  base  vb=0 0 124 68 [('72.3857', 'Moss\\rFern')]
+  merge vb=0 0 124 68 [('72.3857', 'Moss\\rFern')]
+  tip   vb=0 0 121 68 [('69.084', 'Moss\\rFern')]
+== y8_tabsize4 java_exit 0 
+  java  vb=0 0 99 62 [('8.8594', 'k'), ('7.7314', 'a'), ('8.8115', 'b'), ('13.5762', 'm'), ('31.4453', 'wide'), ('8.0254', 'z')]
+  base  vb=None []
+  merge vb=None []
+  tip   vb=None []
+== j8_tabsize4 java_exit 0 
+  java  vb=0 0 98 62 [('8.8594', 'k'), ('7.7314', 'a'), ('8.8115', 'b'), ('12.0791', 'w'), ('31.4453', 'wide'), ('8.0254', 'z')]
+  base  vb=None []
+  merge vb=None []
+  tip   vb=None []
+== j8_decoded_cr java_exit 0 
+  java  vb=0 0 71 62 [('8.8594', 'k'), ('20.9727', 'a&#13;b'), ('8.2715', 'z'), ('8.8525', '1')]
+  base  vb=0 0 75 62 [('8.8594', 'k'), ('24.2744', 'a\\rb'), ('8.2715', 'z'), ('8.8525', '1')]
+  merge vb=0 0 75 62 [('8.8594', 'k'), ('24.2744', 'a\\rb'), ('8.2715', 'z'), ('8.8525', '1')]
+  tip   vb=0 0 71 62 [('8.8594', 'k'), ('20.9727', 'a\\rb'), ('8.2715', 'z'), ('8.8525', '1')]
+== m8_json_class java_exit 0 
+  java  vb=0 0 92 97 [('34.4395', 'Dock'), ('8.1826', 'k'), ('34.9316', 'Moss'), ('29.7227', 'Fern'), ('5.2363', 't'), ('7.7314', 'a'), ('8.8115', 'b')]
+  base  vb=0 0 585 265 [('133.2129', 'Welcome to RustUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+  merge vb=0 0 585 265 [('133.2129', 'Welcome to RustUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+  tip   vb=0 0 585 265 [('133.2129', 'Welcome to RustUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+== m8_json_usecase java_exit 0 
+  java  vb=0 0 185 136 [('29.668', 'Pilot'), ('24.7939', 'Log'), ('35.9639', 'when'), ('36.0186', 'dawn'), ('32.8193', 'dusk'), ('20.4668', 'list'), ('8.5859', 'x'), ('7.3145', 'y'), ('8.0254', 'z')]
+  base  vb=0 0 81 68 [('29.668', 'Pilot')]
+  merge vb=0 0 81 68 [('29.668', 'Pilot')]
+  tip   vb=0 0 81 68 [('29.668', 'Pilot')]
+== m8_json_crlf java_exit 0 
+  java  vb=0 0 72 60 [('34.4395', 'Dock'), ('8.1826', 'k'), ('23.8848', 'a\\b')]
+  base  vb=0 0 585 265 [('133.2129', 'Welcome to RustUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+  merge vb=0 0 585 265 [('133.2129', 'Welcome to RustUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+  tip   vb=0 0 585 265 [('133.2129', 'Welcome to RustUML!'), ('3.7969', '&#160;'), ('268.084', 'You can start with a simple UML Diagram like:'), ('3.7969', '&#160;'), ('122.8184', 'Bob-&gt;Alice:&#160;Hello'), ('3.7969', '&#160;'), ('14.2324', 'Or'), ('3.7969', '&#160;'), ('93.9199', 'class&#160;Example')]
+== mk8_u17_1ad0 java_exit 0 
+  java  vb=0 0 101 68 [('49.7861', 'Vault &#6864;&#1114109;')]
+  base  vb=0 0 113 68 [('61.0176', 'Vault \u1ad0\U0010fffd')]
+  merge vb=0 0 112 68 [('60.2861', 'Vault \u1ad0\U0010fffd')]
+  tip   vb=0 0 112 68 [('60.2861', 'Vault \u1ad0\U0010fffd')]
+== mk8_u17_1e6e3 java_exit 0 
+  java  vb=0 0 91 68 [('39.2861', 'Vault &#124643;')]
+  base  vb=0 0 105 68 [('53.2861', 'Vault \U0001e6e3')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault \U0001e6e3')]
+  tip   vb=0 0 101 68 [('49.7861', 'Vault \U0001e6e3')]
+== mk8_u18_05c8 java_exit 0 
+  java  vb=0 0 91 68 [('39.2861', 'Vault &#1480;')]
+  base  vb=0 0 99 68 [('47.0176', 'Vault \u05c8')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault \u05c8')]
+  tip   vb=0 0 101 68 [('49.7861', 'Vault \u05c8')]
+== mk8_helv_hebrew java_exit 0 
+  java  vb=0 0 105 68 [('53.7031', 'Vault &#1488;&#119163;')]
+  base  vb=0 0 109 68 [('57.5313', 'Vault א𝅻')]
+  merge vb=0 0 104 68 [('52.4043', 'Vault א𝅻')]
+  tip   vb=0 0 95 68 [('43.5313', 'Vault א𝅻')]
+== mk8_helv_hebrew_ctrl java_exit 0 
+  java  vb=0 0 96 68 [('44.8301', 'Vault &#1488;')]
+  base  vb=0 0 95 68 [('43.5313', 'Vault א')]
+  merge vb=0 0 95 68 [('43.5313', 'Vault א')]
+  tip   vb=0 0 95 68 [('43.5313', 'Vault א')]
+== mk8_lucida_arabic java_exit 0 
+  java  vb=0 0 105 68 [('53.8811', 'Vault &#1575;&#119163;')]
+  base  vb=0 0 109 68 [('57.3811', 'Vault ا𝅻')]
+  merge vb=0 0 105 68 [('53.8811', 'Vault ا𝅻')]
+  tip   vb=0 0 95 68 [('43.3811', 'Vault ا𝅻')]
+== mk8_hebrew_lead_mark java_exit 0 
+  java  vb=0 0 106 68 [('54.2295', '&#119163;&#64285; Vault')]
+  base  vb=0 0 119 68 [('67.2861', '𝅻יִ Vault')]
+  merge vb=0 0 112 68 [('60.2861', '𝅻יִ Vault')]
+  tip   vb=0 0 112 68 [('60.2861', '𝅻יִ Vault')]
+== mk8_menlo_hebrew java_exit 0 
+  java  vb=0 0 119 68 [('67.4023', 'Vault&#160;&#1488;&#119163;')]
+  base  vb=0 0 119 68 [('67.4297', 'Vault א𝅻')]
+  merge vb=0 0 119 68 [('67.4297', 'Vault א𝅻')]
+  tip   vb=0 0 111 68 [('59.001', 'Vault א𝅻')]
+== mk8_seq_arabic java_exit 0 
+  java  vb=0 0 133 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('50.0324', 'Vault &#1575;&#119163;')]
+  base  vb=0 0 136 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('53.2824', 'Vault ا𝅻')]
+  merge vb=0 0 133 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('50.0324', 'Vault ا𝅻')]
+  tip   vb=0 0 123 123 [('32.7236', 'Alice'), ('32.7236', 'Alice'), ('25.4639', 'Bob'), ('25.4639', 'Bob'), ('40.2824', 'Vault ا𝅻')]
+== mk8_mono_9 java_exit 0 
+  java  vb=0 0 85 64 [('37.9292', 'Vault&#160;&#119163;q&#124398;')]
+  base  vb=0 0 96 64 [('48.7661', 'Vault 𝅻q\U0001e5ee')]
+  merge vb=0 0 96 64 [('48.7661', 'Vault 𝅻q\U0001e5ee')]
+  tip   vb=0 0 85 64 [('37.9292', 'Vault 𝅻q\U0001e5ee')]
+== mk8_mono_23 java_exit 0 
+  java  vb=0 0 152 72 [('96.9302', 'Vault&#160;&#119163;q&#124398;')]
+  base  vb=0 0 180 72 [('124.6245', 'Vault 𝅻q\U0001e5ee')]
+  merge vb=0 0 180 72 [('124.6245', 'Vault 𝅻q\U0001e5ee')]
+  tip   vb=0 0 152 72 [('96.9302', 'Vault 𝅻q\U0001e5ee')]
+== mk8_serif_9 java_exit 0 
+  java  vb=0 0 88 64 [('40.7461', 'Vault &#119163;q&#124398;')]
+  base  vb=0 0 96 64 [('48.9199', 'Vault 𝅻q\U0001e5ee')]
+  merge vb=0 0 92 64 [('44.4199', 'Vault 𝅻q\U0001e5ee')]
+  tip   vb=0 0 78 64 [('30.9199', 'Vault 𝅻q\U0001e5ee')]
+== mk8_serif_23 java_exit 0 
+  java  vb=0 0 160 72 [('104.1289', 'Vault &#119163;q&#124398;')]
+  base  vb=0 0 181 73 [('125.0176', 'Vault 𝅻q\U0001e5ee')]
+  merge vb=0 0 169 73 [('113.5176', 'Vault 𝅻q\U0001e5ee')]
+  tip   vb=0 0 135 73 [('79.0176', 'Vault 𝅻q\U0001e5ee')]
+== mk8_couriernew_9 java_exit 0 
+  java  vb=0 0 85 64 [('37.8062', 'Vault &#119163;q&#124398;')]
+  base  vb=0 0 96 64 [('48.6079', 'Vault 𝅻q\U0001e5ee')]
+  merge vb=0 0 96 64 [('48.6079', 'Vault 𝅻q\U0001e5ee')]
+  tip   vb=0 0 96 64 [('48.6079', 'Vault 𝅻q\U0001e5ee')]
+== mk8_couriernew_23 java_exit 0 
+  java  vb=0 0 152 72 [('96.6157', 'Vault &#119163;q&#124398;')]
+  base  vb=0 0 180 72 [('124.2202', 'Vault 𝅻q\U0001e5ee')]
+  merge vb=0 0 180 72 [('124.2202', 'Vault 𝅻q\U0001e5ee')]
+  tip   vb=0 0 180 72 [('124.2202', 'Vault 𝅻q\U0001e5ee')]
+== fe8_fe22_complex java_exit 0 
+  java  vb=0 0 101 68 [('49.7861', 'Vault &#65058;&#1114109;')]
+  base  vb=0 0 119 68 [('67.2861', 'Vault ︢\U0010fffd')]
+  merge vb=0 0 112 68 [('60.2861', 'Vault ︢\U0010fffd')]
+  tip   vb=0 0 115 68 [('63.7861', 'Vault ︢\U0010fffd')]
+== fe8_327e_simple java_exit 0 
+  java  vb=0 0 104 68 [('52.5889', 'Vault &#12926;')]
+  base  vb=0 0 105 68 [('53.2861', 'Vault ㉾')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault ㉾')]
+  tip   vb=0 0 105 68 [('53.2861', 'Vault ㉾')]
+== fe8_fa2e_simple java_exit 0 
+  java  vb=0 0 103 68 [('51.8861', 'Vault &#64046;')]
+  base  vb=0 0 105 68 [('53.2861', 'Vault 郞')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault 郞')]
+  tip   vb=0 0 105 68 [('53.2861', 'Vault 郞')]
+== fe8_218a_simple java_exit 0 
+  java  vb=0 0 99 68 [('47.6861', 'Vault &#8586;')]
+  base  vb=0 0 99 68 [('47.0176', 'Vault ↊')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault ↊')]
+  tip   vb=0 0 99 68 [('47.0176', 'Vault ↊')]
+== fe8_f851_simple java_exit 0 
+  java  vb=0 0 99 68 [('47.7148', 'Vault &#63569;')]
+  base  vb=0 0 105 68 [('53.2861', 'Vault \uf851')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault \uf851')]
+  tip   vb=0 0 105 68 [('53.2861', 'Vault \uf851')]
+== fe8_f8c0_simple java_exit 0 
+  java  vb=0 0 99 68 [('47.7148', 'Vault &#63680;')]
+  base  vb=0 0 105 68 [('53.2861', 'Vault \uf8c0')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault \uf8c0')]
+  tip   vb=0 0 105 68 [('53.2861', 'Vault \uf8c0')]
+== fe8_f8fe_simple java_exit 0 
+  java  vb=0 0 99 68 [('47.7148', 'Vault &#63742;')]
+  base  vb=0 0 105 68 [('53.2861', 'Vault \uf8fe')]
+  merge vb=0 0 101 68 [('49.7861', 'Vault \uf8fe')]
+  tip   vb=0 0 105 68 [('53.2861', 'Vault \uf8fe')]

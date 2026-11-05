@@ -1,0 +1,9 @@
+@startuml
+[*] --> Pier
+state Pier {
+  [*] --> Jetty
+  Jetty --> Mm
+  Mm --> [*]
+}
+Pier --> [*]
+@enduml

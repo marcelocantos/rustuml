@@ -1,0 +1,51 @@
+## host
+MacBookPro
+ProductName:		macOS
+ProductVersion:		27.2
+BuildVersion:		26B123
+Thu Nov  5 14:25:07 UTC 2026
+## libfontmanager link-time dependencies
+/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib:
+	/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib (compatibility version 1.0.0, current version 1.0.0)
+	/opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib (compatibility version 61001.0.0, current version 61001.0.0)
+	/opt/homebrew/opt/freetype/lib/libfreetype.6.dylib (compatibility version 27.0.0, current version 27.2.0)
+	@rpath/libawt.dylib (compatibility version 1.0.0, current version 1.0.0)
+	@rpath/libjava.dylib (compatibility version 1.0.0, current version 1.0.0)
+	@rpath/libjvm.dylib (compatibility version 1.0.0, current version 1.0.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1345.100.2)
+	@rpath/libawt_lwawt.dylib (compatibility version 1.0.0, current version 1.0.0)
+	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText (compatibility version 1.0.0, current version 1.0.0)
+	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 2420.0.0)
+	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics (compatibility version 64.0.0, current version 1774.4.3)
+	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 1700.255.0)
+## opt/harfbuzz symlink and kegs
+lrwxr-xr-x  1 marcelo  admin  27 Oct 28 21:37 /opt/homebrew/opt/harfbuzz -> ../Cellar/harfbuzz/15.0.0_1
+10.1.0
+13.2.1
+15.0.0_1
+## resolved libharfbuzz
+/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
+## resolved dylib id and current_version
+/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib:
+	/opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib (compatibility version 61500.0.0, current version 61500.0.0)
+          cmd LC_ID_DYLIB
+      cmdsize 80
+         name /opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib (offset 24)
+   time stamp 1 Thu Jan  1 10:00:01 1970
+      current version 61500.0.0
+## receipt version
+{'stable': '15.0.0', 'head': None, 'version_scheme': 0, 'compatibility_version': None} 1793183878
+## sha256
+b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a  /opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
+80488062f9ab885f1860b0e3b8fc3d13030a0a05765c06d12301668d7404812c  /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9  /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java
+6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e  /Users/marcelo/rustuml-reference/bin/reference
+## font files (compare with colossus hashes in the checker record)
+658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3  /System/Library/Fonts/Helvetica.ttc
+c481b239979bf0a4912949494e00568fba253fd6265a9770c8721e7989e111ca  /System/Library/Fonts/LucidaGrande.ttc
+f2d400484a6aace67980730ec0a9ef24ce9e535a2604f118e6fdc2510021b85f  /System/Library/Fonts/Menlo.ttc
+42e4302bb33db1869a17f1af1e7e9bd6d1b594c0292c683b51d4db0ea5d1206a  /System/Library/Fonts/GeezaPro.ttc
+f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3  /System/Library/Fonts/Supplemental/Times New Roman.ttf
+0da8c12f3e15d95585434d2cf294b3113a3e3fc84bf9ba9d64f2ef834ef4bd98  /System/Library/Fonts/Supplemental/Verdana.ttf
+525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9  /System/Library/Fonts/Supplemental/Arial.ttf
+c886ca3172d8ce9189976992d145ec090500a4ff516ecb9d4df56b1a78336247  /System/Library/Fonts/Supplemental/Courier New.ttf

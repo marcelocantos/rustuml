@@ -1,0 +1,7 @@
+@startyaml
+outer:
+  inner: |
+    Moss
+    Fern
+  side: q
+@endyaml

@@ -1,0 +1,8 @@
+__TEXT                      107634000-107640000    [   48K    48K     0K     0K] r-x/rwx SM=COW          /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+__DATA_CONST                107640000-107644000    [   16K    16K    16K     0K] r--/rwx SM=COW          /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+__LINKEDIT                  107648000-107650000    [   32K    16K     0K     0K] r--/rwx SM=COW          /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+__TEXT                      1269fc000-126ad4000    [  864K   736K     0K     0K] r-x/rwx SM=COW          /opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
+__DATA_CONST                126ad4000-126ad8000    [   16K    16K    16K     0K] r--/rwx SM=COW          /opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
+__LINKEDIT                  126adc000-126b5c000    [  512K   144K     0K     0K] r--/rwx SM=COW          /opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
+__DATA                      107644000-107648000    [   16K    16K    16K     0K] rw-/rwx SM=COW          /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+__DATA                      126ad8000-126adc000    [   16K    16K    16K     0K] rw-/rwx SM=COW          /opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib
