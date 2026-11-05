@@ -1,0 +1,7 @@
+@startuml
+state Lathe {
+  state chips <<outputpin>>
+  state Turn
+  Turn --> chips
+}
+@enduml

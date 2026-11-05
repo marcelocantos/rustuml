@@ -1,0 +1,6 @@
+@startuml
+node "Grist Hall"
+[Flour Bin]
+[Flour Bin] --> "Grist Hall"
+"Flour Bin" ..> [Sack Room]
+@enduml

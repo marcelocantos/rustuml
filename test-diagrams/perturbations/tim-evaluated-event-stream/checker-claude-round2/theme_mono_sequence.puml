@@ -1,0 +1,5 @@
+@startuml
+!theme mono
+Miller -> Baker : flour
+Baker --> Miller : loaf
+@enduml

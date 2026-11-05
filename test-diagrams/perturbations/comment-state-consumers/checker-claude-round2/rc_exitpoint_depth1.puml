@@ -1,0 +1,8 @@
+@startuml
+state Forge {
+  state vent <<exitPoint>>
+  Melt --> vent
+}
+[*] --> Melt
+vent --> Cool
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme plain
+!theme cerulean
+class Kiln
+class Oast
+Kiln --> Oast
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+state Plant {
+  state Hall {
+    state Bay {
+      state door <<entryPoint>>
+      door --> Weld
+    }
+    Weld --> Paint
+  }
+  Paint --> Pack
+}
+@enduml

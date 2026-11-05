@@ -1,0 +1,9 @@
+@startuml
+state Archive {
+  state Stacks {
+    [*] --> Shelf
+  }
+}
+Clerk --> Stacks[H]
+Clerk --> Archive[H*]
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+state Rinse
+state Spin
+Rinse -[#80FF0000]-> Spin
+@enduml

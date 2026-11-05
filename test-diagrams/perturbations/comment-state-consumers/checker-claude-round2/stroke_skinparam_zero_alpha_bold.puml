@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowColor #00FF0000
+state Rinse
+state Spin
+Rinse -[bold]-> Spin
+@enduml

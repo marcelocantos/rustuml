@@ -1,0 +1,5 @@
+@startuml
+!$a = %intval("۴۵")
+!$b = %intval("১๒3")
+class "$a and $b" as Mixed
+@enduml

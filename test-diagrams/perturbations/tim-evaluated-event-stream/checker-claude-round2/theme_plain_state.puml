@@ -1,0 +1,6 @@
+@startuml
+!theme plain
+[*] --> Sift
+Sift --> Store
+Store --> [*]
+@enduml

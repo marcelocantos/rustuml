@@ -1,0 +1,216 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-intval-conversion",
+ "reviewer": {
+  "task_id": "t3-9f1c28b6-independent-shared-svg-round2-checker-claude",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement candidate; no Java run locally"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base_revision": "50f4f5414f9b879e629a70f6072c13978b990539",
+ "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+ "previous_maker_tip": "55c92692dd7b589bde814a6fc34ed246746007c6",
+ "tested_revision": "6c52f2cfd073be4c904a88db283ff2694cb0b8f0",
+ "maker_merge": "04cf5b4d515fe9cbab6fb117fb2f2fa013c37ecc",
+ "commands": [
+  "git switch -c review/shared-svg-round2-claude 6c52f2cfd; git -c protocol.file.allow=always submodule update --init --reference <main checkout>/test-diagrams/golden test-diagrams/golden  (-> 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a)",
+  "for r in 50f4f5414 55c92692d 6c52f2cfd: git archive $r | tar -x -C <private>/src/$r; CARGO_TARGET_DIR=<private>/target/$r cargo build --release -j 6 -p rustuml",
+  "cargo build --release (tools/checker-cmp-main.rs against the 50f4f5414 rustuml-oracle crate; compare_svg_strict, unchanged)",
+  "python3 -I tools/batch.py <work> ~/Library/Caches/rustuml-relay-parent/shared-svg-round2-r2a AW base=rustuml-50f4f5414 prev=rustuml-55c92692d tip=rustuml-6c52f2cfd  (also AU = shared-svg-checker-c1 with its resource, AR = shared-svg-claude-batch1)",
+  "python3 -I tools/cwd_map.py <repo> cwd_map.json; python3 -I tools/sweep.py <bin> <out> <repo> cwd_map.json test-diagrams/golden test-diagrams/perturbations  (each of the three trees)",
+  "checker-cmp over 3 x 16402 pairs; python3 -I tools/classify.py <work> <repo> 50f4f5414 6c52f2cfd and 55c92692d 6c52f2cfd",
+  "PLANTUML_STDLIB=... CARGO_TARGET_DIR=<private> cargo test --release -j 6 --workspace --lib; -p rustuml --test pipe_mode; -p rustuml-oracle --test golden_no_oracle|golden_pairs|parity_perturbations|harness_guards -- --nocapture  (tip worktree and the 50f4f5414 export with the golden submodule linked)",
+  "python3 -I tools/register.py <repo> pairs.json  (Java-valid AW pairs registered under test-diagrams/perturbations/<mechanism>/checker-claude-round2, rerun from that cwd)",
+  "python3 -I tools/intval_diff.py <bin> 400 (seeded 20261105); Rust-only probes: tools/geomcheck.py over probes/state, probes/sur_*, probes/theme"
+ ],
+ "no_production_changes": true,
+ "no_shipping": true,
+ "account_commit": "a15b09ddefd87a173a664ccf3ca29c7b7cf2857c",
+ "implementation_commit": "4414526868d903ae3bbb8a0ad0dddf0526837d46",
+ "account_chronology_record": {
+  "theme/%intval/surrogate": [
+   "account a15b09ddefd87a173a664ccf3ca29c7b7cf2857c 17:09:00",
+   "drafts 1537ada52cf04c5f6b748415ce2a1ca54296bac7 17:10:55, 4414526868d903ae3bbb8a0ad0dddf0526837d46 17:12:24, 61f3883ffb0f41be652951f257fb1eaa57dbf16d 17:14:56"
+  ],
+  "unit-test seed": [
+   "33c7f2d49550c1eb8ab483074b31903873522edf 17:15:58 (owner-contract authorization f1jczin02njk7 citing b62d8ce967b6dda7d85bb6dc28ff92509f6066f9 and batch AU)"
+  ],
+  "0.46667 provenance": [
+   "7c9f23f2010a783252ba54800d5ab2c2d480fd4f 17:16:17, 2546ba7554dc2aca3dba00f49dedb2ae0d9632a0 17:54:00 (test comment only)"
+  ],
+  "bracket": [
+   "account 7dd3e541907382648b4c063b1e83e0d0fc24226b 17:18:39",
+   "draft b0df8ed5d90c4830982b3ae7e6aee35de7f68f83 17:19:14"
+  ],
+  "strokes": [
+   "account 8f3c59efd0ae629235e633e99c5b61d85296a51f 17:22:38",
+   "draft e01f9a6b98a2794a771285974132667f503bf808 17:23:31"
+  ],
+  "clusters": [
+   "account 066603e48dc06a013d29ebb7667452420544d77d 17:28:58",
+   "drafts e86a4635d37763d6f71251bab259fb504b3e955d 17:31:33, ebdfd6e7f93f5a6bb98b7767a8ecd5c9a349f364 17:33:01, 1603cc54ed8d53f75bf52ac40828870af2a764c6 17:43:29, 47cc04b28cdd9d16c429b35e0ec2a03a0a29fa24 17:49:33"
+  ],
+  "evidence": [
+   "6c52f2cfd073be4c904a88db283ff2694cb0b8f0 18:02:43"
+  ],
+  "every account precedes its draft": true,
+  "account commits are docs-only": true
+ },
+ "scope": "%intval Integer.parseInt port (JDK 21) with Character.digit(char, 10) over UTF-16 units",
+ "verdict": "accepted",
+ "packet_verdict": "Packet 6c52f2cfd rejected: on held-out AW case surrogate_high_class (Java exit 0, normal class diagram) the tip exits 1 with the new export error from 61f3883ffb0f41be652951f257fb1eaa57dbf16d. That is a whole-output failure the packet causes on a fresh held-out case. This mechanism is accepted on its own evidence; acceptance does not ship the packet.",
+ "findings": [
+  "java_parse_int matches JDK 21.0.13 java.lang.Integer.parseInt(String, int) line by line (src.zip lines 614-670): firstChar < '0' sign handling, lone '+'/'-' rejected, limit = -Integer.MAX_VALUE or Integer.MIN_VALUE, multmin = limit / radix, negative accumulation with 'result < multmin' and 'result < limit + digit' overflow checks. IntVal.executeReturnFunction calls Integer.parseInt(values.get(0).toString()) and the Rust message 'Cannot convert S to integer.' is Java's.",
+  "BMP_DECIMAL_DIGIT_ZEROS (37 runs) equals the set of BMP Nd code points with digit value 0 under Unicode 15.1 (python 3.13 unicodedata); every run is exactly ten consecutive Nd digits 0..9 and the union is all 370 BMP Nd characters. Unicode 15.1 added no BMP Nd over 15.0 (JDK 21). Surrogate units are never digits, so the 310 supplementary Nd digits are rejected as in Java (AW intval_supplementary_digit: Java exit 200, tip exit 1).",
+  "AW held-out: 4/4 Java-valid cases strict-match in the tip (Arabic-Indic with signs, extended Arabic-Indic/Bengali/Thai mixed scripts, fullwidth MAX/MIN, Myanmar Tai Laing U+A9F0); base mismatched all four and the previous tip errored on all four. All 4 Java-invalid cases (fullwidth overflow, supplementary digit, superscript two, sign then sign; Java exit 200) are rejected by the tip with exit 1.",
+  "Randomized differential, 400 seeded inputs mixing signs, ASCII and nine other Nd scripts, bounds +-2^31, leading zeros and non-digit injections (superscript, Roman numeral, U+1D7CF, Ethiopic U+1369, Tibetan half digit U+0F2A, fullwidth A, space): 0 mismatches against a Python port of JDK parseInt in the tip (211 valid, 189 invalid); the same harness finds 246 mismatches, including panics, in base. See intval-differential.*.txt.",
+  "Corpus: the two inherited new valid-input errors attributed to f663c083d in d539f9a08 (checker6/intval_unicode_digits, intval_unicode_json) now render and match; no case in this directory regresses. The two remaining harness failures here (checker6/intval_invalid_sign, intval_underflow_bound) are preserved Java error pages that the tip rejects (exit 1), which the harness counts as failures by design."
+ ],
+ "bounded_next_obligations": [
+  "None for this mechanism. Packet-level obligations are recorded in tim-builtin-value-boundaries/review-2.json and comment-state-consumers/review-3.json."
+ ],
+ "perturbations": [
+  {
+   "axes": [
+    "Arabic-Indic digits",
+    "leading minus and plus"
+   ],
+   "intended_valid": true,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "87bc61a143364537f60fb7bf6694559b1b213aed95f5e8e1d36caa8e36b75679",
+   "golden_sha256": "3657007cbabccfc663a424cb0cbb840a90a295f6d3a10602caa6c4a2c497a4c5",
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_arabic_indic_signed.puml",
+   "golden": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_arabic_indic_signed.svg",
+   "cwd": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "1273a28a9f7b81d6d28cc8cf50b252c034a1550156702ef513055ded587b7e42",
+   "base_50f4f5414_strict_compare": "DIFF",
+   "base_50f4f5414_difference_count": 6,
+   "base_50f4f5414_comment_list_exact": false,
+   "prev_55c92692d_cli_exit": 1,
+   "prev_55c92692d_stderr_head": "parse error: line 1: Cannot convert -٣٢١ to integer.",
+   "prev_55c92692d_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "prev_55c92692d_strict_compare": "ERR",
+   "prev_55c92692d_difference_count": 0,
+   "prev_55c92692d_comment_list_exact": false,
+   "tip_6c52f2cfd_cli_exit": 0,
+   "tip_6c52f2cfd_stderr_head": "",
+   "tip_6c52f2cfd_stdout_sha256": "e9ec061c049982d7a8df0b5688c1792fd1ed6e8bc08bd9f6f48b6846c0dcc17b",
+   "tip_6c52f2cfd_strict_compare": "match",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": true,
+   "result": "pass"
+  },
+  {
+   "axes": [
+    "extended Arabic-Indic",
+    "Bengali",
+    "Thai",
+    "mixed scripts"
+   ],
+   "intended_valid": true,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "9d15000c29ac6d6d396ca5184f7774c1954bbb9f41531e2236df7960b3695db8",
+   "golden_sha256": "d3e2275d8cf7550c67cb18366b7062e58cf6386549aab6eb9bcaf55f3d9e31f4",
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_extended_arabic_bengali.puml",
+   "golden": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_extended_arabic_bengali.svg",
+   "cwd": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "dd7b698094a995124b3f96f4b72a75f228d9f6e23d825cb38ba443ed1a2823f1",
+   "base_50f4f5414_strict_compare": "DIFF",
+   "base_50f4f5414_difference_count": 6,
+   "base_50f4f5414_comment_list_exact": false,
+   "prev_55c92692d_cli_exit": 1,
+   "prev_55c92692d_stderr_head": "parse error: line 1: Cannot convert ۴۵ to integer.",
+   "prev_55c92692d_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "prev_55c92692d_strict_compare": "ERR",
+   "prev_55c92692d_difference_count": 0,
+   "prev_55c92692d_comment_list_exact": false,
+   "tip_6c52f2cfd_cli_exit": 0,
+   "tip_6c52f2cfd_stderr_head": "",
+   "tip_6c52f2cfd_stdout_sha256": "46f1689dacacefcd64f295cd617c2be0d64c1f2423873dd70e1cfab3da69ac4b",
+   "tip_6c52f2cfd_strict_compare": "match",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": true,
+   "result": "pass"
+  },
+  {
+   "axes": [
+    "fullwidth digits",
+    "Integer.MAX_VALUE and MIN_VALUE"
+   ],
+   "intended_valid": true,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "8b55ef2c7a39ca512d365ad5f9d00d042e22094b7418394e2eb5597d9569c7b1",
+   "golden_sha256": "39015df6a18ca1e620d139301a706bd909fb055730787873beb05655b7c46b95",
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_fullwidth_bounds.puml",
+   "golden": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_fullwidth_bounds.svg",
+   "cwd": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "42f0b73beac69b3bbf898d819076104f1e0c487f3ecf362486861fa85d2457d2",
+   "base_50f4f5414_strict_compare": "DIFF",
+   "base_50f4f5414_difference_count": 6,
+   "base_50f4f5414_comment_list_exact": false,
+   "prev_55c92692d_cli_exit": 1,
+   "prev_55c92692d_stderr_head": "parse error: line 1: Cannot convert ２１４７４８３６４７ to integer.",
+   "prev_55c92692d_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "prev_55c92692d_strict_compare": "ERR",
+   "prev_55c92692d_difference_count": 0,
+   "prev_55c92692d_comment_list_exact": false,
+   "tip_6c52f2cfd_cli_exit": 0,
+   "tip_6c52f2cfd_stderr_head": "",
+   "tip_6c52f2cfd_stdout_sha256": "61c66d45b3269eb68311876551608c2489562470ff0eca4123afd893c7b6ca9b",
+   "tip_6c52f2cfd_strict_compare": "match",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": true,
+   "result": "pass"
+  },
+  {
+   "axes": [
+    "U+A9F0 block (Unicode 7)"
+   ],
+   "intended_valid": true,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "0c1f8ae9f12bc522b6e0b008afd97f796b72d1900994652da4b88dc16a5ee5c6",
+   "golden_sha256": "bf679c638258372b57933aef6c5378e0b1a2b97ace96795f0b3155ebfad76748",
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_myanmar_tai_laing.puml",
+   "golden": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2/intval_myanmar_tai_laing.svg",
+   "cwd": "test-diagrams/perturbations/tim-intval-conversion/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "085f3d7d27ffa3f3f18129b6c7d6ad7c80404610f9149f09f737582e6caf4356",
+   "base_50f4f5414_strict_compare": "DIFF",
+   "base_50f4f5414_difference_count": 6,
+   "base_50f4f5414_comment_list_exact": false,
+   "prev_55c92692d_cli_exit": 1,
+   "prev_55c92692d_stderr_head": "parse error: line 1: Cannot convert ꧱꧲ to integer.",
+   "prev_55c92692d_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "prev_55c92692d_strict_compare": "ERR",
+   "prev_55c92692d_difference_count": 0,
+   "prev_55c92692d_comment_list_exact": false,
+   "tip_6c52f2cfd_cli_exit": 0,
+   "tip_6c52f2cfd_stderr_head": "",
+   "tip_6c52f2cfd_stdout_sha256": "cfc254262a71d3e5708f6b2ebb4c6268f15ac809d53a0b5146efde0cfe57c027",
+   "tip_6c52f2cfd_strict_compare": "match",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": true,
+   "result": "pass"
+  }
+ ],
+ "evidence": "docs/parity-reviews/tim-intval-conversion/checker-claude-round2/ (measurements.json, pairs.json, references/aw-*, tools/; manifest.json lists SHA256s)"
+}

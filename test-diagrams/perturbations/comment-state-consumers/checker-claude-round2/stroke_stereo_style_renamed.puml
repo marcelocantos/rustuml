@@ -1,0 +1,10 @@
+@startuml
+<style>
+.Ember {
+  LineColor RebeccaPurple
+}
+</style>
+state Coal <<Ember>>
+state Ash
+Coal --> Ash
+@enduml

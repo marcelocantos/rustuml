@@ -1,0 +1,11 @@
+@startuml
+state Ring1 {
+  state Ring2 {
+    state Ring3 {
+      [*] --> Core
+      Core --> [H*]
+    }
+  }
+}
+Probe --> Core
+@enduml

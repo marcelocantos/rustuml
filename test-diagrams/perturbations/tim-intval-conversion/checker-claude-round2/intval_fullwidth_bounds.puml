@@ -1,0 +1,5 @@
+@startuml
+!$a = %intval("２１４７４８３６４７")
+!$b = %intval("-２１４７４８３６４８")
+class "$a $b" as Bounds
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam state<<Frost>> BorderColor RebeccaPurple
+state Ice <<Frost>>
+state Melt
+Ice --> Melt
+@enduml

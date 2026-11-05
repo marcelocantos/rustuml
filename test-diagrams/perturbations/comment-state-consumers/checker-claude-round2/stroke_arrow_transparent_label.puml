@@ -1,0 +1,5 @@
+@startuml
+state Rinse
+state Spin
+Rinse -[#transparent]-> Spin : quiet
+@enduml

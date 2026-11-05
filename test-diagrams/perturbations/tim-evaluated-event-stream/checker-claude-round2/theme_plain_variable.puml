@@ -1,0 +1,7 @@
+@startuml
+!$look = "plain"
+!theme $look
+class Sieve
+class Sack
+Sieve --> Sack
+@enduml

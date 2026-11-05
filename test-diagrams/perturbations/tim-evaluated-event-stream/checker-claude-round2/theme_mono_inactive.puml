@@ -1,0 +1,6 @@
+@startuml
+!if 0
+!theme mono
+!endif
+class Quern
+@enduml

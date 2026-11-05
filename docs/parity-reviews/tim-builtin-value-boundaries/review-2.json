@@ -1,0 +1,223 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "reviewer": {
+  "task_id": "t3-9f1c28b6-independent-shared-svg-round2-checker-claude",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement candidate; no Java run locally"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base_revision": "50f4f5414f9b879e629a70f6072c13978b990539",
+ "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+ "previous_maker_tip": "55c92692dd7b589bde814a6fc34ed246746007c6",
+ "tested_revision": "6c52f2cfd073be4c904a88db283ff2694cb0b8f0",
+ "maker_merge": "04cf5b4d515fe9cbab6fb117fb2f2fa013c37ecc",
+ "commands": [
+  "git switch -c review/shared-svg-round2-claude 6c52f2cfd; git -c protocol.file.allow=always submodule update --init --reference <main checkout>/test-diagrams/golden test-diagrams/golden  (-> 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a)",
+  "for r in 50f4f5414 55c92692d 6c52f2cfd: git archive $r | tar -x -C <private>/src/$r; CARGO_TARGET_DIR=<private>/target/$r cargo build --release -j 6 -p rustuml",
+  "cargo build --release (tools/checker-cmp-main.rs against the 50f4f5414 rustuml-oracle crate; compare_svg_strict, unchanged)",
+  "python3 -I tools/batch.py <work> ~/Library/Caches/rustuml-relay-parent/shared-svg-round2-r2a AW base=rustuml-50f4f5414 prev=rustuml-55c92692d tip=rustuml-6c52f2cfd  (also AU = shared-svg-checker-c1 with its resource, AR = shared-svg-claude-batch1)",
+  "python3 -I tools/cwd_map.py <repo> cwd_map.json; python3 -I tools/sweep.py <bin> <out> <repo> cwd_map.json test-diagrams/golden test-diagrams/perturbations  (each of the three trees)",
+  "checker-cmp over 3 x 16402 pairs; python3 -I tools/classify.py <work> <repo> 50f4f5414 6c52f2cfd and 55c92692d 6c52f2cfd",
+  "PLANTUML_STDLIB=... CARGO_TARGET_DIR=<private> cargo test --release -j 6 --workspace --lib; -p rustuml --test pipe_mode; -p rustuml-oracle --test golden_no_oracle|golden_pairs|parity_perturbations|harness_guards -- --nocapture  (tip worktree and the 50f4f5414 export with the golden submodule linked)",
+  "python3 -I tools/register.py <repo> pairs.json  (Java-valid AW pairs registered under test-diagrams/perturbations/<mechanism>/checker-claude-round2, rerun from that cwd)",
+  "python3 -I tools/intval_diff.py <bin> 400 (seeded 20261105); Rust-only probes: tools/geomcheck.py over probes/state, probes/sur_*, probes/theme"
+ ],
+ "no_production_changes": true,
+ "no_shipping": true,
+ "account_commit": "a15b09ddefd87a173a664ccf3ca29c7b7cf2857c",
+ "implementation_commit": "61f3883ffb0f41be652951f257fb1eaa57dbf16d",
+ "account_chronology_record": {
+  "theme/%intval/surrogate": [
+   "account a15b09ddefd87a173a664ccf3ca29c7b7cf2857c 17:09:00",
+   "drafts 1537ada52cf04c5f6b748415ce2a1ca54296bac7 17:10:55, 4414526868d903ae3bbb8a0ad0dddf0526837d46 17:12:24, 61f3883ffb0f41be652951f257fb1eaa57dbf16d 17:14:56"
+  ],
+  "unit-test seed": [
+   "33c7f2d49550c1eb8ab483074b31903873522edf 17:15:58 (owner-contract authorization f1jczin02njk7 citing b62d8ce967b6dda7d85bb6dc28ff92509f6066f9 and batch AU)"
+  ],
+  "0.46667 provenance": [
+   "7c9f23f2010a783252ba54800d5ab2c2d480fd4f 17:16:17, 2546ba7554dc2aca3dba00f49dedb2ae0d9632a0 17:54:00 (test comment only)"
+  ],
+  "bracket": [
+   "account 7dd3e541907382648b4c063b1e83e0d0fc24226b 17:18:39",
+   "draft b0df8ed5d90c4830982b3ae7e6aee35de7f68f83 17:19:14"
+  ],
+  "strokes": [
+   "account 8f3c59efd0ae629235e633e99c5b61d85296a51f 17:22:38",
+   "draft e01f9a6b98a2794a771285974132667f503bf808 17:23:31"
+  ],
+  "clusters": [
+   "account 066603e48dc06a013d29ebb7667452420544d77d 17:28:58",
+   "drafts e86a4635d37763d6f71251bab259fb504b3e955d 17:31:33, ebdfd6e7f93f5a6bb98b7767a8ecd5c9a349f364 17:33:01, 1603cc54ed8d53f75bf52ac40828870af2a764c6 17:43:29, 47cc04b28cdd9d16c429b35e0ec2a03a0a29fa24 17:49:33"
+  ],
+  "evidence": [
+   "6c52f2cfd073be4c904a88db283ff2694cb0b8f0 18:02:43"
+  ],
+  "every account precedes its draft": true,
+  "account commits are docs-only": true
+ },
+ "scope": "lone-surrogate export failure (T14.20 contract) introduced in round 2; AW surrogate_* cases plus Rust-only residue probes",
+ "verdict": "rejected",
+ "packet_verdict": "Packet 6c52f2cfd rejected: on held-out AW case surrogate_high_class (Java exit 0, normal class diagram) the tip exits 1 with the new export error from 61f3883ffb0f41be652951f257fb1eaa57dbf16d. That is a whole-output failure the packet causes on a fresh held-out case.",
+ "findings": [
+  "NEW VALID-INPUT ERROR (packet-caused, Java-confirmed): AW surrogate_high_class `class \"x%substr(\"🚀\",0,1)\" as High`. Java exit 0, empty stderr, a normal class diagram whose only text is 'x' (textLength 22.5859) with comment 'class High'. Tip 6c52f2cfd exits 1: 'parse error: line 1: An invalid XML character (Unicode: 0xd83d) ...'. Base rendered (DIFF 6) and previous tip rendered (DIFF 1); the error is introduced by 61f3883ff. The maker's own unit test unpaired_surrogate_in_diagram_text_is_an_export_failure asserts this exact input fails, which Java contradicts.",
+  "Cause (JDK 21 source, java.xml com/sun/org/apache/xml/internal/serializer/ToStream.java from the 21.0.13 src.zip, read-only): accumDefaultEscape (lines 1711-1727) saves a high surrogate that is the last char of a characters() chunk in m_highSurrogate and advances instead of throwing; it throws only when the pending high surrogate is followed by a non-low unit in a later dirty character, or when a high surrogate is followed in the same chunk by a non-low unit (throwIOE: 'Invalid UTF-16 surrogate detected: d83d 74 ?' as in AW surrogate_activity_label), and XMLChar.isInvalid rejects a lone low surrogate ('An invalid XML character (Unicode: 0xdc9c)' as in AW surrogate_upper_sequence). The outcome is a serializer state machine over SVG text nodes, not a property of the preprocessed line, so record_export_failure at TIM projection time cannot be Java-equivalent.",
+  "Contract-consistent rejections: AW surrogate_upper_sequence and surrogate_activity_label are Java export-crash SVGs with exit 0 (UgDiagram.exportDiagram catch); the tip returns a structured error with exit 1. Under T14.20 that is a defined outcome (never a normal diagram, never malformed XML). The base panicked on surrogate_upper_sequence (preprocess/mod.rs:2587); the tip removes that panic. The message for surrogate_activity_label differs from Java's ('An invalid XML character (Unicode: 0xd83d)' vs 'Invalid UTF-16 surrogate detected: d83d 74 ?'); the maker declared the fixed message as residue.",
+  "Valid controls hold: surrogate_unused_variable, surrogate_rejoined_pair and surrogate_in_comment_line strict-match Java in the tip (rejoined_pair was DIFF in base).",
+  "Declared residue is a new-error class (Rust-only, source-traced, no Java reference yet): a lone unit that never reaches SVG text still fails in the tip where base rendered: sur_removed_entity (`remove Gone`), sur_hidden_member_text (`hide members`), sur_skinparam_value. Java writes no character data for the first two, so by the ToStream trace they render normally. See surrogate-probes.json.",
+  "Precedence: TIM errors still win (sur_tim_error_before/after: 'Cannot convert nope to integer.' in the tip); an activity parser error detected by Rust still wins (sur_parser_error_after: 'unterminated activity action'). Precedence could only be probed where Rust itself detects the parser error.",
+  "Error census: no census file, marker or allow-list changed; error_golden_census_is_frozen passes. Corpus-wide the packet adds 71 rejections, all on Java-error references, and no new valid-input error. The AW case is the only valid input that exposes the over-rejection."
+ ],
+ "attributed_regressions": [
+  {
+   "case": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml",
+   "kind": "new valid-input error (Java exit 0, tip exit 1)",
+   "commit": "61f3883ffb0f41be652951f257fb1eaa57dbf16d",
+   "mechanism": "tim-builtin-value-boundaries"
+  }
+ ],
+ "bounded_next_obligations": [
+  "Move the unpaired-surrogate outcome to the SVG serialization boundary and port ToStream's rule: lone low surrogate -> failure; high surrogate followed by a non-low unit -> failure; high surrogate ending a text chunk -> pending and dropped from output (failure only if a later dirty character in subsequent character data is not a low surrogate). Acceptance: AW surrogate_high_class strict-matches Java; surrogate_upper_sequence and surrogate_activity_label still give the T14.20 error; base-rendering controls unchanged.",
+  "Relay fresh Java references before claiming the residue: removed entity, hide members, skinparam value, a trailing high surrogate followed by later non-ASCII text in another node (expected crash), and the same trailing surrogate inside an attribute (title/tooltip/link)."
+ ],
+ "perturbations": [
+  {
+   "axes": [
+    "lone high surrogate",
+    "class display"
+   ],
+   "intended_valid": false,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "bf35fe33809f8dfa65af2c2560333fd05210095b34190a777126941649e09190",
+   "golden_sha256": "1fc23e23ee197f61db6259791a898c9a1346ad3a96159844f76f6bf6669bbdb0",
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "000c2d30645a4a8a5f66492e91ec6d351dfc14e75833039c69f2b53cbddd66fa",
+   "base_50f4f5414_strict_compare": "DIFF",
+   "base_50f4f5414_difference_count": 6,
+   "base_50f4f5414_comment_list_exact": false,
+   "prev_55c92692d_cli_exit": 0,
+   "prev_55c92692d_stderr_head": "",
+   "prev_55c92692d_stdout_sha256": "f139f2ad7999bfeb299ea19ea568959c36e275938ed0371c3b3e8387b49cc402",
+   "prev_55c92692d_strict_compare": "DIFF",
+   "prev_55c92692d_difference_count": 1,
+   "prev_55c92692d_comment_list_exact": true,
+   "tip_6c52f2cfd_cli_exit": 1,
+   "tip_6c52f2cfd_stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83d) was found in the node's character data content.",
+   "tip_6c52f2cfd_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "tip_6c52f2cfd_strict_compare": "ERR",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": false,
+   "result": "fail"
+  },
+  {
+   "axes": [
+    "lone surrogate held in a variable never displayed"
+   ],
+   "intended_valid": true,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "d759d369313d436813cffe93edda765d5f43c3c97ae90c1651923a385e0d5ef6",
+   "golden_sha256": "fe5a0944753079508e610b40eca1ebe7aa6cc865d79e203c0b2bdf1c234143b0",
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_unused_variable.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_unused_variable.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "f19e1bcef2cb4eb682e20d5a569043c563d4aef45b217b1d12bca871eb399645",
+   "base_50f4f5414_strict_compare": "match",
+   "base_50f4f5414_difference_count": 0,
+   "base_50f4f5414_comment_list_exact": true,
+   "prev_55c92692d_cli_exit": 0,
+   "prev_55c92692d_stderr_head": "",
+   "prev_55c92692d_stdout_sha256": "f19e1bcef2cb4eb682e20d5a569043c563d4aef45b217b1d12bca871eb399645",
+   "prev_55c92692d_strict_compare": "match",
+   "prev_55c92692d_difference_count": 0,
+   "prev_55c92692d_comment_list_exact": true,
+   "tip_6c52f2cfd_cli_exit": 0,
+   "tip_6c52f2cfd_stderr_head": "",
+   "tip_6c52f2cfd_stdout_sha256": "f19e1bcef2cb4eb682e20d5a569043c563d4aef45b217b1d12bca871eb399645",
+   "tip_6c52f2cfd_strict_compare": "match",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": true,
+   "result": "pass"
+  },
+  {
+   "axes": [
+    "high and low units re-joined"
+   ],
+   "intended_valid": true,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "6aad11917b913388960d2544b1c1c8e75ce92b28b1292f9f73602e2ffc9cc90f",
+   "golden_sha256": "2e753d5032a4a0e77a5a561f25d250dc7ef0936e366b4ad8af9e92da7234c198",
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_rejoined_pair.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_rejoined_pair.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "53d7173b8a9dc928156db0916ae6dae65629156fe455fdd0d41dd0229ba54c4a",
+   "base_50f4f5414_strict_compare": "DIFF",
+   "base_50f4f5414_difference_count": 6,
+   "base_50f4f5414_comment_list_exact": false,
+   "prev_55c92692d_cli_exit": 0,
+   "prev_55c92692d_stderr_head": "",
+   "prev_55c92692d_stdout_sha256": "6f8cafe28967bd4b7777997b6b9e5f6c3aa54f0fb361fd69108ff9e9461ab072",
+   "prev_55c92692d_strict_compare": "match",
+   "prev_55c92692d_difference_count": 0,
+   "prev_55c92692d_comment_list_exact": true,
+   "tip_6c52f2cfd_cli_exit": 0,
+   "tip_6c52f2cfd_stderr_head": "",
+   "tip_6c52f2cfd_stdout_sha256": "6f8cafe28967bd4b7777997b6b9e5f6c3aa54f0fb361fd69108ff9e9461ab072",
+   "tip_6c52f2cfd_strict_compare": "match",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": true,
+   "result": "pass"
+  },
+  {
+   "axes": [
+    "residue probe: lone surrogate only in a ' comment line"
+   ],
+   "intended_valid": true,
+   "reference_batch": "AW (relay batch r2a, held out from the maker)",
+   "java_exit": 0,
+   "java_stderr_head": "",
+   "java_error_page": false,
+   "source_sha256": "7ae5a9aae17ee7e6340310efa4b09a2462e6497da9b0071d432e07f273da8a2c",
+   "golden_sha256": "c2d766d3cbca41206c42593edf93814c730040750d7a10fb461f3cebe27e17c4",
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_in_comment_line.puml",
+   "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_in_comment_line.svg",
+   "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2",
+   "base_50f4f5414_cli_exit": 0,
+   "base_50f4f5414_stderr_head": "",
+   "base_50f4f5414_stdout_sha256": "ee9af4d5b80e11ee4a5c0713e34adda2cccd42e3df4fbb229b62b2d623407bce",
+   "base_50f4f5414_strict_compare": "match",
+   "base_50f4f5414_difference_count": 0,
+   "base_50f4f5414_comment_list_exact": true,
+   "prev_55c92692d_cli_exit": 0,
+   "prev_55c92692d_stderr_head": "",
+   "prev_55c92692d_stdout_sha256": "ee9af4d5b80e11ee4a5c0713e34adda2cccd42e3df4fbb229b62b2d623407bce",
+   "prev_55c92692d_strict_compare": "match",
+   "prev_55c92692d_difference_count": 0,
+   "prev_55c92692d_comment_list_exact": true,
+   "tip_6c52f2cfd_cli_exit": 0,
+   "tip_6c52f2cfd_stderr_head": "",
+   "tip_6c52f2cfd_stdout_sha256": "ee9af4d5b80e11ee4a5c0713e34adda2cccd42e3df4fbb229b62b2d623407bce",
+   "tip_6c52f2cfd_strict_compare": "match",
+   "tip_6c52f2cfd_difference_count": 0,
+   "tip_6c52f2cfd_comment_list_exact": true,
+   "result": "pass"
+  }
+ ],
+ "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round2/ (measurements.json, pairs.json, references/aw-*, tools/; manifest.json lists SHA256s)"
+}
