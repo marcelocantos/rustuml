@@ -1,0 +1,6 @@
+@startyaml
+note: |
+  example: |
+  plain line
+after: x
+@endyaml

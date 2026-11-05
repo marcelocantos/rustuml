@@ -1,0 +1,4 @@
+@startjson
+#highlight "a\tb"
+{"a\tb": "v\\nw", "z": 1}
+@endjson

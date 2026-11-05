@@ -1,0 +1,6 @@
+@startuml
+json Dock {
+  "k": "Moss\\nFern",
+  "t": "a\tb"
+}
+@enduml

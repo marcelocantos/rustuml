@@ -1,0 +1,715 @@
+######## src/hb-ot-shape.cc 10.0.1 -> 15.0.0
+46a47
+> #include "hb-unicode.hh"
+48a50,51
+> #include "hb-ot-layout-gdef-table.hh"
+> #include "hb-ot-stat-table.hh"
+49a53
+> 
+84a89
+> 						, aat_map (face, props)
+91c96
+<   script_fallback_mark_positioning = shaper->fallback_position;
+---
+>   script_fallback_position = shaper->fallback_position;
+106a112,115
+> #ifndef HB_NO_AAT_SHAPE
+>   if (apply_morx)
+>     aat_map.compile (plan.aat_map);
+> #endif
+124,127d132
+< #ifndef HB_NO_AAT_SHAPE
+<   plan.trak_mask = plan.map.get_mask (HB_TAG ('t','r','a','k'));
+<   plan.requested_tracking = !!plan.trak_mask;
+< #endif
+177c182
+<       plan.apply_kern = true;
+---
+>       plan.apply_kern = script_fallback_position; // Not all shapers apply legacy `kern`
+182c187
+<   plan.apply_fallback_kern = !(plan.apply_gpos || plan.apply_kerx || plan.apply_kern);
+---
+>   plan.apply_fallback_kern = script_fallback_position && !(plan.apply_gpos || plan.apply_kerx || plan.apply_kern);
+202c207
+< 				   script_fallback_mark_positioning;
+---
+> 				   script_fallback_position;
+211,212c216,220
+<   /* Currently we always apply trak. */
+<   plan.apply_trak = plan.requested_tracking && hb_aat_layout_has_tracking (face);
+---
+>   /* According to Ned, trak is applied by default for "modern fonts", as detected by presence of STAT table. */
+> #ifndef HB_NO_STYLE
+>   plan.apply_trak = hb_aat_layout_has_tracking (face) && face->table.STAT->has_data ();
+> #else
+>   plan.apply_trak = false;
+213a222,223
+> 
+> #endif
+349,355d358
+< #ifndef HB_NO_AAT_SHAPE
+<   /* Tracking.  We enable dummy feature here just to allow disabling
+<    * AAT 'trak' table using features.
+<    * https://github.com/harfbuzz/harfbuzz/issues/1303 */
+<   map->enable_feature (HB_TAG ('t','r','a','k'), F_HAS_FALLBACK);
+< #endif
+< 
+425c428,430
+< struct hb_ot_font_data_t {};
+---
+> struct hb_ot_font_data_t {
+>   OT::hb_scalar_cache_t unused; // Just for alignment
+> };
+428c433
+< _hb_ot_shaper_font_data_create (hb_font_t *font HB_UNUSED)
+---
+> _hb_ot_shaper_font_data_create (hb_font_t *font)
+430c435,436
+<   return (hb_ot_font_data_t *) HB_SHAPER_DATA_SUCCEEDED;
+---
+>   const OT::ItemVariationStore &var_store = font->face->table.GDEF->table->get_var_store ();
+>   return (hb_ot_font_data_t *) var_store.create_cache ();
+434c440
+< _hb_ot_shaper_font_data_destroy (hb_ot_font_data_t *data HB_UNUSED)
+---
+> _hb_ot_shaper_font_data_destroy (hb_ot_font_data_t *data)
+435a442
+>   OT::ItemVariationStore::destroy_cache ((OT::hb_scalar_cache_t *) data);
+464c471,472
+< hb_set_unicode_props (hb_buffer_t *buffer)
+---
+> hb_set_unicode_props (hb_buffer_t *buffer,
+> 		      hb_mask_t    global_mask)
+477a486
+>     info[i].mask = global_mask;
+479a489,491
+>     if (info[i].codepoint < 0x80)
+>       continue;
+> 
+494c506
+<       _hb_glyph_info_set_continuation (&info[i]);
+---
+>       _hb_glyph_info_set_continuation (&info[i], buffer);
+502c514
+< 	_hb_glyph_info_set_continuation (&info[i]);
+---
+> 	_hb_glyph_info_set_continuation (&info[i], buffer);
+507c519
+<       _hb_glyph_info_set_continuation (&info[i]);
+---
+>       _hb_glyph_info_set_continuation (&info[i], buffer);
+511a524
+> 	info[i].mask = global_mask;
+513c526
+< 	_hb_glyph_info_set_continuation (&info[i]);
+---
+> 	_hb_glyph_info_set_continuation (&info[i], buffer);
+532c545,547
+<       _hb_glyph_info_set_continuation (&info[i]);
+---
+>       _hb_glyph_info_set_continuation (&info[i], buffer);
+>     else if (unlikely (info[i].codepoint == 0x2044u /* FRACTION SLASH */))
+>       buffer->scratch_flags |= HB_BUFFER_SCRATCH_FLAG_HAS_FRACTION_SLASH;
+568c583
+<   if (!(buffer->scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_NON_ASCII))
+---
+>   if (!(buffer->scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_CONTINUATIONS))
+571,576c586,587
+<   if (buffer->cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES)
+<     foreach_grapheme (buffer, start, end)
+<       buffer->merge_clusters (start, end);
+<   else
+<     foreach_grapheme (buffer, start, end)
+<       buffer->unsafe_to_break (start, end);
+---
+>   foreach_grapheme (buffer, start, end)
+>     buffer->merge_grapheme_clusters (start, end);
+610,612c621
+<       if (gc == HB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER)
+< 	found_number = true;
+<       else if (HB_UNICODE_GENERAL_CATEGORY_IS_LETTER (gc))
+---
+>       if (HB_UNICODE_GENERAL_CATEGORY_IS_LETTER (gc))
+617c626,628
+<       else if (_hb_codepoint_is_regional_indicator (info[i].codepoint))
+---
+>       else if (gc == HB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER)
+> 	found_number = true;
+>       else if (unlikely (_hb_codepoint_is_regional_indicator (info[i].codepoint)))
+629c640
+<        direction != horiz_dir && horiz_dir != HB_DIRECTION_INVALID) ||
+---
+>        direction != horiz_dir && HB_DIRECTION_IS_VALID (horiz_dir)) ||
+643,695d653
+< #ifndef HB_NO_VERTICAL
+< static hb_codepoint_t
+< hb_vert_char_for (hb_codepoint_t u)
+< {
+<   switch (u >> 8)
+<   {
+<     case 0x20: switch (u) {
+<       case 0x2013u: return 0xfe32u; // EN DASH
+<       case 0x2014u: return 0xfe31u; // EM DASH
+<       case 0x2025u: return 0xfe30u; // TWO DOT LEADER
+<       case 0x2026u: return 0xfe19u; // HORIZONTAL ELLIPSIS
+<     } break;
+<     case 0x30: switch (u) {
+<       case 0x3001u: return 0xfe11u; // IDEOGRAPHIC COMMA
+<       case 0x3002u: return 0xfe12u; // IDEOGRAPHIC FULL STOP
+<       case 0x3008u: return 0xfe3fu; // LEFT ANGLE BRACKET
+<       case 0x3009u: return 0xfe40u; // RIGHT ANGLE BRACKET
+<       case 0x300au: return 0xfe3du; // LEFT DOUBLE ANGLE BRACKET
+<       case 0x300bu: return 0xfe3eu; // RIGHT DOUBLE ANGLE BRACKET
+<       case 0x300cu: return 0xfe41u; // LEFT CORNER BRACKET
+<       case 0x300du: return 0xfe42u; // RIGHT CORNER BRACKET
+<       case 0x300eu: return 0xfe43u; // LEFT WHITE CORNER BRACKET
+<       case 0x300fu: return 0xfe44u; // RIGHT WHITE CORNER BRACKET
+<       case 0x3010u: return 0xfe3bu; // LEFT BLACK LENTICULAR BRACKET
+<       case 0x3011u: return 0xfe3cu; // RIGHT BLACK LENTICULAR BRACKET
+<       case 0x3014u: return 0xfe39u; // LEFT TORTOISE SHELL BRACKET
+<       case 0x3015u: return 0xfe3au; // RIGHT TORTOISE SHELL BRACKET
+<       case 0x3016u: return 0xfe17u; // LEFT WHITE LENTICULAR BRACKET
+<       case 0x3017u: return 0xfe18u; // RIGHT WHITE LENTICULAR BRACKET
+<     } break;
+<     case 0xfe: switch (u) {
+<       case 0xfe4fu: return 0xfe34u; // WAVY LOW LINE
+<     } break;
+<     case 0xff: switch (u) {
+<       case 0xff01u: return 0xfe15u; // FULLWIDTH EXCLAMATION MARK
+<       case 0xff08u: return 0xfe35u; // FULLWIDTH LEFT PARENTHESIS
+<       case 0xff09u: return 0xfe36u; // FULLWIDTH RIGHT PARENTHESIS
+<       case 0xff0cu: return 0xfe10u; // FULLWIDTH COMMA
+<       case 0xff1au: return 0xfe13u; // FULLWIDTH COLON
+<       case 0xff1bu: return 0xfe14u; // FULLWIDTH SEMICOLON
+<       case 0xff1fu: return 0xfe16u; // FULLWIDTH QUESTION MARK
+<       case 0xff3bu: return 0xfe47u; // FULLWIDTH LEFT SQUARE BRACKET
+<       case 0xff3du: return 0xfe48u; // FULLWIDTH RIGHT SQUARE BRACKET
+<       case 0xff3fu: return 0xfe33u; // FULLWIDTH LOW LINE
+<       case 0xff5bu: return 0xfe37u; // FULLWIDTH LEFT CURLY BRACKET
+<       case 0xff5du: return 0xfe38u; // FULLWIDTH RIGHT CURLY BRACKET
+<     } break;
+<   }
+< 
+<   return u;
+< }
+< #endif
+< 
+721c679
+<       hb_codepoint_t codepoint = hb_vert_char_for (info[i].codepoint);
+---
+>       hb_codepoint_t codepoint = hb_unicode_funcs_t::vertical_char_for (info[i].codepoint);
+736c694
+<   if (!(c->buffer->scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_NON_ASCII) ||
+---
+>   if (!(c->buffer->scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_FRACTION_SLASH) ||
+792,801d749
+< hb_ot_shape_initialize_masks (const hb_ot_shape_context_t *c)
+< {
+<   hb_ot_map_t *map = &c->plan->map;
+<   hb_buffer_t *buffer = c->buffer;
+< 
+<   hb_mask_t global_mask = map->get_global_mask ();
+<   buffer->reset_masks (global_mask);
+< }
+< 
+< static inline void
+837c785,791
+<       pos[i].x_advance = pos[i].y_advance = pos[i].x_offset = pos[i].y_offset = 0;
+---
+>     {
+>       pos[i].x_advance = pos[i].y_advance = 0;
+>       if (HB_DIRECTION_IS_HORIZONTAL (buffer->props.direction))
+> 	pos[i].x_offset = 0;
+>       else
+>         pos[i].y_offset = 0;
+>     }
+853,854c807
+<     if (_hb_glyph_info_get_general_category (&info[i]) ==
+< 	_HB_UNICODE_GENERAL_CATEGORY_VARIATION_SELECTOR)
+---
+>     if (_hb_glyph_info_is_variation_selector (&info[i]))
+858c811
+<       _hb_glyph_info_set_general_category (&info[i], HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK);
+---
+>       _hb_glyph_info_set_variation_selector (&info[i], false);
+893c846
+<   /* Normalization process sets up glyph_index(), we just copy it. */
+---
+>   /* Normalization process sets up normalizer_glyph_index(), we just copy it. */
+897c850
+<     info[i].codepoint = info[i].glyph_index();
+---
+>     info[i].codepoint = info[i].normalizer_glyph_index();
+935c888
+<   HB_BUFFER_ALLOCATE_VAR (buffer, glyph_index);
+---
+>   HB_BUFFER_ALLOCATE_VAR (buffer, normalizer_glyph_index);
+947c900
+<   HB_BUFFER_DEALLOCATE_VAR (buffer, glyph_index);
+---
+>   HB_BUFFER_DEALLOCATE_VAR (buffer, normalizer_glyph_index);
+955,959d907
+<   hb_ot_layout_substitute_start (c->font, buffer);
+< 
+<   if (c->plan->fallback_glyph_classes)
+<     hb_synthesize_glyph_classes (c->buffer);
+< 
+961a910,915
+>   {
+>     hb_ot_layout_substitute_start (c->font, buffer);
+> 
+>     if (c->plan->fallback_glyph_classes)
+>       hb_synthesize_glyph_classes (buffer);
+> 
+963a918,922
+>     /* The buffer digest is only used by the OT lookup-apply loop;
+>      * without GPOS ahead, nothing consumes it. */
+>     if (c->plan->apply_gpos)
+>       c->buffer->update_digest ();
+>   }
+965a925,930
+>   {
+>     hb_ot_layout_substitute_start_with_digest (c->font, buffer);
+> 
+>     if (c->plan->fallback_glyph_classes)
+>       hb_synthesize_glyph_classes (buffer);
+> 
+966a932
+>   }
+1010,1011c976,977
+<   pos->x_offset -= pos->x_advance;
+<   pos->y_offset -= pos->y_advance;
+---
+>   pos->x_offset = hb_saturate_sub (pos->x_offset, pos->x_advance);
+>   pos->y_offset = hb_saturate_sub (pos->y_offset, pos->y_advance);
+1047,1052c1013,1015
+<     /* The nil glyph_h_origin() func returns 0, so no need to apply it. */
+<     if (c->font->has_glyph_h_origin_func ())
+<       for (unsigned int i = 0; i < count; i++)
+< 	c->font->subtract_glyph_h_origin (info[i].codepoint,
+< 					  &pos[i].x_offset,
+< 					  &pos[i].y_offset);
+---
+>     // h_origin defaults to zero; only apply it if the font has it.
+>     if (c->font->has_glyph_h_origin_func () || c->font->has_glyph_h_origins_func ())
+>       c->font->subtract_glyph_h_origins (c->buffer);
+1058,1063c1021,1022
+<     for (unsigned int i = 0; i < count; i++)
+<     {
+<       c->font->subtract_glyph_v_origin (info[i].codepoint,
+< 					&pos[i].x_offset,
+< 					&pos[i].y_offset);
+<     }
+---
+>     // v_origin defaults to non-zero; apply even if only fallback is there.
+>     c->font->subtract_glyph_v_origins (c->buffer);
+1072,1075d1030
+<   unsigned int count = c->buffer->len;
+<   hb_glyph_info_t *info = c->buffer->info;
+<   hb_glyph_position_t *pos = c->buffer->pos;
+< 
+1090,1095c1045,1047
+<   /* The nil glyph_h_origin() func returns 0, so no need to apply it. */
+<   if (c->font->has_glyph_h_origin_func ())
+<     for (unsigned int i = 0; i < count; i++)
+<       c->font->add_glyph_h_origin (info[i].codepoint,
+< 				   &pos[i].x_offset,
+< 				   &pos[i].y_offset);
+---
+>   // h_origin defaults to zero; only apply it if the font has it.
+>   if (c->font->has_glyph_h_origin_func () || c->font->has_glyph_h_origins_func ())
+>     c->font->add_glyph_h_origins (c->buffer);
+1130,1133d1081
+< #ifndef HB_NO_AAT_SHAPE
+<   if (c->plan->apply_morx)
+<     hb_aat_layout_zero_width_deleted_glyphs (c->buffer);
+< #endif
+1136,1141c1084,1086
+<   /* The nil glyph_h_origin() func returns 0, so no need to apply it. */
+<   if (c->font->has_glyph_h_origin_func ())
+<     for (unsigned int i = 0; i < count; i++)
+<       c->font->subtract_glyph_h_origin (info[i].codepoint,
+< 					&pos[i].x_offset,
+< 					&pos[i].y_offset);
+---
+>   // h_origin defaults to zero; only apply it if the font has it.
+>   if (c->font->has_glyph_h_origin_func () || c->font->has_glyph_h_origins_func ())
+>     c->font->subtract_glyph_h_origins (c->buffer);
+1169c1114,1138
+<   if (!(buffer->scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_GLYPH_FLAGS))
+---
+>   hb_mask_t and_mask = HB_GLYPH_FLAG_DEFINED;
+>   if ((buffer->flags & HB_BUFFER_FLAG_PRODUCE_UNSAFE_TO_CONCAT) == 0)
+>     and_mask &= ~HB_GLYPH_FLAG_UNSAFE_TO_CONCAT;
+> 
+>   hb_glyph_info_t *info = buffer->info;
+> 
+>   if ((buffer->flags & HB_BUFFER_FLAG_PRODUCE_SAFE_TO_INSERT_TATWEEL) == 0)
+>   {
+>     foreach_cluster (buffer, start, end)
+>     {
+>       if (end - start == 1)
+>       {
+>         info[start].mask &= and_mask;
+> 	continue;
+>       }
+> 
+>       unsigned int mask = 0;
+>       for (unsigned int i = start; i < end; i++)
+> 	mask |= info[i].mask;
+> 
+>       mask &= and_mask;
+> 
+>       for (unsigned int i = start; i < end; i++)
+> 	info[i].mask = mask;
+>     }
+1170a1140
+>   }
+1178c1148
+<    * We couldn't make this interaction earlier. It has to be done here.
+---
+>    * We couldn't make this interaction earlier. It has to be done this way.
+1180,1185d1149
+<   bool flip_tatweel = buffer->flags & HB_BUFFER_FLAG_PRODUCE_SAFE_TO_INSERT_TATWEEL;
+< 
+<   bool clear_concat = (buffer->flags & HB_BUFFER_FLAG_PRODUCE_UNSAFE_TO_CONCAT) == 0;
+< 
+<   hb_glyph_info_t *info = buffer->info;
+< 
+1190c1154
+<       mask |= info[i].mask & HB_GLYPH_FLAG_DEFINED;
+---
+>       mask |= info[i].mask;
+1192,1198c1156,1159
+<     if (flip_tatweel)
+<     {
+<       if (mask & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
+< 	mask &= ~HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL;
+<       if (mask & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
+< 	mask |= HB_GLYPH_FLAG_UNSAFE_TO_BREAK | HB_GLYPH_FLAG_UNSAFE_TO_CONCAT;
+<     }
+---
+>     if (mask & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
+>       mask &= ~HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL;
+>     if (mask & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
+>       mask |= HB_GLYPH_FLAG_UNSAFE_TO_BREAK | HB_GLYPH_FLAG_UNSAFE_TO_CONCAT;
+1200,1201c1161
+<     if (clear_concat)
+< 	mask &= ~HB_GLYPH_FLAG_UNSAFE_TO_CONCAT;
+---
+>     mask &= and_mask;
+1218,1219c1178
+<   hb_ot_shape_initialize_masks (c);
+<   hb_set_unicode_props (c->buffer);
+---
+>   hb_set_unicode_props (c->buffer, c->plan->map.get_global_mask ());
+1242,1243d1200
+< 
+<   c->buffer->leave ();
+1280a1238,1267
+> /**
+>  * hb_ot_shape_plan_get_feature_tags:
+>  * @shape_plan: A shaping plan
+>  * @start_offset: The index of first feature to retrieve
+>  * @tag_count: (inout): Input = the maximum number of features to return;
+>  *                      Output = the actual number of features returned (may be zero)
+>  * @tags: (out) (array length=tag_count): The array of enabled feature
+>  *
+>  * Fetches the list of OpenType feature tags enabled for a shaping plan, if possible.
+>  *
+>  * Return value: Total number of feature tagss.
+>  *
+>  * Since: 10.3.0
+>  */
+> unsigned int
+> hb_ot_shape_plan_get_feature_tags (hb_shape_plan_t *shape_plan,
+> 				   unsigned int     start_offset,
+> 				   unsigned int    *tag_count, /* IN/OUT */
+> 				   hb_tag_t        *tags /* OUT */)
+> {
+> #ifndef HB_NO_OT_SHAPE
+>   return shape_plan->ot.map.get_feature_tags (start_offset, tag_count, tags);
+> #else
+>   if (tag_count)
+> 	*tag_count = 0;
+>   return 0;
+> #endif
+> }
+> 
+> 
+1341a1329,1344
+> 
+> /**
+>  * hb_ot_shape_get_buffer_format_serial:
+>  *
+>  * Returns the serial number of the current internal buffer format.
+>  * See #HB_OT_SHAPE_BUFFER_FORMAT_SERIAL for more information.
+>  *
+>  * Return value: The current buffer-format serial number.
+>  *
+>  * Since: 13.2.0
+>  **/
+> unsigned int
+> hb_ot_shape_get_buffer_format_serial (void)
+> {
+>   return HB_OT_SHAPE_BUFFER_FORMAT_SERIAL;
+> }
+######## src/hb-ot-shape-fallback.cc 10.0.1 -> 15.0.0
+200,201c200,203
+< 	buffer->pos[i].x_offset -= buffer->pos[i].x_advance;
+< 	buffer->pos[i].y_offset -= buffer->pos[i].y_advance;
+---
+> 	buffer->pos[i].x_offset = hb_saturate_sub (buffer->pos[i].x_offset,
+> 						     buffer->pos[i].x_advance);
+> 	buffer->pos[i].y_offset = hb_saturate_sub (buffer->pos[i].y_offset,
+> 						     buffer->pos[i].y_advance);
+234c236,237
+< 	pos.x_offset += base_extents.x_bearing + base_extents.width - mark_extents.width / 2 - mark_extents.x_bearing;
+---
+> 	pos.x_offset = hb_clamp_to<hb_position_t> ((int64_t) base_extents.x_bearing + base_extents.width -
+> 						    mark_extents.width / 2 - mark_extents.x_bearing);
+237c240,241
+< 	pos.x_offset += base_extents.x_bearing - mark_extents.width / 2 - mark_extents.x_bearing;
+---
+> 	pos.x_offset = hb_clamp_to<hb_position_t> ((int64_t) base_extents.x_bearing -
+> 						    mark_extents.width / 2 - mark_extents.x_bearing);
+248c252,254
+<       pos.x_offset += base_extents.x_bearing + (base_extents.width - mark_extents.width) / 2 - mark_extents.x_bearing;
+---
+>       pos.x_offset = hb_clamp_to<hb_position_t> ((int64_t) base_extents.x_bearing +
+> 						((int64_t) base_extents.width - mark_extents.width) / 2 -
+> 						mark_extents.x_bearing);
+255c261
+<       pos.x_offset += base_extents.x_bearing - mark_extents.x_bearing;
+---
+>       pos.x_offset = hb_saturate_sub (base_extents.x_bearing, mark_extents.x_bearing);
+262c268,269
+<       pos.x_offset += base_extents.x_bearing + base_extents.width - mark_extents.width - mark_extents.x_bearing;
+---
+>       pos.x_offset = hb_clamp_to<hb_position_t> ((int64_t) base_extents.x_bearing + base_extents.width -
+> 						mark_extents.width - mark_extents.x_bearing);
+274c281
+<       base_extents.height -= y_gap;
+---
+>       base_extents.height = hb_saturate_sub (base_extents.height, y_gap);
+279c286,287
+<       pos.y_offset = base_extents.y_bearing + base_extents.height - mark_extents.y_bearing;
+---
+>       pos.y_offset = hb_clamp_to<hb_position_t> ((int64_t) base_extents.y_bearing +
+> 						base_extents.height - mark_extents.y_bearing);
+283c291
+< 	base_extents.height -= pos.y_offset;
+---
+> 	base_extents.height = hb_saturate_sub (base_extents.height, pos.y_offset);
+286c294
+<       base_extents.height += mark_extents.height;
+---
+>       base_extents.height = hb_saturate_add (base_extents.height, mark_extents.height);
+294,295c302,303
+<       base_extents.y_bearing += y_gap;
+<       base_extents.height -= y_gap;
+---
+>       base_extents.y_bearing = hb_saturate_add (base_extents.y_bearing, y_gap);
+>       base_extents.height = hb_saturate_sub (base_extents.height, y_gap);
+300c308,309
+<       pos.y_offset = base_extents.y_bearing - (mark_extents.y_bearing + mark_extents.height);
+---
+>       pos.y_offset = hb_clamp_to<hb_position_t> ((int64_t) base_extents.y_bearing -
+> 						mark_extents.y_bearing - mark_extents.height);
+304,307c313,316
+< 	int correction = -pos.y_offset / 2;
+< 	base_extents.y_bearing += correction;
+< 	base_extents.height -= correction;
+< 	pos.y_offset += correction;
+---
+> 	hb_position_t correction = -(pos.y_offset / 2);
+> 	base_extents.y_bearing = hb_saturate_add (base_extents.y_bearing, correction);
+> 	base_extents.height = hb_saturate_sub (base_extents.height, correction);
+> 	pos.y_offset = hb_saturate_add (pos.y_offset, correction);
+309,310c318,319
+<       base_extents.y_bearing -= mark_extents.height;
+<       base_extents.height += mark_extents.height;
+---
+>       base_extents.y_bearing = hb_saturate_sub (base_extents.y_bearing, mark_extents.height);
+>       base_extents.height = hb_saturate_add (base_extents.height, mark_extents.height);
+335c344,345
+<   base_extents.y_bearing += buffer->pos[base].y_offset;
+---
+>   base_extents.y_bearing = hb_saturate_add (base_extents.y_bearing,
+> 					    buffer->pos[base].y_offset);
+349,350c359,360
+<     x_offset -= buffer->pos[base].x_advance;
+<     y_offset -= buffer->pos[base].y_advance;
+---
+>     x_offset = hb_saturate_neg (buffer->pos[base].x_advance);
+>     y_offset = hb_saturate_neg (buffer->pos[base].y_advance);
+379c389,391
+< 	    component_extents.x_bearing += (this_lig_component * component_extents.width) / num_lig_components;
+---
+> 	    component_extents.x_bearing = hb_clamp_to<hb_position_t> (
+> 		(int64_t) component_extents.x_bearing +
+> 		(int64_t) this_lig_component * component_extents.width / num_lig_components);
+381c393,395
+< 	    component_extents.x_bearing += ((num_lig_components - 1 - this_lig_component) * component_extents.width) / num_lig_components;
+---
+> 	    component_extents.x_bearing = hb_clamp_to<hb_position_t> (
+> 		(int64_t) component_extents.x_bearing +
+> 		(int64_t) (num_lig_components - 1 - this_lig_component) * component_extents.width / num_lig_components);
+397,398c411,412
+<       buffer->pos[i].x_offset += x_offset;
+<       buffer->pos[i].y_offset += y_offset;
+---
+>       buffer->pos[i].x_offset = hb_saturate_add (buffer->pos[i].x_offset, x_offset);
+>       buffer->pos[i].y_offset = hb_saturate_add (buffer->pos[i].y_offset, y_offset);
+402,403c416,417
+< 	x_offset -= buffer->pos[i].x_advance;
+< 	y_offset -= buffer->pos[i].y_advance;
+---
+> 	x_offset = hb_saturate_sub (x_offset, buffer->pos[i].x_advance);
+> 	y_offset = hb_saturate_sub (y_offset, buffer->pos[i].y_advance);
+405,406c419,420
+< 	x_offset += buffer->pos[i].x_advance;
+< 	y_offset += buffer->pos[i].y_advance;
+---
+> 	x_offset = hb_saturate_add (x_offset, buffer->pos[i].x_advance);
+> 	y_offset = hb_saturate_add (y_offset, buffer->pos[i].y_advance);
+412,417c426,431
+< position_cluster (const hb_ot_shape_plan_t *plan,
+< 		  hb_font_t *font,
+< 		  hb_buffer_t  *buffer,
+< 		  unsigned int start,
+< 		  unsigned int end,
+< 		  bool adjust_offsets_when_zeroing)
+---
+> position_cluster_impl (const hb_ot_shape_plan_t *plan,
+> 		       hb_font_t *font,
+> 		       hb_buffer_t  *buffer,
+> 		       unsigned int start,
+> 		       unsigned int end,
+> 		       bool adjust_offsets_when_zeroing)
+419,421d432
+<   if (end - start < 2)
+<     return;
+< 
+429a441,444
+>       {
+>         if (_hb_glyph_info_is_hidden (&info[j]) ||
+> 	    _hb_glyph_info_is_default_ignorable (&info[j]))
+> 	  continue;
+431a447
+>       }
+438a455,468
+> static HB_ALWAYS_INLINE void
+> position_cluster (const hb_ot_shape_plan_t *plan,
+> 		  hb_font_t *font,
+> 		  hb_buffer_t  *buffer,
+> 		  unsigned int start,
+> 		  unsigned int end,
+> 		  bool adjust_offsets_when_zeroing)
+> {
+>   if (end - start < 2)
+>     return;
+> 
+>   position_cluster_impl (plan, font, buffer, start, end, adjust_offsets_when_zeroing);
+> }
+> 
+458c488,490
+<     if (likely (!_hb_glyph_info_is_unicode_mark (&info[i]))) {
+---
+>     if (likely (!_hb_glyph_info_is_unicode_mark (&info[i]) &&
+> 		!_hb_glyph_info_is_hidden (&info[i]) &&
+> 		!_hb_glyph_info_is_default_ignorable (&info[i]))) {
+544c576
+< 	  pos[i].y_advance = -font->y_scale / 4;
+---
+> 	  pos[i].y_advance = -(int64_t) font->y_scale / 4;
+564c596
+< 	    pos[i].x_advance = +(font->x_scale + ((int) space_type)/2) / (int) space_type;
+---
+> 	    pos[i].x_advance = ((int64_t) font->x_scale + ((int) space_type)/2) / (int) space_type;
+566c598
+< 	    pos[i].y_advance = -(font->y_scale + ((int) space_type)/2) / (int) space_type;
+---
+> 	    pos[i].y_advance = -((int64_t) font->y_scale + ((int) space_type)/2) / (int) space_type;
+571c603
+< 	    pos[i].x_advance = (int64_t) +font->x_scale * 4 / 18;
+---
+> 	    pos[i].x_advance = (int64_t) font->x_scale * 4 / 18;
+573c605
+< 	    pos[i].y_advance = (int64_t) -font->y_scale * 4 / 18;
+---
+> 	    pos[i].y_advance = -(int64_t) font->y_scale * 4 / 18;
+######## src/hb-unicode.hh 10.0.1 -> 15.0.0
+37,39d36
+< // Hack. See: https://github.com/harfbuzz/harfbuzz/pull/4529#discussion_r1769638033
+< #define _HB_UNICODE_GENERAL_CATEGORY_VARIATION_SELECTOR ((hb_unicode_general_category_t) 30)
+< 
+182c179
+< 	case 0x18: return hb_in_range<hb_codepoint_t> (ch, 0x180Bu, 0x180Eu);
+---
+> 	case 0x18: return hb_in_range<hb_codepoint_t> (ch, 0x180Bu, 0x180Fu);
+244a242,292
+>   }
+> 
+>   static hb_codepoint_t
+>   vertical_char_for (hb_codepoint_t u)
+>   {
+>     switch (u >> 8)
+>     {
+>       case 0x20: switch (u) {
+> 	case 0x2013u: return 0xfe32u; // EN DASH
+> 	case 0x2014u: return 0xfe31u; // EM DASH
+> 	case 0x2025u: return 0xfe30u; // TWO DOT LEADER
+> 	case 0x2026u: return 0xfe19u; // HORIZONTAL ELLIPSIS
+>       } break;
+>       case 0x30: switch (u) {
+> 	case 0x3001u: return 0xfe11u; // IDEOGRAPHIC COMMA
+> 	case 0x3002u: return 0xfe12u; // IDEOGRAPHIC FULL STOP
+> 	case 0x3008u: return 0xfe3fu; // LEFT ANGLE BRACKET
+> 	case 0x3009u: return 0xfe40u; // RIGHT ANGLE BRACKET
+> 	case 0x300au: return 0xfe3du; // LEFT DOUBLE ANGLE BRACKET
+> 	case 0x300bu: return 0xfe3eu; // RIGHT DOUBLE ANGLE BRACKET
+> 	case 0x300cu: return 0xfe41u; // LEFT CORNER BRACKET
+> 	case 0x300du: return 0xfe42u; // RIGHT CORNER BRACKET
+> 	case 0x300eu: return 0xfe43u; // LEFT WHITE CORNER BRACKET
+> 	case 0x300fu: return 0xfe44u; // RIGHT WHITE CORNER BRACKET
+> 	case 0x3010u: return 0xfe3bu; // LEFT BLACK LENTICULAR BRACKET
+> 	case 0x3011u: return 0xfe3cu; // RIGHT BLACK LENTICULAR BRACKET
+> 	case 0x3014u: return 0xfe39u; // LEFT TORTOISE SHELL BRACKET
+> 	case 0x3015u: return 0xfe3au; // RIGHT TORTOISE SHELL BRACKET
+> 	case 0x3016u: return 0xfe17u; // LEFT WHITE LENTICULAR BRACKET
+> 	case 0x3017u: return 0xfe18u; // RIGHT WHITE LENTICULAR BRACKET
+>       } break;
+>       case 0xfe: switch (u) {
+> 	case 0xfe4fu: return 0xfe34u; // WAVY LOW LINE
+>       } break;
+>       case 0xff: switch (u) {
+> 	case 0xff01u: return 0xfe15u; // FULLWIDTH EXCLAMATION MARK
+> 	case 0xff08u: return 0xfe35u; // FULLWIDTH LEFT PARENTHESIS
+> 	case 0xff09u: return 0xfe36u; // FULLWIDTH RIGHT PARENTHESIS
+> 	case 0xff0cu: return 0xfe10u; // FULLWIDTH COMMA
+> 	case 0xff1au: return 0xfe13u; // FULLWIDTH COLON
+> 	case 0xff1bu: return 0xfe14u; // FULLWIDTH SEMICOLON
+> 	case 0xff1fu: return 0xfe16u; // FULLWIDTH QUESTION MARK
+> 	case 0xff3bu: return 0xfe47u; // FULLWIDTH LEFT SQUARE BRACKET
+> 	case 0xff3du: return 0xfe48u; // FULLWIDTH RIGHT SQUARE BRACKET
+> 	case 0xff3fu: return 0xfe33u; // FULLWIDTH LOW LINE
+> 	case 0xff5bu: return 0xfe37u; // FULLWIDTH LEFT CURLY BRACKET
+> 	case 0xff5du: return 0xfe38u; // FULLWIDTH RIGHT CURLY BRACKET
+>       } break;
+>     }
+> 
+>     return u;
+######## src/hb-ot-shaper.hh 10.0.1 -> 15.0.0
+398a399,409
+>     /* Unicode-17.0 additions */
+>     case HB_SCRIPT_BERIA_ERFE:
+>     case HB_SCRIPT_SIDETIC:
+>     case HB_SCRIPT_TAI_YO:
+>     case HB_SCRIPT_TOLONG_SIKI:
+> 
+>     /* Unicode-18.0 additions */
+>     case HB_SCRIPT_JURCHEN:
+>     case HB_SCRIPT_PROTO_CUNEIFORM:
+>     case HB_SCRIPT_SEAL:
+> 

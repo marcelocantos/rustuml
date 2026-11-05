@@ -1,0 +1,6 @@
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... FAILED
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (53296367) panicked at crates/rustuml-render/src/font_chain.rs:582:25:
+assertion `left == right` failed: Menlo-Regular.tsv
+  left: true
+ right: false
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 846 filtered out; finished in 0.01s

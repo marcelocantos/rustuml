@@ -1,0 +1,111 @@
+{
+ "introduced_base_to_tip": [
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/activity.rs",
+   "line": 27402,
+   "text": "svg_comment = crate::svg::comment_text(&format!(\"link {} to {}\" , &from_label, &to_label)),",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/activity.rs",
+   "line": 27402,
+   "text": "svg_comment = crate::svg::comment_text(&format!(\"link {} to {}\" , &from_label, &to_label)),",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/activity.rs",
+   "line": 28762,
+   "text": "crate::svg::comment_text(&format!(\"link {} to end\", &from.label))",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/activity.rs",
+   "line": 28815,
+   "text": "crate::svg::comment_text(&format!(\"link {} to end\", &from.label))",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/activity.rs",
+   "line": 28869,
+   "text": "crate::svg::comment_text(&format!(\"link {} to end\", &from.label))",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/archimate.rs",
+   "line": 629,
+   "text": "svg_comment = crate::svg::comment_text(&format!(\"cluster {}\", &group.label)),",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 13916,
+   "text": "svg_comment = crate::svg::comment_text(&format!(\"link {} to {}\" , &from_name, &to_name)),",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 13916,
+   "text": "svg_comment = crate::svg::comment_text(&format!(\"link {} to {}\" , &from_name, &to_name)),",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::too_many_arguments",
+   "file": "crates/rustuml-render/src/deployment.rs",
+   "line": 3310,
+   "text": "fn render_connection(",
+   "message": "this function has too many arguments (8/7)"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/object.rs",
+   "line": 1102,
+   "text": "svg_comment = crate::svg::comment_text(&format!(\"cluster {}\", &cluster.qname)),",
+   "message": "redundant reference in `format!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::needless_borrow",
+   "file": "crates/rustuml-render/src/state.rs",
+   "line": 7644,
+   "text": "STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),",
+   "message": "this expression creates a reference which is immediately dereferenced by the compiler"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::needless_borrow",
+   "file": "crates/rustuml-render/src/state.rs",
+   "line": 7836,
+   "text": "STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),",
+   "message": "this expression creates a reference which is immediately dereferenced by the compiler"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::needless_borrow",
+   "file": "crates/rustuml-render/src/state.rs",
+   "line": 7878,
+   "text": "STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),",
+   "message": "this expression creates a reference which is immediately dereferenced by the compiler"
+  }
+ ],
+ "base_count": 19,
+ "merge_count": 32,
+ "tip_count": 32
+}

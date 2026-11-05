@@ -1,0 +1,33 @@
+## regenerate font_chain_coverage.rs from the stored extraction (then rustfmt --edition 2024)
+python3 -I tools/font_chain_coverage.py OUT tools/font-chain-reference/monkeyman-round6 --plan-facts docs/parity-reviews/tim-builtin-value-boundaries/maker-round6-claude/cross-kern-facts-colossus.tsv LUCIDA_GRANDE=LucidaGrande.tsv LUCIDA_GRANDE_BOLD=LucidaGrande-Bold.tsv ARIAL=ArialMT.tsv ARIAL_BOLD=Arial-BoldMT.tsv HELVETICA=Helvetica.tsv HELVETICA_BOLD=Helvetica-Bold.tsv VERDANA=Verdana.tsv VERDANA_BOLD=Verdana-Bold.tsv MENLO=Menlo-Regular.tsv COURIER_NEW=CourierNewPSMT.tsv
+result: byte-identical to crates/rustuml-render/src/font_chain_coverage.rs (sha256 6580e8386cb5f8c4bca3b7c10edb088f48b5f8148fb2f85a9a6e0c2a566ccaab)
+## regenerate font_chain_unicode.rs
+python3 -I tools/font_chain_unicode.py OUT Scripts-3.2.0.txt UnicodeData-16.0.0.txt ScriptRunData.java  # JDK 21.0.13 src.zip ScriptRunData (0 differences asserted); then rustfmt
+result: byte-identical to crates/rustuml-render/src/font_chain_unicode.rs (sha256 13ba7a01bab6a7bf298db8a4f279f9e6fbbd58c6138b41ef0d7fe41a02cc79e5)
+## stored copy vs parent artifact
+diff -r /Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-monkeyman-fontchain/out tools/font-chain-reference/monkeyman-round6: no differences (24 files); SHA256SUMS sha256 1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed
+## Lucida Grande cmap/advances on colossus (same macOS build 26B123): swift tools/cmap.swift
+LucidaGrande	LucidaGrande	A	1	2	648.0
+LucidaGrande	LucidaGrande	D	1	2	648.0
+LucidaGrande	LucidaGrande	9	1	2	648.0
+LucidaGrande	LucidaGrande	20	1	3	648.0
+LucidaGrande	LucidaGrande	5D0	1	608	1321.0
+LucidaGrande	LucidaGrande	627	0	0	1536.0
+LucidaGrande	LucidaGrande	710	0	0	1536.0
+LucidaGrande	LucidaGrande	FB1D	0	0	1536.0
+LucidaGrande-Bold	LucidaGrande-Bold	A	1	2	675.0
+LucidaGrande-Bold	LucidaGrande-Bold	D	1	2	675.0
+LucidaGrande-Bold	LucidaGrande-Bold	9	1	2	675.0
+LucidaGrande-Bold	LucidaGrande-Bold	20	1	3	675.0
+LucidaGrande-Bold	LucidaGrande-Bold	5D0	1	608	1342.0
+LucidaGrande-Bold	LucidaGrande-Bold	627	0	0	1536.0
+LucidaGrande-Bold	LucidaGrande-Bold	710	0	0	1536.0
+LucidaGrande-Bold	LucidaGrande-Bold	FB1D	0	0	1536.0
+Helvetica	Helvetica	A	1	2	569.0
+Helvetica	Helvetica	D	1	2	569.0
+Helvetica	Helvetica	9	1	2	569.0
+Helvetica	Helvetica	20	1	3	569.0
+Helvetica	Helvetica	5D0	0	0	1298.0
+Helvetica	Helvetica	627	0	0	1298.0
+Helvetica	Helvetica	710	0	0	1298.0
+Helvetica	Helvetica	FB1D	0	0	1298.0

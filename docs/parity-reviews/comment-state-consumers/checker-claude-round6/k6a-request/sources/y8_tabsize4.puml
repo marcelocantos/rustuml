@@ -1,0 +1,5 @@
+@startyaml
+skinparam tabSize 4
+k: "a\tb"
+m: wide\tz
+@endyaml

@@ -1,0 +1,1030 @@
+{
+ "batch": "K6A",
+ "cases": [
+  {
+   "name": "y8_block_inner_pipe",
+   "axes": [
+    "yaml",
+    "| block whose body has a line ending in ': |'"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_relative_indent",
+   "axes": [
+    "yaml",
+    "| block, deeper-indented body line (cleanBlockStyle trims)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_spaced_pipe",
+   "axes": [
+    "yaml",
+    "| block header with several spaces after the colon"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_comment_pipe",
+   "axes": [
+    "yaml",
+    "| block header followed by a YAML comment"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_two_blocks_end",
+   "axes": [
+    "yaml",
+    "two | blocks, the second at the end of the document, trailing blank lines"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_dash_body",
+   "axes": [
+    "yaml",
+    "| block whose body lines start with '- '"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_nested_key",
+   "axes": [
+    "yaml",
+    "| block under a nested key (depth 2)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_whitespace_lines",
+   "axes": [
+    "yaml",
+    "| block with space-only and tab-only lines (StyleExtractor drop)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_list_key_block",
+   "axes": [
+    "yaml",
+    "list item key with | block (Java YamlParser wip3)"
+   ],
+   "intended_valid": false
+  },
+  {
+   "name": "y8_folded",
+   "axes": [
+    "yaml",
+    "> folded block (Java YamlParser wip4)"
+   ],
+   "intended_valid": false
+  },
+  {
+   "name": "y8_escape_backslash_pairs",
+   "axes": [
+    "yaml",
+    "doubled backslashes quoted and plain; \\\\ before n"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_escape_unknown_pairs",
+   "axes": [
+    "yaml",
+    "unknown escape pairs kept"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_escape_trailing",
+   "axes": [
+    "yaml",
+    "trailing single backslash; value of one doubled backslash"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_escape_key_tab",
+   "axes": [
+    "yaml",
+    "\\t in keys (bold tab stops)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_real_tab_value",
+   "axes": [
+    "yaml",
+    "literal TAB inside values (YamlLine replaces TAB by four spaces)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_escape_n_then_t",
+   "axes": [
+    "yaml",
+    "\\t at line starts after \\n"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_align_mixed",
+   "axes": [
+    "yaml",
+    "mixed \\l and \\r natural alignment, last wins"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_flow_seq_escapes",
+   "axes": [
+    "yaml",
+    "flow sequence items with escapes"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_deep_nested_escape",
+   "axes": [
+    "yaml",
+    "depth 3, \\n in key, \\t in value"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_whitespace_values",
+   "axes": [
+    "yaml",
+    "space-only, tab-escape-only and padded values"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_blank_lines_everywhere",
+   "axes": [
+    "yaml",
+    "leading, interleaved and nested blank and whitespace-only lines"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_crlf",
+   "axes": [
+    "yaml",
+    "CRLF line ends throughout"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_inner_pipe_end",
+   "axes": [
+    "yaml",
+    "| block whose last body line ends in ': |', end of document"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_block_inner_pipe_nested",
+   "axes": [
+    "yaml",
+    "nested | block whose body has a line ending in ': |'"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "s8_chr10_seq",
+   "axes": [
+    "real LF",
+    "%chr(10) inside a sequence message"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "s8_chr13_seq",
+   "axes": [
+    "real CR",
+    "%chr(13) inside a sequence message"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "s8_chr13_class",
+   "axes": [
+    "real CR",
+    "%chr(13) inside a class display name"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "y8_tabsize4",
+   "axes": [
+    "yaml",
+    "skinparam tabSize 4 (AtomText tab stop from FontConfiguration.tabSize)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_tabsize4",
+   "axes": [
+    "json",
+    "skinparam tabSize 4 with decoded TAB"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_decoded_tab",
+   "axes": [
+    "json",
+    "decoded TAB (real U+0009), tab after a token wider than one stop"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_decoded_cr",
+   "axes": [
+    "json",
+    "decoded CR (real U+000D) mid-line"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_decoded_crlf_tail",
+   "axes": [
+    "json",
+    "decoded CR LF at the end of a value"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_decoded_backslash",
+   "axes": [
+    "json",
+    "decoded backslash pairs: \\b unknown, \\n newline, doubled backslash then n"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_unicode_lf",
+   "axes": [
+    "json",
+    "\\u000A and \\u0009 escapes"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_tab_bold_key",
+   "axes": [
+    "json",
+    "decoded TAB in keys (bold)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_empty_space",
+   "axes": [
+    "json",
+    "empty, space-only, padded values"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_array_escapes",
+   "axes": [
+    "json",
+    "top-level array with escapes, nested array"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_nested_uneven",
+   "axes": [
+    "json",
+    "nested boxes with uneven multi-line rows"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_highlight_tab_key",
+   "axes": [
+    "json",
+    "highlighted row whose key has a TAB and value two lines"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "j8_crlf",
+   "axes": [
+    "json",
+    "CRLF line ends"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "m8_json_class",
+   "axes": [
+    "model json",
+    "json element in a class diagram: escapes"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "m8_json_usecase",
+   "axes": [
+    "model json",
+    "json element mixed into a usecase diagram"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "m8_json_crlf",
+   "axes": [
+    "model json",
+    "CRLF, doubled backslash"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "m8_class_crlf_label",
+   "axes": [
+    "crlf",
+    "class diagram with CRLF line ends (real CR never measured)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "m8_seq_crlf",
+   "axes": [
+    "crlf",
+    "sequence with CRLF line ends"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_u17_1ad0",
+   "axes": [
+    "mark",
+    "U+1AD0 Mn only from Unicode 17 (Cn in HarfBuzz 10.0.1's UCD 16): discriminates the loaded HarfBuzz"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_u17_1e6e3",
+   "axes": [
+    "mark",
+    "U+1E6E3 Mn only from Unicode 17, supplementary"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_u18_05c8",
+   "axes": [
+    "mark",
+    "U+05C8 Mn only from Unicode 18 (HarfBuzz 14.6+), Hebrew block (complex)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_u16_113bb",
+   "axes": [
+    "mark",
+    "U+113BB Tulu-Tigalari Mn (Unicode 16), new block"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_u16_10d69",
+   "axes": [
+    "mark",
+    "U+10D69 Garay Mn (Unicode 16)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_u16_1612d",
+   "axes": [
+    "mark",
+    "U+1612D Gurung Khema Mn (Unicode 16)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_me_1abe",
+   "axes": [
+    "mark",
+    "U+1ABE Me (enclosing): not synthesized as MARK"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_mc_11f03",
+   "axes": [
+    "mark",
+    "U+11F03 Kawi Mc: not zeroed"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_helv_hebrew",
+   "axes": [
+    "mark",
+    "Helvetica primary; Hebrew base from the Lucida Grande slot; mark alone in the Helvetica buffer"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_helv_hebrew_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_helv_hebrew without the mark"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_lucida_arabic",
+   "axes": [
+    "mark",
+    "Lucida Grande primary; Arabic base from the Geeza Pro slot; mark alone in its buffer"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_lucida_arabic_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_lucida_arabic"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_lucida_syriac",
+   "axes": [
+    "mark",
+    "Syriac base unmapped everywhere (slot 0, same buffer): arabic shaper fallback zeroes"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_helv_hebrew_pres",
+   "axes": [
+    "mark",
+    "Helvetica; Hebrew FB1D unmapped everywhere (same buffer)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_lucida_devanagari",
+   "axes": [
+    "mark",
+    "Devanagari base (Kohinoor slot): indic shaper, never zeroed"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_lucida_devanagari_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_lucida_devanagari"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_cjk_base",
+   "axes": [
+    "mark",
+    "Han base (PingFang slot): default shaper zeroes regardless"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_cjk_base_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_cjk_base"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_hebrew_lead_mark",
+   "axes": [
+    "mark",
+    "leading mark in a Hebrew run, no base"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_menlo_hebrew",
+   "axes": [
+    "mark",
+    "Monospaced (Menlo) maps Hebrew itself: same buffer"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_seq_arabic",
+   "axes": [
+    "mark",
+    "sequence message, Arabic base from another slot"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_sans_9",
+   "axes": [
+    "mark",
+    "family sans",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_sans_23",
+   "axes": [
+    "mark",
+    "family sans",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_helv_9",
+   "axes": [
+    "mark",
+    "family helv",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_helv_23",
+   "axes": [
+    "mark",
+    "family helv",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_mono_9",
+   "axes": [
+    "mark",
+    "family mono",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_mono_23",
+   "axes": [
+    "mark",
+    "family mono",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_serif_9",
+   "axes": [
+    "mark",
+    "family serif",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_serif_23",
+   "axes": [
+    "mark",
+    "family serif",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_verdana_9",
+   "axes": [
+    "mark",
+    "family verdana",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_verdana_23",
+   "axes": [
+    "mark",
+    "family verdana",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_arial_9",
+   "axes": [
+    "mark",
+    "family arial",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_arial_23",
+   "axes": [
+    "mark",
+    "family arial",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_couriernew_9",
+   "axes": [
+    "mark",
+    "family couriernew",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_couriernew_23",
+   "axes": [
+    "mark",
+    "family couriernew",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk8_sans_bold_23",
+   "axes": [
+    "mark",
+    "Lucida Grande Bold",
+    "size 23"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_31b8_simple",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 31B8-31BF",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_31b8_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 31B8-31BF",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_324a_simple",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 3248-324F",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_324a_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 3248-324F",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_fe22_simple",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only FE20-FE23",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_fe22_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only FE20-FE23",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_1f105_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset 1F101-1F10A",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_327e_simple",
+   "axes": [
+    "font environment",
+    "simple-path only on Monkey Man 327E",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_327e_complex",
+   "axes": [
+    "font environment",
+    "simple-path only on Monkey Man 327E",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f830_simple",
+   "axes": [
+    "font environment",
+    "simple-path F828-F83B",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f830_complex",
+   "axes": [
+    "font environment",
+    "simple-path F828-F83B",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_fa2e_simple",
+   "axes": [
+    "font environment",
+    "simple-path FA2E-FA2F",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_fa2e_complex",
+   "axes": [
+    "font environment",
+    "simple-path FA2E-FA2F",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f881_simple",
+   "axes": [
+    "font environment",
+    "simple-path F880-F881 (LiHeiPro)",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f881_complex",
+   "axes": [
+    "font environment",
+    "simple-path F880-F881 (LiHeiPro)",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_218a_simple",
+   "axes": [
+    "font environment",
+    "user font 218A",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_218a_complex",
+   "axes": [
+    "font environment",
+    "user font 218A",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f851_simple",
+   "axes": [
+    "font environment",
+    "user font F851-F85E",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f851_complex",
+   "axes": [
+    "font environment",
+    "user font F851-F85E",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f8c0_simple",
+   "axes": [
+    "font environment",
+    "user font F8B7-F8FE",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f8c0_complex",
+   "axes": [
+    "font environment",
+    "user font F8B7-F8FE",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f8fe_simple",
+   "axes": [
+    "font environment",
+    "user font F8FE",
+    "simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe8_f8fe_complex",
+   "axes": [
+    "font environment",
+    "user font F8FE",
+    "complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_outer_pier_jetty_mm",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_outer_harbour_ko_pier",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_outer_mm_pier_il",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_outer_dock_mm_harbour",
+   "axes": [
+    "canvas",
+    "outer path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_outer_buoy_mm_lighthouse",
+   "axes": [
+    "canvas",
+    "outer path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_root_pier_jetty_mm",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_root_quay_dock_harbour",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_root_wharf_anchorage_pier",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_rootlate_quay_mooring_wharf",
+   "axes": [
+    "canvas",
+    "rootlate path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_rootlate_mooring_pier_ko",
+   "axes": [
+    "canvas",
+    "rootlate path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_flat_mooring_harbour_slipway",
+   "axes": [
+    "canvas",
+    "flat path",
+    "flat state path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_flat_ko_jetty_mm",
+   "axes": [
+    "canvas",
+    "flat path",
+    "flat state path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_class_note",
+   "axes": [
+    "canvas",
+    "class family (svek)",
+    "short labels"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_usecase",
+   "axes": [
+    "canvas",
+    "usecase family"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_component",
+   "axes": [
+    "canvas",
+    "component family"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv8_activity",
+   "axes": [
+    "canvas",
+    "activity family"
+   ],
+   "intended_valid": true
+  }
+ ]
+}

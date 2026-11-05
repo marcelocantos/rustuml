@@ -1,0 +1,6 @@
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... FAILED
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (53280069) panicked at crates/rustuml-render/src/font_chain.rs:542:9:
+assertion `left == right` failed
+  left: "c0cf293a2b9b5da59d9a6515666bcccf768e2fd48fbc4e129357e6d896a581b4"
+ right: "1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed"
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 846 filtered out; finished in 0.00s

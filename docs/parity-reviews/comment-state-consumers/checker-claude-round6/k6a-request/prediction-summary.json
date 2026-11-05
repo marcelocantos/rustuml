@@ -1,0 +1,7831 @@
+{
+ "batch": "K6A",
+ "registered_before_java": true,
+ "rust_predictions_sha256": "31b7fcf5693f788ebc2d56530979e8edfbd94a0bce3334a4328ce834a6122264",
+ "builds": {
+  "base": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round6-claude-checker/bin/rustuml-8317cf006",
+   "sha256": "00094ef50e529f8013c1b12c24ac163de5b069e597ce343392d237125d5db15e"
+  },
+  "merge": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round6-claude-checker/bin/rustuml-fc44ee58c",
+   "sha256": "15b48398c25fc395a01555f152fdf31673bf83f1df7817d1a016b015e7624152"
+  },
+  "tip": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round6-claude-checker/bin/rustuml-7e9b16f52",
+   "sha256": "8cb25352b7ad9ca57bb7214227465b05df1623957e70ff9e4ce0d8f374445fd0"
+  }
+ },
+ "cases": 120,
+ "tip_differs_from_merge": [
+  "y8_block_inner_pipe",
+  "y8_block_relative_indent",
+  "y8_block_spaced_pipe",
+  "y8_block_comment_pipe",
+  "y8_block_two_blocks_end",
+  "y8_block_dash_body",
+  "y8_block_nested_key",
+  "y8_block_whitespace_lines",
+  "y8_list_key_block",
+  "y8_folded",
+  "y8_escape_backslash_pairs",
+  "y8_escape_trailing",
+  "y8_escape_key_tab",
+  "y8_real_tab_value",
+  "y8_escape_n_then_t",
+  "y8_align_mixed",
+  "y8_flow_seq_escapes",
+  "y8_deep_nested_escape",
+  "y8_whitespace_values",
+  "y8_blank_lines_everywhere",
+  "y8_crlf",
+  "y8_block_inner_pipe_end",
+  "y8_block_inner_pipe_nested",
+  "s8_chr13_seq",
+  "s8_chr13_class",
+  "j8_decoded_tab",
+  "j8_decoded_cr",
+  "j8_decoded_crlf_tail",
+  "j8_decoded_backslash",
+  "j8_unicode_lf",
+  "j8_tab_bold_key",
+  "j8_empty_space",
+  "j8_array_escapes",
+  "j8_nested_uneven",
+  "j8_highlight_tab_key",
+  "j8_crlf",
+  "mk8_u16_113bb",
+  "mk8_u16_10d69",
+  "mk8_u16_1612d",
+  "mk8_helv_hebrew",
+  "mk8_lucida_arabic",
+  "mk8_lucida_syriac",
+  "mk8_helv_hebrew_pres",
+  "mk8_cjk_base",
+  "mk8_menlo_hebrew",
+  "mk8_seq_arabic",
+  "mk8_sans_9",
+  "mk8_sans_23",
+  "mk8_helv_9",
+  "mk8_helv_23",
+  "mk8_mono_9",
+  "mk8_mono_23",
+  "mk8_serif_9",
+  "mk8_serif_23",
+  "mk8_sans_bold_23",
+  "fe8_31b8_complex",
+  "fe8_324a_complex",
+  "fe8_fe22_complex",
+  "fe8_1f105_complex",
+  "fe8_327e_simple",
+  "fe8_f830_simple",
+  "fe8_fa2e_simple",
+  "fe8_f881_simple",
+  "fe8_218a_simple",
+  "fe8_f851_simple",
+  "fe8_f8c0_simple",
+  "fe8_f8fe_simple",
+  "cv8_outer_pier_jetty_mm",
+  "cv8_outer_harbour_ko_pier",
+  "cv8_outer_mm_pier_il",
+  "cv8_root_pier_jetty_mm",
+  "cv8_root_quay_dock_harbour",
+  "cv8_root_wharf_anchorage_pier",
+  "cv8_rootlate_quay_mooring_wharf",
+  "cv8_rootlate_mooring_pier_ko"
+ ],
+ "rows": [
+  {
+   "name": "y8_block_inner_pipe",
+   "axes": [
+    "yaml",
+    "| block whose body has a line ending in ': |'"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 226 62",
+    "stdout_sha256": "06ef6301ab918e09f87c8596f51374117cdc676c73eb6858317656442d646944",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "149.7344",
+      "example: |\nplain line\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 226 62",
+    "stdout_sha256": "06ef6301ab918e09f87c8596f51374117cdc676c73eb6858317656442d646944",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "149.7344",
+      "example: |\nplain line\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 230 62",
+    "stdout_sha256": "f02d092bd7c98c61ea56bb0b088f5473aa942f06a649f84bc9177b9316faa8f0",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "149.8301",
+      "example: |+\nplain line"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_relative_indent",
+   "axes": [
+    "yaml",
+    "| block, deeper-indented body line (cleanBlockStyle trims)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 206 62",
+    "stdout_sha256": "b53ead26484bf0808209c232c721064a0688183d576e4f3dea16c44786f134da",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "129.9717",
+      "Moss\n  Fern\nReed\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 206 62",
+    "stdout_sha256": "b53ead26484bf0808209c232c721064a0688183d576e4f3dea16c44786f134da",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "129.9717",
+      "Moss\n  Fern\nReed\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 196 62",
+    "stdout_sha256": "34865b61d3e129ab9d198f0359144633c0ab9f1f9261e7c1251f3ff42dc057fc",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "115.6367",
+      "Moss\n  Fern\nReed"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_spaced_pipe",
+   "axes": [
+    "yaml",
+    "| block header with several spaces after the colon"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 156 62",
+    "stdout_sha256": "88abf4f154f2888cf2e3ef6a583f7ad3a69d653ea7119e979a47a5739d7e4091",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "80.1172",
+      "Moss\nFern\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 156 62",
+    "stdout_sha256": "88abf4f154f2888cf2e3ef6a583f7ad3a69d653ea7119e979a47a5739d7e4091",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "80.1172",
+      "Moss\nFern\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 149 62",
+    "stdout_sha256": "ad88eb293d07f1413b9ef71fd94e1f35eb9a6ab938ac7956c1cf1e7ea541d868",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "69.084",
+      "Moss\nFern"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_comment_pipe",
+   "axes": [
+    "yaml",
+    "| block header followed by a YAML comment"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 156 62",
+    "stdout_sha256": "88abf4f154f2888cf2e3ef6a583f7ad3a69d653ea7119e979a47a5739d7e4091",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "80.1172",
+      "Moss\nFern\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 156 62",
+    "stdout_sha256": "88abf4f154f2888cf2e3ef6a583f7ad3a69d653ea7119e979a47a5739d7e4091",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "80.1172",
+      "Moss\nFern\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 149 62",
+    "stdout_sha256": "ad88eb293d07f1413b9ef71fd94e1f35eb9a6ab938ac7956c1cf1e7ea541d868",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "69.084",
+      "Moss\nFern"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_two_blocks_end",
+   "axes": [
+    "yaml",
+    "two | blocks, the second at the end of the document, trailing blank lines"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 84 62",
+    "stdout_sha256": "7068043ea8c5f4c147d1c1055d08240c340c15deb2eee2e48e427711dad0562c",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "32.8193",
+      "one\n"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "32.3545",
+      "two\n"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 84 62",
+    "stdout_sha256": "7068043ea8c5f4c147d1c1055d08240c340c15deb2eee2e48e427711dad0562c",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "32.8193",
+      "one\n"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "32.3545",
+      "two\n"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 80 62",
+    "stdout_sha256": "28b2160e895a775ec8b2b2bf322625ee779b5f78d2a0a24dbadb85fa600c77d2",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "25.0879",
+      "one"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "24.623",
+      "two"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_dash_body",
+   "axes": [
+    "yaml",
+    "| block whose body lines start with '- '"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 197 62",
+    "stdout_sha256": "98583efd641e0b0aaa5a27a58849562a120e53899b314409216286047eec87c3",
+    "texts": [
+     [
+      "38.9854",
+      "steps"
+     ],
+     [
+      "116.0264",
+      "- first\n- second\n"
+     ],
+     [
+      "26.6738",
+      "end"
+     ],
+     [
+      "8.0254",
+      "z"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 197 62",
+    "stdout_sha256": "98583efd641e0b0aaa5a27a58849562a120e53899b314409216286047eec87c3",
+    "texts": [
+     [
+      "38.9854",
+      "steps"
+     ],
+     [
+      "116.0264",
+      "- first\n- second\n"
+     ],
+     [
+      "26.6738",
+      "end"
+     ],
+     [
+      "8.0254",
+      "z"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 190 62",
+    "stdout_sha256": "acc1201ab8c8406ba08c5ca6b0b4233e17f50c44faaf8a3b563db14aa1348945",
+    "texts": [
+     [
+      "38.9854",
+      "steps"
+     ],
+     [
+      "104.9932",
+      "- first\n- second"
+     ],
+     [
+      "26.6738",
+      "end"
+     ],
+     [
+      "8.0254",
+      "z"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_nested_key",
+   "axes": [
+    "yaml",
+    "| block under a nested key (depth 2)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 268 62",
+    "stdout_sha256": "b7ffdf9b25966dce14ac94e6d173b1687c191c7102718ae35ed64b7deb817a45",
+    "texts": [
+     [
+      "38.377",
+      "outer"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "37.5088",
+      "inner"
+     ],
+     [
+      "80.1172",
+      "Moss\nFern\n"
+     ],
+     [
+      "29.9482",
+      "side"
+     ],
+     [
+      "8.8115",
+      "q"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 268 62",
+    "stdout_sha256": "b7ffdf9b25966dce14ac94e6d173b1687c191c7102718ae35ed64b7deb817a45",
+    "texts": [
+     [
+      "38.377",
+      "outer"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "37.5088",
+      "inner"
+     ],
+     [
+      "80.1172",
+      "Moss\nFern\n"
+     ],
+     [
+      "29.9482",
+      "side"
+     ],
+     [
+      "8.8115",
+      "q"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 262 62",
+    "stdout_sha256": "6bd3ec04aaf627f1c6f668ed7e30f0b4f449f094a28cbd043e445d61d4c7d0ec",
+    "texts": [
+     [
+      "38.377",
+      "outer"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "37.5088",
+      "inner"
+     ],
+     [
+      "69.084",
+      "Moss\nFern"
+     ],
+     [
+      "29.9482",
+      "side"
+     ],
+     [
+      "8.8115",
+      "q"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_whitespace_lines",
+   "axes": [
+    "yaml",
+    "| block with space-only and tab-only lines (StyleExtractor drop)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "merge": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 149 62",
+    "stdout_sha256": "ad88eb293d07f1413b9ef71fd94e1f35eb9a6ab938ac7956c1cf1e7ea541d868",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "69.084",
+      "Moss\nFern"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_list_key_block",
+   "axes": [
+    "yaml",
+    "list item key with | block (Java YamlParser wip3)"
+   ],
+   "intended_valid": false,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 286 42",
+    "stdout_sha256": "3310db407253db422e602ef362fe3435d62cd10cd3d669e3aee966b319de07ca",
+    "texts": [
+     [
+      "39.9219",
+      "items"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "39.2041",
+      "name"
+     ],
+     [
+      "34.9316",
+      "Moss"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 286 42",
+    "stdout_sha256": "3310db407253db422e602ef362fe3435d62cd10cd3d669e3aee966b319de07ca",
+    "texts": [
+     [
+      "39.9219",
+      "items"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "39.2041",
+      "name"
+     ],
+     [
+      "34.9316",
+      "Moss"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 290 42",
+    "stdout_sha256": "b5cb345bb2138d8c7ec1f773385750bf886f8f88dde897c3f6e46b5fc78db625",
+    "texts": [
+     [
+      "39.9219",
+      "items"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "39.2041",
+      "name"
+     ],
+     [
+      "34.9316",
+      "Moss"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_folded",
+   "axes": [
+    "yaml",
+    "> folded block (Java YamlParser wip4)"
+   ],
+   "intended_valid": false,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 153 62",
+    "stdout_sha256": "80c13bde7f81839b5aa40fef4273641cfa4b7ab5df558c50939c4337b537175c",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "76.8154",
+      "Moss Fern\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 153 62",
+    "stdout_sha256": "80c13bde7f81839b5aa40fef4273641cfa4b7ab5df558c50939c4337b537175c",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "76.8154",
+      "Moss Fern\n"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 149 62",
+    "stdout_sha256": "f4f762c11d4b9edce9b3933009a352c9c81bba9dbe694c6ba9112abeea23e321",
+    "texts": [
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "69.084",
+      "Moss Fern"
+     ],
+     [
+      "34.2754",
+      "after"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_escape_backslash_pairs",
+   "axes": [
+    "yaml",
+    "doubled backslashes quoted and plain; \\\\ before n"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 166 62",
+    "stdout_sha256": "9251ea9494cc4a963d3fb708cbd1d87650039da163f5cd7b3abccc7ead8472fc",
+    "texts": [
+     [
+      "32.375",
+      "path"
+     ],
+     [
+      "88.8398",
+      "C:\\dock\\new"
+     ],
+     [
+      "35.8066",
+      "plain"
+     ],
+     [
+      "31.2266",
+      "a\\\\b"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 181 62",
+    "stdout_sha256": "27fb0c2314c943f3432eed69a85e5453863344db78466734d682ef8eaf666896",
+    "texts": [
+     [
+      "32.375",
+      "path"
+     ],
+     [
+      "103.5234",
+      "C:\\\\dock\\\\new"
+     ],
+     [
+      "35.8066",
+      "plain"
+     ],
+     [
+      "31.2266",
+      "a\\\\b"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 166 62",
+    "stdout_sha256": "d3ef6083445d1ea098927eac2f28aa1085b952188846b87b82ef801e41ab090a",
+    "texts": [
+     [
+      "32.375",
+      "path"
+     ],
+     [
+      "88.8398",
+      "C:\\dock\\new"
+     ],
+     [
+      "35.8066",
+      "plain"
+     ],
+     [
+      "23.8848",
+      "a\\b"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_escape_unknown_pairs",
+   "axes": [
+    "yaml",
+    "unknown escape pairs kept"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 168 42",
+    "stdout_sha256": "4ba78d377eeb93acee7bd17c0eeae38c8cd2b58fdb256e360c72417003eaa1fa",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "117.7695",
+      "a\\qb\\x41\\u0042"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 168 42",
+    "stdout_sha256": "4ba78d377eeb93acee7bd17c0eeae38c8cd2b58fdb256e360c72417003eaa1fa",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "117.7695",
+      "a\\qb\\x41\\u0042"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 168 42",
+    "stdout_sha256": "4ba78d377eeb93acee7bd17c0eeae38c8cd2b58fdb256e360c72417003eaa1fa",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "117.7695",
+      "a\\qb\\x41\\u0042"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "y8_escape_trailing",
+   "axes": [
+    "yaml",
+    "trailing single backslash; value of one doubled backslash"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 86 62",
+    "stdout_sha256": "5ac7e4929f05ba5167b50e2e4412d47fa424d4618d424eb1669ac3b718ff8947",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "31.0557",
+      "abc\\"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "14.6836",
+      "\\\\"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 86 62",
+    "stdout_sha256": "5ac7e4929f05ba5167b50e2e4412d47fa424d4618d424eb1669ac3b718ff8947",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "31.0557",
+      "abc\\"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "14.6836",
+      "\\\\"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 86 62",
+    "stdout_sha256": "606399a64934996111b77efb1c6a7eeaf45135ad5f0dac5f290804846dcaac9a",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "31.0557",
+      "abc\\"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "7.3418",
+      "\\"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_escape_key_tab",
+   "axes": [
+    "yaml",
+    "\\t in keys (bold tab stops)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 138 62",
+    "stdout_sha256": "e5fe7364bfa174528a8c147b34b54e951be33204f4c35b4cbf9eb7f8a86708e0",
+    "texts": [
+     [
+      "31.0967",
+      "a\\tb"
+     ],
+     [
+      "7.2461",
+      "v"
+     ],
+     [
+      "85.8115",
+      "wide key\\tz"
+     ],
+     [
+      "10.7871",
+      "w"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 138 62",
+    "stdout_sha256": "e5fe7364bfa174528a8c147b34b54e951be33204f4c35b4cbf9eb7f8a86708e0",
+    "texts": [
+     [
+      "31.0967",
+      "a\\tb"
+     ],
+     [
+      "7.2461",
+      "v"
+     ],
+     [
+      "85.8115",
+      "wide key\\tz"
+     ],
+     [
+      "10.7871",
+      "w"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 134 62",
+    "stdout_sha256": "54e06dd9291f4cf9f892d9e597b9f05943210dab17e1bab64b6aaae44c9ed11a",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "7.2461",
+      "v"
+     ],
+     [
+      "63.9502",
+      "wide key"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "10.7871",
+      "w"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_real_tab_value",
+   "axes": [
+    "yaml",
+    "literal TAB inside values (YamlLine replaces TAB by four spaces)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 83 62",
+    "stdout_sha256": "fb30f20970c6ae1aa08e5d09b8f90570c41b7c1241f01655897699cbf888b94a",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\tb"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "28.3896",
+      "lead"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 83 62",
+    "stdout_sha256": "fb30f20970c6ae1aa08e5d09b8f90570c41b7c1241f01655897699cbf888b94a",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\tb"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "28.3896",
+      "lead"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 99 62",
+    "stdout_sha256": "d4d95ae6351269c2398904475b458900cad4f98791c9555fdf897f039be480b9",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "7.7314",
+      "a"
+     ],
+     [
+      "8.8115",
+      "b"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "28.3896",
+      "lead"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_escape_n_then_t",
+   "axes": [
+    "yaml",
+    "\\t at line starts after \\n"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 113 42",
+    "stdout_sha256": "f4483ed94c4136900b462cef07d0163d7066d1cb6560912073c122f8d8f2052e",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "62.3711",
+      "a\n\tb\n\t\tc"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 144 42",
+    "stdout_sha256": "334dbef52fa9ba823d8fd314d28d0f022edde7ec9f8d677dc0c05516efac7cef",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "93.5088",
+      "a\\n\\tb\\n\\t\\tc"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 128 75",
+    "stdout_sha256": "0cc7008a65eea253f0f94f7236b5b4fe66a82e21c68c4994897d904be29a6622",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "7.7314",
+      "a"
+     ],
+     [
+      "8.8115",
+      "b"
+     ],
+     [
+      "7.1709",
+      "c"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_align_mixed",
+   "axes": [
+    "yaml",
+    "mixed \\l and \\r natural alignment, last wins"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 164 62",
+    "stdout_sha256": "0e8cf1ed9e9e4985ed977403b6b0647764c7819bed0e51b0e2a2494f6ab805cc",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "109.4229",
+      "one\\ltwo\\rthree"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "48.3848",
+      "x\\ry\\lz"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 164 62",
+    "stdout_sha256": "0e8cf1ed9e9e4985ed977403b6b0647764c7819bed0e51b0e2a2494f6ab805cc",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "109.4229",
+      "one\\ltwo\\rthree"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "48.3848",
+      "x\\ry\\lz"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 90 128",
+    "stdout_sha256": "e08131e9a95ea2faa4ae768dbe2309caf61dc634590c272abddcf4b9381541b2",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "25.0879",
+      "one"
+     ],
+     [
+      "24.623",
+      "two"
+     ],
+     [
+      "35.2529",
+      "three"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "8.5859",
+      "x"
+     ],
+     [
+      "7.3145",
+      "y"
+     ],
+     [
+      "8.0254",
+      "z"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_flow_seq_escapes",
+   "axes": [
+    "yaml",
+    "flow sequence items with escapes"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 143 83",
+    "stdout_sha256": "5033f114442ac3d96d22483093768212e47c78aff886de767dcff599618a08b7",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "32.5732",
+      "a\\nb"
+     ],
+     [
+      "23.3242",
+      "c\\d"
+     ],
+     [
+      "25.5254",
+      "e\\tf"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 143 83",
+    "stdout_sha256": "5033f114442ac3d96d22483093768212e47c78aff886de767dcff599618a08b7",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "32.5732",
+      "a\\nb"
+     ],
+     [
+      "23.3242",
+      "c\\d"
+     ],
+     [
+      "25.5254",
+      "e\\tf"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 151 99",
+    "stdout_sha256": "49e3f3b585df559c7964214dabe23e5562d7993515304c132d4036bcb9d48e9b",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "7.7314",
+      "a"
+     ],
+     [
+      "8.8115",
+      "b"
+     ],
+     [
+      "23.3242",
+      "c\\d"
+     ],
+     [
+      "7.7998",
+      "e"
+     ],
+     [
+      "5.1475",
+      "f"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_deep_nested_escape",
+   "axes": [
+    "yaml",
+    "depth 3, \\n in key, \\t in value"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 296 62",
+    "stdout_sha256": "f9d5d6655ebf36148479508a955128d2a58bd2f3ee9612a6e3447f85ef7182c6",
+    "texts": [
+     [
+      "13.7881",
+      "l1"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "13.7881",
+      "l2"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "56.123",
+      "l3\\nkey"
+     ],
+     [
+      "30.6113",
+      "v\\tw"
+     ],
+     [
+      "38.377",
+      "other"
+     ],
+     [
+      "14.6836",
+      "\\\\"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 296 62",
+    "stdout_sha256": "f9d5d6655ebf36148479508a955128d2a58bd2f3ee9612a6e3447f85ef7182c6",
+    "texts": [
+     [
+      "13.7881",
+      "l1"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "13.7881",
+      "l2"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "56.123",
+      "l3\\nkey"
+     ],
+     [
+      "30.6113",
+      "v\\tw"
+     ],
+     [
+      "38.377",
+      "other"
+     ],
+     [
+      "14.6836",
+      "\\\\"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 294 79",
+    "stdout_sha256": "c7c8a1bdf8269d4c85aea2f60608e02f5fbc796f43ca48186485d5f28a296396",
+    "texts": [
+     [
+      "13.7881",
+      "l1"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "13.7881",
+      "l2"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "13.7881",
+      "l3"
+     ],
+     [
+      "25.2246",
+      "key"
+     ],
+     [
+      "7.2461",
+      "v"
+     ],
+     [
+      "10.7871",
+      "w"
+     ],
+     [
+      "38.377",
+      "other"
+     ],
+     [
+      "7.3418",
+      "\\"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_whitespace_values",
+   "axes": [
+    "yaml",
+    "space-only, tab-escape-only and padded values"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 84 83",
+    "stdout_sha256": "8cb15be8a6a33b794b4c3128fbe92ff1385efbc228afea437790d0f61b84e77d",
+    "texts": [
+     [
+      "17.1924",
+      "sp"
+     ],
+     [
+      "13.2891",
+      "   "
+     ],
+     [
+      "14.9502",
+      "tb"
+     ],
+     [
+      "7.7314",
+      "\t"
+     ],
+     [
+      "26.4004",
+      "mix"
+     ],
+     [
+      "16.5908",
+      " a "
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 84 83",
+    "stdout_sha256": "1dcc58ab2d660bb548b6b15107110e5c6211168a03f19903e105ace78e838ac6",
+    "texts": [
+     [
+      "17.1924",
+      "sp"
+     ],
+     [
+      "13.2891",
+      "   "
+     ],
+     [
+      "14.9502",
+      "tb"
+     ],
+     [
+      "12.5781",
+      "\\t"
+     ],
+     [
+      "26.4004",
+      "mix"
+     ],
+     [
+      "16.5908",
+      " a "
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 103 83",
+    "stdout_sha256": "37bb546fd27332729d63beeca3b03764bf8eb2cdbb93db91d8c7620bdcad2e65",
+    "texts": [
+     [
+      "17.1924",
+      "sp"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "14.9502",
+      "tb"
+     ],
+     [
+      "26.4004",
+      "mix"
+     ],
+     [
+      "7.7314",
+      "a"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_blank_lines_everywhere",
+   "axes": [
+    "yaml",
+    "leading, interleaved and nested blank and whitespace-only lines"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 138 62",
+    "stdout_sha256": "7b7f99298b8bbdb9e052e8ed6dfd69b6f0cb9dfcccd6190ff30f83e5fee5d898",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "7.4512",
+      "c"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 138 62",
+    "stdout_sha256": "7b7f99298b8bbdb9e052e8ed6dfd69b6f0cb9dfcccd6190ff30f83e5fee5d898",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "7.4512",
+      "c"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": true
+  },
+  {
+   "name": "y8_crlf",
+   "axes": [
+    "yaml",
+    "CRLF line ends throughout"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 156 83",
+    "stdout_sha256": "6b5712c466b6975014706196a23b65683dfabe99a98075bc8269adc9641dbc55",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "80.6846",
+      "Moss\\nFern"
+     ],
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "82.0928",
+      "Reed\nRush\n"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "25.2998",
+      "end"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 156 83",
+    "stdout_sha256": "6b5712c466b6975014706196a23b65683dfabe99a98075bc8269adc9641dbc55",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "80.6846",
+      "Moss\\nFern"
+     ],
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "82.0928",
+      "Reed\nRush\n"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "25.2998",
+      "end"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 149 99",
+    "stdout_sha256": "5865091b5cc2174b051b7bd1ba4f73602015f57250e53774c66bb5bd005450f2",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "34.9316",
+      "Moss"
+     ],
+     [
+      "29.7227",
+      "Fern"
+     ],
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "71.0596",
+      "Reed\nRush"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "25.2998",
+      "end"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_inner_pipe_end",
+   "axes": [
+    "yaml",
+    "| block whose last body line ends in ': |', end of document"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 162 62",
+    "stdout_sha256": "c79abd0dc7a4f702b9471362d7f8ba2b393bf675415b269e57a40d5c32d08f5c",
+    "texts": [
+     [
+      "30.3105",
+      "first"
+     ],
+     [
+      "8.5859",
+      "x"
+     ],
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "88.0947",
+      "Moss\nratio: |"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 162 62",
+    "stdout_sha256": "c79abd0dc7a4f702b9471362d7f8ba2b393bf675415b269e57a40d5c32d08f5c",
+    "texts": [
+     [
+      "30.3105",
+      "first"
+     ],
+     [
+      "8.5859",
+      "x"
+     ],
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "88.0947",
+      "Moss\nratio: |"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 174 62",
+    "stdout_sha256": "42564ea2544fafbdebf11f0bb0279b6b1c2fd9a664b2f06c9cbf91addf068a41",
+    "texts": [
+     [
+      "30.3105",
+      "first"
+     ],
+     [
+      "8.5859",
+      "x"
+     ],
+     [
+      "32.0127",
+      "note"
+     ],
+     [
+      "95.9219",
+      "Moss\nratio: |+"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_block_inner_pipe_nested",
+   "axes": [
+    "yaml",
+    "nested | block whose body has a line ending in ': |'"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 234 62",
+    "stdout_sha256": "7f7d62702f3beeb0b6e9c198bd954f6e250d84843051522566eaaaa3dfd25ca1",
+    "texts": [
+     [
+      "38.377",
+      "outer"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "37.5088",
+      "inner"
+     ],
+     [
+      "46.0947",
+      "a: |\nb\n"
+     ],
+     [
+      "29.9482",
+      "side"
+     ],
+     [
+      "8.8115",
+      "q"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 234 62",
+    "stdout_sha256": "7f7d62702f3beeb0b6e9c198bd954f6e250d84843051522566eaaaa3dfd25ca1",
+    "texts": [
+     [
+      "38.377",
+      "outer"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "37.5088",
+      "inner"
+     ],
+     [
+      "46.0947",
+      "a: |\nb\n"
+     ],
+     [
+      "29.9482",
+      "side"
+     ],
+     [
+      "8.8115",
+      "q"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 239 62",
+    "stdout_sha256": "d6db45d91cba7c8157a73fc1ee7eeefee0f0ea1304c83cb42d3556574edda0ed",
+    "texts": [
+     [
+      "38.377",
+      "outer"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "37.5088",
+      "inner"
+     ],
+     [
+      "46.1904",
+      "a: |+\nb"
+     ],
+     [
+      "29.9482",
+      "side"
+     ],
+     [
+      "8.8115",
+      "q"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "s8_chr10_seq",
+   "axes": [
+    "real LF",
+    "%chr(10) inside a sequence message"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 115 123",
+    "stdout_sha256": "3035c9e6296c3c9f7baa7fcea94c831b18b601f375a745c67f7da917e20c144b",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "32.4365",
+      "Moss"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 115 123",
+    "stdout_sha256": "3035c9e6296c3c9f7baa7fcea94c831b18b601f375a745c67f7da917e20c144b",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "32.4365",
+      "Moss"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 115 123",
+    "stdout_sha256": "3035c9e6296c3c9f7baa7fcea94c831b18b601f375a745c67f7da917e20c144b",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "32.4365",
+      "Moss"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "s8_chr13_seq",
+   "axes": [
+    "real CR",
+    "%chr(13) inside a sequence message"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 150 123",
+    "stdout_sha256": "4594148354e4aa0bd10fc20bf020403c74dd8d192cc8e9d4180430f27610b3c2",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "67.2153",
+      "Moss\rFern"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 150 123",
+    "stdout_sha256": "4594148354e4aa0bd10fc20bf020403c74dd8d192cc8e9d4180430f27610b3c2",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "67.2153",
+      "Moss\rFern"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 147 123",
+    "stdout_sha256": "570dee4bdf6fad35d4181f3c0e4514f014044a9b12bae95adfbe2a721470db6d",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "64.1494",
+      "Moss\rFern"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "s8_chr13_class",
+   "axes": [
+    "real CR",
+    "%chr(13) inside a class display name"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 124 68",
+    "stdout_sha256": "6cff0dc1808aff61b5db9fab3b1555f774e0f46934af6ed0565014086a24bf3e",
+    "texts": [
+     [
+      "72.3857",
+      "Moss\rFern"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 124 68",
+    "stdout_sha256": "baa74ef1ec41c22c14c200caba4f8f0e18770fbf47cfdfa90edbb0c8254a7530",
+    "texts": [
+     [
+      "72.3857",
+      "Moss\rFern"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 121 68",
+    "stdout_sha256": "4f893c40d5a012e8837ad8c9c6640645af1da94124cf4c77e519e23b64c92946",
+    "texts": [
+     [
+      "69.084",
+      "Moss\rFern"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "y8_tabsize4",
+   "axes": [
+    "yaml",
+    "skinparam tabSize 4 (AtomText tab stop from FontConfiguration.tabSize)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "merge": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "tip": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "j8_tabsize4",
+   "axes": [
+    "json",
+    "skinparam tabSize 4 with decoded TAB"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "merge": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "tip": {
+    "exit": 1,
+    "viewBox": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "texts": []
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "j8_decoded_tab",
+   "axes": [
+    "json",
+    "decoded TAB (real U+0009), tab after a token wider than one stop"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 214 62",
+    "stdout_sha256": "3f6c64e6ff90cf4ed0701701e866bc69c996262bf0e56de6a9b4c38086258131",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\tb"
+     ],
+     [
+      "12.0791",
+      "w"
+     ],
+     [
+      "160.0361",
+      "WWWWWWWWWWWW\tx"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 214 62",
+    "stdout_sha256": "3f6c64e6ff90cf4ed0701701e866bc69c996262bf0e56de6a9b4c38086258131",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\tb"
+     ],
+     [
+      "12.0791",
+      "w"
+     ],
+     [
+      "160.0361",
+      "WWWWWWWWWWWW\tx"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 239 62",
+    "stdout_sha256": "a1dcffc8ca19b64875748883dee41b2d54a2142bed072036c495334512fd0f0f",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "7.7314",
+      "a"
+     ],
+     [
+      "8.8115",
+      "b"
+     ],
+     [
+      "12.0791",
+      "w"
+     ],
+     [
+      "143.7188",
+      "WWWWWWWWWWWW"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_decoded_cr",
+   "axes": [
+    "json",
+    "decoded CR (real U+000D) mid-line"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 75 62",
+    "stdout_sha256": "150110c22b947bb159480ac51515139a785ee4fe191b93ee8c5d5e7ec5779a0a",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\rb"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 75 62",
+    "stdout_sha256": "150110c22b947bb159480ac51515139a785ee4fe191b93ee8c5d5e7ec5779a0a",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\rb"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 71 62",
+    "stdout_sha256": "8a16d66f4de67ecb195b7c4a5ec86f1b403deeac37430b695188851f574eaddd",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "20.9727",
+      "a\rb"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_decoded_crlf_tail",
+   "axes": [
+    "json",
+    "decoded CR LF at the end of a value"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 90 62",
+    "stdout_sha256": "5ffc259ae6eedb39d13efa2fb42f8c0e6e3ea1e700245b95e02aa24c0dcf3356",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "39.1768",
+      "abc\r\n"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 90 62",
+    "stdout_sha256": "5ffc259ae6eedb39d13efa2fb42f8c0e6e3ea1e700245b95e02aa24c0dcf3356",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "39.1768",
+      "abc\r\n"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 83 62",
+    "stdout_sha256": "e203438ce1756281a2b3a5cacef7bc287e1eb2bc8fac5d6f78e3649a180109bc",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "23.7139",
+      "abc"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_decoded_backslash",
+   "axes": [
+    "json",
+    "decoded backslash pairs: \\b unknown, \\n newline, doubled backslash then n"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 91 83",
+    "stdout_sha256": "4439543aa6e5a6a5942c42d02a9e23ec23e681cf3efc1e5149f9906df31b6f8e",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "23.8848",
+      "a\\b"
+     ],
+     [
+      "9.1943",
+      "n"
+     ],
+     [
+      "32.5732",
+      "a\\nb"
+     ],
+     [
+      "9.2764",
+      "d"
+     ],
+     [
+      "39.915",
+      "a\\\\nb"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 91 83",
+    "stdout_sha256": "4439543aa6e5a6a5942c42d02a9e23ec23e681cf3efc1e5149f9906df31b6f8e",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "23.8848",
+      "a\\b"
+     ],
+     [
+      "9.1943",
+      "n"
+     ],
+     [
+      "32.5732",
+      "a\\nb"
+     ],
+     [
+      "9.2764",
+      "d"
+     ],
+     [
+      "39.915",
+      "a\\\\nb"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 83 99",
+    "stdout_sha256": "b79bb6d58eebb9a899f598dea3a9b372332d4d8818f868b4ba739c50c051b5f2",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "23.8848",
+      "a\\b"
+     ],
+     [
+      "9.1943",
+      "n"
+     ],
+     [
+      "7.7314",
+      "a"
+     ],
+     [
+      "8.8115",
+      "b"
+     ],
+     [
+      "9.2764",
+      "d"
+     ],
+     [
+      "32.5732",
+      "a\\nb"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_unicode_lf",
+   "axes": [
+    "json",
+    "\\u000A and \\u0009 escapes"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 75 62",
+    "stdout_sha256": "c377eed9a08ad6a8c2203b126c94bfd1d55183fe093d6ed88401776f3a7facd0",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\nb"
+     ],
+     [
+      "5.6738",
+      "t"
+     ],
+     [
+      "23.7139",
+      "c\td"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 75 62",
+    "stdout_sha256": "c377eed9a08ad6a8c2203b126c94bfd1d55183fe093d6ed88401776f3a7facd0",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "24.2744",
+      "a\nb"
+     ],
+     [
+      "5.6738",
+      "t"
+     ],
+     [
+      "23.7139",
+      "c\td"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 95 62",
+    "stdout_sha256": "a04a48801f79bf79b8cffd84d54c3c5dec60f6c8c3a616cad197e38efbe73a6f",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "20.9727",
+      "a\nb"
+     ],
+     [
+      "5.6738",
+      "t"
+     ],
+     [
+      "7.1709",
+      "c"
+     ],
+     [
+      "8.8115",
+      "d"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_tab_bold_key",
+   "axes": [
+    "json",
+    "decoded TAB in keys (bold)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 131 62",
+    "stdout_sha256": "45f936bfca6cce9d2e99422e7635c14c4ab98de793b5bfe0d9a3e80c22d893e0",
+    "texts": [
+     [
+      "25.7373",
+      "a\tb"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "80.4521",
+      "wide key\tz"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 131 62",
+    "stdout_sha256": "45f936bfca6cce9d2e99422e7635c14c4ab98de793b5bfe0d9a3e80c22d893e0",
+    "texts": [
+     [
+      "25.7373",
+      "a\tb"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "80.4521",
+      "wide key\tz"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 132 62",
+    "stdout_sha256": "2109285a5bdc25a09a9f87d0354d7b84731728fe843e20ee98df27d80a6fab31",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "63.9502",
+      "wide key"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_empty_space",
+   "axes": [
+    "json",
+    "empty, space-only, padded values"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 68 83",
+    "stdout_sha256": "eddc49428ca9c9d60f4485b91fc4a6fc4fa3c9866f37acbf9a24861745827336",
+    "texts": [
+     [
+      "8.2031",
+      "e"
+     ],
+     [
+      "4.4297",
+      "&#160;"
+     ],
+     [
+      "7.916",
+      "s"
+     ],
+     [
+      "8.8594",
+      "  "
+     ],
+     [
+      "9.2764",
+      "p"
+     ],
+     [
+      "17.4453",
+      " x "
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 68 83",
+    "stdout_sha256": "eddc49428ca9c9d60f4485b91fc4a6fc4fa3c9866f37acbf9a24861745827336",
+    "texts": [
+     [
+      "8.2031",
+      "e"
+     ],
+     [
+      "4.4297",
+      "&#160;"
+     ],
+     [
+      "7.916",
+      "s"
+     ],
+     [
+      "8.8594",
+      "  "
+     ],
+     [
+      "9.2764",
+      "p"
+     ],
+     [
+      "17.4453",
+      " x "
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 68 83",
+    "stdout_sha256": "843fee06a9725663364aeeaea7fb784eda8dcf8113a85e1ee3e0bdd020d018e4",
+    "texts": [
+     [
+      "8.2031",
+      "e"
+     ],
+     [
+      "4.4297",
+      "&#160;"
+     ],
+     [
+      "7.916",
+      "s"
+     ],
+     [
+      "8.8594",
+      "&#160;&#160;"
+     ],
+     [
+      "9.2764",
+      "p"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_array_escapes",
+   "axes": [
+    "json",
+    "top-level array with escapes, nested array"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 136 93",
+    "stdout_sha256": "4c119ff52b72327effeba1ce0f7b54a40c2a2b23963364912ea90a725fb44907",
+    "texts": [
+     [
+      "31.9307",
+      "x\\ny"
+     ],
+     [
+      "25.3545",
+      "p\tq"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "25.9355",
+      "r\\rs"
+     ],
+     [
+      "5.2363",
+      "t"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 136 93",
+    "stdout_sha256": "4c119ff52b72327effeba1ce0f7b54a40c2a2b23963364912ea90a725fb44907",
+    "texts": [
+     [
+      "31.9307",
+      "x\\ny"
+     ],
+     [
+      "25.3545",
+      "p\tq"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "25.9355",
+      "r\\rs"
+     ],
+     [
+      "5.2363",
+      "t"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 130 118",
+    "stdout_sha256": "6a4d2547b9094e613c66f611f693b1074da9303b48d2b7a38d1a50163e0b2cff",
+    "texts": [
+     [
+      "8.5859",
+      "x"
+     ],
+     [
+      "7.3145",
+      "y"
+     ],
+     [
+      "8.8115",
+      "p"
+     ],
+     [
+      "8.8115",
+      "q"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "5.7285",
+      "r"
+     ],
+     [
+      "7.1367",
+      "s"
+     ],
+     [
+      "5.2363",
+      "t"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_nested_uneven",
+   "axes": [
+    "json",
+    "nested boxes with uneven multi-line rows"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 252 121",
+    "stdout_sha256": "e2feae8304391cae865b16ab898aa9325dba427509e09a55b94ba529ea354318",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "7.4512",
+      "c"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "117.0244",
+      "one\\ntwo\\nthree"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 252 121",
+    "stdout_sha256": "e2feae8304391cae865b16ab898aa9325dba427509e09a55b94ba529ea354318",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "7.4512",
+      "c"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "117.0244",
+      "one\\ntwo\\nthree"
+     ],
+     [
+      "13.5762",
+      "m"
+     ],
+     [
+      "8.5859",
+      "x"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 170 171",
+    "stdout_sha256": "2639d3711a04d5b76a2b6bba52e86e70dec3b47cfb220aac9232cbd4a18df955",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "7.4512",
+      "c"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "25.0879",
+      "one"
+     ],
+     [
+      "24.623",
+      "two"
+     ],
+     [
+      "35.2529",
+      "three"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_highlight_tab_key",
+   "axes": [
+    "json",
+    "highlighted row whose key has a TAB and value two lines"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 101 62",
+    "stdout_sha256": "234226ee55cbdb43410e7ff2c1d8b3e508402731b8f4662d22d44f6b404f1cd5",
+    "texts": [
+     [
+      "25.7373",
+      "a\tb"
+     ],
+     [
+      "34.0635",
+      "v\\nw"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 62",
+    "stdout_sha256": "234226ee55cbdb43410e7ff2c1d8b3e508402731b8f4662d22d44f6b404f1cd5",
+    "texts": [
+     [
+      "25.7373",
+      "a\tb"
+     ],
+     [
+      "34.0635",
+      "v\\nw"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 98 79",
+    "stdout_sha256": "48d4b22445da74d3d37bf0cc4bf2bb8bea71a97708e572deae5e2cbd672359dc",
+    "texts": [
+     [
+      "8.2305",
+      "a"
+     ],
+     [
+      "9.2764",
+      "b"
+     ],
+     [
+      "7.2461",
+      "v"
+     ],
+     [
+      "10.7871",
+      "w"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "8.8525",
+      "1"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "j8_crlf",
+   "axes": [
+    "json",
+    "CRLF line ends"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 187 72",
+    "stdout_sha256": "057753841c6d0f0bd9e488230353528618a1c1133cfaa9bf1063995c1cdbd166",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "80.6846",
+      "Moss\\nFern"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 187 72",
+    "stdout_sha256": "057753841c6d0f0bd9e488230353528618a1c1133cfaa9bf1063995c1cdbd166",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "80.6846",
+      "Moss\\nFern"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 141 89",
+    "stdout_sha256": "6d46945c42cd87f7b273ae76f1c39b84f117ceb4e8522e85d2c86b1004e6df2f",
+    "texts": [
+     [
+      "8.8594",
+      "k"
+     ],
+     [
+      "34.9316",
+      "Moss"
+     ],
+     [
+      "29.7227",
+      "Fern"
+     ],
+     [
+      "8.2715",
+      "z"
+     ],
+     [
+      "13.2891",
+      "&#160;&#160;&#160;"
+     ],
+     [
+      "8.8525",
+      "1"
+     ],
+     [
+      "8.8525",
+      "2"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "m8_json_class",
+   "axes": [
+    "model json",
+    "json element in a class diagram: escapes"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 585 265",
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "texts": [
+     [
+      "133.2129",
+      "Welcome to RustUML!"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "268.084",
+      "You can start with a simple UML Diagram like:"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "122.8184",
+      "Bob-&gt;Alice:&#160;Hello"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "14.2324",
+      "Or"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "93.9199",
+      "class&#160;Example"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 585 265",
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "texts": [
+     [
+      "133.2129",
+      "Welcome to RustUML!"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "268.084",
+      "You can start with a simple UML Diagram like:"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "122.8184",
+      "Bob-&gt;Alice:&#160;Hello"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "14.2324",
+      "Or"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "93.9199",
+      "class&#160;Example"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 585 265",
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "texts": [
+     [
+      "133.2129",
+      "Welcome to RustUML!"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "268.084",
+      "You can start with a simple UML Diagram like:"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "122.8184",
+      "Bob-&gt;Alice:&#160;Hello"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "14.2324",
+      "Or"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "93.9199",
+      "class&#160;Example"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "m8_json_usecase",
+   "axes": [
+    "model json",
+    "json element mixed into a usecase diagram"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 81 68",
+    "stdout_sha256": "aa515a8fe5d6470968122855d5bf1f148cf278c76a15ec4d31f439bc93a25c2b",
+    "texts": [
+     [
+      "29.668",
+      "Pilot"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 81 68",
+    "stdout_sha256": "aa515a8fe5d6470968122855d5bf1f148cf278c76a15ec4d31f439bc93a25c2b",
+    "texts": [
+     [
+      "29.668",
+      "Pilot"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 81 68",
+    "stdout_sha256": "aa515a8fe5d6470968122855d5bf1f148cf278c76a15ec4d31f439bc93a25c2b",
+    "texts": [
+     [
+      "29.668",
+      "Pilot"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "m8_json_crlf",
+   "axes": [
+    "model json",
+    "CRLF, doubled backslash"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 585 265",
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "texts": [
+     [
+      "133.2129",
+      "Welcome to RustUML!"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "268.084",
+      "You can start with a simple UML Diagram like:"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "122.8184",
+      "Bob-&gt;Alice:&#160;Hello"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "14.2324",
+      "Or"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "93.9199",
+      "class&#160;Example"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 585 265",
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "texts": [
+     [
+      "133.2129",
+      "Welcome to RustUML!"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "268.084",
+      "You can start with a simple UML Diagram like:"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "122.8184",
+      "Bob-&gt;Alice:&#160;Hello"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "14.2324",
+      "Or"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "93.9199",
+      "class&#160;Example"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 585 265",
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "texts": [
+     [
+      "133.2129",
+      "Welcome to RustUML!"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "268.084",
+      "You can start with a simple UML Diagram like:"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "122.8184",
+      "Bob-&gt;Alice:&#160;Hello"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "14.2324",
+      "Or"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ],
+     [
+      "93.9199",
+      "class&#160;Example"
+     ],
+     [
+      "3.7969",
+      "&#160;"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "m8_class_crlf_label",
+   "axes": [
+    "crlf",
+    "class diagram with CRLF line ends (real CR never measured)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 193 102",
+    "stdout_sha256": "4858b503142f28d02c937ed5280916eb958e5b74b0321dafc3a38b262c61deb8",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "62.2002",
+      "rope : int"
+     ],
+     [
+      "45.1035",
+      "moor()"
+     ],
+     [
+      "27.7393",
+      "tidal"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 193 102",
+    "stdout_sha256": "4858b503142f28d02c937ed5280916eb958e5b74b0321dafc3a38b262c61deb8",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "62.2002",
+      "rope : int"
+     ],
+     [
+      "45.1035",
+      "moor()"
+     ],
+     [
+      "27.7393",
+      "tidal"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 193 102",
+    "stdout_sha256": "4858b503142f28d02c937ed5280916eb958e5b74b0321dafc3a38b262c61deb8",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "62.2002",
+      "rope : int"
+     ],
+     [
+      "45.1035",
+      "moor()"
+     ],
+     [
+      "27.7393",
+      "tidal"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "m8_seq_crlf",
+   "axes": [
+    "crlf",
+    "sequence with CRLF line ends"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 115 152",
+    "stdout_sha256": "1113602b6d7c88346544aa7f4e930a34f7ae5e13118dff377aab51e35457d838",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "28.1138",
+      "ping"
+     ],
+     [
+      "32.3413",
+      "pong"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 115 152",
+    "stdout_sha256": "1113602b6d7c88346544aa7f4e930a34f7ae5e13118dff377aab51e35457d838",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "28.1138",
+      "ping"
+     ],
+     [
+      "32.3413",
+      "pong"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 115 152",
+    "stdout_sha256": "1113602b6d7c88346544aa7f4e930a34f7ae5e13118dff377aab51e35457d838",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "28.1138",
+      "ping"
+     ],
+     [
+      "32.3413",
+      "pong"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "mk8_u17_1ad0",
+   "axes": [
+    "mark",
+    "U+1AD0 Mn only from Unicode 17 (Cn in HarfBuzz 10.0.1's UCD 16): discriminates the loaded HarfBuzz"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 113 68",
+    "stdout_sha256": "4e9df3c6d1344e8bb4e4992f1daf14efb46b100415cb32da6f92572402531cd1",
+    "texts": [
+     [
+      "61.0176",
+      "Vault ᫐􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "851762df85bd065645f9ce820336665585cd3d63975eed14ec8a6a5606d00956",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ᫐􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "851762df85bd065645f9ce820336665585cd3d63975eed14ec8a6a5606d00956",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ᫐􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_u17_1e6e3",
+   "axes": [
+    "mark",
+    "U+1E6E3 Mn only from Unicode 17, supplementary"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "f1fac73a1c905e3b9a22fffd92e2b339795da249b1a1114f9b7650242acb681c",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 𞛣"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "9d0234191d054c7da1636440d215571ee25b39ea53a6717480c8f9201b098238",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 𞛣"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "9d0234191d054c7da1636440d215571ee25b39ea53a6717480c8f9201b098238",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 𞛣"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_u18_05c8",
+   "axes": [
+    "mark",
+    "U+05C8 Mn only from Unicode 18 (HarfBuzz 14.6+), Hebrew block (complex)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 99 68",
+    "stdout_sha256": "8f1a151e7604d49db5ef9a0a67014bf41eb89ada6f9c9be10ce6b78752662c27",
+    "texts": [
+     [
+      "47.0176",
+      "Vault ׈"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "5f4ebc6b1525f5de17c580257cfa23984301cb1d79731f44ad826d08f54b1c46",
+    "texts": [
+     [
+      "49.7861",
+      "Vault ׈"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "5f4ebc6b1525f5de17c580257cfa23984301cb1d79731f44ad826d08f54b1c46",
+    "texts": [
+     [
+      "49.7861",
+      "Vault ׈"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_u16_113bb",
+   "axes": [
+    "mark",
+    "U+113BB Tulu-Tigalari Mn (Unicode 16), new block"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "35c9ffe2eb049f1ec26371b3a280148e62b1486ca68b0c6fdb4bb5f050bb3af0",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 𑎻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "a07583e4564c0e70690f4366d36c27eb513dc4f565e06d073b7150c0bdc5c96e",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 𑎻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 91 68",
+    "stdout_sha256": "f6630bbbfd9a0ba24fef4ceb0d0ffb9682de08098863b65c3d0c291f0a52bc23",
+    "texts": [
+     [
+      "39.2861",
+      "Vault 𑎻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_u16_10d69",
+   "axes": [
+    "mark",
+    "U+10D69 Garay Mn (Unicode 16)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "2da6e240af1e4a933e1b415b360a6dffa6f8f6e7281884a982bebee2afc9dcb4",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 𐵩"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "51748474e9dabc5830933d0823a187c4cc63ce18df93b6edf268d25345f0ddc7",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 𐵩"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 91 68",
+    "stdout_sha256": "f6e76cdd30045d096dee5f7528ba0fdec550bb45b9c72595e51483e5b2f46d8c",
+    "texts": [
+     [
+      "39.2861",
+      "Vault 𐵩"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_u16_1612d",
+   "axes": [
+    "mark",
+    "U+1612D Gurung Khema Mn (Unicode 16)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "599c6604ecfec27540e35ac4093ba38c5424c8fad3d1e6de558bb10eaade765e",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 𖄭"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "2441e8594d10f1e7b4c4b271c0204d883d80ed4f546a71880e43654134515a3d",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 𖄭"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 91 68",
+    "stdout_sha256": "ed32c3e57e38993bf23c07beae9e86de4efd051742ce6c862e02cd3abdd98825",
+    "texts": [
+     [
+      "39.2861",
+      "Vault 𖄭"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_me_1abe",
+   "axes": [
+    "mark",
+    "U+1ABE Me (enclosing): not synthesized as MARK"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 113 68",
+    "stdout_sha256": "9e0cb29bfcf8cf507cfd64a7da43a25a82f1339cedd57ef6eaf38bdef6b5b31a",
+    "texts": [
+     [
+      "61.0176",
+      "Vault ᪾􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "d68a9566243e5c9e1eea6a6c2b46dc50526fa7c88156c9aff72e701e216eaeac",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ᪾􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "d68a9566243e5c9e1eea6a6c2b46dc50526fa7c88156c9aff72e701e216eaeac",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ᪾􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_mc_11f03",
+   "axes": [
+    "mark",
+    "U+11F03 Kawi Mc: not zeroed"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "6243479fb0c9b94d430e60971187a9aa583a20e876d290647a4951f7aad453fb",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 𑼃"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "253a0dd009c65092a33fec4458afe5542e882401d229534a648dbd9b91fa323c",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 𑼃"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "253a0dd009c65092a33fec4458afe5542e882401d229534a648dbd9b91fa323c",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 𑼃"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_helv_hebrew",
+   "axes": [
+    "mark",
+    "Helvetica primary; Hebrew base from the Lucida Grande slot; mark alone in the Helvetica buffer"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 109 68",
+    "stdout_sha256": "7b0d9a7220ecf438359eb0212f6f03c6cce34faab335f0a0d4509ed3464e8891",
+    "texts": [
+     [
+      "57.5313",
+      "Vault א𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 104 68",
+    "stdout_sha256": "a212f908489ef82bf1b49004d6c974bd88a21e18961de3ef4d97731564800a1b",
+    "texts": [
+     [
+      "52.4043",
+      "Vault א𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "c26340057f8a7675cbc500aa2b966af2d2600f9af7dc835e617d37285f051620",
+    "texts": [
+     [
+      "43.5313",
+      "Vault א𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_helv_hebrew_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_helv_hebrew without the mark"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "d5fadac2fcfad9fef950f38c21c57a3b3e29b4a7e73f4259d7b7184e9b5bbddd",
+    "texts": [
+     [
+      "43.5313",
+      "Vault א"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "df01e9cbcc7a2061aeb2aac02b6df201b5af6a25293e0d494e46a0ae926b3ab8",
+    "texts": [
+     [
+      "43.5313",
+      "Vault א"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "df01e9cbcc7a2061aeb2aac02b6df201b5af6a25293e0d494e46a0ae926b3ab8",
+    "texts": [
+     [
+      "43.5313",
+      "Vault א"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_lucida_arabic",
+   "axes": [
+    "mark",
+    "Lucida Grande primary; Arabic base from the Geeza Pro slot; mark alone in its buffer"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 109 68",
+    "stdout_sha256": "02113575655c56e216ff61ccb4b95eea2272346084b917c7c1415bb058d6c050",
+    "texts": [
+     [
+      "57.3811",
+      "Vault ا𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "42fecf2fd7182a90eda12dd3752f10aa9a5ab88108d96db06b177fde1b5e38aa",
+    "texts": [
+     [
+      "53.8811",
+      "Vault ا𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "991ac7059df6c4198b8786c7c11822efdc02df06b4d7d9f825bb7707b1046684",
+    "texts": [
+     [
+      "43.3811",
+      "Vault ا𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_lucida_arabic_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_lucida_arabic"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "d2854c10d0f66e49310ec0c9a9adaf855369d6d583f931b3f16204d59d1903ef",
+    "texts": [
+     [
+      "43.3811",
+      "Vault ا"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "b3e028b61afb6d0fc8fd6b078e2f08b2f6141e3169b6a8da159e4b0b78df999c",
+    "texts": [
+     [
+      "43.3811",
+      "Vault ا"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 95 68",
+    "stdout_sha256": "b3e028b61afb6d0fc8fd6b078e2f08b2f6141e3169b6a8da159e4b0b78df999c",
+    "texts": [
+     [
+      "43.3811",
+      "Vault ا"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_lucida_syriac",
+   "axes": [
+    "mark",
+    "Syriac base unmapped everywhere (slot 0, same buffer): arabic shaper fallback zeroes"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 113 68",
+    "stdout_sha256": "de0cf797061a8e3f6cd362d16d7a4013f61405bb78f3118e017c1c6030c9c7cb",
+    "texts": [
+     [
+      "61.0176",
+      "Vault ܐ𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "5a2be23b45f1cccf4fd51f10dd089d79ffc16a5bc82b9efeb4befd688cfd5957",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ܐ𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "d386fac483a73c3623df9e691cd64785d5d538a161ffdf1721d3622c45f39c9e",
+    "texts": [
+     [
+      "49.7861",
+      "Vault ܐ𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_helv_hebrew_pres",
+   "axes": [
+    "mark",
+    "Helvetica; Hebrew FB1D unmapped everywhere (same buffer)"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 115 68",
+    "stdout_sha256": "7f3cadd05422c1288a4d568a952fab8db8400d4424d34c7a115a344a07e69223",
+    "texts": [
+     [
+      "63.7998",
+      "Vault יִ𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "b3ddb96e3456b6a122770fdc8e97432dfdb7a5903a617ea98967c0c2a75d5fdd",
+    "texts": [
+     [
+      "53.5459",
+      "Vault יִ𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 96 68",
+    "stdout_sha256": "d57f8206d73d7cc1f73010900d2de16ca7e6ad37c4f5f759268736bb74de33fc",
+    "texts": [
+     [
+      "44.6729",
+      "Vault יִ𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_lucida_devanagari",
+   "axes": [
+    "mark",
+    "Devanagari base (Kohinoor slot): indic shaper, never zeroed"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 116 68",
+    "stdout_sha256": "48e6d8677b01a97935fb97327b9fd711479b6a666e5af046ef13685db1960b6e",
+    "texts": [
+     [
+      "64.0661",
+      "Vault क𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "1bd10aeff6266e32a7a497ac7db0e1b6c208cc92cfe51923abca1f57707b30c8",
+    "texts": [
+     [
+      "60.5661",
+      "Vault क𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "1bd10aeff6266e32a7a497ac7db0e1b6c208cc92cfe51923abca1f57707b30c8",
+    "texts": [
+     [
+      "60.5661",
+      "Vault क𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_lucida_devanagari_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_lucida_devanagari"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 102 68",
+    "stdout_sha256": "264baa4f90c2b22ddabbe0b23c812b7763d0a5f78c65db721cd7e0a80f17170a",
+    "texts": [
+     [
+      "50.0661",
+      "Vault क"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 102 68",
+    "stdout_sha256": "d085645cc152564fb542ec7a42d16d9274ad5c7d55560a4d3fa31c2d0114d96b",
+    "texts": [
+     [
+      "50.0661",
+      "Vault क"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 102 68",
+    "stdout_sha256": "d085645cc152564fb542ec7a42d16d9274ad5c7d55560a4d3fa31c2d0114d96b",
+    "texts": [
+     [
+      "50.0661",
+      "Vault क"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_cjk_base",
+   "axes": [
+    "mark",
+    "Han base (PingFang slot): default shaper zeroes regardless"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "24674f286e821aa69bc7988a50063582f0b5716f2551982ae3b6c47dbd0bbf3f",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 一𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 115 68",
+    "stdout_sha256": "98db54b40c9e2dbc1362c0d641af4ea4fbf5183523be2f76f70edc74ae06937d",
+    "texts": [
+     [
+      "63.7861",
+      "Vault 一𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "ca0774b49fa021b3575b43716eb4e37dabfbed8913e8f680f434c9d589457e6b",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 一𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_cjk_base_ctrl",
+   "axes": [
+    "mark",
+    "control for mk8_cjk_base"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "964338008ecd8bfd2aee2e6c8f4c44cfc4d54b1659742a3fcfa21bf38195e4cc",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 一"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "0b7a8ac26e4c59dae432b685bf7f3110da2c96c4059730855800281038a64416",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 一"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "0b7a8ac26e4c59dae432b685bf7f3110da2c96c4059730855800281038a64416",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 一"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_hebrew_lead_mark",
+   "axes": [
+    "mark",
+    "leading mark in a Hebrew run, no base"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "13d95d6f06fcbfcd2d48fa9f81e9ba06bc763cf8ab816517e6291f4a7645e0bc",
+    "texts": [
+     [
+      "67.2861",
+      "𝅻יִ Vault"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "a6cfad5222849ba219de4b121da936fe31dfe5f4cfc05ff041d00ec50cfe11aa",
+    "texts": [
+     [
+      "60.2861",
+      "𝅻יִ Vault"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "a6cfad5222849ba219de4b121da936fe31dfe5f4cfc05ff041d00ec50cfe11aa",
+    "texts": [
+     [
+      "60.2861",
+      "𝅻יִ Vault"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_menlo_hebrew",
+   "axes": [
+    "mark",
+    "Monospaced (Menlo) maps Hebrew itself: same buffer"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "8ec2b6475aa4d886898da7a1c1ad3a58b6f5ab400493e75cc217366612623c10",
+    "texts": [
+     [
+      "67.4297",
+      "Vault א𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "49c85722bb2e7e5e443c7a506006b79d71bf13c28f5b39887ec18a84c7504fd2",
+    "texts": [
+     [
+      "67.4297",
+      "Vault א𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 111 68",
+    "stdout_sha256": "b1c0e7aedea4c565e5dfd74eb879a4819ccf7cff6dee21e7cc06a9862555c86b",
+    "texts": [
+     [
+      "59.001",
+      "Vault א𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_seq_arabic",
+   "axes": [
+    "mark",
+    "sequence message, Arabic base from another slot"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 136 123",
+    "stdout_sha256": "98fb9aefd87438c60cfdbc89cb5c4cb1b88838757a32cb9811b90036a1036c64",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "53.2824",
+      "Vault ا𝅻"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 133 123",
+    "stdout_sha256": "db5a2c9f09d33bd42179035e4c86b80a8160bb8de4c509a99322fc4f1aea0df7",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "50.0324",
+      "Vault ا𝅻"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 123 123",
+    "stdout_sha256": "4a4a7511f726aaf378492625418e13da33d8931aaa63240cc34e3a3f0b9d4623",
+    "texts": [
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "32.7236",
+      "Alice"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "25.4639",
+      "Bob"
+     ],
+     [
+      "40.2824",
+      "Vault ا𝅻"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_sans_9",
+   "axes": [
+    "mark",
+    "family sans",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 96 64",
+    "stdout_sha256": "71d7f2dbd625fe71fd4af17678b55362ae0a0e2036b761fad7cb5982b6a60b30",
+    "texts": [
+     [
+      "48.9199",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 92 64",
+    "stdout_sha256": "d041498378c0c32f185311764d568271d9b1bd276c0b8484cba27f8fbe0a0fde",
+    "texts": [
+     [
+      "44.4199",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 78 64",
+    "stdout_sha256": "5c0d8dd1cec200e257a5e3b24ce57c076a4ff033ada8536c6c6ffc9310767819",
+    "texts": [
+     [
+      "30.9199",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_sans_23",
+   "axes": [
+    "mark",
+    "family sans",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 181 73",
+    "stdout_sha256": "0b33346f76a7b560c7449cdafed90926949a3ea2ad5b809159c5b3357b06fa60",
+    "texts": [
+     [
+      "125.0176",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 169 73",
+    "stdout_sha256": "2dd5a80f2211ae3b4585dae5f6b3a329254d6d7e9b278a65ae0f0084b442eb38",
+    "texts": [
+     [
+      "113.5176",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 135 73",
+    "stdout_sha256": "cf2a274621debec8dca6d5f4e68bae0f18425af709acc7061d48e788f1503548",
+    "texts": [
+     [
+      "79.0176",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_helv_9",
+   "axes": [
+    "mark",
+    "family helv",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 94 64",
+    "stdout_sha256": "f991def74bece7c86df5991602ca9b2a2cc2020d965a6adfaf3df4a74ac5085e",
+    "texts": [
+     [
+      "46.0195",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 87 64",
+    "stdout_sha256": "ca47942ebaaa5141bc71cc357c1a0efb4d50109b32a500824d2b9f155aca07d9",
+    "texts": [
+     [
+      "39.4277",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 76 64",
+    "stdout_sha256": "77d7c7d5e83cf0ea24830056a12493be52a9b75b408feb2ac08a124c7ad386c4",
+    "texts": [
+     [
+      "28.0195",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_helv_23",
+   "axes": [
+    "mark",
+    "family helv",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 173 72",
+    "stdout_sha256": "5cfe1a77742bea460d4a4c7b4646241dff230b8113623729e495c2e6340e6376",
+    "texts": [
+     [
+      "117.6055",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 156 72",
+    "stdout_sha256": "977f80104ccaad343a52cb5e124e656b458dc65bcbc5d7a3f7c15eab87980af7",
+    "texts": [
+     [
+      "100.7598",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 127 72",
+    "stdout_sha256": "0f8db2351ac02380bc9b7d63900d937a2dac1ed9a7d68f104fa6180d5f61962e",
+    "texts": [
+     [
+      "71.6055",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_mono_9",
+   "axes": [
+    "mark",
+    "family mono",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 96 64",
+    "stdout_sha256": "87a363b731875438e8607881e0054d52ee3a7208b7fa804f1d66cdbdf4593f7e",
+    "texts": [
+     [
+      "48.7661",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 96 64",
+    "stdout_sha256": "920b8ecf9875a544dc54512f5db8261e8ee72dc87300e23374b62ec060a3d4ca",
+    "texts": [
+     [
+      "48.7661",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 85 64",
+    "stdout_sha256": "c451506e3b603da9e43f6f8625c1ce797671537f19b7a29965dfe82df2e6f90a",
+    "texts": [
+     [
+      "37.9292",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_mono_23",
+   "axes": [
+    "mark",
+    "family mono",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 180 72",
+    "stdout_sha256": "3bf3a55c23efd1060d4519eaf1e51b5bde81247ca6376f8caf85a0279cf1618c",
+    "texts": [
+     [
+      "124.6245",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 180 72",
+    "stdout_sha256": "723e613a17565e4173eb0d302431a6655c98337917feeea9af75110f9696dec6",
+    "texts": [
+     [
+      "124.6245",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 152 72",
+    "stdout_sha256": "ce7bf2a982dcc92caa1f797231c3c7ae00ffddedf64a1c5922115dbe0a8eaeac",
+    "texts": [
+     [
+      "96.9302",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_serif_9",
+   "axes": [
+    "mark",
+    "family serif",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 96 64",
+    "stdout_sha256": "a5fff03ee8bb06f23457fe1e0f3782075002486c9d15abdf89159fe647edf668",
+    "texts": [
+     [
+      "48.9199",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 92 64",
+    "stdout_sha256": "3027492426c8cbfa7e62db41a6b2719d34eec977a6a2341503b18fb90f124efb",
+    "texts": [
+     [
+      "44.4199",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 78 64",
+    "stdout_sha256": "041bf9bffbcde415a1d968443615a9a6cb7ea51f174f862091e219df9922376c",
+    "texts": [
+     [
+      "30.9199",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_serif_23",
+   "axes": [
+    "mark",
+    "family serif",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 181 73",
+    "stdout_sha256": "e7d768bce2dc67aa9eae71f021814372885f720482d39a6ca94356b49d487b17",
+    "texts": [
+     [
+      "125.0176",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 169 73",
+    "stdout_sha256": "de6eca9661c0470b023540a78afb77bc77a9996b9854e846d8e89b0662feb151",
+    "texts": [
+     [
+      "113.5176",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 135 73",
+    "stdout_sha256": "1152b1071e0f042cef43b8ebd43f3403f9c8b2f1bf0b94f8028ced12e6f07775",
+    "texts": [
+     [
+      "79.0176",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_verdana_9",
+   "axes": [
+    "mark",
+    "family verdana",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 98 64",
+    "stdout_sha256": "a3b50376173855e71f7672833973c9597e65a13b0f2b7969b5f5a44116ccb9ee",
+    "texts": [
+     [
+      "50.0405",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 98 64",
+    "stdout_sha256": "2d489550e12737a3d312921d201ab2ca555bae3bd5df3cc0cd3714e07d0a4b04",
+    "texts": [
+     [
+      "50.0405",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 98 64",
+    "stdout_sha256": "2d489550e12737a3d312921d201ab2ca555bae3bd5df3cc0cd3714e07d0a4b04",
+    "texts": [
+     [
+      "50.0405",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_verdana_23",
+   "axes": [
+    "mark",
+    "family verdana",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 183 73",
+    "stdout_sha256": "47a13dd72c3d151fe435a3e1ad892ed1ad884756a1cf29a933fca5db30da6e1b",
+    "texts": [
+     [
+      "127.8813",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 183 73",
+    "stdout_sha256": "02145f28c83aa65970d95d5deb05fd73d6b05b11386c48daf62e53939ed811fe",
+    "texts": [
+     [
+      "127.8813",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 183 73",
+    "stdout_sha256": "02145f28c83aa65970d95d5deb05fd73d6b05b11386c48daf62e53939ed811fe",
+    "texts": [
+     [
+      "127.8813",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_arial_9",
+   "axes": [
+    "mark",
+    "family arial",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 94 64",
+    "stdout_sha256": "0ec0d2d80392a89fe4301082a1c01c9d855078a6875b3cb79567a8ca05c6846f",
+    "texts": [
+     [
+      "46.0195",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 89 64",
+    "stdout_sha256": "e3021dd732396d1ab48843b301b45733c2c626e4021ff289c4e48553660e77ba",
+    "texts": [
+     [
+      "41.5195",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 89 64",
+    "stdout_sha256": "e3021dd732396d1ab48843b301b45733c2c626e4021ff289c4e48553660e77ba",
+    "texts": [
+     [
+      "41.5195",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_arial_23",
+   "axes": [
+    "mark",
+    "family arial",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 173 72",
+    "stdout_sha256": "de8f138a61535159d644637b87441bcdb7134319ff186f59494a3785aa3999db",
+    "texts": [
+     [
+      "117.6055",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 162 72",
+    "stdout_sha256": "c92d6f464a82aef833a586d86dd405ee8aa27fa3ae2203d8bda4d3beab913097",
+    "texts": [
+     [
+      "106.1055",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 162 72",
+    "stdout_sha256": "c92d6f464a82aef833a586d86dd405ee8aa27fa3ae2203d8bda4d3beab913097",
+    "texts": [
+     [
+      "106.1055",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_couriernew_9",
+   "axes": [
+    "mark",
+    "family couriernew",
+    "size 9",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 96 64",
+    "stdout_sha256": "fda2e8c2435b2c97094e377d09cd7d9e1edc6b9e256dbf233760ddf5e9e18058",
+    "texts": [
+     [
+      "48.6079",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 96 64",
+    "stdout_sha256": "3bfdad1bfe5d9ce86e1e66d1f01c550244cefa4ce76aa10446eb897e4e7c1802",
+    "texts": [
+     [
+      "48.6079",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 96 64",
+    "stdout_sha256": "3bfdad1bfe5d9ce86e1e66d1f01c550244cefa4ce76aa10446eb897e4e7c1802",
+    "texts": [
+     [
+      "48.6079",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_couriernew_23",
+   "axes": [
+    "mark",
+    "family couriernew",
+    "size 23",
+    "two unmapped Mn after bases"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 180 72",
+    "stdout_sha256": "5f2d37008b91ebfd780e93ef471cd76b8e1d5fad3ba0e672c9e0f40770cb13c2",
+    "texts": [
+     [
+      "124.2202",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 180 72",
+    "stdout_sha256": "7303103f236503053f3f9bb69e9e523349ead4b0c546526492ffbaa54af0de62",
+    "texts": [
+     [
+      "124.2202",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 180 72",
+    "stdout_sha256": "7303103f236503053f3f9bb69e9e523349ead4b0c546526492ffbaa54af0de62",
+    "texts": [
+     [
+      "124.2202",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "mk8_sans_bold_23",
+   "axes": [
+    "mark",
+    "Lucida Grande Bold",
+    "size 23"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 186 73",
+    "stdout_sha256": "5e48d790294fa8281b3978e446ab293cb2dc52d79ffc41736cc29f437ef41c0b",
+    "texts": [
+     [
+      "130.3184",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 174 73",
+    "stdout_sha256": "831f25ed05ec2235fc20c2b001cf65f7a7fc51f0d17ca23ce1dcd4d0cf382db1",
+    "texts": [
+     [
+      "118.8184",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 140 73",
+    "stdout_sha256": "ab1f505c60a71b87e59496e28e2fb9b239a803848addeada4afb30682e64c3c0",
+    "texts": [
+     [
+      "84.3184",
+      "Vault 𝅻q𞗮"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_31b8_simple",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 31B8-31BF",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "997e532513d2e765858c766b1e280e65439c4bf0d0765806dcc60f89ae533d86",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㆸ"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "1961b37bb9d9b977d5b9b75fd17493ec37ac4324d809506f899ea2605d8c4181",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㆸ"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "1961b37bb9d9b977d5b9b75fd17493ec37ac4324d809506f899ea2605d8c4181",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㆸ"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_31b8_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 31B8-31BF",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "1d5f215fa226ed36888b512fb7c0913f4914ae439bcc369a0d5e55c0202ca6b4",
+    "texts": [
+     [
+      "67.2861",
+      "Vault ㆸ􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "b735c5149de04b896f0e6605606699323ad36031bdf9d34cb3aee3cb55a905df",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ㆸ􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 115 68",
+    "stdout_sha256": "a56284e0b050f2d16ee7a593339eaba89d2686bc6cad582d73acf91e37477f90",
+    "texts": [
+     [
+      "63.7861",
+      "Vault ㆸ􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_324a_simple",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 3248-324F",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "24eafeb2d6d4845373af13180302119710b76fb7b1dd32a0251dd1713c26b621",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㉊"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "5841cb74217256ba92b809f26d50287ea6e6c925638def0a8b0b421e08662d68",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㉊"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "5841cb74217256ba92b809f26d50287ea6e6c925638def0a8b0b421e08662d68",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㉊"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_324a_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only 3248-324F",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "249285c8234aadfbf79595dc4c68466bbbf4bd83c8c46e0c1b233bcea623f1a4",
+    "texts": [
+     [
+      "67.2861",
+      "Vault ㉊􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "30cc0f5c2bc9dbf32ad49ab48390d3c6cd1fdad51fdd24a548a64c648049f5b9",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ㉊􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 115 68",
+    "stdout_sha256": "00d0e2ba9d84158bbf0f6e13b9ca99c0cb50734be62e7714d2174b3ae7117912",
+    "texts": [
+     [
+      "63.7861",
+      "Vault ㉊􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_fe22_simple",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only FE20-FE23",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "d74ca1d7717a726c011c1f7b49f2b70dda5320dcff4c8921898bbcde7c1d24c9",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ︢"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "e1a6fce95b949e38c9859efa247f38bfdf68c4fbc9a41f8b380190184470849d",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ︢"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "e1a6fce95b949e38c9859efa247f38bfdf68c4fbc9a41f8b380190184470849d",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ︢"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_fe22_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset complex-only FE20-FE23",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "aa94e26bc1ecda95e42abd5271c5c2bd2eea4446a96a6866c4758d9a66028f37",
+    "texts": [
+     [
+      "67.2861",
+      "Vault ︢􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "0010dc2958e13435b81b8f754364ee8d5a65aa5dbee378af92e3489eb7138b10",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ︢􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 115 68",
+    "stdout_sha256": "52d37540239c70825a25c4b96a52f0a6149dbdc28e7f3b8bca7faecebc998890",
+    "texts": [
+     [
+      "63.7861",
+      "Vault ︢􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_1f105_complex",
+   "axes": [
+    "font environment",
+    "PingFang asset 1F101-1F10A",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "7d155e9164a127981546074faf6cd6635aeb36e94279156207b73481dd447fc6",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 🄅􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "25138ad87bd9e21006499f87666d9f200cbc024ae347ce057462e06acbe31244",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 🄅􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 115 68",
+    "stdout_sha256": "7de5c36e84229f42e697caf71aa98557686704de904f0bec16013348353f74ff",
+    "texts": [
+     [
+      "63.7861",
+      "Vault 🄅􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_327e_simple",
+   "axes": [
+    "font environment",
+    "simple-path only on Monkey Man 327E",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "053438fd672d37b89e192a9b4d917e93b9077344404241210438d0caf55c7d64",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㉾"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "135a98a8ae3ce978c7a08d2ac99617fcc26522bc7a6e4880f7815a8a1759d31f",
+    "texts": [
+     [
+      "49.7861",
+      "Vault ㉾"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "1748d372db58b24bb27b87b73ae3dffb87b357aaaff256d640f48d07c50b0a72",
+    "texts": [
+     [
+      "53.2861",
+      "Vault ㉾"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_327e_complex",
+   "axes": [
+    "font environment",
+    "simple-path only on Monkey Man 327E",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "5b05367cbbd73ba79cb77590df33ac9c3f6adadfe50664c2f99b1d28825196b9",
+    "texts": [
+     [
+      "67.2861",
+      "Vault ㉾􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "fc0d76cbee3b9fdcd20ece97d208df9ee2910bcf7e089ab0bc138be6aa5d4547",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ㉾􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "fc0d76cbee3b9fdcd20ece97d208df9ee2910bcf7e089ab0bc138be6aa5d4547",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ㉾􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f830_simple",
+   "axes": [
+    "font environment",
+    "simple-path F828-F83B",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "a477b1f142591e2c5377ee0f4ba93d02f8227c728bacf88bbc61d83943db0f92",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "b2ce46a1faa893dc0eb76e1271e5d7fa5b836bc0f216581271cafbcd20ed53a5",
+    "texts": [
+     [
+      "49.7861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "05a8707e1e36eedabf42f90e9bd73e54293c167a8d62a26879d7d7ea23a6fe08",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f830_complex",
+   "axes": [
+    "font environment",
+    "simple-path F828-F83B",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "fb2db949401fe5f85eed49f9cb5c1161f13ba361ff9c2f81e58e3cb9086e8e09",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "d60e9d71e4dc1bc0a25090946ae5f54af1786ca1531c9b893392b425ae0fb1f0",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "d60e9d71e4dc1bc0a25090946ae5f54af1786ca1531c9b893392b425ae0fb1f0",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_fa2e_simple",
+   "axes": [
+    "font environment",
+    "simple-path FA2E-FA2F",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "26bf16ef37ce6244e1f7e978e1fc2ac6452fa2e35f86d189643d3d03879a6320",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 郞"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "35750b529869337a0f13a1ce6652ea7a9059256e35da65072b72e7df2feca2cb",
+    "texts": [
+     [
+      "49.7861",
+      "Vault 郞"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "f03084ec8d93318d59bd357fe0a8b4cb7527c242f8bb44d8c3a7c6a3a4b292b6",
+    "texts": [
+     [
+      "53.2861",
+      "Vault 郞"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_fa2e_complex",
+   "axes": [
+    "font environment",
+    "simple-path FA2E-FA2F",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "1eaa4c96380cc5ee04f2fa328038381f0167ed54aca7556b58a34850f8def3be",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 郞􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "f33de7bdd4fed68430c3f691e84568a9c346dcfa207070a1f60a51b04c72aeb5",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 郞􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "f33de7bdd4fed68430c3f691e84568a9c346dcfa207070a1f60a51b04c72aeb5",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 郞􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f881_simple",
+   "axes": [
+    "font environment",
+    "simple-path F880-F881 (LiHeiPro)",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "422c79ff706c1d3c2bbef70037ea6255efe9c6bd860896bd8b84d85907f20b83",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "cb42c067cf9b55c4c000670b8068c66ae963f1952429cce3f4218b43d7852ce5",
+    "texts": [
+     [
+      "49.7861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "93c42c24750e92f1926fd1da6f3381350766b4f7b337da663d9c8f746c26ce43",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f881_complex",
+   "axes": [
+    "font environment",
+    "simple-path F880-F881 (LiHeiPro)",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "ac9571acc56a02931280a2f4846aeff673b487b127af1fb655f7188863a4db33",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "8bc5081f1b69ed7b721bbb9c3f7ae43200322457b457fd2d34ae267c76f3eb7b",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "8bc5081f1b69ed7b721bbb9c3f7ae43200322457b457fd2d34ae267c76f3eb7b",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_218a_simple",
+   "axes": [
+    "font environment",
+    "user font 218A",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 99 68",
+    "stdout_sha256": "42298692c2ac964e08c7f17f21be240abbd9f16b5f7edb9b8553ea264d1cf0f9",
+    "texts": [
+     [
+      "47.0176",
+      "Vault ↊"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "a9c634bb37dc1c1c67d59a5b2f390e532cbb7e4795ac157f3a41bcf1bd0b8192",
+    "texts": [
+     [
+      "49.7861",
+      "Vault ↊"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 99 68",
+    "stdout_sha256": "e106822da3b041c5ac7fa3f0ae0bf6d9b06435058f5059d2c20dbb64f866ebe1",
+    "texts": [
+     [
+      "47.0176",
+      "Vault ↊"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_218a_complex",
+   "axes": [
+    "font environment",
+    "user font 218A",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 113 68",
+    "stdout_sha256": "0aaae22cc410fddc56ed640158421bb025c31ee891849d8326b9e3760a70dc3c",
+    "texts": [
+     [
+      "61.0176",
+      "Vault ↊􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "e848a63770b229f421b5a34e1aba554be408bdddb3aba1c5cd6553306ff03436",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ↊􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "e848a63770b229f421b5a34e1aba554be408bdddb3aba1c5cd6553306ff03436",
+    "texts": [
+     [
+      "60.2861",
+      "Vault ↊􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f851_simple",
+   "axes": [
+    "font environment",
+    "user font F851-F85E",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "6c495de5344a7e6a71066f91800502c8933fafc916f98ba985865e3c85dd64a0",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "b409d3824896d3a5f8e22252f364c3b45b3fced772217bb2948b4fe30cb0e11b",
+    "texts": [
+     [
+      "49.7861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "cd5d46e9364037878d0325bb4ccc6e326eafba64c7806192e3c5eaba07e47fd4",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f851_complex",
+   "axes": [
+    "font environment",
+    "user font F851-F85E",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "3af9faf97f5998c312d9e0fcbcf971830abf413da84073c0110dedcfa03f4e1c",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "e7491d7413a49ec549745362ecfd0ae0e2b266f72e7c0f40e3439491869edd6d",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "e7491d7413a49ec549745362ecfd0ae0e2b266f72e7c0f40e3439491869edd6d",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f8c0_simple",
+   "axes": [
+    "font environment",
+    "user font F8B7-F8FE",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "1a2c2df2da2b35db71185e3abe415976209816b7d57aff33b543bd5157aa777d",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "ab648ef5197c9180934fc2abc99ab4f1ed3e81bc35f44288df79c4e2250c59c7",
+    "texts": [
+     [
+      "49.7861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "e9aa0dfe5b848692bc6c1c47d3484c72f1b9123c50409cf143dcfbbe0403b3f5",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f8c0_complex",
+   "axes": [
+    "font environment",
+    "user font F8B7-F8FE",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "3d694cafcc0089e9f8632d11cebbf50c32084a0fed92e74459e422e1cf43fef4",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "1909262d080a16d4995f17a1ba4a3fc584108a28ff1b0509598d3de47f383f49",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "1909262d080a16d4995f17a1ba4a3fc584108a28ff1b0509598d3de47f383f49",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f8fe_simple",
+   "axes": [
+    "font environment",
+    "user font F8FE",
+    "simple path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "5541aadedea5b6e1967bfe492fa874f3636037735997c3479a6cbbb33ea28b0b",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 101 68",
+    "stdout_sha256": "312eda95d0152e332144f84c08094ee6c8f57b26ae129d68be3800eab70299af",
+    "texts": [
+     [
+      "49.7861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 105 68",
+    "stdout_sha256": "aaf9ed73719cb8d63e4be722206a65f4352e49663203aef39ca26cf06dfaa341",
+    "texts": [
+     [
+      "53.2861",
+      "Vault "
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "fe8_f8fe_complex",
+   "axes": [
+    "font environment",
+    "user font F8FE",
+    "complex path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 119 68",
+    "stdout_sha256": "91cebbb1a32a5af98e6acd16c1934f7321454d15965ad5c35bf8556fe5f758d9",
+    "texts": [
+     [
+      "67.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "c808dc5fc18191ca23d024d75ac4307a1e42bd37cc10f005e20815c680e50aa5",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 112 68",
+    "stdout_sha256": "c808dc5fc18191ca23d024d75ac4307a1e42bd37cc10f005e20815c680e50aa5",
+    "texts": [
+     [
+      "60.2861",
+      "Vault 􏿽"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_outer_pier_jetty_mm",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 107 483",
+    "stdout_sha256": "c11a09958a455373dbd0ff8e0ccf6bae4d6f94361b3cba0723b33f6b09dfead8",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 107 482",
+    "stdout_sha256": "e9e684ea96dddfceaa34fddb3ccfc407e342ec77f6fd754ddcd86cbd538eefc7",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 108 482",
+    "stdout_sha256": "a331712b3bcce7980cfd39ff81e6708e6ceeb72d63b3deb4a939f8731bfdc734",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_outer_harbour_ko_pier",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 107 483",
+    "stdout_sha256": "e8cb5d58a81fd537b29081ddb3798cd7c077f3e4750008453d21d8ba00601cb5",
+    "texts": [
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 107 482",
+    "stdout_sha256": "f76a1164047384e83080cb4d455326ccf4b25ef285eb2bc2b400390b97124a93",
+    "texts": [
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 108 482",
+    "stdout_sha256": "83884ec1083ab325ab3c602df9a029f3c2cd0dcd17cad272fd4a02b0abcfca85",
+    "texts": [
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_outer_mm_pier_il",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 107 483",
+    "stdout_sha256": "98a244a9eef3b0d7d9f84668d784610d1054f6448336a05708854c9e54679eb3",
+    "texts": [
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "8.0801",
+      "Il"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 107 482",
+    "stdout_sha256": "03bbd25b7c716d038041fa80a5964ba588938180c75449b03af2ea3781cfd33d",
+    "texts": [
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "8.0801",
+      "Il"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 108 482",
+    "stdout_sha256": "6a85d3d08645eb78a79d53f70402e84bf29ea39816e30ec0b462eb992554fa85",
+    "texts": [
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "8.0801",
+      "Il"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_outer_dock_mm_harbour",
+   "axes": [
+    "canvas",
+    "outer path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 133 483",
+    "stdout_sha256": "b8073e1b821edf74d6085ad903633a086cf8a09ca3e5b539d51132521672b85c",
+    "texts": [
+     [
+      "34.4395",
+      "Dock"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 133 482",
+    "stdout_sha256": "05eaa20bdc7118b0dfd00d1ca8923080f79334ea993013b71d168a1bdedc9d24",
+    "texts": [
+     [
+      "34.4395",
+      "Dock"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 133 482",
+    "stdout_sha256": "05eaa20bdc7118b0dfd00d1ca8923080f79334ea993013b71d168a1bdedc9d24",
+    "texts": [
+     [
+      "34.4395",
+      "Dock"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_outer_buoy_mm_lighthouse",
+   "axes": [
+    "canvas",
+    "outer path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 153 483",
+    "stdout_sha256": "a7b9492ecd97e51ebcfdc5c7be972f58081d233d503f309085bafc25df165982",
+    "texts": [
+     [
+      "32.6553",
+      "Buoy"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "75.0791",
+      "Lighthouse"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 153 482",
+    "stdout_sha256": "14b8f324c8f2dec496315b794fd97a4d07d8145439d7bf1f69c59edd78b65025",
+    "texts": [
+     [
+      "32.6553",
+      "Buoy"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "75.0791",
+      "Lighthouse"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 153 482",
+    "stdout_sha256": "14b8f324c8f2dec496315b794fd97a4d07d8145439d7bf1f69c59edd78b65025",
+    "texts": [
+     [
+      "32.6553",
+      "Buoy"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "75.0791",
+      "Lighthouse"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_root_pier_jetty_mm",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 324 291",
+    "stdout_sha256": "a997d3fb0f27d3637f06fde619769c5acaf8fb14b3ee513205100220123c82d0",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 255 307",
+    "stdout_sha256": "31669e91a534bdcb2e0f202f8741f396137cda0c4145522c14daf59540950e25",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 254 307",
+    "stdout_sha256": "c2478b04d4f3641a3711c61eca11dd57937a71684eedfd4172b8d2883a023f7b",
+    "texts": [
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_root_quay_dock_harbour",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 328 291",
+    "stdout_sha256": "2fe37761937ea9874a14ebabda0d3c88c16c8a5fcd8c478f068d579b9d5e346c",
+    "texts": [
+     [
+      "34.6104",
+      "Quay"
+     ],
+     [
+      "34.4395",
+      "Dock"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 268 307",
+    "stdout_sha256": "345721ae56691b8fc7ed66d0e94001d26edcb90caebfe3feafb35438db11e4a0",
+    "texts": [
+     [
+      "34.6104",
+      "Quay"
+     ],
+     [
+      "34.4395",
+      "Dock"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 267 307",
+    "stdout_sha256": "fc6a5881a7e9260d854c402e86d9ef1e51b9bb502ea115d8b40e3223d2904e7b",
+    "texts": [
+     [
+      "34.6104",
+      "Quay"
+     ],
+     [
+      "34.4395",
+      "Dock"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_root_wharf_anchorage_pier",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 334 291",
+    "stdout_sha256": "569c1e1b7068d8949099ed0cc089216db9fb63b88d13be2337a0b64d5f89a3ea",
+    "texts": [
+     [
+      "39.2725",
+      "Wharf"
+     ],
+     [
+      "72.7959",
+      "Anchorage"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 234 307",
+    "stdout_sha256": "80bb86a39c926a7c8d1d4c2a35b6e6fe6b0848abb3af42b3c4cf4a3d775f2b72",
+    "texts": [
+     [
+      "39.2725",
+      "Wharf"
+     ],
+     [
+      "72.7959",
+      "Anchorage"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 233 307",
+    "stdout_sha256": "2278b4992daec2f86077b04272b106fb9a86c3a2ba1f989d41d11e7581747a10",
+    "texts": [
+     [
+      "39.2725",
+      "Wharf"
+     ],
+     [
+      "72.7959",
+      "Anchorage"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "29.7324",
+      "calm"
+     ],
+     [
+      "26.8994",
+      "Gull"
+     ],
+     [
+      "26.9014",
+      "drift"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_rootlate_quay_mooring_wharf",
+   "axes": [
+    "canvas",
+    "rootlate path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 273 181",
+    "stdout_sha256": "e60bebaa5234f4e1a0d44c6b404a648b3eb6866c205ea36fc4e309b634a87fd7",
+    "texts": [
+     [
+      "34.6104",
+      "Quay"
+     ],
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "39.2725",
+      "Wharf"
+     ],
+     [
+      "29.6689",
+      "busy"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 196 232",
+    "stdout_sha256": "5b19512315b2ba14424b2d69c1249b10a0576445264cf78671f324aecac35885",
+    "texts": [
+     [
+      "34.6104",
+      "Quay"
+     ],
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "39.2725",
+      "Wharf"
+     ],
+     [
+      "29.6689",
+      "busy"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 195 232",
+    "stdout_sha256": "6eb99b9f3b421ca16efd7b06916a8203b5bbb133f42fdb522706cb59e1f8ab0d",
+    "texts": [
+     [
+      "34.6104",
+      "Quay"
+     ],
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "39.2725",
+      "Wharf"
+     ],
+     [
+      "29.6689",
+      "busy"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_rootlate_mooring_pier_ko",
+   "axes": [
+    "canvas",
+    "rootlate path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 268 181",
+    "stdout_sha256": "db340bda147f268fc20e5c7010784f1952d1826de3dbabd2abed93a8cbe98d4e",
+    "texts": [
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "29.6689",
+      "busy"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 173 232",
+    "stdout_sha256": "252a991cd5efd0771304420e2d9f92fdc4df23573707cf596da1d3f8f87812c6",
+    "texts": [
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "29.6689",
+      "busy"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 172 232",
+    "stdout_sha256": "63a9924367e3e8a913fa5aee96144dc86b9bceb937de36574068af20e1ab3249",
+    "texts": [
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "25.3135",
+      "Pier"
+     ],
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "29.6689",
+      "busy"
+     ]
+    ]
+   },
+   "tip_equals_merge": false,
+   "tip_equals_base": false
+  },
+  {
+   "name": "cv8_flat_mooring_harbour_slipway",
+   "axes": [
+    "canvas",
+    "flat path",
+    "flat state path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 98 472",
+    "stdout_sha256": "ad8387f5a082b782449c6cbdc271b7d53652eccc17e2689ae6e9f74b839aa97c",
+    "texts": [
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "50.2783",
+      "Slipway"
+     ],
+     [
+      "16.0913",
+      "go"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 98 472",
+    "stdout_sha256": "ad8387f5a082b782449c6cbdc271b7d53652eccc17e2689ae6e9f74b839aa97c",
+    "texts": [
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "50.2783",
+      "Slipway"
+     ],
+     [
+      "16.0913",
+      "go"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 98 472",
+    "stdout_sha256": "ad8387f5a082b782449c6cbdc271b7d53652eccc17e2689ae6e9f74b839aa97c",
+    "texts": [
+     [
+      "56.4512",
+      "Mooring"
+     ],
+     [
+      "55.5762",
+      "Harbour"
+     ],
+     [
+      "50.2783",
+      "Slipway"
+     ],
+     [
+      "16.0913",
+      "go"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "cv8_flat_ko_jetty_mm",
+   "axes": [
+    "canvas",
+    "flat path",
+    "flat state path"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 72 472",
+    "stdout_sha256": "3b679eef73a5bf36bdfedbd7bb5849195ccc3bbff385dda3032e5a03bee3c07b",
+    "texts": [
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "16.0913",
+      "go"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 72 472",
+    "stdout_sha256": "3b679eef73a5bf36bdfedbd7bb5849195ccc3bbff385dda3032e5a03bee3c07b",
+    "texts": [
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "16.0913",
+      "go"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 72 472",
+    "stdout_sha256": "3b679eef73a5bf36bdfedbd7bb5849195ccc3bbff385dda3032e5a03bee3c07b",
+    "texts": [
+     [
+      "17.7393",
+      "Ko"
+     ],
+     [
+      "29.9414",
+      "Jetty"
+     ],
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "16.0913",
+      "go"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "cv8_class_note",
+   "axes": [
+    "canvas",
+    "class family (svek)",
+    "short labels"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 142 70",
+    "stdout_sha256": "4f5b19c288dcf2613707be17b0b7e4d1e25bd3a7e61fc8da6bb19a59308a0634",
+    "texts": [
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "7.5029",
+      "Il"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 142 70",
+    "stdout_sha256": "4f5b19c288dcf2613707be17b0b7e4d1e25bd3a7e61fc8da6bb19a59308a0634",
+    "texts": [
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "7.5029",
+      "Il"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 142 70",
+    "stdout_sha256": "4f5b19c288dcf2613707be17b0b7e4d1e25bd3a7e61fc8da6bb19a59308a0634",
+    "texts": [
+     [
+      "25.1289",
+      "Mm"
+     ],
+     [
+      "7.5029",
+      "Il"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "cv8_usecase",
+   "axes": [
+    "canvas",
+    "usecase family"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 75 185",
+    "stdout_sha256": "f923a6c4492a1271f3b6e03e3a32bb3fed3e42b044e296259171eb1873a5b8ee",
+    "texts": [
+     [
+      "29.668",
+      "Pilot"
+     ],
+     [
+      "34.9863",
+      "Moor"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 75 185",
+    "stdout_sha256": "f923a6c4492a1271f3b6e03e3a32bb3fed3e42b044e296259171eb1873a5b8ee",
+    "texts": [
+     [
+      "29.668",
+      "Pilot"
+     ],
+     [
+      "34.9863",
+      "Moor"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 75 185",
+    "stdout_sha256": "f923a6c4492a1271f3b6e03e3a32bb3fed3e42b044e296259171eb1873a5b8ee",
+    "texts": [
+     [
+      "29.668",
+      "Pilot"
+     ],
+     [
+      "34.9863",
+      "Moor"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "cv8_component",
+   "axes": [
+    "canvas",
+    "component family"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 99 173",
+    "stdout_sha256": "a189e79daad35638c292bd8ebe7d8818881f5b698b0dd4b545863ae755485f10",
+    "texts": [
+     [
+      "38.3086",
+      "Pump"
+     ],
+     [
+      "35.9775",
+      "Valve"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 99 173",
+    "stdout_sha256": "a189e79daad35638c292bd8ebe7d8818881f5b698b0dd4b545863ae755485f10",
+    "texts": [
+     [
+      "38.3086",
+      "Pump"
+     ],
+     [
+      "35.9775",
+      "Valve"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 99 173",
+    "stdout_sha256": "a189e79daad35638c292bd8ebe7d8818881f5b698b0dd4b545863ae755485f10",
+    "texts": [
+     [
+      "38.3086",
+      "Pump"
+     ],
+     [
+      "35.9775",
+      "Valve"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  },
+  {
+   "name": "cv8_activity",
+   "axes": [
+    "canvas",
+    "activity family"
+   ],
+   "intended_valid": true,
+   "base": {
+    "exit": 0,
+    "viewBox": "0 0 85 151",
+    "stdout_sha256": "e440a1c99698f18bdee9b19dd47bc0881bad9ed7b76656182d0a2e019de031f5",
+    "texts": [
+     [
+      "29.9883",
+      "Moor"
+     ]
+    ]
+   },
+   "merge": {
+    "exit": 0,
+    "viewBox": "0 0 85 151",
+    "stdout_sha256": "e440a1c99698f18bdee9b19dd47bc0881bad9ed7b76656182d0a2e019de031f5",
+    "texts": [
+     [
+      "29.9883",
+      "Moor"
+     ]
+    ]
+   },
+   "tip": {
+    "exit": 0,
+    "viewBox": "0 0 85 151",
+    "stdout_sha256": "e440a1c99698f18bdee9b19dd47bc0881bad9ed7b76656182d0a2e019de031f5",
+    "texts": [
+     [
+      "29.9883",
+      "Moor"
+     ]
+    ]
+   },
+   "tip_equals_merge": true,
+   "tip_equals_base": true
+  }
+ ]
+}

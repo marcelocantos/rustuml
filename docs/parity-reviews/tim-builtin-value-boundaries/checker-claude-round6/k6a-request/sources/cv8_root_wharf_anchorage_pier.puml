@@ -1,0 +1,8 @@
+@startuml
+state Wharf {
+  Anchorage --> Pier
+  note right of Pier : calm
+}
+note left of Gull : drift
+Gull --> Anchorage
+@enduml

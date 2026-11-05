@@ -1,0 +1,7 @@
+hb-ot-shape-fallback.cc byte-identical to tag 10.0.1
+hb-ot-shape.cc byte-identical to tag 10.0.1
+hb-ot-shaper-default.cc byte-identical to tag 10.0.1
+hb-ot-shaper-hebrew.cc byte-identical to tag 10.0.1
+hb-ot-shaper.hh byte-identical to tag 10.0.1
+hb-unicode.hh byte-identical to tag 10.0.1
+meson.build byte-identical to tag 10.0.1

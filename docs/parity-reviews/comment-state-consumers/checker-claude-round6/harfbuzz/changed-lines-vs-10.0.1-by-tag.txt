@@ -1,0 +1,13 @@
+== 8.2.2: hb-ot-shape-fallback.cc:0 hb-ot-shape.cc:35 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:2 hb-ot-shaper-arabic.cc:11 hb-ot-shaper.hh:36 hb-unicode.hh:3 ucd=15.1.0
+== 10.1.0: hb-ot-shape-fallback.cc:0 hb-ot-shape.cc:5 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:0 hb-ot-shaper.hh:0 hb-unicode.hh:3 ucd=16.0.0
+== 10.4.0: hb-ot-shape-fallback.cc:0 hb-ot-shape.cc:56 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:0 hb-ot-shaper.hh:0 hb-unicode.hh:3 ucd=16.0.0
+== 11.0.0: hb-ot-shape-fallback.cc:0 hb-ot-shape.cc:69 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:2 hb-ot-shaper.hh:0 hb-unicode.hh:3 ucd=16.0.0
+== 11.4.5: hb-ot-shape-fallback.cc:38 hb-ot-shape.cc:204 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:4 hb-ot-shaper.hh:0 hb-unicode.hh:54 ucd=16.0.0
+== 11.5.0: hb-ot-shape-fallback.cc:38 hb-ot-shape.cc:207 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:4 hb-ot-shaper.hh:6 hb-unicode.hh:54 ucd=17.0.0
+== 11.5.1: hb-ot-shape-fallback.cc:38 hb-ot-shape.cc:207 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:4 hb-ot-shaper.hh:6 hb-unicode.hh:54 ucd=17.0.0
+== 12.3.2: hb-ot-shape-fallback.cc:38 hb-ot-shape.cc:288 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:4 hb-ot-shaper.hh:6 hb-unicode.hh:54 ucd=17.0.0
+== 13.2.1: hb-ot-shape-fallback.cc:38 hb-ot-shape.cc:310 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:49 hb-ot-shaper.hh:6 hb-unicode.hh:54 ucd=17.0.0
+== 14.0.0: hb-ot-shape-fallback.cc:38 hb-ot-shape.cc:310 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:49 hb-ot-shaper.hh:6 hb-unicode.hh:54 ucd=17.0.0
+== 14.6.0: hb-ot-shape-fallback.cc:124 hb-ot-shape.cc:349 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:68 hb-ot-shaper.hh:11 hb-unicode.hh:56 ucd=18.0.0
+== 15.0.0: hb-ot-shape-fallback.cc:124 hb-ot-shape.cc:349 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:80 hb-ot-shaper.hh:11 hb-unicode.hh:56 ucd=18.0.0
+== 15.1.0: hb-ot-shape-fallback.cc:124 hb-ot-shape.cc:349 hb-ot-shaper-default.cc:0 hb-ot-shaper-hebrew.cc:0 hb-ot-shaper-arabic.cc:80 hb-ot-shaper.hh:11 hb-unicode.hh:56 ucd=18.0.0

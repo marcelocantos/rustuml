@@ -1,0 +1,4 @@
+@startjson
+skinparam tabSize 4
+{"k": "a\tb", "w": "wide\tz"}
+@endjson
