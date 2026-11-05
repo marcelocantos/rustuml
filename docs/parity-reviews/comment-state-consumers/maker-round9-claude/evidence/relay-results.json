@@ -1,0 +1,810 @@
+{
+ "schema_version": 1,
+ "mm_styles": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round9-mm-styles",
+  "out_SHA256SUMS": "ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55",
+  "run.stdout": "d117fa006ba9208500b2930ce69cbde436c647afa917cb7396a9bc9111a46dd2",
+  "exit": 0,
+  "comparisons": [
+   "12 faces of monkeyman-round6: identical except #host (no reference-host drift since round 6)",
+   "24 own-cmap slots: identical to colossus except #host",
+   "10 italic chain extractions: differ from the provisional colossus data by 215-219 complex-path and 5 simple-path code points; the generated table now uses Monkey Man's",
+   "data swap 59c10105c -> 14dd5efae changed no batch output (973 cases) and no sweep output (17,216 sources; only thread ids of 4 pre-existing panics)"
+  ]
+ },
+ "face_probe": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round9-face-probe/probe.stdout",
+  "sha256": "867953601415e701f4a00420d87845bf01d2f3a16550910ec7d86de2c40c2c56",
+  "rows": [
+   {
+    "family": "SansSerif",
+    "style": "plain",
+    "font_name": "SansSerif",
+    "ps_name": "SansSerif",
+    "with_mark": 38.3291015625,
+    "without": 38.3291015625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "SansSerif",
+    "style": "bold",
+    "font_name": "SansSerif",
+    "ps_name": "SansSerif",
+    "with_mark": 40.591796875,
+    "without": 40.591796875,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "SansSerif",
+    "style": "italic",
+    "font_name": "SansSerif",
+    "ps_name": "SansSerif",
+    "with_mark": 41.0361328125,
+    "without": 38.3291015625,
+    "mark_delta": 2.70703125
+   },
+   {
+    "family": "SansSerif",
+    "style": "bolditalic",
+    "font_name": "SansSerif",
+    "ps_name": "SansSerif",
+    "with_mark": 43.298828125,
+    "without": 40.591796875,
+    "mark_delta": 2.70703125
+   },
+   {
+    "family": "Lucida Grande",
+    "style": "plain",
+    "font_name": "LucidaGrande",
+    "ps_name": "LucidaGrande",
+    "with_mark": 38.3291015625,
+    "without": 38.3291015625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Lucida Grande",
+    "style": "bold",
+    "font_name": "LucidaGrande-Bold",
+    "ps_name": "LucidaGrande-Bold",
+    "with_mark": 40.591796875,
+    "without": 40.591796875,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Lucida Grande",
+    "style": "italic",
+    "font_name": "LucidaGrande-Italic-Derived",
+    "ps_name": "LucidaGrande-Italic-Derived",
+    "with_mark": 41.0361328125,
+    "without": 38.3291015625,
+    "mark_delta": 2.70703125
+   },
+   {
+    "family": "Lucida Grande",
+    "style": "bolditalic",
+    "font_name": "LucidaGrande-BoldItalic-Derived",
+    "ps_name": "LucidaGrande-BoldItalic-Derived",
+    "with_mark": 43.298828125,
+    "without": 40.591796875,
+    "mark_delta": 2.70703125
+   },
+   {
+    "family": "Arial",
+    "style": "plain",
+    "font_name": "ArialMT",
+    "ps_name": "ArialMT",
+    "with_mark": 46.2861328125,
+    "without": 35.7861328125,
+    "mark_delta": 10.5
+   },
+   {
+    "family": "Arial",
+    "style": "bold",
+    "font_name": "Arial-BoldMT",
+    "ps_name": "Arial-BoldMT",
+    "with_mark": 48.6376953125,
+    "without": 38.1376953125,
+    "mark_delta": 10.5
+   },
+   {
+    "family": "Arial",
+    "style": "italic",
+    "font_name": "Arial-ItalicMT",
+    "ps_name": "Arial-ItalicMT",
+    "with_mark": 46.2861328125,
+    "without": 35.7861328125,
+    "mark_delta": 10.5
+   },
+   {
+    "family": "Arial",
+    "style": "bolditalic",
+    "font_name": "Arial-BoldItalicMT",
+    "ps_name": "Arial-BoldItalicMT",
+    "with_mark": 48.6376953125,
+    "without": 38.1376953125,
+    "mark_delta": 10.5
+   },
+   {
+    "family": "Helvetica",
+    "style": "plain",
+    "font_name": "Helvetica",
+    "ps_name": "Helvetica",
+    "with_mark": 35.7861328125,
+    "without": 35.7861328125,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Helvetica",
+    "style": "bold",
+    "font_name": "Helvetica-Bold",
+    "ps_name": "Helvetica-Bold",
+    "with_mark": 38.1376953125,
+    "without": 38.1376953125,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Helvetica",
+    "style": "italic",
+    "font_name": "Helvetica-Oblique",
+    "ps_name": "Helvetica-Oblique",
+    "with_mark": 35.7861328125,
+    "without": 35.7861328125,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Helvetica",
+    "style": "bolditalic",
+    "font_name": "Helvetica-BoldOblique",
+    "ps_name": "Helvetica-BoldOblique",
+    "with_mark": 38.1376953125,
+    "without": 38.1376953125,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Verdana",
+    "style": "plain",
+    "font_name": "Verdana",
+    "ps_name": "Verdana",
+    "with_mark": 53.8056640625,
+    "without": 39.8056640625,
+    "mark_delta": 14.0
+   },
+   {
+    "family": "Verdana",
+    "style": "bold",
+    "font_name": "Verdana-Bold",
+    "ps_name": "Verdana-Bold",
+    "with_mark": 59.4521484375,
+    "without": 45.4521484375,
+    "mark_delta": 14.0
+   },
+   {
+    "family": "Verdana",
+    "style": "italic",
+    "font_name": "Verdana-Italic",
+    "ps_name": "Verdana-Italic",
+    "with_mark": 53.8056640625,
+    "without": 39.8056640625,
+    "mark_delta": 14.0
+   },
+   {
+    "family": "Verdana",
+    "style": "bolditalic",
+    "font_name": "Verdana-BoldItalic",
+    "ps_name": "Verdana-BoldItalic",
+    "with_mark": 59.4521484375,
+    "without": 45.4521484375,
+    "mark_delta": 14.0
+   },
+   {
+    "family": "Monospaced",
+    "style": "plain",
+    "font_name": "Monospaced",
+    "ps_name": "Monospaced",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Monospaced",
+    "style": "bold",
+    "font_name": "Monospaced",
+    "ps_name": "Monospaced",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Monospaced",
+    "style": "italic",
+    "font_name": "Monospaced",
+    "ps_name": "Monospaced",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Monospaced",
+    "style": "bolditalic",
+    "font_name": "Monospaced",
+    "ps_name": "Monospaced",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Menlo",
+    "style": "plain",
+    "font_name": "Menlo-Regular",
+    "ps_name": "Menlo-Regular",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Menlo",
+    "style": "bold",
+    "font_name": "Menlo-Bold",
+    "ps_name": "Menlo-Bold",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Menlo",
+    "style": "italic",
+    "font_name": "Menlo-Italic",
+    "ps_name": "Menlo-Italic",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Menlo",
+    "style": "bolditalic",
+    "font_name": "Menlo-BoldItalic",
+    "ps_name": "Menlo-BoldItalic",
+    "with_mark": 50.572265625,
+    "without": 50.572265625,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Courier New",
+    "style": "plain",
+    "font_name": "CourierNewPSMT",
+    "ps_name": "CourierNewPSMT",
+    "with_mark": 50.408203125,
+    "without": 50.408203125,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Courier New",
+    "style": "bold",
+    "font_name": "CourierNewPS-BoldMT",
+    "ps_name": "CourierNewPS-BoldMT",
+    "with_mark": 50.408203125,
+    "without": 50.408203125,
+    "mark_delta": 0.0
+   },
+   {
+    "family": "Courier New",
+    "style": "italic",
+    "font_name": "CourierNewPS-ItalicMT",
+    "ps_name": "CourierNewPS-ItalicMT",
+    "with_mark": 58.8095703125,
+    "without": 50.408203125,
+    "mark_delta": 8.4013671875
+   },
+   {
+    "family": "Courier New",
+    "style": "bolditalic",
+    "font_name": "CourierNewPS-BoldItalicMT",
+    "ps_name": "CourierNewPS-BoldItalicMT",
+    "with_mark": 58.8095703125,
+    "without": 50.408203125,
+    "mark_delta": 8.4013671875
+   }
+  ],
+  "against_predictions": "every family x style resolves to the predicted face (Lucida Grande italics: LucidaGrande-Italic-Derived / LucidaGrande-BoldItalic-Derived); Courier New mark delta 0 plain and bold, 8.4013671875 italic and bold italic as predicted.",
+  "unpredicted": "SansSerif / Lucida Grande derived italic and bold italic add 2.70703125 for the unmapped mark at 14 pt where plain and bold add 0 (plain text width is unchanged: 38.3291015625). The face is the upright file, so this is not a per-face fact; it is the fake-italic path (CFont isFakeItalic). Not modelled; proposed as a target."
+ },
+ "BP": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round9-m9a",
+  "reference_results_sha256": "7afd0ed97055234da11c060c9a00f4a83c4bc230b6d0367e5c4b204458bb8b02",
+  "cases": {
+   "m9a_ci_seq_message": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_seq_message_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_seq_participant": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_seq_participant_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_seq_note": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_seq_note_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_seq_bolditalic": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_seq_bolditalic_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_act_action": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "tip DIFF1; control tip DIFF1",
+    "note": "probe differs from Java only where its control does (space drawn as NBSP in the activity action); the italic mark cell equals Java"
+   },
+   "m9a_ci_act_action_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "control residue at tip (DIFF1; base DIFF1, merge DIFF1)"
+   },
+   "m9a_ci_act_note": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 4,
+    "class": "tip DIFF4; control tip DIFF4",
+    "note": "activity note drawn sans-serif in RustUML (pre-existing; T14.39 context); same at every tree"
+   },
+   "m9a_ci_act_note_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 4,
+    "class": "control residue at tip (DIFF4; base DIFF4, merge DIFF4)"
+   },
+   "m9a_ci_act_bolditalic": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "tip DIFF1; control tip DIFF1",
+    "note": "same control residue as m9a_ci_act_action"
+   },
+   "m9a_ci_act_bolditalic_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "control residue at tip (DIFF1; base DIFF1, merge DIFF1)"
+   },
+   "m9a_ci_class_note": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 10,
+    "class": "tip DIFF10; control tip DIFF9",
+    "note": "class note drawn sans-serif without noteFontName (pre-existing); same at every tree"
+   },
+   "m9a_ci_class_note_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 9,
+    "class": "control residue at tip (DIFF9; base DIFF9, merge DIFF9)"
+   },
+   "m9a_ci_note_left": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 10,
+    "class": "tip DIFF10; control tip DIFF10",
+    "note": "same as m9a_ci_class_note"
+   },
+   "m9a_ci_note_left_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 10,
+    "class": "control residue at tip (DIFF10; base DIFF10, merge DIFF10)"
+   },
+   "m9a_ci_interface": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_interface_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_abstract_member": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_abstract_member_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_abstract_bold": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_abstract_bold_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_cb_bold_class": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_cb_bold_class_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_usecase_actor": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_usecase_actor_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_state_desc": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 2,
+    "class": "tip DIFF2; control tip DIFF2",
+    "note": "control residue DIFF2 (state description), mark cell equals Java"
+   },
+   "m9a_ci_state_desc_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 2,
+    "class": "control residue at tip (DIFF2; base DIFF2, merge DIFF2)"
+   },
+   "m9a_ci_act_note_font": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 4,
+    "class": "tip DIFF4; control tip DIFF4",
+    "note": "activity notes ignore noteFontName in RustUML (pre-existing); same at every tree"
+   },
+   "m9a_ci_act_note_font_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 4,
+    "class": "control residue at tip (DIFF4; base DIFF4, merge DIFF4)"
+   },
+   "m9a_ci_class_note_font": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ci_class_note_font_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_vi_hebrew_italic": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 7,
+    "class": "tip DIFF7; control tip DIFF7",
+    "note": "control residue (Hebrew fallback widths), unchanged merge -> tip"
+   },
+   "m9a_vi_hebrew_italic_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 7,
+    "class": "control residue at tip (DIFF7; base DIFF7, merge DIFF7)"
+   },
+   "m9a_mi_menlo_italic": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 8,
+    "class": "tip DIFF8; control tip DIFF8",
+    "note": "control residue, unchanged at every tree"
+   },
+   "m9a_mi_menlo_italic_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 8,
+    "class": "control residue at tip (DIFF8; base DIFF8, merge DIFF8)"
+   },
+   "m9a_ai_arial_italic": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_ai_arial_italic_ctrl": {
+    "java_exit": 0,
+    "base": "MATCH",
+    "merge": "MATCH",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_bidi_p2029_pdf_verdana": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_p2029_pdf_verdana_ctrl": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_p2029_pdf_space_verdana": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_p2029_pdf_space_verdana_ctrl": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_nel_pdf_verdana": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_nel_pdf_verdana_ctrl": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_nel_pdf_space_verdana": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_nel_pdf_space_verdana_ctrl": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_p2029_mixed_verdana": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_bidi_p2029_mixed_verdana_ctrl": {
+    "java_exit": 200,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 11,
+    "class": "Java rejects (exit 200, Syntax Error at the class line): U+2029/U+0085 not matched by the command regex (java.util.regex \".\" without DOTALL); RustUML renders at every tree (pre-existing acceptance difference)"
+   },
+   "m9a_lt_verdana_beng_link": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 2,
+    "class": "tip DIFF2; control tip DIFF1",
+    "note": "mark delta equals Java (+13.0 at 13 pt); canvas differs by the control residue in the Bengali fallback glyph width (Java 23.8727 vs RustUML 19.4429 in the control)"
+   },
+   "m9a_lt_verdana_beng_link_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "control residue at tip (DIFF1; base DIFF1, merge DIFF1)"
+   },
+   "m9a_lt_arial_guru_link": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "tip DIFF1; control tip DIFF1",
+    "note": "only difference is the control residue (Gurmukhi fallback width 18.2128 vs 18.021, node x 2-decimal rounding)"
+   },
+   "m9a_lt_arial_guru_link_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "control residue at tip (DIFF1; base DIFF9, merge DIFF9)"
+   },
+   "m9a_lt_verdana_size_link": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 2,
+    "class": "tip DIFF2; control tip DIFF1",
+    "note": "mark delta equals Java (+17.0 at 17 pt); remaining difference is the Tamil fallback glyph width also seen in the control"
+   },
+   "m9a_lt_verdana_size_link_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "control residue at tip (DIFF1; base DIFF9, merge DIFF9)"
+   },
+   "m9a_lt_courier_telu_link": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "tip DIFF1; control tip DIFF1",
+    "note": "only difference is the control residue (Telugu fallback width)"
+   },
+   "m9a_lt_courier_telu_link_ctrl": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "DIFF",
+    "tip_ndiff": 1,
+    "class": "control residue at tip (DIFF1; base DIFF9, merge DIFF9)"
+   },
+   "m9a_lt_arrowfont_link": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   },
+   "m9a_lt_arrowsize_link": {
+    "java_exit": 0,
+    "base": "DIFF",
+    "merge": "DIFF",
+    "tip": "MATCH",
+    "tip_ndiff": 0,
+    "class": "MATCH at tip"
+   }
+  }
+ }
+}

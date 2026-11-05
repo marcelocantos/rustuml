@@ -5,12 +5,12 @@
 running 17 tests
 test font_chain::tests::planner_ports_harfbuzz_15 ... ok
 test java_bidi::tests::conformance_bidi_character_test ... ignored
-test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
-test font_chain::tests::fallback_port_follows_position_cluster ... ok
 test font_chain::tests::complexity_follows_java_units ... ok
-test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
 test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
 test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
 test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
 test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
 test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
@@ -25,7 +25,7 @@ failures:
 
 ---- java_bidi::tests::java_bidi_oracle stdout ----
 
-thread 'java_bidi::tests::java_bidi_oracle' (58481584) panicked at crates/rustuml-render/src/java_bidi.rs:1567:9:
+thread 'java_bidi::tests::java_bidi_oracle' (58891808) panicked at crates/rustuml-render/src/java_bidi.rs:1567:9:
 43999 of 93786 differ from Java:
 D;202E 0061 202A 0062 202C 2066 0063 2069 202A 0064 202C 0065 202C
   java 1;0;0;1 1 2 2 2 2 2 2 2 2 1 1 0;1 1 2 2 2 2 2 2 2 2 1 1 0
@@ -69,6 +69,6 @@ warning: function `looks_like_description_bracket_command` is never used
 
 warning: `rustuml-parser` (lib) generated 1 warning
    Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
-    Finished `release` profile [optimized] target(s) in 19.03s
+    Finished `release` profile [optimized] target(s) in 18.76s
      Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
 error: test failed, to rerun pass `-p rustuml-render --lib`

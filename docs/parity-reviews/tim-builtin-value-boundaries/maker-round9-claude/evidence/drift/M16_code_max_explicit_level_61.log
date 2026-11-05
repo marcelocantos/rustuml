@@ -18,7 +18,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 failures:
     java_bidi::tests::java_bidi_oracle
 
-test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.26s
+test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.28s
 
 warning: function `looks_like_description_bracket_command` is never used
   --> crates/rustuml-parser/src/parse/component.rs:74:15
@@ -30,6 +30,6 @@ warning: function `looks_like_description_bracket_command` is never used
 
 warning: `rustuml-parser` (lib) generated 1 warning
    Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
-    Finished `release` profile [optimized] target(s) in 21.57s
+    Finished `release` profile [optimized] target(s) in 19.58s
      Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
 error: test failed, to rerun pass `-p rustuml-render --lib`

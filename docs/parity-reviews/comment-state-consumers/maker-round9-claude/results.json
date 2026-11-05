@@ -9,7 +9,8 @@
   "start (round-8 final review)": "8089ef15030e92f96609a46498d577cdd61c1dcf",
   "merge of parity-recovery-2026-11-03 dcf6d9076 (code = c3116f0b0)": "9d6af0a0e088546d470d0011e4af4c3049411c01",
   "base (dcf6d9076, code = 9834a7194)": "dcf6d90766b04c13b2fcc961736f7d90880caf46",
-  "measured code tip": "59c10105cd6ef114cedd12ac2c02a7d476d55ad1"
+  "measured code tip": "14dd5efaeb388dd557bd39f8b6ab40c4338ada6d",
+  "first measured tip (provisional italic chain data)": "59c10105cd6ef114cedd12ac2c02a7d476d55ad1"
  },
  "commit_roles": {
   "c518a95d5224ed5819b3791235ddeaca35cdad5c": "accounts (docs only), before any draft: per-face facts, TextLine runs, link-label font, bidi oracle gate",
@@ -17,17 +18,21 @@
   "ac3b44fbc8bc31f921635483326741cfc58456b3": "code: obligation 3 (class center labels laid out in the arrow-style font)",
   "6413e26b441564bf6837909324a5ee7df78d6893": "addendum (docs only) after a dev-build BO measurement, before the italic-measurement change was committed",
   "59c10105cd6ef114cedd12ac2c02a7d476d55ad1": "code + data: obligation 1 (per-physical-face facts; italic measured in the drawn face)",
-  "next commit": "evidence + results + target T14.39 (bullseye.yaml)"
+  "98e14bc091ccbc70363fb613e083d897c61bcecd": "first evidence + results (tip 59c10105c) + target T14.39 (bullseye.yaml)",
+  "65e19b01e19258fd129ba6495a489e3c196ec045": "addendum (docs only) after the relay results, before the data swap: Monkey Man data replaces the provisional chain data; why Java rejects the U+2029/U+0085 probes",
+  "14dd5efaeb388dd557bd39f8b6ab40c4338ada6d": "data: per-face tables from the Monkey Man per-style extraction (monkeyman-round9); provisional and pending-hash lists emptied",
+  "next commit": "evidence + results re-measured at 14dd5efae (BP included), M9B relay request"
  },
  "binaries": [
   "68820764a1b7b0eae431d8782349590237bcc8ee41a9fa5e3c30b9be5b9f6d59  rustuml-base",
   "099e5cde52a44553bb2ec62f2ff752f9e1a842654e808d125ed95dd6661ca8ea  rustuml-merge",
   "c73c86e537185e9aae0b9fb03518e0ae5d4ee50d11ff090552de93886569457f  rustuml-o3",
-  "cf9fd40970167ee3998e0e35afea5c3b2b6216bb727fed28216421443aa22e0b  rustuml-tip"
+  "42daf5aff8a47d462d2a520a77b7f564faccf153ddbadf4463c01e4f641cc73b  rustuml-tip",
+  "cf9fd40970167ee3998e0e35afea5c3b2b6216bb727fed28216421443aa22e0b  rustuml-tip1"
  ],
  "obligations": {
   "1 per-face facts (BLOCKING)": {
-   "status": "implemented; BO acceptance met locally; fresh relayed probes pending (M9A); chain runs of the ten italic faces provisional (colossus) pending the requested Monkey Man extraction",
+   "status": "implemented; all per-face data from the reference host (Monkey Man round 9, SHA256SUMS ad8e6566...); BO acceptance met; BP fresh probes: every italic/bold-italic Courier New probe whose control matches now matches (sequence message, participant, note, bold italic; class interface, abstract member, abstract bold; use-case actor; class note with noteFontName); activity, state and default-font note probes fail only on their controls' residues; the Java face probe confirms the face resolution and the Courier New mark deltas",
    "source_trace": "CFontManager.loadFonts 209-235 / registerItalicDerived 174-203, Font2D.setStyle 151-175, FontFamily.getFont 320-360, CFont.createItalicVariant 177-185 / getNativeFontPtr 187-191 / getTableBytes 81-85, AWTFont.m awtFontForName 71-111 / getTableBytesNative 368-410, hb-jdk-font.cc reference_table, hb-ot-layout.cc 152-266 OT::GDEF::is_blocklisted (HarfBuzz 15.0.0)",
    "evidence": {
     "BO gained vs merge": [
@@ -47,7 +52,7 @@
    }
   },
   "2 text_line_levels (BLOCKING)": {
-   "status": "implemented; Java differential met; relayed U+2029/U+0085 probe pending (M9A)",
+   "status": "implemented; Java differential met (0 run-level differences). BP's single-line U+2029/U+0085 probes are not Java-valid: PlantUML's command regexes use '.', which java.util.regex does not match against U+0085/U+2028/U+2029, so Java rejects them (exit 200, Syntax Error at the class line), and <U+XXXX>/&#N; (AtomText 80-86) is not ported to RustUML. Multi-line note/activity bodies carry the separator; M9B (8 cases) requests them",
    "source_trace": "TextLine.fastCreateTextLine 933-948, BidiUtils.getLevels 54-82, BidiBase.getRunLevel 4443-4456, BidiLine.getRuns 475-575 (getSingleRun at paraLevel when not MIXED), BidiBase.setPara 3593",
    "evidence": {
     "DEFAULT_LTR inputs": 120295,
@@ -77,7 +82,7 @@
    }
   },
   "3 round-7 loss c8a_lt_verdana_deva_link (BLOCKING)": {
-   "status": "implemented; matches (viewBox 0 0 80 195); renamed held-out variants pending (M9A)",
+   "status": "implemented; c8a_lt_verdana_deva_link matches (viewBox 0 0 80 195). BP renamed variants: m9a_lt_arrowfont_link and m9a_lt_arrowsize_link (other arrow font name / size) MATCH; the Bengali, Gurmukhi, Tamil and Telugu label variants keep Java's mark delta and differ only by their controls' residues (Indic fallback glyph widths, node x rounding)",
    "source_trace": "GraphvizImageBuilder 233-241 (arrow style font configuration) -> SvekEdge 279-319 (label TextBlock measured for dot and drawn)",
    "mechanism": "the layout measured the label in sans-serif 13 (Lucida Grande, whose synthesized MARK zeroes U+1D167 since 9f33bc3b1) while emission draws it in the arrow-style font (Verdana 35.2737 = Java)"
   },
@@ -106,12 +111,14 @@
     "M19_code_blocklist_ignored": true,
     "M20_generated_courier_italic_lengths_blocklisted": true,
     "M21_code_courier_italic_measured_as_plain": true,
-    "M22_test_const_provisional_list_stale": true,
+    "M22_mm_font_hashes_verdana_italic_changed_sums_untouched": true,
     "M23_code_text_line_levels_per_paragraph": true,
     "M24_extraction_italic_own_facts_sums_untouched": true,
+    "M26_test_const_pending_hash_list_stale": true,
+    "M27_extraction_italic_chain_run_dropped_sums_untouched": true,
     "M25_code_lucida_italic_not_derived": true
    },
-   "caught": "25/25; unmodified exit 0",
+   "caught": "27/27; unmodified exit 0",
    "oracle": "tools/font-chain-reference/java-bidi-oracle: 93,786 lines of the checker's Java differential (e09425f4...), selection rule fixed in the account"
   }
  },
@@ -1286,13 +1293,66 @@
     "new_panic_vs_merge": [],
     "stderr_changed_vs_merge": [],
     "tip_panics": []
+   },
+   "BP": {
+    "cases": 60,
+    "java_valid": 50,
+    "strict_base_merge_tip": [
+     20,
+     13,
+     24
+    ],
+    "strict_and_comments_base_merge_tip": [
+     15,
+     13,
+     24
+    ],
+    "exact_viewbox_base_merge_tip": [
+     27,
+     18,
+     36
+    ],
+    "comment_list_exact_base_merge_tip": [
+     44,
+     50,
+     50
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [
+     "m9a_ci_abstract_bold",
+     "m9a_ci_abstract_member",
+     "m9a_ci_class_note_font",
+     "m9a_ci_interface",
+     "m9a_ci_seq_bolditalic",
+     "m9a_ci_seq_message",
+     "m9a_ci_seq_note",
+     "m9a_ci_seq_participant",
+     "m9a_ci_usecase_actor",
+     "m9a_lt_arrowfont_link",
+     "m9a_lt_arrowsize_link"
+    ],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "m9a_ai_arial_italic",
+     "m9a_cb_bold_class",
+     "m9a_lt_arrowfont_link",
+     "m9a_lt_arrowsize_link"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
    }
   },
-  "gates": {
+  "gates (re-run at 14dd5efae)": {
    "golden_pairs base and tip": "12550 total, 10497 passed, 754 failed, 1299 skipped (identical)",
    "golden_no_oracle": "tip 11181 = merge; failure names vs 9834a7194: +3 GET-provenance goldens (activity/act_skinparam2_shadowing_true, activity/act_skinparam_shadowing, edge-cases/edge_whitespace_multiple_blank_lines; lost at merge, raw-reader contract), -3 (preprocessing/preproc_complex_theme_override, state/state_history_shallow, state/state_note_composite)",
    "parity_perturbations failing": "base 1365, merge 1871, tip 1861; tip failures are a subset of merge's (0 new failures in any directory); 10 fewer",
-   "harness_guards categories": "identical merge -> tip (gates/*.guard_cats.txt)",
+   "harness_guards categories": "identical merge -> tip (gates/*.guard_cats.txt; test print order aside)",
    "pipe_mode": "tip 17/17 ok",
    "workspace lib": "tip ok (41, 10, 31, 665, 858 passed; 1 ignored)",
    "clippy per crate (error-level, -D warnings)": {
@@ -1326,333 +1386,22 @@
   "frozen": "crates/rustuml-oracle unchanged (comparator slack, syntax markers, park list, error census, guard allow-lists, 14-entry strict-XML list); test-diagrams/no_oracle_baseline.txt unchanged; no new 3+-decimal literal"
  },
  "residues": [
-  "Ten italic faces' chain runs (simple path, composite cascade) are a colossus extraction (tools/font-chain-reference/colossus-styled-chain), listed in PROVISIONAL_CHAIN; Monkey Man extraction requested.",
-  "Verdana Italic / Bold Italic have no reference-host file hash (PENDING_REFERENCE_HASH); requested.",
-  "Activity notes ignore noteFontName (drawn sans-serif), and activity if-diamond conditions, component edge labels, state box widths and the sequence title are laid out in sans-serif while drawn in the defaultFontName: pre-existing, filed as T14.39.",
+  "Lucida Grande's derived (fake) italic adds 2.70703125 for an unmapped mark at 14 pt in Java (face probe); RustUML measures it as the upright face (0). Proposed target.",
+  "RustUML accepts single-line commands holding U+0085/U+2028/U+2029 that Java rejects (BP, every tree). Proposed target.",
+  "RustUML does not port AtomText's <U+XXXX> and &#N; conversion (draws them literally). Proposed target.",
+  "Activity notes ignore noteFontName, and activity if-diamond conditions, component edge labels, state box widths and the sequence title are laid out in sans-serif while drawn in the defaultFontName: pre-existing, T14.39.",
   "Arial/Verdana/Helvetica italic advance tables are the upright tables (not touched).",
   "c8a_bl_lucida_thai_digit_after_r exact viewBox lost base -> merge (round-8 code), unchanged at tip; strict status DIFF at all trees."
  ],
+ "relay_results": "evidence/relay-results.json (mm-styles comparisons, face probe rows, BP per-case classification)",
  "pending_relay": {
-  "M9A (Java reference batch, 60 cases)": {
-   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/relay/m9a",
-   "reference_manifest_sha256": "000baef48680f333d05c958fafdaff1b5f74729deb1c3580cb9e7246ef96a019",
-   "reference_input_bundle_sha256": "b369bbee1b4561ac5c2b57bbe239766cd1d00bd28325311cf4df81946ecfc00a",
-   "rust_predictions_sha256": "6c071ea94a3b6a158b5eddca32b37fbb8a8a549017a7e095e46bbbd43a0dbb58",
-   "cases_json_sha256": "4a9b4ad9835d2f0152785ea374b85a7acae5c4222d23df4c2ccb660ff68508f3",
-   "predictions_summary": {
-    "m9a_ci_seq_message": {
-     "tip_viewBox": "0 0 137 121",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "27dd2d54c97a1212b5f0e10b56d44977690d1ac09816983b8b2e1c2899978ecb"
-    },
-    "m9a_ci_seq_message_ctrl": {
-     "tip_viewBox": "0 0 129 121",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "3e72dbf3ea2d068d5dd70604915392dec07644a95e3b356ae9f785c74c8749a8"
-    },
-    "m9a_ci_seq_participant": {
-     "tip_viewBox": "0 0 101 134",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "884ec24275cd14f6acba07f774f254b04c50068902e904b00e0cc9a45fbdbd86"
-    },
-    "m9a_ci_seq_participant_ctrl": {
-     "tip_viewBox": "0 0 97 134",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "f47b091092e1bb51cd25bd0a4859dde5a157017a81063cd0520ddd7f7a9b821d"
-    },
-    "m9a_ci_seq_note": {
-     "tip_viewBox": "0 0 91 127",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "4486f6481da6fa5b699feeb8a1d0ca7c305d0a1b96f6a782a90515666d6e3b6d"
-    },
-    "m9a_ci_seq_note_ctrl": {
-     "tip_viewBox": "0 0 83 127",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "c43ebd787ec9503e699c5f071b8bef62da8e381a26c7f0877039202354a54d5b"
-    },
-    "m9a_ci_seq_bolditalic": {
-     "tip_viewBox": "0 0 153 121",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "703fa785a6008bffceac3d326d278bcc2a203912c517cc410b4815e95094ebae"
-    },
-    "m9a_ci_seq_bolditalic_ctrl": {
-     "tip_viewBox": "0 0 145 121",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "d18584b71732acbec56df6f9e4cbd587aab9dbb6d38ba98dd1de1d24df277c69"
-    },
-    "m9a_ci_act_action": {
-     "tip_viewBox": "0 0 128 150",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "385015f3553e031ff163a6f4e8da81d740c4d4b66f5571697a63b7c3b0255121"
-    },
-    "m9a_ci_act_action_ctrl": {
-     "tip_viewBox": "0 0 120 150",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "dac7eeb6a4d1db89ce0c19a4b3d5b2333e1240ec56bd2995000336410571de5d"
-    },
-    "m9a_ci_act_note": {
-     "tip_viewBox": "0 0 166 150",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "879bf57dbe3c16b75ade873437e14e450c8f154352fc7b5ffe3c2d785cfbe0a0"
-    },
-    "m9a_ci_act_note_ctrl": {
-     "tip_viewBox": "0 0 166 150",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "7cbc6c8c5a03a0ccd4f1a96204e966056cef980a1144fb559d141c2f2b0d214a"
-    },
-    "m9a_ci_act_bolditalic": {
-     "tip_viewBox": "0 0 128 150",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "b0363a7eb97f78d4a1fd84d4f8e72eea764eb1aeb132d4067a506f0cbc66c02a"
-    },
-    "m9a_ci_act_bolditalic_ctrl": {
-     "tip_viewBox": "0 0 120 150",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "141099cd030a9e8a51ed172e1cdb4b1ccd1e629a898d4f73f09e22a1826727ca"
-    },
-    "m9a_ci_class_note": {
-     "tip_viewBox": "0 0 87 155",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "f783360f8a1e9034392c03decf27f719aa3ffcf6db78f66644b6fa6df1bac880"
-    },
-    "m9a_ci_class_note_ctrl": {
-     "tip_viewBox": "0 0 87 155",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "ffecb260cb2e39bf6af226d8cc789a249bd5198dff5af9c7b2a8e77f5eee7eda"
-    },
-    "m9a_ci_note_left": {
-     "tip_viewBox": "0 0 172 70",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "96660a96fcbd3aecc2d4237bb0c150b22a31810e463e72dddaf89ab11bbd215a"
-    },
-    "m9a_ci_note_left_ctrl": {
-     "tip_viewBox": "0 0 172 70",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "32eb552aee7606d6dbe2f5ed46b6657e838b9bb2cee8780a1486de35fd501c7f"
-    },
-    "m9a_ci_interface": {
-     "tip_viewBox": "0 0 127 68",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "b8f5820925ee2a62deb17cef17251df7736379889386a97f26b0030fb8fe4579"
-    },
-    "m9a_ci_interface_ctrl": {
-     "tip_viewBox": "0 0 119 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "12b09b67b02fb4ab267257ee1b3d7980e9ae96228fe9232b5a9c68da634f5fdd"
-    },
-    "m9a_ci_abstract_member": {
-     "tip_viewBox": "0 0 102 83",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "28a132387cc799f4127a59d489d677258d5d347aafb8ed7a481c73b6e71c4617"
-    },
-    "m9a_ci_abstract_member_ctrl": {
-     "tip_viewBox": "0 0 102 83",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "fc62a15ff576bee91a9d3c3ba1c40dbe6f5e7cad3bc87e792547217b6fc5cb54"
-    },
-    "m9a_ci_abstract_bold": {
-     "tip_viewBox": "0 0 102 68",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "fcb90e50e96df40880789f3795a28d2c7291c599a76f22d8e2b955477b68f6a6"
-    },
-    "m9a_ci_abstract_bold_ctrl": {
-     "tip_viewBox": "0 0 94 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "c61e02c82d03bfc2ac1b820782dbfa0d44a1ebf9850845d6a013be6bb7757880"
-    },
-    "m9a_cb_bold_class": {
-     "tip_viewBox": "0 0 110 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "48a45f8887d8327429907665bd8bc8db8e6c6b4c9925ee0f8bac420e2105e489"
-    },
-    "m9a_cb_bold_class_ctrl": {
-     "tip_viewBox": "0 0 110 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "22e7e839772a50ea06a8d7f249bfc21a9067b8a1687db9751c5ee608c0ccab01"
-    },
-    "m9a_ci_usecase_actor": {
-     "tip_viewBox": "0 0 89 182",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "553cbae785e17c97179cd7a05854929cb6115237e4563ac9ade04738d1945651"
-    },
-    "m9a_ci_usecase_actor_ctrl": {
-     "tip_viewBox": "0 0 80 182",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "29ae60d8d46daf41871657ecb46c3b5f721a48816ba83560aca76c872e392875"
-    },
-    "m9a_ci_state_desc": {
-     "tip_viewBox": "0 0 99 71",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "e53b4dc8eaadc380368c3f51df5992169a52108f43b7e551e013db2603aa3e55"
-    },
-    "m9a_ci_state_desc_ctrl": {
-     "tip_viewBox": "0 0 92 71",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "be953d82fdd65ce6116ed94a22273a0ffb012716b74765b4fc2499e9a71fe209"
-    },
-    "m9a_ci_act_note_font": {
-     "tip_viewBox": "0 0 163 150",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "48067a31595b6bf878ddb5ce5264f2c63085c822676431ef9bcdb3d2be203cb3"
-    },
-    "m9a_ci_act_note_font_ctrl": {
-     "tip_viewBox": "0 0 163 150",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "e0b0a7048828efbffaf5ac337affae00a105631a45c5f2424fc2ac6bbcf08074"
-    },
-    "m9a_ci_class_note_font": {
-     "tip_viewBox": "0 0 96 154",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "e7c67400655862d86b645000f739521a5858f502b5584f57c70c1d55bb9879c0"
-    },
-    "m9a_ci_class_note_font_ctrl": {
-     "tip_viewBox": "0 0 88 154",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "a8bda10fdf0647fa302e498b0c78dc037916a25dd263c8b6cca51ac9155f4d0c"
-    },
-    "m9a_vi_hebrew_italic": {
-     "tip_viewBox": "0 0 94 85",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "41b3a9c36155054daa7f7b04ee832421704114a77f72fa243fbad5c7b1c35a97"
-    },
-    "m9a_vi_hebrew_italic_ctrl": {
-     "tip_viewBox": "0 0 94 85",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "73cb4565f9c0c8e5fc7f2ff5b29045809220a10dce1204fb06a3f0146a8aa522"
-    },
-    "m9a_mi_menlo_italic": {
-     "tip_viewBox": "0 0 79 84",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "bd54883bb02ce44c3e6c3c869fb155db7effbce28807175756e5909ef35c28b4"
-    },
-    "m9a_mi_menlo_italic_ctrl": {
-     "tip_viewBox": "0 0 79 84",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "c8c9d8dd0030ea1170c9ca3f9da020380d00efa3c3bae89878c13bede2010c90"
-    },
-    "m9a_ai_arial_italic": {
-     "tip_viewBox": "0 0 92 84",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "585c446b4398664c153d995b925781a283dc1ab8233b4c39632d8ebbf4047ca3"
-    },
-    "m9a_ai_arial_italic_ctrl": {
-     "tip_viewBox": "0 0 82 84",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "d16c7b7a16750993eb6823704018a906442e5c8a1dda5312acefdeb056fc59bc"
-    },
-    "m9a_bidi_p2029_pdf_verdana": {
-     "tip_viewBox": "0 0 97 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "2512deb3c3c0ec7f9d7a48e06b5b5e83a145d352f2c05156b27a2d756952b3f5"
-    },
-    "m9a_bidi_p2029_pdf_verdana_ctrl": {
-     "tip_viewBox": "0 0 83 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "47f022862d9be54958ce5109647c9e2d81aa9d0eb7c30fe75b390c02a70fd60c"
-    },
-    "m9a_bidi_p2029_pdf_space_verdana": {
-     "tip_viewBox": "0 0 87 68",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "805b4d58687c24258307e0d085586ed31b8b32eb0a26412e20382786ad0f4c04"
-    },
-    "m9a_bidi_p2029_pdf_space_verdana_ctrl": {
-     "tip_viewBox": "0 0 87 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "4c97d9dfee482fe31e697b5d89567ac65e60850ff3a69613df6581ce93f43877"
-    },
-    "m9a_bidi_nel_pdf_verdana": {
-     "tip_viewBox": "0 0 103 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "dc27033042f4ec9717480b8708c6a011a9d2f3c287fdde3d33af557f73426efe"
-    },
-    "m9a_bidi_nel_pdf_verdana_ctrl": {
-     "tip_viewBox": "0 0 89 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "a32c3549dbc6e1b47172306c1657467f8545881b4b47f20e4a5620f1b581a3a3"
-    },
-    "m9a_bidi_nel_pdf_space_verdana": {
-     "tip_viewBox": "0 0 93 68",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "ccfaa439c6266e07791a5c18106c02426b1dc0476ffc9fa02fc616a3c7fd75c0"
-    },
-    "m9a_bidi_nel_pdf_space_verdana_ctrl": {
-     "tip_viewBox": "0 0 93 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "73bacd0447e6adcb1ee464ef40a1c5e55ac320f466a70118411161df3e992dc1"
-    },
-    "m9a_bidi_p2029_mixed_verdana": {
-     "tip_viewBox": "0 0 74 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "408112296e604f0ece13e519af16f1caa61e2e7f7e6b9bebb0ac1b715792990c"
-    },
-    "m9a_bidi_p2029_mixed_verdana_ctrl": {
-     "tip_viewBox": "0 0 74 68",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "d304ba40b3ccdad597fbc945711f64b29f624e5b17b3c31768aba1f0fae4499b"
-    },
-    "m9a_lt_verdana_beng_link": {
-     "tip_viewBox": "0 0 89 195",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "554effae57056f5c072c22054c203b50a7809f94c5bfe6031730ca4e1c2a8396"
-    },
-    "m9a_lt_verdana_beng_link_ctrl": {
-     "tip_viewBox": "0 0 88 195",
-     "tip_equals_merge": true,
-     "tip_stdout_sha256": "df95bbdad5d399e94939f6f838e73d114437604c8c9f1af02b01118e9aabe901"
-    },
-    "m9a_lt_arial_guru_link": {
-     "tip_viewBox": "0 0 87 194",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "2f90bf40bc0afad76cf306ac49124f285ccadf5008ba6388c2e962a7c32e6858"
-    },
-    "m9a_lt_arial_guru_link_ctrl": {
-     "tip_viewBox": "0 0 87 194",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "51ac7c14db507cce89d7d162dd1d5d5cd937c515db108b702eeb4e3b5420528e"
-    },
-    "m9a_lt_verdana_size_link": {
-     "tip_viewBox": "0 0 99 200",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "0b95cf6625f1ef8b5a96167f29f973b1f7d851571e4ca06ac51492a026daa81a"
-    },
-    "m9a_lt_verdana_size_link_ctrl": {
-     "tip_viewBox": "0 0 90 200",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "545664ea62de1a5dafdf6c570d61cdcf8b1a15eead17da049064a3a9d63382c2"
-    },
-    "m9a_lt_courier_telu_link": {
-     "tip_viewBox": "0 0 87 194",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "d295ba93ae313277a7adf8ca236b3883e8c18d08413b7ec8772ce7921364ff13"
-    },
-    "m9a_lt_courier_telu_link_ctrl": {
-     "tip_viewBox": "0 0 87 194",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "50a475df56923150c43587e02ee28c67153554abd98fe56a6a93bec34afa8de4"
-    },
-    "m9a_lt_arrowfont_link": {
-     "tip_viewBox": "0 0 176 194",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "2294a1261599c7bc59c7d9888ac248a08f9f315a7cb113c2e81da0eefa928d6c"
-    },
-    "m9a_lt_arrowsize_link": {
-     "tip_viewBox": "0 0 202 202",
-     "tip_equals_merge": false,
-     "tip_stdout_sha256": "456a15f69e9990f6d3fb9cd84326bc1e11c1b2ead40d2989cc2eb788c5e7d1cf"
-    }
-   }
-  },
-  "Monkey Man per-style font extraction": {
-   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/relay/mm-styles",
-   "run.sh": "6a63a29ba0106e7725d6b3ce9ba617ea776d27c2f544b4c2f28957269c33065e",
-   "README.md": "0659a9bae4112c5e5ddd793aab6ba72d56bcf4724dc352c735a28c95fcec5c81",
-   "SHA256SUMS": "5dd90d4ce1859b4a88e24fa7c69942b495a4297a9760522538844a134fa2bf55",
-   "colossus dry run": "exit 0; 22 chain + 24 own files identical (except #host) to the committed colossus extraction"
-  },
-  "Java face-resolution probe": {
-   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/relay/face-probe",
-   "FaceProbe.java": "a337b8bc9fcea78fc28c6d8240e8d3f933f087c4404f59f8cd617bffe3a917ff",
-   "README.md (predictions inside)": "e5365ccca63d15e7899df2efc2963d7f9cdab6273ec3f2e8207b893ecc05ef6b"
+  "M9B (Java reference batch, 8 cases: multi-line sequence-note and activity bodies with U+2029/U+0085)": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/relay/m9b",
+   "reference_manifest_sha256": "d2d987740245f296313db3cc863d69d600cf01ffb718b2b4da2579b0141a8172",
+   "reference_input_bundle_sha256": "1754dc2d2faeb8d945dcca6912f1a80d655377d3c251481d5800b643e508014e",
+   "rust_predictions_sha256": "0890e68dd1363d60b26f8f573de860fe2029cdfb15487d01afda5d792fbb9302",
+   "cases_json_sha256": "256d7decc438ed024ad914858d82ef48025893016c6d7e24e7930797bde6008d",
+   "predictions": "tip zeroes the mark in the PDF variants (one RTL TextLine run: hebrew shaper, Verdana GPOS without 'hebr', fallback positioning after the base) where merge keeps it; the MIXED variant and the controls are unchanged"
   }
  }
 }

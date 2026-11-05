@@ -1744,5 +1744,107 @@
     "0 0 99 68"
    ]
   }
+ },
+ "BP": {
+  "cases_exit0_svg": 50,
+  "base_exact_viewbox": 27,
+  "base_comments_exact": 44,
+  "merge_exact_viewbox": 18,
+  "merge_comments_exact": 50,
+  "tip_exact_viewbox": 36,
+  "tip_comments_exact": 50,
+  "viewbox_lost_vs_base": [],
+  "viewbox_gained_vs_base": [
+   "m9a_ai_arial_italic",
+   "m9a_cb_bold_class",
+   "m9a_lt_arial_guru_link",
+   "m9a_lt_arial_guru_link_ctrl",
+   "m9a_lt_arrowfont_link",
+   "m9a_lt_arrowsize_link",
+   "m9a_lt_courier_telu_link",
+   "m9a_lt_courier_telu_link_ctrl",
+   "m9a_lt_verdana_size_link_ctrl"
+  ],
+  "comments_lost_vs_base": [],
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [
+   "m9a_ci_abstract_bold",
+   "m9a_ci_act_action",
+   "m9a_ci_act_bolditalic",
+   "m9a_ci_class_note_font",
+   "m9a_ci_interface",
+   "m9a_ci_seq_bolditalic",
+   "m9a_ci_seq_message",
+   "m9a_ci_seq_note",
+   "m9a_ci_seq_participant",
+   "m9a_ci_state_desc",
+   "m9a_ci_usecase_actor",
+   "m9a_lt_arial_guru_link",
+   "m9a_lt_arial_guru_link_ctrl",
+   "m9a_lt_arrowfont_link",
+   "m9a_lt_arrowsize_link",
+   "m9a_lt_courier_telu_link",
+   "m9a_lt_courier_telu_link_ctrl",
+   "m9a_lt_verdana_size_link_ctrl"
+  ],
+  "comments_lost_vs_merge": [],
+  "tip_viewbox_mismatch": {
+   "m9a_ci_act_note": [
+    "0 0 181 150",
+    "0 0 166 150"
+   ],
+   "m9a_ci_act_note_ctrl": [
+    "0 0 173 150",
+    "0 0 166 150"
+   ],
+   "m9a_ci_class_note": [
+    "0 0 96 154",
+    "0 0 87 155"
+   ],
+   "m9a_ci_class_note_ctrl": [
+    "0 0 88 154",
+    "0 0 87 155"
+   ],
+   "m9a_ci_note_left": [
+    "0 0 197 70",
+    "0 0 172 70"
+   ],
+   "m9a_ci_note_left_ctrl": [
+    "0 0 189 70",
+    "0 0 172 70"
+   ],
+   "m9a_ci_act_note_font": [
+    "0 0 181 150",
+    "0 0 163 150"
+   ],
+   "m9a_ci_act_note_font_ctrl": [
+    "0 0 173 150",
+    "0 0 163 150"
+   ],
+   "m9a_vi_hebrew_italic": [
+    "0 0 95 85",
+    "0 0 94 85"
+   ],
+   "m9a_vi_hebrew_italic_ctrl": [
+    "0 0 95 85",
+    "0 0 94 85"
+   ],
+   "m9a_mi_menlo_italic": [
+    "0 0 82 84",
+    "0 0 79 84"
+   ],
+   "m9a_mi_menlo_italic_ctrl": [
+    "0 0 82 84",
+    "0 0 79 84"
+   ],
+   "m9a_lt_verdana_beng_link": [
+    "0 0 94 195",
+    "0 0 89 195"
+   ],
+   "m9a_lt_verdana_size_link": [
+    "0 0 102 200",
+    "0 0 99 200"
+   ]
+  }
  }
 }

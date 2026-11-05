@@ -614,7 +614,7 @@
      "thread 'main' (58103894) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205590) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752105) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    },
    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
@@ -622,7 +622,7 @@
      "thread 'main' (58103908) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205596) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752111) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    },
    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
@@ -630,7 +630,7 @@
      "thread 'main' (58103912) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205601) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752115) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    },
    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
@@ -638,7 +638,7 @@
      "thread 'main' (58103919) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205606) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752120) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    },
    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml": {
@@ -1534,7 +1534,7 @@
      "thread 'main' (58158420) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205590) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752105) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    },
    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
@@ -1542,7 +1542,7 @@
      "thread 'main' (58158425) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205596) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752111) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    },
    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
@@ -1550,7 +1550,7 @@
      "thread 'main' (58158429) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205601) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752115) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    },
    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
@@ -1558,7 +1558,7 @@
      "thread 'main' (58158432) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ],
     "gained": [
-     "thread 'main' (58205606) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     "thread 'main' (58752120) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
     ]
    }
   }

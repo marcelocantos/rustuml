@@ -5,18 +5,18 @@
 
 
 running 17 tests
+test font_chain::tests::planner_ports_harfbuzz_15 ... ok
+test java_bidi::tests::conformance_bidi_character_test ... ignored
 test font_chain::tests::complexity_follows_java_units ... ok
 test font_chain::tests::fallback_port_follows_position_cluster ... ok
-test java_bidi::tests::conformance_bidi_character_test ... ignored
 test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
 test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
-test font_chain::tests::planner_ports_harfbuzz_15 ... ok
-test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
 test font_chain::tests::script_runs_follow_jdk_script_run ... ok
-test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
-test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... ok
 test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
 test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
+test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... ok
 test java_bidi::tests::conformance_sample ... ok
 test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... FAILED
 test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... ok
@@ -27,7 +27,7 @@ failures:
 
 ---- java_bidi::tests::bidi_tables_are_jdk_ubidi_icu stdout ----
 
-thread 'java_bidi::tests::bidi_tables_are_jdk_ubidi_icu' (58472130) panicked at crates/rustuml-render/src/java_bidi.rs:1444:9:
+thread 'java_bidi::tests::bidi_tables_are_jdk_ubidi_icu' (58883017) panicked at crates/rustuml-render/src/java_bidi.rs:1444:9:
 assertion `left == right` failed
   left: "4eeb2f0900d051891e4d5ea3afa471141bb7281f64d1c5f469c664229301172a"
  right: "3d394ff30d6d4d35f57703c44fcf4e1af088f94390a705196a2cf90a243d294e"
@@ -37,7 +37,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 failures:
     java_bidi::tests::bidi_tables_are_jdk_ubidi_icu
 
-test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.27s
+test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.28s
 
 warning: function `looks_like_description_bracket_command` is never used
   --> crates/rustuml-parser/src/parse/component.rs:74:15
@@ -49,6 +49,6 @@ warning: function `looks_like_description_bracket_command` is never used
 
 warning: `rustuml-parser` (lib) generated 1 warning
    Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
-    Finished `release` profile [optimized] target(s) in 18.84s
+    Finished `release` profile [optimized] target(s) in 19.34s
      Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
 error: test failed, to rerun pass `-p rustuml-render --lib`

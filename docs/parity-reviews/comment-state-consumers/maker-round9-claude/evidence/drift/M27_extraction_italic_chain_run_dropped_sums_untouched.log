@@ -1,23 +1,23 @@
- crates/rustuml-render/src/font_chain.rs | 1 -
- 1 file changed, 1 deletion(-)
+ tools/font-chain-reference/monkeyman-round9/CourierNewPS-ItalicMT.tsv | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 
 running 17 tests
-test font_chain::tests::fallback_port_follows_position_cluster ... ok
 test font_chain::tests::complexity_follows_java_units ... ok
 test font_chain::tests::planner_ports_harfbuzz_15 ... ok
 test java_bidi::tests::conformance_bidi_character_test ... ignored
-test font_chain::tests::script_runs_follow_jdk_script_run ... ok
-test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
-test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
 test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
 test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
 test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
 test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
 test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... ok
 test java_bidi::tests::conformance_sample ... ok
-test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
 test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... FAILED
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
 test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
 test java_bidi::tests::java_bidi_oracle ... ok
 
@@ -25,15 +25,17 @@ failures:
 
 ---- font_chain::tests::coverage_table_is_the_stored_reference_host_extraction stdout ----
 
-thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (58522448) panicked at crates/rustuml-render/src/font_chain.rs:1361:56:
-called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (58947215) panicked at crates/rustuml-render/src/font_chain.rs:1303:17:
+assertion `left == right` failed: CourierNewPS-ItalicMT.tsv
+  left: "679e9028633ed9794a6e8f981c370fc463979293debe72c5e1e8847ddc5553e7"
+ right: "070ba67340ea8ecc93770e5180289f5aefb5d8a2b4cfb132ca6b4f016ca31aa3"
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
 failures:
     font_chain::tests::coverage_table_is_the_stored_reference_host_extraction
 
-test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.29s
+test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.27s
 
 warning: function `looks_like_description_bracket_command` is never used
   --> crates/rustuml-parser/src/parse/component.rs:74:15
@@ -45,6 +47,6 @@ warning: function `looks_like_description_bracket_command` is never used
 
 warning: `rustuml-parser` (lib) generated 1 warning
    Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
-    Finished `release` profile [optimized] target(s) in 20.98s
+    Finished `release` profile [optimized] target(s) in 19.20s
      Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
 error: test failed, to rerun pass `-p rustuml-render --lib`

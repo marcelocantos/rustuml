@@ -1,5 +1,5 @@
-parity_review_paths_reject_traversal ok
 comparator_constants_frozen ok
+parity_review_paths_reject_traversal ok
 decimal_literal_ratchet FAILED
 no_golden_data_embedded_in_shipping_crates ok
 parity_review_records_are_complete FAILED

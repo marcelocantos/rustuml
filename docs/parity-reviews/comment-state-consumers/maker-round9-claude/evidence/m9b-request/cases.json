@@ -1,0 +1,81 @@
+{
+ "batch": "M9B",
+ "cases": [
+  {
+   "name": "m9b_seqnote_p2029_pdf",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "sequence",
+    "note"
+   ]
+  },
+  {
+   "name": "m9b_seqnote_p2029_pdf_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "sequence",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9b_seqnote_nel_pdf",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "sequence",
+    "note"
+   ]
+  },
+  {
+   "name": "m9b_seqnote_nel_pdf_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "sequence",
+    "note",
+    "control"
+   ]
+  },
+  {
+   "name": "m9b_act_p2029_pdf",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "activity"
+   ]
+  },
+  {
+   "name": "m9b_act_p2029_pdf_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "activity",
+    "control"
+   ]
+  },
+  {
+   "name": "m9b_seqnote_p2029_mixed",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "sequence",
+    "note",
+    "mixed"
+   ]
+  },
+  {
+   "name": "m9b_seqnote_p2029_mixed_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "textline-runs",
+    "sequence",
+    "note",
+    "mixed",
+    "control"
+   ]
+  }
+ ]
+}

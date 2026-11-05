@@ -6,6 +6,7 @@ import gzip, hashlib, json, pathlib, re, subprocess, sys
 T = pathlib.Path(sys.argv[1]); LOG = pathlib.Path(sys.argv[2]); LOG.mkdir(exist_ok=True)
 R = T / "crates/rustuml-render/src"; S = T / "tools/font-chain-reference/shaping-sources"
 P = T / "tools/font-chain-reference/colossus-primary-faces"
+MM = T / "tools/font-chain-reference/monkeyman-round9"
 sha = lambda b: hashlib.sha256(b).hexdigest()
 def sub(path, old, new, count=1):
     t = path.read_text(); assert old in t, (path, old); path.write_text(t.replace(old, new, count))
@@ -30,7 +31,7 @@ M = {
  "M03_mongolian_use_to_arabic": lambda: sub(R / "font_chain_unicode.rs", "(27, ShaperGroup::Use)", "(27, ShaperGroup::Arabic)"),
  "M04_tahoma_blocklist_triple_changed": lambda: sub(R / "font_chain_unicode.rs", "(832, 7324, 47162)", "(832, 7324, 47163)"),
  "M05_generated_courier_gsub_arab_dropped": lambda: sub(R / "font_chain_coverage.rs", 'gsub_scripts: &[*b"arab", *b"hebr", *b"latn"],\n        gdef_length: 588', 'gsub_scripts: &[*b"hebr", *b"latn"],\n        gdef_length: 588'),
- "M06_extraction_courier_gdef_length_sums_untouched": lambda: sub(P / "CourierNewPSMT.plain.own.tsv", "gdef_length=588", "gdef_length=589"),
+ "M06_extraction_courier_gdef_length_sums_untouched": lambda: sub(MM / "CourierNewPSMT.plain.own.tsv", "gdef_length=588", "gdef_length=589"),
  "M07_pinned_hb_layout_appended_sums_untouched": lambda: (S / "harfbuzz-15.0.0/hb-ot-layout.cc").write_text((S / "harfbuzz-15.0.0/hb-ot-layout.cc").read_text() + "// x\n"),
  "M08_pinned_hb_layout_tahoma_case_removed_sums_and_constant_forged": m08,
  "M09_ucd18_u1d167_removed_sums_and_constant_forged": m09,
@@ -47,9 +48,11 @@ M = {
  # Round-9 per-face model and run levels.
  "M20_generated_courier_italic_lengths_blocklisted": lambda: sub(R / "font_chain_coverage.rs", 'gsub_scripts: &[*b"hebr", *b"latn"],\n        gdef_length: 162,', 'gsub_scripts: &[*b"hebr", *b"latn"],\n        gdef_length: 588,'),
  "M21_code_courier_italic_measured_as_plain": lambda: sub(R / "font_chain.rs", "(ChainFamily::CourierNew, false, true) => CourierNewItalic,", "(ChainFamily::CourierNew, false, true) => CourierNew,"),
- "M22_test_const_provisional_list_stale": lambda: sub(R / "font_chain.rs", '        "CourierNewPS-BoldItalicMT",\n    ];', '    ];'),
+ "M22_mm_font_hashes_verdana_italic_changed_sums_untouched": lambda: sub(MM / "font-hashes.txt", "a1149e84da9e5c0a9b4cad68b62542b8503cb16ed8d1d7efd2640b36ce202b44", "a1149e84da9e5c0a9b4cad68b62542b8503cb16ed8d1d7efd2640b36ce202b45"),
  "M23_code_text_line_levels_per_paragraph": lambda: sub(R / "java_bidi.rs", "(!paragraph.is_left_to_right()).then(|| paragraph.run_levels())", "(!paragraph.is_left_to_right()).then_some(paragraph.levels)"),
- "M24_extraction_italic_own_facts_sums_untouched": lambda: sub(P / "CourierNewPS-ItalicMT.italic.own.tsv", "gdef_length=162", "gdef_length=588"),
+ "M24_extraction_italic_own_facts_sums_untouched": lambda: sub(MM / "CourierNewPS-ItalicMT.italic.own.tsv", "gdef_length=162", "gdef_length=588"),
+ "M26_test_const_pending_hash_list_stale": lambda: sub(R / "font_chain.rs", "const PENDING_REFERENCE_HASH: &[&str] = &[];", 'const PENDING_REFERENCE_HASH: &[&str] = &["Verdana-Italic"];'),
+ "M27_extraction_italic_chain_run_dropped_sums_untouched": lambda: sub(MM / "CourierNewPS-ItalicMT.tsv", "\nC\t", "\nX\t"),
  "M25_code_lucida_italic_not_derived": lambda: sub(R / "font_chain.rs", "(ChainFamily::LucidaGrande, false, _) => LucidaGrande,", "(ChainFamily::LucidaGrande, false, false) => LucidaGrande,\n            (ChainFamily::LucidaGrande, false, true) => LucidaGrandeBold,"),
 }
 res = {}

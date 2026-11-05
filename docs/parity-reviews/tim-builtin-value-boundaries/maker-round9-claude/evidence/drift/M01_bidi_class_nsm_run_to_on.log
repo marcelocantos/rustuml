@@ -3,11 +3,11 @@
 
 
 running 17 tests
-test font_chain::tests::fallback_port_follows_position_cluster ... ok
+test java_bidi::tests::conformance_bidi_character_test ... ignored
 test font_chain::tests::planner_ports_harfbuzz_15 ... ok
 test font_chain::tests::complexity_follows_java_units ... ok
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
 test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
-test java_bidi::tests::conformance_bidi_character_test ... ignored
 test font_chain::tests::script_runs_follow_jdk_script_run ... ok
 test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
 test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
@@ -25,7 +25,7 @@ failures:
 
 ---- java_bidi::tests::bidi_tables_are_jdk_ubidi_icu stdout ----
 
-thread 'java_bidi::tests::bidi_tables_are_jdk_ubidi_icu' (58435301) panicked at crates/rustuml-render/src/java_bidi.rs:1432:13:
+thread 'java_bidi::tests::bidi_tables_are_jdk_ubidi_icu' (58855667) panicked at crates/rustuml-render/src/java_bidi.rs:1432:13:
 assertion `left == right` failed: U+0591
   left: 10
  right: 17
@@ -33,7 +33,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 ---- java_bidi::tests::java_bidi_oracle stdout ----
 
-thread 'java_bidi::tests::java_bidi_oracle' (58435303) panicked at crates/rustuml-render/src/java_bidi.rs:1567:9:
+thread 'java_bidi::tests::java_bidi_oracle' (58855669) panicked at crates/rustuml-render/src/java_bidi.rs:1567:9:
 914 of 93786 differ from Java:
 1;D83B DC71 005A 05B4 007D 00AD 05FF 005D 05D1 0915 D803 DE60 005D 202C 002B FEFF 0061 0021 0025 0061 05D0 2069
   java 1;0;1;1 1 2 2 1 1 1 1 1 2 2 2 1 1 1 2 2 2 2 2 1 1;1 1 2 2 1 1 1 1 1 2 2 2 1 1 1 2 2 2 2 2 1 1
@@ -65,7 +65,7 @@ failures:
     java_bidi::tests::bidi_tables_are_jdk_ubidi_icu
     java_bidi::tests::java_bidi_oracle
 
-test result: FAILED. 14 passed; 2 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.26s
+test result: FAILED. 14 passed; 2 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.28s
 
 warning: function `looks_like_description_bracket_command` is never used
   --> crates/rustuml-parser/src/parse/component.rs:74:15
@@ -77,6 +77,6 @@ warning: function `looks_like_description_bracket_command` is never used
 
 warning: `rustuml-parser` (lib) generated 1 warning
    Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
-    Finished `release` profile [optimized] target(s) in 19.11s
+    Finished `release` profile [optimized] target(s) in 19.69s
      Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
 error: test failed, to rerun pass `-p rustuml-render --lib`

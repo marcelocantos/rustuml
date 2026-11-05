@@ -4,8 +4,8 @@
 set -e
 C=~/Library/Caches/rustuml-shared-svg-round9-claude-maker; R=/Users/marcelo/.t3/worktrees/rustuml/t3-8ee2b4ee
 D=$R/docs/parity-reviews/tim-builtin-value-boundaries/maker-round9-claude/evidence
-rm -rf $D; mkdir -p $D/batches $D/sweep $D/gates $D/clippy $D/drift $D/bidi $D/scan $D/m9a-request $D/mm-styles-request $D/face-probe-request $D/tools
-for L in AR AU AW BB BC BE BF BG BH BI BJ BK BL BM BN BO; do cp $C/work/batch-$L.json $D/batches/; done
+rm -rf $D; mkdir -p $D/m9b-request $D/batches $D/sweep $D/gates $D/clippy $D/drift $D/bidi $D/scan $D/m9a-request $D/mm-styles-request $D/face-probe-request $D/tools
+for L in AR AU AW BB BC BE BF BG BH BI BJ BK BL BM BN BO BP; do cp $C/work/batch-$L.json $D/batches/; done
 cp $C/work/batch-summary.json $C/work/viewbox-census.json $C/work/widths-BO.json $D/batches/
 cp $C/work/cohorts.json $C/work/cohorts.txt $D/sweep/
 for r in base merge tip; do cp $C/gates/$r.exit $C/gates/$r.guard_cats.txt $C/gates/$r.pert_fail.txt $D/gates/; done
@@ -24,6 +24,8 @@ cp $C/work/scan/*.puml $C/work/scan/scan-summary.txt $D/scan/
 for f in cases.json m9a_sources.py reference-manifest.json reference-input-bundle.json.gz rust-predictions.json SHA256SUMS; do cp $C/relay/m9a/$f $D/m9a-request/; done
 cp $C/relay/mm-styles/* $D/mm-styles-request/; cp $C/relay/face-probe/* $D/face-probe-request/
 cp $C/work/mmtest/work/out/SHA256SUMS $D/mm-styles-request/colossus-dry-run-SHA256SUMS
+for f in cases.json m9b_sources.py reference-manifest.json reference-input-bundle.json.gz rust-predictions.json SHA256SUMS; do cp $C/relay/m9b/$f $D/m9b-request/; done
+cp $C/work/relay-results.json $D/relay-results.json
 chmod -R u+w $D
 cp $C/tools/*.py $C/tools/*.sh $C/tools/maker-cmp-* $D/tools/
 cp $C/bin/binaries.sha256 $D/binaries.sha256
