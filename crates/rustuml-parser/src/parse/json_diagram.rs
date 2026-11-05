@@ -45,7 +45,7 @@ pub fn parse_json_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
 /// Parse a `@startyaml` / `@endyaml` block.
 pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     let (_highlights, content) = extract_body(lines);
-    let content = keep_quoted_backslashes(&content);
+    let content = keep_block_line_breaks(&keep_quoted_backslashes(&content));
     let value: serde_yml::Value = crate::java_utf16::decode_carried(
         &content,
         |text| serde_yml::from_str(text),
@@ -61,6 +61,22 @@ pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
         format: DataFormat::Yaml,
         root,
     })
+}
+
+/// PlantUML's `YamlParser.getBlockStyleString` (133-149) ends every line of
+/// a `key: |` block with a line break and keeps blank lines: YAML keep
+/// chomping (`|+`) over a body that ends with a line break. serde_yml's
+/// default clip would drop the block's final break.
+fn keep_block_line_breaks(content: &str) -> String {
+    let mut out = String::with_capacity(content.len() + 8);
+    for line in content.split('\n') {
+        out.push_str(line);
+        if line.trim_end().ends_with(": |") {
+            out.push('+');
+        }
+        out.push('\n');
+    }
+    out
 }
 
 /// PlantUML's YAML parser (`yaml/parser/YamlLine.build`) splits a line's key
@@ -331,6 +347,17 @@ fn yaml_value_to_node(key: Option<String>, value: &serde_yml::Value) -> JsonNode
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn yaml_block_values_keep_every_line_break_as_get_block_style_string() {
+        let lines = |text: &str| text.lines().map(str::to_string).collect::<Vec<_>>();
+        let diagram =
+            parse_yaml_diagram(&lines("note: |\n  Moss\n  Fern\nafter: x\nlast: |\n  Reed"))
+                .unwrap();
+        let shown = format!("{:?}", diagram.root);
+        assert!(shown.contains(r#"Moss\nFern\n""#), "{shown}");
+        assert!(shown.contains(r#"Reed\n""#), "{shown}");
+    }
 
     #[test]
     fn yaml_quoted_backslashes_stay_literal_as_in_yaml_line_unquote() {
