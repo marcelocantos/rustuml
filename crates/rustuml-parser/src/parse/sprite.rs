@@ -162,6 +162,63 @@ fn candidate(lines: &[String], index: usize) -> (Option<Candidate>, bool) {
     (None, starts_multiline)
 }
 
+/// A sprite multiline command a line opened, for the preprocessor's
+/// comment-stripping exemption (see [`sprite_line_role`]).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) struct OpenSprite(&'static CompiledGrammar);
+
+/// What a line is to the sprite group, judged on its own text.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum SpriteLineRole {
+    /// The first sprite grammar whose start pattern accepts the line is a
+    /// single-line command.
+    Single,
+    /// ... is a multiline command (CommandFactorySprite multiline,
+    /// CommandSpriteSvgMultiline); its body and END follow.
+    Opens(OpenSprite),
+}
+
+impl PartialEq for CompiledGrammar {
+    fn eq(&self, other: &Self) -> bool {
+        std::ptr::eq(self, other)
+    }
+}
+
+impl Eq for CompiledGrammar {}
+
+impl std::fmt::Debug for CompiledGrammar {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.grammar.class)
+    }
+}
+
+/// The role of `line` as a sprite command start: the first grammar in
+/// `CommonCommands#addCommonCommands2` order whose start pattern accepts it.
+/// The preprocessor cannot look ahead for END, so a multiline start counts
+/// as opening its command.
+pub(crate) fn sprite_line_role(line: &str) -> Option<SpriteLineRole> {
+    let folded = command_text(line).to_ascii_lowercase();
+    let signature = sequence_fox_signature(&folded);
+    COMPILED
+        .iter()
+        .find(|compiled| {
+            compiled.grammar.signature & signature == compiled.grammar.signature
+                && compiled.start.is_match(&folded)
+        })
+        .map(|compiled| match compiled.end {
+            Some(_) => SpriteLineRole::Opens(OpenSprite(compiled)),
+            None => SpriteLineRole::Single,
+        })
+}
+
+/// CommandMultilines2's END (Trim.BOTH, Matcher#matches) for an open sprite.
+pub(crate) fn sprite_line_closes(open: OpenSprite, line: &str) -> bool {
+    open.0
+        .end
+        .as_ref()
+        .is_some_and(|end| end.is_match(&command_text(line).to_ascii_lowercase()))
+}
+
 /// The last line a complete sprite command starting at `index` would own,
 /// without executing it (for a family's structural pre-pass).
 pub(super) fn complete_span(lines: &[String], index: usize) -> Option<usize> {

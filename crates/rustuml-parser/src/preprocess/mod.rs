@@ -498,6 +498,9 @@ struct PreprocessContext {
     /// True when inside an @startebnf block — disables single-quote comment
     /// stripping since EBNF uses `'` as a terminal delimiter.
     in_ebnf_block: bool,
+    /// The sprite multiline command the active line stream has opened and not
+    /// yet closed (comment-stripping exemption only; commands run after TIM).
+    open_sprite: Option<crate::parse::OpenSprite>,
     seen_start_tag: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
@@ -619,6 +622,7 @@ impl PreprocessContext {
             archimate_enabled: false,
             in_diagram_block: false,
             in_ebnf_block: false,
+            open_sprite: None,
             seen_start_tag: false,
             base_dir,
             include_depth: 0,
@@ -800,20 +804,36 @@ impl PreprocessContext {
 
         // Strip inline comments (single-quote comment syntax) — but NOT
         // inside EBNF blocks. Java has no trailing-apostrophe comment form:
-        // StringLocated#removeInnerComment only removes /' ... '/ spans. Do
-        // not apply the Rust-only stripping to a line in the start grammar of
-        // CommandSpriteSvg/CommandSpriteSvgMultiline, whose SVG text may
-        // contain " '" and whose trailing text decides command completion.
-        static SPRITE_SVG_START: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"\A(?i-u:sprite)[\x09-\x0d \u{00a0}]+\$?[-\p{L}\p{N}_]+[\x09-\x0d \u{00a0}]+(?i-u:<svg)(?-u:\b)").unwrap()
-        });
-        let line_no_comment = if self.in_ebnf_block
-            || SPRITE_SVG_START.is_match(line.trim_matches([' ', '\t', '\r', '\n', '\0']))
-        {
-            line.to_string()
-        } else {
-            strip_inline_comment(line)
-        };
+        // TContext#buildCodeIterator removes whole-line ' comments
+        // (CodeIteratorShortComment) and StringLocated#removeInnerComment
+        // only /' ... '/ spans. Do not apply the Rust-only stripping to a line
+        // the sprite commands own: a line a sprite start grammar accepts, and
+        // every line of an open CommandFactorySprite/CommandSpriteSvgMultiline
+        // command through its END, whose text (SVG with " '", trailing text
+        // after </svg> or '}') decides command completion.
+        let sprite_role = crate::parse::sprite_line_role(line);
+        let line_no_comment =
+            if self.in_ebnf_block || self.open_sprite.is_some() || sprite_role.is_some() {
+                line.to_string()
+            } else {
+                strip_inline_comment(line)
+            };
+        // Track the open sprite command on the lines that survive TIM's
+        // conditionals (Java offers only those to the commands).
+        if self.is_active() {
+            match self.open_sprite {
+                Some(open) => {
+                    if crate::parse::sprite_line_closes(open, line) {
+                        self.open_sprite = None;
+                    }
+                }
+                None => {
+                    if let Some(crate::parse::SpriteLineRole::Opens(open)) = sprite_role {
+                        self.open_sprite = Some(open);
+                    }
+                }
+            }
+        }
         let trimmed = line_no_comment.trim();
 
         // Handle @start/@end tags.
@@ -4184,6 +4204,45 @@ $record(SaffronArchive)\n\
         );
         // Other lines keep the existing inline-comment handling.
         assert_eq!(pp("@startuml\nA -> B ' note\n@enduml"), vec!["A -> B "]);
+    }
+
+    #[test]
+    fn open_sprite_commands_keep_apostrophes_through_end() {
+        // SVG body and END lines, and the line after END is stripped again.
+        let svg = "sprite $tag <svg width=\"4\" height=\"4\">\n<g> 'a' </g>\n<text> 'hi'</text></svg>\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{svg}\n@enduml")),
+            vec![
+                "sprite $tag <svg width=\"4\" height=\"4\">",
+                "<g> 'a' </g>",
+                "<text> 'hi'</text></svg>",
+                "A -> B "
+            ]
+        );
+        // Trailing text after </svg> stays, so END cannot match it.
+        let trailing = "sprite $tag <svg>\n<rect/>\n</svg> ' done\n</svg>\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{trailing}\n@enduml")),
+            vec![
+                "sprite $tag <svg>",
+                "<rect/>",
+                "</svg> ' done",
+                "</svg>",
+                "A -> B "
+            ]
+        );
+        // Pixel sprites: '} ' x' is not END; the start line keeps its text.
+        let pixel = "sprite $p [2x2/16] {\nFF\n} ' x\n}\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{pixel}\n@enduml")),
+            vec!["sprite $p [2x2/16] {", "FF", "} ' x", "}", "A -> B "]
+        );
+        // A sprite header in an inactive branch opens nothing.
+        let inactive = "!if %false()\nsprite $q <svg>\n!endif\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{inactive}\n@enduml")),
+            vec!["A -> B "]
+        );
     }
 
     #[test]

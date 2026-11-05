@@ -24,6 +24,7 @@ pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
 mod sprite;
+pub(crate) use sprite::{OpenSprite, SpriteLineRole, sprite_line_closes, sprite_line_role};
 pub mod state;
 pub mod timing;
 pub mod usecase;
