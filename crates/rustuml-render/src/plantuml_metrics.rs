@@ -19,10 +19,22 @@
 /// This matches `java.awt.FontMetrics.getStringBounds(text, g).getWidth()`
 /// on the JVM that generated the golden SVGs.
 pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
+    let table = char_width_table(font_size, bold);
+    if text.contains(rustuml_parser::java_utf16::ESCAPE) {
+        // Escaped legitimate scalars of the carrier range measure as
+        // themselves; unpaired units keep their one-em advance.
+        return rustuml_parser::java_utf16::tokens(text)
+            .map(|token| match token {
+                rustuml_parser::java_utf16::Token::Char(c) => {
+                    literal_char_width(c, table, bold, font_size)
+                }
+                rustuml_parser::java_utf16::Token::Unit(_) => font_size,
+            })
+            .sum();
+    }
     if let Some(width) = shaped_text_width(text, font_size, bold) {
         return width;
     }
-    let table = char_width_table(font_size, bold);
     text.chars()
         .map(|c| char_width(c, table, bold, font_size))
         .sum()
@@ -290,6 +302,17 @@ fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
 }
 
 fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
+    if rustuml_parser::java_utf16::carried_unit(c).is_some() {
+        // An unpaired UTF-16 unit advances one em in Java's SansSerif: in AW
+        // surrogate_high_class, Java's textLength for 'x' + a lone high unit
+        // at size 14 exceeds CHAR_WIDTHS_14's 'x' advance by exactly 14.
+        return font_size;
+    }
+    literal_char_width(c, table, bold, font_size)
+}
+
+/// Advance of a legitimate scalar (never an unpaired-unit carrier).
+fn literal_char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     let code = c as u32;
     if (32..=126).contains(&code) {
         return table[(code - 32) as usize];
@@ -297,11 +320,12 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     if matches!(c, '\u{200D}' | '\u{FE0E}' | '\u{FE0F}') || is_emoji_modifier(code) {
         return 0.0;
     }
-    if rustuml_parser::java_utf16::carried_unit(c).is_some() {
-        // An unpaired UTF-16 unit advances one em in Java's SansSerif: in AW
-        // surrogate_high_class, Java's textLength for 'x' + a lone high unit
-        // at size 14 exceeds CHAR_WIDTHS_14's 'x' advance by exactly 14.
-        return font_size;
+    if is_supplementary_private_use(code) {
+        // Extracted from Java references (batch BC, size 14 plain): each
+        // planes-15/16 private-use scalar advances 10.5 against the ASCII
+        // advances in "Vault U+10FFFD", "Vault U+FFFFD", "Gate U+10F800 end"
+        // and "Rune U+10F83D U+10FE80"; other sizes and bold are relayed.
+        return font_size * SUPPLEMENTARY_PRIVATE_USE_ADVANCE_PER_SIZE;
     }
     if is_color_emoji_fallback(code) {
         return (font_size * crate::non_ascii_widths::COLOR_EMOJI_STRIKE_SCALE).round();
@@ -355,6 +379,15 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
         // default approximation.
         table[('a' as u32 - 32) as usize]
     }
+}
+
+/// Advance per font size of a planes-15/16 private-use scalar (see
+/// `literal_char_width`).
+const SUPPLEMENTARY_PRIVATE_USE_ADVANCE_PER_SIZE: f64 = 0.75;
+
+/// Supplementary Private Use Area-A and -B (U+F0000..U+FFFFD, U+100000..U+10FFFD).
+fn is_supplementary_private_use(code: u32) -> bool {
+    (0xF_0000..=0xF_FFFD).contains(&code) || (0x10_0000..=0x10_FFFD).contains(&code)
 }
 
 fn is_color_emoji_fallback(code: u32) -> bool {
@@ -1616,6 +1649,40 @@ const CHAR_WIDTHS_14_BOLD: [f64; 95] = [
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn carrier_range_text_measures_as_java() {
+        use rustuml_parser::java_utf16;
+        // Batch BC, size 14 plain: textLength 49.7861 for "Vault U+10FFFD"
+        // and for "Vault U+FFFFD"; an unpaired unit keeps one em.
+        let vault = text_width("Vault ", 14.0, false);
+        assert_eq!(
+            fmt_coord(text_width(
+                &java_utf16::escape("Vault \u{10FFFD}"),
+                14.0,
+                false
+            )),
+            "49.7861"
+        );
+        assert_eq!(
+            fmt_coord(text_width("Vault \u{FFFFD}", 14.0, false)),
+            "49.7861"
+        );
+        let rocket: Vec<u16> = "🚀".encode_utf16().collect();
+        let unit = java_utf16::text(&rocket[..1]);
+        assert_eq!(
+            text_width(&format!("Vault {unit}"), 14.0, false),
+            vault + 14.0
+        );
+        assert_eq!(
+            text_width(
+                &format!("Vault {unit}{}", java_utf16::escape("\u{10F83D}")),
+                14.0,
+                false
+            ),
+            vault + 14.0 + 10.5
+        );
+    }
 
     #[test]
     fn times_new_roman_fractional_unicode_advances_accumulate_like_awt() {

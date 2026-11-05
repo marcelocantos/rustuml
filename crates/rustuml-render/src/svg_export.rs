@@ -95,15 +95,44 @@ pub fn serialize(document: String) -> Result<String, SvgExportError> {
     Ok(output)
 }
 
-/// Fast path: documents without a carried unit serialize unchanged.
+/// Fast path: documents without a carrier or escape serialize unchanged.
 fn carries_unpaired_unit(document: &str) -> bool {
-    document
-        .chars()
-        .any(|ch| java_utf16::carried_unit(ch).is_some())
+    document.chars().any(java_utf16::reserved)
         || document.match_indices("&#").any(|(at, _)| {
-            character_reference(&document[at..])
-                .is_some_and(|(ch, _)| java_utf16::carried_unit(ch).is_some())
+            character_reference(&document[at..]).is_some_and(|(ch, _)| java_utf16::reserved(ch))
         })
+}
+
+/// The document as plain text for converters that do not serialize through
+/// `ToStream` (PNG, PDF, EPS): escape prefixes removed and each unpaired unit
+/// replaced by U+FFFD, raw or as a character reference like the original.
+pub fn show_carried(document: String) -> String {
+    if !carries_unpaired_unit(&document) {
+        return document;
+    }
+    let mut output = String::with_capacity(document.len());
+    let mut after_escape = false;
+    let mut at = 0;
+    while at < document.len() {
+        let rest = &document[at..];
+        let (ch, length, reference) = match character_reference(rest) {
+            Some((ch, length)) => (ch, length, true),
+            None => {
+                let ch = rest.chars().next().expect("at is a char boundary");
+                (ch, ch.len_utf8(), false)
+            }
+        };
+        let literal = std::mem::take(&mut after_escape);
+        if !literal && ch == java_utf16::ESCAPE && at + length < document.len() {
+            after_escape = true;
+        } else if !literal && java_utf16::carried_unit(ch).is_some() {
+            output.push_str(if reference { "&#65533;" } else { "\u{FFFD}" });
+        } else {
+            output.push_str(&rest[..length]);
+        }
+        at += length;
+    }
+    output
 }
 
 /// Decode `&#N;` / `&#xN;` at the start of `text`: the scalar and the length.
@@ -133,7 +162,9 @@ impl Serializer<'_> {
         while at < document.len() {
             let rest = &document[at..];
             if let Some(body) = rest.strip_prefix("<!--") {
-                at += 4 + body.find("-->").map_or(body.len(), |end| end + 3);
+                let end = body.find("-->").unwrap_or(body.len());
+                self.comment(at + 4..at + 4 + end);
+                at += 4 + (end + 3).min(body.len());
             } else if let Some(body) = rest.strip_prefix("<![CDATA[") {
                 let end = body.find("]]>").unwrap_or(body.len());
                 self.node(NodeKind::Text, at + 9..at + 9 + end, false)?;
@@ -215,6 +246,22 @@ impl Serializer<'_> {
         Ok(at)
     }
 
+    /// `ToStream.comment` writes through the StreamEncoder: a carried unit
+    /// is one unmappable unit ('?') and an escape is not text.
+    fn comment(&mut self, span: std::ops::Range<usize>) {
+        let body = &self.document[span.clone()];
+        for (token, token_span) in java_utf16::token_spans(body) {
+            let span = span.start + token_span.start..span.start + token_span.end;
+            match token {
+                java_utf16::Token::Unit(_) => self.edits.push((span, "?".to_string())),
+                java_utf16::Token::Char(ch) if java_utf16::reserved(ch) => {
+                    self.edits.push((span, ch.to_string()))
+                }
+                java_utf16::Token::Char(_) => {}
+            }
+        }
+    }
+
     /// One `characters()` or `writeAttrString` call.
     fn node(
         &mut self,
@@ -222,7 +269,12 @@ impl Serializer<'_> {
         span: std::ops::Range<usize>,
         escaped: bool,
     ) -> Result<(), SvgExportError> {
-        let units = decode(self.document, span, kind, escaped);
+        let (units, escapes) = decode(self.document, span, kind, escaped);
+        // An escape prefix (rustuml_parser::java_utf16::ESCAPE) is not Java
+        // text: the scalar after it is ordinary character data.
+        for escape in escapes {
+            self.edits.push((escape, String::new()));
+        }
         let mut index = 0;
         while index < units.len() {
             let current = &units[index];
@@ -300,9 +352,11 @@ fn decode(
     span: std::ops::Range<usize>,
     kind: NodeKind,
     escaped: bool,
-) -> Vec<Unit> {
+) -> (Vec<Unit>, Vec<std::ops::Range<usize>>) {
     let text = &document[span.clone()];
     let mut units = Vec::with_capacity(text.len());
+    let mut escapes = Vec::new();
+    let mut after_escape = false;
     let mut offset = 0;
     while offset < text.len() {
         let rest = &text[offset..];
@@ -329,7 +383,13 @@ fn decode(
         };
         let char_span = span.start + offset..span.start + offset + length;
         offset += length;
-        if let Some(unit) = java_utf16::carried_unit(ch) {
+        let literal = std::mem::take(&mut after_escape);
+        if !literal && ch == java_utf16::ESCAPE && offset < text.len() {
+            escapes.push(char_span);
+            after_escape = true;
+            continue;
+        }
+        if let Some(unit) = java_utf16::carried_unit(ch).filter(|_| !literal) {
             units.push(Unit {
                 unit,
                 checked: true,
@@ -351,7 +411,7 @@ fn decode(
             });
         }
     }
-    units
+    (units, escapes)
 }
 
 /// Whether a non-entity character reaches `accumDefaultEscape`'s surrogate
@@ -464,8 +524,49 @@ mod tests {
 
     #[test]
     fn comments_are_not_character_data() {
+        // ToStream.comment writes through the StreamEncoder: the unit is one
+        // unmappable '?' and never reaches m_highSurrogate.
         let high = carried("🚀", 0);
         let document = format!("<svg><!--class {high}--><text>é</text></svg>");
-        assert_eq!(serialize(document.clone()), Ok(document));
+        assert_eq!(
+            serialize(document),
+            Ok("<svg><!--class ?--><text>é</text></svg>".to_string())
+        );
+    }
+
+    #[test]
+    fn escaped_legitimate_scalars_are_character_data() {
+        // BC pua_b_*: legitimate U+10F800..U+10FFFF text never fails and
+        // never joins a neighbour; the escape prefix is not written.
+        let escaped = java_utf16::escape("Rune \u{10F83D}\u{10FE80}").into_owned();
+        let reference: String = escaped
+            .chars()
+            .map(|ch| {
+                if ch.is_ascii() {
+                    ch.to_string()
+                } else {
+                    format!("&#{};", ch as u32)
+                }
+            })
+            .collect();
+        let document = format!("<svg><text>{escaped}</text><a title=\"{reference}\"/></svg>");
+        assert_eq!(
+            serialize(document),
+            Ok("<svg><text>Rune \u{10F83D}\u{10FE80}</text><a title=\"Rune &#1112125;&#1113728;\"/></svg>".to_string())
+        );
+        // A real unit next to an escaped scalar keeps the ToStream rule.
+        let low = carried("𝒜", 1);
+        let document = format!(
+            "<svg><text>{}{low}</text></svg>",
+            java_utf16::escape("\u{10FFFD}")
+        );
+        assert!(serialize(document).unwrap_err().message.contains("0xdc9c"));
+        assert_eq!(
+            show_carried(format!(
+                "<svg><text>{}{low}</text></svg>",
+                java_utf16::escape("\u{10FFFD}")
+            )),
+            "<svg><text>\u{10FFFD}\u{FFFD}</text></svg>"
+        );
     }
 }

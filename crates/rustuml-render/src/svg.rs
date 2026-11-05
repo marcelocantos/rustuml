@@ -35,7 +35,13 @@ pub(crate) fn escape_attribute(value: &str) -> String {
 pub(crate) fn comment_text(body: &str) -> String {
     let mut result = String::with_capacity(body.len());
     let mut was_dash = false;
-    for ch in body.chars() {
+    // Carried text (rustuml_parser::java_utf16): an escaped scalar is one
+    // character and an unpaired unit is one unmappable unit ('?').
+    for token in rustuml_parser::java_utf16::tokens(body) {
+        let ch = match token {
+            rustuml_parser::java_utf16::Token::Char(ch) => ch,
+            rustuml_parser::java_utf16::Token::Unit(_) => '?',
+        };
         if was_dash && ch == '-' {
             result.push(' ');
         }

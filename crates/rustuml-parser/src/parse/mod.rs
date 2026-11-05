@@ -1083,7 +1083,8 @@ pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
 
 /// Parse YAML input into a diagram model.
 pub fn parse_yaml(input: &str) -> Result<Diagram, ParseError> {
-    serde_yml::from_str(input).map_err(|e| ParseError {
+    // Model text enters here without TIM: escape it for the unit carrier.
+    serde_yml::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
         line: e.location().map_or(0, |l| l.line()),
         message: format!("YAML parse error: {e}"),
     })
@@ -1091,7 +1092,7 @@ pub fn parse_yaml(input: &str) -> Result<Diagram, ParseError> {
 
 /// Parse JSON input into a diagram model.
 pub fn parse_json(input: &str) -> Result<Diagram, ParseError> {
-    serde_json::from_str(input).map_err(|e| ParseError {
+    serde_json::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
         line: e.line(),
         message: format!("JSON parse error: {e}"),
     })
@@ -1111,7 +1112,10 @@ pub fn parse_auto_with_base(
     if trimmed.starts_with('{') {
         // Try model JSON first; fall back to @startjson-style data visualization.
         parse_json(input).or_else(|_| {
-            let lines: Vec<String> = input.lines().map(|l| l.to_string()).collect();
+            let lines: Vec<String> = crate::java_utf16::escape(input)
+                .lines()
+                .map(|l| l.to_string())
+                .collect();
             let diagram = json_diagram::parse_json_diagram(&lines)?;
             Ok(Diagram::Json(diagram))
         })

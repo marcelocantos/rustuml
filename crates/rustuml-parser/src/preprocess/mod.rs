@@ -385,8 +385,10 @@ impl Value {
     }
 
     fn from_utf16(units: Vec<u16>) -> Self {
+        // Decoded scalars of the carrier's reserved range are escaped, so a
+        // legitimate U+10F7FF..U+10FFFF never reads back as a unit.
         match String::from_utf16(&units) {
-            Ok(text) => Self::Str(text),
+            Ok(_) => Self::Str(crate::java_utf16::text(&units)),
             Err(_) => Self::Utf16(units),
         }
     }
@@ -1053,6 +1055,9 @@ impl PreprocessContext {
     }
 
     fn process(&mut self, input: &str) -> Vec<EvaluatedEvent> {
+        // Every caller passes text read from outside (source, !include,
+        // stdlib, !theme): escape it once for the unit carrier.
+        let input = crate::java_utf16::escape(input);
         let lines: Vec<&str> = input.lines().collect();
         self.process_lines(&lines)
     }
@@ -2185,6 +2190,7 @@ impl PreprocessContext {
 
         match std::fs::read_to_string(&file_path) {
             Ok(content) => {
+                let content = crate::java_utf16::escape(&content);
                 // Sub.fromFile selects raw StringLocated lines, not an executed
                 // temporary context. Repeated matching blocks append; unselected
                 // prelude/tail never executes (including errors and mutations).
@@ -3206,7 +3212,7 @@ impl PreprocessContext {
                 } else {
                     std::env::var(name).unwrap_or_default()
                 };
-                return Value::Str(value);
+                return Value::Str(crate::java_utf16::escape(&value).into_owned());
             }
             "strlen" => {
                 return Value::Int(values.first().map_or(0, |v| v.utf16_units().len() as i32));
@@ -3478,7 +3484,7 @@ impl PreprocessContext {
                 // Without file context we return "." as a placeholder.
                 self.base_dir
                     .as_ref()
-                    .map(|p| p.display().to_string())
+                    .map(|p| crate::java_utf16::escape(&p.display().to_string()).into_owned())
                     .unwrap_or_else(|| ".".to_string())
             }
             "feature" => {
@@ -4359,6 +4365,33 @@ mod tests {
                 format!("Cannot convert {text} to integer.")
             );
         }
+    }
+
+    #[test]
+    fn legitimate_carrier_range_text_is_ordinary_java_text() {
+        // Review-3 attributed regressions (BC pua_b_*): U+10F800..U+10FFFF in
+        // the source is ordinary text. %strlen counts Java's two units.
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("!$s = \"\u{10FFFD}\"\n");
+        assert_eq!(ctx.eval_expr_to_value("%strlen($s)").to_display(), "2");
+        assert_eq!(
+            ctx.eval_expr_to_value("%substr($s, 0)").utf16_units(),
+            "\u{10FFFD}".encode_utf16().collect::<Vec<_>>()
+        );
+        let output = preprocess_full(
+            "@startuml\nclass \"Rune \u{10F83D}\u{10FE80} %upper(\"\u{10F800}a\")\" as R\n@enduml\n",
+            None,
+        );
+        assert!(output.error.is_none());
+        let line = output.lines.concat();
+        assert_eq!(
+            crate::java_utf16::display(&line, '?'),
+            "class \"Rune \u{10F83D}\u{10FE80} \u{10F800}A\" as R"
+        );
+        assert!(
+            crate::java_utf16::tokens(&line)
+                .all(|token| matches!(token, crate::java_utf16::Token::Char(_)))
+        );
     }
 
     #[test]

@@ -114,6 +114,14 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     try_render_svg_with_theme(diagram, theme).unwrap_or_default()
 }
 
+/// The rendered document for `-tpng`/`-tpdf`/`-teps`. Java draws text there
+/// through Graphics2D (`DriverTextG2d`) or TextLayout outlines
+/// (`DriverTextEps`), never `ToStream`, so the SVG export failure does not
+/// apply; carried text is shown plainly (`svg_export::show_carried`).
+pub fn render_svg_for_conversion(diagram: &Diagram, theme: &Theme) -> String {
+    svg_export::show_carried(render_document_with_theme(diagram, theme))
+}
+
 /// The rendered document before export (`svg_export::serialize`).
 fn render_document_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     // Apply inline skinparam overrides from any diagram type.
