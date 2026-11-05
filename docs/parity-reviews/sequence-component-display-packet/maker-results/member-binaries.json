@@ -1,0 +1,10 @@
+{
+  "revision": "c0ae326fe0ec171784f51a85b6da7afb88d7073a",
+  "dirty": true,
+  "renderer_sha256": "28b9f0242ca5b72ea34028f9113909ebce5e2e272c6c2d22552da11131ba4fea",
+  "binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "c17b027a7a8c3bb01ab1b3f8fcb615b87865c98ee3e89ad228940e8d09ac8ca0",
+    "rustuml": "ffcb3e14b45c0679eafd523561877d908b7237cbc16c7a71c23d7ac37ef51225"
+  }
+}

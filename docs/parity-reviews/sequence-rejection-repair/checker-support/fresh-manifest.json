@@ -1,0 +1,654 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth1.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth1.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "engine",
+      "activation recursion and sequential color inheritance"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth3.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth3.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "engine",
+      "activation recursion and sequential color inheritance"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth1.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth1.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "engine",
+      "activation recursion and sequential color inheritance"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth3.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth3.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "engine",
+      "activation recursion and sequential color inheritance"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order0.puml",
+    "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order0.svg",
+    "cohort": "sequence-reverse-self-component",
+    "axes": [
+      "engine",
+      "participant declaration order",
+      "reverse async head and attached note side"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order1.puml",
+    "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order1.svg",
+    "cohort": "sequence-reverse-self-component",
+    "axes": [
+      "engine",
+      "participant declaration order",
+      "reverse async head and attached note side"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order0.puml",
+    "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order0.svg",
+    "cohort": "sequence-reverse-self-component",
+    "axes": [
+      "engine",
+      "participant declaration order",
+      "reverse async head and attached note side"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order1.puml",
+    "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order1.svg",
+    "cohort": "sequence-reverse-self-component",
+    "axes": [
+      "engine",
+      "participant declaration order",
+      "reverse async head and attached note side"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.puml",
+    "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.svg",
+    "cohort": "sequence-preferred-component-flow",
+    "axes": [
+      "engine",
+      "shadow on spanning preferred dimensions",
+      "padding and delay composition"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.puml",
+    "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.svg",
+    "cohort": "sequence-preferred-component-flow",
+    "axes": [
+      "engine",
+      "shadow on spanning preferred dimensions",
+      "padding and delay composition"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.puml",
+    "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.svg",
+    "cohort": "sequence-preferred-component-flow",
+    "axes": [
+      "engine",
+      "shadow on spanning preferred dimensions",
+      "padding and delay composition"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.puml",
+    "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.svg",
+    "cohort": "sequence-preferred-component-flow",
+    "axes": [
+      "engine",
+      "shadow on spanning preferred dimensions",
+      "padding and delay composition"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.svg",
+    "cohort": "sequence-page-wrapper-hierarchy",
+    "axes": [
+      "engine",
+      "page boundary with later lifecycle and self-arrow",
+      "wrapper order and multiline caption"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.svg",
+    "cohort": "sequence-page-wrapper-hierarchy",
+    "axes": [
+      "engine",
+      "page boundary with later lifecycle and self-arrow",
+      "wrapper order and multiline caption"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.svg",
+    "cohort": "sequence-page-wrapper-hierarchy",
+    "axes": [
+      "engine",
+      "page boundary with later lifecycle and self-arrow",
+      "wrapper order and multiline caption"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.svg",
+    "cohort": "sequence-page-wrapper-hierarchy",
+    "axes": [
+      "engine",
+      "page boundary with later lifecycle and self-arrow",
+      "wrapper order and multiline caption"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "declaration order",
+      "creation/destruction and close/reopen ownership"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "declaration order",
+      "creation/destruction and close/reopen ownership"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "declaration order",
+      "creation/destruction and close/reopen ownership"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "declaration order",
+      "creation/destruction and close/reopen ownership"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth1_group.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth1_group.svg",
+    "cohort": "sequence-teoz-callback-lifecycle",
+    "axes": [
+      "activation depth",
+      "group END versus standalone note before repeated closes",
+      "initial activation"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth1_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth1_note.svg",
+    "cohort": "sequence-teoz-callback-lifecycle",
+    "axes": [
+      "activation depth",
+      "group END versus standalone note before repeated closes",
+      "initial activation"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth3_group.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth3_group.svg",
+    "cohort": "sequence-teoz-callback-lifecycle",
+    "axes": [
+      "activation depth",
+      "group END versus standalone note before repeated closes",
+      "initial activation"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth3_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth3_note.svg",
+    "cohort": "sequence-teoz-callback-lifecycle",
+    "axes": [
+      "activation depth",
+      "group END versus standalone note before repeated closes",
+      "initial activation"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested0.svg",
+    "cohort": "sequence-teoz-group-tile-composition",
+    "axes": [
+      "declaration order versus explicit note endpoints",
+      "group nesting and else",
+      "attached reverse note and delay"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested1.svg",
+    "cohort": "sequence-teoz-group-tile-composition",
+    "axes": [
+      "declaration order versus explicit note endpoints",
+      "group nesting and else",
+      "attached reverse note and delay"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested0.svg",
+    "cohort": "sequence-teoz-group-tile-composition",
+    "axes": [
+      "declaration order versus explicit note endpoints",
+      "group nesting and else",
+      "attached reverse note and delay"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested1.svg",
+    "cohort": "sequence-teoz-group-tile-composition",
+    "axes": [
+      "declaration order versus explicit note endpoints",
+      "group nesting and else",
+      "attached reverse note and delay"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_left.svg",
+    "cohort": "sequence-teoz-note-component-flow",
+    "axes": [
+      "self direction",
+      "attached note side",
+      "asymmetric span endpoint order and shadow"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.svg",
+    "cohort": "sequence-teoz-note-component-flow",
+    "axes": [
+      "self direction",
+      "attached note side",
+      "asymmetric span endpoint order and shadow"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_left.svg",
+    "cohort": "sequence-teoz-note-component-flow",
+    "axes": [
+      "self direction",
+      "attached note side",
+      "asymmetric span endpoint order and shadow"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.svg",
+    "cohort": "sequence-teoz-note-component-flow",
+    "axes": [
+      "self direction",
+      "attached note side",
+      "asymmetric span endpoint order and shadow"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide0.svg",
+    "cohort": "sequence-teoz-real-bound-capture",
+    "axes": [
+      "asymmetric participant declaration order",
+      "constraint expansion after captured bounds"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order0_wide1.svg",
+    "cohort": "sequence-teoz-real-bound-capture",
+    "axes": [
+      "asymmetric participant declaration order",
+      "constraint expansion after captured bounds"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide0.svg",
+    "cohort": "sequence-teoz-real-bound-capture",
+    "axes": [
+      "asymmetric participant declaration order",
+      "constraint expansion after captured bounds"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_order1_wide1.svg",
+    "cohort": "sequence-teoz-real-bound-capture",
+    "axes": [
+      "asymmetric participant declaration order",
+      "constraint expansion after captured bounds"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_leading.puml",
+    "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_leading.svg",
+    "cohort": "sequence-delay-label-allocation",
+    "axes": [
+      "engine",
+      "asymmetric leading versus trailing allocation whitespace",
+      "group and padding"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.puml",
+    "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.svg",
+    "cohort": "sequence-delay-label-allocation",
+    "axes": [
+      "engine",
+      "asymmetric leading versus trailing allocation whitespace",
+      "group and padding"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_leading.puml",
+    "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_leading.svg",
+    "cohort": "sequence-delay-label-allocation",
+    "axes": [
+      "engine",
+      "asymmetric leading versus trailing allocation whitespace",
+      "group and padding"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.puml",
+    "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.svg",
+    "cohort": "sequence-delay-label-allocation",
+    "axes": [
+      "engine",
+      "asymmetric leading versus trailing allocation whitespace",
+      "group and padding"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted0.puml",
+    "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted0.svg",
+    "cohort": "sequence-box-title-grammar",
+    "axes": [
+      "engine",
+      "quoted/unquoted trailing whitespace before color",
+      "multi-participant box"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted1.puml",
+    "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted1.svg",
+    "cohort": "sequence-box-title-grammar",
+    "axes": [
+      "engine",
+      "quoted/unquoted trailing whitespace before color",
+      "multi-participant box"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted0.puml",
+    "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted0.svg",
+    "cohort": "sequence-box-title-grammar",
+    "axes": [
+      "engine",
+      "quoted/unquoted trailing whitespace before color",
+      "multi-participant box"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted1.puml",
+    "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted1.svg",
+    "cohort": "sequence-box-title-grammar",
+    "axes": [
+      "engine",
+      "quoted/unquoted trailing whitespace before color",
+      "multi-participant box"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested0.svg",
+    "cohort": "sequence-teoz-englober-margins",
+    "axes": [
+      "boxed participant count",
+      "nested englobers",
+      "boxPadding and hidden footbox"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested1.svg",
+    "cohort": "sequence-teoz-englober-margins",
+    "axes": [
+      "boxed participant count",
+      "nested englobers",
+      "boxPadding and hidden footbox"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested0.svg",
+    "cohort": "sequence-teoz-englober-margins",
+    "axes": [
+      "boxed participant count",
+      "nested englobers",
+      "boxPadding and hidden footbox"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested1.svg",
+    "cohort": "sequence-teoz-englober-margins",
+    "axes": [
+      "boxed participant count",
+      "nested englobers",
+      "boxPadding and hidden footbox"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "source-guided edge control",
+      "orphan_note"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "source-guided edge control",
+      "external_twice"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "source-guided edge control",
+      "unknown_color"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_parallel.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_parallel.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "source-guided edge control",
+      "parallel"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_parallel.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_parallel.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "source-guided edge control",
+      "parallel"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_create_then_destroy.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_create_then_destroy.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "source-guided edge control",
+      "create_then_destroy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_delay_active.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_delay_active.svg",
+    "cohort": "sequence-teoz-callback-lifecycle",
+    "axes": [
+      "source-guided edge control",
+      "delay_active"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_multiline.puml",
+    "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_multiline.svg",
+    "cohort": "sequence-delay-label-allocation",
+    "axes": [
+      "source-guided edge control",
+      "multiline"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_top_legend.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_top_legend.svg",
+    "cohort": "sequence-page-wrapper-hierarchy",
+    "axes": [
+      "source-guided edge control",
+      "top_legend"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_styled_caption.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_styled_caption.svg",
+    "cohort": "sequence-page-wrapper-hierarchy",
+    "axes": [
+      "source-guided edge control",
+      "styled_caption"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.puml",
+    "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.svg",
+    "cohort": "sequence-preferred-component-flow",
+    "axes": [
+      "source-guided edge control",
+      "actor_shadow"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_hex_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_hex_note.svg",
+    "cohort": "sequence-teoz-group-tile-composition",
+    "axes": [
+      "source-guided edge control",
+      "hex_note"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_left_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_left_0.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "external border side",
+      "external direction",
+      "group and active participant"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_left_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_left_1.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "external border side",
+      "external direction",
+      "group and active participant"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_right_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_right_0.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "external border side",
+      "external direction",
+      "group and active participant"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_right_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_external_right_1.svg",
+    "cohort": "sequence-teoz-event-history",
+    "axes": [
+      "external border side",
+      "external direction",
+      "group and active participant"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_standalone_destroy.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_standalone_destroy.svg",
+    "cohort": "sequence-teoz-callback-lifecycle",
+    "axes": [
+      "standalone destruction after group owner",
+      "self arrow after destruction"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_box_before_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_box_before_note.svg",
+    "cohort": "sequence-teoz-real-bound-capture",
+    "axes": [
+      "englober margins before Real compile",
+      "span allocation versus later arrow expansion"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_cross.puml",
+    "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_cross.svg",
+    "cohort": "sequence-reverse-self-component",
+    "axes": [
+      "reverse cross arrowhead",
+      "active depth and attached note"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_nested_after_destroy.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_nested_after_destroy.svg",
+    "cohort": "sequence-return-configuration",
+    "axes": [
+      "destroy before return",
+      "multiple activating destinations and color"
+    ]
+  }
+]

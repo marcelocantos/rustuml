@@ -1,0 +1,13 @@
+{
+  "validated": true,
+  "cases": 2,
+  "calls": 2,
+  "gzip_sha256": "fe40a97b6e1911041f574bd3b5702ca04c5fe8ae232615b97a813e3736b805c1",
+  "classification_performed": false,
+  "checks": [
+    "exact source membership/bytes/hash",
+    "transport and streams",
+    "wrapper/Java argv, cwd/TZ/env",
+    "pinned headless JAR and wrapper"
+  ]
+}

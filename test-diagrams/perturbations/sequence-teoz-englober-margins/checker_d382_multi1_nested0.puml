@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+skinparam padding 2
+skinparam boxPadding 7
+box An unusually wide outer title #lightblue
+participant A
+participant B
+end box
+participant Z
+A -> Z : outside
+B <- B : loop
+hide footbox
+footer last band
+@enduml

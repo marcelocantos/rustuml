@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Cedar
+create queue "\n<size:18>Mail</size>\nend" as Mail <<work>>
+Cedar -> Mail: enqueue
+@enduml

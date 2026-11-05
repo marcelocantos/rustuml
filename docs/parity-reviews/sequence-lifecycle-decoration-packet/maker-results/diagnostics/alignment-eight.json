@@ -1,0 +1,50 @@
+[
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_black_knight_sequence.puml",
+    "exit": 0,
+    "stdout": "SVGs are structurally equivalent\n",
+    "stderr": ""
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_hacker_sequence.puml",
+    "exit": 0,
+    "stdout": "SVGs are structurally equivalent\n",
+    "stderr": ""
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_metal_sequence.puml",
+    "exit": 0,
+    "stdout": "SVGs are structurally equivalent\n",
+    "stderr": ""
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_silver_sequence.puml",
+    "exit": 0,
+    "stdout": "SVGs are structurally equivalent\n",
+    "stderr": ""
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_spacelab_sequence.puml",
+    "exit": 0,
+    "stdout": "SVGs are structurally equivalent\n",
+    "stderr": ""
+  },
+  {
+    "source": "test-diagrams/golden/skinparam/skin_combined_thick_lines_sequence.puml",
+    "exit": 1,
+    "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"167px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:184px;height:167px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 184 167\"), (\"width\", \"184px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"167px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:187px;height:167px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 187 167\"), (\"width\", \"187px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+    "stderr": ""
+  },
+  {
+    "source": "test-diagrams/golden/skinparam/skin_global_defaultTextAlignment_center.puml",
+    "exit": 0,
+    "stdout": "SVGs are structurally equivalent\n",
+    "stderr": ""
+  },
+  {
+    "source": "test-diagrams/golden/skinparam/skin_global_shadowing_true.puml",
+    "exit": 1,
+    "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"167px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:167px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 167\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"167px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:165px;height:167px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 165 167\"), (\"width\", \"165px\"), (\"zoomAndPan\", \"magnify\")]\n\n",
+    "stderr": ""
+  }
+]

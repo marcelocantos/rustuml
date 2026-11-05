@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+boundary Osprey
+participant Lyra
+create Osprey
+?-> Osprey: near
+Osprey -> Lyra: far
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+participant Juniper
+participant Kestrel
+participant Lark
+Juniper -> Juniper: recursive
+rnote left
+<b>amber</b>
+line two
+line three
+end note
+Juniper -> Kestrel: final
+@enduml

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-participant-kind-font-consumer",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3A3586e3c0-433f-4984-bdab-61d183d23ec6",
+    "model": "gpt-6-astra / Codex harness in T3 Code",
+    "role": "Independent checker; did not implement candidate; no children",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "branch": "review/sequence-711dbca7-5c023380"
+  },
+  "account_commit": "9e6a899c153c4816f71f2c93b717f8e1e6a2b05b",
+  "implementation_commit": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "tested_packet_commit": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "tested_production_commit": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "intermediate_revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent's existing Monkey Man relay: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; exact per-input actual wrapper argv/cwd/status/streams in checker evidence; Java argv derived from pinned wrapper, not process-traced",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/fresh52.json PRIVATE_CACHE/after-bin PRIVATE_CACHE/after-fresh; separately followup12.json -> after-followup (same checkout cwd); before binaries likewise",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_isolation_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_isolation_legacy.svg",
+      "axes": [
+        "kind-specific inherited font",
+        "multiline/mixed kinds",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "4522d11dc1c82a9ff86d9d632914f091e32db7fa9e6da0e992b24ef9bec182ce",
+      "reference_sha256": "95f52bd2694bf7ef63bae5b5f153c97a8abce5794f321f23be7b378041a36408",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_isolation_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_isolation_teoz.svg",
+      "axes": [
+        "kind-specific inherited font",
+        "multiline/mixed kinds",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "6b93bf246b8a504cf3ce6c8342bd26acf612e8439f4ce2214a55da524ecf631b",
+      "reference_sha256": "5e0d309481bae6b07165f9e2fa830355ce44f855a883d8b4de9db3b4a8fce46f",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_each_kind_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_each_kind_legacy.svg",
+      "axes": [
+        "unequal explicit sizes",
+        "reverse/mixed kinds",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "6fc6086887cda339dc89f54f0ea2b3b0cdbe0ed68043307e12db784f566f46c1",
+      "reference_sha256": "f0ccde53456e33bfca5b135ecc61ceba54f6122a338e143b449dbc30ad80f26b",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_each_kind_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_font_each_kind_teoz.svg",
+      "axes": [
+        "unequal explicit sizes",
+        "reverse/mixed kinds",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f25551e14c37f79e835295da3866ab1b61e7400f842883a6b042c41faa2da8ac",
+      "reference_sha256": "710f919e8268253c4db45f1dcbeca89eaedcc1a5d76d5ca3883808539221bbec",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    }
+  ],
+  "findings": [
+    "Participant.getUsedStyles begins with getStyleSignature for the participant kind; sibling actor/queue styles do not inherit participantFontSize. Rust resolves component_style(kind).fontSize into ParticipantLayout and temporarily uses it for painting.",
+    "Four new mixed-kind multiline cases with participant-only override and unequal explicit actor/queue/participant sizes pass. This supports the font-size consumer narrowly. Logical-font mapping, per-stereotype style and other shared-style semantics are not proved. Global standing/guard gates remain red, so no acceptance is issued."
+  ],
+  "verdict": "rejected",
+  "acceptance_policy": "Any failing whole case rejects. Mechanisms with green fresh cases only have bounded support, not acceptance: required standing perturbations and guards remain red. No prior acceptance transfers and no failure is waived.",
+  "evidence": "docs/parity-reviews/sequence-component-display-packet/checker-711-astra/README.md",
+  "fresh_outcomes": {
+    "entries": 4,
+    "outcomes": {
+      "0": 4
+    },
+    "cli_panics": []
+  }
+}

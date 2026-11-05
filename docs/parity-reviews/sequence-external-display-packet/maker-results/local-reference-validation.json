@@ -1,0 +1,52 @@
+{
+  "cases": 16,
+  "valid": 16,
+  "command_errors": 0,
+  "timeouts": 0,
+  "manifest_sha256": "6f038fa8177116750c9ac6858c8c05ca4d0e89a2e4094eac2250baf134809b57",
+  "gzip_sha256": "9dfcc45130464b349d53a7827ed203885408163653a9cf5557360ef5412acc6b",
+  "transport_sha256": "f8003e2887f94980b31ef25a5162dbc16ff48ee3f6e00e92e66a6887c4462319",
+  "environment": {
+    "batch": "sequence-external-queue-maker16",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.Vj1RPcfr",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "c850cc781bbeac95b51ecfe34bec09fb265f952130ea2c6cb21ef66f7981047b",
+    "manifest_sha256": "6f038fa8177116750c9ac6858c8c05ca4d0e89a2e4094eac2250baf134809b57",
+    "env_overrides": {},
+    "environment_policy": "Inherited environment; wrapper removes JAVA_TOOL_OPTIONS, _JAVA_OPTIONS, JDK_JAVA_OPTIONS, CLASSPATH and sets GRAPHVIZ_DOT",
+    "timeout_seconds": 60,
+    "classification_performed": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "manifest_original_path": "/Users/marcelo/rustuml-reference/scratch/transfer.UdcTb6mN/input-bundle.json.gz#manifest_base64",
+    "manifest_original_bytes": 11109,
+    "manifest_provenance": "Exact original bytes decoded from manifest_base64; SHA256 and semantic equality to bundle.manifest verified",
+    "original_input_bundle_sha256": "f8b48bf7c7908dacb5eb13f32028983a2de9a9d6d5368c56e6a975d85a6b4013",
+    "transport_mapping_provenance": {
+      "declared_by": "parent",
+      "mapping": "Original files[].base64 preserved; exact original manifest bytes embedded",
+      "original_envelope_hash_verification": "Parent-declared original hash retained; current envelope and exact manifest verified locally"
+    },
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.UdcTb6mN/input-bundle.json.gz",
+    "requested_cwd": "PRIVATE_CWD",
+    "timezone": "GMT+11:00",
+    "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  },
+  "raw_preserved": true,
+  "limits": "Recorded Java argv derives from pinned wrapper, not process tracing. OpenJDK21.0.5/Graphviz12.2 differ from origin; scoped transport conformance is not global font/Graphviz equivalence. All16 references have Sequence metadata and empty stderr, not merely exit0."
+}

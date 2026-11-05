@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+actor Finch #pinkorder 4
+Finch -> Juniper: tint
+@enduml

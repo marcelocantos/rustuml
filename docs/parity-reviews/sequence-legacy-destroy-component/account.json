@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-legacy-destroy-component",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.graphic.DrawableSetInitializer#prepareLiveEvent",
+    "sequencediagram.graphic.MessageSelfArrow#getArrowYEndLevel",
+    "sequencediagram.graphic.LifeDestroy#drawInternalU",
+    "skin.rose.ComponentRoseDestroy#getPreferredHeight"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "invariant": "A legacy attached destroy is centered on its message end level; an unattached destroy begins at freeY and advances freeY by preferred height.",
+  "causal_divergence": "The generic Rust life ordinate points at the self-message start for painting and leaves a group-leaf destroy at zero height. Fresh engine controls expose missing loop drop and standalone preferred-height allocation.",
+  "planned_change": "Use the actual owner message end for destroy paint and component height for standalone scheduling, independently of whether a close life variation was accepted.",
+  "perturbation_axes": [
+    "self recursion depth and ordinary call",
+    "message ownership across note/group END and engine"
+  ]
+}

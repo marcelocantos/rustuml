@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Cedar -> Birch : enter
+return #a gray
+return #12ab34cd alpha
+@enduml

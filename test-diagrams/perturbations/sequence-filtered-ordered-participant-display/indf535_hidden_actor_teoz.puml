@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+hide stereotype
+actor "EnormouslyLongCedarName" as Cedar1 <<s>>
+participant Wren
+show stereotypes
+Wren -> Cedar1: seed
+hide stereotypes
+@enduml

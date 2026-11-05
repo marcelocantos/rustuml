@@ -1,0 +1,40 @@
+[
+  {
+    "mechanism": "sequence-external-create-consumer",
+    "review": "docs/parity-reviews/sequence-external-create-consumer/review.json",
+    "verdict": "rejected",
+    "counts": {
+      "entries": 32,
+      "valid": 30,
+      "before": {
+        "runtime_failure": 14,
+        "svg_mismatch": 14,
+        "invalid": 2,
+        "match": 2
+      },
+      "after": {
+        "svg_mismatch": 9,
+        "match": 19,
+        "runtime_failure": 2,
+        "invalid": 2
+      }
+    }
+  },
+  {
+    "mechanism": "sequence-queue-complete-stereotype-display",
+    "review": "docs/parity-reviews/sequence-queue-complete-stereotype-display/review.json",
+    "verdict": "rejected",
+    "counts": {
+      "entries": 32,
+      "valid": 32,
+      "before": {
+        "svg_mismatch": 24,
+        "match": 8
+      },
+      "after": {
+        "svg_mismatch": 18,
+        "match": 14
+      }
+    }
+  }
+]

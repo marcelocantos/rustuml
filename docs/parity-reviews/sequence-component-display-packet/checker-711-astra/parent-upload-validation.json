@@ -1,0 +1,8 @@
+{
+  "remote_input": "/Users/marcelo/rustuml-reference/scratch/transfer.7RERwydM/relay-manifest.json.gz",
+  "input_sha256": "8509881389625feb4f1517cd2ba69cb601b608132a9fe374f2ed427705f538e1",
+  "manifest_sha256": "81508a66934ee73c4af590221071c9c1ecba69fc635aa2b0f6569feaffaf04e1",
+  "cases": 52,
+  "source_files": 52,
+  "mapping": "gzip of exact manifest bytes; no semantic or source changes"
+}

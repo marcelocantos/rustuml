@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-display-normalization",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A253dfb72-0e49-40b9-b53c-b6160ecef3bf",
+    "model": "gpt-6-astra / high reasoning / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+  "implementation_commit": "c534957672b4a8e2c1721f4646a507110b1a4a84",
+  "implementation_commits": [
+    "c534957672b4a8e2c1721f4646a507110b1a4a84"
+  ],
+  "tested_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_revision": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "before_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (exact substituted argv, source hashes, streams and environment preserved in checker-ef020 raw relay archives)",
+    "cargo build --locked --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (fresh distinct private targets at exact before/candidate)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT",
+    "cargo test --locked --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "See docs/parity-reviews/sequence-corrective-b9/checker-ef020/commands.json for all exact local commands, cwd, environment and exits."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.svg",
+      "axes": [
+        "inline newline/tab/backslash",
+        "engine/font/style"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_0.puml",
+      "source_sha256": "5dbdd932f7776d4e1763a4ef32d091649d7e5c142ebee36d4294ee02cf8a2a34",
+      "golden_sha256": "441ac4c3c835a00d12217ffcda0151fc6aab10ea1748d9cc9cc8a22c82d3a883",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.before.rust.svg",
+          "svg_sha256": "b21eb8960a083bf895ccfd9720909d6b9df60d344349e6baed1e604eea1f87a6"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.after.rust.svg",
+          "svg_sha256": "c96caf365b3a8bbb3df746fc5c59ac37fcb01ee573631e130bb810fb1f924149"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.svg",
+      "axes": [
+        "block literal escape",
+        "engine/font/style"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_0.puml",
+      "source_sha256": "ac73fffb083394d9341ef53c5c2bd006a4b64809517607c720e2660c3930c81f",
+      "golden_sha256": "de36d35230a6ecaf43453ef00e410420b58afdb399a12ef25a45049bb9ca1093",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.before.rust.svg",
+          "svg_sha256": "9f80e825f2c7d59fd4587c6cc8c75b4a7f5fb1c1c1a4ee206e38d61685696182"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.after.rust.svg",
+          "svg_sha256": "9f80e825f2c7d59fd4587c6cc8c75b4a7f5fb1c1c1a4ee206e38d61685696182"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.svg",
+      "axes": [
+        "natural right/left alignment",
+        "engine/unequal lines"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_0.puml",
+      "source_sha256": "ba4ef8a15bdbf62e5686096fe125ceaabf7b962e06eb983b94453a1006a8903d",
+      "golden_sha256": "ebeb17aaa9ecea724f6d84346f832eb22c98caac43945695b49733d423a75706",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.before.rust.svg",
+          "svg_sha256": "c8ce3c17440dac1e481d4fb837996b943a24f2cf0196598007b20b39a1974c93"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.after.rust.svg",
+          "svg_sha256": "c8ce3c17440dac1e481d4fb837996b943a24f2cf0196598007b20b39a1974c93"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.svg",
+      "axes": [
+        "inline newline/tab/backslash",
+        "engine/font/style"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_inline_1.puml",
+      "source_sha256": "d62003d3da9789ef92868694edf97bfa6964e7354ae1ac10f869ca994fbb2985",
+      "golden_sha256": "4955c04c98f3884dd6510ad3f76df2859ae6b54ca1832fa99b8400a4bef8002b",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.before.rust.svg",
+          "svg_sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.after.rust.svg",
+          "svg_sha256": "c7a1ca88491a6a31bc5510c22b2393b7e6131c2bd3680776ec2f8a12de86b5ae"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.svg",
+      "axes": [
+        "block literal escape",
+        "engine/font/style"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_block_1.puml",
+      "source_sha256": "96cbcde643f9f9c39c838447b771534a0da490ba5f09a19bac7963a48d1a7d83",
+      "golden_sha256": "cf4eb168cc5832d0ffd0cc28a47f472310080d73d7c7c3764bcb6ecc15ad7268",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.before.rust.svg",
+          "svg_sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.after.rust.svg",
+          "svg_sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.svg",
+      "axes": [
+        "natural right/left alignment",
+        "engine/unequal lines"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_natural_1.puml",
+      "source_sha256": "223ff201b91ee082b0213bdbc6445c8e6ade925b357b630572b0f9aecf7c5b8b",
+      "golden_sha256": "e252120f6915aa64456f9c4a288cfd570d4d6279b642f7c903a99a4400609dfb",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.before.rust.svg",
+          "svg_sha256": "e9f485268674ec7b873c10b0706898bac58231633e129e3be49b82f6c2890383"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.after.rust.svg",
+          "svg_sha256": "e9f485268674ec7b873c10b0706898bac58231633e129e3be49b82f6c2890383"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.svg",
+      "axes": [
+        "raw link boundary versus following inline escape",
+        "engine/escaped backslash"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_raw_link_0.puml",
+      "source_sha256": "dc498ef992347c39bd3232ca2b66e77ce7a4fa7569b52778b6f8e38c1293e327",
+      "golden_sha256": "ae81dcd1a9701a944ff996f198c907c428aa21bb64e62fe03453b90f23b8681f",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.before.rust.svg",
+          "svg_sha256": "b3c2d47675a2f3142361cfe0584dfaef39542f6fefb1fb2ef1dad303d5d53a26"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.after.rust.svg",
+          "svg_sha256": "45e734cd17efa48761aecbd885e7897d3acc03b064f8089e7e0cd41d42a64d89"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.svg",
+      "axes": [
+        "raw link boundary versus following inline escape",
+        "engine/escaped backslash"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-note-display-normalization",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_raw_link_1.puml",
+      "source_sha256": "023ba5518975221d1e03cc91162c9614eed430d365abae70e6503cc3203e6a5d",
+      "golden_sha256": "0e5f066abfa2881fd7f8e7f6da86138dd4a19205ab0f15bb8ee69f678555b42a",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.before.rust.svg",
+          "svg_sha256": "2bf5ffa61cf900ef4c00eb8c8898cd2fa8885d46c7c13d7707575abf48dd49f0"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.after.rust.svg",
+          "svg_sha256": "28cf802cec0c7d5c25635943a64f84d0ea8c530dec0c7650b41b23ba50159857"
+        }
+      }
+    }
+  ],
+  "findings": [
+    "display-natural-alignment: Java splits on n/r/l and carries naturalHorizontalAlignment in Display. The Rust String conversion handles n/t/backslash only and leaves r/l literal. Fresh right/left transitions produce one Rust note line instead of three Java lines. This is a source-semantic hole in the declared Display invariant, not a font or comparator tolerance issue. Causal next step: Carry Display line segmentation and natural alignment through the note model and its text block, including interactions with explicit style; do not apply SVG replacement.",
+    "styled-tab-atom-origin: Inline/newline and block/literal distinctions survive, but Java resets tab x to zero for each AtomText. Rust advances a tab from the accumulated line start passed into each segment. After a bold run, Java places the plain Z at x210.2695 versus Rust199.125 in the inline legacy control, with identical glyph textLength21.0996. The block analogue is x254.3438 versus229.5. Matching glyph widths and differing atom origins locate the defect independently of host-font speculation. Causal next step: Make tab measurement and paint use the same per-atom origin and then compose atom widths. This dependency is in shared text_render.rs, outside the two maker-edited files; it remains required for the claimed note Display/text-block product behavior.",
+    "legacy-attached-note-complete-height: The new painter truncates the total height correctly, but legacy ordinary-arrow allocation still uses fixed base3 plus half of all lines after the first. Unlike the self/Teoz branch, it does not compare complete arrow/note preferred heights. At note11/message13, line widths, line spacing and horizontal alignment match, but the canvas is190 versus188 and following event is2.3555 units too low; at note12 the accumulated difference is1.1777. These equal the first-line font-height differences omitted by that ordinary-note branch. Teoz text_precision_1 passes because it takes the complete-height branch. Causal next step: Use ArrowAndNoteBox's max of complete component heights and child centering for ordinary legacy attached notes as well; derive event advancement and paint from the same values.",
+    "raw-link-second-display: Preserving raw link escapes in the outer Display conversion is correct but insufficient. Java applies Display#getWithNewlines again to the parsed URL label and composes AtomVerticalTexts. Rust push_literal retains path\\ntext as one run. Both fresh engines lose one line and its preferred height; the measured and painted note envelope is wrong. This is a shared creole model dependency, not a font difference. Causal next step: Represent multiline hyperlink label atoms and propagate their complete dimensions; preserve the outer raw-boundary semantics."
+  ],
+  "source_audit": [
+    {
+      "id": "display-natural-alignment",
+      "mechanisms": [
+        "sequence-note-display-normalization",
+        "sequence-note-textblock-dimensions"
+      ],
+      "sources": [
+        "display_natural_0",
+        "display_natural_1"
+      ],
+      "java": [
+        "klimt.creole.Display#getWithNewlines (258-340)"
+      ],
+      "rust": [
+        "crates/rustuml-parser/src/parse/sequence.rs::inline_note_display (88-125)"
+      ],
+      "diagnosis": "Java splits on n/r/l and carries naturalHorizontalAlignment in Display. The Rust String conversion handles n/t/backslash only and leaves r/l literal. Fresh right/left transitions produce one Rust note line instead of three Java lines. This is a source-semantic hole in the declared Display invariant, not a font or comparator tolerance issue.",
+      "next_repair": "Carry Display line segmentation and natural alignment through the note model and its text block, including interactions with explicit style; do not apply SVG replacement."
+    },
+    {
+      "id": "styled-tab-atom-origin",
+      "mechanisms": [
+        "sequence-note-display-normalization",
+        "sequence-note-textblock-dimensions"
+      ],
+      "sources": [
+        "display_inline_0",
+        "display_inline_1",
+        "display_block_0",
+        "display_block_1"
+      ],
+      "java": [
+        "klimt.creole.legacy.AtomText#getWidth/#drawU (122-179)",
+        "command.note.sequence.FactorySequenceNoteOnArrowCommand#createSingleLine/#createMultiLine"
+      ],
+      "rust": [
+        "crates/rustuml-render/src/text_render.rs::text_advance_with_tabs/emit_tabbed_segment (627-677)",
+        "crates/rustuml-render/src/sequence.rs::note_max_line_width_with_family"
+      ],
+      "diagnosis": "Inline/newline and block/literal distinctions survive, but Java resets tab x to zero for each AtomText. Rust advances a tab from the accumulated line start passed into each segment. After a bold run, Java places the plain Z at x210.2695 versus Rust199.125 in the inline legacy control, with identical glyph textLength21.0996. The block analogue is x254.3438 versus229.5. Matching glyph widths and differing atom origins locate the defect independently of host-font speculation.",
+      "next_repair": "Make tab measurement and paint use the same per-atom origin and then compose atom widths. This dependency is in shared text_render.rs, outside the two maker-edited files; it remains required for the claimed note Display/text-block product behavior."
+    },
+    {
+      "id": "legacy-attached-note-complete-height",
+      "mechanisms": [
+        "sequence-note-textblock-dimensions",
+        "sequence-effective-note-activation-style",
+        "sequence-note-display-normalization"
+      ],
+      "sources": [
+        "text_precision_0",
+        "display_inline_0",
+        "display_block_0"
+      ],
+      "java": [
+        "sequencediagram.graphic.ArrowAndNoteBox#ArrowAndNoteBox/#getPreferredHeight",
+        "sequencediagram.graphic.Step1Message#prepareMessage",
+        "skin.AbstractTextualComponent#getTextHeight"
+      ],
+      "rust": [
+        "crates/rustuml-render/src/sequence.rs::note_msg_extra_base/note_msg_text_tail (1779-1794)",
+        "crates/rustuml-render/src/sequence.rs::render msg_note_extra pre-scan (7810-7864)"
+      ],
+      "diagnosis": "The new painter truncates the total height correctly, but legacy ordinary-arrow allocation still uses fixed base3 plus half of all lines after the first. Unlike the self/Teoz branch, it does not compare complete arrow/note preferred heights. At note11/message13, line widths, line spacing and horizontal alignment match, but the canvas is190 versus188 and following event is2.3555 units too low; at note12 the accumulated difference is1.1777. These equal the first-line font-height differences omitted by that ordinary-note branch. Teoz text_precision_1 passes because it takes the complete-height branch.",
+      "next_repair": "Use ArrowAndNoteBox's max of complete component heights and child centering for ordinary legacy attached notes as well; derive event advancement and paint from the same values."
+    },
+    {
+      "id": "raw-link-second-display",
+      "mechanisms": [
+        "sequence-note-display-normalization",
+        "sequence-note-textblock-dimensions"
+      ],
+      "sources": [
+        "display_raw_link_0",
+        "display_raw_link_1"
+      ],
+      "java": [
+        "klimt.creole.command.CommandCreoleUrl#executeAndGetRemaining",
+        "klimt.creole.legacy.StripeSimple#addUrl",
+        "klimt.creole.legacy.AtomTextUtils#createUrl (79-90)"
+      ],
+      "rust": [
+        "crates/rustuml-parser/src/parse/sequence.rs::inline_note_display",
+        "crates/rustuml-render/src/creole.rs::parse_segments_inner hyperlink arm (1142-1170)"
+      ],
+      "diagnosis": "Preserving raw link escapes in the outer Display conversion is correct but insufficient. Java applies Display#getWithNewlines again to the parsed URL label and composes AtomVerticalTexts. Rust push_literal retains path\\ntext as one run. Both fresh engines lose one line and its preferred height; the measured and painted note envelope is wrong. This is a shared creole model dependency, not a font difference.",
+      "next_repair": "Represent multiline hyperlink label atoms and propagate their complete dimensions; preserve the outer raw-boundary semantics."
+    }
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Independent bounded source/control observation on exact candidate only. This is not whole-sequence acceptance, a shipping recommendation, a waiver of dependencies or standing red gates, or transfer of old5358314a self-cross/destroy acceptance.",
+  "residue": [
+    "Existing557 retained mismatches, fonts/deferred layout and12 accepted negative references remain active.",
+    "Parent-only326 sources were not measured in this replay.",
+    "Remote font/dot equivalence is scoped to captured environment and these sequence cases.",
+    "Scoped shadow scalar conversion and activation sibling fallback are locally supported even where complete-output dependencies reject the requested mechanism acceptance."
+  ],
+  "evidence": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/README.md"
+}

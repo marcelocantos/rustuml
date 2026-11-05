@@ -1,0 +1,5 @@
+@startuml
+queue Q <<a considerably wider dispatch category>>
+participant Kite
+Kite -> Q: deliver
+@enduml

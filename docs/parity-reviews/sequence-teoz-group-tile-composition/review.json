@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-teoz-group-tile-composition",
+  "account_commit": "bf4f0c1410a2dc8d72e76d9b470431fe58c5f6c6",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested0.svg",
+      "source_sha256": "2bd8be932452261e4b4c068438b1a588a98b3903de6fffe2ad658ad6f3ba1899",
+      "golden_sha256": "8a306536490fe18a74e83e10a46369f6c8500dc674d461f97f5b8ce26e217c12",
+      "axes": [
+        "declaration order versus explicit note endpoints",
+        "group nesting and else",
+        "attached reverse note and delay"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order0_nested1.svg",
+      "source_sha256": "122620b095e97b64b466de483566ad87f33c35fab6e6b6a0a0edf6ed69c154f4",
+      "golden_sha256": "c7544a2f1006d1353ff70b0370ed753d39ecca2eff350b26628e4a938baae552",
+      "axes": [
+        "declaration order versus explicit note endpoints",
+        "group nesting and else",
+        "attached reverse note and delay"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested0.svg",
+      "source_sha256": "b7d10b6ba9b83dde8c119e9e48ccaca3e273d805c1d9789072cbdc7d1a181018",
+      "golden_sha256": "dc4a59af5111546d7f7ddf6ba2111962fdb0a6467b3305df11d2e66e5f3f7ee9",
+      "axes": [
+        "declaration order versus explicit note endpoints",
+        "group nesting and else",
+        "attached reverse note and delay"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_order1_nested1.svg",
+      "source_sha256": "f051677fce69caf01af7adcc34fb33738c2f8eddaddd7785e8b949cd94fd9771",
+      "golden_sha256": "2a57015b6ccbee9c618f17e21822e098b5f5bb6ac25ecd4a7aeb65927462fe43",
+      "axes": [
+        "declaration order versus explicit note endpoints",
+        "group nesting and else",
+        "attached reverse note and delay"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_hex_note.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_hex_note.svg",
+      "source_sha256": "788e6e16d66258a865f88692206305899b248db46a149d2653c020ea47e2c987",
+      "golden_sha256": "6f3043994ef4ab3611b9949c11cddbbc3aa81bfb6f90f0a7b327f06c0d0273cc",
+      "axes": [
+        "source-guided edge control",
+        "hex_note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-teoz-group-tile-composition",
+    "java_files": [
+      "sequencediagram/teoz/GroupingTile.java",
+      "sequencediagram/teoz/ElseTile.java",
+      "sequencediagram/teoz/TileBuilder.java",
+      "skin/rose/ComponentRoseGroupingHeader.java"
+    ],
+    "rust_locations": [
+      "sequence.rs:9667-9733",
+      "sequence.rs:9833-9920",
+      "sequence.rs:10036-10334"
+    ],
+    "source_supported": "Child bounds plus 16, nested external margins 3/9, and header floors have Java provenance. Head boxes are no longer implicit child members. Source endpoint order is retained for folded standalone spans. Null comment has commentMargin=0; header widths 45 and 15 derive from 15+30 margins and extra first margin.",
+    "adversarial_boundary": "Java merges parallel tiles and constructs all note styles through NoteTile. Rust geometry helper early-returns for non-folded notes and the shared group/event scheduler remains distinct. Fresh nested reversed spans and hexagonal-note control challenge that composition."
+  },
+  "findings": [
+    "Child bounds plus 16, nested external margins 3/9, and header floors have Java provenance. Head boxes are no longer implicit child members. Source endpoint order is retained for folded standalone spans. Null comment has commentMargin=0; header widths 45 and 15 derive from 15+30 margins and extra first margin.",
+    "Four order/nesting/reversed-span/folded-note controls match. Hexagonal note inside a group fails: group/participant x positions differ by0.4016px despite the same source text widths. Java routes every note style through NoteTile bounds; Rust shared geometry returns None for non-folded notes and falls back to older reconstruction. Extend component preferred/allocation/bound dataflow to note styles, retaining the initial-versus-final Real phase.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

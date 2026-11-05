@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+Cedar -> Birch ++ : begin
+Birch -> Birch ++ : nested
+Birch <--x Birch ++ : edge
+Birch -> Cedar : after
+@enduml

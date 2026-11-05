@@ -1,0 +1,23 @@
+{
+  "protected_paths": 8645,
+  "baseline_paths": 8462,
+  "imported_paths": 183,
+  "changed_protected_paths": [],
+  "fresh_pairs": 96,
+  "reviews": 5,
+  "review_sha256": {
+    "docs/parity-reviews/sequence-single-pending-create/review.json": "2b6ae97bfc37dd7eda22fb34e92c8b442fa4799b12c0875241ff1dd30fa6bbdb",
+    "docs/parity-reviews/sequence-queue-stripe-origin/review.json": "f959ecaa2ee9b3a7b4aec6da2f7aa67264a4ff168dc3705b14b5aa3a25aa5d8e",
+    "docs/parity-reviews/sequence-message-stripe-baselines/review.json": "b54af27c6ac6d35f9b5f7e17d795f06c094160dc900723fee4984f1bc10017d2",
+    "docs/parity-reviews/sequence-self-half-polygon-order/review.json": "3442b561c26cb6a479fd9e94c50ad75ec9b822ac7095c6f66b511a24da0b7ddf",
+    "docs/parity-reviews/sequence-collections-source-clarification/review.json": "3afedd248720be0592a455374cf3c39c5041b04409403de31a22183d06900976"
+  },
+  "archive_members": 13930,
+  "source_crate_trees_match_exact_production": true,
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "golden_files_verified": 25106,
+  "production_diff": "none",
+  "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "cargo_lock_sha256": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd",
+  "scope": "Evidence schema/blob/hash registration validation; no repeated broad test run"
+}

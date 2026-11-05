@@ -1,0 +1,52 @@
+{
+  "status": "maker candidate, not accepted; independent checker required",
+  "account_commit": "40919de22b7fb5f408c5e6abbd93414923f365dc",
+  "implementation": "same commit as this summary",
+  "fresh_cases": 20,
+  "before": {
+    "pass": 3,
+    "mismatch": 17,
+    "panic": 0
+  },
+  "after": {
+    "pass": 14,
+    "mismatch": 6,
+    "panic": 0
+  },
+  "cli_equivalence": 20,
+  "new_regressions": 0,
+  "main_product": [
+    11181,
+    11251
+  ],
+  "main_assisted": [
+    10497,
+    11251
+  ],
+  "sequence": [
+    1411,
+    1411
+  ],
+  "whole_parser_render_units": {
+    "parser_pass": 561,
+    "renderer_pass": 780,
+    "failed": 0
+  },
+  "dependencies": [
+    "Six fresh open-arrow cases retain the shared self painter one-pixel return-leg start defect; ComponentRoseSelfArrow#drawRightSide subtracts one for ASYNC before painting the return leg and restores it before drawing the head. Rust special_return_tip overrides the ordinary open-line branch without that adjustment. No golden or comparator waiver."
+  ],
+  "logs": {
+    "/tmp/rustuml-seq-recovery/return-main.log": {
+      "sha256": "1ed68fd68b5edd192a5fc7c991872c51453b810045520fb0fedaf5605f3edb9b"
+    },
+    "/tmp/rustuml-seq-recovery/packet-libs.log": {
+      "sha256": "42ba5a735daadd324510742e83adf6cb362f3f3106df8eb0e640384774204d55"
+    },
+    "/tmp/rustuml-seq-recovery/return-fresh-current.log": {
+      "sha256": "16d33d3a2229157b43b76e9ce18694c511d7551a83ba092bd4fe57e03d2336da"
+    },
+    "/tmp/rustuml-seq-recovery/return-fresh-before.log": {
+      "sha256": "cd66515370f77d2f0312171d3833300140cf8748b648fab0e09703e004e3c065"
+    }
+  }
+}

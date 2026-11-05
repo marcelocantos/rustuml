@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant "North Pier" as N
+participant South
+N -> South: seed
+rnote right of N : keyed
+@enduml

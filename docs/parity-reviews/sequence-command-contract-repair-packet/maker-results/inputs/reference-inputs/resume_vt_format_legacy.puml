@@ -1,0 +1,9 @@
+@startuml
+participant N
+autonumber
+N -> S: first
+autonumber stop
+N -> S: unnumbered
+autonumberresume "Item 00"
+N -> S: last
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class "Elm o-->>o Ash" as Tree
+class Root
+Tree o-- Root
+@enduml

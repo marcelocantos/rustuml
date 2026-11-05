@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-factory-command-viability",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3Ac792f275-d5e8-406c-bb85-740990ccfb83",
+    "model": "OpenAI gpt-6-astra, high reasoning, Codex harness in T3 Code",
+    "role": "Independent checker; no production implementation, no children"
+  },
+  "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+  "implementation_commit": "aeb638a3e2c23f2d874641c49c49ad993b7bb140",
+  "implementation_commits": [
+    "aeb638a3e2c23f2d874641c49c49ad993b7bb140"
+  ],
+  "reviewed_candidate": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "reviewed_production": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent existing Monkey Man runner only: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; actual argv/cwd/status/raw bytes in captures.tar.gz reference-results.json and supplement-reference-results.json",
+    "uv run --no-project python PRIVATE_CACHE/checks.py candidate (private target, jobs4): parser572/render791/CLI13 pass; main library11181/11251 and10497/11251, guards4/6; original golden-submodule outage preserved and unresolved tiers rerun after exact9efdc12f initialization",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/fresh-candidate",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/supplement-reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/supplement-candidate",
+    "uv run --no-project python PRIVATE_CACHE/checks.py before; replay_before.py; checks.py intermediate; queue_replay.py; all exact commands, exits, bindings and raw streams in support archive"
+  ],
+  "perturbations": [
+    {
+      "name": "factory_order",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_order.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_order.svg",
+      "axes": [
+        "command order",
+        "reverse async circles"
+      ],
+      "result": "fail",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "728d296003104f87b029898cfd77a6b8a2a880bf19a41f9bfb47df369f58646d",
+      "golden_sha256": "0e87d8834777fee7bba23d070cd6fae17d7e0249ab57c8a982d0aaac55457e30"
+    },
+    {
+      "name": "factory_quoted_header",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_quoted_header.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_quoted_header.svg",
+      "axes": [
+        "header and comment commands",
+        "quoted alias"
+      ],
+      "result": "fail",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "675ee97de2325f04f38cf84d42e9de815bdca292a4c0caea5e15885bef7a5c3b",
+      "golden_sha256": "65364ad3a2d860fde019ca8bd3dbbc2cf980c2dc12d80464e58670958e2fc818"
+    },
+    {
+      "name": "factory_mixed_after",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.svg",
+      "axes": [
+        "declaration order",
+        "mixed class"
+      ],
+      "result": "fail",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": false,
+      "observed_java_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 0,
+      "comparison_exit": 2,
+      "before_comparison_exit": 2,
+      "source_sha256": "02ae1bd857450d2c0828cf24e211735e5609a894b7e94625774a04736c8c4312",
+      "golden_sha256": "955564afa4c25872b32d23eb9eb93b2f9e3ae389074548ca6e4efe9b0a872d36"
+    },
+    {
+      "name": "factory_unknown",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.svg",
+      "axes": [
+        "unknown command",
+        "decorated trigger"
+      ],
+      "result": "fail",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": false,
+      "observed_java_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 0,
+      "comparison_exit": 2,
+      "before_comparison_exit": 2,
+      "source_sha256": "345e3fb9ffa8c68585acc76ec0691896ecf2752f68a38fa40b302df3f9a2f975",
+      "golden_sha256": "ba9f982389b83c57f05cf654b47de0d9f63eea9a485fb868ee17498577e3dd1b"
+    },
+    {
+      "name": "factory_unclosed_group",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unclosed_group.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unclosed_group.svg",
+      "axes": [
+        "unfinished group",
+        "decorated trigger"
+      ],
+      "result": "fail",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": false,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "84c2976da5b97ffacb1d8413d8e582bcda923c3a53c042d2556ee77c999b74d2",
+      "golden_sha256": "100f03123d65bf5810d5fbf663985fc39288d02557f09d811788110d3b08536b"
+    },
+    {
+      "name": "factory_unclosed_box",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unclosed_box.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unclosed_box.svg",
+      "axes": [
+        "unfinished box",
+        "decorated trigger"
+      ],
+      "result": "pass",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": false,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 0,
+      "source_sha256": "4e1a3bf3ac95d2f3decbb58c7e28cdf24f5175c31b2ef709480960f5e768dd29",
+      "golden_sha256": "f185ff653ce45297bbc29cf955707455ce178e28a3acf6bfcba0dc6e8ece94f0"
+    },
+    {
+      "name": "factory_class_control",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_class_control.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_class_control.svg",
+      "axes": [
+        "factory ownership",
+        "class"
+      ],
+      "result": "pass",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 0,
+      "source_sha256": "890b5df25872e1b2d966643d56c7bebddfb2391a46e11f4c8e01445e5a864cec",
+      "golden_sha256": "6f1f85e97d2585bf21ef1bc5b3cc32930a90d716b9469ab4424b81bea002c659"
+    },
+    {
+      "name": "factory_object_control",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_object_control.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_object_control.svg",
+      "axes": [
+        "factory ownership",
+        "object"
+      ],
+      "result": "pass",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 0,
+      "source_sha256": "4a44bf4d4c3f987283e5696e4abd6a965812dfbaae10950fefbda93b96d08375",
+      "golden_sha256": "a980a494a66ca8748cd99e35160655ca1408626187c04728f65340d44d326fef"
+    },
+    {
+      "name": "factory_component_control",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_component_control.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_component_control.svg",
+      "axes": [
+        "factory ownership",
+        "component"
+      ],
+      "result": "fail",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "39595c100c46fdf21218b0c8bb5897ae405f17f448a39bae4ca4eb0dc4ec492b",
+      "golden_sha256": "cd95760edd6e34c2cad2b3663541c92c91db3475e0f5f096224725ac6a213036"
+    },
+    {
+      "name": "factory_bare_circle",
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_bare_circle.puml",
+      "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_bare_circle.svg",
+      "axes": [
+        "missing head",
+        "both circles"
+      ],
+      "result": "fail",
+      "claim": "sequence-factory-command-viability",
+      "intended_valid": false,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "6bdedb9b3168db602f6ba0a0d5afd1e8b0f4e57cd2e64814109df554243a4e1b",
+      "golden_sha256": "a411ae182d9eafb647fed0d1f3867a4acdccca208d8da4a3a6cb97252d20139f"
+    }
+  ],
+  "findings": [
+    "New dispatch branch requires actual parsed Message circle decoration plus a recognized head/cross and no flagged unknown command. No new token scores or fixture text branches found; preexisting scored fallback is retained.",
+    "The probe reuses a permissive parser, not Java command execution/finalization. try_hide accepts arbitrary hide prefixes; group and box syntax are not generally validated. Java ACCEPTS the generated unclosed group/box, so those cannot substantiate a missing-finalization rejection.",
+    "The quoted-header valid Sequence source fails whole CLI output (blank Class). try_meta does not implement multiline header command consumption; this remains bounded coverage, not general dispatcher correctness.",
+    "Command-order fresh source retains two messages but participant UID/declaration order differs. Genuine class/object controls match; component aggregation, bare-circle Class, and header/quoted remain failures. Mixed and unknown syntax-negative sources are accepted by Rust; no positive parity credit.",
+    "Rejected under whole-output/fresh-counterexample gate. Passing subsets are bounded observations, not extracted acceptance. Earlier accounts/reviews/counterexamples and all failures remain unchanged.",
+    "Account chronology and precise Java/Rust source hashes/line locations independently checked in checker-672-astra/integrity.json and source-audit.json. Exact Java local source blobs agree with pinned revision."
+  ],
+  "verdict": "rejected",
+  "support": "docs/parity-reviews/sequence-composed-components-packet/checker-672-astra/README.md",
+  "standing_registration": "Every fresh pair is registered under test-diagrams/perturbations and automatically collected by the unchanged standing harness. Last executed candidate standing suite714/1310 before these42 additions; no broad rerun after evidence-only registration. All42 checked through real CLI and unchanged library diagnostics.",
+  "residue": [
+    "Historical frozen failures, factory_component/factory_quoted, shared tabs/URL second Display/natural alignment/logical fonts, themed self Real/padder/envelope, other component/style/page/ASCII contracts, welcome-factory TIM handoff remain unresolved.",
+    "No native/layout/fault review retry, production/account/baseline/comparator/skip/target/reader changes, shared style/font fixes, unrelated production imports, shipping, or self-acceptance."
+  ]
+}

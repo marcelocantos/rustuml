@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "purpose": "Source-derived sequence corrective controls after checker-b9c6; no local Java",
+  "remote_private_directory": "allocate with existing new-worker runner",
+  "cases": [
+    {
+      "name": "color_self_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/color_self_0.puml",
+      "source_sha256": "5d90bc04ea7a9f2c6b82c23601102ee08fad26b7fb4569d25a95947a64ea9709",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "self return and transparent/alpha"
+      ]
+    },
+    {
+      "name": "color_external_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/color_external_0.puml",
+      "source_sha256": "b13d75509b9701553cdf339bbbed03c644cf8b6addbe07e8e1dd41fb9b3c5b17",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "external/self return and gray/zero alpha"
+      ]
+    },
+    {
+      "name": "display_escaped_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/display_escaped_0.puml",
+      "source_sha256": "69e435def0d2fa17fbc5ff82e2b04c3086f940483f9f21aa59cc5976301057cb",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "escaped multiline and activation"
+      ]
+    },
+    {
+      "name": "display_block_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/display_block_0.puml",
+      "source_sha256": "60bb7d37fe8b91e5138fa8ccd8ff32004034be973ce5db95aa6ccf58ed519fdd",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "physical multiline and activation"
+      ]
+    },
+    {
+      "name": "style_0_center",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/style_0_center.puml",
+      "source_sha256": "86cc5a74af89098f47fe58cd6653964576d7946137cd7bb63dd233ae0b365222",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "alignment/scoped numeric shadow/multiline"
+      ]
+    },
+    {
+      "name": "style_0_right",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/style_0_right.puml",
+      "source_sha256": "0dc4488552958f772c0d97667edb8f6dfbc8eb6669333faddb8e826d098d5bba",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "alignment/scoped numeric shadow/multiline"
+      ]
+    },
+    {
+      "name": "theme_activation_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/theme_activation_0.puml",
+      "source_sha256": "8880e7a9bb81beda17b67f23d65ec78dcbbc838e7e00ad718757dc096a22b3d9",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "theme and nested activation"
+      ]
+    },
+    {
+      "name": "color_self_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/color_self_1.puml",
+      "source_sha256": "e8a16a174039b4bed8f87a09d1c8a678bce579c7a38359d49e666132f3189245",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "self return and transparent/alpha"
+      ]
+    },
+    {
+      "name": "color_external_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/color_external_1.puml",
+      "source_sha256": "23e7ec2c2acbf80523dbd9d1df4fb7e78e25b39be32b7947e84411773929c387",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "external/self return and gray/zero alpha"
+      ]
+    },
+    {
+      "name": "display_escaped_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/display_escaped_1.puml",
+      "source_sha256": "4cbf876450cd546f4da502e9d573337085d61be280ec01ac9b8248cd68710e83",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "escaped multiline and activation"
+      ]
+    },
+    {
+      "name": "display_block_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/display_block_1.puml",
+      "source_sha256": "525a04e36244b426c7599fcce0a366fb5101b230154dde504dbaaa05f5cf23e5",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "physical multiline and activation"
+      ]
+    },
+    {
+      "name": "style_1_center",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/style_1_center.puml",
+      "source_sha256": "0f9e9b1e3c5816b0a56d629f1b12d18262e2db9665f89a78a840fe82af001a3b",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "alignment/scoped numeric shadow/multiline"
+      ]
+    },
+    {
+      "name": "style_1_right",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/style_1_right.puml",
+      "source_sha256": "3bbdf79d53319b3fddf6c933b7c48cbdcd7d81e0acfadafc3edff77001247667",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "alignment/scoped numeric shadow/multiline"
+      ]
+    },
+    {
+      "name": "theme_activation_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/theme_activation_1.puml",
+      "source_sha256": "04375eefcf83339e53d38bf39e9130a87683095241f842cd02c0c9cb827ba0e6",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "engine",
+        "theme and nested activation"
+      ]
+    },
+    {
+      "name": "legacy_rawclose_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/legacy_rawclose_0.puml",
+      "source_sha256": "d0beec3421dc2fd9e41ff5233a7d41d51381263dfa39c81f69e30051958e591c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "participant order",
+        "unmatched close and nested reopening"
+      ]
+    },
+    {
+      "name": "legacy_rawclose_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/legacy_rawclose_1.puml",
+      "source_sha256": "5c1f273af64fcee08baf10197ba2d4668b3dfd22daee6b326514cde908d9872d",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "participant order",
+        "unmatched close and nested reopening"
+      ]
+    },
+    {
+      "name": "parallel_message_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/parallel_message_0.puml",
+      "source_sha256": "d4650a490ffc108d1f2cb9633945e1d2bbe63e190f8edcd68c5e86b3f2e8b150",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "graphical predecessor",
+        "self/ordinary contact and multiline"
+      ]
+    },
+    {
+      "name": "parallel_message_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/parallel_message_1.puml",
+      "source_sha256": "dbffcff05aae63be9a53112d1584eb299497b25bcf561fa020ade5e6eb23dd8a",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "graphical predecessor",
+        "self/ordinary contact and multiline"
+      ]
+    },
+    {
+      "name": "parallel_note_0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/parallel_note_0.puml",
+      "source_sha256": "d1c6fe9c501005c146fe62adc62479f843744e72a861f87b536224b06124684f",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "graphical predecessor",
+        "self/ordinary contact and multiline"
+      ]
+    },
+    {
+      "name": "parallel_note_1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-b9/reference-inputs/parallel_note_1.puml",
+      "source_sha256": "b3858aadc28dbc09dea5b67845c607313f26939d60a6a1f9572d4a079236b9e0",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CORRECTIVE_B9_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "graphical predecessor",
+        "self/ordinary contact and multiline"
+      ]
+    }
+  ]
+}

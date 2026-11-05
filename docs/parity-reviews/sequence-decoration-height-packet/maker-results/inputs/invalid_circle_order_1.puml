@@ -1,0 +1,4 @@
+@startuml
+!pragma teoz true
+Wren -[#a]o> Lark : invalid decoration order
+@enduml

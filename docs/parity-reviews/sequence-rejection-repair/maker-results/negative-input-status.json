@@ -1,0 +1,496 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "a62c4693094c9fbbfaecaeaedeb339a8fa2ba18ce79cb5b17dcf96d8a1305db7",
+      "svg": "8181db51241aee4b6f9a.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "16cf4ecd6dea92d6ba7b2098550f8bd463628fb3546e22d1379a9fb972ec413d",
+      "svg": "70596ac25bf77f279ce7.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "svg": "50fd3b91b5dbb7dfab0d.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "51903eb92a1070a0ac7ea54e55260f32a61aa30d0b71d42ab8b76bccdf051be1",
+      "svg": "20f2785140ca3ea681ae.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "6ba30f5bcdcc69efbc35ad8c465822348739deeed9f1d8dec404358a14724143",
+      "svg": "bb2f6d223694748b26c1.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "c1e59dde54aacf3352f5b85981df4c5fabd73bae216bf11404eddb5319662eeb",
+      "svg": "510b1ffd85639a42b856.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "fdda826d0a16c68e79fc8247ce292caaeac3441d6a235d89234c2c770bbd88f2",
+      "svg": "609b3dce74964cd669aa.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "1657ca02a9b90d90be285830cbe451b7980bb3b6fa4ea260864870fbac158447",
+      "svg": "cfac8123dd4f01af274f.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "59149bd297de823a1be03683a65531e5d44ff91a4f86762d012ef9c6a00029e6",
+      "svg": "6d91548d31e343a3353c.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (11632059) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "37544ea51a3c910dd28cd71dbccd8d3ac96df40825ada9394d388077dfda5596",
+      "svg": "ada1e217e87cf8ee8a5b.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 4: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "ea3d1b606cc3baf677c8.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 5: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "d57b928acde383d9e984.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.puml",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 4: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "54566fd053186ebac60d.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.puml",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 5: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "7e5276389e6c07e1acf1.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.puml",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 2: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "df707fad695eedb67e67.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.puml",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 3: Nowhere to return to.\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "c1e88f9ac7dc6391170f.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "58c86d2e9899b4d54ee16862a10d9b94bb947286ea11deeac02bbbf67cb3e024",
+      "svg": "270df9a75807e1e16357.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "ff5d9a488a8c23ec1b9b0850b88b3191e75287bc0ff6f7263620eb9436aaf3b7",
+      "svg": "27eef9da246e0190ec95.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "7be8ab43eea496043c14c0994afc6e891386f3e2ec9a8b1c014dc04b1a14e6fe",
+      "svg": "78ad7416f803cdb87ca7.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "f88b7ba99d4870427f9980f4c0650bc11f16a20e46711a82dbb575c84d7750bf",
+      "svg": "1c576b6625fb89c4a067.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "4ef8d4d6877b5e38183e32da6f70e3c86e84b2468dee9ca4b508b6f4d18d3e56",
+      "svg": "21f920f2b804713e57a7.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "99377478a093ed7ea1904bf00a405a32d9535dc51b341a2d18766ee7579142f1",
+      "svg": "aa03946f82fe8c2e32e7.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "bd44007597fffb578bd046e35699a3520ba336565fa40bc766458ecacb1de8f2",
+      "svg": "f40f26a7fba7bb792551.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "c7e270e5c1badab611d98411621a800d7fd179d2b6f1165679efaaf423134acd",
+      "svg": "40a16aeb8c5cd5711b19.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "513ef52091ecfa4a41fe6d35eed975156b48d28b7d6e5fa09c00552ed1840e87",
+      "svg": "448783247848809c0304.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "46aaa241929df440f6478a95f6d57afe72b749f5d64495bffb792510bcc2e714",
+      "svg": "cdce03301c3c82887b62.rust.svg"
+    },
+    "comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    }
+  }
+]

@@ -1,0 +1,97 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "records": [
+    {
+      "rust_consumer": "MESSAGE_RE",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b"
+    },
+    {
+      "rust_consumer": "EXTERNAL_MESSAGE_IN_RE",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowLeft.java",
+      "sha256": "97c0f744c0fa01bce1f1cb61ecd19296d41bca857dac2f7f7c14d64f301e548b"
+    },
+    {
+      "rust_consumer": "EXTERNAL_MESSAGE_OUT_RE",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowRight.java",
+      "sha256": "ed229434c93f7226764e8228bd3bb57d66576b8020a1c2c346d26e5057f62c95"
+    },
+    {
+      "rust_consumer": "NOTE_END",
+      "java_path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508"
+    },
+    {
+      "rust_consumer": "try_participant_decl",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b"
+    },
+    {
+      "rust_consumer": "try_note",
+      "java_path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29"
+    },
+    {
+      "rust_consumer": "try_group",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandGrouping.java",
+      "sha256": "fa1736360451c1a8a01d860a6a124b0031ce56a925d2c699330ff5c25654d5cb"
+    },
+    {
+      "rust_consumer": "try_divider",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDivider.java",
+      "sha256": "02b14eff2e2eee29b7277e978287e2e81c7d67e0f7a87d858fa23fcfd1814e02"
+    },
+    {
+      "rust_consumer": "try_autonumber",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumber.java",
+      "sha256": "546c672dff29eb3edebe20bad232b5e831c50250c8aa78ce8d4241960e7ab6b6"
+    },
+    {
+      "rust_consumer": "autonumber resume",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberResume.java",
+      "sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321"
+    },
+    {
+      "rust_consumer": "try_activation/create/destroy",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandActivate.java",
+      "sha256": "8d653402d29619ab112333ffb17e5e188ae84661fc1e1f75df676de54cf81299"
+    },
+    {
+      "rust_consumer": "create declaration parsing",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b"
+    },
+    {
+      "rust_consumer": "return color boundary",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReturn.java",
+      "sha256": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53"
+    },
+    {
+      "rust_consumer": "try_ref inline",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceOverSeveral.java",
+      "sha256": "9948cf0d17ee31420cd89bb69a04b36ef4a9d96ed47ac937a8ae56021072dac7"
+    },
+    {
+      "rust_consumer": "try_ref multiline",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceMultilinesOverSeveral.java",
+      "sha256": "11e6d7dadc1d8d924bd3df29098bf01f54bf36b04caaee8ae0d67a013487adae"
+    },
+    {
+      "rust_consumer": "STEREOTYPE_VISIBILITY",
+      "java_path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByGender.java",
+      "sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4"
+    },
+    {
+      "rust_consumer": "shared character class",
+      "java_path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52"
+    },
+    {
+      "rust_consumer": "shared command space leaf",
+      "java_path": "src/main/java/net/sourceforge/plantuml/regex/RegexLeaf.java",
+      "sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b"
+    }
+  ],
+  "implementation": "sequence_regex expands [%s]/[^%s] using one explicit ASCII TAB..CR + SPACE + NBSP class and its negation. No bare Unicode whitespace regex remains in owned sequence production. INLINE_ARROW_STYLE, delay and fixed-space regexes contain no whitespace port but use the same compiler; their grammar is unchanged.",
+  "limits": "This is a regex character-class correction, not global command-consumption or non-regex trimming/case-folding redesign. T14.17 retains ignored malformed command failures."
+}

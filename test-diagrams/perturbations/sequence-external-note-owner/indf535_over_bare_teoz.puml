@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Thistle
+[-> Thistle: frost
+note over: ice
+@enduml

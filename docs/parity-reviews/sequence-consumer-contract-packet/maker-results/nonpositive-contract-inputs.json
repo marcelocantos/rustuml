@@ -1,0 +1,893 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+    "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+    "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+    "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+    "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/invalid_circle_order_0.puml",
+    "golden": "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/invalid_circle_order_0.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/invalid_circle_order_1.puml",
+    "golden": "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/invalid_circle_order_1.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_mixed.puml",
+    "golden": "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_mixed.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.puml",
+    "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.puml",
+    "golden": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-component-display-packet/maker-results/inputs/unclosed_note_legacy.puml",
+    "golden": "docs/parity-reviews/sequence-component-display-packet/maker-results/inputs/unclosed_note_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-component-display-packet/maker-results/inputs/unclosed_note_teoz.puml",
+    "golden": "docs/parity-reviews/sequence-component-display-packet/maker-results/inputs/unclosed_note_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_legacy.puml",
+    "golden": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_teoz.puml",
+    "golden": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_legacy.puml",
+    "golden": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_teoz.puml",
+    "golden": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": null,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "frozen nonpositive reference; raw Java status not regenerated"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": null,
+    "validity_provenance": "independent checker record"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_em_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_em_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_em_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_em_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_narrow_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_narrow_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_narrow_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_narrow_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_legacy.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_teoz.svg",
+    "observed_valid": false,
+    "intended_valid": false,
+    "reference_classification": "unchanged comparator nonpositive reference",
+    "java_exit": 200,
+    "validity_provenance": "fresh raw relay XML/status/stderr"
+  }
+]

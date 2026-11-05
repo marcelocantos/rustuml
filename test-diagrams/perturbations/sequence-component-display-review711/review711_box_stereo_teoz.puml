@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+box "Members"
+queue "Inbox\nHere" as Q <<worker>>
+participant "Reply\nThere" as P <<service>>
+end box
+Q -> P: relay
+@enduml

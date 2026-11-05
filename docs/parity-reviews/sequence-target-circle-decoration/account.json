@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "baseline": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "checker_evidence": "fdf1154eb3a17ebb041fffb0c18710a38210f56b",
+  "mechanism": "sequence-target-circle-decoration",
+  "java_locations": [
+    "skin.ArrowConfiguration decoration and dressing fields",
+    "sequencediagram.command.CommandArrow#getRegexConcat/#executeArg",
+    "sequencediagram.command.CommandExoArrowLeft/#getRegexConcat",
+    "sequencediagram.command.CommandExoArrowRight/#getRegexConcat",
+    "skin.rose.ComponentRoseArrow#drawInternalU/#drawDressing1/#drawDressing2",
+    "skin.rose.ComponentRoseSelfArrow#drawRightSide/#drawLeftSide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/sequence.rs::Arrow",
+    "crates/rustuml-parser/src/parse/sequence.rs::parse_arrow",
+    "crates/rustuml-render/src/sequence.rs message primitive writers",
+    "crates/rustuml-render/src/ascii.rs exactly two Arrow test constructors"
+  ],
+  "invariant": "Destination circle decoration coexists with its head dressing and belongs to its semantic endpoint before spatial direction and self-message translation; circle/head/stroke ordering and endpoints follow the same component model.",
+  "causal_divergence": "Rust selects Circle instead of retaining target decoration independently and does not emit the destination ellipse. Loose token matching also accepts head/decoration order forbidden by Java (normalized -o> rather than ->o).",
+  "planned_change": "Add serde-defaulted target_circle, preserve normal/open/half head, derive circle and head/stroke shifts and primitive order from Java for straight and self arrows. Validate decoration position rather than accepting invalid tokens. Only two explicitly authorized ASCII test-constructor additions, no ASCII behavior change.",
+  "perturbation_axes": [
+    "ordinary/self/external and direction/activation",
+    "normal/open/half head with circle and alpha/no-paint",
+    "valid head-decoration ordering versus preserved invalid originals"
+  ]
+}

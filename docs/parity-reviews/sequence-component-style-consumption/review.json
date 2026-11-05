@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-component-style-consumption",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A3e06ca94-2269-474d-820c-d3eae66e6612",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness in T3 Code",
+    "children": 0
+  },
+  "account_commit": "0b3295821b0aeef0d5fc8b190cd57aadba8ca0e0",
+  "implementation_commit": "71b465a98aa5c511588d87ee080088e8614d975e",
+  "tested_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "before_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_commits": [
+    "350e776a2cd376dd2171dc79b61010da8f01fc2e",
+    "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c",
+    "71b465a98aa5c511588d87ee080088e8614d975e"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT REPO_CWD",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_legacy.svg",
+      "axes": [
+        "root versus sibling selectors",
+        "activation/note/return",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.svg",
+      "axes": [
+        "numeric participant/root shadow",
+        "activation/note override",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_legacy.svg",
+      "axes": [
+        "creation consumer",
+        "numeric shadow/event history",
+        "legacy"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_teoz.svg",
+      "axes": [
+        "root versus sibling selectors",
+        "activation/note/return",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_teoz.svg",
+      "axes": [
+        "numeric participant/root shadow",
+        "activation/note override",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_teoz.svg",
+      "axes": [
+        "creation consumer",
+        "numeric shadow/event history",
+        "teoz"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    }
+  ],
+  "findings": [
+    "Four fresh root/sibling line and numeric-shadow controls match. ComponentType separates participant/lifeLine/activationBox; Java ActiveLine has paint-only shadow1 and width10/height0. The shared cascade is unchanged. These samples do not prove per-kind/property/stereotype coverage.",
+    "style_create_legacy and style_create_teoz are valid failures even for plain participant Shadowing5. Both inline created heads omit the shadow filter while initial and tail heads carry it. draw_created_head at sequence.rs:12651 constructs a fresh PlantUmlSvg and copies only participant border/thickness, losing participant_shadow_filter and other resolved paint context.",
+    "Both creation controls place the target2.5 left of Java and narrow the canvas3 after integer rounding. sequence.rs:8771 reserves box_width/2, whereas ArrowAndParticipant.getArrowOnlyWidth/getPreferredWidth and CommunicationTile.getPoint2 use complete participant preferred dimensions (shadow5 contributes5/2). This is a source-derived missing preferred-width contribution.",
+    "Legacy creation additionally ends5 too early. create_msg_extra at7770 derives height from unshadowed box_height plus the old CREATE_EXTRA_ADVANCE (pre-existing reverse-engineered constant); Java ArrowAndParticipant.getPreferredHeight takes max(arrow preferred height, head height). Teoz candidate71b465a fixes the height in this fresh case, but not width or paint. No new numeric compensation is proposed.",
+    "Exact candidate is rejected as a combination. No old bounded acceptance transfers. Every source, including invalid and zero-byte sources, remains executable; no comparator, baseline, skip, target, policy or production edit.",
+    "Independent frozen CLI replay: 1350 matches, 569 valid mismatches, 47 invalid references among1966 entries/1918 unique byte strings;31 recoveries and0 losses. Every maker status and actual CLI SVG hash reproduces.",
+    "Exact candidate library tiers11181/11251 and10497/11251, sequence1411/1411; parser570, renderer790, CLI13 pass. Standing perturbations686/1279; guards4/6. Owned formatting passes; workspace formatting and Clippy remain red."
+  ],
+  "verdict": "rejected",
+  "assessment": "rejected by creation-time consumers",
+  "causal_repair_guidance": "Carry one complete resolved plain-participant component through initial, inline-created and tail consumers. Use preferred width in creation constraints, Java composite preferred height for legacy flow, and inherited paint/shadow in created-head rendering. Audit other kinds separately; do not call these bounded samples full style parity.",
+  "evidence": "docs/parity-reviews/sequence-decoration-height-packet/checker-092cf5f/README.md"
+}

@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Lark
+[->o Lark ++ : arrive
+Lark o<--] : right arrive
+Lark ->o] : leave
+[<--o Lark -- : left leave
+@enduml

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "evidence_import": "82020a168c622ea109f1a61074c942072f37327e",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-external-create-consumer",
+  "java_locations": [
+    "sequencediagram.SequenceDiagram#activate/#addMessage",
+    "sequencediagram.MessageExo#compatibleForCreate",
+    "sequencediagram.graphic.DrawableSetInitializer#prepareMessageExo",
+    "sequencediagram.graphic.Step1MessageExo#prepareMessage/#createArrow",
+    "sequencediagram.graphic.Step1Message#createArrowCreate",
+    "sequencediagram.teoz.CommunicationExoTile#drawU/#callbackY_internal",
+    "sequencediagram.teoz.CommunicationTile#drawU/#callbackY_internal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/sequence.rs::sequence_create_attachments",
+    "crates/rustuml-render/src/sequence.rs::sequence_create_message_indices/TeozHistory/created_inline"
+  ],
+  "invariant": "Pending CREATE attaches to any compatible AbstractMessage, including MessageExo. Only ordinary Message creation consumers draw an inline head and overwrite the participant creation origin; external arrow consumers keep their ordinary external geometry and callback semantics.",
+  "causal_divergence": "The general ownership map is used as the ordinary-head map. Outgoing external targets are borders, so the ordinary target lookup panics; incoming external messages also acquire inappropriate creation geometry.",
+  "planned_change": "Keep the complete attachment derivation and Teoz raw-history owner. Derive a separately named ordinary creation-head map using message topology, following Java dispatch; all existing ordinary head/spacing/life-origin consumers use that map. Preserve external attachment, raw CREATE and life flags, without nullable endpoint compensation.",
+  "perturbation_axes": [
+    "incoming/outgoing and left/right border in both engines",
+    "overwritten pending versus attached repeats, participant kind and activation"
+  ]
+}

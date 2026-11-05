@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-return-configuration",
+  "account_commit": "f785ee820f7364f0669a620222ac1d6e64c42d83",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth1.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth1.svg",
+      "source_sha256": "7f0f2e486ce063e7f273c0eff5d284f0e58fba24b3f27d0d05574ec97ceae64b",
+      "golden_sha256": "bbad08d8547348fa61972aa86b65fe8578a994de3a922a6e55183a2e2427f57a",
+      "axes": [
+        "engine",
+        "activation recursion and sequential color inheritance"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth3.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth3.svg",
+      "source_sha256": "2cc73a9b608f4137b30e728b86755b805070bb6e782935daa5d962b5fdbec17f",
+      "golden_sha256": "6ff0e9071728ca2a3bd689b3f6c6ac72efb18fe14bc7d36c4e39becfb9ccfe85",
+      "axes": [
+        "engine",
+        "activation recursion and sequential color inheritance"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth1.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth1.svg",
+      "source_sha256": "4639ad2e4a8af5c32114ff0a220cd634b7f01a7336bad0b02c1ab9e6361c04ea",
+      "golden_sha256": "bc77726e2e186575c0bf57eb5df3b82b42e95f0ff2b85025004f43e6bfde80f5",
+      "axes": [
+        "engine",
+        "activation recursion and sequential color inheritance"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth3.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e1_depth3.svg",
+      "source_sha256": "538cac27b87517be9e1e5670847726ec2a8bb59e3982d6fd40b191e5599d0570",
+      "golden_sha256": "b24275e2134c7eb45c5388e1d873bcbb8990dc3b653814a39f0bca4a4852cb2a",
+      "axes": [
+        "engine",
+        "activation recursion and sequential color inheritance"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.svg",
+      "source_sha256": "95c83f3738bf68d24d6fb4da163a659ae017d86cced4483d33ef1a44059a77fd",
+      "golden_sha256": "e3f5f7eb110a3b91bf738a3944bf1094c66c20ed7d96fd6a68227cd2b4dc7fee",
+      "axes": [
+        "source-guided edge control",
+        "orphan_note"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 1,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "correct CLI rejection; not a positive SVG pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.svg",
+      "source_sha256": "f1c3ce0bc9462c552c80887a65e0db794680b2677ed7ddf01ab7e210858c1fb8",
+      "golden_sha256": "99746e4d19cdb0b08d4928f5e7984069e5e8ea497c1d68147ba0f1e2e0176553",
+      "axes": [
+        "source-guided edge control",
+        "external_twice"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 1,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "correct CLI rejection; not a positive SVG pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.svg",
+      "source_sha256": "4f9bec1386be0b78218fa56dbc63970e74a7bcc10ea91f4bc8ea715e01fbb180",
+      "golden_sha256": "b60e68e4d40886fc24e7324168b312ec680f9e01c1c2d3311f2faa836e34b295",
+      "axes": [
+        "source-guided edge control",
+        "unknown_color"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "Rust accepts Java-negative input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_parallel.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_parallel.svg",
+      "source_sha256": "0d743b6560ea69ef31949991d6f6490fba0f95d1f7360f7bb73a9a1a9f1a83f5",
+      "golden_sha256": "dab31ec15e19d21fd9c4d10497a894cd84536dd348d2fa1dcb055444d1ca31f3",
+      "axes": [
+        "source-guided edge control",
+        "parallel"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_nested_after_destroy.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_nested_after_destroy.svg",
+      "source_sha256": "e964a455fcd6f5cf97c062cc3007ab95a912a72ede2b100618eb6b74d525d575",
+      "golden_sha256": "090dec8b632a18386fbd829e3d9965c8c5a62b13d21a0839f5b9618234feb480",
+      "axes": [
+        "destroy before return",
+        "multiple activating destinations and color"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-return-configuration",
+    "java_files": [
+      "sequencediagram/command/CommandReturn.java",
+      "sequencediagram/SequenceDiagram.java"
+    ],
+    "rust_locations": [
+      "parse/sequence.rs:66-107",
+      "sequence.rs:3347-3564"
+    ],
+    "source_supported": "Optional color, activating-stack versus internal-message fallback, END reset, and generated-message color propagation trace to CommandReturn and SequenceDiagram. Parser stores only an internal/external boolean for validation while renderer independently maintains return contexts; agreement is not guaranteed by that duplicate representation.",
+    "adversarial_boundary": "Unknown colors must fail HColorSet.getColor; parallel returns use PARALLEL and goParallel. Rust ReturnMessage has no parallel field and try_return only recognizes a leading return token. Fresh negative/color and parallel controls challenge those boundaries."
+  },
+  "findings": [
+    "Optional color, activating-stack versus internal-message fallback, END reset, and generated-message color propagation trace to CommandReturn and SequenceDiagram. Parser stores only an internal/external boolean for validation while renderer independently maintains return contexts; agreement is not guaranteed by that duplicate representation.",
+    "Three of six valid fresh cases match. Legacy depth1 repeated returns leave a 5px excess canvas; parallel return is dropped (40 Java elements versus 37 Rust), and nested return after destroy retains extra components. The orphan-note and repeated external return negatives correctly exit1. Unknown #notacolor777 is rejected by Java exit200 but accepted by Rust exit0. Color recognition, parallel ownership and destruction must feed the same ordinary-message model; optional color support alone is not closure.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

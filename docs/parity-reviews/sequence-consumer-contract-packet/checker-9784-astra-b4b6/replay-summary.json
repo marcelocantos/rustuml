@@ -1,0 +1,241 @@
+{
+  "before": {
+    "entries": 2549,
+    "categories": {
+      "svg_mismatch": 676,
+      "match": 1772,
+      "nonpositive": 99,
+      "valid_error": 2
+    },
+    "panics": [],
+    "library_panics": [
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+    ]
+  },
+  "after": {
+    "entries": 2549,
+    "categories": {
+      "svg_mismatch": 639,
+      "match": 1809,
+      "nonpositive": 99,
+      "valid_error": 2
+    },
+    "panics": [],
+    "library_panics": [
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+    ]
+  },
+  "cohorts": {
+    "frozen": {
+      "before": {
+        "entries": 2371,
+        "categories": {
+          "svg_mismatch": 616,
+          "match": 1674,
+          "nonpositive": 79,
+          "valid_error": 2
+        },
+        "panics": [],
+        "library_panics": [
+          "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+          "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ]
+      },
+      "after": {
+        "entries": 2371,
+        "categories": {
+          "svg_mismatch": 616,
+          "match": 1674,
+          "nonpositive": 79,
+          "valid_error": 2
+        },
+        "panics": [],
+        "library_panics": [
+          "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+          "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ]
+      }
+    },
+    "checker148": {
+      "before": {
+        "entries": 148,
+        "categories": {
+          "match": 94,
+          "svg_mismatch": 42,
+          "nonpositive": 12
+        },
+        "panics": [],
+        "library_panics": []
+      },
+      "after": {
+        "entries": 148,
+        "categories": {
+          "match": 115,
+          "svg_mismatch": 21,
+          "nonpositive": 12
+        },
+        "panics": [],
+        "library_panics": []
+      }
+    },
+    "maker30": {
+      "before": {
+        "entries": 30,
+        "categories": {
+          "svg_mismatch": 18,
+          "match": 4,
+          "nonpositive": 8
+        },
+        "panics": [],
+        "library_panics": []
+      },
+      "after": {
+        "entries": 30,
+        "categories": {
+          "match": 20,
+          "nonpositive": 8,
+          "svg_mismatch": 2
+        },
+        "panics": [],
+        "library_panics": []
+      }
+    }
+  },
+  "recoveries": {
+    "cli_comparison": [
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_rnote_self_attached_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_hnote_self_attached_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_upper_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/participant_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/participant_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/actor_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/actor_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/boundary_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/boundary_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/control_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/control_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/entity_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/entity_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/database_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/database_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/collections_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/collections_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/self_left_rnote_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/self_right_hnote_teoz.puml"
+    ],
+    "product_library": [
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_rnote_self_attached_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_hnote_self_attached_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_upper_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/participant_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/participant_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/actor_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/actor_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/boundary_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/boundary_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/control_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/control_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/entity_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/entity_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/database_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/database_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/collections_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/collections_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/self_left_rnote_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/self_right_hnote_teoz.puml"
+    ],
+    "assisted_library": [
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_teoz.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_legacy.puml",
+      "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_rnote_self_attached_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_hnote_self_attached_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_upper_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/participant_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/participant_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/actor_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/actor_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/boundary_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/boundary_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/control_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/control_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/entity_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/entity_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/database_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/database_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/collections_ordered_legacy.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/collections_ordered_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/self_left_rnote_teoz.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/self_right_hnote_teoz.puml"
+    ]
+  },
+  "losses": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "new_valid_errors": [],
+  "before_maker_differences": [],
+  "after_maker_differences": []
+}

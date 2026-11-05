@@ -1,0 +1,28 @@
+diff --git a/crates/rustuml-render/src/ascii.rs b/crates/rustuml-render/src/ascii.rs
+index a529de75f..62b2fd68e 100644
+--- a/crates/rustuml-render/src/ascii.rs
++++ b/crates/rustuml-render/src/ascii.rs
+@@ -508,6 +508,7 @@ mod tests {
+                     kind: ParticipantKind::Participant,
+                     order: Some(i),
+                     stereotype: None,
++                    stereotype_position_bottom: false,
+                     url: None,
+                     color: None,
+                     source_line: i + 1,
+@@ -516,6 +517,7 @@ mod tests {
+             events,
+             autonumber: None,
+             hide_footbox: false,
++            hide_stereotypes: false,
+             teoz: false,
+             boxes: Vec::new(),
+         }
+@@ -690,6 +692,7 @@ mod tests {
+             events: vec![],
+             autonumber: None,
+             hide_footbox: false,
++            hide_stereotypes: false,
+             teoz: false,
+             boxes: Vec::new(),
+         };

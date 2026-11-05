@@ -1,0 +1,193 @@
+{
+  "before": {
+    "entries": 3111,
+    "match": 2165,
+    "mismatch": 767,
+    "nonpositive": 165,
+    "valid_errors": 14,
+    "cli_panics": []
+  },
+  "after": {
+    "entries": 3111,
+    "match": 2195,
+    "mismatch": 749,
+    "nonpositive": 165,
+    "valid_errors": 2,
+    "cli_panics": []
+  },
+  "unique_sources": 3059,
+  "duplicate_entries": 52,
+  "cohorts": {
+    "frozen2549": {
+      "before": {
+        "entries": 2549,
+        "match": 1809,
+        "mismatch": 639,
+        "nonpositive": 99,
+        "valid_errors": 2,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 2549,
+        "match": 1809,
+        "mismatch": 639,
+        "nonpositive": 99,
+        "valid_errors": 2,
+        "cli_panics": []
+      }
+    },
+    "checker534": {
+      "before": {
+        "entries": 534,
+        "match": 348,
+        "mismatch": 116,
+        "nonpositive": 60,
+        "valid_errors": 10,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 534,
+        "match": 370,
+        "mismatch": 104,
+        "nonpositive": 60,
+        "valid_errors": 0,
+        "cli_panics": []
+      }
+    },
+    "maker24": {
+      "before": {
+        "entries": 24,
+        "match": 4,
+        "mismatch": 12,
+        "nonpositive": 6,
+        "valid_errors": 2,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 24,
+        "match": 12,
+        "mismatch": 6,
+        "nonpositive": 6,
+        "valid_errors": 0,
+        "cli_panics": []
+      }
+    },
+    "signature4": {
+      "before": {
+        "entries": 4,
+        "match": 4,
+        "mismatch": 0,
+        "nonpositive": 0,
+        "valid_errors": 0,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 4,
+        "match": 4,
+        "mismatch": 0,
+        "nonpositive": 0,
+        "valid_errors": 0,
+        "cli_panics": []
+      }
+    }
+  },
+  "gains": [
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_autonumber_resume_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_autonumber_resume_teoz.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_box_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_across_teoz.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_box_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_across_teoz.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_autonumber_resume_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_autonumber_resume_teoz.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_box_legacy.puml",
+    "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_across_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_quoted_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_quoted_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_spaced_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_spaced_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_coloured_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_coloured_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_multi_coloured_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_multi_coloured_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_rnote_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_rnote_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_hnote_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_of_hnote_teoz.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/identity_keyword_legacy.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/identity_keyword_teoz.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/identity_quoted_legacy.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/identity_quoted_teoz.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_format_legacy.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/resume_vt_format_teoz.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/box_nbsp_legacy.puml",
+    "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/inputs/reference-inputs/box_nbsp_teoz.puml"
+  ],
+  "losses": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "new_valid_cli_errors": [],
+  "maker_comparison": [
+    {
+      "label": "before",
+      "disagreements": []
+    },
+    {
+      "label": "after",
+      "disagreements": []
+    }
+  ],
+  "model_modes": {
+    "ast": {
+      "before_exits": {
+        "0": 2984,
+        "1": 127
+      },
+      "after_exits": {
+        "0": 2992,
+        "1": 119
+      },
+      "frozen_stdout_equal": true,
+      "all_changed_stdout": 58,
+      "new_panics": []
+    },
+    "ascii": {
+      "before_exits": {
+        "0": 2984,
+        "1": 127
+      },
+      "after_exits": {
+        "0": 2992,
+        "1": 119
+      },
+      "frozen_stdout_equal": true,
+      "all_changed_stdout": 36,
+      "new_panics": []
+    },
+    "yaml": {
+      "before_exits": {
+        "0": 2949,
+        "101": 35,
+        "1": 127
+      },
+      "after_exits": {
+        "0": 2957,
+        "101": 35,
+        "1": 119
+      },
+      "frozen_stdout_equal": true,
+      "all_changed_stdout": 52,
+      "new_panics": []
+    }
+  },
+  "alias16": {
+    "entries": 16,
+    "match": 16,
+    "mismatch": 0,
+    "nonpositive": 0,
+    "valid_errors": 0,
+    "cli_panics": []
+  }
+}

@@ -1,0 +1,13 @@
+@startuml
+<style>
+sequenceDiagram {
+participant {
+Shadowing 5
+}
+}
+</style>
+participant Quartz
+create participant Finch
+Quartz -> Finch : create
+Finch -> Quartz : alive
+@enduml

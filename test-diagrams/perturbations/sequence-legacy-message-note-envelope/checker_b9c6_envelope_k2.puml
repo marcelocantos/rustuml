@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : enter
+Cedar -> Birch : ordinary
+note left : narrow
+return after
+@enduml

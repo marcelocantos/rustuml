@@ -1,0 +1,6 @@
+@startuml
+class Elm
+class Ash
+Elm o-- Ash
+Elm --> Ash: o-->>o
+@enduml

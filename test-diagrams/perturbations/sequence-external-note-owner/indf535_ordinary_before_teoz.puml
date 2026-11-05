@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Tansy
+participant Yarrow
+Tansy -> Yarrow: prior
+Yarrow <-]: current
+note left: must belong current
+@enduml

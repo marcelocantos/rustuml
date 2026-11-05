@@ -1,0 +1,76 @@
+[
+  {
+    "mechanism": "Shared per-atom tab origins",
+    "status": "Unresolved checker display_inline/block controls in both engines",
+    "java": "AtomText#getWidth/#drawU resets each atom's tab origin; composition then sums atom widths.",
+    "rust": "Shared text_render.rs text_advance_with_tabs/emit_tabbed_segment use accumulated line origin. No shared edit or font compensation.",
+    "ownership": "Class maker owns shared positioned text work; coordinate there."
+  },
+  {
+    "mechanism": "URL label second Display conversion",
+    "status": "Unresolved checker display_raw_link controls in both engines",
+    "java": "CommandCreoleUrl -> StripeSimple.addUrl -> AtomTextUtils.createUrl invokes Display#getWithNewlines again for URL label and builds AtomVerticalTexts.",
+    "rust": "Shared creole.rs hyperlink arm emits literal escaped label; no shared edit."
+  },
+  {
+    "mechanism": "Natural Display alignment",
+    "status": "Unresolved checker display_natural controls in both engines",
+    "java": "Display#getWithNewlines segments backslash-r/backslash-l and carries naturalHorizontalAlignment.",
+    "rust": "Sequence String model retains these escapes; source/model dependency is not a font issue or waived failure."
+  },
+  {
+    "mechanism": "Logical font mapping and metrics",
+    "status": "Both font controls remain failed; T14.11 unowned",
+    "ownership": "Shared font mapping/metrics separate from class circled font target. No imported host fonts, geometry compensation or shared font changes."
+  },
+  {
+    "mechanism": "Themed self-note padder/Real/envelope",
+    "status": "Prior maker theme controls and fresh text_theme_self remain failed",
+    "java": "AbstractComponentRoseArrow.getTextBlock -> sequenceDiagramPadder -> MessageSelfArrow preferred width -> Step1Abstract note allocation; Teoz LivingSpace posC2/posD and PlayingSpaceWithParticipants compose complete body bounds.",
+    "rust": "constraint_global_padding drops theme padding, while self_arrow_by_event, participant origins and raw_body_bottom reconstruct dimensions separately. No themed self geometry edits in this packet."
+  },
+  {
+    "mechanism": "Historical frozen failures and prior rejected reviews",
+    "status": "Every input remains executable and every nonzero preserved",
+    "details": "remaining-failures.json.gz enumerates exact final nonzero entries; do not summarize frozen542/deferred15 as accepted or waived. All old accepted/bounded observations stay tied to their tested revisions, including registry cleanup and exact sequence revisions. Shared entity sequence stereotypes retained under prior lifecycle maker dependency provenance; no class/TIM edits."
+  },
+  {
+    "mechanism": "Welcome factory evaluated-source viability",
+    "status": "Read-only TIM8 handoff; not repaired or added to this replay",
+    "evidence_commit": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+    "evidence": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf/docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/README.md",
+    "java": "PSystemWelcomeFactory selects evaluated UmlSource totalLineCount==2, including the truncated @startuml plus class Anchor source without end tag.",
+    "rust": "parse/mod.rs subtype dispatch ignores evaluated-source welcome selection and renders Class. TIM8 independently confirmed exact source truncation; no reader/preprocessor repair is implied.",
+    "ownership": "Current parse/mod.rs authorization remains recognized decorated sequence versus class. No welcome/TIM changes."
+  },
+  {
+    "mechanism": "Genuine class/component contrasts and invalid mixed declarations",
+    "status": "Two unchanged valid whole-output failures and one accepted syntax-negative remain",
+    "sources": [
+      "inputs/factory_component.puml",
+      "inputs/factory_quoted.puml",
+      "inputs/factory_mixed.puml"
+    ],
+    "details": "Component aggregation decoration is rendered as association; quoted class text/comment content leaks into output. Actual CLI models stay Component and Class respectively. Mixed class/participant Java syntax error exits200 while Rust accepts0. These failures are preserved, not waived; no positive SVG credit for the negative."
+  },
+  {
+    "mechanism": "Remaining component kinds, styles and geometry",
+    "status": "Incomplete family coverage; no whole component/style acceptance",
+    "details": "Created plain participants and actors now share preferred dimensions and resolved shadow paint; queue creation uses symbol preferred height. Per-kind/stereotype style signatures, global shadow/style behavior for collections and other glyphs, page chrome/legend/styled captions, hexnote bounds, right-note canvas, multiline delay, boxPadding and nested englobers remain separate dependencies. Common row alignment remains an existing renderer band, not a complete replacement of every participant component."
+  },
+  {
+    "mechanism": "Enhanced note body shared-text limits",
+    "status": "Body/title composition corrected on preserved controls, shared rich-text coverage not proved",
+    "details": "Segmented rule blocks use the owned sequence text path. Tables, rich nested blocks, tabs, natural alignment and hyperlink second Display conversion still depend on shared text contracts; no unsupported shared-code edits or offset compensation."
+  },
+  {
+    "mechanism": "Standing gates and cwd contract",
+    "status": "Full repository remains red",
+    "details": "Main library counts match baseline exactly but no-oracle ratchets reject unchanged unlocked improvements in class/preprocessing/rendering; assisted has754 failures. Guards4/6, standing714/1310 (596failures). Workspace fmt has class-file differences. Clippy parser dead code and19 renderer warnings remain, including untouched sequence warnings. Owned-file fmt passes. Cargo-package cwd differs from repo CLI cwd on T14.6.2; frozen contracts are unchanged."
+  },
+  {
+    "mechanism": "ASCII endpoint representation",
+    "status": "No ASCII renderer repair claimed",
+    "details": "Only two Arrow test constructor source_dressing:None additions were authorized and made. Four actual ASCII outputs change with factory ownership; all raw before/after outputs are retained. Java-correct bidirectional direction can still yield one endpoint in the existing ASCII renderer. SVG parity does not certify ASCII endpoint parity."
+  }
+]

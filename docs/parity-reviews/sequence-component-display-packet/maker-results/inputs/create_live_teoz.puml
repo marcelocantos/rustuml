@@ -1,0 +1,15 @@
+@startuml
+!pragma teoz true
+<style>
+sequenceDiagram {
+ actor {
+ Shadowing 4
+ }
+}
+</style>
+participant Ridge
+create actor Valley
+Ridge -> Valley ++: born
+Valley -> Ridge: reply
+Ridge -> Valley --: close
+@enduml

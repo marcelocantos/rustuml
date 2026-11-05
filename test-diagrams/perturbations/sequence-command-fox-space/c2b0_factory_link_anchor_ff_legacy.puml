@@ -1,0 +1,8 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+{first} Quartz -> Vale: ping
+{last} Vale -> Quartz: pong
+{first}<->{last}:link
+@enduml

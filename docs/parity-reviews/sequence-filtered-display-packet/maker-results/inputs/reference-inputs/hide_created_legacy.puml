@@ -1,0 +1,6 @@
+@startuml
+participant Hub
+create queue "LongMailbox" as M <<x>>
+Hub -> M: open
+hide stereotypes
+@enduml

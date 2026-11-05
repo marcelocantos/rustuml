@@ -1,0 +1,13 @@
+@startuml
+skinparam noteTextAlignment center
+<style>
+sequenceDiagram {
+ note {
+ Shadowing 2
+ }
+}
+</style>
+North -> South ++ : contact
+note right : narrow\na deliberately wider line
+return end
+@enduml

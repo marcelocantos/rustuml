@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant "Dawn" as D
+collections "<size:20>Archive</size>\n<size:9>leaf</size>" as A
+D -> A: store
+@enduml

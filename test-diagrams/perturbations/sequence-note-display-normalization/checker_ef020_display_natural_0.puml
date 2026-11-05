@@ -1,0 +1,4 @@
+@startuml
+Quartz -> Fern : call
+note right : tiny\rconsiderably longer\lEnd
+@enduml

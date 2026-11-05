@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "review_candidate": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "resources": [],
+  "cases": [
+    {
+      "name": "queue_multiline_legacy",
+      "remote_name": "queue_multiline_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_multiline_legacy.puml",
+      "source_bytes": 126,
+      "source_sha256": "e603683ae133bd09aa942f4aef2bf4d8889ae42730c7c5c06a05e100cde426e3",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCnF1ZXVlICJGaXJzdFxuU2Vjb25kIiBhcyBNYXBsZQpjcmVhdGUgTWFwbGUKQ2VkYXIgLT4gTWFwbGU6IGJ1aWxkCk1hcGxlIC0+IENlZGFyOiBkZWxpdmVyCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "queue_multiline",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "body_unclosed_legacy",
+      "remote_name": "body_unclosed_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_unclosed_legacy.puml",
+      "source_bytes": 92,
+      "source_sha256": "6e5d065a7ed15ecc6ede5b07543bc99da9dda9d1d3bbdadab56cb49111d21b5b",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCkNlZGFyIC0+IENlZGFyOiBiZWZvcmUKbm90ZSByaWdodApfXyBIZWFkaW5nIF9fCmNvbnRlbnQKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "body_unclosed",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "create_duplicate_legacy",
+      "remote_name": "create_duplicate_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_duplicate_legacy.puml",
+      "source_bytes": 120,
+      "source_sha256": "2be32158dd5af11e82a04f1fbd96e261dda04de68f02e1a16b4ea9eae58df8bf",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCmNyZWF0ZSBNYXBsZQpDZWRhciAtPiBNYXBsZTogb25lCmNyZWF0ZSBNYXBsZQpDZWRhciAtPiBNYXBsZTogdHdvCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "create_duplicate",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "queue_multiline_teoz",
+      "remote_name": "queue_multiline_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_multiline_teoz.puml",
+      "source_bytes": 144,
+      "source_sha256": "720f85ffc778f72d582c6b76c4912d82033edceb42a761d53c40470e10be3fce",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCnF1ZXVlICJGaXJzdFxuU2Vjb25kIiBhcyBNYXBsZQpjcmVhdGUgTWFwbGUKQ2VkYXIgLT4gTWFwbGU6IGJ1aWxkCk1hcGxlIC0+IENlZGFyOiBkZWxpdmVyCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "queue_multiline",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "body_unclosed_teoz",
+      "remote_name": "body_unclosed_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_unclosed_teoz.puml",
+      "source_bytes": 110,
+      "source_sha256": "ca91d72f59e986037607e01a15596d188b6ea89c54b20ef36c8dc76ad6bd15b9",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCkNlZGFyIC0+IENlZGFyOiBiZWZvcmUKbm90ZSByaWdodApfXyBIZWFkaW5nIF9fCmNvbnRlbnQKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "body_unclosed",
+        "teoz"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "create_duplicate_teoz",
+      "remote_name": "create_duplicate_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_duplicate_teoz.puml",
+      "source_bytes": 138,
+      "source_sha256": "77eab9005525f91936c2e1445c6e6706d78c434314460859f8c534d2f157ddfe",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCmNyZWF0ZSBNYXBsZQpDZWRhciAtPiBNYXBsZTogb25lCmNyZWF0ZSBNYXBsZQpDZWRhciAtPiBNYXBsZTogdHdvCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "create_duplicate",
+        "teoz"
+      ],
+      "intended_valid": false
+    }
+  ],
+  "source_derivation": "Queue branch computes line_h times one/two rather than USymbolQueue merged Display height; exercise actual multiline Display. Negative controls exercise unclosed BodyEnhanced input and duplicate creation semantics."
+}

@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+queue Q <<cold\nwarm>>
+participant Kite
+Kite -> Q: deliver
+@enduml

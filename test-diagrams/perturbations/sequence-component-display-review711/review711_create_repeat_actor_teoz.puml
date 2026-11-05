@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+participant Mint
+actor "Receiver\nthree\nlines" as Roe
+create Roe
+Mint -> Roe: first
+Roe --> Mint: reply
+create Roe
+Mint -> Roe ++: second
+Roe --> Mint --: release
+create Roe
+Mint -> Roe: third
+@enduml

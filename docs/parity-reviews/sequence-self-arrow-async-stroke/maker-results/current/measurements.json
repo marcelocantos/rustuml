@@ -1,0 +1,326 @@
+[
+  {
+    "source": "async_0.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_1.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_10.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_11.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_12.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_13.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_14.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_15.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_16.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_17.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_2.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_3.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_4.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_5.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_6.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_7.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_8.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "async_9.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  }
+]

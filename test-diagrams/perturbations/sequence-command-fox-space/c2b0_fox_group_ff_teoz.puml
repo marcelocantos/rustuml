@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+altbranch
+Quartz -> Vale: within
+elsefallback
+Vale -> Quartz: other
+end
+@enduml

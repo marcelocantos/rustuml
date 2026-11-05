@@ -1,0 +1,30 @@
+{
+  "account_commit": "8c6074666083f8db47872f81a1e79811331859b5",
+  "status": "candidate; independent checker required",
+  "observations": {
+    "before": {
+      "product": {
+        "1": 24
+      },
+      "assisted": {
+        "1": 24
+      },
+      "cli_equivalence": 24
+    },
+    "current": {
+      "product": {
+        "0": 2,
+        "1": 22
+      },
+      "assisted": {
+        "0": 2,
+        "1": 22
+      },
+      "cli_equivalence": 24
+    }
+  },
+  "logs": {
+    "/tmp/rustuml-seq-recovery/teoz-life-before.log": "c6f24703fefdbbec2bbf51b8828e4e125c75c47da075922b3436d81e3eba4694",
+    "/tmp/rustuml-seq-recovery/teoz-life-current.log": "22599282b70edf34f98eaa38e1c8b9f5649f3447e8a3c4cc5b42124aba60e4aa"
+  }
+}

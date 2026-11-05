@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+actor Heron
+participant Lyra
+alt green
+create Heron
+Heron ->]: signal
+else amber
+Lyra -> Heron: retry
+end
+@enduml

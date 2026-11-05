@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-head-englober-component-height",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.graphic.DrawableSet#getHeadAndEngloberHeight",
+    "skin.rose.ComponentRoseEnglober#getPreferredHeight",
+    "skin.AbstractTextualComponent#getTextHeight"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render",
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout"
+  ],
+  "invariant": "Englober title preferred height is its Display height plus two marginY1 and trailing3, independent of queue kind. Complete queue preferred size supplies bottom alignment itself.",
+  "causal_divergence": "An old any-queue heuristic suppresses the title vertical margins to compensate for a separate queue paint offset. Once queue head bounds are real, boxed stereotyped queues remain five pixels too high.",
+  "planned_change": "Remove the queue-kind shortcut in title component preferred height, preserving existing nested-box/padding dependencies. Use the source ComponentRoseEnglober margin1+1+3 derivation, not a final diagram offset.",
+  "perturbation_axes": [
+    "queue versus rectangular/mixed boxed heads",
+    "stereotype/multiline label and engine"
+  ],
+  "before_revision": "71422f1b",
+  "account_date": "2026-11-04",
+  "evidence": "Preserved display62 focused captures; complete Display draft already exists under earlier bf400d84 account. This account precedes these additional corrections."
+}

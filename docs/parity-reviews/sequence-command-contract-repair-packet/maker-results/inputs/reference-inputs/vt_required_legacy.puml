@@ -1,0 +1,7 @@
+@startuml
+participant N
+participant S
+N -> S: seed
+activateS
+deactivateS
+@enduml

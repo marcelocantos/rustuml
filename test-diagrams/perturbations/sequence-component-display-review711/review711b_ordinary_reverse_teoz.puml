@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Mica
+participant Juniper
+Juniper <-/ Mica: half normal
+Juniper <<-\\ Mica: open mix
+Juniper o<-/o Mica: circles
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+!pragma teoz true
+<style>
+sequenceDiagram {
+ lifeLine {
+ LineColor red
+ }
+ activationBox {
+ LineColor blue
+ }
+ note {
+ HorizontalAlignment right
+ Shadowing 2.25
+ }
+}
+</style>
+skinparam defaultTextAlignment center
+skinparam noteTextAlignment left
+Wagtail -> Thrush ++ : start
+note right : i\nwider instruction
+return end
+@enduml

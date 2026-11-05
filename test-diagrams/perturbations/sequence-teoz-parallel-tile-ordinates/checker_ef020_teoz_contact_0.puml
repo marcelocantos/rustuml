@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Lark
+participant Dove
+Lark -> Lark ++ : solo\nsecond
+& Lark -> Dove ++ : join
+& Dove -> Dove ++ : nested
+Dove --> Dove -- : close
+Dove --> Lark -- : reply
+destroy Dove
+@enduml

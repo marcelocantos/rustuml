@@ -1,0 +1,133 @@
+{
+  "preserved2021": {
+    "before": {
+      "1": 569,
+      "0": 1401,
+      "2": 51
+    },
+    "after": {
+      "1": 569,
+      "0": 1401,
+      "2": 51
+    },
+    "entries": 2021,
+    "gains": 0,
+    "losses": 0
+  },
+  "checker42": {
+    "before": {
+      "1": 19,
+      "2": 6,
+      "0": 17
+    },
+    "after": {
+      "1": 6,
+      "2": 6,
+      "0": 30
+    },
+    "entries": 42,
+    "gains": 13,
+    "losses": 0
+  },
+  "maker20": {
+    "before": {
+      "1": 13,
+      "0": 5,
+      "2": 2
+    },
+    "after": {
+      "0": 17,
+      "1": 1,
+      "2": 2
+    },
+    "entries": 20,
+    "gains": 12,
+    "losses": 0
+  },
+  "total": {
+    "before": {
+      "1": 601,
+      "0": 1423,
+      "2": 59
+    },
+    "after": {
+      "1": 576,
+      "0": 1448,
+      "2": 59
+    },
+    "entries": 2083,
+    "gains": 25,
+    "losses": 0
+  },
+  "invalid": {
+    "before": {
+      "accepted": 20,
+      "rejected": 39
+    },
+    "after": {
+      "accepted": 16,
+      "rejected": 43
+    }
+  },
+  "cli_panics": [],
+  "library_render_panics": [],
+  "comparison_panics": {
+    "product_library": [
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+    ],
+    "assisted_library": [
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+    ]
+  },
+  "diagnostic_modes": {
+    "cli_comparison": {
+      "before": {
+        "1": 601,
+        "0": 1423,
+        "2": 59
+      },
+      "after": {
+        "1": 576,
+        "0": 1448,
+        "2": 59
+      },
+      "gains": 25,
+      "lost_passes": 0
+    },
+    "product_library": {
+      "before": {
+        "1": 601,
+        "0": 1423,
+        "2": 57,
+        "101": 2
+      },
+      "after": {
+        "1": 576,
+        "0": 1448,
+        "2": 57,
+        "101": 2
+      },
+      "gains": 25,
+      "lost_passes": 0
+    },
+    "assisted_library": {
+      "before": {
+        "1": 643,
+        "0": 1381,
+        "2": 57,
+        "101": 2
+      },
+      "after": {
+        "1": 618,
+        "0": 1406,
+        "2": 57,
+        "101": 2
+      },
+      "gains": 25,
+      "lost_passes": 0
+    }
+  },
+  "new_valid_cli_errors": []
+}

@@ -1,0 +1,12 @@
+test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_spaces_legacy.puml:5: trailing whitespace.
++   |||   
+test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_spaces_teoz.puml:6: trailing whitespace.
++   |||   
+test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_tab_legacy.puml:5: trailing whitespace.
++	|||	
+test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_space_tab_teoz.puml:6: trailing whitespace.
++	|||	
+test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_legacy.puml:5: trailing whitespace.
++ ||| 
+test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_spacing_vt_space_teoz.puml:6: trailing whitespace.
++ ||| 

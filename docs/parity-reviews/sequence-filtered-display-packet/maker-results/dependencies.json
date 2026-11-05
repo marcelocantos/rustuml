@@ -1,0 +1,94 @@
+[
+  {
+    "mechanism": "External attached-note horizontal envelope",
+    "scope": "sequence follow-up",
+    "sources": [
+      "ind5f_exo_note_legacy",
+      "ind5f_exo_note_teoz",
+      "exo_note_out_legacy",
+      "exo_right_in_legacy"
+    ],
+    "finding": "Bare notes now retain normalized external-message ownership and paint their labels. Whole outputs still fail on these cases. Fresh outgoing legacy endpoint is 0.8697 left of Java; fresh incoming right legacy line endpoint is 0.3892 left. These differences are recorded symptoms, not offset proposals.",
+    "source_path": "Step1MessageExo#createArrow wraps MessageExoArrow in ArrowAndNoteBox; border constraint uses graphic.getArrowOnlyWidth. Rust lost_preferred_extent_by_from/right boundary projection remains a separate width path.",
+    "next": "Trace complete ArrowAndNoteBox plus MessageExoArrow constraint/envelope through one shared dimension model before editing."
+  },
+  {
+    "mechanism": "Short external arrows",
+    "scope": "separate parser/model/render mechanism",
+    "sources": [
+      "ind5f_exo_short_in_legacy",
+      "ind5f_exo_short_in_teoz",
+      "ind5f_exo_short_out_legacy",
+      "ind5f_exo_short_out_teoz"
+    ],
+    "finding": "Two incoming ? controls still fail parsing after pending CREATE; outgoing ? controls render mismatched. Do not count these as invalid references. Regex recognition alone would omit the short-arrow model and constraints.",
+    "source_path": "CommandExoArrowLeft/Right accept ?, CommandExoArrowAny sets MessageExo.shortArrow, MessageExoArrow#getLeftStartInternal/#getRightEndInternal and CommunicationExoTile consume it for endpoints/constraints. Rust Message has no short-arrow state.",
+    "next": "Preaccount full short-arrow model plus both engine consumers. Any cross-owned Message fixture constructor additions require separate exact authorization."
+  },
+  {
+    "mechanism": "Legacy external lifecycle callback ordinate",
+    "scope": "sequence follow-up",
+    "sources": [
+      "ind5f_exo_activate_legacy",
+      "ind5f_exo_return_in_legacy"
+    ],
+    "finding": "Activation/activated-return bars retain the earlier vertical mismatch; no correction attempted by adding10. External creation ownership stays retained and ordinary head consumption stays separated.",
+    "source_path": "Step1MessageExo#prepareMessage records graphic.getArrowYStartLevel/getArrowYEndLevel; MessageExoArrow derives them from component preferred dimension/start/end points, potentially wrapped by ArrowAndNoteBox. Rust add_sequence_life_variation uses event_y_positions and created participant life-origin paths separately.",
+    "next": "Trace raw CREATE ownership versus external endpoint callbacks and participant life origin before a bounded lifecycle account; no guard/offset patch."
+  },
+  {
+    "mechanism": "Stereotype multiplicity, spots and style",
+    "scope": "separate sequence Display/style component mechanism",
+    "sources": [
+      "ind5f_queue_multiple_legacy",
+      "ind5f_queue_multiple_teoz",
+      "ind5f_queue_spotted_legacy",
+      "ind5f_queue_spotted_teoz",
+      "ind5f_queue_fontsize_legacy",
+      "ind5f_queue_fontsize_teoz",
+      "ind5f_queue_fontcolor_legacy",
+      "ind5f_queue_fontcolor_teoz"
+    ],
+    "finding": "Single raw stereotype parser still loses additional labels; spotted syntax remains literal without spot shapes; stereotype font-size/colour style is unresolved. This packet filters and orders existing raw stereotype content; it does not implement Stereotype text/spot components. Bottom queue order is repaired; nonqueue bottom-order paint consumers remain unclaimed.",
+    "source_path": "Participant#getDisplay adds a Stereotype object, not merely an italic guillemet string; Display creation resolves its text/spot/font properties.",
+    "next": "Separate source-derived component account, coordinate shared style/text ownership if required."
+  },
+  {
+    "mechanism": "Group/box/nested component envelopes",
+    "scope": "deferred sequence geometry",
+    "sources": [
+      "ind5f_exo_group_legacy",
+      "ind5f_exo_group_teoz",
+      "ind5f_exo_nested_legacy",
+      "ind5f_queue_nested_boxes_legacy",
+      "ind5f_queue_nested_boxes_teoz"
+    ],
+    "finding": "Grouping and englober ancestor sums, nested/multiline boxes, reverse-created queue canvas and prior factory failures remain executable. No expanded canvas rewrite in this packet."
+  },
+  {
+    "mechanism": "Shared Creole text",
+    "scope": "unowned; T14.13 and existing shared maker",
+    "sources": [
+      "flush_eol_nested",
+      "hide_closing_capture",
+      "ind78_stripe_heading_legacy",
+      "ind78_stripe_heading_teoz"
+    ],
+    "finding": "Exact two handoff sources/references copied byte-for-byte from checker t3-43738774. Both still fail whole comparison before/after. Folded bottoms already match Java122.4883; flush width147 versus84, hide width167 versus158 plus text/element differences persist. Notes/dividers heading controls, per-atom tabs, URL second Display conversion, sprite-only caller filtering and nested Unicode remain dependencies. No shared production imported."
+  },
+  {
+    "mechanism": "Logical fonts",
+    "scope": "unowned T14.11",
+    "finding": "Both font controls remain failed; no tuning against font widths or host font import."
+  },
+  {
+    "mechanism": "TIM welcome/factory and other frozen failures",
+    "scope": "unowned parser dispatch/TIM/class",
+    "finding": "Evaluated-source totalLineCount==2 welcome dependency remains. No parse/mod.rs, TIM, class or targets edited. All593 frozen SVG failures and77 frozen invalid-reference entries retained, including pre-existing factory/page/legend/shadow/envelope dependencies."
+  },
+  {
+    "mechanism": "CLI YAML nested enums",
+    "scope": "unowned CLI serialization",
+    "finding": "Nineteen existing --yaml executions panic in both revisions at main.rs:130 with serializing nested enums in YAML is not supported yet. Full stdout/stderr/status preserved, no new YAML panic. These are diagnostic-path errors distinct from zero SVG renderer panics."
+  }
+]

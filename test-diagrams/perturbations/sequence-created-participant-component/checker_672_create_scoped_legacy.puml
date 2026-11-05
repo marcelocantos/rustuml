@@ -1,0 +1,17 @@
+@startuml
+<style>
+sequenceDiagram {
+ actor {
+ Shadowing 7
+ }
+ participant {
+ Shadowing 2
+ }
+}
+</style>
+participant Cedar
+actor "Long Maple" as Maple
+create Maple
+Cedar -> Maple ++: create
+Maple -> Cedar --: reply
+@enduml

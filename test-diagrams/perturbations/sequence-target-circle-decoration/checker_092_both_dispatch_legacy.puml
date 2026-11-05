@@ -1,0 +1,4 @@
+@startuml
+Quartz o-->>o Finch : transport
+Finch -> Quartz : return leg
+@enduml

@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested1.puml",
+  "source_sha256": "cf183023adc4940a0e844d55412c08c76a1c845b18537171ee98d21a312d6fe0",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1337387910025427,
+  "stdout_sha256": "29ebe0e847d16c40f69b1db417072c452ac386cb0a4361d8bfe41ce8bff329c8",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

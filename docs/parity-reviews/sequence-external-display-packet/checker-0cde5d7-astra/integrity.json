@@ -1,0 +1,16 @@
+{
+  "validated_pairs": 64,
+  "raw_capture_entries": {
+    "replay2281": 2281,
+    "fresh60": 60,
+    "followup4": 4
+  },
+  "all_raw_cli_ast_ascii_hashes_verified": true,
+  "old_evidence_unchanged": true,
+  "production_unchanged": true,
+  "verdicts": {
+    "sequence-external-create-consumer": "rejected",
+    "sequence-queue-complete-stereotype-display": "rejected"
+  },
+  "note": "Evidence integrity validation, not a passing product parity claim."
+}

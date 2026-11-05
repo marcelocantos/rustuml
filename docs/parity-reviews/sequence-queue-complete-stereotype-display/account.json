@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "evidence_import": "82020a168c622ea109f1a61074c942072f37327e",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-queue-complete-stereotype-display",
+  "java_locations": [
+    "sequencediagram.Participant#getDisplay",
+    "skin.AbstractTextualComponent#constructor",
+    "skin.rose.ComponentRoseQueue#constructor/#getPreferredHeight",
+    "decoration.symbol.USymbolQueue#asSmall",
+    "klimt.creole.legacy.CreoleParser#createSheetSlow"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout/render_participant_shape/queue_shape"
+  ],
+  "invariant": "Queue component preferred bounds and paint consume complete Participant Display, including stereotype, independently of box placement or creation. ComponentRoseQueue passes this complete text block as label and an empty symbol stereotype to USymbolQueue.",
+  "causal_divergence": "Rust retains stereotype in the AST but gates its height/paint on in_box, losing unboxed/created stereotype text. Separate component consumers reconstruct incomplete Display.",
+  "planned_change": "Have queue component measurement and painting include the same existing sequence stereotype/name blocks with their measured heights and widths for initial, inline-created and tail use. Remove box membership from the queue Display decision; preserve other component contracts and existing underline/ascent fixes. No shared font/style/text edit.",
+  "perturbation_axes": [
+    "bare/boxed/created queue and head/tail",
+    "stereotype width, multiline/rich-size labels and engine"
+  ]
+}

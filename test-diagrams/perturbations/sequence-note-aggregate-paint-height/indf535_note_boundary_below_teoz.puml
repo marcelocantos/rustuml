@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant Acorn
+note over Acorn
+<size:24>leaf0</size>
+<size:25>leaf1</size>
+<size:26>leaf2</size>
+<size:27>leaf3</size>
+<size:28>leaf4</size>
+<size:31>leaf5</size>
+<size:34>leaf6</size>
+end note
+Acorn -> Acorn: shake
+@enduml

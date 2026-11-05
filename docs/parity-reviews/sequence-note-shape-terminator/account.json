@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-shape-terminator",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "command.note.sequence.FactorySequenceNoteCommand#END/#createMultiLine",
+    "command.note.sequence.FactorySequenceNoteAcrossCommand#END",
+    "command.note.sequence.FactorySequenceNoteOverSeveralCommand#END",
+    "command.note.sequence.FactorySequenceNoteOnArrowCommand#END"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::parse_line note_buffer"
+  ],
+  "invariant": "Standalone note commands accept end plus optional one whitespace plus note/hnote/rnote, independently of starting shape; arrow-attached command accepts only note terminators.",
+  "causal_divergence": "The immutable fresh rectangular and hexagonal controls returned valid Java SVGs, but Rust reports Unclosed sequence note because it only recognizes endnote and end note for every shape.",
+  "planned_change": "Select the Java terminator grammar by the buffered note command ownership. Retain shape and exact body, consume the complete end command, and verify following messages remain outside the note. No rewrite of fresh sources.",
+  "perturbation_axes": [
+    "three starting shapes versus all legal terminator spellings",
+    "standalone versus attached owner and following message consumption"
+  ],
+  "account_date": "2026-11-05",
+  "before_revision": "aa5ac30e6",
+  "evidence": [
+    "private cache reference-inputs/rect_rows_{legacy,teoz}.puml",
+    "private cache reference-inputs/hex_rows_{legacy,teoz}.puml"
+  ],
+  "scope": "Sequence parser only; dependency necessary to exercise aggregate height through the real CLI."
+}

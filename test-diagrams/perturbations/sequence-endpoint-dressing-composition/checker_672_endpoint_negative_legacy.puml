@@ -1,0 +1,5 @@
+@startuml
+participant Cedar
+participant Maple
+Cedar -o> Maple: invalid
+@enduml

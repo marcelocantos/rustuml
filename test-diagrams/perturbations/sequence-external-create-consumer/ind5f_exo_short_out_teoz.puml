@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Lyra
+collections Osprey
+create Osprey
+Osprey ->?: near
+Lyra -> Osprey: next
+@enduml

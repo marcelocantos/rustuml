@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+A -> B ++ : enter
+B -> C ++ : nested
+destroy C
+return #blue first
+return #red next
+@enduml

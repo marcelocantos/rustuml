@@ -1,0 +1,698 @@
+{
+  "kind": "Maker measurements only, not acceptance; NEW independent checker required",
+  "baseline": "0cde5d7e55139b63cb8e91f8e42acd473441f80a",
+  "production": "61e6aeed6eaf686b3497fbc696aadc03a64e69a2",
+  "accounts": "ca2aae93f8056b9ff0a93e08cd6bafda7be2360a",
+  "note_terminator_account": "5d4858fb269c68ec8e6ec7261f41c9c84a7a4618",
+  "before": {
+    "entries": 2371,
+    "match": 1648,
+    "svg_mismatch": 638,
+    "invalid_reference": 79,
+    "valid_non_svg_error": 6,
+    "cli_exits": {
+      "0": 2306,
+      "1": 65
+    },
+    "invalid_cli_exits": {
+      "0": 20,
+      "1": 59
+    },
+    "valid_errors": [
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_teoz.puml"
+    ],
+    "cli_panics": [],
+    "library_render_panics": [
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_teoz.puml"
+    ],
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 638,
+        "0": 1648,
+        "2": 79,
+        "3": 6
+      },
+      "product_library": {
+        "1": 638,
+        "0": 1648,
+        "2": 77,
+        "101": 8
+      },
+      "assisted_library": {
+        "1": 680,
+        "0": 1606,
+        "2": 77,
+        "101": 8
+      }
+    }
+  },
+  "after": {
+    "entries": 2371,
+    "match": 1674,
+    "svg_mismatch": 616,
+    "invalid_reference": 79,
+    "valid_non_svg_error": 2,
+    "cli_exits": {
+      "0": 2310,
+      "1": 61
+    },
+    "invalid_cli_exits": {
+      "0": 20,
+      "1": 59
+    },
+    "valid_errors": [
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+    ],
+    "cli_panics": [],
+    "library_render_panics": [
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+    ],
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 616,
+        "0": 1674,
+        "2": 79,
+        "3": 2
+      },
+      "product_library": {
+        "1": 616,
+        "0": 1674,
+        "2": 77,
+        "101": 4
+      },
+      "assisted_library": {
+        "1": 658,
+        "0": 1632,
+        "2": 77,
+        "101": 4
+      }
+    }
+  },
+  "cohorts": {
+    "frozen2281": {
+      "before": {
+        "entries": 2281,
+        "match": 1611,
+        "svg_mismatch": 593,
+        "invalid_reference": 77,
+        "valid_non_svg_error": 0,
+        "cli_exits": {
+          "0": 2224,
+          "1": 57
+        },
+        "invalid_cli_exits": {
+          "0": 20,
+          "1": 57
+        },
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 593,
+            "0": 1611,
+            "2": 77
+          },
+          "product_library": {
+            "1": 593,
+            "0": 1611,
+            "2": 75,
+            "101": 2
+          },
+          "assisted_library": {
+            "1": 635,
+            "0": 1569,
+            "2": 75,
+            "101": 2
+          }
+        }
+      },
+      "after": {
+        "entries": 2281,
+        "match": 1611,
+        "svg_mismatch": 593,
+        "invalid_reference": 77,
+        "valid_non_svg_error": 0,
+        "cli_exits": {
+          "0": 2224,
+          "1": 57
+        },
+        "invalid_cli_exits": {
+          "0": 20,
+          "1": 57
+        },
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 593,
+            "0": 1611,
+            "2": 77
+          },
+          "product_library": {
+            "1": 593,
+            "0": 1611,
+            "2": 75,
+            "101": 2
+          },
+          "assisted_library": {
+            "1": 635,
+            "0": 1569,
+            "2": 75,
+            "101": 2
+          }
+        }
+      }
+    },
+    "checker64": {
+      "before": {
+        "entries": 64,
+        "match": 33,
+        "svg_mismatch": 27,
+        "invalid_reference": 2,
+        "valid_non_svg_error": 2,
+        "cli_exits": {
+          "0": 60,
+          "1": 4
+        },
+        "invalid_cli_exits": {
+          "1": 2
+        },
+        "valid_errors": [
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ],
+        "cli_panics": [],
+        "library_render_panics": [
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 27,
+            "0": 33,
+            "3": 2,
+            "2": 2
+          },
+          "product_library": {
+            "1": 27,
+            "0": 33,
+            "101": 2,
+            "2": 2
+          },
+          "assisted_library": {
+            "1": 27,
+            "0": 33,
+            "101": 2,
+            "2": 2
+          }
+        }
+      },
+      "after": {
+        "entries": 64,
+        "match": 41,
+        "svg_mismatch": 19,
+        "invalid_reference": 2,
+        "valid_non_svg_error": 2,
+        "cli_exits": {
+          "0": 60,
+          "1": 4
+        },
+        "invalid_cli_exits": {
+          "1": 2
+        },
+        "valid_errors": [
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ],
+        "cli_panics": [],
+        "library_render_panics": [
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 19,
+            "0": 41,
+            "3": 2,
+            "2": 2
+          },
+          "product_library": {
+            "1": 19,
+            "0": 41,
+            "101": 2,
+            "2": 2
+          },
+          "assisted_library": {
+            "1": 19,
+            "0": 41,
+            "101": 2,
+            "2": 2
+          }
+        }
+      }
+    },
+    "maker24": {
+      "before": {
+        "entries": 24,
+        "match": 4,
+        "svg_mismatch": 16,
+        "invalid_reference": 0,
+        "valid_non_svg_error": 4,
+        "cli_exits": {
+          "0": 20,
+          "1": 4
+        },
+        "invalid_cli_exits": {},
+        "valid_errors": [
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_legacy.puml",
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_teoz.puml",
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_legacy.puml",
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_teoz.puml"
+        ],
+        "cli_panics": [],
+        "library_render_panics": [
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_legacy.puml",
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_teoz.puml",
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_legacy.puml",
+          "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_teoz.puml"
+        ],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 16,
+            "0": 4,
+            "3": 4
+          },
+          "product_library": {
+            "1": 16,
+            "0": 4,
+            "101": 4
+          },
+          "assisted_library": {
+            "1": 16,
+            "0": 4,
+            "101": 4
+          }
+        }
+      },
+      "after": {
+        "entries": 24,
+        "match": 22,
+        "svg_mismatch": 2,
+        "invalid_reference": 0,
+        "valid_non_svg_error": 0,
+        "cli_exits": {
+          "0": 24
+        },
+        "invalid_cli_exits": {},
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 22,
+            "1": 2
+          },
+          "product_library": {
+            "0": 22,
+            "1": 2
+          },
+          "assisted_library": {
+            "0": 22,
+            "1": 2
+          }
+        }
+      }
+    },
+    "creole_handoff2": {
+      "before": {
+        "entries": 2,
+        "match": 0,
+        "svg_mismatch": 2,
+        "invalid_reference": 0,
+        "valid_non_svg_error": 0,
+        "cli_exits": {
+          "0": 2
+        },
+        "invalid_cli_exits": {},
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 2
+          },
+          "product_library": {
+            "1": 2
+          },
+          "assisted_library": {
+            "1": 2
+          }
+        }
+      },
+      "after": {
+        "entries": 2,
+        "match": 0,
+        "svg_mismatch": 2,
+        "invalid_reference": 0,
+        "valid_non_svg_error": 0,
+        "cli_exits": {
+          "0": 2
+        },
+        "invalid_cli_exits": {},
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 2
+          },
+          "product_library": {
+            "1": 2
+          },
+          "assisted_library": {
+            "1": 2
+          }
+        }
+      }
+    }
+  },
+  "gains": [
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_hide_legacy.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "36370f90a4c7c9aab2beaee11ac3b632f1bef4f17cfe296d5f54c38ba3abb30a",
+      "after_svg_sha256": "1b2e2666aab48c799926aa248d99ce2e4f1483966c31e9ccc0d704773e8a4ca2"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_hide_teoz.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "a1d00cbe7606e6036d04689ed29639ddf8295643ea7c76e18592c3b6f2319ae9",
+      "after_svg_sha256": "85fa5644f6d22fdc08518c75b4f11cade0b0f7da3551347f09761098aa09aa8f"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_below_legacy.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "87d4ccc82e827551001460764468f0ce353ce84d09225369719cc5d43768f642",
+      "after_svg_sha256": "ee9e0ec5c7c748d2a3ad85787638bd7f585632523f1f69339b64a2243244b7e5"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_below_teoz.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "b9ef19e748b1095953b74a9b358c88d7441b497d60fd7996a1f15bb12d30b304",
+      "after_svg_sha256": "a8f9bdc5ffbc6a1a859fa3ceab395368506ab5d29534c23cdfe8b83ea929f491"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_legacy.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "536983b47694b1b2de37099ecae855feb84b80046b672dfe46ea63f3a14fdcaa",
+      "after_svg_sha256": "015c587057a145106012cb503b66cdae42289cf3d4e5bccf815747c73c4b2afd"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_teoz.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "4e499e08e102504a827d8fbebf0a48c0aa848888c5d60d17be564579faf25c4e",
+      "after_svg_sha256": "b29c880a3a9dda0394dce60c1eeceb812e2ee2dfa529af0eeebe3b20b675bb39"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_legacy.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "4fc56fd40ab8e4441e949d95b73858d9c992f5a6b1bdfe0845ae8058cacbdc82",
+      "after_svg_sha256": "8f755fc397e0410b797a213978ce18cc3d9dfd9a1f2a12695ee0e389cb65182f"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_teoz.puml",
+      "cohort": "independent64",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "8294aa3ba01b3cbe7f743a1ceb331bf9f7958acf092f9558d6a883d2b30605a3",
+      "after_svg_sha256": "9d77cafe9e4c6d0c3ff8fd0a97be63395e2bbebe151696b9f5ec1f6f8bc063bb"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_kinds_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "807f32383663de45a2efae53c581bef022c08ea63fb7ce0288d0d9ac8696c75e",
+      "after_svg_sha256": "edeeb47a62903266556027a9827d01639e5100949b0e792c9389472b78743ce8"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_kinds_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "b7bbe64e911518597333730fc768279fdc2f4bae85156927de0d574cfad9acb3",
+      "after_svg_sha256": "d1e1372656e69234d7c3350285c7a8acfe7ffc2ba6f0582d9935ffdc4358b5b8"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_created_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "db96a3c226c170629585d0fbd535edfda374a444a73c7d424a15420b53621b05",
+      "after_svg_sha256": "d989e86e035009d04af4152faefe71a80636506ea948e0670d4dff275433a817"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_created_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "589ef6402c8e6188d4674a1998a911ba94b7bbb47409e483111ddf9109b62436",
+      "after_svg_sha256": "7dd6e164d14e283ee930f9878a17653a135319deb5dd989b563d8eb5887df319"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_order_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "3f274a3abbe5d47e2f067cf9d15b14f661e6a8faf9c987fe7ab5b24754a436c3",
+      "after_svg_sha256": "4c8355a2d591c76b4ffe8893202227193910d7d0b55d7dcf597986a1b6b73608"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_order_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "4234a8acdaa039a4396563fff157bc0eae9cdf351e9faf8111428b1754643b32",
+      "after_svg_sha256": "7d451ffa4f792329c4b04a07c9021bb3df235a964486000b7e56c17202ae9d17"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_created_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "629389c5c80213a25d7cadfa12723ba31a3889884d81a3b7a5855d5cf2e9f5e3",
+      "after_svg_sha256": "47e8e92afbd8fd70558eba94fb2ca9aba4c050fef515bad965895f2959ba5185"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_created_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "dbc99c7cb2f330be5c6c1ceb3b6eef1a94696f52d143f477e36663e94b117b57",
+      "after_svg_sha256": "3b185d3d8ba3bac546c08d9e863f483f992b5cd6edcf838b67f3187e878a5fc9"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 3,
+      "after_status": 0,
+      "before_cli": 1,
+      "after_cli": 0,
+      "before_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_svg_sha256": "68c2d4eac3743c597b9dadfafb1a4587c8318ae0f8cd7ccc53a32985562efca7"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 3,
+      "after_status": 0,
+      "before_cli": 1,
+      "after_cli": 0,
+      "before_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_svg_sha256": "ca8a53e8ad56084247a53132eeef04968426ad205dd97d32d5629a87a6a2cf45"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 3,
+      "after_status": 0,
+      "before_cli": 1,
+      "after_cli": 0,
+      "before_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_svg_sha256": "0a8ef37d4b6752f33418bb8f8b249bd0fcd970b58a55dbdc548be78f96106f1f"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 3,
+      "after_status": 0,
+      "before_cli": 1,
+      "after_cli": 0,
+      "before_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after_svg_sha256": "28194dad6b90530141479c6a00207ff9c483de57ee5bbee043617e31fffbf54e"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_in_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "35bd1269165af0c5f7f712ec997b7a15948754098822b960735607603b0f90fe",
+      "after_svg_sha256": "5ef69f6d07c85a982ea2f07f16e45864ca16b74b0fa7aa51f54db5099349ebe9"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_in_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "14710259a45d63e9240cfae026d8e4fb28dd42ccf16ef6bbaa78f3fbf9ee081f",
+      "after_svg_sha256": "ef2fe640a35c4d5fcfd7fbe5dbe497960b0fd5e7a257c28d94cfdb0653108f85"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_out_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "04a49f3a46be6553863df4e7faf77107696cd1de6c4a07d2dee8aa1bb4128e76",
+      "after_svg_sha256": "9f9af99a9407dcf930465e7966dad22ef43d3df21f6f0a7b58c9b800fbbdedac"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_stale_owner_legacy.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "52329a8168984a9577c913fbc45e58d8c1d68b43237de8b01c0928162d2a723e",
+      "after_svg_sha256": "0bc2190e8c5568b79ec13bd5c64e4511dbad5a459a2467929f86d281e03e0ed3"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_stale_owner_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "122a253f0682c74c5b611aefc496afe932b53b132e76f1620ca92dfa78a61465",
+      "after_svg_sha256": "c25c1c422aab53ac94b09382481b936b035742632f60482e3717530564758bbe"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_right_in_teoz.puml",
+      "cohort": "maker24",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "c5b70632fb967f2d93fc20bf317ee85a36f46d160c64d5026f27739b95146377",
+      "after_svg_sha256": "f1eafc62a389e29f0929c76f5c6bc3e1d702e2a876a4f2cf94bfddcf8fa2b3a8"
+    }
+  ],
+  "losses_by_mode": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "new_valid_cli_errors": [],
+  "main_library_tiers": {
+    "product_pass": 11181,
+    "eligible": 11251,
+    "assisted_pass": 10497,
+    "assisted_failures": 754,
+    "skipped": 1299,
+    "sequence": "1411/1411",
+    "changes": {
+      "no_oracle_failure_names.txt": {
+        "recovered": [],
+        "newly_failing": [],
+        "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+        "snapshot": "Copied immediately after final main/guard/standing command at 61e6aeed6; before is immutable 0cde maker snapshot."
+      },
+      "golden_failure_names.txt": {
+        "recovered": [],
+        "newly_failing": [],
+        "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+        "snapshot": "Copied immediately after final main/guard/standing command at 61e6aeed6; before is immutable 0cde maker snapshot."
+      }
+    },
+    "label": "Library APIs, not 11251 CLI subprocesses"
+  },
+  "units": {
+    "parser": 579,
+    "renderer": 798,
+    "cli_pipe": 13,
+    "ascii_included": 12
+  },
+  "guards": "4/6; historic evidence/provenance red gates plus unreviewed new accounts remain red",
+  "standing_perturbations": {
+    "entries": 1576,
+    "failures": 660,
+    "matches": 916,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/crates/rustuml-oracle"
+  },
+  "broad_runs": 1
+}

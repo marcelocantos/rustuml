@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+<style>
+sequenceDiagram {
+note {
+Shadowing nonnumeric
+}
+}
+</style>
+Cedar -> Juniper ++ : enter
+note right : first\nshort
+return done
+@enduml

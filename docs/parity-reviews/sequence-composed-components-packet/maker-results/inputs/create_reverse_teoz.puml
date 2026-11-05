@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+skinparam participantFontSize 20
+skinparam sequenceMessageFontSize 9
+skinparam shadowing true
+participant Left
+participant Right
+create Left
+Right -> Left: create
+Left --> Right: response
+@enduml

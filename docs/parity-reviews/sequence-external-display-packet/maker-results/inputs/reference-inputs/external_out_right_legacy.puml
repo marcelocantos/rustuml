@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Finch
+activate Finch
+create Finch
+Finch ->]: leave
+deactivate Finch
+@enduml

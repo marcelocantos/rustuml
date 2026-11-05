@@ -1,0 +1,42 @@
+{
+  "validated": true,
+  "cases": 30,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.Vq6Awd0O",
+  "hashes": {
+    "reference-results.json.gz": "3250de742a5986122db2a9028fde28fc41f400d5718a63afc3684fb4c1634549",
+    "reference-transport.json": "7e54c9754ea2b511e61ceb2fafe838b2d5e2827da9951d2e746dcdbfb314e860"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "0": 22,
+    "200": 8
+  },
+  "intended_invalid": [
+    "bare_over_inline_legacy",
+    "bare_over_inline_teoz",
+    "bare_over_multiline_legacy",
+    "bare_over_multiline_teoz",
+    "message_gap_em_legacy",
+    "message_gap_narrow_legacy",
+    "terminator_gap_em_teoz",
+    "terminator_gap_narrow_teoz"
+  ],
+  "intended_invalid_exit0": [],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "bare_over_inline_legacy",
+    "bare_over_inline_teoz",
+    "bare_over_multiline_legacy",
+    "bare_over_multiline_teoz",
+    "message_gap_em_legacy",
+    "message_gap_narrow_legacy",
+    "terminator_gap_em_teoz",
+    "terminator_gap_narrow_teoz"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

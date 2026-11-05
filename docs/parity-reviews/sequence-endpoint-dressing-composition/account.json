@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-endpoint-dressing-composition",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.command.CommandArrow#executeArg",
+    "skin.ArrowConfiguration#withHead1/#withHead2/#reverseDefine",
+    "skin.rose.ComponentRoseArrow#drawInternalU/#drawDressing1/#drawDressing2",
+    "skin.rose.ComponentRoseSelfArrow#drawLeftSide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/sequence.rs::Arrow",
+    "crates/rustuml-parser/src/parse/sequence.rs::parse_arrow",
+    "crates/rustuml-render/src/sequence.rs::message_filled_arrow/message_open_arrow"
+  ],
+  "invariant": "Each semantic endpoint retains its own head, part and circle independently; physical left/right dressings paint in Java order and contribute their own head/stroke transforms. Normalized grammar decides inversion.",
+  "causal_divergence": "Rust infers a bidirectional source head from the target and applies circle shortening without translating that head. Half inversion tests the decorated raw prefix rather than its dressing. Self endpoint calculations must be audited against the same configuration.",
+  "planned_change": "Add serde-defaulted source_dressing, preserve old missing-field compatibility, parse both normalized dressings, and use endpoint composition for ordinary paint/stroke. Trace self full/half/async branches before changing them. The only ASCII edits authorized are source_dressing: None in its two existing Arrow test constructors; actual ASCII outputs remain separately measured.",
+  "perturbation_axes": [
+    "independent left/right head and circle combinations",
+    "reverse half-head/activation/self topology",
+    "legacy versus Teoz"
+  ],
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "evidence_import": "9d81627b",
+  "account_date": "2026-11-04",
+  "status": "preimplementation hypothesis; independent review required"
+}

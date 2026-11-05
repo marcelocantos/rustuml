@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : <size:25></size>\n<color:red></color>\n<size:25><b></b></size>\n<b>
+@enduml

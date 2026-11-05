@@ -1,0 +1,1005 @@
+{
+  "schema_version": 1,
+  "review_candidate": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "resources": [],
+  "cases": [
+    {
+      "name": "factory_order",
+      "remote_name": "factory_order.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_order.puml",
+      "source_bytes": 121,
+      "source_sha256": "728d296003104f87b029898cfd77a6b8a2a880bf19a41f9bfb47df369f58646d",
+      "source_base64": "QHN0YXJ0dW1sCkNlZGFyIG8tLT4+byBNYXBsZTogYmVmb3JlIGRlY2xhcmF0aW9ucwpwYXJ0aWNpcGFudCBNYXBsZQpwYXJ0aWNpcGFudCBDZWRhcgpNYXBsZSBvPDwtLW8gQ2VkYXI6IGFuc3dlcgpAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "command order",
+        "reverse async circles"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "factory_quoted_header",
+      "remote_name": "factory_quoted_header.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_quoted_header.puml",
+      "source_bytes": 163,
+      "source_sha256": "675ee97de2325f04f38cf84d42e9de815bdca292a4c0caea5e15885bef7a5c3b",
+      "source_base64": "QHN0YXJ0dW1sCmhlYWRlcgpjbGFzcyBGYWtlIG8tLSBOb2RlCmVuZGhlYWRlcgpwYXJ0aWNpcGFudCAiQ2VkYXIgby0tIGNsYXNzIiBhcyBDCnBhcnRpY2lwYW50IE1hcGxlIGFzIE0KQyBvLS0+Pm8gTTogcXVvdGVkCicgY2xhc3MgRGVjb3kKTSBvPC0tbyBDOiByZXBseQpAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "header and comment commands",
+        "quoted alias"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "factory_mixed_after",
+      "remote_name": "factory_mixed_after.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_mixed_after.puml",
+      "source_bytes": 56,
+      "source_sha256": "02ae1bd857450d2c0828cf24e211735e5609a894b7e94625774a04736c8c4312",
+      "source_base64": "QHN0YXJ0dW1sCkNlZGFyIG8tLT4+byBNYXBsZTogZmlyc3QKY2xhc3MgQ2VkYXIKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "declaration order",
+        "mixed class"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "factory_unknown",
+      "remote_name": "factory_unknown.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_unknown.puml",
+      "source_bytes": 105,
+      "source_sha256": "345e3fb9ffa8c68585acc76ec0691896ecf2752f68a38fa40b302df3f9a2f975",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIG8tLT4+byBNYXBsZTogZmlyc3QKdGhpcyBjb21tYW5kIGlzIG5vdCByZWFsCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "unknown command",
+        "decorated trigger"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "factory_unclosed_group",
+      "remote_name": "factory_unclosed_group.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_unclosed_group.puml",
+      "source_bytes": 93,
+      "source_sha256": "84c2976da5b97ffacb1d8413d8e582bcda923c3a53c042d2556ee77c999b74d2",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCmxvb3AgcGVuZGluZwpDZWRhciBvLS0+Pm8gTWFwbGU6IGZpcnN0CkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "unfinished group",
+        "decorated trigger"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "factory_unclosed_box",
+      "remote_name": "factory_unclosed_box.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_unclosed_box.puml",
+      "source_bytes": 92,
+      "source_sha256": "4e1a3bf3ac95d2f3decbb58c7e28cdf24f5175c31b2ef709480960f5e768dd29",
+      "source_base64": "QHN0YXJ0dW1sCmJveCBwZW5kaW5nCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIG8tLT4+byBNYXBsZTogZmlyc3QKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "unfinished box",
+        "decorated trigger"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "factory_class_control",
+      "remote_name": "factory_class_control.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_class_control.puml",
+      "source_bytes": 58,
+      "source_sha256": "890b5df25872e1b2d966643d56c7bebddfb2391a46e11f4c8e01445e5a864cec",
+      "source_base64": "QHN0YXJ0dW1sCmNsYXNzIENlZGFyCmNsYXNzIE1hcGxlCkNlZGFyIG8tLSBNYXBsZQpAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "factory ownership",
+        "class"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "factory_object_control",
+      "remote_name": "factory_object_control.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_object_control.puml",
+      "source_bytes": 60,
+      "source_sha256": "4a44bf4d4c3f987283e5696e4abd6a965812dfbaae10950fefbda93b96d08375",
+      "source_base64": "QHN0YXJ0dW1sCm9iamVjdCBDZWRhcgpvYmplY3QgTWFwbGUKQ2VkYXIgby0tIE1hcGxlCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "factory ownership",
+        "object"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "factory_component_control",
+      "remote_name": "factory_component_control.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_component_control.puml",
+      "source_bytes": 66,
+      "source_sha256": "39595c100c46fdf21218b0c8bb5897ae405f17f448a39bae4ca4eb0dc4ec492b",
+      "source_base64": "QHN0YXJ0dW1sCmNvbXBvbmVudCBDZWRhcgpjb21wb25lbnQgTWFwbGUKQ2VkYXIgby0tIE1hcGxlCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "factory ownership",
+        "component"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "factory_bare_circle",
+      "remote_name": "factory_bare_circle.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_bare_circle.puml",
+      "source_bytes": 35,
+      "source_sha256": "6bdedb9b3168db602f6ba0a0d5afd1e8b0f4e57cd2e64814109df554243a4e1b",
+      "source_base64": "QHN0YXJ0dW1sCkNlZGFyIG8tLW8gTWFwbGUKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "missing head",
+        "both circles"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "endpoint_half_legacy",
+      "remote_name": "endpoint_half_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_half_legacy.puml",
+      "source_bytes": 182,
+      "source_sha256": "7bf9ba7368d4d430ace1ea4ada8012ef51c6affafb9d4fb8c0da1ef7a4962714",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIG8vLy0tXG8gTWFwbGU6IGNyb3NzZWQgaGFsdmVzCk1hcGxlIG9cXC0tL28gQ2VkYXI6IHJldmVyc2UKQ2VkYXIgbzwtLT4+byBNYXBsZSArKzogYWN0aXZhdGUKTWFwbGUgbzw8LS0+byBDZWRhciAtLTogY2xvc2UKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "independent half and async dressings",
+        "reverse order and activation",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "endpoint_self_legacy",
+      "remote_name": "endpoint_self_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_self_legacy.puml",
+      "source_bytes": 155,
+      "source_sha256": "e085f4a8c4de1df4b28aaf7a0c2c547c2f2c0f760fc635b8b24385778db0f859",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCkNlZGFyIG88PC0+byBDZWRhcjogb3BlbiBzb3VyY2UKQ2VkYXIgbzwtLT4+byBDZWRhcjogb3BlbiB0YXJnZXQKQ2VkYXIgb1wtLW8gQ2VkYXI6IGhhbGYKQ2VkYXIgby8vLS1vIENlZGFyOiB0aGluIGhhbGYKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "mixed self heads",
+        "half and circles",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "endpoint_external_legacy",
+      "remote_name": "endpoint_external_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_external_legacy.puml",
+      "source_bytes": 138,
+      "source_sha256": "0d97a698cf3c5234dc2b6225df1b037049b540330a020ceb90963c486169e3aa",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCltvLT4gQ2VkYXI6IGluY29taW5nCkNlZGFyIG8tPm9dOiBvdXRnb2luZwpbPC1vIENlZGFyOiByZXZlcnNlIGluY29taW5nCkNlZGFyIG88LS1dOiByZXZlcnNlIG91dGdvaW5nCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "external endpoints",
+        "direction and circles",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "endpoint_negative_legacy",
+      "remote_name": "endpoint_negative_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_negative_legacy.puml",
+      "source_bytes": 79,
+      "source_sha256": "61615bc1d32cd0a84eaa6154c2d5ade97dc0847541023fb963512941f4e8170f",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIC1vPiBNYXBsZTogaW52YWxpZApAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "invalid decoration placement",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "body_blocks_legacy",
+      "remote_name": "body_blocks_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_blocks_legacy.puml",
+      "source_bytes": 226,
+      "source_sha256": "e0a23a8605ba11dacedeea1b25728755a4c6d3f2a8a0608d4ab484b1e3171520",
+      "source_base64": "QHN0YXJ0dW1sCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIC0+IE1hcGxlOiBhdHRhY2hlZApub3RlIHJpZ2h0Cj09IExvbmcgc2VjdGlvbiBoZWFkaW5nID09CngKc2Vjb25kIGJvZHkKLi4gLi4KX18gbmFycm93IF9fCmEgbXVjaCBsb25nZXIgYm9keSB0aGFuIGl0cyB0aXRsZQotLSBlbXB0eSAtLQplbmQgbm90ZQpNYXBsZSAtPiBDZWRhcjogZG9uZQpAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "empty and nonempty multiple sections",
+        "title and body width",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "body_right_legacy",
+      "remote_name": "body_right_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_right_legacy.puml",
+      "source_bytes": 189,
+      "source_sha256": "07da1c73938d058014d0c80760587537b3cf8249e7db9dd0b64de537d85e6cf3",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBub3RlVGV4dEFsaWdubWVudCByaWdodApza2lucGFyYW0gbm90ZUZvbnRTaXplIDE3CnBhcnRpY2lwYW50IENlZGFyCm5vdGUgb3ZlciBDZWRhcgotLSBMb25nIGNhcCAtLQp4CmJvZHkgd2l0aCB3aWR0aAo9PSBaID09CnNtYWxsCmVuZCBub3RlCkNlZGFyIC0+IENlZGFyOiB0YWlsCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "right alignment and font size",
+        "standalone self topology",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "body_center_legacy",
+      "remote_name": "body_center_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_center_legacy.puml",
+      "source_bytes": 188,
+      "source_sha256": "8fa2019f55b15e47cd3aaf7cde53577d0d2bffb41d35467f5462a9b9e35e35ae",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBub3RlVGV4dEFsaWdubWVudCBjZW50ZXIKcGFydGljaXBhbnQgQ2VkYXIKcGFydGljaXBhbnQgTWFwbGUKbm90ZSBvdmVyIENlZGFyLCBNYXBsZQppbnRybwpfXyBDYXAgX18Kc21hbGwKYSBsb25nZXIgYm9keQouLiBFbmQgLi4KZW5kIG5vdGUKQ2VkYXIgLT4gTWFwbGU6IHRhaWwKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "center alignment",
+        "multiple sections across participants",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "create_scoped_legacy",
+      "remote_name": "create_scoped_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_scoped_legacy.puml",
+      "source_bytes": 221,
+      "source_sha256": "12514d458299cb93d5d6ead5142171d4ea51aeac8732093e6344a4000b3761f2",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4Kc2VxdWVuY2VEaWFncmFtIHsKIGFjdG9yIHsKIFNoYWRvd2luZyA3CiB9CiBwYXJ0aWNpcGFudCB7CiBTaGFkb3dpbmcgMgogfQp9Cjwvc3R5bGU+CnBhcnRpY2lwYW50IENlZGFyCmFjdG9yICJMb25nIE1hcGxlIiBhcyBNYXBsZQpjcmVhdGUgTWFwbGUKQ2VkYXIgLT4gTWFwbGUgKys6IGNyZWF0ZQpNYXBsZSAtPiBDZWRhciAtLTogcmVwbHkKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "actor versus participant scoped shadow",
+        "activation",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "create_reverse_nested_legacy",
+      "remote_name": "create_reverse_nested_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_reverse_nested_legacy.puml",
+      "source_bytes": 168,
+      "source_sha256": "46b96fb6a1304524ae67a6b241207fce79b00f643417b2b10b38c68b716547c4",
+      "source_base64": "QHN0YXJ0dW1sCmFjdG9yIENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCmxvb3Agb3V0ZXIKYWx0IGJyYW5jaApjcmVhdGUgQ2VkYXIKTWFwbGUgLT4gQ2VkYXI6IGNyZWF0ZQpDZWRhciAtPiBNYXBsZTogcmVwbHkKZWxzZSBvdGhlcgpNYXBsZSAtPiBNYXBsZTogc2VsZgplbmQKZW5kCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "reverse creation",
+        "nested loop alt",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "queue_stereo_legacy",
+      "remote_name": "queue_stereo_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_stereo_legacy.puml",
+      "source_bytes": 171,
+      "source_sha256": "b92c0809a9bdef06b9281155ed92e6d7f009cae33fafda1f842d45f438d17825",
+      "source_base64": "QHN0YXJ0dW1sCmJveCBXb3JrZXJzCnBhcnRpY2lwYW50IENlZGFyCnF1ZXVlICJMb25nIE1hcGxlIiBhcyBNYXBsZSA8PHdvcms+PgplbmQgYm94CmNyZWF0ZSBNYXBsZQpDZWRhciAtPiBNYXBsZSArKzogY3JlYXRlCk1hcGxlIC0+IENlZGFyIC0tOiByZXBseQpkZXN0cm95IE1hcGxlCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "stereotype in box",
+        "activation destruction",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "queue_only_legacy",
+      "remote_name": "queue_only_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_only_legacy.puml",
+      "source_bytes": 130,
+      "source_sha256": "1926965f0adbb48e3cdb8bbf44b13a1a51472d8f0c37c6490b6094f19b09a7af",
+      "source_base64": "QHN0YXJ0dW1sCnF1ZXVlIENlZGFyCnF1ZXVlIE1hcGxlCmNyZWF0ZSBDZWRhcgpNYXBsZSAtPiBDZWRhcjogY3JlYXRlCmxvb3Agd29yawpDZWRhciAtPiBNYXBsZTogZGVsaXZlcgplbmQKZGVzdHJveSBDZWRhcgpAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "queue-only reverse creation",
+        "loop destruction",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "head_scoped_legacy",
+      "remote_name": "head_scoped_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/head_scoped_legacy.puml",
+      "source_bytes": 186,
+      "source_sha256": "74c2001529e3f1f70a4f5dd53da9bcd11d1961f1598e10aaad95f22dbbd87fdd",
+      "source_base64": "QHN0YXJ0dW1sCjxzdHlsZT4Kc2VxdWVuY2VEaWFncmFtIHsKIGFjdG9yIHsKIFNoYWRvd2luZyA3CiB9CiBwYXJ0aWNpcGFudCB7CiBTaGFkb3dpbmcgMgogfQp9Cjwvc3R5bGU+CmFjdG9yIENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIC0+IE1hcGxlOiBmaXJzdApNYXBsZSAtPiBDZWRhcjogc2Vjb25kCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-resolved-head-alignment",
+      "axes": [
+        "unequal sibling shadow",
+        "message direction",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "head_participant_legacy",
+      "remote_name": "head_participant_legacy.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/head_participant_legacy.puml",
+      "source_bytes": 179,
+      "source_sha256": "25bde86456f698dae1638f9dc58189877035a52ca9cffcee269522b3126d2986",
+      "source_base64": "QHN0YXJ0dW1sCnNraW5wYXJhbSBhY3RvclNoYWRvd2luZyBmYWxzZQpza2lucGFyYW0gcGFydGljaXBhbnRTaGFkb3dpbmcgdHJ1ZQpwYXJ0aWNpcGFudCAiVGFsbFxuTWFwbGUiIGFzIE1hcGxlCmFjdG9yIENlZGFyCkNlZGFyIC0+IE1hcGxlOiByZXZlcnNlCk1hcGxlIC0+IENlZGFyOiBhbnN3ZXIKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-resolved-head-alignment",
+      "axes": [
+        "participant-only shadow",
+        "multiline sibling and order",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "endpoint_half_teoz",
+      "remote_name": "endpoint_half_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_half_teoz.puml",
+      "source_bytes": 200,
+      "source_sha256": "61b2a69852ccb7df308a14da9aece596608a6b5bc182273084953dead47befc1",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIG8vLy0tXG8gTWFwbGU6IGNyb3NzZWQgaGFsdmVzCk1hcGxlIG9cXC0tL28gQ2VkYXI6IHJldmVyc2UKQ2VkYXIgbzwtLT4+byBNYXBsZSArKzogYWN0aXZhdGUKTWFwbGUgbzw8LS0+byBDZWRhciAtLTogY2xvc2UKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "independent half and async dressings",
+        "reverse order and activation",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "endpoint_self_teoz",
+      "remote_name": "endpoint_self_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_self_teoz.puml",
+      "source_bytes": 173,
+      "source_sha256": "345f655e8f001fa294720dde2842512aac800a414531b907a576e9c4117f8dd8",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCkNlZGFyIG88PC0+byBDZWRhcjogb3BlbiBzb3VyY2UKQ2VkYXIgbzwtLT4+byBDZWRhcjogb3BlbiB0YXJnZXQKQ2VkYXIgb1wtLW8gQ2VkYXI6IGhhbGYKQ2VkYXIgby8vLS1vIENlZGFyOiB0aGluIGhhbGYKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "mixed self heads",
+        "half and circles",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "endpoint_external_teoz",
+      "remote_name": "endpoint_external_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_external_teoz.puml",
+      "source_bytes": 156,
+      "source_sha256": "23e2423a8be0efd5f614fe731d7919a67f645cca0035ff671cfebae71b3575f9",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCltvLT4gQ2VkYXI6IGluY29taW5nCkNlZGFyIG8tPm9dOiBvdXRnb2luZwpbPC1vIENlZGFyOiByZXZlcnNlIGluY29taW5nCkNlZGFyIG88LS1dOiByZXZlcnNlIG91dGdvaW5nCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "external endpoints",
+        "direction and circles",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "endpoint_negative_teoz",
+      "remote_name": "endpoint_negative_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_negative_teoz.puml",
+      "source_bytes": 97,
+      "source_sha256": "6cef8fb1f4aa1164283bf52aa79e81e0e9b83538ecc296ec6fe69b166de4b2fb",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIC1vPiBNYXBsZTogaW52YWxpZApAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-endpoint-dressing-composition",
+      "axes": [
+        "invalid decoration placement",
+        "teoz"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "body_blocks_teoz",
+      "remote_name": "body_blocks_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_blocks_teoz.puml",
+      "source_bytes": 244,
+      "source_sha256": "29e925d8252d0633b149e40c569a22084bdb1a44cbf491027133f66d0fba2a29",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnBhcnRpY2lwYW50IENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIC0+IE1hcGxlOiBhdHRhY2hlZApub3RlIHJpZ2h0Cj09IExvbmcgc2VjdGlvbiBoZWFkaW5nID09CngKc2Vjb25kIGJvZHkKLi4gLi4KX18gbmFycm93IF9fCmEgbXVjaCBsb25nZXIgYm9keSB0aGFuIGl0cyB0aXRsZQotLSBlbXB0eSAtLQplbmQgbm90ZQpNYXBsZSAtPiBDZWRhcjogZG9uZQpAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "empty and nonempty multiple sections",
+        "title and body width",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "body_right_teoz",
+      "remote_name": "body_right_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_right_teoz.puml",
+      "source_bytes": 207,
+      "source_sha256": "cbd62b988ea3eb5cf0bbd943d6324a4bf53cf536dba2a21649c35890cccd024d",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnNraW5wYXJhbSBub3RlVGV4dEFsaWdubWVudCByaWdodApza2lucGFyYW0gbm90ZUZvbnRTaXplIDE3CnBhcnRpY2lwYW50IENlZGFyCm5vdGUgb3ZlciBDZWRhcgotLSBMb25nIGNhcCAtLQp4CmJvZHkgd2l0aCB3aWR0aAo9PSBaID09CnNtYWxsCmVuZCBub3RlCkNlZGFyIC0+IENlZGFyOiB0YWlsCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "right alignment and font size",
+        "standalone self topology",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "body_center_teoz",
+      "remote_name": "body_center_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_center_teoz.puml",
+      "source_bytes": 206,
+      "source_sha256": "bd6d9b72727943cb73952467b63e9c58dcaa904c8ccc349e6fe7eb12a000c7a2",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnNraW5wYXJhbSBub3RlVGV4dEFsaWdubWVudCBjZW50ZXIKcGFydGljaXBhbnQgQ2VkYXIKcGFydGljaXBhbnQgTWFwbGUKbm90ZSBvdmVyIENlZGFyLCBNYXBsZQppbnRybwpfXyBDYXAgX18Kc21hbGwKYSBsb25nZXIgYm9keQouLiBFbmQgLi4KZW5kIG5vdGUKQ2VkYXIgLT4gTWFwbGU6IHRhaWwKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "center alignment",
+        "multiple sections across participants",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "create_scoped_teoz",
+      "remote_name": "create_scoped_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_scoped_teoz.puml",
+      "source_bytes": 239,
+      "source_sha256": "879eebb37121e64da3a6ee3f5344c63c1b51c8c434b4aad809db7abd6280e219",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCjxzdHlsZT4Kc2VxdWVuY2VEaWFncmFtIHsKIGFjdG9yIHsKIFNoYWRvd2luZyA3CiB9CiBwYXJ0aWNpcGFudCB7CiBTaGFkb3dpbmcgMgogfQp9Cjwvc3R5bGU+CnBhcnRpY2lwYW50IENlZGFyCmFjdG9yICJMb25nIE1hcGxlIiBhcyBNYXBsZQpjcmVhdGUgTWFwbGUKQ2VkYXIgLT4gTWFwbGUgKys6IGNyZWF0ZQpNYXBsZSAtPiBDZWRhciAtLTogcmVwbHkKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "actor versus participant scoped shadow",
+        "activation",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "create_reverse_nested_teoz",
+      "remote_name": "create_reverse_nested_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_reverse_nested_teoz.puml",
+      "source_bytes": 186,
+      "source_sha256": "b90074b4c5dacad8730b658891c35ba971eb0719e5d06e1a02d1cf9e53a60caa",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCmFjdG9yIENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCmxvb3Agb3V0ZXIKYWx0IGJyYW5jaApjcmVhdGUgQ2VkYXIKTWFwbGUgLT4gQ2VkYXI6IGNyZWF0ZQpDZWRhciAtPiBNYXBsZTogcmVwbHkKZWxzZSBvdGhlcgpNYXBsZSAtPiBNYXBsZTogc2VsZgplbmQKZW5kCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "reverse creation",
+        "nested loop alt",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "queue_stereo_teoz",
+      "remote_name": "queue_stereo_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_stereo_teoz.puml",
+      "source_bytes": 189,
+      "source_sha256": "aad55003a7a6c28d568f288a66b2ecb2a4744458202d257eb50767ccc1a91380",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCmJveCBXb3JrZXJzCnBhcnRpY2lwYW50IENlZGFyCnF1ZXVlICJMb25nIE1hcGxlIiBhcyBNYXBsZSA8PHdvcms+PgplbmQgYm94CmNyZWF0ZSBNYXBsZQpDZWRhciAtPiBNYXBsZSArKzogY3JlYXRlCk1hcGxlIC0+IENlZGFyIC0tOiByZXBseQpkZXN0cm95IE1hcGxlCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "stereotype in box",
+        "activation destruction",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "queue_only_teoz",
+      "remote_name": "queue_only_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_only_teoz.puml",
+      "source_bytes": 148,
+      "source_sha256": "02704796b5034cd0656ae7277892a86cbcdf771edf0adeeb97994ed570ad6dde",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnF1ZXVlIENlZGFyCnF1ZXVlIE1hcGxlCmNyZWF0ZSBDZWRhcgpNYXBsZSAtPiBDZWRhcjogY3JlYXRlCmxvb3Agd29yawpDZWRhciAtPiBNYXBsZTogZGVsaXZlcgplbmQKZGVzdHJveSBDZWRhcgpAZW5kdW1sCg==",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "queue-only reverse creation",
+        "loop destruction",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "head_scoped_teoz",
+      "remote_name": "head_scoped_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/head_scoped_teoz.puml",
+      "source_bytes": 204,
+      "source_sha256": "45a650a375046520676e521c930e82284ca7cc32569c8c25f4628c9ac4ce218c",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCjxzdHlsZT4Kc2VxdWVuY2VEaWFncmFtIHsKIGFjdG9yIHsKIFNoYWRvd2luZyA3CiB9CiBwYXJ0aWNpcGFudCB7CiBTaGFkb3dpbmcgMgogfQp9Cjwvc3R5bGU+CmFjdG9yIENlZGFyCnBhcnRpY2lwYW50IE1hcGxlCkNlZGFyIC0+IE1hcGxlOiBmaXJzdApNYXBsZSAtPiBDZWRhcjogc2Vjb25kCkBlbmR1bWwK",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-resolved-head-alignment",
+      "axes": [
+        "unequal sibling shadow",
+        "message direction",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "head_participant_teoz",
+      "remote_name": "head_participant_teoz.puml",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/head_participant_teoz.puml",
+      "source_bytes": 197,
+      "source_sha256": "eaf0c5950132ca622c6db51e6dea3fc7d800f61f27e708521eee807e7ad9b867",
+      "source_base64": "QHN0YXJ0dW1sCiFwcmFnbWEgdGVveiB0cnVlCnNraW5wYXJhbSBhY3RvclNoYWRvd2luZyBmYWxzZQpza2lucGFyYW0gcGFydGljaXBhbnRTaGFkb3dpbmcgdHJ1ZQpwYXJ0aWNpcGFudCAiVGFsbFxuTWFwbGUiIGFzIE1hcGxlCmFjdG9yIENlZGFyCkNlZGFyIC0+IE1hcGxlOiByZXZlcnNlCk1hcGxlIC0+IENlZGFyOiBhbnN3ZXIKQGVuZHVtbAo=",
+      "resources": [],
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "claim": "sequence-resolved-head-alignment",
+      "axes": [
+        "participant-only shadow",
+        "multiline sibling and order",
+        "teoz"
+      ],
+      "intended_valid": true
+    }
+  ]
+}

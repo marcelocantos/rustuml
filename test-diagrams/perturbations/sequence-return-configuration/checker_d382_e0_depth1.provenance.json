@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth1.puml",
+  "source_sha256": "7f0f2e486ce063e7f273c0eff5d284f0e58fba24b3f27d0d05574ec97ceae64b",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 2.2768242500023916,
+  "stdout_sha256": "bbad08d8547348fa61972aa86b65fe8578a994de3a922a6e55183a2e2427f57a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

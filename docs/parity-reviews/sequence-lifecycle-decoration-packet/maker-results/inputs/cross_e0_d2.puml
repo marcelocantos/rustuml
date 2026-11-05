@@ -1,0 +1,10 @@
+@startuml
+participant Before
+participant Center
+Before -> Center ++ : active
+Before -> Center ++ : active
+Center x-- Center : reverse crossed
+Center --x Center : forward crossed
+Center x-> Center : source crossed
+Center ->x Center : target crossed
+@enduml

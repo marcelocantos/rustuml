@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+skinparam participantFontSize 18
+collections "Archives" as A
+participant Dusk
+A -> Dusk: fetch
+@enduml

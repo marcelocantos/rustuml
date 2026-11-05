@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant A
+participant M
+participant Z
+A -> M ++ : enter
+group border
+M ->] : boundary
+end
+M -> Z : exit
+@enduml

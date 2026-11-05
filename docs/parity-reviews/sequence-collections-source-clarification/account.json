@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "evidence_import": "96e2561122e70ffe53dfa3f102cf18d199cc464f",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-collections-source-clarification",
+  "java_locations": [
+    "skin.rose.Rose#createComponentParticipant",
+    "skin.rose.ComponentRoseParticipant#constructor/#getDeltaCollection"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::collections_shape"
+  ],
+  "invariant": "Collection rectangle margins come from ComponentRoseParticipant with collections=true.",
+  "causal_divergence": "The adjacent ComponentRoseCollections citation names no pinned Java class; the earlier immutable account/history remains as recorded.",
+  "planned_change": "Correct the adjacent source name only, explicitly recording this later clarification without retroactive account modification.",
+  "perturbation_axes": [
+    "plain/collection sibling",
+    "font/label dimensions"
+  ]
+}

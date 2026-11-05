@@ -1,0 +1,18 @@
+{
+  "validated": true,
+  "cases": 16,
+  "calls": 16,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.Vj1RPcfr",
+  "hashes": {
+    "reference-results.json.gz": "9dfcc45130464b349d53a7827ed203885408163653a9cf5557360ef5412acc6b",
+    "reference-transport.json": "f8003e2887f94980b31ef25a5162dbc16ff48ee3f6e00e92e66a6887c4462319"
+  },
+  "exit_statuses": {
+    "0": 16
+  },
+  "nonzero": [],
+  "nonempty_stderr": [],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+box Outer domain #lightblue
+participant Oak
+end box
+participant Elm
+Oak -> Elm : dispatch
+footer accounting
+@enduml

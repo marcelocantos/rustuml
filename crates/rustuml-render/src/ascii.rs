@@ -508,6 +508,7 @@ mod tests {
                     kind: ParticipantKind::Participant,
                     order: Some(i),
                     stereotype: None,
+                    stereotype_position_bottom: false,
                     url: None,
                     color: None,
                     source_line: i + 1,
@@ -516,6 +517,7 @@ mod tests {
             events,
             autonumber: None,
             hide_footbox: false,
+            hide_stereotypes: false,
             teoz: false,
             boxes: Vec::new(),
         }
@@ -523,6 +525,7 @@ mod tests {
 
     fn simple_message(from: &str, to: &str, label: &str) -> Event {
         Event::Message(Message {
+            parallel: false,
             from: from.to_string(),
             to: to.to_string(),
             label: label.to_string(),
@@ -535,6 +538,8 @@ mod tests {
                 thin_head: false,
                 source_cross: false,
                 source_circle: false,
+                target_circle: false,
+                source_dressing: None,
             },
             activation: None,
             activation_color: None,
@@ -544,6 +549,7 @@ mod tests {
 
     fn reply_message(from: &str, to: &str, label: &str) -> Event {
         Event::Message(Message {
+            parallel: false,
             from: from.to_string(),
             to: to.to_string(),
             label: label.to_string(),
@@ -556,6 +562,8 @@ mod tests {
                 thin_head: false,
                 source_cross: false,
                 source_circle: false,
+                target_circle: false,
+                source_dressing: None,
             },
             activation: None,
             activation_color: None,
@@ -684,6 +692,7 @@ mod tests {
             events: vec![],
             autonumber: None,
             hide_footbox: false,
+            hide_stereotypes: false,
             teoz: false,
             boxes: Vec::new(),
         };

@@ -1,0 +1,91 @@
+[
+  {
+    "mechanism": "sequence-single-pending-create",
+    "review": "docs/parity-reviews/sequence-single-pending-create/review.json",
+    "verdict": "rejected",
+    "counts": {
+      "entries": 38,
+      "valid": 30,
+      "before": {
+        "1": 11,
+        "0": 19,
+        "2": 8
+      },
+      "after": {
+        "0": 19,
+        "2": 8,
+        "1": 7,
+        "3": 4
+      },
+      "verdict": "rejected"
+    }
+  },
+  {
+    "mechanism": "sequence-queue-stripe-origin",
+    "review": "docs/parity-reviews/sequence-queue-stripe-origin/review.json",
+    "verdict": "rejected",
+    "counts": {
+      "entries": 14,
+      "valid": 14,
+      "before": {
+        "1": 10,
+        "0": 4
+      },
+      "after": {
+        "1": 6,
+        "0": 8
+      },
+      "verdict": "rejected"
+    }
+  },
+  {
+    "mechanism": "sequence-message-stripe-baselines",
+    "review": "docs/parity-reviews/sequence-message-stripe-baselines/review.json",
+    "verdict": "rejected",
+    "counts": {
+      "entries": 16,
+      "valid": 16,
+      "before": {
+        "1": 16
+      },
+      "after": {
+        "0": 12,
+        "1": 4
+      },
+      "verdict": "rejected"
+    }
+  },
+  {
+    "mechanism": "sequence-self-half-polygon-order",
+    "review": "docs/parity-reviews/sequence-self-half-polygon-order/review.json",
+    "verdict": "accepted",
+    "counts": {
+      "entries": 24,
+      "valid": 24,
+      "before": {
+        "0": 18,
+        "1": 6
+      },
+      "after": {
+        "0": 24
+      },
+      "verdict": "accepted"
+    }
+  },
+  {
+    "mechanism": "sequence-collections-source-clarification",
+    "review": "docs/parity-reviews/sequence-collections-source-clarification/review.json",
+    "verdict": "accepted",
+    "counts": {
+      "entries": 4,
+      "valid": 4,
+      "before": {
+        "0": 4
+      },
+      "after": {
+        "0": 4
+      },
+      "verdict": "accepted"
+    }
+  }
+]

@@ -1,0 +1,9 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+autonumber
+Quartz -> Vale: count
+autonumberstop
+Quartz -> Vale: next
+@enduml

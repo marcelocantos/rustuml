@@ -1,0 +1,8 @@
+@startuml
+participant Caller
+participant Work
+participant Receiver
+Work -// Work : short
+Work -// Work ++ : activate
+return close local
+@enduml

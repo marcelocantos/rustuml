@@ -1,0 +1,6 @@
+@startuml
+participant Remote
+participant of
+of -> Remote: inbound
+rnote right of of: margin
+@enduml

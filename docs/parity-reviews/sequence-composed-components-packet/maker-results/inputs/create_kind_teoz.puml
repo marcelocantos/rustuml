@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam shadowing true
+participant Seed
+create actor Sprout
+Seed -> Sprout: actor
+Sprout --> Seed: reply
+@enduml

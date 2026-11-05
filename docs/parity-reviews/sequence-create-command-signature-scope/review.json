@@ -1,0 +1,675 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-create-command-signature-scope",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A481a605b-38ce-49c2-a334-2037d4b478a3",
+    "model": "gpt-6-astra, high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+    "branch": "review/sequence-command-contract-independent-20261105",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "d4fc86b240d2ea0cde6780c0910de2fff01b3c23",
+  "implementation_commit": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "tested_rust_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "baseline_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (exact per-revision cwd/env/targets in before-build.json and after-build.json)",
+    "Parent existing Monkey Man relay only: [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]; every expanded argv and source byte hash retained in reference-results.json.gz and supplement/reference-results.json.gz",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN_DIR PRIVATE_OUTPUT_DIR (unchanged comparator, before/after3111 and fresh358/fresh64)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO_ROOT NEGATIVE_MANIFEST BEFORE_RUSTUML AFTER_RUSTUML OUTPUT_JSON"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind participant",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "d8d9c9c1fa6e533beb993b007df533b46f691af67f1310acf8b8d9b2c5e64574",
+      "golden_sha256": "4df869a6e4b5ac05dd9b7f9abc7cfdea43a05a07cbf01fc5216d157587c170ba",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind participant",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "8a0d519e2cac6af43a80aa61b09f57533a3357812565a7160ff8db8299ac6cc3",
+      "golden_sha256": "efb07dd14599932c72d1e0e3b7d2f6dfc833fc67d295e934a3abc415d1adc768",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind participant",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "8179af4440f498a23b07985d22d88c9aa729401b4734be94f6f63ad0916c9806",
+      "golden_sha256": "993cd637d5241f7d778feb65cb0890a9c53190146462baa8aeb299444d818e88",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_participant_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind participant",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "a94ed548419f13b236b712d4647655e56282b8b68f3f7c88c294efd0f3821d5d",
+      "golden_sha256": "291458963702fe12366c3b9bfb188f0d3bc99799136350b16cf304d5775413c3",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind actor",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "3cd61bcb5bb6078f018d01df77386097af6739ea52b57777ff583b5bb3d1416e",
+      "golden_sha256": "04fac00a5a25d70ed5c1c2fb49a2a4168b1758ce4cc4a57c3fea91d2e61088e6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind actor",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "0bc0689f007ab5801254793f01f8afb544257ad67fa2be3f0c911d412ba76cf3",
+      "golden_sha256": "6f243561bedadc9a9de2ef768f41812b7aed9774f4421b6e29ae0cabca993e36",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind actor",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "04c45c19d2240547de92c94a67315a6b037691427f823b7ef6ff57a460d0ed2c",
+      "golden_sha256": "394cafdb782c49c38281cadc2639da70107cf74c51bf0e66acab251eb1ae3c1e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_actor_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind actor",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "889af68665ac210be5597e55ebd96c7588e95c72f7732b5db91662ba0ab1341e",
+      "golden_sha256": "1d26a5496b7245a1f6a1347da5a1baf27658a6845c6d8277ead8b98e4016b120",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind boundary",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "daa6ef35bd9a6e95ef6f3f877b49194fe349c73ca4d0155d3c030730a8127c49",
+      "golden_sha256": "5b32411e59d37c91793b8b871bd2df114624492fe2653485e77e074d060ca523",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind boundary",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "99b7a978b294063d9042976de734619388f1c3400c8c23bad34c50c82e5bb06c",
+      "golden_sha256": "aa46a2f9b52c0cc2f11fedf43c59628b63b666fa487faafd1d408514a10e083a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind boundary",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "5faa73dc104e6a2e353082dabb449a70ab1040b34853aab3bef6c224bb48b18e",
+      "golden_sha256": "9381534ebcae5fccc86e50100d0709a6eeb0a0ae46fba26bdb8a2fd9cb639254",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_boundary_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind boundary",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "16813c6c36f49caa33e0dd8fce2f2391865fbf3f49fffe56bc3fc0158784e0d7",
+      "golden_sha256": "252ac496a3ced826ed1db8d8b7aeb4e6e904cffc63be66222a1160fb75b0f0f0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind control",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ae815834f79d093c698530fb3f5eac4db744b96426157de04937e35bcfe442fa",
+      "golden_sha256": "f8259d11c990bfe81c04a59a8b5c617bf14a60a144629c683cfcc49cfeb4142e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind control",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f3c6f0e67ecdfcd3a312a1135f8096242abc609a1f87e36b929db23a5544e7da",
+      "golden_sha256": "2ca0d74a8f12f416861f16a175c109bd8e8ac42403dff02884a916da33774fb7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind control",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "008cba4ffe6597c1d444c46cfcfcf145d21aa20cb9e8e4a990f0fd253810206b",
+      "golden_sha256": "4badd3c86e78b6b470f834b5c88f0ad1d11ad25dddfcf40dc0b860937d70a6b6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_control_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind control",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "c93157c58f68b2aeb0b1f92ee2214e4f292a07d38d9953b368cc0f0ea1d758ec",
+      "golden_sha256": "8ce298f9e85418200ccc3970f253583a7ec55195f83f978d70176bacb735d5e7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind entity",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "9a4f2dde82d508de0c67ef8c77f7974486555796519c549145ffdda4ea480f85",
+      "golden_sha256": "02dc27a291debc3e3dadd623c2321a8623f046477ef8ff921eba1d8a0a8f4f39",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind entity",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "63ea628dbd098d81e5c23e4b89588e48879dd9dbdc8ef51a775f883a23d9bb5a",
+      "golden_sha256": "6e6ead31da499297780448a3d074dd43b139e6ab110e7de7de87162d519cbf53",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind entity",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "70d4bc28c9b5446c4d9481b283e64b8ccc0cc6ce034bc635005822f2a9c23a73",
+      "golden_sha256": "df159b6bbf8a33673423f159105379923e946a2ffede66cdd2c9c1dba783fbd7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_entity_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind entity",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "c2d226c9c246e6e50e006c01a72d1bfe32dce0819e07bb640e22f7cd809b854e",
+      "golden_sha256": "81bcdcdd74d58f50c1e091ff14ce34ed23d02c15c27c97242f1a75f85693ed00",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind queue",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "c21f7e0a30ac9fd637421e16f969fe25fd2fbeae15d4d044cb2539bd01f62279",
+      "golden_sha256": "484090709cdd6ce24fdea9f913468df39a7d9ecec68ce1e880ab7f6b7248f97d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind queue",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d7bf4df2cc0519ce24ef823d685bbd10a9ad6dde79d2039bccbaaa140e845e38",
+      "golden_sha256": "a1de2077918854cd23313cfb641ac32875923972de6c887099813e621943b74b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind queue",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "5435ba9d38e7d2459263bf2e6fe8652da6390b67ffbcb4577e04ec85db027fd1",
+      "golden_sha256": "183902acd8bcb8625fa5e40775c64842ac1221be0ba713cd36de7791e34d2afc",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_queue_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind queue",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "296ec48ce87e35140583d3f6522edbb3cda3005114f6323d08700dd9d27bac55",
+      "golden_sha256": "985634b8f48021bd59bb897eef30df98a21379a9f77ebf1b8afc097c05dc6b8d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind database",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "a72421de5895e77faf497cfe74096016c82c9b57c8188703d4ab54a7bd4cf420",
+      "golden_sha256": "5fab522526372b5b73e483547b8afc950a078c689d4e60e30fbe9515c810b791",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind database",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "8a499ac70bfc9cf72cd675404918365d7d7af6eb6c2d6659ab5f84f8ecbb7464",
+      "golden_sha256": "0f963a7794315afb2c264f286669922ae44fc9e82bf4ee5a75847b26eb557fe6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind database",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "52ecdbbf92eec38a4a0ac2be8e30582be57bcab43aeca7dd895ba7af1b718554",
+      "golden_sha256": "e3a81fead7b67f9eff745693d4bf00fd5c5222209a37afc8e97b2f2193d75cef",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_database_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind database",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "6fdf451100f3e0c8c56f8d50935b22d7982514a1e244fe81a9d088f78d8500fa",
+      "golden_sha256": "4ae18008e74c669c40dcbc76a189fafb23c5938966b0ae22e82dfed39f6b5e58",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_outer_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_outer_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind collections",
+        "outer signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "73b6221e2690e1d46136eadd7036765fda03a8b3d9c72989a3436283a0a7c5eb",
+      "golden_sha256": "4c40b377016d45f8467912b3405e88a91404d246c4fa712ba66b0e8707d3d838",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_outer_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_outer_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind collections",
+        "outer signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "2e8d1fad73cacfe7b71f652beddf06df8c68f71208756c1d10e2900e7159ecee",
+      "golden_sha256": "862aac0f4543ddfda1046036c30da0ef6ce0a2b451886697af16b7ba87888251",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_inner_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_inner_legacy.svg",
+      "axes": [
+        "nested group and loop",
+        "kind collections",
+        "inner signature separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "c6faf54ef88c65dc1e575fd7b02571dd0f5ed656c69e0f085c824a32ed8bbf5a",
+      "golden_sha256": "dc53a0a15d4721a32c6cac24fdf08e8cf0037640973869cec1e90a2c75c9a68b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_inner_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-create-command-signature-scope/c2b0_create_collections_inner_teoz.svg",
+      "axes": [
+        "nested group and loop",
+        "kind collections",
+        "inner signature separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d2522da91dd104a762a8ddbc18ecaffda458b0ff3ca47ac680da4a03b20755ad",
+      "golden_sha256": "d487aef9680a02d0262ffb713ad63b454d07d6cef5dc3f8260e0f2ac72c32185",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    }
+  ],
+  "findings": [
+    "CommandParticipant#getRegexType includes create in the same command; CommandParticipantA/A2/A3/A4 use a direct required whitespace leaf. Rust now forwards the complete command through try_participant_decl_in_command when parsing its declaration tail. This is source-supported full-command data flow.",
+    "All32 fresh inputs pass in both revisions:8 kinds x2 separator placements x2 engines inside nested group/loop state. All4 maker signature supplements pass final. Raw candidate2 evidence contains2 lost matches on the outer bit; both are repaired. The32 fresh passes do not imply a baseline gain, because this repair undoes an intermediate regression.",
+    "No fresh counterexample to the narrow signature-scope repair was found. Under the requested whole-output acceptance rule, the packet remains rejected: the retained created-control legacy and8 nested Teoz Display/box failures remain explicit dependencies. No historical acceptance is transferred or separate geometry defect blamed on this repair."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output packet acceptance, not a claim that every locally supported mechanism is wrong.",
+  "fresh_counts": {
+    "before": {
+      "entries": 32,
+      "match": 32,
+      "mismatch": 0,
+      "nonpositive": 0,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    },
+    "after": {
+      "entries": 32,
+      "match": 32,
+      "mismatch": 0,
+      "nonpositive": 0,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    }
+  },
+  "evidence": "docs/parity-reviews/sequence-command-contract-repair-packet/checker-2b056ca1-astra",
+  "inherited_failed_dependencies": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/remaining-dependencies.json",
+  "reference_limits": [
+    "Java argv is derived, not process-traced.",
+    "OpenJDK21.0.5/Graphviz12.2 historical equivalence remains unproved.",
+    "No correctness claim for concurrent shared SVG serialization work."
+  ],
+  "bounded_next_obligations": [
+    "No fresh counterexample to the narrow signature-scope repair was found. Under the requested whole-output acceptance rule, the packet remains rejected: the retained created-control legacy and8 nested Teoz Display/box failures remain explicit dependencies. No historical acceptance is transferred or separate geometry defect blamed on this repair."
+  ]
+}

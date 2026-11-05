@@ -1,0 +1,5191 @@
+[
+  {
+    "name": "indf535_note_1_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,118.7988 L84,118.7988 L84,103.7988 L74,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            84.0,
+            118.7988
+          ],
+          "width": 79.0,
+          "height": 25.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M74,93.7988 L74,103.7988 L84,103.7988 L74,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            74.0,
+            93.7988,
+            84.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,118.7988 L84,118.7988 L84,103.7988 L74,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            84.0,
+            118.7988
+          ],
+          "width": 79.0,
+          "height": 25.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M74,93.7988 L74,103.7988 L84,103.7988 L74,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            74.0,
+            93.7988,
+            84.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,118.7988 L84,118.7988 L84,103.7988 L74,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            84.0,
+            118.7988
+          ],
+          "width": 79.0,
+          "height": 25.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M74,93.7988 L74,103.7988 L84,103.7988 L74,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            74.0,
+            93.7988,
+            84.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 25.0,
+      "before": 25.0,
+      "after": 25.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_1_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,121.7988 L94,121.7988 L94,106.7988 L84,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            94.0,
+            121.7988
+          ],
+          "width": 79.0,
+          "height": 25.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M84,96.7988 L84,106.7988 L94,106.7988 L84,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            96.7988,
+            94.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,121.7988 L94,121.7988 L94,106.7988 L84,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            94.0,
+            121.7988
+          ],
+          "width": 79.0,
+          "height": 25.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M84,96.7988 L84,106.7988 L94,106.7988 L84,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            96.7988,
+            94.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,121.7988 L94,121.7988 L94,106.7988 L84,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            94.0,
+            121.7988
+          ],
+          "width": 79.0,
+          "height": 25.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M84,96.7988 L84,106.7988 L94,106.7988 L84,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            96.7988,
+            94.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 25.0,
+      "before": 25.0,
+      "after": 25.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_2_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,137.7988 L97,137.7988 L97,103.7988 L87,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            97.0,
+            137.7988
+          ],
+          "width": 92.0,
+          "height": 44.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M87,93.7988 L87,103.7988 L97,103.7988 L87,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            87.0,
+            93.7988,
+            97.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,137.7988 L97,137.7988 L97,103.7988 L87,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            97.0,
+            137.7988
+          ],
+          "width": 92.0,
+          "height": 44.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M87,93.7988 L87,103.7988 L97,103.7988 L87,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            87.0,
+            93.7988,
+            97.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,137.7988 L97,137.7988 L97,103.7988 L87,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            97.0,
+            137.7988
+          ],
+          "width": 92.0,
+          "height": 44.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M87,93.7988 L87,103.7988 L97,103.7988 L87,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            87.0,
+            93.7988,
+            97.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 44.0,
+      "before": 44.0,
+      "after": 44.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_2_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,140.7988 L107,140.7988 L107,106.7988 L97,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            107.0,
+            140.7988
+          ],
+          "width": 92.0,
+          "height": 44.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,96.7988 L97,106.7988 L107,106.7988 L97,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            96.7988,
+            107.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,140.7988 L107,140.7988 L107,106.7988 L97,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            107.0,
+            140.7988
+          ],
+          "width": 92.0,
+          "height": 44.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,96.7988 L97,106.7988 L107,106.7988 L97,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            96.7988,
+            107.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,140.7988 L107,140.7988 L107,106.7988 L97,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            107.0,
+            140.7988
+          ],
+          "width": 92.0,
+          "height": 44.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,96.7988 L97,106.7988 L107,106.7988 L97,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            96.7988,
+            107.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 44.0,
+      "before": 44.0,
+      "after": 44.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_3_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M35,93.7988 L35,159.7988 L141,159.7988 L141,103.7988 L131,93.7988 L35,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            141.0,
+            159.7988
+          ],
+          "width": 106.0,
+          "height": 66.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M131,93.7988 L131,103.7988 L141,103.7988 L131,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            131.0,
+            93.7988,
+            141.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M35,93.7988 L35,159.7988 L141,159.7988 L141,103.7988 L131,93.7988 L35,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            141.0,
+            159.7988
+          ],
+          "width": 106.0,
+          "height": 66.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M131,93.7988 L131,103.7988 L141,103.7988 L131,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            131.0,
+            93.7988,
+            141.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M35,93.7988 L35,159.7988 L141,159.7988 L141,103.7988 L131,93.7988 L35,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            141.0,
+            159.7988
+          ],
+          "width": 106.0,
+          "height": 66.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M131,93.7988 L131,103.7988 L141,103.7988 L131,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            131.0,
+            93.7988,
+            141.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 66.0,
+      "before": 66.0,
+      "after": 66.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_3_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M40.3921,96.7988 L40.3921,162.7988 L146.3921,162.7988 L146.3921,106.7988 L136.3921,96.7988 L40.3921,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            146.3921,
+            162.7988
+          ],
+          "width": 106.0,
+          "height": 66.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M136.3921,96.7988 L136.3921,106.7988 L146.3921,106.7988 L136.3921,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            136.3921,
+            96.7988,
+            146.3921,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M40.3921,96.7988 L40.3921,162.7988 L146.3921,162.7988 L146.3921,106.7988 L136.3921,96.7988 L40.3921,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            146.3921,
+            162.7988
+          ],
+          "width": 106.0,
+          "height": 66.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M136.3921,96.7988 L136.3921,106.7988 L146.3921,106.7988 L136.3921,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            136.3921,
+            96.7988,
+            146.3921,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M40.3921,96.7988 L40.3921,162.7988 L146.3921,162.7988 L146.3921,106.7988 L136.3921,96.7988 L40.3921,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            146.3921,
+            162.7988
+          ],
+          "width": 106.0,
+          "height": 66.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M136.3921,96.7988 L136.3921,106.7988 L146.3921,106.7988 L136.3921,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            136.3921,
+            96.7988,
+            146.3921,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 66.0,
+      "before": 66.0,
+      "after": 66.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_5_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M7,93.7988 L7,193.7988 L123,193.7988 L123,103.7988 L113,93.7988 L7,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            7.0,
+            93.7988,
+            123.0,
+            193.7988
+          ],
+          "width": 116.0,
+          "height": 100.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M113,93.7988 L113,103.7988 L123,103.7988 L113,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            113.0,
+            93.7988,
+            123.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M7,93.7988 L7,193.7988 L123,193.7988 L123,103.7988 L113,93.7988 L7,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            7.0,
+            93.7988,
+            123.0,
+            193.7988
+          ],
+          "width": 116.0,
+          "height": 100.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M113,93.7988 L113,103.7988 L123,103.7988 L113,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            113.0,
+            93.7988,
+            123.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M7,93.7988 L7,193.7988 L123,193.7988 L123,103.7988 L113,93.7988 L7,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            7.0,
+            93.7988,
+            123.0,
+            193.7988
+          ],
+          "width": 116.0,
+          "height": 100.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M113,93.7988 L113,103.7988 L123,103.7988 L113,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            113.0,
+            93.7988,
+            123.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 100.0,
+      "before": 100.0,
+      "after": 100.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_5_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15.1846,96.7988 L15.1846,196.7988 L126.1846,196.7988 L126.1846,106.7988 L116.1846,96.7988 L15.1846,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            196.7988
+          ],
+          "width": 111.0,
+          "height": 100.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M116.1846,96.7988 L116.1846,106.7988 L126.1846,106.7988 L116.1846,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            116.1846,
+            96.7988,
+            126.1846,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15.1846,96.7988 L15.1846,196.7988 L126.1846,196.7988 L126.1846,106.7988 L116.1846,96.7988 L15.1846,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            196.7988
+          ],
+          "width": 111.0,
+          "height": 100.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M116.1846,96.7988 L116.1846,106.7988 L126.1846,106.7988 L116.1846,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            116.1846,
+            96.7988,
+            126.1846,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15.1846,96.7988 L15.1846,196.7988 L126.1846,196.7988 L126.1846,106.7988 L116.1846,96.7988 L15.1846,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            196.7988
+          ],
+          "width": 111.0,
+          "height": 100.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M116.1846,96.7988 L116.1846,106.7988 L126.1846,106.7988 L116.1846,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            116.1846,
+            96.7988,
+            126.1846,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 100.0,
+      "before": 100.0,
+      "after": 100.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_7_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,231.7988 L111,231.7988 L111,103.7988 L101,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            111.0,
+            231.7988
+          ],
+          "width": 106.0,
+          "height": 138.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M101,93.7988 L101,103.7988 L111,103.7988 L101,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            101.0,
+            93.7988,
+            111.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,231.7988 L111,231.7988 L111,103.7988 L101,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            111.0,
+            231.7988
+          ],
+          "width": 106.0,
+          "height": 138.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M101,93.7988 L101,103.7988 L111,103.7988 L101,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            101.0,
+            93.7988,
+            111.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,93.7988 L5,231.7988 L111,231.7988 L111,103.7988 L101,93.7988 L5,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            111.0,
+            231.7988
+          ],
+          "width": 106.0,
+          "height": 138.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M101,93.7988 L101,103.7988 L111,103.7988 L101,93.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            101.0,
+            93.7988,
+            111.0,
+            103.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 138.0,
+      "before": 138.0,
+      "after": 138.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_7_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,234.7988 L121,234.7988 L121,106.7988 L111,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            121.0,
+            234.7988
+          ],
+          "width": 106.0,
+          "height": 138.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M111,96.7988 L111,106.7988 L121,106.7988 L111,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            111.0,
+            96.7988,
+            121.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,234.7988 L121,234.7988 L121,106.7988 L111,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            121.0,
+            234.7988
+          ],
+          "width": 106.0,
+          "height": 138.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M111,96.7988 L111,106.7988 L121,106.7988 L111,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            111.0,
+            96.7988,
+            121.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,96.7988 L15,234.7988 L121,234.7988 L121,106.7988 L111,96.7988 L15,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            121.0,
+            234.7988
+          ],
+          "width": 106.0,
+          "height": 138.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M111,96.7988 L111,106.7988 L121,106.7988 L111,96.7988",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            111.0,
+            96.7988,
+            121.0,
+            106.7988
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 138.0,
+      "before": 138.0,
+      "after": 138.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_boundary_exact_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,51.4883 L5,211.4883 L97,211.4883 L97,61.4883 L87,51.4883 L5,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            97.0,
+            211.4883
+          ],
+          "width": 92.0,
+          "height": 160.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M87,51.4883 L87,61.4883 L97,61.4883 L87,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            87.0,
+            51.4883,
+            97.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,51.4883 L5,211.4883 L97,211.4883 L97,61.4883 L87,51.4883 L5,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            97.0,
+            211.4883
+          ],
+          "width": 92.0,
+          "height": 160.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M87,51.4883 L87,61.4883 L97,61.4883 L87,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            87.0,
+            51.4883,
+            97.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,51.4883 L5,211.4883 L97,211.4883 L97,61.4883 L87,51.4883 L5,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            97.0,
+            211.4883
+          ],
+          "width": 92.0,
+          "height": 160.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M87,51.4883 L87,61.4883 L97,61.4883 L87,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            87.0,
+            51.4883,
+            97.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 160.0,
+      "before": 160.0,
+      "after": 160.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_boundary_exact_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,214.4883 L107,214.4883 L107,64.4883 L97,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            107.0,
+            214.4883
+          ],
+          "width": 92.0,
+          "height": 160.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,54.4883 L97,64.4883 L107,64.4883 L97,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            54.4883,
+            107.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,214.4883 L107,214.4883 L107,64.4883 L97,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            107.0,
+            214.4883
+          ],
+          "width": 92.0,
+          "height": 160.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,54.4883 L97,64.4883 L107,64.4883 L97,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            54.4883,
+            107.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,214.4883 L107,214.4883 L107,64.4883 L97,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            107.0,
+            214.4883
+          ],
+          "width": 92.0,
+          "height": 160.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,54.4883 L97,64.4883 L107,64.4883 L97,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            54.4883,
+            107.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 160.0,
+      "before": 160.0,
+      "after": 160.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_boundary_below_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,51.4883 L5,290.4883 L107,290.4883 L107,61.4883 L97,51.4883 L5,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            107.0,
+            290.4883
+          ],
+          "width": 102.0,
+          "height": 238.99999999999997
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,51.4883 L97,61.4883 L107,61.4883 L97,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            51.4883,
+            107.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,51.4883 L5,290.4883 L107,290.4883 L107,61.4883 L97,51.4883 L5,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            107.0,
+            290.4883
+          ],
+          "width": 102.0,
+          "height": 238.99999999999997
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,51.4883 L97,61.4883 L107,61.4883 L97,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            51.4883,
+            107.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M5,51.4883 L5,290.4883 L107,290.4883 L107,61.4883 L97,51.4883 L5,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            107.0,
+            290.4883
+          ],
+          "width": 102.0,
+          "height": 238.99999999999997
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M97,51.4883 L97,61.4883 L107,61.4883 L97,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            97.0,
+            51.4883,
+            107.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 238.99999999999997,
+      "before": 238.99999999999997,
+      "after": 238.99999999999997
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_boundary_below_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,293.4883 L117,293.4883 L117,64.4883 L107,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            117.0,
+            293.4883
+          ],
+          "width": 102.0,
+          "height": 238.99999999999997
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M107,54.4883 L107,64.4883 L117,64.4883 L107,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            107.0,
+            54.4883,
+            117.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,293.4883 L117,293.4883 L117,64.4883 L107,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            117.0,
+            293.4883
+          ],
+          "width": 102.0,
+          "height": 238.99999999999997
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M107,54.4883 L107,64.4883 L117,64.4883 L107,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            107.0,
+            54.4883,
+            117.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,293.4883 L117,293.4883 L117,64.4883 L107,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            117.0,
+            293.4883
+          ],
+          "width": 102.0,
+          "height": 238.99999999999997
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M107,54.4883 L107,64.4883 L117,64.4883 L107,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            107.0,
+            54.4883,
+            117.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 238.99999999999997,
+      "before": 238.99999999999997,
+      "after": 238.99999999999997
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_self_attached_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M84,51.4883 L84,123.4883 L150,123.4883 L150,61.4883 L140,51.4883 L84,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            51.4883,
+            150.0,
+            123.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M140,51.4883 L140,61.4883 L150,61.4883 L140,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            140.0,
+            51.4883,
+            150.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M84,51.4883 L84,123.4883 L150,123.4883 L150,61.4883 L140,51.4883 L84,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            51.4883,
+            150.0,
+            123.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M140,51.4883 L140,61.4883 L150,61.4883 L140,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            140.0,
+            51.4883,
+            150.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M84,51.4883 L84,123.4883 L150,123.4883 L150,61.4883 L140,51.4883 L84,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            51.4883,
+            150.0,
+            123.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M140,51.4883 L140,61.4883 L150,61.4883 L140,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            140.0,
+            51.4883,
+            150.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 72.0,
+      "before": 72.0,
+      "after": 72.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_self_attached_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M89.4658,54.4883 L89.4658,126.4883 L155.4658,126.4883 L155.4658,64.4883 L145.4658,54.4883 L89.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            89.4658,
+            54.4883,
+            155.4658,
+            126.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M145.4658,54.4883 L145.4658,64.4883 L155.4658,64.4883 L145.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            145.4658,
+            54.4883,
+            155.4658,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M89.4658,54.4883 L89.4658,126.4883 L155.4658,126.4883 L155.4658,64.4883 L145.4658,54.4883 L89.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            89.4658,
+            54.4883,
+            155.4658,
+            126.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M145.4658,54.4883 L145.4658,64.4883 L155.4658,64.4883 L145.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            145.4658,
+            54.4883,
+            155.4658,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M89.4658,54.4883 L89.4658,126.4883 L155.4658,126.4883 L155.4658,64.4883 L145.4658,54.4883 L89.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            89.4658,
+            54.4883,
+            155.4658,
+            126.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M145.4658,54.4883 L145.4658,64.4883 L155.4658,64.4883 L145.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            145.4658,
+            54.4883,
+            155.4658,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 72.0,
+      "before": 72.0,
+      "after": 72.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_1_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "23",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "66",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            71.0,
+            116.7988
+          ],
+          "width": 66.0,
+          "height": 23.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "23",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "66",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            71.0,
+            116.7988
+          ],
+          "width": 66.0,
+          "height": 23.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "23",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "66",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            71.0,
+            116.7988
+          ],
+          "width": 66.0,
+          "height": 23.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 23.0,
+      "before": 23.0,
+      "after": 23.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_1_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "23",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "66",
+            "x": "15",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            81.0,
+            119.7988
+          ],
+          "width": 66.0,
+          "height": 23.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "23",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "66",
+            "x": "15",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            81.0,
+            119.7988
+          ],
+          "width": 66.0,
+          "height": 23.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "23",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "66",
+            "x": "15",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            81.0,
+            119.7988
+          ],
+          "width": 66.0,
+          "height": 23.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 23.0,
+      "before": 23.0,
+      "after": 23.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_2_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "42",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            84.0,
+            135.7988
+          ],
+          "width": 79.0,
+          "height": 42.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "41",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            84.0,
+            134.7988
+          ],
+          "width": 79.0,
+          "height": 41.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "42",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            84.0,
+            135.7988
+          ],
+          "width": 79.0,
+          "height": 42.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 42.0,
+      "before": 41.0,
+      "after": 42.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_2_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "42",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "15",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            94.0,
+            138.7988
+          ],
+          "width": 79.0,
+          "height": 42.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "41",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "9",
+            "y": "96.7988"
+          },
+          "bounds": [
+            9.0,
+            96.7988,
+            88.0,
+            137.7988
+          ],
+          "width": 79.0,
+          "height": 41.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "42",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "9",
+            "y": "96.7988"
+          },
+          "bounds": [
+            9.0,
+            96.7988,
+            88.0,
+            138.7988
+          ],
+          "width": 79.0,
+          "height": 42.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 42.0,
+      "before": 41.0,
+      "after": 42.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_3_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "64",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "35",
+            "y": "93.7988"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            128.0,
+            157.7988
+          ],
+          "width": 93.0,
+          "height": 64.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "63",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "35",
+            "y": "93.7988"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            128.0,
+            156.7988
+          ],
+          "width": 93.0,
+          "height": 63.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "64",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "35",
+            "y": "93.7988"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            128.0,
+            157.7988
+          ],
+          "width": 93.0,
+          "height": 64.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 64.0,
+      "before": 63.0,
+      "after": 64.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_3_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "64",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "40.3921",
+            "y": "96.7988"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            133.3921,
+            160.7988
+          ],
+          "width": 93.0,
+          "height": 64.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "63",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "40.3921",
+            "y": "96.7988"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            133.3921,
+            159.7988
+          ],
+          "width": 93.0,
+          "height": 63.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "64",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "40.3921",
+            "y": "96.7988"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            133.3921,
+            160.7988
+          ],
+          "width": 93.0,
+          "height": 64.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 64.0,
+      "before": 63.0,
+      "after": 64.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_5_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "98",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "116",
+            "x": "7",
+            "y": "93.7988"
+          },
+          "bounds": [
+            7.0,
+            93.7988,
+            123.0,
+            191.7988
+          ],
+          "width": 116.0,
+          "height": 98.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "96",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "109",
+            "x": "11",
+            "y": "93.7988"
+          },
+          "bounds": [
+            11.0,
+            93.7988,
+            120.0,
+            189.7988
+          ],
+          "width": 109.0,
+          "height": 96.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "98",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "109",
+            "x": "11",
+            "y": "93.7988"
+          },
+          "bounds": [
+            11.0,
+            93.7988,
+            120.0,
+            191.7988
+          ],
+          "width": 109.0,
+          "height": 98.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 98.0,
+      "before": 96.0,
+      "after": 98.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_5_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "98",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "111",
+            "x": "15.1846",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            194.7988
+          ],
+          "width": 111.0,
+          "height": 98.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "96",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "111",
+            "x": "15.1846",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            192.7988
+          ],
+          "width": 111.0,
+          "height": 96.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "98",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "111",
+            "x": "15.1846",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            194.7988
+          ],
+          "width": 111.0,
+          "height": 98.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 98.0,
+      "before": 96.0,
+      "after": 98.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_7_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "136",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            98.0,
+            229.7988
+          ],
+          "width": 93.0,
+          "height": 136.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "133",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            98.0,
+            226.7988
+          ],
+          "width": 93.0,
+          "height": 133.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "136",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "5",
+            "y": "93.7988"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            98.0,
+            229.7988
+          ],
+          "width": 93.0,
+          "height": 136.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 136.0,
+      "before": 133.0,
+      "after": 136.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_7_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "136",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "15",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            108.0,
+            232.7988
+          ],
+          "width": 93.0,
+          "height": 136.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "133",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "15",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            108.0,
+            229.7988
+          ],
+          "width": 93.0,
+          "height": 133.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "136",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "93",
+            "x": "15",
+            "y": "96.7988"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            108.0,
+            232.7988
+          ],
+          "width": 93.0,
+          "height": 136.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 136.0,
+      "before": 133.0,
+      "after": 136.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_boundary_exact_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "158",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "5",
+            "y": "51.4883"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            84.0,
+            209.4883
+          ],
+          "width": 79.0,
+          "height": 158.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "157",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "5",
+            "y": "51.4883"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            84.0,
+            208.4883
+          ],
+          "width": 79.0,
+          "height": 157.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "158",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "5",
+            "y": "51.4883"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            84.0,
+            209.4883
+          ],
+          "width": 79.0,
+          "height": 158.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 158.0,
+      "before": 157.0,
+      "after": 158.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_boundary_exact_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "158",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "15",
+            "y": "54.4883"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            94.0,
+            212.4883
+          ],
+          "width": 79.0,
+          "height": 158.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "157",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "15",
+            "y": "54.4883"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            94.0,
+            211.4883
+          ],
+          "width": 79.0,
+          "height": 157.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "158",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "79",
+            "x": "15",
+            "y": "54.4883"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            94.0,
+            212.4883
+          ],
+          "width": 79.0,
+          "height": 158.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 158.0,
+      "before": 157.0,
+      "after": 158.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_boundary_below_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "237",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "89",
+            "x": "5",
+            "y": "51.4883"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            94.0,
+            288.4883
+          ],
+          "width": 89.0,
+          "height": 236.99999999999997
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "234",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "89",
+            "x": "5",
+            "y": "51.4883"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            94.0,
+            285.4883
+          ],
+          "width": 89.0,
+          "height": 233.99999999999997
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "237",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "89",
+            "x": "5",
+            "y": "51.4883"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            94.0,
+            288.4883
+          ],
+          "width": 89.0,
+          "height": 236.99999999999997
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 236.99999999999997,
+      "before": 233.99999999999997,
+      "after": 236.99999999999997
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_boundary_below_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "237",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "89",
+            "x": "15",
+            "y": "54.4883"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            104.0,
+            291.4883
+          ],
+          "width": 89.0,
+          "height": 236.99999999999997
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "234",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "89",
+            "x": "15",
+            "y": "54.4883"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            104.0,
+            288.4883
+          ],
+          "width": 89.0,
+          "height": 233.99999999999997
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "237",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "89",
+            "x": "15",
+            "y": "54.4883"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            104.0,
+            291.4883
+          ],
+          "width": 89.0,
+          "height": 236.99999999999997
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 236.99999999999997,
+      "before": 233.99999999999997,
+      "after": 236.99999999999997
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_self_attached_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "70",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "53",
+            "x": "84",
+            "y": "51.4883"
+          },
+          "bounds": [
+            84.0,
+            51.4883,
+            137.0,
+            121.48830000000001
+          ],
+          "width": 53.0,
+          "height": 70.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "70",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "53",
+            "x": "84",
+            "y": "39.7109"
+          },
+          "bounds": [
+            84.0,
+            39.7109,
+            137.0,
+            109.71090000000001
+          ],
+          "width": 53.0,
+          "height": 70.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "70",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "53",
+            "x": "84",
+            "y": "39.7109"
+          },
+          "bounds": [
+            84.0,
+            39.7109,
+            137.0,
+            109.71090000000001
+          ],
+          "width": 53.0,
+          "height": 70.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 70.0,
+      "before": 70.0,
+      "after": 70.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_self_attached_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M89.4658,54.4883 L89.4658,126.4883 L155.4658,126.4883 L155.4658,64.4883 L145.4658,54.4883 L89.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            89.4658,
+            54.4883,
+            155.4658,
+            126.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M145.4658,54.4883 L145.4658,64.4883 L155.4658,64.4883 L145.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            145.4658,
+            54.4883,
+            155.4658,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "70",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "53",
+            "x": "89",
+            "y": "54.4883"
+          },
+          "bounds": [
+            89.0,
+            54.4883,
+            142.0,
+            124.48830000000001
+          ],
+          "width": 53.0,
+          "height": 70.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "70",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "53",
+            "x": "89",
+            "y": "54.4883"
+          },
+          "bounds": [
+            89.0,
+            54.4883,
+            142.0,
+            124.48830000000001
+          ],
+          "width": 53.0,
+          "height": 70.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 72.0,
+      "before": 70.0,
+      "after": 70.0
+    },
+    "height_equal_after": false
+  },
+  {
+    "name": "indf535_hnote_1_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,77,93.7988,87,104.7988,77,116.7988,15,116.7988,5,104.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            87.0,
+            116.7988
+          ],
+          "width": 82.0,
+          "height": 23.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,77,93.7988,87,104.7988,77,116.7988,15,116.7988,5,104.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            87.0,
+            116.7988
+          ],
+          "width": 82.0,
+          "height": 23.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,77,93.7988,87,104.7988,77,116.7988,15,116.7988,5,104.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            87.0,
+            116.7988
+          ],
+          "width": 82.0,
+          "height": 23.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 23.0,
+      "before": 23.0,
+      "after": 23.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_1_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,96.7988,87,96.7988,97,107.7988,87,119.7988,25,119.7988,15,107.7988,25,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            97.0,
+            119.7988
+          ],
+          "width": 82.0,
+          "height": 23.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,96.7988,87,96.7988,97,107.7988,87,119.7988,25,119.7988,15,107.7988,25,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            97.0,
+            119.7988
+          ],
+          "width": 82.0,
+          "height": 23.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,96.7988,87,96.7988,97,107.7988,87,119.7988,25,119.7988,15,107.7988,25,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            97.0,
+            119.7988
+          ],
+          "width": 82.0,
+          "height": 23.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 23.0,
+      "before": 23.0,
+      "after": 23.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_2_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,90,93.7988,100,114.7988,90,135.7988,15,135.7988,5,114.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            100.0,
+            135.7988
+          ],
+          "width": 95.0,
+          "height": 42.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,90,93.7988,100,113.7988,90,134.7988,15,134.7988,5,113.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            100.0,
+            134.7988
+          ],
+          "width": 95.0,
+          "height": 41.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,90,93.7988,100,114.7988,90,135.7988,15,135.7988,5,114.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            100.0,
+            135.7988
+          ],
+          "width": 95.0,
+          "height": 42.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 42.0,
+      "before": 41.0,
+      "after": 42.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_2_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,96.7988,100,96.7988,110,117.7988,100,138.7988,25,138.7988,15,117.7988,25,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            110.0,
+            138.7988
+          ],
+          "width": 95.0,
+          "height": 42.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "19,96.7988,94,96.7988,104,116.7988,94,137.7988,19,137.7988,9,116.7988,19,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            9.0,
+            96.7988,
+            104.0,
+            137.7988
+          ],
+          "width": 95.0,
+          "height": 41.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "19,96.7988,94,96.7988,104,117.7988,94,138.7988,19,138.7988,9,117.7988,19,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            9.0,
+            96.7988,
+            104.0,
+            138.7988
+          ],
+          "width": 95.0,
+          "height": 42.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 42.0,
+      "before": 41.0,
+      "after": 42.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_3_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "45,93.7988,134,93.7988,144,125.7988,134,157.7988,45,157.7988,35,125.7988,45,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            144.0,
+            157.7988
+          ],
+          "width": 109.0,
+          "height": 64.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "45,93.7988,134,93.7988,144,124.7988,134,156.7988,45,156.7988,35,124.7988,45,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            144.0,
+            156.7988
+          ],
+          "width": 109.0,
+          "height": 63.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "45,93.7988,134,93.7988,144,125.7988,134,157.7988,45,157.7988,35,125.7988,45,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            35.0,
+            93.7988,
+            144.0,
+            157.7988
+          ],
+          "width": 109.0,
+          "height": 64.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 64.0,
+      "before": 63.0,
+      "after": 64.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_3_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "50.3921,96.7988,139.3921,96.7988,149.3921,128.7988,139.3921,160.7988,50.3921,160.7988,40.3921,128.7988,50.3921,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            149.3921,
+            160.7988
+          ],
+          "width": 109.0,
+          "height": 64.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "50.3921,96.7988,139.3921,96.7988,149.3921,127.7988,139.3921,159.7988,50.3921,159.7988,40.3921,127.7988,50.3921,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            149.3921,
+            159.7988
+          ],
+          "width": 109.0,
+          "height": 63.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "50.3921,96.7988,139.3921,96.7988,149.3921,128.7988,139.3921,160.7988,50.3921,160.7988,40.3921,128.7988,50.3921,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            40.3921,
+            96.7988,
+            149.3921,
+            160.7988
+          ],
+          "width": 109.0,
+          "height": 64.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 64.0,
+      "before": 63.0,
+      "after": 64.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_5_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "17,93.7988,113,93.7988,123,142.7988,113,191.7988,17,191.7988,7,142.7988,17,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            7.0,
+            93.7988,
+            123.0,
+            191.7988
+          ],
+          "width": 116.0,
+          "height": 98.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "21,93.7988,110,93.7988,120,141.7988,110,189.7988,21,189.7988,11,141.7988,21,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            11.0,
+            93.7988,
+            120.0,
+            189.7988
+          ],
+          "width": 109.0,
+          "height": 96.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "21,93.7988,110,93.7988,120,142.7988,110,191.7988,21,191.7988,11,142.7988,21,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            11.0,
+            93.7988,
+            120.0,
+            191.7988
+          ],
+          "width": 109.0,
+          "height": 98.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 98.0,
+      "before": 96.0,
+      "after": 98.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_5_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25.1846,96.7988,116.1846,96.7988,126.1846,145.7988,116.1846,194.7988,25.1846,194.7988,15.1846,145.7988,25.1846,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            194.7988
+          ],
+          "width": 111.0,
+          "height": 98.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25.1846,96.7988,116.1846,96.7988,126.1846,144.7988,116.1846,192.7988,25.1846,192.7988,15.1846,144.7988,25.1846,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            192.7988
+          ],
+          "width": 111.0,
+          "height": 96.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25.1846,96.7988,116.1846,96.7988,126.1846,145.7988,116.1846,194.7988,25.1846,194.7988,15.1846,145.7988,25.1846,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.1846,
+            96.7988,
+            126.1846,
+            194.7988
+          ],
+          "width": 111.0,
+          "height": 98.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 98.0,
+      "before": 96.0,
+      "after": 98.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_7_rows_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,104,93.7988,114,161.7988,104,229.7988,15,229.7988,5,161.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            114.0,
+            229.7988
+          ],
+          "width": 109.0,
+          "height": 136.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,104,93.7988,114,159.7988,104,226.7988,15,226.7988,5,159.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            114.0,
+            226.7988
+          ],
+          "width": 109.0,
+          "height": 133.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,93.7988,104,93.7988,114,161.7988,104,229.7988,15,229.7988,5,161.7988,15,93.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            93.7988,
+            114.0,
+            229.7988
+          ],
+          "width": 109.0,
+          "height": 136.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 136.0,
+      "before": 133.0,
+      "after": 136.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_7_rows_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,96.7988,114,96.7988,124,164.7988,114,232.7988,25,232.7988,15,164.7988,25,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            124.0,
+            232.7988
+          ],
+          "width": 109.0,
+          "height": 136.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,96.7988,114,96.7988,124,162.7988,114,229.7988,25,229.7988,15,162.7988,25,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            124.0,
+            229.7988
+          ],
+          "width": 109.0,
+          "height": 133.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,96.7988,114,96.7988,124,164.7988,114,232.7988,25,232.7988,15,164.7988,25,96.7988",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            96.7988,
+            124.0,
+            232.7988
+          ],
+          "width": 109.0,
+          "height": 136.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 136.0,
+      "before": 133.0,
+      "after": 136.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_boundary_exact_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,51.4883,90,51.4883,100,130.4883,90,209.4883,15,209.4883,5,130.4883,15,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            100.0,
+            209.4883
+          ],
+          "width": 95.0,
+          "height": 158.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,51.4883,90,51.4883,100,129.4883,90,208.4883,15,208.4883,5,129.4883,15,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            100.0,
+            208.4883
+          ],
+          "width": 95.0,
+          "height": 157.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,51.4883,90,51.4883,100,130.4883,90,209.4883,15,209.4883,5,130.4883,15,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            100.0,
+            209.4883
+          ],
+          "width": 95.0,
+          "height": 158.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 158.0,
+      "before": 157.0,
+      "after": 158.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_boundary_exact_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,100,54.4883,110,133.4883,100,212.4883,25,212.4883,15,133.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            110.0,
+            212.4883
+          ],
+          "width": 95.0,
+          "height": 158.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,100,54.4883,110,132.4883,100,211.4883,25,211.4883,15,132.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            110.0,
+            211.4883
+          ],
+          "width": 95.0,
+          "height": 157.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,100,54.4883,110,133.4883,100,212.4883,25,212.4883,15,133.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            110.0,
+            212.4883
+          ],
+          "width": 95.0,
+          "height": 158.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 158.0,
+      "before": 157.0,
+      "after": 158.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_boundary_below_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,51.4883,100,51.4883,110,169.4883,100,288.4883,15,288.4883,5,169.4883,15,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            110.0,
+            288.4883
+          ],
+          "width": 105.0,
+          "height": 236.99999999999997
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,51.4883,100,51.4883,110,168.4883,100,285.4883,15,285.4883,5,168.4883,15,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            110.0,
+            285.4883
+          ],
+          "width": 105.0,
+          "height": 233.99999999999997
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "15,51.4883,100,51.4883,110,169.4883,100,288.4883,15,288.4883,5,169.4883,15,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            5.0,
+            51.4883,
+            110.0,
+            288.4883
+          ],
+          "width": 105.0,
+          "height": 236.99999999999997
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 236.99999999999997,
+      "before": 233.99999999999997,
+      "after": 236.99999999999997
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_boundary_below_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,110,54.4883,120,172.4883,110,291.4883,25,291.4883,15,172.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            120.0,
+            291.4883
+          ],
+          "width": 105.0,
+          "height": 236.99999999999997
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,110,54.4883,120,171.4883,110,288.4883,25,288.4883,15,171.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            120.0,
+            288.4883
+          ],
+          "width": 105.0,
+          "height": 233.99999999999997
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,110,54.4883,120,172.4883,110,291.4883,25,291.4883,15,172.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            120.0,
+            291.4883
+          ],
+          "width": 105.0,
+          "height": 236.99999999999997
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 236.99999999999997,
+      "before": 233.99999999999997,
+      "after": 236.99999999999997
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_self_attached_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "94,51.4883,143,51.4883,153,86.4883,143,121.4883,94,121.4883,84,86.4883,94,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            51.4883,
+            153.0,
+            121.4883
+          ],
+          "width": 69.0,
+          "height": 70.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "94,39.7109,143,39.7109,153,74.7109,143,109.7109,94,109.7109,84,74.7109,94,39.7109",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            39.7109,
+            153.0,
+            109.7109
+          ],
+          "width": 69.0,
+          "height": 70.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "94,39.7109,143,39.7109,153,74.7109,143,109.7109,94,109.7109,84,74.7109,94,39.7109",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            84.0,
+            39.7109,
+            153.0,
+            109.7109
+          ],
+          "width": 69.0,
+          "height": 70.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 70.0,
+      "before": 70.0,
+      "after": 70.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_self_attached_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M89.4658,54.4883 L89.4658,126.4883 L155.4658,126.4883 L155.4658,64.4883 L145.4658,54.4883 L89.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            89.4658,
+            54.4883,
+            155.4658,
+            126.4883
+          ],
+          "width": 66.0,
+          "height": 72.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M145.4658,54.4883 L145.4658,64.4883 L155.4658,64.4883 L145.4658,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            145.4658,
+            54.4883,
+            155.4658,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "99,54.4883,148,54.4883,158,89.4883,148,124.4883,99,124.4883,89,89.4883,99,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            89.0,
+            54.4883,
+            158.0,
+            124.4883
+          ],
+          "width": 69.0,
+          "height": 70.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "99,54.4883,148,54.4883,158,89.4883,148,124.4883,99,124.4883,89,89.4883,99,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            89.0,
+            54.4883,
+            158.0,
+            124.4883
+          ],
+          "width": 69.0,
+          "height": 70.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 1,
+    "max_paint_height": {
+      "java": 72.0,
+      "before": 70.0,
+      "after": 70.0
+    },
+    "height_equal_after": false
+  },
+  {
+    "name": "indf535_note_exact512_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M7,51.4883 L7,664.4883 L82,664.4883 L82,61.4883 L72,51.4883 L7,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            7.0,
+            51.4883,
+            82.0,
+            664.4883
+          ],
+          "width": 75.0,
+          "height": 613.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M72,51.4883 L72,61.4883 L82,61.4883 L72,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            72.0,
+            51.4883,
+            82.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M7,51.4883 L7,664.4883 L82,664.4883 L82,61.4883 L72,51.4883 L7,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            7.0,
+            51.4883,
+            82.0,
+            664.4883
+          ],
+          "width": 75.0,
+          "height": 613.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M72,51.4883 L72,61.4883 L82,61.4883 L72,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            72.0,
+            51.4883,
+            82.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M7,51.4883 L7,664.4883 L82,664.4883 L82,61.4883 L72,51.4883 L7,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            7.0,
+            51.4883,
+            82.0,
+            664.4883
+          ],
+          "width": 75.0,
+          "height": 613.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M72,51.4883 L72,61.4883 L82,61.4883 L72,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            72.0,
+            51.4883,
+            82.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 613.0,
+      "before": 613.0,
+      "after": 613.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_exact512_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,667.4883 L90,667.4883 L90,64.4883 L80,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            90.0,
+            667.4883
+          ],
+          "width": 75.0,
+          "height": 613.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M80,54.4883 L80,64.4883 L90,64.4883 L80,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            80.0,
+            54.4883,
+            90.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,667.4883 L90,667.4883 L90,64.4883 L80,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            90.0,
+            667.4883
+          ],
+          "width": 75.0,
+          "height": 613.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M80,54.4883 L80,64.4883 L90,64.4883 L80,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            80.0,
+            54.4883,
+            90.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M15,54.4883 L15,667.4883 L90,667.4883 L90,64.4883 L80,54.4883 L15,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            90.0,
+            667.4883
+          ],
+          "width": 75.0,
+          "height": 613.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M80,54.4883 L80,64.4883 L90,64.4883 L80,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            80.0,
+            54.4883,
+            90.0,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 613.0,
+      "before": 613.0,
+      "after": 613.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_below557_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M12,51.4883 L12,716.4883 L77,716.4883 L77,61.4883 L67,51.4883 L12,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            12.0,
+            51.4883,
+            77.0,
+            716.4883
+          ],
+          "width": 65.0,
+          "height": 665.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M67,51.4883 L67,61.4883 L77,61.4883 L67,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            67.0,
+            51.4883,
+            77.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M12,51.4883 L12,716.4883 L77,716.4883 L77,61.4883 L67,51.4883 L12,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            12.0,
+            51.4883,
+            77.0,
+            716.4883
+          ],
+          "width": 65.0,
+          "height": 665.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M67,51.4883 L67,61.4883 L77,61.4883 L67,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            67.0,
+            51.4883,
+            77.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M12,51.4883 L12,716.4883 L77,716.4883 L77,61.4883 L67,51.4883 L12,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            12.0,
+            51.4883,
+            77.0,
+            716.4883
+          ],
+          "width": 65.0,
+          "height": 665.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M67,51.4883 L67,61.4883 L77,61.4883 L67,51.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            67.0,
+            51.4883,
+            77.0,
+            61.4883
+          ],
+          "width": 10.0,
+          "height": 10.0
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 665.0,
+      "before": 665.0,
+      "after": 665.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_note_below557_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M17.6821,54.4883 L17.6821,719.4883 L82.6821,719.4883 L82.6821,64.4883 L72.6821,54.4883 L17.6821,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            17.6821,
+            54.4883,
+            82.6821,
+            719.4883
+          ],
+          "width": 65.0,
+          "height": 665.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M72.6821,54.4883 L72.6821,64.4883 L82.6821,64.4883 L72.6821,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            72.6821,
+            54.4883,
+            82.6821,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "before": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M17.6821,54.4883 L17.6821,719.4883 L82.6821,719.4883 L82.6821,64.4883 L72.6821,54.4883 L17.6821,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            17.6821,
+            54.4883,
+            82.6821,
+            719.4883
+          ],
+          "width": 65.0,
+          "height": 665.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M72.6821,54.4883 L72.6821,64.4883 L82.6821,64.4883 L72.6821,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            72.6821,
+            54.4883,
+            82.6821,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ],
+      "after": [
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M17.6821,54.4883 L17.6821,719.4883 L82.6821,719.4883 L82.6821,64.4883 L72.6821,54.4883 L17.6821,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            17.6821,
+            54.4883,
+            82.6821,
+            719.4883
+          ],
+          "width": 65.0,
+          "height": 665.0
+        },
+        {
+          "element": "path",
+          "attributes": {
+            "d": "M72.6821,54.4883 L72.6821,64.4883 L82.6821,64.4883 L72.6821,54.4883",
+            "fill": "#FEFFDD",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            72.6821,
+            54.4883,
+            82.6821,
+            64.4883
+          ],
+          "width": 10.0,
+          "height": 9.999999999999993
+        }
+      ]
+    },
+    "whole_before": 0,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 665.0,
+      "before": 665.0,
+      "after": 665.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_exact512_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "611",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "62",
+            "x": "14",
+            "y": "51.4883"
+          },
+          "bounds": [
+            14.0,
+            51.4883,
+            76.0,
+            662.4883
+          ],
+          "width": 62.0,
+          "height": 611.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "608",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "62",
+            "x": "14",
+            "y": "51.4883"
+          },
+          "bounds": [
+            14.0,
+            51.4883,
+            76.0,
+            659.4883
+          ],
+          "width": 62.0,
+          "height": 608.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "611",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "62",
+            "x": "14",
+            "y": "51.4883"
+          },
+          "bounds": [
+            14.0,
+            51.4883,
+            76.0,
+            662.4883
+          ],
+          "width": 62.0,
+          "height": 611.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 611.0,
+      "before": 608.0,
+      "after": 611.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_exact512_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "611",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "62",
+            "x": "19.0063",
+            "y": "54.4883"
+          },
+          "bounds": [
+            19.0063,
+            54.4883,
+            81.0063,
+            665.4883
+          ],
+          "width": 62.0,
+          "height": 611.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "608",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "62",
+            "x": "19.0063",
+            "y": "54.4883"
+          },
+          "bounds": [
+            19.0063,
+            54.4883,
+            81.0063,
+            662.4883
+          ],
+          "width": 62.0,
+          "height": 608.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "611",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "62",
+            "x": "19.0063",
+            "y": "54.4883"
+          },
+          "bounds": [
+            19.0063,
+            54.4883,
+            81.0063,
+            665.4883
+          ],
+          "width": 62.0,
+          "height": 611.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 611.0,
+      "before": 608.0,
+      "after": 611.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_below557_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "663",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "52",
+            "x": "19",
+            "y": "51.4883"
+          },
+          "bounds": [
+            19.0,
+            51.4883,
+            71.0,
+            714.4883
+          ],
+          "width": 52.0,
+          "height": 663.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "661",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "52",
+            "x": "19",
+            "y": "51.4883"
+          },
+          "bounds": [
+            19.0,
+            51.4883,
+            71.0,
+            712.4883
+          ],
+          "width": 52.0,
+          "height": 661.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "663",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "52",
+            "x": "19",
+            "y": "51.4883"
+          },
+          "bounds": [
+            19.0,
+            51.4883,
+            71.0,
+            714.4883
+          ],
+          "width": 52.0,
+          "height": 663.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 663.0,
+      "before": 661.0,
+      "after": 663.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_rnote_below557_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "663",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "52",
+            "x": "24.1821",
+            "y": "54.4883"
+          },
+          "bounds": [
+            24.1821,
+            54.4883,
+            76.18209999999999,
+            717.4883
+          ],
+          "width": 51.99999999999999,
+          "height": 663.0
+        }
+      ],
+      "before": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "661",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "52",
+            "x": "24.1821",
+            "y": "54.4883"
+          },
+          "bounds": [
+            24.1821,
+            54.4883,
+            76.18209999999999,
+            715.4883
+          ],
+          "width": 51.99999999999999,
+          "height": 661.0
+        }
+      ],
+      "after": [
+        {
+          "element": "rect",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "height": "663",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "52",
+            "x": "24.1821",
+            "y": "54.4883"
+          },
+          "bounds": [
+            24.1821,
+            54.4883,
+            76.18209999999999,
+            717.4883
+          ],
+          "width": 51.99999999999999,
+          "height": 663.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 663.0,
+      "before": 661.0,
+      "after": 663.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_exact512_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "16,51.4883,74,51.4883,84,356.4883,74,662.4883,16,662.4883,6,356.4883,16,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            6.0,
+            51.4883,
+            84.0,
+            662.4883
+          ],
+          "width": 78.0,
+          "height": 611.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "16,51.4883,74,51.4883,84,355.4883,74,659.4883,16,659.4883,6,355.4883,16,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            6.0,
+            51.4883,
+            84.0,
+            659.4883
+          ],
+          "width": 78.0,
+          "height": 608.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "16,51.4883,74,51.4883,84,356.4883,74,662.4883,16,662.4883,6,356.4883,16,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            6.0,
+            51.4883,
+            84.0,
+            662.4883
+          ],
+          "width": 78.0,
+          "height": 611.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 611.0,
+      "before": 608.0,
+      "after": 611.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_exact512_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,83,54.4883,93,359.4883,83,665.4883,25,665.4883,15,359.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            93.0,
+            665.4883
+          ],
+          "width": 78.0,
+          "height": 611.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,83,54.4883,93,358.4883,83,662.4883,25,662.4883,15,358.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            93.0,
+            662.4883
+          ],
+          "width": 78.0,
+          "height": 608.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "25,54.4883,83,54.4883,93,359.4883,83,665.4883,25,665.4883,15,359.4883,25,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            15.0,
+            54.4883,
+            93.0,
+            665.4883
+          ],
+          "width": 78.0,
+          "height": 611.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 611.0,
+      "before": 608.0,
+      "after": 611.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_below557_legacy",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "21,51.4883,69,51.4883,79,382.4883,69,714.4883,21,714.4883,11,382.4883,21,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            11.0,
+            51.4883,
+            79.0,
+            714.4883
+          ],
+          "width": 68.0,
+          "height": 663.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "21,51.4883,69,51.4883,79,381.4883,69,712.4883,21,712.4883,11,381.4883,21,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            11.0,
+            51.4883,
+            79.0,
+            712.4883
+          ],
+          "width": 68.0,
+          "height": 661.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "21,51.4883,69,51.4883,79,382.4883,69,714.4883,21,714.4883,11,382.4883,21,51.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            11.0,
+            51.4883,
+            79.0,
+            714.4883
+          ],
+          "width": 68.0,
+          "height": 663.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 663.0,
+      "before": 661.0,
+      "after": 663.0
+    },
+    "height_equal_after": true
+  },
+  {
+    "name": "indf535_hnote_below557_teoz",
+    "shapes": {
+      "java": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "26.1821,54.4883,74.1821,54.4883,84.1821,385.4883,74.1821,717.4883,26.1821,717.4883,16.1821,385.4883,26.1821,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            16.1821,
+            54.4883,
+            84.1821,
+            717.4883
+          ],
+          "width": 68.0,
+          "height": 663.0
+        }
+      ],
+      "before": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "26.1821,54.4883,74.1821,54.4883,84.1821,384.4883,74.1821,715.4883,26.1821,715.4883,16.1821,384.4883,26.1821,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            16.1821,
+            54.4883,
+            84.1821,
+            715.4883
+          ],
+          "width": 68.0,
+          "height": 661.0
+        }
+      ],
+      "after": [
+        {
+          "element": "polygon",
+          "attributes": {
+            "fill": "#FEFFDD",
+            "points": "26.1821,54.4883,74.1821,54.4883,84.1821,385.4883,74.1821,717.4883,26.1821,717.4883,16.1821,385.4883,26.1821,54.4883",
+            "style": "stroke:#181818;stroke-width:0.5;"
+          },
+          "bounds": [
+            16.1821,
+            54.4883,
+            84.1821,
+            717.4883
+          ],
+          "width": 68.0,
+          "height": 663.0
+        }
+      ]
+    },
+    "whole_before": 1,
+    "whole_after": 0,
+    "max_paint_height": {
+      "java": 663.0,
+      "before": 661.0,
+      "after": 663.0
+    },
+    "height_equal_after": true
+  }
+]

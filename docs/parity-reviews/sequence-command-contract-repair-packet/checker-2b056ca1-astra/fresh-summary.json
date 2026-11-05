@@ -1,0 +1,395 @@
+{
+  "before": {
+    "entries": 422,
+    "match": 190,
+    "mismatch": 164,
+    "nonpositive": 66,
+    "valid_cli_errors": 2,
+    "cli_panics": []
+  },
+  "after": {
+    "entries": 422,
+    "match": 232,
+    "mismatch": 124,
+    "nonpositive": 66,
+    "valid_cli_errors": 0,
+    "cli_panics": []
+  },
+  "valid_references": 356,
+  "reference_outcomes": {
+    "valid_sequence": 356,
+    "java_syntax_error_with_export_failure": 46,
+    "java_export_error": 12,
+    "java_syntax_error": 2,
+    "java_color_error": 6
+  },
+  "intent_disagreements": [
+    {
+      "name": "c2b0_fox_box_end_vt_legacy",
+      "intended_valid": false,
+      "observed_valid": true,
+      "outcome": "valid_sequence"
+    },
+    {
+      "name": "c2b0_fox_box_end_vt_teoz",
+      "intended_valid": false,
+      "observed_valid": true,
+      "outcome": "valid_sequence"
+    },
+    {
+      "name": "c2b0_fox_hide_footbox_vt_legacy",
+      "intended_valid": false,
+      "observed_valid": true,
+      "outcome": "valid_sequence"
+    },
+    {
+      "name": "c2b0_fox_hide_footbox_vt_teoz",
+      "intended_valid": false,
+      "observed_valid": true,
+      "outcome": "valid_sequence"
+    },
+    {
+      "name": "c2b0_fox_divider_vt_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_divider_vt_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_divider_ff_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_divider_ff_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_divider_vt_space_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_divider_vt_space_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_delay_vt_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_delay_vt_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_delay_ff_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_delay_ff_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_delay_vt_space_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_delay_vt_space_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_export_error"
+    },
+    {
+      "name": "c2b0_fox_spacing_vt_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error_with_export_failure"
+    },
+    {
+      "name": "c2b0_fox_spacing_vt_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error_with_export_failure"
+    },
+    {
+      "name": "c2b0_fox_spacing_ff_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error_with_export_failure"
+    },
+    {
+      "name": "c2b0_fox_spacing_ff_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error_with_export_failure"
+    },
+    {
+      "name": "c2b0_fox_spacing_vt_space_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error_with_export_failure"
+    },
+    {
+      "name": "c2b0_fox_spacing_vt_space_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error_with_export_failure"
+    },
+    {
+      "name": "c2b0_entry_space_nbsp_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error"
+    },
+    {
+      "name": "c2b0_entry_space_nbsp_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_syntax_error"
+    },
+    {
+      "name": "c2b0_rich_color_note_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_color_error"
+    },
+    {
+      "name": "c2b0_rich_color_note_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_color_error"
+    },
+    {
+      "name": "c2b0_rich_color_rnote_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_color_error"
+    },
+    {
+      "name": "c2b0_rich_color_rnote_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_color_error"
+    },
+    {
+      "name": "c2b0_rich_color_hnote_legacy",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_color_error"
+    },
+    {
+      "name": "c2b0_rich_color_hnote_teoz",
+      "intended_valid": true,
+      "observed_valid": false,
+      "outcome": "java_color_error"
+    }
+  ],
+  "gains": [
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_of_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_of_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_over_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_over_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_left_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_left_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_right_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_right_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_as_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_as_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_across_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_across_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_on_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_on_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_end_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_end_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_space_identity_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_space_identity_teoz.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_space_identity_legacy.puml",
+    "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_space_identity_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_ff_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_ff_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_space_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_resume_vt_space_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_ff_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_note_across_vt_space_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_ff_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-fox-space/c2b0_fox_box_vt_space_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_box_tab_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_across_tab_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_resume_tab_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_resume_tab_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_box_nbsp_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_across_nbsp_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_resume_nbsp_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_resume_nbsp_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_across_spaces_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_resume_spaces_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_entry_resume_spaces_teoz.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_empty_note_teoz.puml"
+  ],
+  "losses": [],
+  "new_valid_errors": [],
+  "lost_rejections": [],
+  "corrected_valid_errors": [
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_empty_note_legacy.puml",
+    "test-diagrams/perturbations/sequence-command-entry-grammar/c2b0_empty_note_teoz.puml"
+  ],
+  "by_mechanism": {
+    "sequence-command-entry-grammar": {
+      "before": {
+        "entries": 42,
+        "match": 9,
+        "mismatch": 29,
+        "nonpositive": 2,
+        "valid_cli_errors": 2,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 42,
+        "match": 21,
+        "mismatch": 19,
+        "nonpositive": 2,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      }
+    },
+    "sequence-command-fox-space": {
+      "before": {
+        "entries": 224,
+        "match": 93,
+        "mismatch": 73,
+        "nonpositive": 58,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 224,
+        "match": 103,
+        "mismatch": 63,
+        "nonpositive": 58,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      }
+    },
+    "sequence-create-command-signature-scope": {
+      "before": {
+        "entries": 32,
+        "match": 32,
+        "mismatch": 0,
+        "nonpositive": 0,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 32,
+        "match": 32,
+        "mismatch": 0,
+        "nonpositive": 0,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      }
+    },
+    "sequence-pattern2-class-composition": {
+      "before": {
+        "entries": 68,
+        "match": 30,
+        "mismatch": 32,
+        "nonpositive": 6,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 68,
+        "match": 30,
+        "mismatch": 32,
+        "nonpositive": 6,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      }
+    },
+    "sequence-required-note-identity": {
+      "before": {
+        "entries": 56,
+        "match": 26,
+        "mismatch": 30,
+        "nonpositive": 0,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      },
+      "after": {
+        "entries": 56,
+        "match": 46,
+        "mismatch": 10,
+        "nonpositive": 0,
+        "valid_cli_errors": 0,
+        "cli_panics": []
+      }
+    }
+  },
+  "novelty": {
+    "entries": 422,
+    "distinct_sources": 422,
+    "overlap_with_3111": 0,
+    "overlap_with_all_prior_and_maker_sources": 0
+  },
+  "classification_refinements": [
+    {
+      "name": "c2b0_rich_color_note_legacy",
+      "initial": "java_syntax_error",
+      "final": "java_color_error",
+      "evidence": "stderr: No such color; SingleLineCommand2#execute catches NoSuchColorException; source-extracted regex capture #back retained in color-capture-derivation.json"
+    },
+    {
+      "name": "c2b0_rich_color_note_teoz",
+      "initial": "java_syntax_error",
+      "final": "java_color_error",
+      "evidence": "stderr: No such color; SingleLineCommand2#execute catches NoSuchColorException; source-extracted regex capture #back retained in color-capture-derivation.json"
+    },
+    {
+      "name": "c2b0_rich_color_rnote_legacy",
+      "initial": "java_syntax_error",
+      "final": "java_color_error",
+      "evidence": "stderr: No such color; SingleLineCommand2#execute catches NoSuchColorException; source-extracted regex capture #back retained in color-capture-derivation.json"
+    },
+    {
+      "name": "c2b0_rich_color_rnote_teoz",
+      "initial": "java_syntax_error",
+      "final": "java_color_error",
+      "evidence": "stderr: No such color; SingleLineCommand2#execute catches NoSuchColorException; source-extracted regex capture #back retained in color-capture-derivation.json"
+    },
+    {
+      "name": "c2b0_rich_color_hnote_legacy",
+      "initial": "java_syntax_error",
+      "final": "java_color_error",
+      "evidence": "stderr: No such color; SingleLineCommand2#execute catches NoSuchColorException; source-extracted regex capture #back retained in color-capture-derivation.json"
+    },
+    {
+      "name": "c2b0_rich_color_hnote_teoz",
+      "initial": "java_syntax_error",
+      "final": "java_color_error",
+      "evidence": "stderr: No such color; SingleLineCommand2#execute catches NoSuchColorException; source-extracted regex capture #back retained in color-capture-derivation.json"
+    }
+  ]
+}

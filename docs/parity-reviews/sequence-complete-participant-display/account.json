@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-complete-participant-display",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.Participant#getDisplay",
+    "skin.AbstractTextualComponent#getTextBlock/#getTextWidth/#getTextHeight",
+    "skin.rose.ComponentRoseParticipant#getPreferredHeight/#drawInternalU",
+    "skin.rose.ComponentRoseQueue#getPreferredHeight/#drawInternalU",
+    "decoration.symbol.USymbolQueue#asSmall/#getMargin",
+    "sequencediagram.teoz.LivingSpaces#drawHeads"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout",
+    "crates/rustuml-render/src/sequence.rs::render_participant_shape",
+    "crates/rustuml-render/src/sequence.rs::participant_text"
+  ],
+  "invariant": "Preferred bounds, row reservation and paint use the same evaluated participant Display, including all label and rendered stereotype lines. Queue margins surround that component; shadow and shape margins remain kind-specific.",
+  "causal_divergence": "Current label is measured/emitted as a literal string; queue height is line_h times one/two; ordinary heads and queue paint have single-line constants independent of Display.",
+  "planned_change": "Materialize sequence-owned participant text lines using existing sequence newline/creole measurement and paint APIs. Carry complete measured dimensions into head/queue shape and creation consumers; preserve underline allocation and queue component-versus-row separation. No shared text/style/font edits.",
+  "perturbation_axes": [
+    "multiline labels/stereotypes and unequal font sizes",
+    "created/initial/tail, mixed/queue-only topology, engine/shadow"
+  ],
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "evidence_import": "16b28fc6de23d3920150efe50cfad7d065985c1a",
+  "account_date": "2026-11-04"
+}

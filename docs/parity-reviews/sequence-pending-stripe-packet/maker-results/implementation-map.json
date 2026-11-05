@@ -1,0 +1,46 @@
+{
+  "accounts": [
+    {
+      "mechanism": "sequence-single-pending-create",
+      "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+      "implementation_commits": [
+        "d5478061ffbd2b1ec31a8ac513ff23b4489e3fa6"
+      ]
+    },
+    {
+      "mechanism": "sequence-queue-stripe-origin",
+      "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+      "implementation_commits": [
+        "653b1ed7a49784e6e6205f3aebf69a16278f8d78"
+      ]
+    },
+    {
+      "mechanism": "sequence-message-stripe-baselines",
+      "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+      "implementation_commits": [
+        "653b1ed7a49784e6e6205f3aebf69a16278f8d78"
+      ]
+    },
+    {
+      "mechanism": "sequence-self-half-polygon-order",
+      "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+      "implementation_commits": [
+        "653b1ed7a49784e6e6205f3aebf69a16278f8d78"
+      ]
+    },
+    {
+      "mechanism": "sequence-collections-source-clarification",
+      "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+      "implementation_commits": [
+        "653b1ed7a49784e6e6205f3aebf69a16278f8d78"
+      ]
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "full_tested_production": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "ownership": "Only sequence model/parser/renderer. No parse/mod, ASCII, class, TIM, shared text/style/fonts or targets."
+}

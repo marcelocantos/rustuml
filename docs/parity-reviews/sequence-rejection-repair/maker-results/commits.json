@@ -1,0 +1,125 @@
+[
+  {
+    "mechanism": "sequence-box-title-grammar",
+    "account": "docs/parity-reviews/sequence-box-title-grammar/account.json",
+    "original_account_commit": "55e88b2add0a1356aeb1bc42284f1d5a0f06b974",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-delay-label-allocation",
+    "account": "docs/parity-reviews/sequence-delay-label-allocation/account.json",
+    "original_account_commit": "a21a02753cc9abaeef64d7b75caacb253d4f4c7c",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-page-wrapper-hierarchy",
+    "account": "docs/parity-reviews/sequence-page-wrapper-hierarchy/account.json",
+    "original_account_commit": "836f9c0d6e9337c7af51d87ee250b8698b23fd7c",
+    "implementation_commits": [
+      "cd6be3da975cc9a8133e91bb33aceb28c7f6da3f",
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-preferred-component-flow",
+    "account": "docs/parity-reviews/sequence-preferred-component-flow/account.json",
+    "original_account_commit": "11c4e6354cd2029fad6463db0c14a023e422a6d6",
+    "implementation_commits": [
+      "2000a77ec57266181a4ae73ee73e65381ed1bf36",
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-return-configuration",
+    "account": "docs/parity-reviews/sequence-return-configuration/account.json",
+    "original_account_commit": "f785ee820f7364f0669a620222ac1d6e64c42d83",
+    "implementation_commits": [
+      "e120da16f6ae07ce55edb7dedd9db80f800b4f2a"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-reverse-self-component",
+    "account": "docs/parity-reviews/sequence-reverse-self-component/account.json",
+    "original_account_commit": "a519af2de609190c9c124c5b5aa02a8dc06b9f97",
+    "implementation_commits": [
+      "2dd42f4c71422afcbb2246f5ed3137cdf70c747f",
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-teoz-callback-lifecycle",
+    "account": "docs/parity-reviews/sequence-teoz-callback-lifecycle/account.json",
+    "original_account_commit": "7ddde17123b246df7ac2e4084e27e21f2deb450a",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-teoz-englober-margins",
+    "account": "docs/parity-reviews/sequence-teoz-englober-margins/account.json",
+    "original_account_commit": "3c9a9e67c7742ef7a70a4645ba499073366c069f",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-teoz-event-history",
+    "account": "docs/parity-reviews/sequence-teoz-event-history/account.json",
+    "original_account_commit": "836f9c0d6e9337c7af51d87ee250b8698b23fd7c",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-teoz-group-tile-composition",
+    "account": "docs/parity-reviews/sequence-teoz-group-tile-composition/account.json",
+    "original_account_commit": "bf4f0c1410a2dc8d72e76d9b470431fe58c5f6c6",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-teoz-note-component-flow",
+    "account": "docs/parity-reviews/sequence-teoz-note-component-flow/account.json",
+    "original_account_commit": "81acbf505408497b108442bab5371fa9e78f9a5e",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  },
+  {
+    "mechanism": "sequence-teoz-real-bound-capture",
+    "account": "docs/parity-reviews/sequence-teoz-real-bound-capture/account.json",
+    "original_account_commit": "a5a826c28d39e4a1ac01348390c3c4f3bfa2cc48",
+    "implementation_commits": [
+      "8291416539aa9c61589e4dd586ad65d3a135966c"
+    ],
+    "normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+    "status": "Awaiting new independent checker; no acceptance asserted"
+  }
+]

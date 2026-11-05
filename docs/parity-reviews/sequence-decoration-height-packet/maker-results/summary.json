@@ -1,0 +1,756 @@
+{
+  "kind": "Maker evidence only; no acceptance claim",
+  "baseline": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "implementation": "71b465a98aa5c511588d87ee080088e8614d975e",
+  "before": {
+    "entries": 1966,
+    "cli_comparator_exits": {
+      "1": 600,
+      "0": 1319,
+      "2": 47
+    },
+    "matches": 1319,
+    "valid_mismatches": 600,
+    "invalid_references": 47,
+    "invalid_rejected": 31,
+    "invalid_accepted": 16,
+    "valid_cli_errors": [],
+    "cli_panics": [],
+    "library_render_panics": [],
+    "library_comparison_panics": {
+      "product_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+      ],
+      "assisted_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+      ]
+    },
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 600,
+        "0": 1319,
+        "2": 47
+      },
+      "product_library": {
+        "1": 600,
+        "0": 1319,
+        "2": 46,
+        "101": 1
+      },
+      "assisted_library": {
+        "1": 643,
+        "0": 1276,
+        "2": 46,
+        "101": 1
+      }
+    },
+    "cli_equals_library": 1920
+  },
+  "after": {
+    "entries": 1966,
+    "cli_comparator_exits": {
+      "1": 569,
+      "0": 1350,
+      "2": 47
+    },
+    "matches": 1350,
+    "valid_mismatches": 569,
+    "invalid_references": 47,
+    "invalid_rejected": 35,
+    "invalid_accepted": 12,
+    "valid_cli_errors": [],
+    "cli_panics": [],
+    "library_render_panics": [],
+    "library_comparison_panics": {
+      "product_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+      ],
+      "assisted_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+      ]
+    },
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 569,
+        "0": 1350,
+        "2": 47
+      },
+      "product_library": {
+        "1": 569,
+        "0": 1350,
+        "2": 46,
+        "101": 1
+      },
+      "assisted_library": {
+        "1": 612,
+        "0": 1307,
+        "2": 46,
+        "101": 1
+      }
+    },
+    "cli_equals_library": 1920
+  },
+  "gains": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.svg",
+      "source_sha256": "f4656160710518c72e76b7882a9c4b16b09f0579eccb56c08c0c10df62bfaeb8",
+      "golden_sha256": "bbfd601685b02bc3fd214b9a14553e81e06ed637478812de5d1a1a465966f233",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.svg",
+      "source_sha256": "7f502b0f32a28961f22a36e330c2c3cc141facf68ac34fecba2eab2dd3255c3f",
+      "golden_sha256": "5c9741594d2f3d115b457f105117a1d304a2f44c3b00820b2ebc9df2a1485987",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.svg",
+      "source_sha256": "02d4f2e3225692ea335272bd6c1d2ff88a93364fa9239276ce20834a32c8c2a1",
+      "golden_sha256": "8af0eb33b5ed5227fa96bb5984fd0e591ece3f31ce7e84910398a0fe34bd1417",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.svg",
+      "source_sha256": "52c5b67e5e48b1b99079bb54634cd786b1b29973ba1e2813f5c420c64c5288b9",
+      "golden_sha256": "aaea779e5ed27c9493c9e5bd22fa380988cb5398ab9e762afea5d931f5d4c951",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.svg",
+      "source_sha256": "8edc2eb0ec7dd0e75744641d7ffeab8cda03196b3cb0ecf25bbc9cc1f9913228",
+      "golden_sha256": "b91073550ea80ad2c60e9f1ff7489b86d1bb6b7d9ca4aaefa4b33dcdc4bb92b2",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.svg",
+      "source_sha256": "1a4b33372002e9f5aba82df02888c41854de7bfc2ad24638370d006df6e5b80c",
+      "golden_sha256": "20be5a60985995aab24508ae1169eb463867e4cfee7a05613649cdb742ea2758",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.svg",
+      "source_sha256": "e8439ac2560c421ccfa0a610d3e38a58c1da39dfa68e5c09cfecda3854ab4bb5",
+      "golden_sha256": "cb965d89ca412657ba45ee78b208334d1492d2027177d856b2e23cbdb68f9485",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.svg",
+      "source_sha256": "7fe10f6e9e610764878f583c5f94b96431d742bfad40d6f633da89b4c5f720c5",
+      "golden_sha256": "058b005ad93941e80b2e19d4a77262ca89421bff84cf83c115bcfad93cd00ce0",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.svg",
+      "source_sha256": "9c71231256da076137c2434f9430b910649b84d6616d59cf32f5a49815a94887",
+      "golden_sha256": "71fb27c070420edeec188c5ef8efc03ae4e9f4a53523e61f3801805c35b75d9c",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.svg",
+      "source_sha256": "31029767868ac9dbf7ec0e45f78c6da4134cacb6200edc724d1e040da659df5f",
+      "golden_sha256": "cfffd59e02bc2cbf05b5bb0ca88ffec0f5db72102b3e7ca94a535b2882474ede",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_internal_0.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_internal_0.svg",
+      "source_sha256": "df71877728133a9ac7af325e99587519780b8e20ab95b0dbde1676fe51807bde",
+      "golden_sha256": "2ee5571ea2b648c54fce7c1a562081de32b12a7d59946c8ea9e7766d7facbeb7",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_self_0.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_self_0.svg",
+      "source_sha256": "00d77e54cd9b4b3e41c8eba82f08ef22d0e35cfc853f2dd7ca580df6a48777d1",
+      "golden_sha256": "26f3d81b5c287d013656fb3486c716972166cadf546b5daa1e1c9f047c6c72f0",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_external_0.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_external_0.svg",
+      "source_sha256": "507202ba75f274740a8975648f14491c42648185e2796a55f5427d3ac225f79c",
+      "golden_sha256": "4619b5d3f5f749bc2016ff4e7eeee7c009460314f1e121d9d628ce14568ebd3a",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_11_13.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_11_13.svg",
+      "source_sha256": "928783df85d446dd4f725a01f714b741c8b9410e19c661f5bbdeff25ccc5d41b",
+      "golden_sha256": "83168788a95f7696e5b912c4c1aac0eeb17cfc79da54fe158e63a85e608c5fe2",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_18_10.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_18_10.svg",
+      "source_sha256": "3883a43dd904759213a9eba376cec77113d542a228e684511a67452c0e44f1ec",
+      "golden_sha256": "14121a9e869f773e402c7c9d120d87657a8dbef93ec0440f2e9feb9ce842c09f",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_10_20.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_fonts_0_10_20.svg",
+      "source_sha256": "ba461d3d45c93e941ecf53f2670d959aec4edabee66b60694ccb952c42ba568b",
+      "golden_sha256": "5fe37c4e119ca0fc81869122f29487a2be9a35c08ed5d2f868adecd786286dbe",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_two_notes_0.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_two_notes_0.svg",
+      "source_sha256": "bf41bc86cf70068924b71a5714431d75e5bd3e25bc502d7b24b9fb1b11fc20b1",
+      "golden_sha256": "91d2f4d8083ccd0caa4e7180d42bfb1024dd723645c0c158bd68d133a28c7d03",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_root_0.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_root_0.svg",
+      "source_sha256": "5d2d9e000ca17f8ff93536f75e6e9954b6012d31f670299bfc6eba6fec6ca5e4",
+      "golden_sha256": "f57098fbb0c7f694b027710a854d5b9850eaa58fe874032669d679926322da55",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_siblings_0.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_siblings_0.svg",
+      "source_sha256": "4c40623086a59811b213693514feb483643f5f51cc92d98b8fb1e5c507719bdd",
+      "golden_sha256": "a766336df48612eb2a2f3b4607f568543bb97e722bfa25d6f4183bfee567c393",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_shadow_0.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_shadow_0.svg",
+      "source_sha256": "c1b6f88ae76c003b3a04ae71f66aa573c922e0b78950ceeff7aeacf1fb3498fd",
+      "golden_sha256": "f8d55af7a4dfc792793d21862ac8de8538ef6c5696a68ab642d62ddc2f9371b4",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_internal_1.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_internal_1.svg",
+      "source_sha256": "92aee83fe4afadd67ea26347cd8678bca392b32c845f6f4d53335e281ef6c64c",
+      "golden_sha256": "e945b9cb63158f387da0257502f620daacda9646fc950ae3f0f4cad5575cf124",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_self_1.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_self_1.svg",
+      "source_sha256": "3f8c8630d1315b5e995aa02504bfb257dba347ef0a80e006c0c002e135f09c21",
+      "golden_sha256": "61906d19a7523aedaecd0a14622e98df67c7eb0342425ea660fc059ac71852fd",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_external_1.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/circle_external_1.svg",
+      "source_sha256": "26f58a96ac6cc8df6db7ca4df8d658216fbcf1282629839b73af564f5e178e74",
+      "golden_sha256": "69eb52929f7226496c66c8b486c462cebc940922535d87ea8acfd78cf857b50f",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_two_notes_1.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/child_two_notes_1.svg",
+      "source_sha256": "57b426de0f0509e20cdd0bc9f7bd28ebbf5c67ad9175d6031db2e06d7415d621",
+      "golden_sha256": "88d88b5c542b2314b036a48a29ebeca774f8b288faf57c775bf5e3bb27079ad4",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_root_1.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_root_1.svg",
+      "source_sha256": "5e13e89f40cf5f88ddcd4ccf304a18da0057343a89a43dfdeae28920afe650c5",
+      "golden_sha256": "2dae18ab951883e19a012ff479e980043251f2a70a4a9d88ceed48289c97f11a",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_siblings_1.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_siblings_1.svg",
+      "source_sha256": "850f330b22bdc7b5b49f623620c912b64aaaf7e241ba29fead1462e3c7d73315",
+      "golden_sha256": "5e5e926d7b51defb41ecc2ff25d79cc4837b6012aa93077fbf84fb1039b2e71a",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_shadow_1.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/style_shadow_1.svg",
+      "source_sha256": "5aa0df2803df42acd56c4e09aa33e64d346e2fd0ed3db883c37c90faa029135b",
+      "golden_sha256": "25fe738e670d46184b7f94fa5aca21fa804cc98566694fd0dfb2181b680b56fe",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_0_11.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_0_11.svg",
+      "source_sha256": "259ad0f8b40b108adc9989c62384353a47f6453599766414ccc04b71391ecb95",
+      "golden_sha256": "1d02144e7ebf5d0b36fabd9679b0e90903488f8ff620a3b49eb5fbe86c7a0441",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_0_18.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_0_18.svg",
+      "source_sha256": "de5a04a7c338eadbf310353b40acd9c163e592a3c023073604396503816ab26e",
+      "golden_sha256": "f4a0c0c9023d68dce74758d87c903ae80dd114c36a428f21883fc862487e50ce",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_1_11.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_1_11.svg",
+      "source_sha256": "bc0ee34d50b4cee9c47ad9004a2f1c190af3679a35b44a6cea3f19faba980f92",
+      "golden_sha256": "046ac45e3f956677f2ed56fecc1cfedb23954522341d75575ebdec2d549c5df6",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_1_18.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_1_18.svg",
+      "source_sha256": "7a4f569f882015918de7d045245b09e53b4d99d3d1091e94756bd3a506c1bd41",
+      "golden_sha256": "f9f4546a9f189b80c9ede944b53a9d1584c87f1cc8baa92dd8f64c7b052c9d0b",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0
+    }
+  ],
+  "losses_by_mode": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "cohorts": {
+    "preserved1901": {
+      "before": {
+        "entries": 1901,
+        "cli_comparator_exits": {
+          "1": 559,
+          "0": 1299,
+          "2": 43
+        },
+        "matches": 1299,
+        "valid_mismatches": 559,
+        "invalid_references": 43,
+        "invalid_rejected": 31,
+        "invalid_accepted": 12,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+          ],
+          "assisted_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+          ]
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 559,
+            "0": 1299,
+            "2": 43
+          },
+          "product_library": {
+            "1": 559,
+            "0": 1299,
+            "2": 42,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 602,
+            "0": 1256,
+            "2": 42,
+            "101": 1
+          }
+        },
+        "cli_equals_library": 1859
+      },
+      "after": {
+        "entries": 1901,
+        "cli_comparator_exits": {
+          "1": 557,
+          "0": 1301,
+          "2": 43
+        },
+        "matches": 1301,
+        "valid_mismatches": 557,
+        "invalid_references": 43,
+        "invalid_rejected": 31,
+        "invalid_accepted": 12,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+          ],
+          "assisted_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml"
+          ]
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 557,
+            "0": 1301,
+            "2": 43
+          },
+          "product_library": {
+            "1": 557,
+            "0": 1301,
+            "2": 42,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 600,
+            "0": 1258,
+            "2": 42,
+            "101": 1
+          }
+        },
+        "cli_equals_library": 1859
+      }
+    },
+    "checker37": {
+      "before": {
+        "entries": 37,
+        "cli_comparator_exits": {
+          "1": 18,
+          "2": 2,
+          "0": 17
+        },
+        "matches": 17,
+        "valid_mismatches": 18,
+        "invalid_references": 2,
+        "invalid_rejected": 0,
+        "invalid_accepted": 2,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 18,
+            "2": 2,
+            "0": 17
+          },
+          "product_library": {
+            "1": 18,
+            "2": 2,
+            "0": 17
+          },
+          "assisted_library": {
+            "1": 18,
+            "2": 2,
+            "0": 17
+          }
+        },
+        "cli_equals_library": 35
+      },
+      "after": {
+        "entries": 37,
+        "cli_comparator_exits": {
+          "1": 10,
+          "2": 2,
+          "0": 25
+        },
+        "matches": 25,
+        "valid_mismatches": 10,
+        "invalid_references": 2,
+        "invalid_rejected": 2,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 10,
+            "2": 2,
+            "0": 25
+          },
+          "product_library": {
+            "1": 10,
+            "2": 2,
+            "0": 25
+          },
+          "assisted_library": {
+            "1": 10,
+            "2": 2,
+            "0": 25
+          }
+        },
+        "cli_equals_library": 35
+      }
+    },
+    "maker24": {
+      "before": {
+        "entries": 24,
+        "cli_comparator_exits": {
+          "1": 19,
+          "2": 2,
+          "0": 3
+        },
+        "matches": 3,
+        "valid_mismatches": 19,
+        "invalid_references": 2,
+        "invalid_rejected": 0,
+        "invalid_accepted": 2,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 19,
+            "2": 2,
+            "0": 3
+          },
+          "product_library": {
+            "1": 19,
+            "2": 2,
+            "0": 3
+          },
+          "assisted_library": {
+            "1": 19,
+            "2": 2,
+            "0": 3
+          }
+        },
+        "cli_equals_library": 22
+      },
+      "after": {
+        "entries": 24,
+        "cli_comparator_exits": {
+          "0": 20,
+          "1": 2,
+          "2": 2
+        },
+        "matches": 20,
+        "valid_mismatches": 2,
+        "invalid_references": 2,
+        "invalid_rejected": 2,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 20,
+            "1": 2,
+            "2": 2
+          },
+          "product_library": {
+            "0": 20,
+            "1": 2,
+            "2": 2
+          },
+          "assisted_library": {
+            "0": 20,
+            "1": 2,
+            "2": 2
+          }
+        },
+        "cli_equals_library": 22
+      }
+    },
+    "underline4": {
+      "before": {
+        "entries": 4,
+        "cli_comparator_exits": {
+          "1": 4
+        },
+        "matches": 0,
+        "valid_mismatches": 4,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 4
+          },
+          "product_library": {
+            "1": 4
+          },
+          "assisted_library": {
+            "1": 4
+          }
+        },
+        "cli_equals_library": 4
+      },
+      "after": {
+        "entries": 4,
+        "cli_comparator_exits": {
+          "0": 4
+        },
+        "matches": 4,
+        "valid_mismatches": 0,
+        "invalid_references": 0,
+        "invalid_rejected": 0,
+        "invalid_accepted": 0,
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "library_render_panics": [],
+        "library_comparison_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 4
+          },
+          "product_library": {
+            "0": 4
+          },
+          "assisted_library": {
+            "0": 4
+          }
+        },
+        "cli_equals_library": 4
+      }
+    }
+  },
+  "main_library_tiers": {
+    "product_pass": 11181,
+    "eligible": 11251,
+    "assisted_pass": 10497,
+    "assisted_failed": 754,
+    "skipped": 1299,
+    "sequence": "1411/1411",
+    "changes": {
+      "no_oracle_failure_names.txt": {
+        "newly_failing": [],
+        "recovered": [],
+        "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910"
+      },
+      "golden_failure_names.txt": {
+        "newly_failing": [],
+        "recovered": [],
+        "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+      }
+    },
+    "label": "Library tiers, not 11251 CLI processes; frozen test ratchets remain red"
+  },
+  "units": {
+    "parser": 570,
+    "renderer": 790,
+    "ascii_included": true,
+    "cli_pipe": 13
+  },
+  "guards": "4/6",
+  "builtin_perturbations": {
+    "registered": 1279,
+    "failures": 593,
+    "matches": 686,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/crates/rustuml-oracle",
+    "note": "Unchanged built-in suite. Package cwd differs from isolated CLI repo cwd on an existing theme case (T14.6.2)."
+  },
+  "validation_retry": "350e776a introduced one main creole-family regression. All intermediate logs/output are preserved. Accounts54fb67fc and6e9c711d precede the source-derived flow/title corrections; four intermediate fresh mismatches are also preserved. The subsequent plain-participant Teoz creation height audit changed its consumer to the same resolved shadow; validation026e5eeb is also preserved. Final repetition is justified by changed production, not an attempt to erase failed runs."
+}

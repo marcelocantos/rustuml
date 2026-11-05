@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+skinparam padding 3
+skinparam shadowing true
+participant "Edge" as E
+participant "Wider middle participant" as M
+participant Z
+E -> M ++ : enter
+M <-- M ++ : nested
+note left
+attached words
+more
+end note
+M -> Z : next
+note over Z,E: span
+@enduml

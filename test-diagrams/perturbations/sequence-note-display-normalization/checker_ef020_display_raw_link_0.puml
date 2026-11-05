@@ -1,0 +1,4 @@
+@startuml
+Quartz -> Fern : call
+note right : [[https://example.org/a path\ntext]]\nafter\\nlast
+@enduml

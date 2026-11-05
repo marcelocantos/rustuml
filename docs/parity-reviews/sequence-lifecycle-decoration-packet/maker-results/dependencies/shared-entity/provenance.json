@@ -1,0 +1,26 @@
+{
+  "commit": "fc698b9b",
+  "records": [
+    {
+      "original": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_quoted.puml",
+      "copy": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/dependencies/shared-entity/bare_quoted.puml",
+      "sha256": "4102dec03d0b6170a14a8d6efe32e6d910e9c319a13860d0aa96b539d1cf7328"
+    },
+    {
+      "original": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/bare_quoted.svg",
+      "copy": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/dependencies/shared-entity/bare_quoted.svg",
+      "sha256": "d433a00be85b73b7fc7f624ba9ceced4a5b74a5a49d39b6b7f0bedc7689d478c"
+    },
+    {
+      "original": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/order_stereo_entity.puml",
+      "copy": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/dependencies/shared-entity/order_stereo_entity.puml",
+      "sha256": "b5d406bce365362a00d9d30bc30ee0ab13ce83f2f02278d4d0e6c4825398d62b"
+    },
+    {
+      "original": "test-diagrams/perturbations/class-sequence-shared-entity-command/checker3c/order_stereo_entity.svg",
+      "copy": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/dependencies/shared-entity/order_stereo_entity.svg",
+      "sha256": "7fd376de09549ae93ea49ab05438b20278905c4b5c27c2259aa4f2494662c86b"
+    }
+  ],
+  "disposition": "Separate retained participant stereotype consumer dependency; no lifecycle cause, no fixes in this packet."
+}

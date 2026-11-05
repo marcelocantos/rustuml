@@ -1,0 +1,12 @@
+{
+  "note": "Python execution of source-extracted ASCII regex confirms the static derivation; it is not substituted for Java stdout/status.",
+  "patterns": {
+    "COLOR_REGEXP": "#\\w+[-\\\\|/]?\\w+",
+    "PART2": "#(?:\\w+[-\\\\|/]?\\w+;)?(?:(?:text|back|header|line|line\\.dashed|line\\.dotted|line\\.bold|shadowing)(?::\\w+[-\\\\|/]?\\w+)?(?:;|(?![\\w;:.])))+"
+  },
+  "source": "note over Vale #back:LightBlue: cargo",
+  "capture": {
+    "color": "#back",
+    "text": "LightBlue: cargo"
+  }
+}

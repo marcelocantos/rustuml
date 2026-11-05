@@ -1,0 +1,11 @@
+{
+  "account_commit": "ea313c62",
+  "timing": "Before self-cross production edits",
+  "correction": "The initial account incorrectly hypothesized x-- as reverseDefine. CommandArrow lines218-225 explicitly selects false for x-only dressings; x-- is a starting cross with the default normal final head. Existing parser direction is correct for that input. Do not change it.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "model": "Port starting/final cross decoration for both drawRightSide and true drawLeftSide (such as <-x). Existing source_cross/target Cross plus direction can represent these. Active x-- failure is missing starting-cross strokes/endpoint, not reverse direction.",
+  "fresh_axes": [
+    "x-- versus <-x source crosses",
+    "activation depth and engine"
+  ]
+}

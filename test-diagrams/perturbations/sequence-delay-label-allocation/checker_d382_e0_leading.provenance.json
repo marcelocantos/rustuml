@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_leading.puml",
+  "source_sha256": "84137f8ea4a2a2978ec01d85842de9879bd4dc311dda26824d8b0c01ce057211",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1288041670050006,
+  "stdout_sha256": "ce25dd3eceb6bc75ab7a7f35c063d0ca987bdd6d2481bec6c96544e2be73f1e1",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

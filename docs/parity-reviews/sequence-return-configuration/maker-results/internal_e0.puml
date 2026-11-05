@@ -1,0 +1,6 @@
+@startuml
+Client -> Worker ++ : enter
+note over Client : retained owner
+return #008844 complete
+return #red final
+@enduml

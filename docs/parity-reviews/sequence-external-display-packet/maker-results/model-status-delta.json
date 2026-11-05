@@ -1,0 +1,16 @@
+{
+  "entries": 2281,
+  "changes": {
+    "model": {
+      "exit": [],
+      "stdout_sha256": [],
+      "stderr": []
+    },
+    "ascii": {
+      "exit": [],
+      "stdout_sha256": [],
+      "stderr": []
+    }
+  },
+  "note": "Ignore only the binary path in recorded argv. Compare actual stdout SHA, stderr and status; no global ASCII parity claim."
+}

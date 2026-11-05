@@ -1,0 +1,3543 @@
+{
+  "entries": 165,
+  "kinds": {
+    "historical_nonpositive": {
+      "entries": 99,
+      "before_rejected": 77,
+      "after_rejected": 77,
+      "false_successes": [
+        "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+        "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+        "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+        "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+        "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+        "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+        "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+        "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+        "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+        "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+        "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+        "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_mixed.puml",
+        "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.puml",
+        "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_teoz.puml",
+        "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_em_legacy.puml",
+        "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_narrow_legacy.puml"
+      ]
+    },
+    "java_export_error": {
+      "entries": 8,
+      "before_rejected": 0,
+      "after_rejected": 0,
+      "false_successes": [
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_teoz.puml"
+      ]
+    },
+    "java_invalid": {
+      "entries": 58,
+      "before_rejected": 36,
+      "after_rejected": 40,
+      "false_successes": [
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_teoz.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_legacy.puml",
+        "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/vt_required_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/vt_required_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/resume_vt_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/resume_vt_teoz.puml"
+      ]
+    }
+  },
+  "lost_rejections": [],
+  "results": [
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "a62c4693094c9fbbfaecaeaedeb339a8fa2ba18ce79cb5b17dcf96d8a1305db7",
+        "svg": "8181db51241aee4b6f9a.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "a62c4693094c9fbbfaecaeaedeb339a8fa2ba18ce79cb5b17dcf96d8a1305db7",
+        "svg": "8181db51241aee4b6f9a.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "16cf4ecd6dea92d6ba7b2098550f8bd463628fb3546e22d1379a9fb972ec413d",
+        "svg": "70596ac25bf77f279ce7.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "16cf4ecd6dea92d6ba7b2098550f8bd463628fb3546e22d1379a9fb972ec413d",
+        "svg": "70596ac25bf77f279ce7.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+        "svg": "50fd3b91b5dbb7dfab0d.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+        "svg": "50fd3b91b5dbb7dfab0d.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "51903eb92a1070a0ac7ea54e55260f32a61aa30d0b71d42ab8b76bccdf051be1",
+        "svg": "20f2785140ca3ea681ae.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "51903eb92a1070a0ac7ea54e55260f32a61aa30d0b71d42ab8b76bccdf051be1",
+        "svg": "20f2785140ca3ea681ae.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "6ba30f5bcdcc69efbc35ad8c465822348739deeed9f1d8dec404358a14724143",
+        "svg": "bb2f6d223694748b26c1.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "6ba30f5bcdcc69efbc35ad8c465822348739deeed9f1d8dec404358a14724143",
+        "svg": "bb2f6d223694748b26c1.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "c1e59dde54aacf3352f5b85981df4c5fabd73bae216bf11404eddb5319662eeb",
+        "svg": "510b1ffd85639a42b856.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "c1e59dde54aacf3352f5b85981df4c5fabd73bae216bf11404eddb5319662eeb",
+        "svg": "510b1ffd85639a42b856.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "fdda826d0a16c68e79fc8247ce292caaeac3441d6a235d89234c2c770bbd88f2",
+        "svg": "609b3dce74964cd669aa.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "fdda826d0a16c68e79fc8247ce292caaeac3441d6a235d89234c2c770bbd88f2",
+        "svg": "609b3dce74964cd669aa.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "1657ca02a9b90d90be285830cbe451b7980bb3b6fa4ea260864870fbac158447",
+        "svg": "cfac8123dd4f01af274f.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "1657ca02a9b90d90be285830cbe451b7980bb3b6fa4ea260864870fbac158447",
+        "svg": "cfac8123dd4f01af274f.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "59149bd297de823a1be03683a65531e5d44ff91a4f86762d012ef9c6a00029e6",
+        "svg": "6d91548d31e343a3353c.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "59149bd297de823a1be03683a65531e5d44ff91a4f86762d012ef9c6a00029e6",
+        "svg": "6d91548d31e343a3353c.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "37544ea51a3c910dd28cd71dbccd8d3ac96df40825ada9394d388077dfda5596",
+        "svg": "ada1e217e87cf8ee8a5b.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "37544ea51a3c910dd28cd71dbccd8d3ac96df40825ada9394d388077dfda5596",
+        "svg": "ada1e217e87cf8ee8a5b.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ea3d1b606cc3baf677c8.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ea3d1b606cc3baf677c8.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d57b928acde383d9e984.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d57b928acde383d9e984.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "54566fd053186ebac60d.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "54566fd053186ebac60d.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "7e5276389e6c07e1acf1.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "7e5276389e6c07e1acf1.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "df707fad695eedb67e67.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "df707fad695eedb67e67.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c1e88f9ac7dc6391170f.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c1e88f9ac7dc6391170f.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "270df9a75807e1e16357.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "270df9a75807e1e16357.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "27eef9da246e0190ec95.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "27eef9da246e0190ec95.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "78ad7416f803cdb87ca7.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "78ad7416f803cdb87ca7.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "1c576b6625fb89c4a067.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "1c576b6625fb89c4a067.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "21f920f2b804713e57a7.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "21f920f2b804713e57a7.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "aa03946f82fe8c2e32e7.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "aa03946f82fe8c2e32e7.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f40f26a7fba7bb792551.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f40f26a7fba7bb792551.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "40a16aeb8c5cd5711b19.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on L\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "40a16aeb8c5cd5711b19.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "513ef52091ecfa4a41fe6d35eed975156b48d28b7d6e5fa09c00552ed1840e87",
+        "svg": "448783247848809c0304.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "513ef52091ecfa4a41fe6d35eed975156b48d28b7d6e5fa09c00552ed1840e87",
+        "svg": "448783247848809c0304.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "46aaa241929df440f6478a95f6d57afe72b749f5d64495bffb792510bcc2e714",
+        "svg": "cdce03301c3c82887b62.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "46aaa241929df440f6478a95f6d57afe72b749f5d64495bffb792510bcc2e714",
+        "svg": "cdce03301c3c82887b62.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "822b11bb3811ecf53b84.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "822b11bb3811ecf53b84.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 7: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "cfebbd8770d9cc74a158.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 7: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "cfebbd8770d9cc74a158.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "5ee51a2da2b298ffa01b.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "5ee51a2da2b298ffa01b.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 7: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "1a6a337a1366f71d4c66.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 7: Activate/Deactivate already done on B\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "1a6a337a1366f71d4c66.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c769bbf3ca4740a6f8ca.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c769bbf3ca4740a6f8ca.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "496394e9086038a3b0d4.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "496394e9086038a3b0d4.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "af3b7aeec611a3db5cbd.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "af3b7aeec611a3db5cbd.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "fe3524995e9ae8056bd8.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "fe3524995e9ae8056bd8.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d74021c0036aeda46595.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d74021c0036aeda46595.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "98be1a48aa7f9227101f.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "98be1a48aa7f9227101f.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3638a623d3617abbb585.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3638a623d3617abbb585.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "11cac46588f5c435e413.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Activate/Deactivate already done on Two\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "11cac46588f5c435e413.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "05de2a0ebb52abee5de8.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "05de2a0ebb52abee5de8.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Activate/Deactivate already done on Birch\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f5368e236c36733c0aea.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Activate/Deactivate already done on Birch\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f5368e236c36733c0aea.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "e93055ba198a5bebba7c.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "e93055ba198a5bebba7c.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Activate/Deactivate already done on Birch\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "8f8fe20875d055d3c713.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Activate/Deactivate already done on Birch\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "8f8fe20875d055d3c713.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f92c07f7999ec9097f86.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: No such color\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f92c07f7999ec9097f86.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "42e0ae101b3b177c072f.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "42e0ae101b3b177c072f.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "54e7d926305e715e84d8.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "54e7d926305e715e84d8.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/invalid_circle_order_0.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 1: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "34df8482efa97569d58d.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 1: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "34df8482efa97569d58d.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/invalid_circle_order_1.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9bdd8574225e8346fea9.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9bdd8574225e8346fea9.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 1: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9e16e63630dfa87fc5ca.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 1: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9e16e63630dfa87fc5ca.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 1: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c883dfa71b2dec3b0a68.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 1: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c883dfa71b2dec3b0a68.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+        "svg": "c07a0272252e819e9277.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+        "svg": "c07a0272252e819e9277.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_mixed.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "6f11ea99d25a4dbf2b4538701eed2c88858355b97e1f10124e8afeef316f97a9",
+        "svg": "9173785c52642831384b.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "6f11ea99d25a4dbf2b4538701eed2c88858355b97e1f10124e8afeef316f97a9",
+        "svg": "9173785c52642831384b.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "1d12b91463088e8acd43b7ac8102ad7041d4c03c111ba7ce353c36a3f9c7f94b",
+        "svg": "f2e39eb1fb6760576e90.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "1d12b91463088e8acd43b7ac8102ad7041d4c03c111ba7ce353c36a3f9c7f94b",
+        "svg": "f2e39eb1fb6760576e90.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "f83fcbba2d76e41b25c5b7da17fb2c76dac627b5ecb15e947ea66fd3f3fb9c16",
+        "svg": "2f42203f47e03712944d.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "f83fcbba2d76e41b25c5b7da17fb2c76dac627b5ecb15e947ea66fd3f3fb9c16",
+        "svg": "2f42203f47e03712944d.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3d1db717663c49f6189d.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3d1db717663c49f6189d.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "634541b487f481f724c5.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Illegal sequence arrow decoration\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "634541b487f481f724c5.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "337041cdeb3413dce57e.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "337041cdeb3413dce57e.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "21c4cbeea8c553ea0c26.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "21c4cbeea8c553ea0c26.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-component-display-packet/maker-results/inputs/unclosed_note_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "17c43ac3a0f2d4571e28.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "17c43ac3a0f2d4571e28.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-component-display-packet/maker-results/inputs/unclosed_note_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "64b4dc60d996147dc273.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "64b4dc60d996147dc273.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "7b22a78617a64724079544a528db14141c5cf4fe3ccb643b0c9323658600da0b",
+        "svg": "db11deda84abcfe4f975.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "7b22a78617a64724079544a528db14141c5cf4fe3ccb643b0c9323658600da0b",
+        "svg": "db11deda84abcfe4f975.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "fa8b384526aa863ac56feca432516b9992043bc7fe35ce60b44ff7f92235b067",
+        "svg": "84768e12ada40f07b249.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "fa8b384526aa863ac56feca432516b9992043bc7fe35ce60b44ff7f92235b067",
+        "svg": "84768e12ada40f07b249.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "36b94015b13fc7d5a3f48881d690af90616b5f06c4295a5164d44c8c9b602efe",
+        "svg": "183b47e16fcacb72c154.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "36b94015b13fc7d5a3f48881d690af90616b5f06c4295a5164d44c8c9b602efe",
+        "svg": "183b47e16fcacb72c154.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "b945e908cc1adb4ed487c6ac1fd89af2bb6845dfb45b05b54c5889634d3be6e8",
+        "svg": "a6e7e055c6743243a0dc.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "b945e908cc1adb4ed487c6ac1fd89af2bb6845dfb45b05b54c5889634d3be6e8",
+        "svg": "a6e7e055c6743243a0dc.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f3555f9eb8173525f022.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f3555f9eb8173525f022.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "36f4ccdff8cd2902e8de.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "36f4ccdff8cd2902e8de.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: After create command, you have to send a message to \"Elm\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3f13c932666bef54d187.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: After create command, you have to send a message to \"Elm\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3f13c932666bef54d187.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: After create command, you have to send a message to \"Elm\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "7eea09a1a2d9ed76394e.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: After create command, you have to send a message to \"Elm\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "7eea09a1a2d9ed76394e.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: After create command, you have to send a message to \"Cedar\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4e6c267bdd39266d75e4.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: After create command, you have to send a message to \"Cedar\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4e6c267bdd39266d75e4.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: After create command, you have to send a message to \"Cedar\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "763ba0676aa1c79b4239.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: After create command, you have to send a message to \"Cedar\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "763ba0676aa1c79b4239.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 8: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "697f5fa28554e0adf4e1.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 8: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "697f5fa28554e0adf4e1.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 9: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a7fba8d842f4ae98af60.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 9: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a7fba8d842f4ae98af60.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "aa36f372026496973f86.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "aa36f372026496973f86.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "de3d31c259007141f0a7.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "de3d31c259007141f0a7.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f1396ce223f93a6b13cf.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f1396ce223f93a6b13cf.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2b3d5d0cfb5b1dd6bf0f.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2b3d5d0cfb5b1dd6bf0f.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "b4f84ea13ca466e567f4.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "b4f84ea13ca466e567f4.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "506d39bca29cef71edfe.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "506d39bca29cef71edfe.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "121902139aba07cf2c78.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "121902139aba07cf2c78.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": null,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 6: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "1495976c594efb54219d.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 6: Nowhere to return to.\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "1495976c594efb54219d.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "383aa6933ee00475c152.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "383aa6933ee00475c152.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c6c8bee177cc0b5aecb9.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c6c8bee177cc0b5aecb9.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4e30d7a91ba15ca26868.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4e30d7a91ba15ca26868.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ca422dbb7488e1d343d5.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ca422dbb7488e1d343d5.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9fe0de9e1bf1fb69237d.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9fe0de9e1bf1fb69237d.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "7a29c3434afea2a1fb25.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "7a29c3434afea2a1fb25.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d6a6eca7f0a26dea2868.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d6a6eca7f0a26dea2868.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "adaa66a5929b7f84a9a9.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "adaa66a5929b7f84a9a9.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d857c01984d7edf80bba.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d857c01984d7edf80bba.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "cb6f0c10a46e531ff8e5.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "cb6f0c10a46e531ff8e5.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "49d1e5544551ee5aa4b3.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 2: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "49d1e5544551ee5aa4b3.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": null,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a852c905da7250b2c21f.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a852c905da7250b2c21f.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_em_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "224d493643c8cf3e945accf3440c86b653639d3db0a765a2827c72d1e4109949",
+        "svg": "92deee44df4499a31747.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "224d493643c8cf3e945accf3440c86b653639d3db0a765a2827c72d1e4109949",
+        "svg": "92deee44df4499a31747.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_em_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ec15380afd8250fcc45d.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ec15380afd8250fcc45d.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_narrow_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "224d493643c8cf3e945accf3440c86b653639d3db0a765a2827c72d1e4109949",
+        "svg": "ab8b35986f074c6336a0.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "224d493643c8cf3e945accf3440c86b653639d3db0a765a2827c72d1e4109949",
+        "svg": "ab8b35986f074c6336a0.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_narrow_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c2b316bc7c2fab8f3ca8.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c2b316bc7c2fab8f3ca8.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "64a38b42568b600d5b1f.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "64a38b42568b600d5b1f.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f1c154d0177ea026fc6a.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "f1c154d0177ea026fc6a.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_legacy.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 3: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c08f5c067f8a32bff4eb.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c08f5c067f8a32bff4eb.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_teoz.puml",
+      "reference_kind": "historical_nonpositive",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "25aa9e4409795779ee92.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "25aa9e4409795779ee92.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2000_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "5f4dac00cfa44dddef2f.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "5f4dac00cfa44dddef2f.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2000_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c8eadf2a8fe62ecb0890.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c8eadf2a8fe62ecb0890.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2001_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d9f875c52771e65a2ea6.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "d9f875c52771e65a2ea6.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2001_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9841d6a878913309d6b4.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9841d6a878913309d6b4.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2002_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2c862ab1d019062e3574.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2c862ab1d019062e3574.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2002_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4e877fb114cf3bec9581.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4e877fb114cf3bec9581.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2003_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "83d7265b19895a02b79b.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "83d7265b19895a02b79b.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2003_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4fe0172bea01d9867bbf.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4fe0172bea01d9867bbf.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2004_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "adcf7e63e0c780497127.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "adcf7e63e0c780497127.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2004_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a4aa6a3cb9996f79cd46.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a4aa6a3cb9996f79cd46.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2005_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "70fefab635aab03623ac.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "70fefab635aab03623ac.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2005_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2fe04a0b16ff6b38a33a.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2fe04a0b16ff6b38a33a.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2006_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "0cb98fea0044011c2153.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "0cb98fea0044011c2153.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2006_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "204ca12ccd357b4f4abf.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "204ca12ccd357b4f4abf.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2007_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2bcd3538f3507125bdff.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "2bcd3538f3507125bdff.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2007_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9dd8553dacdf34a587d9.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9dd8553dacdf34a587d9.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2008_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4ae6c323db6c02e61234.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4ae6c323db6c02e61234.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2008_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c2cb9e741e1567f2ac41.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "c2cb9e741e1567f2ac41.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2009_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "61f50fb025208211350e.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "61f50fb025208211350e.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_2009_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "838e8e4b76e65fb44bf6.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "838e8e4b76e65fb44bf6.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_200a_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "96add3132af35ab89f46.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "96add3132af35ab89f46.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_200a_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "bf1f60a8ad326697abdd.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "bf1f60a8ad326697abdd.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_3000_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "cb5b66ea67ca50b60cfd.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "cb5b66ea67ca50b60cfd.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_3000_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a38206b6e8a879d5d9a2.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "a38206b6e8a879d5d9a2.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_1680_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "66a3e56ce6321e520800.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "66a3e56ce6321e520800.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_1680_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "e4ae8101e68c8a339309.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "e4ae8101e68c8a339309.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_205f_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4176f938cc30f886ae5e.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4176f938cc30f886ae5e.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_205f_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "99c8984c31105e211da9.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "99c8984c31105e211da9.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_feff_terminator_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9da485fbf091f2157faf.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "9da485fbf091f2157faf.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_feff_terminator_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "16768375d41011969e4a.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Unclosed sequence note\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "16768375d41011969e4a.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+        "svg": "3b859b29a92df868cf52.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+        "svg": "3b859b29a92df868cf52.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_nbsp_color_boundary_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+        "svg": "7a5898363e9bb742a6eb.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+        "svg": "7a5898363e9bb742a6eb.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "65eb17b5adbf4719acd50518aec9da958d6eed85bc61115e7e71e4f2579a4d3c",
+        "svg": "70055887d2e87c00d09b.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "d4333475e25537081a9db9d112e1d3fba79ac3c4ac13469b0e3a38a1ab5bb72c",
+        "svg": "70055887d2e87c00d09b.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_activation_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "54c87554f4038998df35a3d1db0670a0fdc7f0c7fdb982c812a42c43555cb0ba",
+        "svg": "67bef4ba75e9ed864430.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "aa95c7e3ef1087d3c9aae40d7fe089f22657b4661de405b0043d788f4dd4cfc4",
+        "svg": "67bef4ba75e9ed864430.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "f5f8620907ce924eff8b85681683193dc93610db347bce489baa830aac6d8094",
+        "svg": "f38ae5aff91967b668c9.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "f5f8620907ce924eff8b85681683193dc93610db347bce489baa830aac6d8094",
+        "svg": "f38ae5aff91967b668c9.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_autonumber_resume_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "a14607042981a0d50f4a8621f7e67aaa2b85c447a146f42ca87befcb89c4c800",
+        "svg": "86dc60e24202c4552e84.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "a14607042981a0d50f4a8621f7e67aaa2b85c447a146f42ca87befcb89c4c800",
+        "svg": "86dc60e24202c4552e84.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_legacy.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+        "svg": "f70544c4e7ddf1ae7b2f.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+        "svg": "f70544c4e7ddf1ae7b2f.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_divider_teoz.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+        "svg": "2423449650d269730d07.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+        "svg": "2423449650d269730d07.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_legacy.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+        "svg": "4f476543ca706583cd38.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+        "svg": "4f476543ca706583cd38.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_delay_teoz.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+        "svg": "0b5f66a881276daa4269.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+        "svg": "0b5f66a881276daa4269.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "d06b3326d7f1477b747613482b56f1895d39024d7413135d062b225541ffaa6d",
+        "svg": "19d0af997936d64ecc10.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "5e063204dab7a9771553f1844c91cf300f6c9dae68ddd7bcec5454f87ce56601",
+        "svg": "19d0af997936d64ecc10.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_create_destroy_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "88e067dff9a16f2cb8315b5dd0094ccc269ff40fba5ea771c2d73f43140d9cb1",
+        "svg": "7453da90c531464c5093.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "e4f68c34d8ca7b6ad6c72d7f395c9eb6a6e2e1ba81a2a95110c95450313d4eda",
+        "svg": "7453da90c531464c5093.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "6b00d37523df56c5a964731838d0ae97213b8e8d4cd96834e3526fca5d9f8870",
+        "svg": "af4664b08dc1ec81b962.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "a5aabdc5e1621533120f2ca98e3dc4fd5ba33cc91da92710317d978b6b38ac9f",
+        "svg": "af4664b08dc1ec81b962.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_hide_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "08d6f46faa0b7804474f0b54d15120b5130631588104c27b99a8118a0b5d6ff4",
+        "svg": "7f84529a2edb055760d5.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "9b984fc3962a296f7d8165d61c422f74e717f10471ee04b6035ad05a1917ee81",
+        "svg": "7f84529a2edb055760d5.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+        "svg": "68eef6a8a8924e3b5225.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+        "svg": "68eef6a8a8924e3b5225.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_vt_color_boundary_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+        "svg": "7194f85aa2c138e8be65.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+        "svg": "7194f85aa2c138e8be65.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_legacy.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+        "svg": "be8ca2ce000759428f11.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+        "svg": "be8ca2ce000759428f11.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_divider_teoz.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+        "svg": "ab38976c35c465bb654e.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+        "svg": "ab38976c35c465bb654e.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_legacy.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+        "svg": "249be24a6537c13536f6.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+        "svg": "249be24a6537c13536f6.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_delay_teoz.puml",
+      "reference_kind": "java_export_error",
+      "intended_valid": true,
+      "java_exit": 0,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+        "svg": "c13f16bf92fbfeed5975.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+        "svg": "c13f16bf92fbfeed5975.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+        "svg": "fbf87db9a2e9c25c06e9.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+        "svg": "fbf87db9a2e9c25c06e9.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-whitespace/b4b6_ws_ff_color_boundary_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+        "svg": "83efec103af363575aa5.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+        "svg": "83efec103af363575aa5.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_accross_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "712e261878ddf0ab3372f087eb989c2606fbc29ec3afa5e57969bbb35dcaef22",
+        "svg": "0428e97b60a2755f47ce.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Use 'across' instead of 'accross'\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "0428e97b60a2755f47ce.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_accross_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": true,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "de82f29f0bf357c94eb773ed435d417315ae41afe492256e2fc9d0726a0f3763",
+        "svg": "34bf426f719510a0984d.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: Use 'across' instead of 'accross'\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "34bf426f719510a0984d.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_coloured_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ccff9e3f5dba95f7223e.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ccff9e3f5dba95f7223e.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_coloured_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "e0477454d0ebcac715c0.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "e0477454d0ebcac715c0.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_rect_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "69d7dfcfe91532134cea.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "69d7dfcfe91532134cea.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_rect_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ba23b68bd201c9fbfbef.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "ba23b68bd201c9fbfbef.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_hex_multiline_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3da67a2f21fd044cba04.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "3da67a2f21fd044cba04.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-over-command-domain/b4b6_domain_bare_hex_multiline_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 1,
+        "stderr": "parse error: line 5: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4715b00fe297312fd1eb.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 5: A note over command requires a participant\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "4715b00fe297312fd1eb.rust.svg"
+      },
+      "rejection_before": true,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/vt_required_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "f0f87591fded32546a9c9370ca9b0460d850c1715c1bcf7fbdd9be929511ecff",
+        "svg": "1493315fda4eb45c85b3.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "78b6bd7229dadafd9dfdd04d6c3737e8449b3951a2111f7b61b972453c0c256b",
+        "svg": "1493315fda4eb45c85b3.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/vt_required_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "7c1aac8d4563df32ccdc7a1d6c51884bfb0d59213df3f6a91fb97c2017e7c42f",
+        "svg": "0c56e3b02bbd0229269f.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "07d726551bcb7829dd6ca9bf129b649afc59234b585790ebcdcd916705f79526",
+        "svg": "0c56e3b02bbd0229269f.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/resume_vt_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "96ee1b5f00bcfcded723a87dc46e746d456adeaf79e27a991d3b497b0904606c",
+        "svg": "436311c77980751b5e8d.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "96ee1b5f00bcfcded723a87dc46e746d456adeaf79e27a991d3b497b0904606c",
+        "svg": "436311c77980751b5e8d.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/resume_vt_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "35e64c9874bb28d0c64c2aaf1dbef56ca0fa7d5fe61472c6d5b9f16beb6f3b8c",
+        "svg": "aa9777b646c1577ac158.rust.svg"
+      },
+      "after": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "35e64c9874bb28d0c64c2aaf1dbef56ca0fa7d5fe61472c6d5b9f16beb6f3b8c",
+        "svg": "aa9777b646c1577ac158.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": false,
+      "lost_rejection": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/accross_negative_legacy.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "4595542d0860602407d715f5fb49c157d7fc9c0952fac77515d52f6117176037",
+        "svg": "72269c1c0ecf4df03bbf.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 3: Use 'across' instead of 'accross'\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "72269c1c0ecf4df03bbf.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": true,
+      "lost_rejection": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/reference-inputs/accross_negative_teoz.puml",
+      "reference_kind": "java_invalid",
+      "intended_valid": false,
+      "java_exit": 200,
+      "before": {
+        "exit": 0,
+        "stderr": "",
+        "svg_sha256": "883bcf4010511cb1fc5524ea468c43e343a108459fc4ccb31b31d4e3bc6ee624",
+        "svg": "235eb285df181802aa98.rust.svg"
+      },
+      "after": {
+        "exit": 1,
+        "stderr": "parse error: line 4: Use 'across' instead of 'accross'\n",
+        "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "svg": "235eb285df181802aa98.rust.svg"
+      },
+      "rejection_before": false,
+      "rejection_after": true,
+      "lost_rejection": false
+    }
+  ],
+  "note": "Actual CLI captures already executed in the replay; no rerender. The eight Java exporter errors are nonpositive but NOT syntax rejection obligations. Historical99 retain their previous nonpositive classification without asserting unavailable Java validity. Full SVG stdout files are in captures.tar.gz and bound by these hashes."
+}

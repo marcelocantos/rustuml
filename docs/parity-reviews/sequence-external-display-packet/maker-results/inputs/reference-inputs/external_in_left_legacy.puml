@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+actor Finch
+create Finch
+[-> Finch: arrive
+Finch -> Cedar: later
+@enduml

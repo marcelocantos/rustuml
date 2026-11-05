@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Lyra
+actor Pipit
+database Hazel
+create Pipit
+Lyra -> Pipit: first ordinary
+create Hazel
+Pipit -> Hazel: second ordinary
+destroy Hazel
+@enduml

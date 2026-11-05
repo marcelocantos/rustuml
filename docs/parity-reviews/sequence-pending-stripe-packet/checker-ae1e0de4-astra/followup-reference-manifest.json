@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "purpose": "Complete independent reverse open/circle/full self consumer matrix",
+  "cases": [
+    {
+      "name": "ind78_self_extra_reverse_full_legacy",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_full_legacy.puml",
+      "source_sha256": "8e1f846684931c971654d4b801c0dee52494eb193dfd43ce40c54988acb3d977",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_full",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_full_teoz",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_full_teoz.puml",
+      "source_sha256": "2ca01eaf0a389374c53c45e3e151369c89efdba0959c85f727bbb7229a7dffb1",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_full",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_open_top_legacy",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_top_legacy.puml",
+      "source_sha256": "029aab2e2d271f167270528efda42bfdcba72f808dd4eaf5389775697add05a2",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_open_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_open_top_teoz",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_top_teoz.puml",
+      "source_sha256": "dde2f1c0d53edfac212b7dda2b92d14a64e4f3f97e650ffee5d8f1485633deaf",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_open_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_open_bottom_legacy",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_bottom_legacy.puml",
+      "source_sha256": "d34b575f376355ceb37505b0e1dbcd5edd877e9ed0f42b7095cd671fc489e797",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_open_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_open_bottom_teoz",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_bottom_teoz.puml",
+      "source_sha256": "d9f4fb88604051bb46f7f1934c8aba3666384d1e4d924fd0bbe12fcb7d277398",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_open_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_circle_top_legacy",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_top_legacy.puml",
+      "source_sha256": "9be9c1742abca7f107fd611272d29d33fbc8203c7ae1be013e5af3a85d31a288",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_circle_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_circle_top_teoz",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_top_teoz.puml",
+      "source_sha256": "a6589b1d2e36720493d33a1cc68ff7898c405c65146ad596386f0ac9a51286ce",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_circle_top",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_circle_bottom_legacy",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_bottom_legacy.puml",
+      "source_sha256": "16c0ef20d0f82b5d92ddb2f38aadfd49f24534554bf883741eddff530d1dbaaf",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_circle_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "ind78_self_extra_reverse_circle_bottom_teoz",
+      "mechanism": "sequence-self-half-polygon-order",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_bottom_teoz.puml",
+      "source_sha256": "7afa6c6debcd2bd6e3856eea235c9d711f85246bfef7bf5fce268e2a289a789c",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "reverse reverse_circle_bottom",
+        "reversed declaration order",
+        "first/last nested activation",
+        "teoz"
+      ],
+      "intended_valid": true
+    }
+  ]
+}

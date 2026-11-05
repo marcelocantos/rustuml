@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Elm
+Cedar -> Elm: small\n<size:23>Tall</size>\nend
+@enduml

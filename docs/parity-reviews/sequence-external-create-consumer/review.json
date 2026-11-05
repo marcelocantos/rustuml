@@ -1,0 +1,732 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-external-create-consumer",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3Aa5282dc0-4d56-4644-952d-a4ab3cd0665a",
+    "model": "gpt-6-astra",
+    "tool": "T3 Code / Codex harness",
+    "independence": "NEW checker with no prior maker involvement; no children, no extra worktrees, no production edits",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-5fc3056e",
+    "branch": "review/external-display-independent-5fc3056e"
+  },
+  "account_commit": "6857e26f9b0e1fc4c96d34faca06f7fe3ce539f2",
+  "implementation_commit": "f3d8bf0cce9caecfcaee445eaa69226f68378047",
+  "tested_production": "d714bb55d40ca18590d15a5ffd57c7620b91b456",
+  "evidence_tip": "0cde5d7e55139b63cb8e91f8e42acd473441f80a",
+  "before_revision": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "before_production": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/build_gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/all-inputs.json replay2281",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/fresh60.json fresh60",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup4.json followup4",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing Monkey Man relay; exact substituted JSON-array argv retained per result)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_legacy.svg",
+      "axes": [
+        "outgoing right",
+        "note on arrow",
+        "actor",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "d72df01e7e47b0f5ff5d45a6ac8cf7cdec0d54db4318e4d5082d0be11b20c839",
+      "reference_sha256": "4f392d8971304ff921d0a68dccadd35037dee3f2a1987580087736578b211af2",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_teoz.svg",
+      "axes": [
+        "outgoing right",
+        "note on arrow",
+        "actor",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "95559ea642d1fdf21afb112dc406de717e2bb2778c7043fd419242b2026aa3a3",
+      "reference_sha256": "25ef84afbe17fe13c98ed8825e4e8caacce1cbd0a30aabacc8069fb7eec5372c",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_legacy.svg",
+      "axes": [
+        "incoming left",
+        "autonumber increment",
+        "database first",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "d088ded17b55c133b5371518cb131fa84e0a55f44950a4fa0ab247e948d428a6",
+      "reference_sha256": "8e9efd2d2c2a0ec76cfd48ec1921559462859fcead6b2dfa3b2b71ca8fb986af",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_teoz.svg",
+      "axes": [
+        "incoming left",
+        "autonumber increment",
+        "database first",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "f3c714e0ca37358b6e8bcd2d009fc966733ca5809b93101332d452867a7fd3af",
+      "reference_sha256": "2d2bf748a4d8a72aa0313d8ef374d49e758f0b0d9636b93c97e70f3659ebe819",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 3
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_activate_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_activate_legacy.svg",
+      "axes": [
+        "incoming right",
+        "activation/deactivation",
+        "collections",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "db5a290bd2a148ed319424d0ddeb180c59fd419d2f4336e5b3517850c5a72261",
+      "reference_sha256": "0afdfde4560bfab035118e929e5de6d599d22faf347a7a04cde9aa8d614c5830",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 4
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_activate_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_activate_teoz.svg",
+      "axes": [
+        "incoming right",
+        "activation/deactivation",
+        "collections",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "b95e87c2273112396c19580f77b927028bb4d1b5bd9116beaa91104410197ef8",
+      "reference_sha256": "9b643185c13a6895db3190a3771d70d5ba3570c34e6006546570ed6732809505",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 5
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_group_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_group_legacy.svg",
+      "axes": [
+        "outgoing left",
+        "group",
+        "control",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "9ef575b47b671168fcd9f544d0981bf4e3dce0e3881a5671d50884b81d4fd6e0",
+      "reference_sha256": "993bd98b0cc59d310f02ea205e1b46b3e1e54c5cf8671581f1a9d304d80c7961",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 6
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_group_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_group_teoz.svg",
+      "axes": [
+        "outgoing left",
+        "group",
+        "control",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "ecacdb90a22c2e3877c70aa5e2217fc166a3f71b42f44306db09931303d492ac",
+      "reference_sha256": "cbe43bc619a36354d2b59a540d4fd3ac968a1a7fed3c494581b10c6b255d6868",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 7
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_alt_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_alt_legacy.svg",
+      "axes": [
+        "outgoing right",
+        "alt branches",
+        "actor first",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "eccff6815f41b4b59b8699f7db4be1924d71dbad3d6c1aec400eb4e6342b3db0",
+      "reference_sha256": "658674cabf727bc528379bade70418b4353678409500acbbb8a60633ea149ebf",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 8
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_alt_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_alt_teoz.svg",
+      "axes": [
+        "outgoing right",
+        "alt branches",
+        "actor first",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "9666eb86a697e084391cafb8d328c4e709af15a448e24aa6399bf9102485716f",
+      "reference_sha256": "a03fd8376d5bad0e07c312ec2c5349b3df57aa359523b4ad0881bd438e74f00b",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 9
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_box_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_box_legacy.svg",
+      "axes": [
+        "incoming left",
+        "box",
+        "queue",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "ad05c0c341b9021d41e4a0d70f9a4d47fd1f7013bf96c71767ce55aa162381aa",
+      "reference_sha256": "b17c761b95803c36c122ac86ede0beb4961a396e9736a07aef59ae31a5ed2166",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 10
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_box_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_box_teoz.svg",
+      "axes": [
+        "incoming left",
+        "box",
+        "queue",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "261e84febcad3529b7e4db0848d927a4f05017145ef8fb7d2044e564bd982c27",
+      "reference_sha256": "97b17152bfaff7c47d73c1a1f2839cd281e11decd12081668afa5e5ff2b2fd24",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 11
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_repeat_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_repeat_legacy.svg",
+      "axes": [
+        "three attached creates",
+        "directions",
+        "entity",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "7b1c50ff8198696a03557391ba1e770de41f82f0792ae95cbf74e2c2f4980551",
+      "reference_sha256": "592a39629810c313e2870746f9d3b688e2eb7a9c575b2e0eb2b095a3ead0f5c6",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 12
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_repeat_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_repeat_teoz.svg",
+      "axes": [
+        "three attached creates",
+        "directions",
+        "entity",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "7fb8d4ad22efee614bad132eae0fafc1d541c660aca7b428babdcb38d7b7e41d",
+      "reference_sha256": "534bed0d00dffd168a922a137b5739888298d36f5baf62c360f0fb723a291c40",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 13
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_then_other_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_then_other_legacy.svg",
+      "axes": [
+        "external then ordinary different receiver",
+        "three participants",
+        "declaration order",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "0cdba6d91dcb998b71e3b15e4bdffcd5fff2f01b8cd8bee1da5d53d946a45d07",
+      "reference_sha256": "8e52e008d6db6ce6ad55dbdbe34a29c385dbd6c458eabfd1d7853e406440a0f4",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 14
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_then_other_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_then_other_teoz.svg",
+      "axes": [
+        "external then ordinary different receiver",
+        "three participants",
+        "declaration order",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "8c9e2bd9756e752ce137e3df35832321ee401540325b4a681d00ed6243af5c9c",
+      "reference_sha256": "16cd2bc97b39c1f47c4c75c60e653aa2506e65f64c5db757b6601b7132ebb219",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 15
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.svg",
+      "axes": [
+        "short incoming question border",
+        "boundary",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "7100bbc69273937eae2b9278b0168f8fb184001c8e253fd7001ce9e2f5cd4d2a",
+      "reference_sha256": "b6ecffc88fb55fd990f9275f911dadc493b650616b0b4b7ecd99650d613107e6",
+      "before_cli_exit": 1,
+      "cli_exit": 1,
+      "before_comparison_exit": 3,
+      "comparison_exit": 3,
+      "capture_set": "fresh60",
+      "capture_index": 16
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.svg",
+      "axes": [
+        "short incoming question border",
+        "boundary",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "d24b396616bdb28813d35743c3b4bba187390bc89edeb51b7534a80bb37d46c1",
+      "reference_sha256": "c68ec342115b137c236acb255d8a0c23aa94a3b1ddd58258cddb83b057f7e9ca",
+      "before_cli_exit": 1,
+      "cli_exit": 1,
+      "before_comparison_exit": 3,
+      "comparison_exit": 3,
+      "capture_set": "fresh60",
+      "capture_index": 17
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_out_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_out_legacy.svg",
+      "axes": [
+        "short outgoing question border",
+        "collections",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "21a4c7e5fd135fa759d2f953a5fa12100460c91f462a81a8eceb8ceffcc13373",
+      "reference_sha256": "2dbe10d6fb744d66ba66f90e0640d3b7c48af6c81d350c5461bf007ddd29dcbb",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 18
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_out_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_out_teoz.svg",
+      "axes": [
+        "short outgoing question border",
+        "collections",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "7ddd376b83a3e72e1785dc0a7d49e0e227d6a959d015d5d7554cc16b4bfdd9c9",
+      "reference_sha256": "76722f32ea995ac87a22f25b32c733074cedd76051560f0fdd9e6016e70c9a5b",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 19
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_in_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_in_legacy.svg",
+      "axes": [
+        "external incoming return",
+        "activation",
+        "actor",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "72692c1cfb8b5516f2751ede097ac4d293ec14e5c002e014986622e2c69ef1da",
+      "reference_sha256": "61cc7a15d2271fcedd46cf78f5aaa67cb62d4962d31ea8f67a57c7676f7da95d",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 20
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_in_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_in_teoz.svg",
+      "axes": [
+        "external incoming return",
+        "activation",
+        "actor",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "9198847c93cb2afa2ce4e17ee68f80ac21815f96a811f110171674bd7b725d0c",
+      "reference_sha256": "28b1bd1871eab4d927947d444e7c0af8a3b06ed083ebeb3ac34dcc7ae75edfd3",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 21
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_legacy.svg",
+      "axes": [
+        "external outgoing return",
+        "entity",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "090355a25a7cbe90eb7f5b3b60a552d929cf86301253c8d1d669f7531f362d8d",
+      "reference_sha256": "0c562a8b58c7dae51be422a0e326d628d116650f5cd53550e016bb7e68289055",
+      "before_cli_exit": 1,
+      "cli_exit": 1,
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "capture_set": "fresh60",
+      "capture_index": 22
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_return_out_teoz.svg",
+      "axes": [
+        "external outgoing return",
+        "entity",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "fcdfbb4bfa498fa346f4960c79c9ef8a1fca9ab9f531f2507327bc94868c0302",
+      "reference_sha256": "b3714a59535470cbafc8e5aa18cda9c73447d1ab260b4d0a0e025a1bc5eacd04",
+      "before_cli_exit": 1,
+      "cli_exit": 1,
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "capture_set": "fresh60",
+      "capture_index": 23
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_destroy_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_destroy_legacy.svg",
+      "axes": [
+        "outgoing destroy",
+        "actor first",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "e5f7e01d89b63a8757bd9af836c11a510309920f631f569747984b6516d1ed4e",
+      "reference_sha256": "e13bb85158a7f742228da5946fdbb149881f76ee29f8a48b9e0b00a0a1e108c1",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 24
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_destroy_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_destroy_teoz.svg",
+      "axes": [
+        "outgoing destroy",
+        "actor first",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "0155c3e0405940dd94b7cdad75911c1da0812f0f041ebcbf0a4efaea0d8dc2b1",
+      "reference_sha256": "2523a2d1034b946fec5139c69b69eb8759e7dedb68c7c14f272701839e6ac8f7",
+      "before_cli_exit": 101,
+      "cli_exit": 0,
+      "before_comparison_exit": 3,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 25
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_nested_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_nested_legacy.svg",
+      "axes": [
+        "nested group alt",
+        "incoming",
+        "database",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "26d57346577868ddf8067ca210f4bba933eb90ba6df3f95aa68cd4c0d38f3f90",
+      "reference_sha256": "452dd1cb9d8eeced58649464da7c9a8ab1e3ccc0757cb15150790f32f0ed4b10",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "capture_set": "fresh60",
+      "capture_index": 26
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_nested_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_nested_teoz.svg",
+      "axes": [
+        "nested group alt",
+        "incoming",
+        "database",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "724d8dc6a7b56992fcaf317b7aee100ccdfb0829b8932cadb2ab42f90cf10cc5",
+      "reference_sha256": "0013dc79e1252056f332f68317b9cd4d5df176bb33213f1e6f422dc3c50e00ec",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 27
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_ordinary_control_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_ordinary_control_legacy.svg",
+      "axes": [
+        "ordinary control",
+        "two created kinds",
+        "destroy",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "bb0eab675594f18d3ea42ff2964ffa906c4c8fe3adca2960bca3313fd3e7de8f",
+      "reference_sha256": "b0361f5c194fe76b59db13f34a87fc9f6df12fcfb3b8d1aef88fc20f88f5eb0f",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 28
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_ordinary_control_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_ordinary_control_teoz.svg",
+      "axes": [
+        "ordinary control",
+        "two created kinds",
+        "destroy",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "40d31a7e3bbb36b0970c3671aefb3d07e51c7c5f0651b2aec4fa5872cee69840",
+      "reference_sha256": "9415eb437f06bf3e89f715bbf91fb9db9306ca6a1d99951772b3065ab9d4959a",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 29
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_multilabel_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_multilabel_legacy.svg",
+      "axes": [
+        "incoming right",
+        "multiline message",
+        "separate note",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "5d9f3bd2c1a42d47d9f11fc4703f79e4e7a12a5986c03cd541923e8392e58532",
+      "reference_sha256": "d8b874d3f44ee2e90223fdcd1d9792bcd085485ce274371b8eb682b21e2cf970",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 30
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_multilabel_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_multilabel_teoz.svg",
+      "axes": [
+        "incoming right",
+        "multiline message",
+        "separate note",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "d6d488addb7995f2df71bd0f1a109d75a0d7181c106f9e05c48af09ec36fb353",
+      "reference_sha256": "0d396a9eff2180e086806971b682ffbde510fd3bca5f3e8f6e4d7856441952de",
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "capture_set": "fresh60",
+      "capture_index": 31
+    }
+  ],
+  "findings": [
+    "Source audit supports the narrow separation: SequenceDiagram.addMessage attaches pending CREATE to compatible MessageExo and clears it; DrawableSetInitializer dispatches Step1MessageExo, and CommunicationExoTile performs addStepForLivebox without CommunicationTile.goCreate or ordinary inline-head painting. Rust sequence_ordinary_creation_messages filters only external border topology; sequence_create_attachments and TeozHistory preserve raw CREATE ownership. No missing-target guard, dropped owner, fixture label branch, unexplained new numeric constant or coordinate compensation was introduced.",
+    "Whole fresh outputs still refute mechanism acceptance: 19/30 valid cases match, 9 render mismatching SVG, and 2 valid short incoming ? arrows are parse-rejected, in 32 entries including 2 Java-invalid outgoing returns. All 12 old outgoing renderer panics in this fresh cohort disappear; no new pass loss or valid-input error was introduced by this packet.",
+    "External note counterexamples lose outbound annotation in both engines. AST has one Create and two Message events but no Note, whereas Java Step1MessageExo creates each NoteBox. Rust try_external_message does not update last_message; try_note sees no owner and returns without emitting the bare note. This parser defect is unchanged by the packet; it is a causal residual, not an introduced regression.",
+    "Short ? arrows are accepted by CommandExoArrowLeft/Right and marked short by CommandExoArrowAny.isShortArrow. Rust external regexes accept only square borders. Incoming short-arrow statements disappear, so the later ordinary message is checked against the pending CREATE and rejected. Outgoing short arrows disappear and lose the near label. These errors predate the packet.",
+    "Legacy activation and activated-return cases retain all labels but activation bars begin 10 units early; Teoz counterparts match. Fresh group cases fail in both engines and nested group/alt fails in legacy. Existing group/box residuals remain explicit; no envelope/activation ownership repair is claimed here.",
+    "Repeated external CREATE witness retains 3 Create and 4 Message events, two labels per participant and 2 lifelines, matching Java. The external-then-different-ordinary witness retains 2 Create and 3 Message events, two labels per each of 3 participants and 3 lifelines. Both engines match. The independent ordinary creation/destroy control matches both revisions. TeozHistory source keeps the external raw owner and the existing ownership unit passes; this is bounded support, not whole acceptance.",
+    "Both outgoing return controls were intended valid but Java emits Nowhere to return to error pages and stderr. CommandReturn requires an activating message for MessageExo; fallback requires ordinary Message. Their original intent is preserved, observed validity is false, and Rust rejects both before and after."
+  ],
+  "verdict": "rejected",
+  "counts": {
+    "entries": 32,
+    "valid": 30,
+    "before": {
+      "runtime_failure": 14,
+      "svg_mismatch": 14,
+      "invalid": 2,
+      "match": 2
+    },
+    "after": {
+      "svg_mismatch": 9,
+      "match": 19,
+      "runtime_failure": 2,
+      "invalid": 2
+    }
+  },
+  "next_obligations": [
+    "Preserve external CREATE ownership separately from ordinary head/origin consumers and retain all 8 reported cohort panic recoveries.",
+    "Close the source-guided external note, short-arrow, legacy lifecycle, and group/envelope whole failures before acceptance, with explicit parser/renderer ownership and fresh independent checks.",
+    "Retain the 3 prior pending-CREATE group/box failures and the shared heading/stripe handoff; no transfer of acceptance or combined correctness."
+  ],
+  "evidence_directory": "docs/parity-reviews/sequence-external-display-packet/checker-0cde5d7-astra",
+  "limitations": [
+    "Any valid whole failure rejects; bounded support never waives it. All generated pairs, including negatives, remain executable.",
+    "Stable broad gates ran once at each exact production revision before adding evidence. No rerun of broad gates for evidence-only additions; fresh pairs were exercised through exact CLI and library diff helpers and are collected by the standing perturbation test.",
+    "Java argv is derived from pinned wrapper, not process traced. OpenJDK 21.0.5 / Graphviz 12.2 historical equivalence is unproved.",
+    "Concurrent creole hide/flush packet owns creole.rs. No combined correctness is claimed.",
+    "Historical self half-polygon and collections acceptance remains bound to its original revision and scope."
+  ]
+}

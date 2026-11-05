@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-teoz-real-bound-capture/checker_d382_box_before_note.puml",
+  "source_sha256": "eaf795f0e04847fcb4fdf53f3fee4726c5f622fb954bb23f3399521d7a9e1b64",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1443168339901604,
+  "stdout_sha256": "82c529e7ee39bc8d1f703ea9cbe941ab48cf9f896b56cc48231e2d252d6b95e5",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

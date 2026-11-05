@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant "Ju niper" as J
+participant K
+J -> K: ping
+@enduml

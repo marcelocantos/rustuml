@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+Cedar -> Birch ++ : first
+& Birch -> Birch ++ : one\ntwo\nthree
+& Birch -> Cedar -- : last
+return unwind
+@enduml

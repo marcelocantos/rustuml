@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant Fir
+participant Oak
+Fir -> Oak: request
+note right
+__short__
+a substantially longer body
+second line
+--another title--
+tail
+end note
+Oak --> Fir: response
+@enduml

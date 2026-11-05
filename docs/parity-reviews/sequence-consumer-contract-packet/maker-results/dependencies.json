@@ -1,0 +1,66 @@
+[
+  {
+    "target": "T14.17",
+    "mechanism": "Unconsumed command rejection",
+    "sources": [
+      "message_gap_em_legacy",
+      "message_gap_narrow_legacy"
+    ],
+    "status": "Java-invalid, Rust exit0 before and after; explicit negative failures, no parity credit",
+    "exact_path": "sequence_regex refuses the line; SeqParser::parse_line marks self.unconsumed=true; parse_sequence returns parser.finish() without rejecting that state, so the malformed message is dropped.",
+    "scope": "Parent filed T14.17 and explicitly prohibited parse/mod or global unconsumed-line changes in this packet. Both raw sources, reference errors, output changes and exit statuses are retained."
+  },
+  {
+    "mechanism": "Self-note geometry outside component selection",
+    "sources": [
+      "self_left_rnote_legacy",
+      "self_right_hnote_legacy",
+      "indf535_rnote_self_attached_legacy",
+      "indf535_hnote_self_attached_legacy"
+    ],
+    "status": "Legacy ordinate/canvas failures remain. Fresh Teoz left/right controls match; requested shapes stay in AST/YAML. No legacy offset compensation."
+  },
+  {
+    "mechanism": "Participant and note envelopes",
+    "sources": [
+      "indf535_create_box_teoz",
+      "indf535_nested_hidden_legacy",
+      "indf535_nested_hidden_teoz"
+    ],
+    "status": "Created-box/nested englober failures remain executable. Note horizontal bounds, self ordinates and canvas bounds, external-note envelopes and group/box ancestor sums remain outside this round."
+  },
+  {
+    "mechanism": "Short external arrows and lifecycle callbacks",
+    "sources": [
+      "ind5f_exo_short_in_legacy",
+      "ind5f_exo_short_in_teoz",
+      "ind5f_exo_short_out_legacy",
+      "ind5f_exo_short_out_teoz",
+      "ind5f_exo_activate_legacy",
+      "ind5f_exo_return_in_legacy"
+    ],
+    "status": "Two valid incoming short-question inputs remain CLI parse errors, not invalid references. Outgoing short geometry and legacy external callback/life-origin issues remain. Ordinary/external CREATE ownership separation is retained."
+  },
+  {
+    "mechanism": "Stereotype object composition and style",
+    "status": "Spotted/multiple/styled stereotypes remain failures. Shared filtered ordered plain stereotype Display now feeds every kind, but it does not implement complete Stereotype spot/multiplicity/font styling."
+  },
+  {
+    "target": "T14.13",
+    "mechanism": "Shared Creole stripe classification",
+    "status": "Headings/notes/dividers and other shared text failures retained. Concurrent creole maker owns shared files; no import or combined correctness claim."
+  },
+  {
+    "target": "T14.11",
+    "mechanism": "Logical fonts",
+    "status": "Both font controls remain failed and unowned. No font imports, shared text edits or geometry tuning."
+  },
+  {
+    "mechanism": "Frozen factory/TIM/shared failures",
+    "status": "All616 frozen SVG mismatches,2 valid short-arrow errors and79 frozen nonpositive references remain unchanged in category. TIM welcome/evaluated-source factory dependency remains. Outgoing unactivated returns remain Java-invalid."
+  },
+  {
+    "mechanism": "Diagnostic YAML failures",
+    "status": "Nineteen pre-existing CLI YAML serialization panics remain before/after. Independent checker also proved one state minty old-model deserialization libyml scanner panic in both revisions; preserved as distinct residue, not rerun or conflated with SVG rendering. Two diff_one diagnostic processes panic while unwrapping the known short-arrow ParseError; actual CLI reports exit1 and no renderer panic."
+  }
+]

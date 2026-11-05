@@ -1,0 +1,10 @@
+@startuml
+hide stereotype
+box Outer
+box Inner
+collections Corm <<secret>>
+end box
+database Bulb <<another>>
+end box
+Corm -> Bulb: store
+@enduml

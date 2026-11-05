@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "purpose": "Resolve actor sibling shadow through the created component model; account5b45a172, two additional controls only",
+  "cases": [
+    {
+      "name": "actor_scoped_forward",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-092/reference-inputs/actor_scoped_forward.puml",
+      "source_sha256": "c41d869f747fa6a94744c0ef301612659bb1b889941e09566f5328dd5af4a617",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "actor versus participant sibling shadow",
+        "creation direction/engine"
+      ]
+    },
+    {
+      "name": "actor_scoped_reverse",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-092/reference-inputs/actor_scoped_reverse.puml",
+      "source_sha256": "d60ced8b4ce5d8a6b582e5bd8a7f2822b5f6f9a9d90d6a7b01951b7173a37f6c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "actor versus participant sibling shadow",
+        "creation direction/engine"
+      ]
+    }
+  ]
+}

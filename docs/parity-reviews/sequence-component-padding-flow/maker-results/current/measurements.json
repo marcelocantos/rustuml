@@ -1,0 +1,866 @@
+[
+  {
+    "source": "padding_0.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_1.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_10.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_11.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M209,86.709 L209,126.709 L301,126.709 L301,96.709 L291,86.709 L209,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M204,86.709 L204,126.709 L296,126.709 L296,96.709 L286,86.709 L204,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M291,86.709 L291,96.709 L301,96.709 L291,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M286,86.709 L286,96.709 L296,96.709 L286,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"215\"), (\"y\", \"104.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"210\"), (\"y\", \"104.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"215\"), (\"y\", \"119.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"210\"), (\"y\", \"119.5879\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M209,86.709 L209,126.709 L301,126.709 L301,96.709 L291,86.709 L209,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M204,86.709 L204,126.709 L296,126.709 L296,96.709 L286,86.709 L204,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M291,86.709 L291,96.709 L301,96.709 L291,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M286,86.709 L286,96.709 L296,96.709 L286,86.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"215\"), (\"y\", \"104.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"210\"), (\"y\", \"104.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"215\"), (\"y\", \"119.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"210\"), (\"y\", \"119.5879\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_12.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_13.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_14.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_15.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"301px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:337px;height:301px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 337 301\"), (\"width\", \"337px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"301px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:335px;height:301px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 335 301\"), (\"width\", \"335px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M217,83.7988 L217,127.7988 L313,127.7988 L313,93.7988 L303,83.7988 L217,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M212,83.7988 L212,127.7988 L308,127.7988 L308,93.7988 L298,83.7988 L212,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M303,83.7988 L303,93.7988 L313,93.7988 L303,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M298,83.7988 L298,93.7988 L308,93.7988 L298,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"225\"), (\"y\", \"103.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"220\"), (\"y\", \"103.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"225\"), (\"y\", \"118.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"220\"), (\"y\", \"118.6777\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"301px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:337px;height:301px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 337 301\"), (\"width\", \"337px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"301px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:335px;height:301px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 335 301\"), (\"width\", \"335px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"185.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M217,83.7988 L217,127.7988 L313,127.7988 L313,93.7988 L303,83.7988 L217,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M212,83.7988 L212,127.7988 L308,127.7988 L308,93.7988 L298,83.7988 L212,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M303,83.7988 L303,93.7988 L313,93.7988 L303,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M298,83.7988 L298,93.7988 L308,93.7988 L298,83.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"225\"), (\"y\", \"103.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"220\"), (\"y\", \"103.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"225\"), (\"y\", \"118.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"220\"), (\"y\", \"118.6777\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_16.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_17.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_18.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_19.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"368px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:337px;height:368px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 337 368\"), (\"width\", \"337px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"368px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:335px;height:368px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 335 368\"), (\"width\", \"335px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M217,85.7539 L217,129.7539 L313,129.7539 L313,95.7539 L303,85.7539 L217,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M212,85.7539 L212,129.7539 L308,129.7539 L308,95.7539 L298,85.7539 L212,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M303,85.7539 L303,95.7539 L313,95.7539 L303,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M298,85.7539 L298,95.7539 L308,95.7539 L298,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"225\"), (\"y\", \"105.3223\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"220\"), (\"y\", \"105.3223\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"225\"), (\"y\", \"120.6328\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"220\"), (\"y\", \"120.6328\")]\n  [52] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"321.0864\"), (\"y1\", \"246.2617\"), (\"y2\", \"246.2617\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"319.1313\"), (\"y1\", \"246.2617\"), (\"y2\", \"246.2617\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"368px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:337px;height:368px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 337 368\"), (\"width\", \"337px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"368px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:335px;height:368px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 335 368\"), (\"width\", \"335px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"252.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M217,85.7539 L217,129.7539 L313,129.7539 L313,95.7539 L303,85.7539 L217,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M212,85.7539 L212,129.7539 L308,129.7539 L308,95.7539 L298,85.7539 L212,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M303,85.7539 L303,95.7539 L313,95.7539 L303,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M298,85.7539 L298,95.7539 L308,95.7539 L298,85.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"225\"), (\"y\", \"105.3223\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"220\"), (\"y\", \"105.3223\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"225\"), (\"y\", \"120.6328\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"220\"), (\"y\", \"120.6328\")]\n  [52] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"321.0864\"), (\"y1\", \"246.2617\"), (\"y2\", \"246.2617\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"319.1313\"), (\"y1\", \"246.2617\"), (\"y2\", \"246.2617\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_2.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_20.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_21.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_22.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_23.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"381px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:337px;height:381px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 337 381\"), (\"width\", \"337px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"381px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:335px;height:381px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 335 381\"), (\"width\", \"335px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M217,98.709 L217,142.709 L313,142.709 L313,108.709 L303,98.709 L217,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M212,98.709 L212,142.709 L308,142.709 L308,108.709 L298,98.709 L212,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M303,98.709 L303,108.709 L313,108.709 L303,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M298,98.709 L298,108.709 L308,108.709 L298,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"225\"), (\"y\", \"118.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"220\"), (\"y\", \"118.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"225\"), (\"y\", \"133.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"220\"), (\"y\", \"133.5879\")]\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"321.0864\"), (\"y1\", \"259.2168\"), (\"y2\", \"259.2168\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"319.1313\"), (\"y1\", \"259.2168\"), (\"y2\", \"259.2168\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"381px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:337px;height:381px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 337 381\"), (\"width\", \"337px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"381px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:335px;height:381px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 335 381\"), (\"width\", \"335px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"312.0864\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"265.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"310.1313\"), (\"x\", \"9\"), (\"y\", \"57.4883\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M217,98.709 L217,142.709 L313,142.709 L313,108.709 L303,98.709 L217,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M212,98.709 L212,142.709 L308,142.709 L308,108.709 L298,98.709 L212,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M303,98.709 L303,108.709 L313,108.709 L303,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M298,98.709 L298,108.709 L308,108.709 L298,98.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"225\"), (\"y\", \"118.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"220\"), (\"y\", \"118.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"225\"), (\"y\", \"133.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"220\"), (\"y\", \"133.5879\")]\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"321.0864\"), (\"y1\", \"259.2168\"), (\"y2\", \"259.2168\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"319.1313\"), (\"y1\", \"259.2168\"), (\"y2\", \"259.2168\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_24.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_25.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_26.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_27.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"349px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:355px;height:349px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 355 349\"), (\"width\", \"355px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"349px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:353px;height:349px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 353 349\"), (\"width\", \"353px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M229,95.7988 L229,145.7988 L331,145.7988 L331,105.7988 L321,95.7988 L229,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M224,95.7988 L224,145.7988 L326,145.7988 L326,105.7988 L316,95.7988 L224,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M321,95.7988 L321,105.7988 L331,105.7988 L321,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M316,95.7988 L316,105.7988 L326,105.7988 L316,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"240\"), (\"y\", \"118.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"235\"), (\"y\", \"118.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"240\"), (\"y\", \"133.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"235\"), (\"y\", \"133.6777\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"349px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:355px;height:349px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 355 349\"), (\"width\", \"355px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"349px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:353px;height:349px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 353 349\"), (\"width\", \"353px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"221.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M229,95.7988 L229,145.7988 L331,145.7988 L331,105.7988 L321,95.7988 L229,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M224,95.7988 L224,145.7988 L326,145.7988 L326,105.7988 L316,95.7988 L224,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M321,95.7988 L321,105.7988 L331,105.7988 L321,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M316,95.7988 L316,105.7988 L326,105.7988 L316,95.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"240\"), (\"y\", \"118.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"235\"), (\"y\", \"118.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"240\"), (\"y\", \"133.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"235\"), (\"y\", \"133.6777\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_28.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_29.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_3.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M209,75.7988 L209,115.7988 L301,115.7988 L301,85.7988 L291,75.7988 L209,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M204,75.7988 L204,115.7988 L296,115.7988 L296,85.7988 L286,75.7988 L204,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M291,75.7988 L291,85.7988 L301,85.7988 L291,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M286,75.7988 L286,85.7988 L296,85.7988 L286,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"215\"), (\"y\", \"93.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"210\"), (\"y\", \"93.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"215\"), (\"y\", \"108.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"210\"), (\"y\", \"108.6777\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M209,75.7988 L209,115.7988 L301,115.7988 L301,85.7988 L291,75.7988 L209,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M204,75.7988 L204,115.7988 L296,115.7988 L296,85.7988 L286,75.7988 L204,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M291,75.7988 L291,85.7988 L301,85.7988 L291,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M286,75.7988 L286,85.7988 L296,85.7988 L286,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"215\"), (\"y\", \"93.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"210\"), (\"y\", \"93.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"215\"), (\"y\", \"108.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"210\"), (\"y\", \"108.6777\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_30.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_31.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"434px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:355px;height:434px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 355 434\"), (\"width\", \"355px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"434px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:353px;height:434px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 353 434\"), (\"width\", \"353px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M229,103.7539 L229,153.7539 L331,153.7539 L331,113.7539 L321,103.7539 L229,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M224,103.7539 L224,153.7539 L326,153.7539 L326,113.7539 L316,103.7539 L224,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M321,103.7539 L321,113.7539 L331,113.7539 L321,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M316,103.7539 L316,113.7539 L326,113.7539 L316,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"240\"), (\"y\", \"126.3223\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"235\"), (\"y\", \"126.3223\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"240\"), (\"y\", \"141.6328\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"235\"), (\"y\", \"141.6328\")]\n  [52] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"339.0864\"), (\"y1\", \"294.2617\"), (\"y2\", \"294.2617\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"337.1313\"), (\"y1\", \"294.2617\"), (\"y2\", \"294.2617\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"434px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:355px;height:434px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 355 434\"), (\"width\", \"355px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"434px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:353px;height:434px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 353 434\"), (\"width\", \"353px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"306.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M229,103.7539 L229,153.7539 L331,153.7539 L331,113.7539 L321,103.7539 L229,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M224,103.7539 L224,153.7539 L326,153.7539 L326,113.7539 L316,103.7539 L224,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M321,103.7539 L321,113.7539 L331,113.7539 L321,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M316,103.7539 L316,113.7539 L326,113.7539 L316,103.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"240\"), (\"y\", \"126.3223\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"235\"), (\"y\", \"126.3223\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"240\"), (\"y\", \"141.6328\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"235\"), (\"y\", \"141.6328\")]\n  [52] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"339.0864\"), (\"y1\", \"294.2617\"), (\"y2\", \"294.2617\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"337.1313\"), (\"y1\", \"294.2617\"), (\"y2\", \"294.2617\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_32.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_33.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_34.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_35.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"447px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:355px;height:447px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 355 447\"), (\"width\", \"355px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"447px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:353px;height:447px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 353 447\"), (\"width\", \"353px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M229,116.709 L229,166.709 L331,166.709 L331,126.709 L321,116.709 L229,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M224,116.709 L224,166.709 L326,166.709 L326,126.709 L316,116.709 L224,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M321,116.709 L321,126.709 L331,126.709 L321,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M316,116.709 L316,126.709 L326,126.709 L316,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"240\"), (\"y\", \"139.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"235\"), (\"y\", \"139.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"240\"), (\"y\", \"154.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"235\"), (\"y\", \"154.5879\")]\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"339.0864\"), (\"y1\", \"307.2168\"), (\"y2\", \"307.2168\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"337.1313\"), (\"y1\", \"307.2168\"), (\"y2\", \"307.2168\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"447px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:355px;height:447px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 355 447\"), (\"width\", \"355px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"447px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:353px;height:447px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 353 447\"), (\"width\", \"353px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"330.0864\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"319.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"328.1313\"), (\"x\", \"9\"), (\"y\", \"63.4883\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M229,116.709 L229,166.709 L331,166.709 L331,126.709 L321,116.709 L229,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M224,116.709 L224,166.709 L326,166.709 L326,126.709 L316,116.709 L224,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M321,116.709 L321,126.709 L331,126.709 L321,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M316,116.709 L316,126.709 L326,126.709 L316,116.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"240\"), (\"y\", \"139.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"235\"), (\"y\", \"139.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"240\"), (\"y\", \"154.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"235\"), (\"y\", \"154.5879\")]\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"339.0864\"), (\"y1\", \"307.2168\"), (\"y2\", \"307.2168\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"337.1313\"), (\"y1\", \"307.2168\"), (\"y2\", \"307.2168\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_36.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_37.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_38.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_39.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"413px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:379px;height:413px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 379 413\"), (\"width\", \"379px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"413px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:377px;height:413px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 377 413\"), (\"width\", \"377px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M245,111.7988 L245,169.7988 L355,169.7988 L355,121.7988 L345,111.7988 L245,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M240,111.7988 L240,169.7988 L350,169.7988 L350,121.7988 L340,111.7988 L240,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M345,111.7988 L345,121.7988 L355,121.7988 L345,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M340,111.7988 L340,121.7988 L350,121.7988 L340,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"260\"), (\"y\", \"138.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"255\"), (\"y\", \"138.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"260\"), (\"y\", \"153.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"255\"), (\"y\", \"153.6777\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"413px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:379px;height:413px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 379 413\"), (\"width\", \"379px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"413px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:377px;height:413px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 377 413\"), (\"width\", \"377px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"269.8184\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [36] <path> attr mismatch:\n    expected: [(\"d\", \"M245,111.7988 L245,169.7988 L355,169.7988 L355,121.7988 L345,111.7988 L245,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M240,111.7988 L240,169.7988 L350,169.7988 L350,121.7988 L340,111.7988 L240,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M345,111.7988 L345,121.7988 L355,121.7988 L345,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M340,111.7988 L340,121.7988 L350,121.7988 L340,111.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"260\"), (\"y\", \"138.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"255\"), (\"y\", \"138.3672\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"260\"), (\"y\", \"153.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"255\"), (\"y\", \"153.6777\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_4.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_40.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_41.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_42.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_43.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"522px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:379px;height:522px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 379 522\"), (\"width\", \"379px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"522px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:377px;height:522px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 377 522\"), (\"width\", \"377px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M245,127.7539 L245,185.7539 L355,185.7539 L355,137.7539 L345,127.7539 L245,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M240,127.7539 L240,185.7539 L350,185.7539 L350,137.7539 L340,127.7539 L240,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M345,127.7539 L345,137.7539 L355,137.7539 L345,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M340,127.7539 L340,137.7539 L350,137.7539 L340,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"260\"), (\"y\", \"154.3223\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"255\"), (\"y\", \"154.3223\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"260\"), (\"y\", \"169.6328\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"255\"), (\"y\", \"169.6328\")]\n  [52] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"363.0864\"), (\"y1\", \"358.2617\"), (\"y2\", \"358.2617\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"361.1313\"), (\"y1\", \"358.2617\"), (\"y2\", \"358.2617\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"522px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:379px;height:522px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 379 522\"), (\"width\", \"379px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"522px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:377px;height:522px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 377 522\"), (\"width\", \"377px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"378.9941\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M245,127.7539 L245,185.7539 L355,185.7539 L355,137.7539 L345,127.7539 L245,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M240,127.7539 L240,185.7539 L350,185.7539 L350,137.7539 L340,127.7539 L240,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M345,127.7539 L345,137.7539 L355,137.7539 L345,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M340,127.7539 L340,137.7539 L350,137.7539 L340,127.7539\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"260\"), (\"y\", \"154.3223\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"255\"), (\"y\", \"154.3223\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"260\"), (\"y\", \"169.6328\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"255\"), (\"y\", \"169.6328\")]\n  [52] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"363.0864\"), (\"y1\", \"358.2617\"), (\"y2\", \"358.2617\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"361.1313\"), (\"y1\", \"358.2617\"), (\"y2\", \"358.2617\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_44.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_45.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_46.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_47.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"535px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:379px;height:535px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 379 535\"), (\"width\", \"379px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"535px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:377px;height:535px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 377 535\"), (\"width\", \"377px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M245,140.709 L245,198.709 L355,198.709 L355,150.709 L345,140.709 L245,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M240,140.709 L240,198.709 L350,198.709 L350,150.709 L340,140.709 L240,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M345,140.709 L345,150.709 L355,150.709 L345,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M340,140.709 L340,150.709 L350,150.709 L340,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"260\"), (\"y\", \"167.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"255\"), (\"y\", \"167.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"260\"), (\"y\", \"182.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"255\"), (\"y\", \"182.5879\")]\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"363.0864\"), (\"y1\", \"371.2168\"), (\"y2\", \"371.2168\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"361.1313\"), (\"y1\", \"371.2168\"), (\"y2\", \"371.2168\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"535px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:379px;height:535px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 379 535\"), (\"width\", \"379px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"535px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:377px;height:535px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 377 535\"), (\"width\", \"377px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [30] <rect> attr mismatch:\n    expected: [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"354.0864\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n    actual:   [(\"fill\", \"none\"), (\"height\", \"391.9492\"), (\"style\", \"stroke:#000000;stroke-width:1.5;\"), (\"width\", \"352.1313\"), (\"x\", \"9\"), (\"y\", \"71.4883\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M245,140.709 L245,198.709 L355,198.709 L355,150.709 L345,140.709 L245,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M240,140.709 L240,198.709 L350,198.709 L350,150.709 L340,140.709 L240,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <path> attr mismatch:\n    expected: [(\"d\", \"M345,140.709 L345,150.709 L355,150.709 L345,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M340,140.709 L340,150.709 L350,150.709 L340,140.709\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"260\"), (\"y\", \"167.2773\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"255\"), (\"y\", \"167.2773\")]\n  [41] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"260\"), (\"y\", \"182.5879\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"255\"), (\"y\", \"182.5879\")]\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"363.0864\"), (\"y1\", \"371.2168\"), (\"y2\", \"371.2168\")]\n    actual:   [(\"style\", \"stroke:#000000;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"9\"), (\"x2\", \"361.1313\"), (\"y1\", \"371.2168\"), (\"y2\", \"371.2168\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_5.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_6.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_7.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M209,75.7988 L209,115.7988 L301,115.7988 L301,85.7988 L291,75.7988 L209,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M204,75.7988 L204,115.7988 L296,115.7988 L296,85.7988 L286,75.7988 L204,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M291,75.7988 L291,85.7988 L301,85.7988 L291,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M286,75.7988 L286,85.7988 L296,85.7988 L286,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"215\"), (\"y\", \"93.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"210\"), (\"y\", \"93.3672\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"215\"), (\"y\", \"108.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"210\"), (\"y\", \"108.6777\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [37] <path> attr mismatch:\n    expected: [(\"d\", \"M209,75.7988 L209,115.7988 L301,115.7988 L301,85.7988 L291,75.7988 L209,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M204,75.7988 L204,115.7988 L296,115.7988 L296,85.7988 L286,75.7988 L204,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [38] <path> attr mismatch:\n    expected: [(\"d\", \"M291,75.7988 L291,85.7988 L301,85.7988 L291,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M286,75.7988 L286,85.7988 L296,85.7988 L286,75.7988\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [39] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"215\"), (\"y\", \"93.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"58.189\"), (\"x\", \"210\"), (\"y\", \"93.3672\")]\n  [40] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"215\"), (\"y\", \"108.6777\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"71.7031\"), (\"x\", \"210\"), (\"y\", \"108.6777\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_8.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "padding_9.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  }
+]

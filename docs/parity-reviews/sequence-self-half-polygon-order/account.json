@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "evidence_import": "96e2561122e70ffe53dfa3f102cf18d199cc464f",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-self-half-polygon-order",
+  "java_locations": [
+    "skin.rose.ComponentRoseSelfArrow#getPolygon/#drawRightSide/#drawLeftSide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::self-message filled half drawing"
+  ],
+  "invariant": "TOP_PART polygon points are wing-top, tip, wing-base; BOTTOM_PART points are wing-base, tip, wing-bottom. Orientation changes x sign, not point order.",
+  "causal_divergence": "Rust uses wing-base first for both half parts, making reverse TOP_PART differ structurally despite identical vertex set.",
+  "planned_change": "Emit source polygon vertex order for filled half-self heads, preserving ordinary dressing ownership, self aggregate consumer and frozen comparator.",
+  "perturbation_axes": [
+    "forward/reverse top/bottom and open controls",
+    "activation depth/circles and engine"
+  ]
+}

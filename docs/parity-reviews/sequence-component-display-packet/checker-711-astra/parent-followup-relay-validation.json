@@ -1,0 +1,24 @@
+{
+  "validated": true,
+  "calls": 12,
+  "sources": 12,
+  "timeouts": 0,
+  "hashes": {
+    "reference-results.json.gz": "ef850993b451a6404790657c237af3ba0b989a265e6619a17a1adc2790bbdbea",
+    "reference-transport.json": "59a9f4d342619c59370ae1c0f68f8a65f082b48f7a93e4f4701be101475fd649"
+  },
+  "manifest_sha256": "823df7997a71401e9f60a9824214c5b91ec37f2998f30f501667edb20b5ad639",
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.vfXZZscg",
+  "checks": [
+    "immutable sources and both paths",
+    "membership",
+    "streams",
+    "argv cwd timezone env",
+    "pinned environment",
+    "derived Java argv"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "exit_statuses": {
+    "0": 12
+  }
+}

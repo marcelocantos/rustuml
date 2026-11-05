@@ -1,0 +1,340 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "ordinary_live_legacy",
+    "axes": [
+      "head/open/filled",
+      "direction/activation/alpha",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "bidir_legacy",
+    "axes": [
+      "both endpoints",
+      "bidirectional/declaration order",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "self_half_legacy",
+    "axes": [
+      "self/open half",
+      "reverse/live depth",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_source_legacy",
+    "axes": [
+      "external source decoration",
+      "border/direction/activation",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_target_legacy",
+    "axes": [
+      "external target decoration",
+      "border/open head/live depth",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "both_dispatch_legacy",
+    "axes": [
+      "both circle dispatch",
+      "open dotted head/labels",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_legacy",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_multi_legacy",
+    "axes": [
+      "unequal child heights",
+      "reverse/multiple children/padding",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_alone_legacy",
+    "axes": [
+      "title wrapper",
+      "font relationship/underline",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_body_legacy",
+    "axes": [
+      "nonempty title body",
+      "font relationship/underline",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "underline_legacy",
+    "axes": [
+      "underline inline/whole",
+      "multiline/font",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_lines_legacy",
+    "axes": [
+      "root versus sibling selectors",
+      "activation/note/return",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_shadow_legacy",
+    "axes": [
+      "numeric participant/root shadow",
+      "activation/note override",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_create_legacy",
+    "axes": [
+      "creation consumer",
+      "numeric shadow/event history",
+      "legacy"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "ordinary_live_teoz",
+    "axes": [
+      "head/open/filled",
+      "direction/activation/alpha",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "bidir_teoz",
+    "axes": [
+      "both endpoints",
+      "bidirectional/declaration order",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "self_half_teoz",
+    "axes": [
+      "self/open half",
+      "reverse/live depth",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_source_teoz",
+    "axes": [
+      "external source decoration",
+      "border/direction/activation",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_target_teoz",
+    "axes": [
+      "external target decoration",
+      "border/open head/live depth",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "both_dispatch_teoz",
+    "axes": [
+      "both circle dispatch",
+      "open dotted head/labels",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_teoz",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_multi_teoz",
+    "axes": [
+      "unequal child heights",
+      "reverse/multiple children/padding",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_alone_teoz",
+    "axes": [
+      "title wrapper",
+      "font relationship/underline",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_body_teoz",
+    "axes": [
+      "nonempty title body",
+      "font relationship/underline",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "underline_teoz",
+    "axes": [
+      "underline inline/whole",
+      "multiline/font",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_lines_teoz",
+    "axes": [
+      "root versus sibling selectors",
+      "activation/note/return",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_shadow_teoz",
+    "axes": [
+      "numeric participant/root shadow",
+      "activation/note override",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_create_teoz",
+    "axes": [
+      "creation consumer",
+      "numeric shadow/event history",
+      "teoz"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "invalid_inner",
+    "axes": [
+      "interior decoration",
+      "ordinary/external"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "invalid_exo",
+    "axes": [
+      "interior decoration",
+      "ordinary/external"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "empty",
+    "axes": [
+      "zero bytes",
+      "pipe front end"
+    ]
+  }
+]

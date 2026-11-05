@@ -1,0 +1,18 @@
+@startuml
+!pragma teoz true
+title Measured wrapper
+legend left
+key entry
+endlegend
+caption first\nlonger second
+header remote probe
+footer finished
+hide footbox
+participant "Cedar relay" as C
+participant "Finch" as F
+C -> F ++ : dispatch
+newpage later
+F -> F ++ : work
+return complete
+return delivered
+@enduml

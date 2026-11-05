@@ -1,0 +1,4 @@
+@startuml
+[-> Worker ++ : enter
+return #purple complete
+@enduml

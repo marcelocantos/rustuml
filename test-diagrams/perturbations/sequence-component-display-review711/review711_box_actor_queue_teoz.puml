@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+queue "Outside" as Q
+box "Actors"
+actor "Tall\nInside" as A
+end box
+Q -> A: relay
+@enduml

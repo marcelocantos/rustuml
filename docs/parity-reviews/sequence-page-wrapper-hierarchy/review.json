@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-page-wrapper-hierarchy",
+  "account_commit": "836f9c0d6e9337c7af51d87ee250b8698b23fd7c",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.svg",
+      "source_sha256": "f1886ddb5f9e8171d28bb052e98a95fc0a000dd8178b9ca8270754e44996172c",
+      "golden_sha256": "352b2dce5b3d7e93e52256046a5841f7014479c930a85b84c034691b58f9c918",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.svg",
+      "source_sha256": "241ee45621b41b5ec06357c29add2a1e963faeadefb4c0010d98e546006335de",
+      "golden_sha256": "662f81d2706628d1d1fa4e237ae9e90fc8e54dda6cb1b2f8646bef22ecc10dab",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.svg",
+      "source_sha256": "38c70597d23a75b1e081f487ce5fb648b21cb3d8cd09223419ec47e81284d5ba",
+      "golden_sha256": "da9e2365f90df2b6b5159acb0c89c58e0f57d2d8ef6157b316f20d69827d685f",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.svg",
+      "source_sha256": "7c37855173b60a1f8309927119603c04307e46cfd04f27bc57f5621eb80d4d7d",
+      "golden_sha256": "29777858b36ac3a97e5fb4d61e387b6d19dbd2c40314689e1a2d9f094a30069c",
+      "axes": [
+        "engine",
+        "page boundary with later lifecycle and self-arrow",
+        "wrapper order and multiline caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_top_legend.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_top_legend.svg",
+      "source_sha256": "6f77aa690b39bc0051020d6534e2268336d613337a49ba0a01e9f278e6ff2c79",
+      "golden_sha256": "5fb86cf8c15ba3b2c45ef7f4c0d995a4b9f0ee308da00011e9fb270acfc4bfcb",
+      "axes": [
+        "source-guided edge control",
+        "top_legend"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_styled_caption.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_styled_caption.svg",
+      "source_sha256": "2d72448c93d874e925dc49eb9fd75681e084fadd90170e5194cb7225a689bab1",
+      "golden_sha256": "152d4f71dcf4107c1a95ef53fe67a8f8a551df2cad0b940b7e61d3e15e676a89",
+      "axes": [
+        "source-guided edge control",
+        "styled_caption"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-page-wrapper-hierarchy",
+    "java_files": [
+      "core/DiagramChromeFactory12026.java",
+      "svek/DecorateEntityImage.java",
+      "klimt/shape/TextBlockBordered.java",
+      "sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java",
+      "sequencediagram/teoz/PlayingSpaceWithParticipants.java"
+    ],
+    "rust_locations": [
+      "sequence.rs:7013-7039",
+      "sequence.rs:7435-7454",
+      "sequence.rs:11076-11155",
+      "sequence.rs:11369-11423",
+      "sequence.rs:14862-14937"
+    ],
+    "source_supported": "Factory order raw/legend/title/caption/header-footer is real; caption now measures all lines and bottom stacking uses complete blocks. Teoz newpage measures full body while clipping drawn tiles. The former actor/database title adjustment and midpoint heuristics were removed.",
+    "adversarial_boundary": "Factory addLegend honors vertical and horizontal placement, and caption uses resolved Style.createTextBlockBordered. Rust still constructs a bottom legend and fixed caption font/margin/padding geometry. Fresh top-legend and styled-caption probes challenge actual wrapper invariants, not unrelated dependencies. Raw multi-page stdout must also be preserved verbatim."
+  },
+  "findings": [
+    "Factory order raw/legend/title/caption/header-footer is real; caption now measures all lines and bottom stacking uses complete blocks. Teoz newpage measures full body while clipping drawn tiles. The former actor/database title adjustment and midpoint heuristics were removed.",
+    "All six fresh cases fail. In combined wrappers, valid legend left is absent from Rust (41 versus38 elements,262px versus211px legacy). Top legend is painted in the wrong wrapper position. Styled caption FontSize20/Margin6/Padding3 produces197px height versus167px. Both newpage engines fail. Use the parsed full legend placement and resolved styled TextBlocks through the wrapper chain; do not compensate by fixed page offsets.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

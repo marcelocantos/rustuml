@@ -1,0 +1,57 @@
+{
+  "accounts": [
+    {
+      "mechanism": "sequence-factory-command-viability",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "aeb638a3e2c23f2d874641c49c49ad993b7bb140"
+      ]
+    },
+    {
+      "mechanism": "sequence-endpoint-dressing-composition",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "96716b8b9595abf437a26b6bd6af914411cef44a"
+      ]
+    },
+    {
+      "mechanism": "sequence-note-body-composition",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "689f00cb730100e6640ebec8bfb026f942c1cf03",
+        "c921945aac3bfaf7d61dd323498f0e4899f32182"
+      ]
+    },
+    {
+      "mechanism": "sequence-created-participant-component",
+      "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+      "implementation_commits": [
+        "c921945aac3bfaf7d61dd323498f0e4899f32182",
+        "bc9ef612c05d120650ee6a92b2a4393a663a183d"
+      ]
+    },
+    {
+      "mechanism": "sequence-queue-preferred-component",
+      "account_commit": "7ab48cc4b66eae7b50c7508c9f6bf481427f316d",
+      "implementation_commits": [
+        "bc9ef612c05d120650ee6a92b2a4393a663a183d"
+      ]
+    },
+    {
+      "mechanism": "sequence-resolved-head-alignment",
+      "account_commit": "00845306f8df250f86517580cc4cc7d4fbaf3b46",
+      "implementation_commits": [
+        "b4f37ab5840b8d70bf1246e3659f1902c0952a51"
+      ]
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/parse/mod.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs"
+  ],
+  "full_tested_production": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+  "ownership": "parse/mod.rs only decorated command viability; ascii.rs exactly two source_dressing:None additions. No shared style/text/font changes."
+}

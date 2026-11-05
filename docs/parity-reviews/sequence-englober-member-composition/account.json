@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-englober-member-composition",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.graphic.DrawableSet#getHeadHeight/#getHeadAndEngloberHeight/#getParticipantEnglober",
+    "skin.rose.ComponentRoseEnglober#getPreferredHeight",
+    "sequencediagram.teoz.LivingSpaces#getHeadHeight",
+    "sequencediagram.teoz.Dolls#getOffsetForEnglobers",
+    "sequencediagram.teoz.SequenceDiagramFileMakerTeoz#constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render head_box_y/max_head_band"
+  ],
+  "invariant": "Legacy maximizes each participant head plus its own enclosing title preferred height. An unboxed taller participant does not inherit another participant's title. Teoz retains its separate max head plus Dolls offset composition.",
+  "causal_divergence": "cf3eafb2 uses max(all heads)+max(all titles). Fresh complete Display fixes reveal one main regression: boxed short queues plus unboxed taller rectangle reserve the rectangle and unrelated title together.",
+  "planned_change": "Move row composition after resolved participant components. For legacy find each participant's actual box, compose its title component and head, then choose the maximum; use that common bottom for head alignment and scheduling. Keep Teoz separate. No type/label condition or measured offset. Existing nested box parsing, rich box title and boxPadding dependencies remain explicit.",
+  "perturbation_axes": [
+    "boxed queue-only versus boxed mixed heads with unboxed taller siblings",
+    "multiline/stereotype/font variation and legacy versus Teoz"
+  ],
+  "before_revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "account_date": "2026-11-05",
+  "evidence": "Preserved stable2083 has no losses; first broad main has sequence/seq_box_with_queue loss (1410/1411). Existing immutable queue controls and new queue_stereotype controls exercise the member-composition distinction."
+}

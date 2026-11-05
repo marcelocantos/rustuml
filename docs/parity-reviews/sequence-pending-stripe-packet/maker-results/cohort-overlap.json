@@ -1,0 +1,36 @@
+{
+  "entries": 2169,
+  "unique_paths": 2169,
+  "unique_source_bytes": 2121,
+  "duplicate_entries": 48,
+  "cohorts": {
+    "preserved2083": {
+      "entries": 2083,
+      "unique_sources": 2035,
+      "overlap_prior_bytes": 0
+    },
+    "checker64": {
+      "entries": 64,
+      "unique_sources": 64,
+      "overlap_prior_bytes": 0
+    },
+    "maker20": {
+      "entries": 20,
+      "unique_sources": 20,
+      "overlap_prior_bytes": 0
+    },
+    "handoff2": {
+      "entries": 2,
+      "unique_sources": 2,
+      "overlap_prior_bytes": 0
+    }
+  },
+  "parent1449": {
+    "overlap_paths": 1123,
+    "parent_only_paths_not_replayed": 326,
+    "overlap_unique_bytes": 1097,
+    "parent_only_unique_bytes": 278,
+    "provenance": "Immutable checker711 parent-overlap.json; historical parent overlap with frozen2083 only. No new parent inventory or additive claim."
+  },
+  "note": "Retain all entries including duplicate bytes, invalids and separate shared handoffs."
+}

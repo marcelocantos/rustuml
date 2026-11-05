@@ -1,0 +1,38 @@
+[
+  {
+    "review": "docs/parity-reviews/sequence-dressing-owned-parts/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-created-image-event-ownership/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-complete-participant-display/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-empty-rule-title-atom/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-unclosed-note-command/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-self-part-consumer/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-participant-kind-font-consumer/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-head-englober-component-height/review.json",
+    "verdict": "rejected"
+  },
+  {
+    "review": "docs/parity-reviews/sequence-englober-member-composition/review.json",
+    "verdict": "rejected"
+  }
+]

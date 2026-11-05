@@ -1,0 +1,315 @@
+{
+  "entries": 2281,
+  "distinct": 2233,
+  "before": {
+    "svg_mismatch": 613,
+    "match": 1583,
+    "invalid": 77,
+    "runtime_failure": 8
+  },
+  "after": {
+    "svg_mismatch": 593,
+    "match": 1611,
+    "invalid": 77
+  },
+  "lost_passes": [],
+  "recoveries": [
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_legacy.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_teoz.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_legacy.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_teoz.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_legacy.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_teoz.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_legacy.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_teoz.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_left_legacy.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_left_teoz.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_right_legacy.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_right_teoz.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_left_legacy.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_left_teoz.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_right_legacy.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_right_teoz.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_bare_legacy.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_bare_teoz.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_created_legacy.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_created_teoz.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_repeated_legacy.puml",
+    "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_repeated_teoz.puml"
+  ],
+  "new_valid_errors": [],
+  "final_panics": [],
+  "ast_changed": [],
+  "ascii_changed": [],
+  "losses_by_mode": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "invalid_rust_statuses": {
+    "before": {
+      "0": 20,
+      "1": 57
+    },
+    "after": {
+      "0": 20,
+      "1": 57
+    }
+  },
+  "cohorts": {
+    "frozen": {
+      "entries": 2169,
+      "distinct": 2121,
+      "before": {
+        "svg_mismatch": 586,
+        "match": 1514,
+        "invalid": 69
+      },
+      "after": {
+        "svg_mismatch": 586,
+        "match": 1514,
+        "invalid": 69
+      },
+      "lost_passes": [],
+      "recoveries": [],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {
+          "0": 20,
+          "1": 49
+        },
+        "after": {
+          "0": 20,
+          "1": 49
+        }
+      }
+    },
+    "checker96": {
+      "entries": 96,
+      "distinct": 96,
+      "before": {
+        "match": 67,
+        "invalid": 8,
+        "svg_mismatch": 17,
+        "runtime_failure": 4
+      },
+      "after": {
+        "match": 81,
+        "invalid": 8,
+        "svg_mismatch": 7
+      },
+      "lost_passes": [],
+      "recoveries": [
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_teoz.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_teoz.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_teoz.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_teoz.puml",
+        "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_legacy.puml",
+        "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_teoz.puml",
+        "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_legacy.puml",
+        "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_teoz.puml",
+        "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_legacy.puml",
+        "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_teoz.puml"
+      ],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {
+          "1": 8
+        },
+        "after": {
+          "1": 8
+        }
+      }
+    },
+    "maker16": {
+      "entries": 16,
+      "distinct": 16,
+      "before": {
+        "runtime_failure": 4,
+        "svg_mismatch": 10,
+        "match": 2
+      },
+      "after": {
+        "match": 16
+      },
+      "lost_passes": [],
+      "recoveries": [
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_left_legacy.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_left_teoz.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_right_legacy.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_out_right_teoz.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_left_legacy.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_left_teoz.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_right_legacy.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/external_in_right_teoz.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_bare_legacy.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_bare_teoz.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_created_legacy.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_created_teoz.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_repeated_legacy.puml",
+        "docs/parity-reviews/sequence-external-display-packet/maker-results/inputs/reference-inputs/queue_repeated_teoz.puml"
+      ],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {},
+        "after": {}
+      }
+    }
+  },
+  "frozen_cli_changes": [],
+  "recoveries_by_previous": {
+    "svg_mismatch": 20,
+    "runtime_failure": 8
+  },
+  "original_accepted_scope_replays": {
+    "sequence-self-half-polygon-order": {
+      "entries": 24,
+      "distinct": 24,
+      "before": {
+        "match": 24
+      },
+      "after": {
+        "match": 24
+      },
+      "lost_passes": [],
+      "recoveries": [],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {},
+        "after": {}
+      }
+    },
+    "sequence-collections-source-clarification": {
+      "entries": 4,
+      "distinct": 4,
+      "before": {
+        "match": 4
+      },
+      "after": {
+        "match": 4
+      },
+      "lost_passes": [],
+      "recoveries": [],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {},
+        "after": {}
+      }
+    },
+    "sequence-single-pending-create": {
+      "entries": 38,
+      "distinct": 38,
+      "before": {
+        "match": 19,
+        "invalid": 8,
+        "svg_mismatch": 7,
+        "runtime_failure": 4
+      },
+      "after": {
+        "match": 27,
+        "invalid": 8,
+        "svg_mismatch": 3
+      },
+      "lost_passes": [],
+      "recoveries": [
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_teoz.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_teoz.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_teoz.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_legacy.puml",
+        "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_teoz.puml"
+      ],
+      "new_valid_errors": [],
+      "final_panics": [],
+      "ast_changed": [],
+      "ascii_changed": [],
+      "losses_by_mode": {
+        "cli_comparison": [],
+        "product_library": [],
+        "assisted_library": []
+      },
+      "invalid_rust_statuses": {
+        "before": {
+          "1": 8
+        },
+        "after": {
+          "1": 8
+        }
+      }
+    }
+  },
+  "final_helper_panics": [
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "mode": "product_library",
+      "stderr": "\nthread 'main' (22528069) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "mode": "assisted_library",
+      "stderr": "\nthread 'main' (22528080) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "mode": "product_library",
+      "stderr": "\nthread 'main' (22563893) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "mode": "assisted_library",
+      "stderr": "\nthread 'main' (22563897) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    }
+  ]
+}

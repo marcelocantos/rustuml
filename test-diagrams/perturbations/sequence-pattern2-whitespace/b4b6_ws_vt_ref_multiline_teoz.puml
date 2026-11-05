@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+refoverJuniper,Kestrel
+opaque
+end ref
+@enduml

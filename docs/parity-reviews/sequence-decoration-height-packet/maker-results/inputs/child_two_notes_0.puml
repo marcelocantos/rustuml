@@ -1,0 +1,8 @@
+@startuml
+skinparam noteFontSize 11
+skinparam Padding 2
+Wren <- Lark : reverse
+note left : first\nsecond
+note right : compact
+Lark -> Wren : next
+@enduml

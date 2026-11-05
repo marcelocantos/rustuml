@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "sequence-teoz-life-event-scheduling",
+  "java_locations": [
+    "sequencediagram.teoz.LiveBoxes#getLevelAtInternal/#getStairs/#drawOneLevel",
+    "sequencediagram.teoz.GroupingTile#mergeParallel",
+    "sequencediagram.teoz.TileParallel#getContactPointRelative/#getPreferredHeight",
+    "sequencediagram.teoz.LifeEventTile#getPreferredHeight/#drawU",
+    "sequencediagram.teoz.CommunicationTile#callbackY_internal",
+    "skin.rose.ComponentRoseDestroy#getPreferredHeight"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::TeozHistory",
+    "crates/rustuml-render/src/sequence.rs::render"
+  ],
+  "invariant": "Raw CREATE is a neutral life event with next-message ownership; DESTROY is a close with destruction metadata. Standalone DESTROY allocates the destroy component height, while attached destroy is painted at its owning message stair. Parallel tiles align contact points and reserve the maximum extents above/below.",
+  "causal_divergence": "Rust omits CREATE from history; conflates all non-ACTIVATE life events with close; paints standalone destroy at a centered zero-height event; drops destruction metadata from stairs; compares only identical owner indices; schedules all messages serially.",
+  "planned_change": "Extend the raw lifecycle model with create/close kinds and directional parallel ancestry; retain createY and destroy flags through stairs and painting. Schedule standalone destroy from preferred cross dimensions and parallel message clusters from contact-point/preferred-height composition. Preserve supported callback traversal count and folded-note Real phases.",
+  "perturbation_axes": [
+    "parallel chain length and label/self-message height",
+    "create/destroy attachment across groups/notes and recursion depth",
+    "engine and participant declaration order"
+  ]
+}

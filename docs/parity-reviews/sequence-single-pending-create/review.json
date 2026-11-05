@@ -1,0 +1,861 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-single-pending-create",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A432882cd-4556-4e95-862f-31b54103f709",
+    "model": "gpt-6-astra",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker; no maker involvement; no children; production unchanged",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "branch": "review/sequence-pending-stripe-independent-20261105"
+  },
+  "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+  "implementation_commit": "d5478061ffbd2b1ec31a8ac513ff23b4489e3fa6",
+  "tested_production": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "evidence_tip": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "before_production": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/build_gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py docs/parity-reviews/sequence-pending-stripe-packet/maker-results/all-inputs.json replay2169",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/fresh86.json fresh86",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/followup10.json followup10",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing relay; exact substituted argv retained per result)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_triple_pending_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_triple_pending_legacy.svg",
+      "axes": [
+        "triple overwrite",
+        "four kinds/order",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "1fb43bcd24baf4c3010ce73e75b11491f942f5a98ef015683e3f0250013f746c",
+      "reference_sha256": "2b19b98fd027475ecde3d092713b812209e5778c123780c88e1e0dc62ac8669b",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_triple_pending_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_triple_pending_teoz.svg",
+      "axes": [
+        "triple overwrite",
+        "four kinds/order",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "58f144eca8bbdd79fb0902b1a76b84fabcb7be8569da98c8754883e56e2d156f",
+      "reference_sha256": "87123a159eeee4ed6cd038ffa011b6c4926448ca13cbfc7e3f3e965dd4533a15",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_interleaved_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_interleaved_legacy.svg",
+      "axes": [
+        "consumed plus overwritten",
+        "mixed kinds",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "ca3670d8bdf2dba91a616db6e7e54de497d0a670d77ed3b4b3d42a94b83c128c",
+      "reference_sha256": "c4b4547cb1814e3264b96c43cd0c5410ca288a5d5003ee74b2f4f1578990e193",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 2
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_interleaved_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_interleaved_teoz.svg",
+      "axes": [
+        "consumed plus overwritten",
+        "mixed kinds",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "0e215d6239ef3a85ed205ea163f4f1d6d6f2e1f8987c09bb9ec704c9b0455906",
+      "reference_sha256": "5ae67b966d3fa942fd5f34afe17fa5b217942333970d7356bf996eb4a26a3ed8",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 3
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_valid_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_valid_legacy.svg",
+      "axes": [
+        "pending before return",
+        "return destination",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "8ef58b6aabe81f9d1dd58f2141e83f21e9b50770c53fd319df47891a0dc7d6cf",
+      "reference_sha256": "5534a341bd4b9964512eb93119212ccefb16e3f0f6e954bf7c127e2705d3a5bc",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 4
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_valid_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_valid_teoz.svg",
+      "axes": [
+        "pending before return",
+        "return destination",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "6dc11209281083efd7d3157826d41ef2a552ddc90ebcab3d9da6703da40ef034",
+      "reference_sha256": "80dca5f567e137b997e610b251fc37b1b205e12637823658b5b13a954b3f6ec7",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 5
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_legacy.svg",
+      "axes": [
+        "pending before return",
+        "wrong receiver",
+        "legacy"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "b736518688295aa3d87eacf39b0ac120a65179bafca6885f18b8b885c0f205b8",
+      "reference_sha256": "c0fa5ca53a66496bce0a268e1b44c96ae6defdb40103ddd78aaec443ba7a30dd",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 8: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 6
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_return_invalid_teoz.svg",
+      "axes": [
+        "pending before return",
+        "wrong receiver",
+        "teoz"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "622dd1fbdc1041cfac504ed6eed0c0b2df57af6792abd8be7531b4a4adab0c22",
+      "reference_sha256": "304b5e792bf3226e7c67a673c5034e8020a98d8a3a779b902dacdb463b20e247",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 9: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 7
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_activate_between_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_activate_between_legacy.svg",
+      "axes": [
+        "unattached initial activation",
+        "pending retention",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "bb2294b8d0bead2eac0b5b001ed600616b035c91fbc52be2eecc114d18479b76",
+      "reference_sha256": "44d1e6446635a6c821b3e8e6b8220c169b8fcee7cc5161814f0f06a088445438",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 8
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_activate_between_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_activate_between_teoz.svg",
+      "axes": [
+        "unattached initial activation",
+        "pending retention",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "0b21d455b2c07c75b8f7837a2d0dc3c140db1ecd769e3b3327e9e9c4e1838e86",
+      "reference_sha256": "99915a9485db554b2bbb8f1dd8a5d34e1c2817c6c68b65d35cee433fc0ff122e",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 9
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_deactivate_between_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_deactivate_between_legacy.svg",
+      "axes": [
+        "deactivation between",
+        "mixed kind",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "58e07831cbf0b97ca3b66c1c5e1faf89024a3c202d04cb8bf34e832a5cd5595e",
+      "reference_sha256": "6e60e3e6f233eeb1a92b0e12399b8e5e8c11eec8d7312a560097ab471e3a82fe",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 10
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_deactivate_between_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_deactivate_between_teoz.svg",
+      "axes": [
+        "deactivation between",
+        "mixed kind",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "03bbf0cb232061dc990dab6f7b261b07b98b084081e5b5f0417291962dc80b33",
+      "reference_sha256": "dbf7d1976b26436b11b3d525d86ce3988a21d8bb8d5cf7236bd6c03c58df5f5c",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 11
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_legacy.svg",
+      "axes": [
+        "external direction",
+        "incoming_left",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "cb33630419926fb6587cdc599e6a6dcd82e6cbb614158edb9ef94d3105bd24a8",
+      "reference_sha256": "6488d51a646f9e647e0481ef4e54418f1eb32fe4a24d5acc2790e07a9dd75411",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 12
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_left_teoz.svg",
+      "axes": [
+        "external direction",
+        "incoming_left",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "77ea2a92a702b282166bcfcd3e7724c63e9dfaf3a42874c45f6ed31ae6d3cbac",
+      "reference_sha256": "e10e54635689bd362feca49ace0da85d62ad2979c8a62464a7d746bbed09bc9f",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 13
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_legacy.svg",
+      "axes": [
+        "external direction",
+        "incoming_right",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "6f37bf5c39ac8be88c31b2cc46e1541ae3f97e741d2ea25e2b7e070736c9d89f",
+      "reference_sha256": "461357b588b97396b32b85f2f7313473544dec8f076534ce976630d12d700bed",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 14
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_incoming_right_teoz.svg",
+      "axes": [
+        "external direction",
+        "incoming_right",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "3cc7755aebb20ce3e07c7ed111e7af6edf29b68e2b6aad3bac50f0b576b5d3c8",
+      "reference_sha256": "eab3bea4ca77fc501017cfe43cdc8196ef9e4e57ba2b6d4633f3bc175a7b82e7",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 15
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_legacy.svg",
+      "axes": [
+        "external direction",
+        "outgoing_left",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "7a1cac14fed50efe18010f349af670d1eb900621d491b5c527cc55dd03783e8e",
+      "reference_sha256": "9e672e8c7d8b9688cfd762f1604c853b5ffbaf8d4a9159835c2a6361e03b4902",
+      "before_comparison_exit": 0,
+      "comparison_exit": 3,
+      "before_cli_exit": 0,
+      "cli_exit": 101,
+      "cli_stderr": "\nthread 'main' (21400566) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "capture_set": "fresh86",
+      "capture_index": 16
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_left_teoz.svg",
+      "axes": [
+        "external direction",
+        "outgoing_left",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "99f466610dd81d484c02311a6d3a668750b50b88a74be8bdd0f78dca578f09be",
+      "reference_sha256": "1a1a7d49ab42f40f6821d81d53f098c6f7dee7b818eac852b8208f956b926b03",
+      "before_comparison_exit": 0,
+      "comparison_exit": 3,
+      "before_cli_exit": 0,
+      "cli_exit": 101,
+      "cli_stderr": "\nthread 'main' (21400574) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "capture_set": "fresh86",
+      "capture_index": 17
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_legacy.svg",
+      "axes": [
+        "external direction",
+        "outgoing_right",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "cf75931a3cb58af46f558e18aed951369544389d631c21bd797d48f43e6b6892",
+      "reference_sha256": "4297edd086ce0aca56b5814de2e1789ec6fcbab622b026d67649c703f5c42ed1",
+      "before_comparison_exit": 0,
+      "comparison_exit": 3,
+      "before_cli_exit": 0,
+      "cli_exit": 101,
+      "cli_stderr": "\nthread 'main' (21400614) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "capture_set": "fresh86",
+      "capture_index": 18
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_outgoing_right_teoz.svg",
+      "axes": [
+        "external direction",
+        "outgoing_right",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "dce88f64b4b37959a0aa4caac23b66888e092e94079382c78d563970d0db9cad",
+      "reference_sha256": "6ad56986e01e1d1a75b692d8c5939f25b89600d07043d13642eea1cba2fcbc3e",
+      "before_comparison_exit": 0,
+      "comparison_exit": 3,
+      "before_cli_exit": 0,
+      "cli_exit": 101,
+      "cli_stderr": "\nthread 'main' (21400634) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "capture_set": "fresh86",
+      "capture_index": 19
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_legacy.svg",
+      "axes": [
+        "pending crosses nested group",
+        "overwrite kinds",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "674b1b793d9bf456a8f18eb02840b0baa49ec3caa92a0a7d53ae8cde5d879796",
+      "reference_sha256": "29d467a7d539f5d3239a30779b7117ccf2ccbd300e46ff9a788b08c807ed5111",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 20
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_teoz.svg",
+      "axes": [
+        "pending crosses nested group",
+        "overwrite kinds",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "550783284a4c2e6c5f160c51efc065ebcfad0517654ed9c911ba0af5bdde29be",
+      "reference_sha256": "c9b51c276e63d1b594a00fc73746a417b04b646a9caec43bae10bfc94acb9aca",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 21
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_box_scope_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_box_scope_legacy.svg",
+      "axes": [
+        "box membership",
+        "overwritten pending",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "610bdd5405b128cbee222b28a879227de1953bc9fadfdf32ce3a66af4b47c296",
+      "reference_sha256": "e1fdbae2ce6b5574ad19be3c76c9bb2b20729a9384ad4f4c2ea07a462b340476",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 22
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_box_scope_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_box_scope_teoz.svg",
+      "axes": [
+        "box membership",
+        "overwritten pending",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "2473711fe5afd92a19b6ccd9e1db1e47c08bb850dfda90285363833feb976d57",
+      "reference_sha256": "166e4f60bff682ca058cace93bff285f39077f7eb793d534a3c72c4928b5dd44",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 23
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_legacy.svg",
+      "axes": [
+        "autonumber",
+        "triple pending",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "e185406c9e31b0007ac1ea8606010250fb185ba67ecbdd3eaf8a19e49155832e",
+      "reference_sha256": "334afc905cf970ae9233f08261c2d24da5c068bfe0457c340c6967382a228bce",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 24
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_teoz.svg",
+      "axes": [
+        "autonumber",
+        "triple pending",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "b88c7a6daf23c2714451fe2a499d3f0fbadde5933973692dacbc87af0e3c1454",
+      "reference_sha256": "455ea8779a0463d30269ce17c05ca5a570251e1bf9a0709a1dc7e96d00643e4d",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 25
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_participant_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_participant_legacy.svg",
+      "axes": [
+        "end without consumer",
+        "participant",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "a35aa83bc1820a04e2da438ce66428765fe4aa9d4e8f893a030ca9832499e4b9",
+      "reference_sha256": "20139c3b1e30234dd8d279c375c3eb6c5538456d2d34bbbf7220305842399b03",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 26
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_participant_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_participant_teoz.svg",
+      "axes": [
+        "end without consumer",
+        "participant",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "f5ac08be9dc9ce53396e6e7fc09a2ff08faa66631f8152739ff6ae7fe8f04c11",
+      "reference_sha256": "b6cc2f787b02c030a361e1fc38cbf6cde268ee2b75ccbd07bf232b13d759b991",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 27
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_actor_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_actor_legacy.svg",
+      "axes": [
+        "end without consumer",
+        "actor",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "52cf2339f7b0b4c8003adad6172ae1c67a40bd18cdc4a35f2ad28eff2d72c0e1",
+      "reference_sha256": "cffbbf4b58eb091449252805b4baca4d7ab9f2c514cd34d7ac118f74a0b719c5",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 28
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_actor_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_actor_teoz.svg",
+      "axes": [
+        "end without consumer",
+        "actor",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "b31f9f5da861c0053bb70674367e00ba27af7b09185fbc97cd327d798cc3a6f4",
+      "reference_sha256": "403489faa7b1799b71da66c63dddbc662f357e6a0caa64016b773a5aa0bd312d",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 29
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_queue_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_queue_legacy.svg",
+      "axes": [
+        "end without consumer",
+        "queue",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "294e8ab863120b3ead7f952d10c48868c32031fc0f4e705e3357a00c46b362c2",
+      "reference_sha256": "b5bf8b7716d035da96ef3c24c7276e3e1c7c228dbeb4a5dac809e65ecfb30041",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 30
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_queue_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_dangling_queue_teoz.svg",
+      "axes": [
+        "end without consumer",
+        "queue",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "745e3f48954e2bc2820f8f16ffb1bb8b0a7fc3f86f2ec559d2a467bb539a4d01",
+      "reference_sha256": "62146f20494608be77a9d698a42d7edd2308932696fadeeaf4bad89cbf1f243c",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 31
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_legacy.svg",
+      "axes": [
+        "self receiver",
+        "queue",
+        "legacy"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "46ae02500cdfebe0e8fec0d143afc97ce6efc7785edabb52825894e0ee901b8b",
+      "reference_sha256": "55bd5153da42b46b7dee87de5b36b4cac9953e5976c9fb792175ec19497ed193",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 32
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_self_teoz.svg",
+      "axes": [
+        "self receiver",
+        "queue",
+        "teoz"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "ae25d46439a29837bf505b8a40e0b1911a5eb9537cb0d2c008a7ec9c3867465e",
+      "reference_sha256": "7bd08f208e0c51aab5f5f44b56028326f8534158e9d8a060030bd3d5a0597540",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 33
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_legacy.svg",
+      "axes": [
+        "source receiver",
+        "queue",
+        "legacy"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "216e10247989353715b465993d4bcb100ad5676181dcec8fccb81e4224373874",
+      "reference_sha256": "3b1d4a4f5dc2119fb6cc910a7f3721f2b674f695a3a48f28dd67f8525196d642",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 34
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_source_teoz.svg",
+      "axes": [
+        "source receiver",
+        "queue",
+        "teoz"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "064ea82052fb17c49377adf9726d65b3e390f464adf9ac0d0c95d41a2ab26e73",
+      "reference_sha256": "9ab0de209853920605d3231f0ae78c75ab1644ba3d9209afd53a8cd9d68bee19",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 35
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_legacy.svg",
+      "axes": [
+        "neither receiver",
+        "actor",
+        "legacy"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "47b139d3c3f214ceffda05cb1822afbb4b8daa13becf7794059e2eeeb9653d2b",
+      "reference_sha256": "28b70b39aa4febabf20a0dedee087e418dc9dd5124a5404a8be3104ca2018e8a",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 6: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 36
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-single-pending-create/ind78_invalid_neither_teoz.svg",
+      "axes": [
+        "neither receiver",
+        "actor",
+        "teoz"
+      ],
+      "intended_valid": false,
+      "observed_valid": false,
+      "result": "fail",
+      "source_sha256": "6e8e4bd24de67c813fdd2d898e77b0f9f298738affe8016a9880be934e274c64",
+      "reference_sha256": "de2994ccc69e85415992288ed77ae6c9dda3bcaed1b2ba186aaf707e877f126e",
+      "before_comparison_exit": 2,
+      "comparison_exit": 2,
+      "before_cli_exit": 0,
+      "cli_exit": 1,
+      "cli_stderr": "parse error: line 7: After create command, you have to send a message to \"Draco\"\n",
+      "capture_set": "fresh86",
+      "capture_index": 37
+    }
+  ],
+  "findings": [
+    "SequenceDiagram.activate overwrites one pending CREATE; addMessage validates, attaches and clears. Message.compatibleForCreate excludes source and self; MessageExo accepts its sole real participant. The new event-index helper follows these parser ownership rules, and no serialized field was added. LifeLine.setCreate and LivingSpace.goCreate independently overwrite their origins.",
+    "NEW REGRESSION: all four ind78_outgoing_left/right legacy/teoz cases match Java before but panic after at crates/rustuml-render/src/sequence.rs:14287:81. The helper now attaches outgoing MessageExo CREATE events; create_msg_idx feeds created_inline/is_create_msg, and the ordinary creation endpoint code unwraps id_to_idx[msg.to], which is '[' or ']'. Valid Java input reaches this panic. Incoming exo cases remain whole failures.",
+    "The Java render consumers are distinct: DrawableSetInitializer.prepareMessageExo dispatches Step1MessageExo, which creates MessageExoArrow without Step1Message.createArrowCreate; Teoz CommunicationExoTile has no CommunicationTile goCreate/head branch. Accepting an exo CREATE attachment does not authorize ordinary participant-target creation geometry. A null check alone would not establish semantic parity.",
+    "Fresh triple/interleaved overwrite, lowered compatible return, intervening activation/deactivation, autonumber and dangling participant/actor/queue CREATE controls exercise both engines. Raw event counts, head/tail groups where present, total shapes and exact label multiplicities are preserved. In prior double-pending legacy Roe labels fall 3 to Java 2; in maker pending_same actor ellipses/labels fall 4 to Java 3 while all three raw CREATEs remain. Group/box controls retain whole failures and are not waived.",
+    "Eight fresh Java command-error references (source, self, neither receiver, incompatible lowered return in both engines) change from successful Rust rendering to real parser exit1; all valid fresh AST/ASCII commands remain exit0. No Java-valid fresh source becomes a parse rejection. Four valid SVG commands instead panic, which refutes any broader no-new-valid-input-error claim."
+  ],
+  "verdict": "rejected",
+  "next_obligations": [
+    "Separate pending ownership from engine-specific ordinary/external creation drawing and origin behavior, then retain and rerun all four outgoing counterexamples.",
+    "Resolve the incoming external and group/box whole failures before mechanism acceptance; do not weaken comparator or reference validity."
+  ],
+  "evidence_directory": "docs/parity-reviews/sequence-pending-stripe-packet/checker-ae1e0de4-astra",
+  "counts": {
+    "entries": 38,
+    "valid": 30,
+    "before": {
+      "1": 11,
+      "0": 19,
+      "2": 8
+    },
+    "after": {
+      "0": 19,
+      "2": 8,
+      "1": 7,
+      "3": 4
+    },
+    "verdict": "rejected"
+  },
+  "limitations": [
+    "Whole failure rejects; bounded support never waives any failed counterexample or imports historical acceptance.",
+    "Stable broad gates ran once per exact revision before evidence registration; no repeated broad run for evidence-only files. Existing gates remain red.",
+    "Java argv derived from pinned wrapper, not process traced. Remote OpenJDK21.0.5/Graphviz12.2 historical font/Graphviz equivalence is unproved.",
+    "No combined correctness with concurrent creole/text_render/WBS packet."
+  ]
+}

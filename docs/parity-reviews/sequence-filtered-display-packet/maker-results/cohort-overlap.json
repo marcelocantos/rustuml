@@ -1,0 +1,36 @@
+{
+  "entries": 2371,
+  "unique_paths": 2371,
+  "unique_source_bytes": 2323,
+  "duplicate_entries": 48,
+  "cohorts": {
+    "frozen2281": {
+      "entries": 2281,
+      "unique_sources": 2233,
+      "overlap_prior_bytes": 0
+    },
+    "checker64": {
+      "entries": 64,
+      "unique_sources": 64,
+      "overlap_prior_bytes": 0
+    },
+    "maker24": {
+      "entries": 24,
+      "unique_sources": 24,
+      "overlap_prior_bytes": 0
+    },
+    "creole_handoff2": {
+      "entries": 2,
+      "unique_sources": 2,
+      "overlap_prior_bytes": 0
+    }
+  },
+  "parent1449": {
+    "overlap_paths": 1123,
+    "parent_only_paths_not_replayed": 326,
+    "overlap_unique_bytes": 1097,
+    "parent_only_unique_bytes": 278,
+    "provenance": "Historical independently recorded overlap retained, not a new parent inventory or additive denominator."
+  },
+  "note": "No duplicate removal; 2281+64+24+2=2371 entries. Parent cohort overlaps and must not be summed."
+}

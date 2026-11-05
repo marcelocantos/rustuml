@@ -1,0 +1,6 @@
+@startuml
+skinparam sequenceMessageFontSize 19
+Quartz -> Finch : __first__
+Finch -> Quartz : inline __second__
+Quartz -> Finch : __third__\nlast
+@enduml

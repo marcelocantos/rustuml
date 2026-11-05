@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant North
+participant South
+North o<<--/o South: lower target
+South o\\-->>o North: upper source token
+North o<--\\o South: async target
+@enduml

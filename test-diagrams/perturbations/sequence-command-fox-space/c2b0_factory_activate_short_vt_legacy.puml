@@ -1,0 +1,8 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+Vale++
+Vale -> Quartz: active
+Vale--
+@enduml

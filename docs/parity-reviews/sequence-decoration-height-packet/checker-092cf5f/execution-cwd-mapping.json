@@ -1,0 +1,12 @@
+{
+  "reason": "Existing pinned wrapper allows cwd only within scratch; no calls executed with original work path. No includes/resources/cwd-sensitive directives found in these sequence controls.",
+  "original_manifest_sha256": "f5bffd6c351c960bcdcb011a846f6e59e3cd16310b1bea002821faa7448efe5c",
+  "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+  "execution_cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+  "replacement_scope": [
+    "invocation --cwd argument",
+    "remote_source directory"
+  ],
+  "source_bytes_changed": false,
+  "wrapper_changed": false
+}

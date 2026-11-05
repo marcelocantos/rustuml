@@ -1,0 +1,7 @@
+@startuml
+title Small
+participant Willow as W
+participant Fir as F
+W -> F : request
+F --> W : response
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+actor Lark
+participant Lyra
+create Lark
+Lark ->]: send
+Lyra -> Lark: close
+destroy Lark
+@enduml

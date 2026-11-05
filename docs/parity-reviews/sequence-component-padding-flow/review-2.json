@@ -1,0 +1,451 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-component-padding-flow",
+  "account_commit": "b6c43da53ab24ba360820b1f8bd9d73e6a5ad8b4",
+  "previous_review": "docs/parity-reviews/sequence-component-padding-flow/review.json",
+  "previous_review_commit": "704b80d0c31def61e0ccd6ff78565b017fd675a0",
+  "previous_implementation_commit": "bb761bd13b3d9630ec9409022a7225eba3e3d9f0",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.svg",
+      "source_sha256": "e00361cc0ad2f9bd6b6a56883c124284145453cadb02a4cc0eb18215c7253c47",
+      "golden_sha256": "b24bd305a3d44b0f8c140385f0704f8fdebedef2b505da9118a290c5e900e0a2",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.svg",
+      "source_sha256": "fd71eb2011197a148e6c3a2d77c45ec6f0c942134ecab6485c219df89fd102dd",
+      "golden_sha256": "49f8e92eafdf87dd3396a3f048817a80940086ec342498672499bee2065f998a",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.svg",
+      "source_sha256": "6537af2aa11af9358d2e6418041eeb1d293b90fbd5561fe648d15682167a6ddd",
+      "golden_sha256": "c4e0db38341688d9f6cce8e197ca827463a66ed0b7b3d199b66d137730dae12e",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.svg",
+      "source_sha256": "df80c0b4f79dcbc030ffa64e34721b9beb9f3ba7dacac24cc637dbe0bda542a4",
+      "golden_sha256": "cb500503027654ad2ef52b6855e0538c779568491297303e0c695fdbc179965b",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.svg",
+      "source_sha256": "ff89992fb3569bb43eb2455bcb858d6a4191fa1dc56874e4982518571c301c7b",
+      "golden_sha256": "c3adb119b82848ef5a4d6b79c1bc04a3ed34ad97026d0a450eaea67cb9f465fc",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.svg",
+      "source_sha256": "d6556da24ede15e491903051f93e4e9e4a29ead1892c57bb65e403f7a4d4eadf",
+      "golden_sha256": "7ce835e9323b08fb4a1d9a0d3b65818ec9bc81f3a2ea727f89901a6d7d7f7b48",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.svg",
+      "source_sha256": "ffc7d536e26a0c91b4819e9745f6cad0dc4b00503d193f40dcb3293a42464a63",
+      "golden_sha256": "ad94669ab8f674046454a50a8f55d8b04bcce421a41218bf27be6fb13cd9411f",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.svg",
+      "source_sha256": "eefbe088d864d36c52e036b2024748db2683e792f7a5ca49c1bd7a1d99f92b93",
+      "golden_sha256": "44ed16de87a7062fbd067508d7838697d31d5eb488bf5ec69e796bbef8d08cc4",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    }
+  ],
+  "fresh_cross_mechanism_evidence": [
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.svg",
+      "source_sha256": "7bf3dc68c749e626faa53753c5d649c3012e9a52b856eee663e72c3157a5482b",
+      "golden_sha256": "0bc9e815a0632b6b014149da6435e4757f360a3d4e4a08edf9b04f9d980e3314",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.svg",
+      "source_sha256": "963b10cf90daedabfd05b2b65376b48861d9413e88509bbd57fd0020a3210ece",
+      "golden_sha256": "2756d65b794e3ec0a4239d8902df382000ee4f41a4135c78588c8d08fbcba085",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.svg",
+      "source_sha256": "9256a66b365b82dfb1217eba55a3c3c882a532d730acf41f54ea8639f964fd9d",
+      "golden_sha256": "52d9b44395171fc0a3b19bd7286e363ced9633452460ab3537d350c40944eaf4",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.svg",
+      "source_sha256": "84db093ef3977d950db7fbab4fdaa1d4483ad3f2cb0edf9f6d651d4af9ba5506",
+      "golden_sha256": "fce162a60657060de739e00dc65f5c43cbf1beb9d257bf32980864b0b8ecdaea",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_left.svg",
+      "source_sha256": "f2d23c68e13b63bfba5a1aa0d846dc7a057e60be69441e155243823189296ad1",
+      "golden_sha256": "560716f74e91c3735954fc870ca94ac3ab01545d719524f904923486947e39ae",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.svg",
+      "source_sha256": "f4656160710518c72e76b7882a9c4b16b09f0579eccb56c08c0c10df62bfaeb8",
+      "golden_sha256": "bbfd601685b02bc3fd214b9a14553e81e06ed637478812de5d1a1a465966f233",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_left.svg",
+      "source_sha256": "b95c19ebedfdca92e5ba45831203677fb4626cf02df71d0bd00613111a5e019a",
+      "golden_sha256": "e5a9b356dd79e54eed5b7012ef8d37214b5c4b2aef44535853ddeace25cf2188",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.svg",
+      "source_sha256": "7f502b0f32a28961f22a36e330c2c3cc141facf68ac34fecba2eab2dd3255c3f",
+      "golden_sha256": "5c9741594d2f3d115b457f105117a1d304a2f44c3b00820b2ebc9df2a1485987",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_leading.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_leading.svg",
+      "source_sha256": "84137f8ea4a2a2978ec01d85842de9879bd4dc311dda26824d8b0c01ce057211",
+      "golden_sha256": "ce25dd3eceb6bc75ab7a7f35c063d0ca987bdd6d2481bec6c96544e2be73f1e1",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.svg",
+      "source_sha256": "229b72cc6a732c2b90da32d151e10d54b188a0dc8fa6ea44234fcfbd9df4b9e5",
+      "golden_sha256": "1725613c29ac74f558d157cefbbf5628915eaec9ea9f839b847ea339c79f9fa1",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_leading.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_leading.svg",
+      "source_sha256": "667cb578df024e26984d522bcf7a475c19e66cf8370608d8af7b90c9721a0345",
+      "golden_sha256": "ad77ad0447067447103820696cb96e7ee4d713bd0e26d00e7c9d765025dc5dbb",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.svg",
+      "source_sha256": "3c95fee1b26fd9f3ad327b5600bc897df178db99c7c7214ce5faaa6f504ce9f4",
+      "golden_sha256": "72e533260b880f35e4e6a876ceff2c2d8df170d00c8b3c4264cc78573006031b",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_multiline.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_multiline.svg",
+      "source_sha256": "ba516f0aed8972b096064d7a62df1dc6d6b8a95f48f985fecd22b262fb0b115c",
+      "golden_sha256": "d72afba110e538638653d132aadd5507fe85ff170f2b0cd4a7e7dd637e01c189",
+      "axes": [
+        "source-guided edge control",
+        "multiline"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.svg",
+      "source_sha256": "5b8ad138536aeabc88a2f91c965d40d5f616f827922fe7fddbd21be34cf6a645",
+      "golden_sha256": "2a6297669c5b7b5bf5e88927851bd86c72137177a637fdc23f10a9fe23a2e8fe",
+      "axes": [
+        "source-guided edge control",
+        "actor_shadow"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "findings": [
+    "The original primary valid inputs now match. New cross-mechanism controls exercise the changed consumers on at least two independent axes; linked valid failures remain binding to whole-source closure. This does not imply every isolated equation is wrong.",
+    "Four folded-note/ordinary-participant engine/shadow/padding controls match. Actor/database shadow control fails: canvas151px Java versus154px Rust, centers shift1.5px and actor label y differs3px. Preferred versus painted dimensions must come from each participant component; a uniform shadow increment cannot represent all kinds. Attached right-note shadow failures also bound the purported shared note flow.",
+    "Four asymmetric whitespace/engine/padding controls match. The fresh multiline grouped delay fails: one text element is lost and canvas259px Java versus246px Rust. Java LABEL becomes Display.getWithNewlines and preferred TextBlock dimensions; Rust still measures/paints one scalar label. Whitespace preservation is established for one line, but allocation and text flow do not generalize to the claimed component.",
+    "Both left attachments match; both right attachments with padding3/shadow and opposite self directions fail. Java canvas390/328px versus Rust393/331px while inner elements otherwise compare equal, identifying residual envelope propagation rather than general text metrics. Audit right-wrapper preferred width versus painted shadow and canvas maximum. Source inspection also finds CommunicationTileNoteRight creation-specific posD branch absent from the ordinary-right helper; that branch is source-only residue, not an invented fresh test.",
+    "Historic review.json and every retained input/reference are unchanged. New record describes candidate0fb4e14b only. Cross-linked sources are counted once in the68-case fresh matrix, not copied into additional directories."
+  ],
+  "verdict": "rejected"
+}

@@ -1,0 +1,5 @@
+@startuml
+participant Finch
+participant Quartz
+Quartz o<->o Finch : doubled marker
+@enduml

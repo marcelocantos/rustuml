@@ -1,0 +1,6 @@
+@startuml
+participant "Same\nname" as First
+participant "Same\nname" as Second
+First -> Second: distinct identities
+Second -> First: return
+@enduml

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-textblock-dimensions",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "skin.rose.ComponentRoseNote#ComponentRoseNote/#drawInternalU/#getPreferredWidth",
+    "skin.AbstractTextualComponent#getTextHeight/#getTextWidth",
+    "klimt.creole.SheetBlock1#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::folded_note_component_width",
+    "crates/rustuml-render/src/sequence.rs::note_rendered_height",
+    "crates/rustuml-render/src/sequence.rs note line painter"
+  ],
+  "invariant": "Component margins derive from skinparam alignment, while the inner text block consumes its effective alignment and full line widths; painting truncates the complete text-block height once, not each line. Every preferred-width consumer includes the same constructor margin.",
+  "causal_divergence": "Fresh checker CENTER multiline controls expose rounding of each baseline x; scoped style CENTER changes inner text alignment without changing the note constructor margin. A two-line 12pt themed note loses one pixel because Rust sums floored line heights. Teoz preferred width uses a LEFT-only helper even when component alignment is CENTER.",
+  "planned_change": "Carry component and inner-block alignment separately, apply line alignment to full-precision text-block width, share alignment-aware folded-note preferred width, and truncate total folded-note text height at the painter boundary. Preserve separate shape components.",
+  "perturbation_axes": [
+    "skinparam versus scoped style alignment and unequal line widths",
+    "font size/global padding and legacy/Teoz component allocation"
+  ],
+  "discovery": "Source-derived follow-up to first 69-case focused replay; every first-run output is retained."
+}

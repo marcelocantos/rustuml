@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-factory-command-viability",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "PSystemBuilder#constructor/#createPSystem/#isOk",
+    "command.PSystemCommandFactory#getCandidate/#executeFewLines",
+    "sequencediagram.SequenceDiagramFactory#initCommandsList",
+    "sequencediagram.command.CommandArrow#getRegexConcat/#executeArg"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs::detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::parse_line"
+  ],
+  "invariant": "A sequence candidate precedes class only when its commands consume the complete source successfully. Decorated arrows are recognized by command grammar, not raw class-marker substrings in labels or tokens.",
+  "causal_divergence": "Raw o-- scores class even when part of a valid sequence command. Merely removing the score or increasing sequence weight does not establish full-source viability; parse_sequence currently silently ignores unknown commands.",
+  "planned_change": "Add a bounded sequence viability diagnostic using actual sequence command consumption, preserving existing permissive public parsing. In dispatch prefer the successful sequence candidate only for the recognized decorated-message conflict; genuine nonsequence declarations/relations reject that candidate. Preserve all other factory scoring. If complete consumption cannot be established in owned code, retain dependency instead of broad redesign.",
+  "perturbation_axes": [
+    "renamed repeated decorated arrows/declaration topology",
+    "class/object/component contrast and mixed declarations",
+    "quoted labels/header bodies versus command tokens"
+  ],
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "evidence_import": "9d81627b",
+  "account_date": "2026-11-04",
+  "status": "preimplementation hypothesis; independent review required"
+}
