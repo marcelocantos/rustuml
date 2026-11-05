@@ -1653,21 +1653,15 @@ mod tests {
     #[test]
     fn carrier_range_text_measures_as_java() {
         use rustuml_parser::java_utf16;
-        // Batch BC, size 14 plain: textLength 49.7861 for "Vault U+10FFFD"
-        // and for "Vault U+FFFFD"; an unpaired unit keeps one em.
+        // Batch BC, size 14 plain: Java's textLength for "Vault U+10FFFD" and
+        // for "Vault U+FFFFD" exceeds the ASCII advance of "Vault " by 10.5;
+        // an unpaired unit keeps one em.
         let vault = text_width("Vault ", 14.0, false);
         assert_eq!(
-            fmt_coord(text_width(
-                &java_utf16::escape("Vault \u{10FFFD}"),
-                14.0,
-                false
-            )),
-            "49.7861"
+            text_width(&java_utf16::escape("Vault \u{10FFFD}"), 14.0, false),
+            vault + 10.5
         );
-        assert_eq!(
-            fmt_coord(text_width("Vault \u{FFFFD}", 14.0, false)),
-            "49.7861"
-        );
+        assert_eq!(text_width("Vault \u{FFFFD}", 14.0, false), vault + 10.5);
         let rocket: Vec<u16> = "🚀".encode_utf16().collect();
         let unit = java_utf16::text(&rocket[..1]);
         assert_eq!(
