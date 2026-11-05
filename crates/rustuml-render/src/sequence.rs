@@ -1326,11 +1326,8 @@ impl<'a> ParticipantTextBlock<'a> {
     /// built with the participant style's `FontConfiguration` for the label
     /// and the stereotype style's UFont (italic) for the stereotype line.
     fn new(text: &'a str, size: f64, family: &str, bold: bool, italic: bool) -> Self {
-        let lines: Vec<_> = text
-            .split('\n')
+        let lines: Vec<_> = Self::lines(text)
             .map(|line| {
-                // StripeSimple#getAtoms supplies a space for a present empty line.
-                let line = if line.is_empty() { " " } else { line };
                 let width =
                     text_render::measure_with_family_and_face(line, size, bold, italic, family);
                 (
@@ -1347,6 +1344,19 @@ impl<'a> ParticipantTextBlock<'a> {
             width,
             height,
         }
+    }
+    /// The display lines: StripeSimple#getAtoms supplies a space for a
+    /// present empty line.
+    fn lines(text: &str) -> impl Iterator<Item = &str> {
+        text.split('\n')
+            .map(|line| if line.is_empty() { " " } else { line })
+    }
+    /// Height of the block [`Self::new`] builds for `text`; the line metrics
+    /// take no face, so no face is needed.
+    fn height_of(text: &str, size: f64, family: &str) -> f64 {
+        Self::lines(text)
+            .map(|line| rendered_line_metrics_with_family(line, size, family).height)
+            .sum()
     }
     fn draw(&self, buf: &mut String, base: &TextBase<'_>) {
         let mut top = base.y - self.lines[0].2.ascent;
@@ -5649,23 +5659,19 @@ impl PlantUmlSvg {
         queue_head_offset: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
-        // ComponentRoseQueue passes Participant#getDisplay as one ordered label.
-        // Reuse that filtered structure for the pill and every painted stripe.
-        let blocks: Vec<_> = display
+        // ComponentRoseQueue passes Participant#getDisplay as one ordered
+        // label; the pill is as tall as that label. The label is drawn (in
+        // its faces) by `participant_display` below; its height takes no face.
+        let label_height: f64 = display
             .iter()
-            .map(|(text, stereotype)| {
-                (
-                    ParticipantTextBlock::new(
-                        text,
-                        self.participant_font_size as f64,
-                        &self.participant_font_family,
-                        !stereotype && self.participant_font_bold,
-                        *stereotype || self.participant_font_italic,
-                    ),
-                    *stereotype,
+            .map(|(text, _)| {
+                ParticipantTextBlock::height_of(
+                    text,
+                    self.participant_font_size as f64,
+                    &self.participant_font_family,
                 )
             })
-            .collect();
+            .sum();
         // Pill shape: rounded left side, right side with inner curve
         // From golden SVG for queue "Alice":
         // Main body: M10,10 L52.7236,10 C57.7236,10 57.7236,23.2441 57.7236,23.2441
@@ -5682,7 +5688,7 @@ impl PlantUmlSvg {
         let inner_left = left + cap_r;
         let inner_right = right - cap_r;
         // ComponentRoseQueue -> USymbolQueue uses Display height + margins5/5.
-        let pill_h = blocks.iter().map(|(block, _)| block.height).sum::<f64>() + 5.0 + 5.0;
+        let pill_h = label_height + 5.0 + 5.0;
         let top = if position == "tail" {
             base_y
         } else {
