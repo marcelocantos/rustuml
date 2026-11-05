@@ -1,0 +1,118 @@
+{
+ "M00_unmodified": {
+  "exit": 0,
+  "passed": true
+ },
+ "Arial_face_italic_slot_to_plain": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "ChainFace::for_style(ChainFamily::Arial, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Arial, bold, italic && bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Arial_face_bolditalic_slot_to_bold": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "ChainFace::for_style(ChainFamily::Arial, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Arial, bold, italic && !bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Helvetica_face_italic_slot_to_plain": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "ChainFace::for_style(ChainFamily::Helvetica, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Helvetica, bold, italic && bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Helvetica_face_bolditalic_slot_to_bold": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "ChainFace::for_style(ChainFamily::Helvetica, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Helvetica, bold, italic && !bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Verdana_face_italic_slot_to_plain": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "ChainFace::for_style(ChainFamily::Verdana, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Verdana, bold, italic && bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Verdana_face_bolditalic_slot_to_bold": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "ChainFace::for_style(ChainFamily::Verdana, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Verdana, bold, italic && !bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Menlo_face_italic_slot_to_plain": {
+  "file": "crates/rustuml-render/src/plantuml_metrics.rs",
+  "old": "ChainFace::for_style(ChainFamily::Menlo, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Menlo, bold, italic && bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Menlo_face_bolditalic_slot_to_bold": {
+  "file": "crates/rustuml-render/src/plantuml_metrics.rs",
+  "old": "ChainFace::for_style(ChainFamily::Menlo, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Menlo, bold, italic && !bold)",
+  "exit": 0,
+  "passed": true,
+  "caught": false
+ },
+ "CourierNew_face_italic_slot_to_plain": {
+  "file": "crates/rustuml-render/src/plantuml_metrics.rs",
+  "old": "ChainFace::for_style(ChainFamily::CourierNew, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::CourierNew, bold, italic && bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "CourierNew_face_bolditalic_slot_to_bold": {
+  "file": "crates/rustuml-render/src/plantuml_metrics.rs",
+  "old": "ChainFace::for_style(ChainFamily::CourierNew, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::CourierNew, bold, italic && !bold)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "M15_checker_arial_italic_routed_plain": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "ChainFace::for_style(ChainFamily::Arial, bold, italic)",
+  "new": "ChainFace::for_style(ChainFamily::Arial, bold, false)",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Mono_arm_italic_dropped": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "MetricFamily::Mono => pm::mono_text_width_styled(text, font_size, bold, italic),",
+  "new": "MetricFamily::Mono => pm::mono_text_width_styled(text, font_size, bold, false),",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "CourierNew_arm_italic_dropped": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size, bold, italic),",
+  "new": "MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size, bold, false),",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ },
+ "Helvetica_arm_italic_dropped": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold, italic),",
+  "new": "MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold, false),",
+  "exit": 101,
+  "passed": false,
+  "caught": true
+ }
+}

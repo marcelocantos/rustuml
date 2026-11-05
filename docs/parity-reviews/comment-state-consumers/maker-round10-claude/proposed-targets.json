@@ -1,0 +1,62 @@
+{
+ "schema_version": 1,
+ "ledger_note": "proposed only; the maker adds no ledger entry",
+ "targets": [
+  {
+   "name": "Description diagrams without component-family elements draw and measure labels in the element's style face",
+   "acceptance": [
+    "deployment.rs honours defaultFontName and <kind>FontName/FontSize/FontStyle (FromSkinparamToStyle addMagic -> Style.getUFont) for node, rectangle, artifact, folder, frame, cloud and their stereotypes, in measurement and drawing alike (EntityImageDescription 143-207)",
+    "M10A m10a_node_*, m10a_rect_*, m10a_artf_* and m10a_css_node_* match where their controls match; renamed labels and a bold node beside an italic artifact (not in the corpus) match; no pass lost"
+   ],
+   "context": "Shared-SVG round-10 maker: lone description elements route to deployment.rs, which hardcodes sans-serif 14 plain for every label and stereotype (stereotypes measured plain, drawn italic)."
+  },
+  {
+   "name": "Rectangle elements of component diagrams apply rectangleFontStyle",
+   "acceptance": [
+    "rectangle beside a component is measured and drawn in its style face (SName.rectangle)",
+    "M10A m10a_rctc_* match where their controls match; no pass lost"
+   ],
+   "context": "Shared-SVG round-10 maker: m10a_rctc_* draw the label plain under rectangleFontStyle."
+  },
+  {
+   "name": "Sequence participant kinds take their own style signature's font",
+   "acceptance": [
+    "actor, database, boundary, control, entity, collections and queue participants resolve FontName/Size/Style from their ParticipantType style (SName.actor, SName.database, ...) rather than participant_font_*; participantFontStyle styles only participants",
+    "M10A m10a_acts_* and m10a_dbse_* match where their controls match; a participant styled italic beside an unstyled actor (not in the corpus) matches; no pass lost"
+   ],
+   "context": "Shared-SVG round-10 maker: sequence.rs gives every participant kind participant_font_*; actorFontStyle/databaseFontStyle are ignored."
+  },
+  {
+   "name": "Activity actions and sequence participants read <style> FontStyle",
+   "acceptance": [
+    "<style> activity { FontStyle .. } and participant { FontStyle .. } reach the measured and drawn face (FtileBox 146-167, AbstractTextualComponent 73-95)",
+    "M10A m10a_css_actv_* and m10a_css_part_* match where their controls match"
+   ],
+   "context": "Shared-SVG round-10 maker: activity.rs and sequence.rs read only the legacy skinparams for these faces."
+  },
+  {
+   "name": "Activity diamond conditions are measured in the face they are drawn in",
+   "acceptance": [
+    "every diamond width helper (diamond_inner_w_styled, if_diamond_half_width, ... 69 call sites) takes the drawn italic as well as bold and family; activityDiamondFontStyle italic Courier New conditions with an unmapped mark match Java",
+    "no pass lost"
+   ],
+   "context": "Shared-SVG round-10 maker audit: diamonds draw diamond_text_italic but measure bold only; overlaps T14.39 (diamond family)."
+  },
+  {
+   "name": "Style FontWeight overrides the measured weight; <kind>StereotypeFontStyle reaches the stereotype face",
+   "acceptance": [
+    "Style.getUFont 210-212 FontWeight and the stereotype style's FontStyle are applied in component, use-case and sequence measurement and drawing",
+    "fresh probes with FontWeight 700 and componentStereotypeFontStyle bold match"
+   ],
+   "context": "Shared-SVG round-10 maker: font_face ports FontStyle only; stereotype faces are the skin default (italic) in these renderers."
+  },
+  {
+   "name": "State Arial widths come from the font model, not label text",
+   "acceptance": [
+    "state.rs arial_text_width's branch keyed to the labels \"A\" and \"B\" at 14 pt (9.3379) is replaced by the Arial face's measured width (text_render Arial table) with no output loss, or removed with its provenance traced",
+    "renamed one-letter Arial state names match Java"
+   ],
+   "context": "Shared-SVG round-10 maker audit: a conditional keyed to fixture label text (Parity Honesty rule 2) sits in the state width path; pre-existing, not touched here."
+  }
+ ]
+}
