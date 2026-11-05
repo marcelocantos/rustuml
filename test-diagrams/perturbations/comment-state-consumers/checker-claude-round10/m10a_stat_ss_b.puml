@@ -1,0 +1,4 @@
+@startuml
+skinparam stateFontStyle bold
+state "Pylon vk" as E1
+@enduml

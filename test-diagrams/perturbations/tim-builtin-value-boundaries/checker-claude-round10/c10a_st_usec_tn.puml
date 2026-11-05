@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Times New Roman
+usecase "Kiln" as E1 <<Ferrous gauge vista>>
+@enduml

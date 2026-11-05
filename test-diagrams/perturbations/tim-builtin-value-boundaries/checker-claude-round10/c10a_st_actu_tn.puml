@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+actor "Kiln" as E1 <<Ferrous gauge vista>>
+usecase "Ok" as E2
+E1 --> E2
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+database "Pylon vk" as E1
+@enduml

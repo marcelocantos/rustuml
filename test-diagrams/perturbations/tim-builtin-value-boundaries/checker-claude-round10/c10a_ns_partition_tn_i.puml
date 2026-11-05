@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam activityFontStyle italic
+start
+partition Dock {
+  :Kiln wq vista;
+}
+@enduml

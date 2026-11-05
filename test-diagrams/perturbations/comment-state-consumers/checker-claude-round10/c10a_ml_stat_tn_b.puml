@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam stateFontStyle bold
+state "Kiln wq" as E1
+E1 : first desc
+E1 : longer second description
+@enduml

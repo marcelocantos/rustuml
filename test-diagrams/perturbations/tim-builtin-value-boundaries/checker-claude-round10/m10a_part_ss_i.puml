@@ -1,0 +1,5 @@
+@startuml
+skinparam participantFontStyle italic
+participant "Pylon vk" as E1
+E1 -> E1 : ok
+@enduml

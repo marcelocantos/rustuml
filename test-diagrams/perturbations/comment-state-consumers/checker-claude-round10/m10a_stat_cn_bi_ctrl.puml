@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam stateFontStyle bold italic
+state "Pylon vk" as E1
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam classAttributeFontStyle bold italic
+class E1 {
+  +harbour : int
+}
+@enduml

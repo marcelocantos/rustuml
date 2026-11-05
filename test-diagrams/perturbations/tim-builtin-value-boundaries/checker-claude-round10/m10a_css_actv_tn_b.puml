@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName Times New Roman
+<style>
+activity {
+  FontStyle bold
+}
+</style>
+start
+:Pylon vk;
+@enduml

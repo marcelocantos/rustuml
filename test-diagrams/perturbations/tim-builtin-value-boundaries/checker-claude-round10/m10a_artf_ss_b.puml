@@ -1,0 +1,4 @@
+@startuml
+skinparam artifactFontStyle bold
+artifact "Pylon vk" as E1
+@enduml

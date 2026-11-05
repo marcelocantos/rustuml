@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam activityFontStyle bold italic
+start
+:Pylon vk;
+@enduml

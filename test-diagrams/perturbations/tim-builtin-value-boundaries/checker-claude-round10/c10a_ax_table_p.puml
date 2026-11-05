@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+start
+:|= Head |= Col |
+| kiln | wq vista long |;
+@enduml

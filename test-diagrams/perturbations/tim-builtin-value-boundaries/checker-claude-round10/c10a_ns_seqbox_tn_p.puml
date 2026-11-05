@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Times New Roman
+box "Harbour"
+participant "Kiln wq vista" as E1
+participant "Ok" as E2
+end box
+E1 -> E2 : go
+@enduml

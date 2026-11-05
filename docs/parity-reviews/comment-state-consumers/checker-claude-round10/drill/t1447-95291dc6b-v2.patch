@@ -1,0 +1,17 @@
+--- /Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-checker/src/95291dc6b/crates/rustuml-render/src/state.rs	2026-11-06 07:21:02
++++ 95291dc6b-v2/crates/rustuml-render/src/state.rs	2026-11-06 08:49:09
+@@ -1579,13 +1579,7 @@
+ }
+ 
+ fn arial_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
+-    if !bold && (font_size - 14.0).abs() < f64::EPSILON {
+-        match text {
+-            "A" | "B" => return 9.3379,
+-            _ => {}
+-        }
+-    }
+-    text_render::measure(text, font_size, bold)
++    text_render::measure_with_family(text, font_size, bold, "Arial")
+ }
+ 
+ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning) {

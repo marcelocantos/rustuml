@@ -1,0 +1,3 @@
+@startuml
+usecase "Kiln" as E1 <<Ferrous gauge vista>>
+@enduml

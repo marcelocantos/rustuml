@@ -1,0 +1,12 @@
+@startuml
+skinparam defaultFontName Times New Roman
+<style>
+sequenceDiagram {
+  participant {
+    FontStyle italic
+  }
+}
+</style>
+participant "Kiln wq vista" as E1 <<Dock>>
+E1 -> E1 : ok
+@enduml

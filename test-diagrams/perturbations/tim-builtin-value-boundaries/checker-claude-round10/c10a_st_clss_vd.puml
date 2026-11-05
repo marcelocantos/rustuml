@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+class "Kiln" as E1 <<Ferrous gauge vista>>
+@enduml

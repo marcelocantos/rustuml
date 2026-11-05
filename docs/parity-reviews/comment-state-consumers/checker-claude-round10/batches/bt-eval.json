@@ -1,0 +1,419 @@
+{
+ "by_expect": {
+  "record": {
+   "n": 82,
+   "tip": 25,
+   "merge": 8,
+   "base": 7
+  },
+  "match": {
+   "n": 16,
+   "tip": 4,
+   "merge": 0,
+   "base": 0
+  },
+  "fail": {
+   "n": 47,
+   "tip": 6,
+   "merge": 6,
+   "base": 6
+  },
+  "control": {
+   "n": 86,
+   "tip": 48,
+   "merge": 45,
+   "base": 41
+  },
+  "match-iff-control": {
+   "n": 148,
+   "tip": 74,
+   "merge": 27,
+   "base": 27
+  }
+ },
+ "by_group": {
+  "st": {
+   "n": 54,
+   "tip": 10,
+   "merge": 6,
+   "base": 5
+  },
+  "cl": {
+   "n": 16,
+   "tip": 9,
+   "merge": 2,
+   "base": 2
+  },
+  "ml": {
+   "n": 42,
+   "tip": 11,
+   "merge": 9,
+   "base": 9
+  },
+  "cr": {
+   "n": 40,
+   "tip": 30,
+   "merge": 15,
+   "base": 12
+  },
+  "pr": {
+   "n": 29,
+   "tip": 14,
+   "merge": 1,
+   "base": 1
+  },
+  "ns": {
+   "n": 27,
+   "tip": 3,
+   "merge": 2,
+   "base": 2
+  },
+  "fv": {
+   "n": 65,
+   "tip": 40,
+   "merge": 25,
+   "base": 25
+  },
+  "bi": {
+   "n": 28,
+   "tip": 9,
+   "merge": 9,
+   "base": 8
+  },
+  "ft": {
+   "n": 30,
+   "tip": 5,
+   "merge": 5,
+   "base": 5
+  },
+  "sz": {
+   "n": 10,
+   "tip": 10,
+   "merge": 5,
+   "base": 5
+  },
+  "sx": {
+   "n": 20,
+   "tip": 12,
+   "merge": 4,
+   "base": 4
+  },
+  "ax": {
+   "n": 18,
+   "tip": 4,
+   "merge": 3,
+   "base": 3
+  }
+ },
+ "violations": [
+  [
+   "c10a_st_comp_tn",
+   "expected match",
+   8
+  ],
+  [
+   "c10a_st_comp_tn_i",
+   "expected match",
+   8
+  ],
+  [
+   "c10a_st_nodc_tn",
+   "expected match",
+   17
+  ],
+  [
+   "c10a_st_nodc_tn_i",
+   "expected match",
+   17
+  ],
+  [
+   "c10a_st_dbsc_tn",
+   "expected match",
+   15
+  ],
+  [
+   "c10a_st_dbsc_tn_i",
+   "expected match",
+   15
+  ],
+  [
+   "c10a_st_cldc_tn",
+   "expected match",
+   14
+  ],
+  [
+   "c10a_st_cldc_tn_i",
+   "expected match",
+   14
+  ],
+  [
+   "c10a_st_quec_tn",
+   "expected match",
+   15
+  ],
+  [
+   "c10a_st_quec_tn_i",
+   "expected match",
+   15
+  ],
+  [
+   "c10a_st_actu_tn",
+   "expected match",
+   8
+  ],
+  [
+   "c10a_st_actu_tn_i",
+   "expected match",
+   8
+  ],
+  [
+   "c10a_ml_actv_vd_i",
+   "expected fail, matched"
+  ],
+  [
+   "c10a_fv_comp_bolder",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_comp_lighter",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"300\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_comp_w600",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"600\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_comp_w900",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"900\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_comp_css800",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 8, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_part_bolder",
+   "control matches, probe fails",
+   2,
+   "[AttrMismatch { index: 9, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_part_lighter",
+   "control matches, probe fails",
+   2,
+   "[AttrMismatch { index: 9, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"300\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_part_w600",
+   "control matches, probe fails",
+   2,
+   "[AttrMismatch { index: 9, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"600\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_part_w900",
+   "control matches, probe fails",
+   2,
+   "[AttrMismatch { index: 9, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"900\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_part_css800",
+   "control matches, probe fails",
+   12,
+   "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"135px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:109px;height:135px;backgr"
+  ],
+  [
+   "c10a_fv_actv_bolder",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"12\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"68.0156\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_actv_lighter",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"12\"), (\"font-weight\", \"300\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"64.6641\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_actv_w600",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"12\"), (\"font-weight\", \"600\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"64.6641\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_actv_w900",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"12\"), (\"font-weight\", \"900\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"68.0156\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_actv_css800",
+   "control matches, probe fails",
+   6,
+   "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"ACTIVITY\"), (\"height\", \"108px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:124px;height:108px;backgr"
+  ],
+  [
+   "c10a_fv_stat_bolder",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_stat_lighter",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"300\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_stat_w600",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"600\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_stat_w900",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"900\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_stat_css800",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 6, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_usec_bolder",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_usec_lighter",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"300\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_usec_w600",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"600\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"75.4414\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_usec_w900",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"900\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_fv_usec_css800",
+   "control matches, probe fails",
+   1,
+   "[AttrMismatch { index: 5, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"Times New Roman\"), (\"font-size\", \"14\"), (\"font-weight\", \"800\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.3516\"), (\"x\", "
+  ],
+  [
+   "c10a_bi_seqnote_bi",
+   "expected fail, matched"
+  ],
+  [
+   "c10a_bi_swim_bi",
+   "expected fail, matched"
+  ],
+  [
+   "c10a_bi_statattr_bi",
+   "expected fail, matched"
+  ],
+  [
+   "c10a_ax_bullets_vd_i",
+   "expected fail, matched"
+  ],
+  [
+   "c10a_ax_deprecated_vd_i",
+   "expected fail, matched"
+  ]
+ ],
+ "losses": [],
+ "gains": [
+  "c10a_st_usec_tn",
+  "c10a_st_usec_tn_i",
+  "c10a_st_part_tn",
+  "c10a_st_part_tn_i",
+  "c10a_cl_ss_20_n",
+  "c10a_cl_tn_d_n",
+  "c10a_cl_tn_20_n",
+  "c10a_cl_tn_i",
+  "c10a_cl_vd_d_n",
+  "c10a_cl_vd_20_n",
+  "c10a_cl_vd_i",
+  "c10a_ml_part_tn_i",
+  "c10a_ml_actv_tn_i",
+  "c10a_cr_comp_bt_i",
+  "c10a_cr_comp_sz_i",
+  "c10a_cr_comp_fo_i",
+  "c10a_cr_comp_st_i",
+  "c10a_cr_part_bt_i",
+  "c10a_cr_part_sz_i",
+  "c10a_cr_part_st_i",
+  "c10a_cr_actv_bt_i",
+  "c10a_cr_actv_sz_i",
+  "c10a_cr_actv_fo_i",
+  "c10a_cr_actv_st_i",
+  "c10a_cr_usec_bt_i",
+  "c10a_cr_usec_sz_i",
+  "c10a_cr_usec_fo_i",
+  "c10a_cr_usec_st_i",
+  "c10a_pr_comp_css_then_sp",
+  "c10a_pr_comp_nested_sel",
+  "c10a_pr_comp_stereo_sel",
+  "c10a_pr_comp_element_sel",
+  "c10a_pr_comp_ctrl",
+  "c10a_pr_part_css_then_sp",
+  "c10a_pr_part_ctrl",
+  "c10a_pr_actv_css_then_sp",
+  "c10a_pr_usec_css_then_sp",
+  "c10a_pr_usec_nested_sel",
+  "c10a_pr_usec_stereo_sel",
+  "c10a_pr_usec_element_sel",
+  "c10a_pr_usec_ctrl",
+  "c10a_ns_compst_tn_i",
+  "c10a_fv_comp_Italic",
+  "c10a_fv_comp_w650",
+  "c10a_fv_comp_italicbold",
+  "c10a_fv_comp_cssbi",
+  "c10a_fv_part_Italic",
+  "c10a_fv_part_w650",
+  "c10a_fv_part_italicbold",
+  "c10a_fv_actv_Italic",
+  "c10a_fv_actv_w650",
+  "c10a_fv_actv_italicbold",
+  "c10a_fv_stat_Italic",
+  "c10a_fv_stat_w650",
+  "c10a_fv_usec_BOLD",
+  "c10a_fv_usec_Italic",
+  "c10a_fv_usec_w650",
+  "c10a_sz_comp_i",
+  "c10a_sz_part_i",
+  "c10a_sz_actv_i",
+  "c10a_sz_stat_i",
+  "c10a_sz_usec_i",
+  "c10a_sx_composite_i",
+  "c10a_sx_composite_nm_i",
+  "c10a_sx_concurrent_i",
+  "c10a_sx_concurrent_nm_i",
+  "c10a_sx_longname_i",
+  "c10a_sx_longname_nm_i",
+  "c10a_sx_statename_i",
+  "c10a_sx_statename_nm_i",
+  "c10a_ax_deprecated_i"
+ ],
+ "base_losses": []
+}

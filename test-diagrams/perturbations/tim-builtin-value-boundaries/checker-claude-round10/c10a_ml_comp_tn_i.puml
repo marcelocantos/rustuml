@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam componentFontStyle italic
+component "Kiln wq\nlonger second line" as E1
+@enduml

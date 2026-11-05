@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam activityFontStyle bold
+|Dock|
+start
+:Kiln wq vista;
+|Yard|
+:Ok;
+@enduml

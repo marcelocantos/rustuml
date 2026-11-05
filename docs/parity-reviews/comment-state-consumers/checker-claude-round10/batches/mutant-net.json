@@ -1,0 +1,81 @@
+{
+ "C1_component_label_measure_italic_dropped": {
+  "pairs_checked": 368,
+  "pairs_failing": 19,
+  "caught": true,
+  "examples": [
+   "m10a_artc_cn_i",
+   "m10a_artc_tn_i",
+   "m10a_comp_cn_i",
+   "m10a_comp_tn_i",
+   "m10a_css_comp_cn_i",
+   "m10a_css_comp_tn_i",
+   "m10a_nodc_cn_i",
+   "m10a_nodc_tn_i",
+   "c10a_cl_tn_i",
+   "c10a_cr_comp_bt_i",
+   "c10a_cr_comp_fo_i",
+   "c10a_cr_comp_st_i"
+  ]
+ },
+ "C2_component_stereotype_measured_plain": {
+  "pairs_checked": 368,
+  "pairs_failing": 6,
+  "caught": true,
+  "examples": [
+   "m10a_stereo_comp_cn_mk",
+   "c10a_pr_comp_css_then_sp",
+   "c10a_pr_comp_ctrl",
+   "c10a_pr_comp_element_sel",
+   "c10a_pr_comp_nested_sel",
+   "c10a_pr_comp_stereo_sel"
+  ]
+ },
+ "C3_participant_block_italic_dropped_5663": {
+  "pairs_checked": 368,
+  "pairs_failing": 0,
+  "caught": false,
+  "examples": []
+ },
+ "C4_activity_layout_italic_dropped": {
+  "pairs_checked": 368,
+  "pairs_failing": 9,
+  "caught": true,
+  "examples": [
+   "m10a_actv_tn_i",
+   "c10a_cr_actv_bt_i",
+   "c10a_cr_actv_fo_i",
+   "c10a_cr_actv_st_i",
+   "c10a_cr_actv_sz_i",
+   "c10a_fv_actv_Italic",
+   "c10a_ml_actv_tn_i",
+   "c10a_pr_actv_css_then_sp",
+   "c10a_sz_actv_i"
+  ]
+ },
+ "C5_state_node_font_italic_dropped": {
+  "pairs_checked": 368,
+  "pairs_failing": 0,
+  "caught": false,
+  "examples": []
+ },
+ "C6_usecase_label_measure_italic_dropped": {
+  "pairs_checked": 368,
+  "pairs_failing": 14,
+  "caught": true,
+  "examples": [
+   "m10a_css_usec_cn_i",
+   "m10a_css_usec_tn_i",
+   "m10a_usec_cn_i",
+   "m10a_usec_tn_i",
+   "c10a_cr_usec_bt_i",
+   "c10a_cr_usec_fo_i",
+   "c10a_cr_usec_st_i",
+   "c10a_cr_usec_sz_i",
+   "c10a_fv_usec_Italic",
+   "c10a_pr_usec_css_then_sp",
+   "c10a_pr_usec_element_sel",
+   "c10a_pr_usec_stereo_sel"
+  ]
+ }
+}

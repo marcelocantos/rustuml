@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam nodeFontStyle bold italic
+node "Pylon v𝅧k" as E1
+component "Ok" as E2
+E1 --> E2
+@enduml

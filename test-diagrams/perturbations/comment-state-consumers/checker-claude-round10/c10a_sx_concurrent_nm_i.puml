@@ -1,0 +1,9 @@
+@startuml
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle italic
+state E1 {
+  state "Kiln wq" as A
+  --
+  state "Vista long" as B
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam participantFontSize 18
+participant "Kiln wq vista" as E1
+E1 -> E1 : ok
+@enduml

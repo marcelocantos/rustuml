@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Times New Roman
+start
+repeat
+  :Kiln;
+backward:Long wq vista backward;
+repeat while (more?)
+@enduml

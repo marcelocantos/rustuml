@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam activityFontStyle italic
+start
+repeat
+  :Kiln;
+backward:Long wq vista backward;
+repeat while (more?)
+@enduml

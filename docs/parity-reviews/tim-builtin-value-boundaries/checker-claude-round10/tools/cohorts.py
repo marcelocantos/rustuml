@@ -1,7 +1,7 @@
 """Classify the three-tree sweep by cohort, with stderr changes. Usage: cohorts.py <work> <repo> <out.json>"""
 import json, sys, pathlib, re, collections
 W, REPO, OUT = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3]
-TREES = ["dcf6d9076", "9d6af0a0e", "14dd5efae"]; TIP = TREES[-1]
+TREES = ["95291dc6b", "d06667af0", "e24240b35"]; TIP = TREES[-1]
 MARK = ["Syntax Error","NoSuchElementException","Welcome to PlantUML","An error has occured","kill cannot be used here",
  "swimlane must be defined at the start","Note already created:","Parsing syntax error about %","[From string",
  "Your data does not sound like YAML data","does&#160;not&#160;sound&#160;like&#160;YAML","Your data does not sound like JSON data",

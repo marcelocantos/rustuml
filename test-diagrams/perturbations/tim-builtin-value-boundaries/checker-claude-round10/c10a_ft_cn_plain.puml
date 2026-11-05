@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Courier New
+component "ABCDEFGHIJKLM" as E0
+component "NOPQRSTUVWXYZ" as E1
+component "abcdefghijklm" as E2
+component "nopqrstuvwxyz" as E3
+component "0123456789 !#$%&()*+,-./:;=?@[]^_`{|}" as E4
+@enduml

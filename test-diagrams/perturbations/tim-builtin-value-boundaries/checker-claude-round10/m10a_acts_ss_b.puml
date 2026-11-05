@@ -1,0 +1,5 @@
+@startuml
+skinparam actorFontStyle bold
+actor "Pylon vk" as E1
+E1 -> E1 : ok
+@enduml

@@ -1,0 +1,96 @@
+{
+ "M00_unmodified": {
+  "exit": 0,
+  "counts": [
+   "860",
+   "0"
+  ],
+  "failed": []
+ },
+ "T1_times_arm_italic_dropped": {
+  "file": "crates/rustuml-render/src/text_render.rs",
+  "old": "pm::times_new_roman_text_width(text, font_size, bold, italic)",
+  "new": "pm::times_new_roman_text_width(text, font_size, bold, false)",
+  "exit": 101,
+  "counts": [
+   "859",
+   "1"
+  ],
+  "new_failures": [
+   "text_render::tests::awt_named_font_metrics_match_goldens"
+  ],
+  "caught": true
+ },
+ "C1_component_label_measure_italic_dropped": {
+  "file": "crates/rustuml-render/src/component.rs",
+  "old": "        label_bold,\n        label_italic,\n        font_family,\n    );",
+  "new": "        label_bold,\n        false,\n        font_family,\n    );",
+  "exit": 0,
+  "counts": [
+   "860",
+   "0"
+  ],
+  "new_failures": [],
+  "caught": false
+ },
+ "C2_component_stereotype_measured_plain": {
+  "file": "crates/rustuml-render/src/component.rs",
+  "old": "                STEREOTYPE_FONT_BOLD,\n                STEREOTYPE_FONT_ITALIC,\n                font_family,",
+  "new": "                STEREOTYPE_FONT_BOLD,\n                false,\n                font_family,",
+  "exit": 0,
+  "counts": [
+   "860",
+   "0"
+  ],
+  "new_failures": [],
+  "caught": false
+ },
+ "C3_participant_block_italic_dropped_5663": {
+  "file": "crates/rustuml-render/src/sequence.rs",
+  "old": "                        !stereotype && self.participant_font_bold,\n                        *stereotype || self.participant_font_italic,\n                    ),",
+  "new": "                        !stereotype && self.participant_font_bold,\n                        false,\n                    ),",
+  "exit": 0,
+  "counts": [
+   "860",
+   "0"
+  ],
+  "new_failures": [],
+  "caught": false
+ },
+ "C4_activity_layout_italic_dropped": {
+  "file": "crates/rustuml-render/src/activity.rs",
+  "old": "        palette.action_text_bold,\n        palette.action_text_italic,\n        &palette.action_font_family,\n    );\n    LayoutNode::Action {",
+  "new": "        palette.action_text_bold,\n        false,\n        &palette.action_font_family,\n    );\n    LayoutNode::Action {",
+  "exit": 0,
+  "counts": [
+   "860",
+   "0"
+  ],
+  "new_failures": [],
+  "caught": false
+ },
+ "C5_state_node_font_italic_dropped": {
+  "file": "crates/rustuml-render/src/state.rs",
+  "old": "        italic: state_font_italic,",
+  "new": "        italic: false,",
+  "exit": 0,
+  "counts": [
+   "860",
+   "0"
+  ],
+  "new_failures": [],
+  "caught": false
+ },
+ "C6_usecase_label_measure_italic_dropped": {
+  "file": "crates/rustuml-render/src/usecase.rs",
+  "old": "        &uc.label,\n        font_size,\n        skin.uc_font_bold,\n        skin.uc_font_italic,",
+  "new": "        &uc.label,\n        font_size,\n        skin.uc_font_bold,\n        false,",
+  "exit": 0,
+  "counts": [
+   "860",
+   "0"
+  ],
+  "new_failures": [],
+  "caught": false
+ }
+}

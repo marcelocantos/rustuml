@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam stateFontStyle italic
+state "<font:Courier New>Kiln</font> wq vista" as E1
+@enduml

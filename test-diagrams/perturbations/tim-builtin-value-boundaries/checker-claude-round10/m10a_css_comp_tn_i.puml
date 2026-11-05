@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Times New Roman
+<style>
+component {
+  FontStyle italic
+}
+</style>
+component "Pylon vk" as E1
+@enduml
