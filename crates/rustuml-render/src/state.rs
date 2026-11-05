@@ -4073,14 +4073,13 @@ fn build_autonomous_composite<'a>(
         Some(autonomous_outer_spacing(diagram)),
         &outer_notes,
     )?;
-    let outer = if live_clusters.is_empty() {
-        outer
-    } else {
-        let mut outer = normalize_autonomous_scope(outer);
-        outer.width += CUCA_POSITIVE_AXIS_MARGIN;
-        outer.height += CUCA_POSITIVE_AXIS_MARGIN;
-        outer
-    };
+    // The root image is a SvekResult like every region: calculateDimension
+    // moves it by 6 - LimitFinder min (a URectangle adds x-1, an Opale note
+    // UPath adds no adjustment) and sizes it max - min + 15, inside
+    // CucaDiagram.getDefaultMargins (0, 5, 5, 0).
+    let mut outer = normalize_autonomous_scope(outer);
+    outer.width += CUCA_POSITIVE_AXIS_MARGIN;
+    outer.height += CUCA_POSITIVE_AXIS_MARGIN;
 
     Some((composites, live_clusters, outer))
 }
@@ -11292,6 +11291,21 @@ CobaltDecision --> [*]
         let composite_header = svg.find(">HarborMode</text>").unwrap();
         let outer_start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(composite_header < outer_start);
+    }
+
+    #[test]
+    fn outer_image_origin_follows_limit_finder_bounds_of_a_leftmost_note() {
+        // SvekResult.calculateDimension: an Opale note path adds no LimitFinder
+        // adjustment, so a leftmost note sits at x = 6 (a rectangle at 7).
+        let svg = |source: &str| crate::render_svg(&rustuml_parser::parse::parse(source).unwrap());
+        let left =
+            svg("@startuml\nstate Kiln {\n  Clay --> Pot\n}\nnote left of Kiln : warm\n@enduml\n");
+        assert!(left.contains(r#"<path d="M6,"#), "{left}");
+        let plain = svg("@startuml\nstate Kiln {\n  Clay --> Pot\n}\n@enduml\n");
+        assert!(
+            plain.contains(r#"<rect fill="none""#) && plain.contains(r#"x="7""#),
+            "{plain}"
+        );
     }
 
     #[test]
