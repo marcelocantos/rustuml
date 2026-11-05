@@ -4057,7 +4057,11 @@ fn build_autonomous_composite<'a>(
         }
         outer_notes.push(spec);
     }
-    if image_notes + outer_notes.len() != diagram.notes.len() {
+    // Without any image the diagram is the root cluster path's
+    // (render_non_autarkic_root_clusters), which owns its notes.
+    if image_notes + outer_notes.len() != diagram.notes.len()
+        || (!outer_notes.is_empty() && composites.is_empty())
+    {
         return None;
     }
     let outer = layout_autonomous_scope(
