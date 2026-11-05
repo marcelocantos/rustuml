@@ -1,0 +1,1 @@
+swiftc -O tools/FontChainExtract.swift -o font-chain-extract; for f in Arial-ItalicMT Arial-BoldItalicMT Helvetica-Oblique Helvetica-BoldOblique Verdana-Italic Verdana-BoldItalic Menlo-Italic Menlo-BoldItalic CourierNewPS-ItalicMT CourierNewPS-BoldItalicMT; do font-chain-extract $f > $f.tsv; done

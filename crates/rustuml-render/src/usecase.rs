@@ -1417,7 +1417,13 @@ fn use_case_footprint_atoms(
         } else {
             font_family
         };
-        let width = text_render::measure_with_family(&atom_text, size, segment.style.bold, family);
+        let width = text_render::measure_with_family_and_face(
+            &atom_text,
+            size,
+            segment.style.bold,
+            segment.style.italic,
+            family,
+        );
         let height = text_render::label_height_with_family(&atom_text, size, family);
         let ascent = text_render::label_ascent_with_family(&atom_text, size, family);
         let own_drop = height - ascent;

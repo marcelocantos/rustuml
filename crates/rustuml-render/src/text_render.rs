@@ -21,7 +21,7 @@ use std::fmt::Write;
 
 use crate::creole::{self, Segment, Style};
 use crate::filter_registry;
-use crate::font_chain::{ChainFace, ChainGlyph};
+use crate::font_chain::{ChainFace, ChainFamily, ChainGlyph};
 use crate::plantuml_metrics as pm;
 use crate::svg::normalize_svg_link_title;
 use rustuml_parser::java_utf16;
@@ -184,7 +184,19 @@ pub fn measure_no_underline_with_family(
     bold: bool,
     font_family: &str,
 ) -> f64 {
-    measure_inner_with_family(content, font_size, bold, false, true, font_family)
+    measure_no_underline_with_family_and_face(content, font_size, bold, false, font_family)
+}
+
+/// [`measure_no_underline_with_family`] in the complete face the label is
+/// drawn in (Java measures the TextBlock it draws).
+pub fn measure_no_underline_with_family_and_face(
+    content: &str,
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+    font_family: &str,
+) -> f64 {
+    measure_inner_with_family(content, font_size, bold, italic, true, font_family)
 }
 
 fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool) -> f64 {
@@ -1363,12 +1375,8 @@ fn helvetica_bold_char_units(c: char) -> Option<f64> {
     Some(units)
 }
 
-fn helvetica_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
-    let face = if bold {
-        ChainFace::HelveticaBold
-    } else {
-        ChainFace::Helvetica
-    };
+fn helvetica_text_width(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
+    let face = ChainFace::for_style(ChainFamily::Helvetica, bold, italic);
     chain_text_width(text, font_size, bold, face, |c| {
         if bold {
             helvetica_bold_char_units(c)
@@ -1424,32 +1432,24 @@ fn family_text_width(
     family: MetricFamily,
 ) -> f64 {
     match family {
-        MetricFamily::Mono => pm::mono_text_width(text, font_size),
-        MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size),
+        MetricFamily::Mono => pm::mono_text_width_styled(text, font_size, bold, italic),
+        MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size, bold, italic),
         MetricFamily::Arial => family_table_text_width(
             text,
             font_size,
             bold,
             &ARIAL_WIDTH,
             &ARIAL_BOLD_WIDTH,
-            if bold {
-                ChainFace::ArialBold
-            } else {
-                ChainFace::Arial
-            },
+            ChainFace::for_style(ChainFamily::Arial, bold, italic),
         ),
-        MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold),
+        MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold, italic),
         MetricFamily::Verdana => family_table_text_width(
             text,
             font_size,
             bold,
             &VERDANA_WIDTH,
             &VERDANA_BOLD_WIDTH,
-            if bold {
-                ChainFace::VerdanaBold
-            } else {
-                ChainFace::Verdana
-            },
+            ChainFace::for_style(ChainFamily::Verdana, bold, italic),
         ),
         MetricFamily::TimesNewRoman => {
             pm::times_new_roman_text_width(text, font_size, bold, italic)
@@ -1909,7 +1909,7 @@ mod tests {
                 "sans-serif" | "Arial" => 10.5,
                 "Helvetica" => 1298.0 / 2048.0 * 14.0,
                 "Verdana" => 14.0,
-                "Courier New" => pm::courier_new_text_width(" ", 14.0),
+                "Courier New" => pm::courier_new_text_width(" ", 14.0, false, false),
                 "Courier" | "Monospaced" => pm::mono_text_width(" ", 14.0),
                 _ => 1593.0 / 2048.0 * 14.0,
             };

@@ -1,11 +1,13 @@
 """Generate crates/rustuml-render/src/font_chain_coverage.rs from FontChainExtract.swift output.
 
-Usage: python3 -I tools/font_chain_coverage.py <out.rs> <source_dir> --primary <primary_dir> <Face>=<file.tsv>[:<own.tsv>] ...
+Usage: python3 -I tools/font_chain_coverage.py <out.rs> <source_dir> --primary <primary_dir> [--provisional <dir>]
+           <Face>=[+]<file.tsv>:<own.tsv> ...
 
 <source_dir> (repository-relative) is the extraction output as returned from the reference host: its SHA256SUMS is hashed
 into the generated provenance header (the drift gate compares that hash with the stored artifact),
-and every <file.tsv> is read from it. Face names are the generated constants font_chain::ChainFace
-reads; identical run tables are shared between faces.
+and every <file.tsv> is read from it, except that "+<file.tsv>" is read from the --provisional directory (an
+extraction not made on the reference host, listed by the drift gate until replaced). Face names are the generated
+constants font_chain::ChainFace reads; identical run tables are shared between faces.
 
 Per face the raw HarfBuzz plan facts (#hb_plan of the extraction) are emitted as PlanFacts; font_chain
 ports HarfBuzz 15.0.0's planner over them per shaper. <primary_dir> is tools/PrimaryFaceExtract.swift's
@@ -22,9 +24,15 @@ rest = args[2:]
 assert rest[0] == "--primary", "--primary <dir> is required"
 primary_dir = rest[1]
 rest = rest[2:]
+provisional_dir = None
+if rest and rest[0] == "--provisional":
+    provisional_dir = rest[1]
+    rest = rest[2:]
 specs = [a.split("=", 1) for a in rest]
 sums_sha = hashlib.sha256(open(os.path.join(source_dir, "SHA256SUMS"), "rb").read()).hexdigest()
 primary_sums_sha = hashlib.sha256(open(os.path.join(primary_dir, "SHA256SUMS"), "rb").read()).hexdigest()
+provisional_sums_sha = (hashlib.sha256(open(os.path.join(provisional_dir, "SHA256SUMS"), "rb").read()).hexdigest()
+                        if provisional_dir else None)
 
 
 def load(path):
@@ -53,15 +61,22 @@ def table(runs):
 faces, tables, counts = [], {}, {"S": 0, "C": 0, "P": 0}
 for face, spec in specs:
     name, _, own = spec.partition(":")
+    chain_dir = source_dir
+    if name.startswith("+"):
+        assert provisional_dir, "+<file> needs --provisional"
+        name, chain_dir = name[1:], provisional_dir
     own = own or name.rsplit(".", 1)[0] + ".own.tsv"
-    header, runs = load(os.path.join(source_dir, name))
+    header, runs = load(os.path.join(chain_dir, name))
     own_header, own_runs = load(os.path.join(primary_dir, own))
     info = {h[0]: h[1:] for h in header}
     own_info = {h[0]: h[1:] for h in own_header}
     notdef = float(info["#notdef_advance_units"][0])
     upem = int(info["#notdef_advance_units"][2])
     assert upem == 2048 and notdef == int(notdef), (face, notdef, upem)
-    assert own_info["#face"][1] == info["#family"][1], (face, own_info["#face"], info["#family"])
+    # The own-cmap extraction resolves the Java slot to the same face, with the same planner facts.
+    assert own_info["#java_face"][2] == info["#family"][1], (face, own_info["#java_face"], info["#family"])
+    assert own_info["#hb_plan"] == info["#hb_plan"], (face, own_info["#hb_plan"], info["#hb_plan"])
+    assert own_info["#notdef_advance_units"] == info["#notdef_advance_units"], face
     facts = dict(item.split("=", 1) for item in info["#hb_plan"])
     facts.update(item.split("=", 1) for item in own_info["#plan_extra"])
     # hb-ot-shape.cc 218 (15.0.0): trak with STAT would change advances; not modelled.
@@ -74,7 +89,8 @@ for face, spec in specs:
             prefix = {"S": "SIMPLE_MISSING", "C": "COMPLEX_MAPPED", "P": "PRIMARY_MAPPED"}[kind]
             tables[key] = f"{prefix}_{counts[kind]}"
         names.append(tables[key])
-    faces.append((face, int(notdef), names, info["#family"][1], info["#family"][2], info["#host"][0], facts))
+    faces.append((face, int(notdef), names, info["#family"][1], info["#family"][2], info["#host"][0], facts,
+                  chain_dir == provisional_dir))
 
 hosts = sorted({f[5] for f in faces})
 lines = [
@@ -87,7 +103,9 @@ lines = [
     "// CTFontGetAdvancesForGlyphs), the BMP runs the JDK simple path cannot map, the runs the",
     "// complex path (CFont.createCompositeFont cascade) maps, the runs the face's own cmap maps",
     "// (JDK composite slot 0; tools/PrimaryFaceExtract.swift on colossus, the same font files), and",
-    "// the sfnt facts HarfBuzz 15.0.0's planner reads (font_chain::plan).",
+    "// the sfnt facts HarfBuzz 15.0.0's planner reads (font_chain::plan). A face is the one JDK",
+    "// measures for a family and style (font_chain::ChainFace::for_style). Faces whose chain runs",
+    "// come from the provisional extraction (not the reference host) say so below.",
     "",
     "use crate::font_chain::{FaceCoverage, PlanFacts};",
     "",
@@ -102,8 +120,16 @@ lines = [
     f'pub(crate) const PRIMARY_DIR: &str = "{primary_dir}";',
     "#[cfg(test)]",
     f'pub(crate) const PRIMARY_SHA256SUMS_SHA256: &str = "{primary_sums_sha}";',
-    "",
 ]
+if provisional_dir:
+    lines += [
+        "/// The provisional (non-reference-host) chain extraction and its SHA256SUMS.",
+        "#[cfg(test)]",
+        f'pub(crate) const PROVISIONAL_DIR: &str = "{provisional_dir}";',
+        "#[cfg(test)]",
+        f'pub(crate) const PROVISIONAL_SHA256SUMS_SHA256: &str = "{provisional_sums_sha}";',
+    ]
+lines.append("")
 for (kind, key), name in tables.items():
     lines.append(f"const {name}: &[(u32, u32)] = &[")
     if key:
@@ -114,8 +140,9 @@ def flag(facts, key):
     return "true" if facts[key] == "1" else "false"
 
 
-for face, notdef, (s_name, c_name, p_name), family, font_path, _, facts in faces:
-    lines.append(f"/// {family}, {font_path}.")
+for face, notdef, (s_name, c_name, p_name), family, font_path, _, facts, provisional in faces:
+    where = " Chain runs: provisional colossus extraction (PROVISIONAL_DIR)." if provisional else ""
+    lines.append(f"/// {family}, {font_path}.{where}")
     lines.append(f"pub(crate) const {face}: FaceCoverage = FaceCoverage {{")
     lines.append(f"    notdef_units: {notdef},")
     lines.append(f"    simple_missing: {s_name},")
@@ -136,4 +163,4 @@ for face, notdef, (s_name, c_name, p_name), family, font_path, _, facts in faces
     lines.append("};")
 open(out_path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
 print(len(faces), "faces,", len(tables), "tables,", sum(len(k[1]) for k in tables), "runs; SHA256SUMS", sums_sha,
-      "primary SHA256SUMS", primary_sums_sha)
+      "primary SHA256SUMS", primary_sums_sha, "provisional SHA256SUMS", provisional_sums_sha)

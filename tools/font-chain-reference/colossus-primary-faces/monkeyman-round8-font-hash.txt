@@ -1,0 +1,19 @@
+## host
+MacBookPro
+ProductName:		macOS
+ProductVersion:		27.2
+BuildVersion:		26B123
+Thu Nov  5 18:03:58 UTC 2026
+## font files
+c886ca3172d8ce9189976992d145ec090500a4ff516ecb9d4df56b1a78336247  /System/Library/Fonts/Supplemental/Courier New.ttf
+500df4e46b554ae7d646e8727952fd8c7e60e94423481f6b82325cfddba2ee6a  /System/Library/Fonts/Supplemental/Courier New Bold.ttf
+b5c6d453f16fb1693652671fa2e11d8c8ad1cd0046c3f38ae2608d165838ecf1  /System/Library/Fonts/Supplemental/Courier New Italic.ttf
+60e4c514200985d3f8405af039ffb89cd24b45fef5005b019825a4937b96135d  /System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf
+f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3  /System/Library/Fonts/Supplemental/Times New Roman.ttf
+7bb99c3a67697fbce15ab66d806d9a2151432ce1dab2eaba4156e1251da486c0  /System/Library/Fonts/Supplemental/Times New Roman Italic.ttf
+906157e8294fdf168d83002eaabde01c2d30fc3f44977be89e33fa22f262002a  /System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf
+359413e76969fc8a03e0acf91b355a98bb13c42472614e54bff5c8e4f4817fbb  /System/Library/Fonts/Supplemental/Tahoma.ttf
+fc1863ab504b9c160abaa12b92296363db72f5b759311982510a85fe2aa9ff4f  /System/Library/Fonts/Supplemental/Tahoma Bold.ttf
+658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3  /System/Library/Fonts/Helvetica.ttc
+## user/local copies that could shadow them
+(none)

@@ -219,21 +219,45 @@ impl ShaperGroup {
 /// GDEF glyph class MARK.
 const GDEF_MARK_CLASS: u8 = 3;
 
-/// The physical faces RustUML measures (`SansSerif` resolves to Lucida
-/// Grande and `Monospaced` to Menlo on macOS, `CFontManager`). Menlo and
-/// Courier New have one face here: RustUML measures their bold like plain.
+/// The modelled font families (`SansSerif` resolves to Lucida Grande and
+/// `Monospaced` to Menlo on macOS, `CFontManager.loadFonts` 228-232).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum ChainFamily {
+    LucidaGrande,
+    Arial,
+    Helvetica,
+    Verdana,
+    Menlo,
+    CourierNew,
+}
+
+/// The physical faces JDK measures for the modelled families: one per
+/// (family, bold, italic) slot (see [`ChainFace::for_style`]). Every fact of
+/// the face (own cmap, cascade, `.notdef`, HarfBuzz plan) is its own.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum ChainFace {
     LucidaGrande,
     LucidaGrandeBold,
     Arial,
     ArialBold,
+    ArialItalic,
+    ArialBoldItalic,
     Helvetica,
     HelveticaBold,
+    HelveticaOblique,
+    HelveticaBoldOblique,
     Verdana,
     VerdanaBold,
+    VerdanaItalic,
+    VerdanaBoldItalic,
     Menlo,
+    MenloBold,
+    MenloItalic,
+    MenloBoldItalic,
     CourierNew,
+    CourierNewBold,
+    CourierNewItalic,
+    CourierNewBoldItalic,
 }
 
 /// How the chain draws one character.
@@ -421,18 +445,65 @@ const UNITS_PER_EM: f64 = 2048.0;
 const FIRST_SUPPLEMENTARY: u32 = 0x1_0000;
 
 impl ChainFace {
+    /// The face JDK measures for `family` in a style: the family's slot
+    /// face (`FontFamily.getFont` 320-360; slots by full name,
+    /// `Font2D.setStyle` 151-175), whose native font is
+    /// `AWTFont.awtFontForName` (71-111). Lucida Grande has no italic face:
+    /// `CFontManager.registerItalicDerived` (174-203) adds derived italics
+    /// of its plain and bold faces, and `NSFontManager` finds no italic
+    /// trait for them, so they measure as those faces.
+    pub(crate) fn for_style(family: ChainFamily, bold: bool, italic: bool) -> ChainFace {
+        use ChainFace::*;
+        match (family, bold, italic) {
+            (ChainFamily::LucidaGrande, false, _) => LucidaGrande,
+            (ChainFamily::LucidaGrande, true, _) => LucidaGrandeBold,
+            (ChainFamily::Arial, false, false) => Arial,
+            (ChainFamily::Arial, true, false) => ArialBold,
+            (ChainFamily::Arial, false, true) => ArialItalic,
+            (ChainFamily::Arial, true, true) => ArialBoldItalic,
+            (ChainFamily::Helvetica, false, false) => Helvetica,
+            (ChainFamily::Helvetica, true, false) => HelveticaBold,
+            (ChainFamily::Helvetica, false, true) => HelveticaOblique,
+            (ChainFamily::Helvetica, true, true) => HelveticaBoldOblique,
+            (ChainFamily::Verdana, false, false) => Verdana,
+            (ChainFamily::Verdana, true, false) => VerdanaBold,
+            (ChainFamily::Verdana, false, true) => VerdanaItalic,
+            (ChainFamily::Verdana, true, true) => VerdanaBoldItalic,
+            (ChainFamily::Menlo, false, false) => Menlo,
+            (ChainFamily::Menlo, true, false) => MenloBold,
+            (ChainFamily::Menlo, false, true) => MenloItalic,
+            (ChainFamily::Menlo, true, true) => MenloBoldItalic,
+            (ChainFamily::CourierNew, false, false) => CourierNew,
+            (ChainFamily::CourierNew, true, false) => CourierNewBold,
+            (ChainFamily::CourierNew, false, true) => CourierNewItalic,
+            (ChainFamily::CourierNew, true, true) => CourierNewBoldItalic,
+        }
+    }
+
     fn coverage(self) -> &'static FaceCoverage {
         match self {
             Self::LucidaGrande => &coverage::LUCIDA_GRANDE,
             Self::LucidaGrandeBold => &coverage::LUCIDA_GRANDE_BOLD,
             Self::Arial => &coverage::ARIAL,
             Self::ArialBold => &coverage::ARIAL_BOLD,
+            Self::ArialItalic => &coverage::ARIAL_ITALIC,
+            Self::ArialBoldItalic => &coverage::ARIAL_BOLD_ITALIC,
             Self::Helvetica => &coverage::HELVETICA,
             Self::HelveticaBold => &coverage::HELVETICA_BOLD,
+            Self::HelveticaOblique => &coverage::HELVETICA_OBLIQUE,
+            Self::HelveticaBoldOblique => &coverage::HELVETICA_BOLD_OBLIQUE,
             Self::Verdana => &coverage::VERDANA,
             Self::VerdanaBold => &coverage::VERDANA_BOLD,
+            Self::VerdanaItalic => &coverage::VERDANA_ITALIC,
+            Self::VerdanaBoldItalic => &coverage::VERDANA_BOLD_ITALIC,
             Self::Menlo => &coverage::MENLO,
+            Self::MenloBold => &coverage::MENLO_BOLD,
+            Self::MenloItalic => &coverage::MENLO_ITALIC,
+            Self::MenloBoldItalic => &coverage::MENLO_BOLD_ITALIC,
             Self::CourierNew => &coverage::COURIER_NEW,
+            Self::CourierNewBold => &coverage::COURIER_NEW_BOLD,
+            Self::CourierNewItalic => &coverage::COURIER_NEW_ITALIC,
+            Self::CourierNewBoldItalic => &coverage::COURIER_NEW_BOLD_ITALIC,
         }
     }
 
@@ -864,6 +935,19 @@ mod tests {
         assert_eq!(zeroing(courier, "\u{1D167}Wharf"), "z-----");
         assert_eq!(zeroing(courier, "Wharf x\u{11F03}"), "--------");
         assert_eq!(zeroing(courier, "Wharf x\u{1ABE}\u{10FFFD}"), "---------");
+        // The blocklist is decided per font file: Courier New Bold (588,
+        // 5078, 14238) is listed, Courier New Italic (162, 914, 8502) and Bold
+        // Italic (114, 928, 8322) are not, so their GDEF classes make glyph 0
+        // a base and the mark keeps its cell (BO c8a_ci_*).
+        assert_eq!(
+            zeroing(ChainFace::CourierNewBold, "Wharf x\u{1D167}"),
+            "-------z"
+        );
+        for face in [ChainFace::CourierNewItalic, ChainFace::CourierNewBoldItalic] {
+            assert!(!face.coverage().plan.gdef_blocklisted(), "{face:?}");
+            assert_eq!(zeroing(face, "Wharf x\u{1D167}"), "--------", "{face:?}");
+            assert_eq!(zeroing(face, "\u{1D167}Wharf"), "------", "{face:?}");
+        }
         // Simple text never reaches HarfBuzz.
         assert_eq!(
             ChainFace::LucidaGrande.resolve('\u{1AB0}', Complexity::Simple),
@@ -1010,25 +1094,209 @@ mod tests {
 
     /// Faces whose plan can zero a glyph but whose font file the reference
     /// host's records do not hash yet. The gate fails if this list is stale.
-    /// (Verdana Bold resolved by the Monkey Man record of the round-7 relay,
-    /// `monkeyman-round7-font-hash.txt`, sha256 a5591bab...)
-    const PENDING_REFERENCE_HASH: &[&str] = &[];
+    /// (Requested from Monkey Man in shared-SVG round 9.)
+    const PENDING_REFERENCE_HASH: &[&str] = &["Verdana-Italic", "Verdana-BoldItalic"];
+
+    /// Faces whose chain runs (simple path, composite cascade) come from the
+    /// provisional colossus extraction, not the reference host. The gate
+    /// fails if this list is stale. (A Monkey Man extraction of every style
+    /// was requested in shared-SVG round 9.)
+    const PROVISIONAL_CHAIN: &[&str] = &[
+        "Arial-ItalicMT",
+        "Arial-BoldItalicMT",
+        "Helvetica-Oblique",
+        "Helvetica-BoldOblique",
+        "Verdana-Italic",
+        "Verdana-BoldItalic",
+        "Menlo-Italic",
+        "Menlo-BoldItalic",
+        "CourierNewPS-ItalicMT",
+        "CourierNewPS-BoldItalicMT",
+    ];
 
     /// The faces whose GDEF HarfBuzz 15.0.0 blocklists (their stored table
     /// lengths are listed in `GDEF_BLOCKLIST`).
     const GDEF_BLOCKLISTED: &[&str] = &["CourierNewPSMT", "CourierNewPS-BoldMT"];
 
+    /// Every modelled (family, style) slot: the slot's native font name and
+    /// Java style (0 plain, 1 bold, 2 italic, 3 bold italic), and the face
+    /// [`ChainFace::for_style`] measures, with its PostScript name.
+    const SLOTS: [(ChainFamily, &str, u8, ChainFace, &str); 24] = {
+        use ChainFace::*;
+        [
+            (
+                ChainFamily::LucidaGrande,
+                "LucidaGrande",
+                0,
+                LucidaGrande,
+                "LucidaGrande",
+            ),
+            (
+                ChainFamily::LucidaGrande,
+                "LucidaGrande-Bold",
+                1,
+                LucidaGrandeBold,
+                "LucidaGrande-Bold",
+            ),
+            (
+                ChainFamily::LucidaGrande,
+                "LucidaGrande",
+                2,
+                LucidaGrande,
+                "LucidaGrande",
+            ),
+            (
+                ChainFamily::LucidaGrande,
+                "LucidaGrande-Bold",
+                3,
+                LucidaGrandeBold,
+                "LucidaGrande-Bold",
+            ),
+            (ChainFamily::Arial, "ArialMT", 0, Arial, "ArialMT"),
+            (
+                ChainFamily::Arial,
+                "Arial-BoldMT",
+                1,
+                ArialBold,
+                "Arial-BoldMT",
+            ),
+            (
+                ChainFamily::Arial,
+                "Arial-ItalicMT",
+                2,
+                ArialItalic,
+                "Arial-ItalicMT",
+            ),
+            (
+                ChainFamily::Arial,
+                "Arial-BoldItalicMT",
+                3,
+                ArialBoldItalic,
+                "Arial-BoldItalicMT",
+            ),
+            (
+                ChainFamily::Helvetica,
+                "Helvetica",
+                0,
+                Helvetica,
+                "Helvetica",
+            ),
+            (
+                ChainFamily::Helvetica,
+                "Helvetica-Bold",
+                1,
+                HelveticaBold,
+                "Helvetica-Bold",
+            ),
+            (
+                ChainFamily::Helvetica,
+                "Helvetica-Oblique",
+                2,
+                HelveticaOblique,
+                "Helvetica-Oblique",
+            ),
+            (
+                ChainFamily::Helvetica,
+                "Helvetica-BoldOblique",
+                3,
+                HelveticaBoldOblique,
+                "Helvetica-BoldOblique",
+            ),
+            (ChainFamily::Verdana, "Verdana", 0, Verdana, "Verdana"),
+            (
+                ChainFamily::Verdana,
+                "Verdana-Bold",
+                1,
+                VerdanaBold,
+                "Verdana-Bold",
+            ),
+            (
+                ChainFamily::Verdana,
+                "Verdana-Italic",
+                2,
+                VerdanaItalic,
+                "Verdana-Italic",
+            ),
+            (
+                ChainFamily::Verdana,
+                "Verdana-BoldItalic",
+                3,
+                VerdanaBoldItalic,
+                "Verdana-BoldItalic",
+            ),
+            (
+                ChainFamily::Menlo,
+                "Menlo-Regular",
+                0,
+                Menlo,
+                "Menlo-Regular",
+            ),
+            (ChainFamily::Menlo, "Menlo-Bold", 1, MenloBold, "Menlo-Bold"),
+            (
+                ChainFamily::Menlo,
+                "Menlo-Italic",
+                2,
+                MenloItalic,
+                "Menlo-Italic",
+            ),
+            (
+                ChainFamily::Menlo,
+                "Menlo-BoldItalic",
+                3,
+                MenloBoldItalic,
+                "Menlo-BoldItalic",
+            ),
+            (
+                ChainFamily::CourierNew,
+                "CourierNewPSMT",
+                0,
+                CourierNew,
+                "CourierNewPSMT",
+            ),
+            (
+                ChainFamily::CourierNew,
+                "CourierNewPS-BoldMT",
+                1,
+                CourierNewBold,
+                "CourierNewPS-BoldMT",
+            ),
+            (
+                ChainFamily::CourierNew,
+                "CourierNewPS-ItalicMT",
+                2,
+                CourierNewItalic,
+                "CourierNewPS-ItalicMT",
+            ),
+            (
+                ChainFamily::CourierNew,
+                "CourierNewPS-BoldItalicMT",
+                3,
+                CourierNewBoldItalic,
+                "CourierNewPS-BoldItalicMT",
+            ),
+        ]
+    };
+
+    /// The stored own-cmap extraction of a slot.
+    fn own_file(native: &str, style: u8) -> String {
+        let style = ["plain", "bold", "italic", "bolditalic"][usize::from(style)];
+        format!("{native}.{style}.own.tsv")
+    }
+
     /// Drift gate (T14.6.8): the generated table is the stored extractions.
     /// Each SHA256SUMS hashes to the recorded value and every stored file
     /// matches it; each face's runs, `.notdef` advance, own-cmap runs and
     /// every HarfBuzz plan fact (the kern cross-stream bit included) equal
-    /// the stored TSVs; the unextracted GPOS `kern` feature cannot change any
-    /// plan; and every face whose plan can zero a glyph has the same font
-    /// file on the reference host (Monkey Man record) as where its own cmap
-    /// was read.
+    /// the stored TSVs, and the own-cmap extraction's planner facts equal the
+    /// chain extraction's; every Java slot resolves to its face (derived
+    /// italics to their upright face, with identical facts); the
+    /// unextracted GPOS `kern` feature cannot change any plan; and every
+    /// face whose plan can zero a glyph has the same font file on the
+    /// reference host (Monkey Man records) as where its own cmap was read.
     #[test]
     fn coverage_table_is_the_stored_reference_host_extraction() {
         use sha2::{Digest, Sha256};
+        use std::collections::HashMap;
         let hex = |bytes: &[u8]| {
             Sha256::digest(bytes)
                 .iter()
@@ -1049,7 +1317,11 @@ mod tests {
         };
         let dir = verify(coverage::SOURCE_DIR, coverage::SOURCE_SHA256SUMS_SHA256);
         let primary = verify(coverage::PRIMARY_DIR, coverage::PRIMARY_SHA256SUMS_SHA256);
-        let font_hashes = |name: &str| -> std::collections::HashMap<String, String> {
+        let provisional = verify(
+            coverage::PROVISIONAL_DIR,
+            coverage::PROVISIONAL_SHA256SUMS_SHA256,
+        );
+        let font_hashes = |name: &str| -> HashMap<String, String> {
             std::fs::read_to_string(primary.join(name))
                 .unwrap()
                 .lines()
@@ -1060,96 +1332,137 @@ mod tests {
                 })
                 .collect()
         };
-        // Both Monkey Man records; where both hash a file they must agree.
-        let mut reference_host = font_hashes("monkeyman-hb-static.txt");
-        for (path, hash) in font_hashes("monkeyman-round7-font-hash.txt") {
-            if let Some(previous) = reference_host.insert(path.clone(), hash.clone()) {
-                assert_eq!(previous, hash, "{path}: Monkey Man records disagree");
+        // Every Monkey Man record; where two hash a file they must agree.
+        let mut reference_host = HashMap::new();
+        for record in [
+            "monkeyman-hb-static.txt",
+            "monkeyman-round7-font-hash.txt",
+            "monkeyman-round8-font-hash.txt",
+        ] {
+            for (path, hash) in font_hashes(record) {
+                if let Some(previous) = reference_host.insert(path.clone(), hash.clone()) {
+                    assert_eq!(previous, hash, "{path}: Monkey Man records disagree");
+                }
             }
         }
         let colossus = font_hashes("colossus-font-files.sha256");
-        let plan_extra = |name: &str| -> std::collections::HashMap<String, String> {
-            let text = std::fs::read_to_string(primary.join(format!("{name}.own.tsv"))).unwrap();
-            text.lines()
-                .filter(|line| line.starts_with("#plan_extra\t"))
-                .flat_map(|line| line.split('\t').skip(1))
-                .map(|fact| {
-                    let (key, value) = fact.split_once('=').unwrap();
-                    (key.to_string(), value.to_string())
-                })
-                .collect()
-        };
-        let lengths = |facts: &std::collections::HashMap<String, String>| {
-            let length = |key: &str| facts[key].parse::<u32>().unwrap();
-            (
-                length("gdef_length"),
-                length("gsub_length"),
-                length("gpos_length"),
-            )
-        };
-        let faces = [
-            (ChainFace::LucidaGrande, "LucidaGrande"),
-            (ChainFace::LucidaGrandeBold, "LucidaGrande-Bold"),
-            (ChainFace::Arial, "ArialMT"),
-            (ChainFace::ArialBold, "Arial-BoldMT"),
-            (ChainFace::Helvetica, "Helvetica"),
-            (ChainFace::HelveticaBold, "Helvetica-Bold"),
-            (ChainFace::Verdana, "Verdana"),
-            (ChainFace::VerdanaBold, "Verdana-Bold"),
-            (ChainFace::Menlo, "Menlo-Regular"),
-            (ChainFace::CourierNew, "CourierNewPSMT"),
-        ];
-        let mut pending = Vec::new();
-        for (face, name) in faces {
-            let mut facts = std::collections::HashMap::new();
-            let (mut simple, mut complex, mut own) = (Vec::new(), Vec::new(), Vec::new());
-            let mut font_path = String::new();
-            for file in [format!("{name}.tsv"), format!("{name}.own.tsv")] {
-                let base = if file.ends_with(".own.tsv") {
-                    &primary
-                } else {
-                    &dir
-                };
-                let text = std::fs::read_to_string(base.join(&file)).unwrap();
-                for line in text.lines() {
-                    let fields: Vec<&str> = line.split('\t').collect();
-                    match fields[0] {
-                        "#notdef_advance_units" => assert_eq!(
-                            fields[1].parse::<f64>().unwrap(),
-                            f64::from(face.coverage().notdef_units),
-                            "{name}"
-                        ),
-                        "#hb_plan" | "#plan_extra" => {
-                            for fact in &fields[1..] {
-                                let (key, value) = fact.split_once('=').unwrap();
-                                facts.insert(key.to_string(), value.to_string());
-                            }
+        // A stored TSV: header facts (key=value fields of #hb_plan and
+        // #plan_extra), other header lines, and the S/C/P runs.
+        struct Stored {
+            facts: HashMap<String, String>,
+            header: HashMap<String, Vec<String>>,
+            runs: HashMap<&'static str, Vec<(u32, u32)>>,
+        }
+        let read = |path: std::path::PathBuf| {
+            let mut stored = Stored {
+                facts: HashMap::new(),
+                header: HashMap::new(),
+                runs: HashMap::new(),
+            };
+            for line in std::fs::read_to_string(&path).unwrap().lines() {
+                let fields: Vec<&str> = line.split('\t').collect();
+                match fields[0] {
+                    "#hb_plan" | "#plan_extra" => {
+                        for fact in &fields[1..] {
+                            let (key, value) = fact.split_once('=').unwrap();
+                            stored.facts.insert(key.to_string(), value.to_string());
                         }
-                        "#face" => font_path = fields[3].to_string(),
-                        "S" | "C" | "P" => {
-                            let run = (
-                                u32::from_str_radix(fields[1], 16).unwrap(),
-                                u32::from_str_radix(fields[2], 16).unwrap(),
-                            );
-                            match fields[0] {
-                                "S" => &mut simple,
-                                "C" => &mut complex,
-                                _ => &mut own,
-                            }
-                            .push(run);
-                        }
-                        _ => {}
                     }
+                    kind @ ("S" | "C" | "P") => stored
+                        .runs
+                        .entry(match kind {
+                            "S" => "S",
+                            "C" => "C",
+                            _ => "P",
+                        })
+                        .or_default()
+                        .push((
+                            u32::from_str_radix(fields[1], 16).unwrap(),
+                            u32::from_str_radix(fields[2], 16).unwrap(),
+                        )),
+                    _ => {}
+                }
+                if fields[0].starts_with('#') {
+                    stored.header.insert(
+                        fields[0].to_string(),
+                        fields[1..].iter().map(|f| f.to_string()).collect(),
+                    );
                 }
             }
-            simple.sort_unstable();
-            complex.sort_unstable();
-            own.sort_unstable();
-            assert_eq!(simple, face.coverage().simple_missing, "{name} simple");
-            assert_eq!(complex, face.coverage().complex_mapped, "{name} complex");
-            assert_eq!(own, face.coverage().primary_mapped, "{name} own cmap");
+            for runs in stored.runs.values_mut() {
+                runs.sort_unstable();
+            }
+            stored
+        };
+        let header_line =
+            |stored: &Stored, key: &str| -> Vec<String> { stored.header[key].clone() };
+        let mut pending = Vec::new();
+        let mut provisional_faces = Vec::new();
+        let mut faces_seen = Vec::new();
+        for (family, native, style, face, ps) in SLOTS {
+            assert_eq!(
+                ChainFace::for_style(family, style & 1 != 0, style & 2 != 0),
+                face,
+                "{native} style {style}"
+            );
+            let own = read(primary.join(own_file(native, style)));
+            // The slot's native font, through awtFontForName's traits, is
+            // this face (a derived italic finds no italic trait).
+            assert_eq!(
+                header_line(&own, "#java_face"),
+                [native.to_string(), style.to_string(), ps.to_string()],
+                "{native} style {style}"
+            );
+            if faces_seen.contains(&face) {
+                // A derived italic: identical facts to its upright face.
+                let (_, upright_native, upright_style, _, _) =
+                    SLOTS.iter().find(|slot| slot.3 == face).copied().unwrap();
+                let upright = read(primary.join(own_file(upright_native, upright_style)));
+                assert_eq!(own.facts, upright.facts, "{native} style {style}");
+                assert_eq!(own.runs, upright.runs, "{native} style {style}");
+                continue;
+            }
+            faces_seen.push(face);
+            let chain_dir = if PROVISIONAL_CHAIN.contains(&ps) {
+                provisional_faces.push(ps);
+                &provisional
+            } else {
+                &dir
+            };
+            let chain = read(chain_dir.join(format!("{ps}.tsv")));
+            let coverage = face.coverage();
+            assert_eq!(header_line(&chain, "#family")[1], ps, "{ps}");
+            let notdef = |stored: &Stored| {
+                stored.header["#notdef_advance_units"][0]
+                    .parse::<f64>()
+                    .unwrap()
+            };
+            assert_eq!(notdef(&chain), f64::from(coverage.notdef_units), "{ps}");
+            assert_eq!(notdef(&own), f64::from(coverage.notdef_units), "{ps}");
+            let empty = Vec::new();
+            let runs =
+                |stored: &Stored, kind: &str| stored.runs.get(kind).unwrap_or(&empty).clone();
+            assert_eq!(runs(&chain, "S"), coverage.simple_missing, "{ps} simple");
+            assert_eq!(runs(&chain, "C"), coverage.complex_mapped, "{ps} complex");
+            assert_eq!(runs(&own, "P"), coverage.primary_mapped, "{ps} own cmap");
+            // Both extractions read the planner facts of the same face.
+            for key in [
+                "gdef_glyph_classes",
+                "notdef_gdef_class",
+                "gsub",
+                "gpos",
+                "morx",
+                "kerx",
+                "kern",
+                "kern_formats",
+                "machine_kern",
+            ] {
+                assert_eq!(chain.facts[key], own.facts[key], "{ps} {key}");
+            }
+            let facts = &own.facts;
             let flag = |key: &str| facts[key] == "1";
-            let stored = &face.coverage().plan;
+            let length = |key: &str| facts[key].parse::<u32>().unwrap();
+            let stored = &coverage.plan;
             assert_eq!(
                 (
                     stored.gdef_glyph_classes,
@@ -1185,16 +1498,20 @@ mod tests {
                         .filter(|tag| !tag.is_empty())
                         .map(str::to_string)
                         .collect::<Vec<_>>(),
-                    lengths(&facts),
+                    (
+                        length("gdef_length"),
+                        length("gsub_length"),
+                        length("gpos_length")
+                    ),
                 ),
-                "{name} plan facts"
+                "{ps} plan facts"
             );
-            assert!(!(flag("trak") && flag("STAT")), "{name}: trak applies");
-            // The blocklist decision, from the stored table lengths.
+            assert!(!(flag("trak") && flag("STAT")), "{ps}: trak applies");
+            // The blocklist decision, from this face's own table lengths.
             assert_eq!(
                 stored.gdef_blocklisted(),
-                GDEF_BLOCKLISTED.contains(&name),
-                "{name}: GDEF blocklist decision"
+                GDEF_BLOCKLISTED.contains(&ps),
+                "{ps}: GDEF blocklist decision"
             );
             let glyph0_can_be_mark =
                 !stored.has_glyph_classes() || stored.notdef_gdef_class == GDEF_MARK_CLASS;
@@ -1202,7 +1519,7 @@ mod tests {
                 assert_eq!(
                     plan(stored, shaper, false),
                     plan(stored, shaper, true),
-                    "{name} {shaper:?}: GPOS kern feature"
+                    "{ps} {shaper:?}: GPOS kern feature"
                 );
             }
             // Every ICU script JDK maps (scriptMapping.c 0..45), categorized
@@ -1212,29 +1529,40 @@ mod tests {
                 (plan.zero_by_gdef && glyph0_can_be_mark) || plan.fallback_mark_positioning
             });
             if zeroes {
-                let here = &colossus[&font_path];
-                match reference_host.get(&font_path) {
-                    Some(there) => assert_eq!(here, there, "{name}: {font_path}"),
-                    None => pending.push(name),
+                let font_path = &header_line(&own, "#face")[2];
+                let here = &colossus[font_path];
+                match reference_host.get(font_path) {
+                    Some(there) => assert_eq!(here, there, "{ps}: {font_path}"),
+                    None => pending.push(ps),
                 }
             }
         }
+        assert_eq!(faces_seen.len(), 22);
         assert_eq!(
             pending, PENDING_REFERENCE_HASH,
             "faces awaiting reference hashes"
         );
-        // Courier New Bold is measured as Courier New (one ChainFace): same
-        // blocklist decision and GSUB scripts, and the same file on Monkey Man.
-        let bold = plan_extra("CourierNewPS-BoldMT");
-        let plain = plan_extra("CourierNewPSMT");
-        assert!(
-            unicode::GDEF_BLOCKLIST.contains(&lengths(&bold))
-                && GDEF_BLOCKLISTED.contains(&"CourierNewPS-BoldMT")
+        assert_eq!(
+            provisional_faces, PROVISIONAL_CHAIN,
+            "provisional chain faces"
         );
-        assert_eq!(bold["gsub_scripts"], plain["gsub_scripts"]);
-        assert_eq!(bold["gpos_scripts"], plain["gpos_scripts"]);
-        let bold_path = "/System/Library/Fonts/Supplemental/Courier New Bold.ttf";
-        assert_eq!(colossus[bold_path], reference_host[bold_path]);
+        // plantuml_metrics counts monospaced cells: every Menlo and Courier
+        // New face's .notdef is its cell (1233 and 1229 units).
+        for (family, cell) in [(ChainFamily::Menlo, 1233), (ChainFamily::CourierNew, 1229)] {
+            for (bold, italic) in [(false, false), (true, false), (false, true), (true, true)] {
+                let face = ChainFace::for_style(family, bold, italic);
+                assert_eq!(face.coverage().notdef_units, cell, "{face:?}");
+            }
+        }
+        // Courier New Italic and Bold Italic (HarfBuzz 15.0.0 does not list
+        // their lengths): GDEF classes kept, glyph 0 a base.
+        for face in [ChainFace::CourierNewItalic, ChainFace::CourierNewBoldItalic] {
+            let plan = &face.coverage().plan;
+            assert!(
+                plan.has_glyph_classes() && plan.notdef_gdef_class == 1,
+                "{face:?}"
+            );
+        }
     }
 
     #[test]

@@ -868,6 +868,19 @@ fn filter_removed(
     out
 }
 
+/// Whether an entity's name is drawn italic (abstract classes and
+/// interfaces, an italic class font or stereotype style). Java measures the
+/// name block in the face it draws it with, so layout and emission share it.
+fn entity_name_italic(entity: &ClassEntity, font: &ClassFontOverrides) -> bool {
+    let (_, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
+    matches!(
+        entity.kind,
+        EntityKind::AbstractClass | EntityKind::Interface
+    ) || font.font_italic
+        || font.attr_font_italic
+        || stereotype_italic
+}
+
 fn calc_entity_dims(
     entity: &ClassEntity,
     entity_index: usize,
@@ -882,13 +895,15 @@ fn calc_entity_dims(
     let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
+    let name_italic = entity_name_italic(entity, font);
     let name_width = escaped_newline_lines(&entity.label)
         .iter()
         .map(|line| {
-            text_render::measure_no_underline_with_family(
+            text_render::measure_no_underline_with_family_and_face(
                 line,
                 name_font_size,
                 name_bold,
+                name_italic,
                 &font.name_family,
             )
         })
@@ -1100,10 +1115,12 @@ fn calc_entity_dims(
                     if let Some(latex) = latex_member_content(text) {
                         crate::math::latex_layout_metrics(latex).width
                     } else {
-                        text_render::measure_no_underline_with_family(
+                        // Drawn italic when abstract (emit_member's TextBase).
+                        text_render::measure_no_underline_with_family_and_face(
                             text,
                             member_font_size,
                             font.attr_font_bold,
+                            m.is_abstract || font.attr_font_italic,
                             &font.family,
                         )
                     }
@@ -7776,8 +7793,6 @@ fn render_entity_content(
     let name_text_x_override = oracle_rect.and_then(|r| r.name_text_x);
     let oracle_images = oracle_rect.map_or(&[][..], |r| r.images.as_slice());
     let first_sep_y = oracle_rect.and_then(|r| r.sep_y_values.first().copied());
-    let is_abstract = entity.kind == EntityKind::AbstractClass;
-    let is_interface = entity.kind == EntityKind::Interface;
     let is_enum_entity = entity.kind == EntityKind::Enum;
     let _is_annotation = entity.kind == EntityKind::Annotation;
 
@@ -8055,21 +8070,18 @@ fn render_entity_content(
     let icon_radius = font.circled_radius();
     let member_text_offset = MEMBER_TEXT_INSET + icon_radius;
     let name_font_size = font.name_font_size();
-    let (stereotype_bold, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
+    let (stereotype_bold, _) = font.stereotype_font_style(&entity.stereotypes);
     let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
-    let name_italic = is_abstract
-        || is_interface
-        || font.font_italic
-        || font.attr_font_italic
-        || stereotype_italic;
+    let name_italic = entity_name_italic(entity, font);
     let name_lines = escaped_newline_lines(&entity.label);
     let name_tl = name_lines
         .iter()
         .map(|line| {
-            text_render::measure_no_underline_with_family(
+            text_render::measure_no_underline_with_family_and_face(
                 line,
                 name_font_size as f64,
                 name_bold,
+                name_italic,
                 &font.name_family,
             )
         })
@@ -8553,10 +8565,11 @@ fn render_entity_content(
     let mut text_buf = String::new();
     for (line_index, line) in name_lines.iter().enumerate() {
         let anchor_index = dim.stereotype_count + line_index;
-        let line_width = text_render::measure_no_underline_with_family(
+        let line_width = text_render::measure_no_underline_with_family_and_face(
             line,
             name_font_size as f64,
             name_bold,
+            name_italic,
             &font.name_family,
         );
         let centered_line_x = name_x + (name_tl - line_width) / 2.0;

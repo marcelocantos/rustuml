@@ -13,7 +13,7 @@
 //! JVM's font metrics at full IEEE 754 precision (all values are exact
 //! multiples of powers of 2, so they round-trip perfectly through f64).
 
-use crate::font_chain::{ChainFace, ChainGlyph, Complexity};
+use crate::font_chain::{ChainFace, ChainFamily, ChainGlyph, Complexity};
 use rustuml_parser::java_utf16::{self, Token};
 
 /// Compute the width of `text` at the given `font_size` using
@@ -23,11 +23,8 @@ use rustuml_parser::java_utf16::{self, Token};
 /// on the JVM that generated the golden SVGs.
 pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     let table = char_width_table(font_size, bold);
-    let face = if bold {
-        ChainFace::LucidaGrandeBold
-    } else {
-        ChainFace::LucidaGrande
-    };
+    // SansSerif italic is Lucida Grande's derived italic: the same faces.
+    let face = ChainFace::for_style(ChainFamily::LucidaGrande, bold, false);
     // One complexity per Java token; without an escape, tokens are chars.
     let complexity = face.complexity_per_token(text);
     if text.contains(rustuml_parser::java_utf16::ESCAPE) {
@@ -104,11 +101,19 @@ const MONO_ASCENT_PER_SIZE: f64 = 0.92822265625;
 const MONO_DESCENT_PER_SIZE: f64 = 0.23583984375;
 const MONO_HEIGHT_PER_SIZE: f64 = 1.1640625;
 
-/// Width of `text` rendered in PlantUML's `Monospaced` font at the given
-/// size. Every character contributes the same advance, so the result is
-/// `char_count * size * ratio`. Bold doesn't change the width.
+/// Width of `text` rendered in PlantUML's plain `Monospaced` font at the
+/// given size. Every character contributes the same advance, so the result
+/// is `char_count * size * ratio`.
 pub fn mono_text_width(text: &str, font_size: f64) -> f64 {
-    cell_count(text, ChainFace::Menlo) as f64 * font_size * MONO_WIDTH_PER_SIZE
+    mono_text_width_styled(text, font_size, false, false)
+}
+
+/// [`mono_text_width`] in a style: the cell advance is the same in every
+/// Menlo face, but which characters take a cell depends on the face JDK
+/// measures (its cmap, cascade and HarfBuzz plan).
+pub fn mono_text_width_styled(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
+    let face = ChainFace::for_style(ChainFamily::Menlo, bold, italic);
+    cell_count(text, face) as f64 * font_size * MONO_WIDTH_PER_SIZE
 }
 
 /// Java characters of `text` that advance one cell of a monospaced face: an
@@ -147,8 +152,12 @@ const COURIER_NEW_WIDTH_PER_SIZE: f64 = 0.60009765625;
 const COURIER_NEW_ASCENT_PER_SIZE: f64 = 0.83251953125;
 const COURIER_NEW_HEIGHT_PER_SIZE: f64 = 1.1328125;
 
-pub fn courier_new_text_width(text: &str, font_size: f64) -> f64 {
-    cell_count(text, ChainFace::CourierNew) as f64 * font_size * COURIER_NEW_WIDTH_PER_SIZE
+/// Courier New width in a style: one cell per character the face JDK
+/// measures for that style draws (each face has its own cmap, cascade and
+/// HarfBuzz plan; the GDEF blocklist is decided per font file).
+pub fn courier_new_text_width(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
+    let face = ChainFace::for_style(ChainFamily::CourierNew, bold, italic);
+    cell_count(text, face) as f64 * font_size * COURIER_NEW_WIDTH_PER_SIZE
 }
 
 pub fn courier_new_ascent(font_size: f64) -> f64 {
