@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "imported_rejection": "521fe226d428c01128f4379bb7342584772924d7",
+  "import_commit": "dc796484a0a1ef723b8030ef0fd767da2708533d",
+  "verification": "Private before/after CLI -pipe plus --yaml -pipe, unchanged strict comparator, exact six retained memberships1730+18+50+38+15+26, including all nonpositives and32panics. Fresh reference via parent existing runner only; all raw outcomes preserved. Broad gates once stable. No self-review, baseline/contract changes or old evidence edits.",
+  "mechanism": "wbs-display-line-projection",
+  "java_locations": [
+    "wbs/WBSDiagram#addIdea (125-134): Display.getWithNewlines before WElement creation",
+    "klimt/creole/Display#getWithNewlines (258-353): raw regions, escape and line controls, trailing empty line",
+    "klimt/creole/legacy/CreoleParser#createSheetSlow",
+    "klimt/creole/SheetBlock1#initMap: stripe maximum width and accumulated heights, alignment",
+    "wbs/WBSTextBlock#buildMain and activitydiagram3/ftile/vertical/FtileBoxOld#constructor/calculateDimensionFtile/drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/wbs.rs::Itf/measure/emit_box",
+    "crates/rustuml-render/src/text_render.rs::measure/label_height/label_first_baseline_ascent_with_family/emit_text",
+    "crates/rustuml-parser/src/diagram/wbs.rs::WbsNode.label (raw content retained)"
+  ],
+  "invariant": "WBS component measurement and paint consume the same sequence of Display lines, preserving leading/interior/trailing empty lines and per-line style restoration. Preferred width is maximum line advance and height is accumulated stripe height; source label identity/content remains raw in the model. Escaped backslashes and raw URL/math regions must not accidentally create new lines.",
+  "causal_divergence": "The existing WBS component sends an entire raw label through single-line measurement and emission. Literal backslash-n is therefore painted rather than projecting Display lines, and empty stripe height cannot accumulate. The already-existing parser display helper splits raw backslash-n but does not implement escaped backslash consumption, so globally changing/reusing it blindly would alter unrelated callers.",
+  "planned_change": "Build a private WBS display-line projection from the pinned source escape/raw-region rules, retaining raw model label. Cache per-line content, height and first-baseline values in measured WBS text and use these same lines for maximum width/summed height and paint. Preserve default left alignment, existing padding, side/topology/spacing formulas. Do not modify global display helpers, TIM or other consumers; no new multiline command syntax.",
+  "perturbation_axes": [
+    "root/child/deeper placement and multiple lines",
+    "leading/interior/trailing blank versus sprite-only lines and mixed sizes",
+    "literal escaped backslashes versus line controls and raw regions"
+  ]
+}

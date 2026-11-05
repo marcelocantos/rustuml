@@ -1,0 +1,5 @@
+@startuml
+!$data=%str2json('{"entry":["009",4]}')
+!$result=$data.entry[0]+2
+class "$result" as Result
+@enduml

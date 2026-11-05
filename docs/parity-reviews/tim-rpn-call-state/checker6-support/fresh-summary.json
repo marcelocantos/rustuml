@@ -1,0 +1,25 @@
+{
+  "total": 29,
+  "valid": 19,
+  "negative": 10,
+  "before_matches": 5,
+  "after_matches": 12,
+  "after_source_matches": 12,
+  "negative_rejected": 9,
+  "fresh_valid_failures": [
+    "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_dual_parameters.puml",
+    "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+    "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml",
+    "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_defined_in_uncalled.puml",
+    "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_return.puml",
+    "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_overload_procedure.puml",
+    "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_bare_read.puml"
+  ],
+  "fresh_negative_accepted": [
+    "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.puml"
+  ],
+  "new_valid_cli_errors": [
+    "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+    "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml"
+  ]
+}

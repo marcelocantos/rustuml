@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-function-execution-kind",
+  "rust_revision": "b02ea9cba8e5724790eb767f8e7fa2052bc393a7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:executeOneLineNotSafe/simulatePlain/addPlain/executeTheme",
+    "tim/TFunctionImpl.java:executeReturnFunction/executeProcedureInternal",
+    "tim/iterator/CodeIteratorReturnFunction.java:peek"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "invariant": "Return-function plain lines evaluate substitutions exactly once but do not enter the result stream; nested procedure/include/theme execution retains its own execution kind and emits its events.",
+  "causal_divergence": "FunctionDef loses declaration kind and all body plain lines are added to the shared stream.",
+  "planned_change": "Retain declaration kind and track the current execution kind across nested calls; simulate ordinary return-function plain text while preserving nested effects. Preserve existing no-return legacy function behavior as a documented Rust compatibility extension, not Java parity.",
+  "perturbation_axes": [
+    "Nested return functions versus called procedures/themes",
+    "Plain output versus function effects with repeated invocation"
+  ],
+  "oracle_plan": [
+    "Frozen checker counterexamples through actual CLI and unchanged SVG comparator; supplemental exact Java source",
+    "Focused fresh maker controls on at least two axes; ALL LOCAL JAVA PAUSED, references await verified Monkey Man environment",
+    "Once stable: parser/CLI suites, both main tiers, guards, format/clippy; explicitly scoped 1038=949+89 locally versus frozen955/checker1044 and parent1449"
+  ],
+  "pending": [
+    "Fresh independent checker; all ten prior claims remain rejected",
+    "No class/sequence renderer changes; no historical reference or baseline changes"
+  ],
+  "scope": "Preprocess and NEW maker evidence only. Root parse error checks and raw assertion preserved."
+}

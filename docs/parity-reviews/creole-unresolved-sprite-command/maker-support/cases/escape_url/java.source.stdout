@@ -1,0 +1,3 @@
+@startuml
+class "~<$ghost> / <space key> / http://example.test/a / [[https://example.test/ path]] end" as A
+@enduml

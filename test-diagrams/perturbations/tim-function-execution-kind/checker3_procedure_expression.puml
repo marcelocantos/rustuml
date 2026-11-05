@@ -1,0 +1,7 @@
+@startuml
+!procedure $emit()
+class Unexpected
+!endprocedure
+!$result=$emit()
+class Result
+@enduml

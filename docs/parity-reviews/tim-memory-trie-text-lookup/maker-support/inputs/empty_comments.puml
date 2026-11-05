@@ -1,0 +1,9 @@
+@startuml
+class Anchor
+!startsub empty
+/' discarded '/
+' discarded
+!endsub
+!$v=%intval("bad")
+class Lost
+@enduml

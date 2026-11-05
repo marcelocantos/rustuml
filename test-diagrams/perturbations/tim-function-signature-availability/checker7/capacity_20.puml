@@ -1,0 +1,70 @@
+@startuml
+!function $filler0()
+!return 0
+!endfunction
+!function $filler1()
+!return 1
+!endfunction
+!function $filler2()
+!return 2
+!endfunction
+!function $filler3()
+!return 3
+!endfunction
+!function $filler4()
+!return 4
+!endfunction
+!function $filler5()
+!return 5
+!endfunction
+!function $filler6()
+!return 6
+!endfunction
+!function $filler7()
+!return 7
+!endfunction
+!function $filler8()
+!return 8
+!endfunction
+!function $filler9()
+!return 9
+!endfunction
+!function $filler10()
+!return 10
+!endfunction
+!function $filler11()
+!return 11
+!endfunction
+!function $filler12()
+!return 12
+!endfunction
+!function $filler13()
+!return 13
+!endfunction
+!function $filler14()
+!return 14
+!endfunction
+!function $filler15()
+!return 15
+!endfunction
+!function $filler16()
+!return 16
+!endfunction
+!function $filler17()
+!return 17
+!endfunction
+!function $filler18()
+!return 18
+!endfunction
+!function $filler19()
+!return 19
+!endfunction
+!function $oak515(a="one",b="two",c="three")
+!return "three"
+!endfunction
+!function $oak515(a="one",b="two")
+!return "two"
+!endfunction
+!$answer=$oak515()
+class "$answer" as Node
+@enduml

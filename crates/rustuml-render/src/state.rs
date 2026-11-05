@@ -126,7 +126,7 @@ fn emit_state_gradient_defs(svg: &mut String, gradients: &[StateGradient]) {
         write!(
             svg,
             r#"<linearGradient id="{}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
-            gradient.id, gradient.color1, gradient.color2,
+            gradient.id, crate::svg::escape_attribute(&gradient.color1), crate::svg::escape_attribute(&gradient.color2),
         )
         .unwrap();
     }
@@ -1240,7 +1240,9 @@ fn emit_attached_svek_note(
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            position.id, note.source_line, position.entity_id,
+            crate::svg::escape_attribute(&position.id),
+            note.source_line,
+            position.entity_id,
         )
         .unwrap();
         emit_plain_note_body(
@@ -1312,7 +1314,9 @@ fn emit_attached_svek_note(
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        position.id, note.source_line, position.entity_id,
+        crate::svg::escape_attribute(&position.id),
+        note.source_line,
+        position.entity_id,
     )
     .unwrap();
 
@@ -1491,7 +1495,9 @@ fn emit_floating_svek_note(svg: &mut String, note: &StateNote, position: &Floati
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        position.alias, note.source_line, position.entity_id,
+        crate::svg::escape_attribute(&position.alias),
+        note.source_line,
+        position.entity_id,
     )
     .unwrap();
     emit_plain_note_body(
@@ -1592,12 +1598,12 @@ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning
     write!(
         svg,
         r#"<polygon fill="{}" points="{}""#,
-        escape_attr(&warning.polygon.fill),
-        escape_attr(&warning.polygon.points),
+        crate::svg::escape_attribute(&warning.polygon.fill),
+        crate::svg::escape_attribute(&warning.polygon.points),
     )
     .unwrap();
     if let Some(style) = warning.polygon.style.as_deref() {
-        write!(svg, r#" style="{}""#, escape_attr(style)).unwrap();
+        write!(svg, r#" style="{}""#, crate::svg::escape_attribute(style)).unwrap();
     }
     svg.push_str("/>");
     match warning.text_length.as_deref() {
@@ -1624,12 +1630,12 @@ fn emit_entity_polygon(svg: &mut String, polygon: &EntityPolygon) {
     write!(
         svg,
         r#"<polygon fill="{}" points="{}""#,
-        escape_attr(&polygon.fill),
-        escape_attr(&polygon.points),
+        crate::svg::escape_attribute(&polygon.fill),
+        crate::svg::escape_attribute(&polygon.points),
     )
     .unwrap();
     if let Some(style) = polygon.style.as_deref() {
-        write!(svg, r#" style="{}""#, escape_attr(style)).unwrap();
+        write!(svg, r#" style="{}""#, crate::svg::escape_attribute(style)).unwrap();
     }
     svg.push_str("/>");
 }
@@ -1638,12 +1644,12 @@ fn emit_entity_path(svg: &mut String, path: &EntityPath) {
     write!(
         svg,
         r#"<path d="{}" fill="{}""#,
-        escape_attr(&path.d),
-        escape_attr(&path.fill),
+        crate::svg::escape_attribute(&path.d),
+        crate::svg::escape_attribute(&path.fill),
     )
     .unwrap();
     if let Some(style) = path.style.as_deref() {
-        write!(svg, r#" style="{}""#, escape_attr(style)).unwrap();
+        write!(svg, r#" style="{}""#, crate::svg::escape_attribute(style)).unwrap();
     }
     svg.push_str("/>");
 }
@@ -1651,7 +1657,7 @@ fn emit_entity_path(svg: &mut String, path: &EntityPath) {
 fn edge_path_id_attr(edge: &OracleEdgePath) -> String {
     edge.path_id
         .as_deref()
-        .map(|id| format!(r#" id="{}""#, escape_attr(id)))
+        .map(|id| format!(r#" id="{}""#, crate::svg::escape_attribute(id)))
         .unwrap_or_default()
 }
 
@@ -3758,8 +3764,8 @@ fn emit_autonomous_scope_entities(
                     r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
-                    fmt_f(cy),
-                )
+                    fmt_f(cy), qualified_name = crate::svg::escape_attribute(&qualified_name),
+)
                 .unwrap();
             } else {
                 write!(
@@ -3769,8 +3775,8 @@ fn emit_autonomous_scope_entities(
                     fmt_f(cx),
                     fmt_f(cy),
                     fmt_f(cx),
-                    fmt_f(cy),
-                )
+                    fmt_f(cy), qualified_name = crate::svg::escape_attribute(&qualified_name),
+)
                 .unwrap();
             }
             continue;
@@ -3794,12 +3800,12 @@ fn emit_autonomous_scope_entities(
                 write!(
                     svg,
                     r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
-                    escape_attr(&state.id),
+                    crate::svg::escape_attribute(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
-                    fmt_f(cy),
-                )
+                    fmt_f(cy), fill = crate::svg::escape_attribute(&fill),
+)
                 .unwrap();
                 continue;
             }
@@ -3812,14 +3818,14 @@ fn emit_autonomous_scope_entities(
                 write!(
                     svg,
                     r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
-                    escape_attr(&state.id),
+                    crate::svg::escape_attribute(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
                     fmt_f(cx),
-                    fmt_f(cy),
-                )
+                    fmt_f(cy), fill = crate::svg::escape_attribute(&fill),
+)
                 .unwrap();
                 continue;
             }
@@ -3832,7 +3838,7 @@ fn emit_autonomous_scope_entities(
                 write!(
                     svg,
                     r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
-                    escape_attr(&state.id),
+                    crate::svg::escape_attribute(&state.id),
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy - CHOICE_SIZE),
@@ -3844,8 +3850,8 @@ fn emit_autonomous_scope_entities(
                     fmt_f(cy),
                     fmt_f(cx),
                     fmt_f(cy - CHOICE_SIZE),
-                    context.skin.stroke,
-                )
+                    crate::svg::escape_attribute(&context.skin.stroke), fill = crate::svg::escape_attribute(&fill),
+)
                 .unwrap();
                 continue;
             }
@@ -3861,8 +3867,8 @@ fn emit_autonomous_scope_entities(
                     fmt_f(*height),
                     fmt_f(*width),
                     fmt_f(cx - width / 2.0),
-                    fmt_f(cy - height / 2.0),
-                )
+                    fmt_f(cy - height / 2.0), fill = crate::svg::escape_attribute(&fill),
+)
                 .unwrap();
                 continue;
             }
@@ -3882,14 +3888,14 @@ fn emit_autonomous_scope_entities(
                     r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
                     fmt_f(cx),
                     fmt_f(cy),
-                    context.skin.stroke,
-                )
+                    crate::svg::escape_attribute(&context.skin.stroke), fill = crate::svg::escape_attribute(&fill),
+)
                 .unwrap();
                 let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
                 write!(
                     svg,
                     r#"<text fill="{}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
-                    context.skin.text_color,
+                    crate::svg::escape_attribute(&context.skin.text_color),
                     fmt_f(text_width),
                     fmt_f(cx - text_width / 2.0),
                     fmt_f(cy + HISTORY_LABEL_BASELINE_OFFSET),
@@ -3940,19 +3946,19 @@ fn emit_autonomous_scope_entities(
                         r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{STATE_BORDER_RADIUS}" ry="{STATE_BORDER_RADIUS}" style="stroke:{};stroke-width:1.5;"/>"#,
                         fmt_f(cx),
                         fmt_f(cy),
-                        style.stroke,
-                    )
+                        crate::svg::escape_attribute(&style.stroke), fill = crate::svg::escape_attribute(&fill),
+)
                     .unwrap();
                 } else {
                     write!(
                         svg,
                         r#"<rect fill="{fill}" height="{}" style="stroke:{};stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
                         fmt_f(image_height),
-                        style.stroke,
+                        crate::svg::escape_attribute(&style.stroke),
                         fmt_f(image_width),
                         fmt_f(image_x),
-                        fmt_f(image_y),
-                    )
+                        fmt_f(image_y), fill = crate::svg::escape_attribute(&fill),
+)
                     .unwrap();
                 }
                 if entity_position == StateEntityPosition::ExitPoint {
@@ -3964,12 +3970,12 @@ fn emit_autonomous_scope_entities(
                     write!(
                         svg,
                         r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        style.stroke,
+                        crate::svg::escape_attribute(&style.stroke),
                         fmt_f(cross_center_x + cross_delta),
                         fmt_f(cross_center_x - cross_delta),
                         fmt_f(cross_center_y + cross_delta),
                         fmt_f(cross_center_y - cross_delta),
-                        style.stroke,
+                        crate::svg::escape_attribute(&style.stroke),
                         fmt_f(cross_center_x + cross_delta),
                         fmt_f(cross_center_x - cross_delta),
                         fmt_f(cross_center_y - cross_delta),
@@ -3986,7 +3992,7 @@ fn emit_autonomous_scope_entities(
                         write!(
                             svg,
                             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            style.stroke,
+                            crate::svg::escape_attribute(&style.stroke),
                             fmt_f(x),
                             fmt_f(x),
                             fmt_f(image_y),
@@ -4024,7 +4030,7 @@ fn emit_autonomous_scope_entities(
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            escape_attr(&state.id),
+            crate::svg::escape_attribute(&state.id),
             autonomous_entity_id(context.entity_ids, id),
             fmt_f(*height),
             fmt_f(*width),
@@ -4033,8 +4039,8 @@ fn emit_autonomous_scope_entities(
             fmt_f(box_x),
             fmt_f(box_x + width),
             fmt_f(divider_y),
-            fmt_f(divider_y),
-        )
+            fmt_f(divider_y), fill = crate::svg::escape_attribute(&fill), stroke_style = crate::svg::escape_attribute(&stroke_style),
+)
         .unwrap();
         let text_width = style.title.width(&state.label);
         style.title.emit(
@@ -4106,11 +4112,20 @@ fn emit_autonomous_scope_links(
         if arrow_at_start {
             write!(
                 svg,
-                "<!--reverse link {edge_from_name} to {edge_to_name}-->"
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!(
+                    "reverse link {edge_from_name} to {edge_to_name}"
+                )),
             )
             .unwrap();
         } else {
-            write!(svg, "<!--link {edge_from_name} to {edge_to_name}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("link {edge_from_name} to {edge_to_name}")),
+            )
+            .unwrap();
         }
         write!(
             svg,
@@ -4224,6 +4239,8 @@ fn emit_autonomous_scope_links(
             write!(
                 svg,
                 r#"<path d="{path}" fill="none" id="{path_id}" style="{stroke}"/>"#,
+                path_id = crate::svg::escape_attribute(&path_id),
+                stroke = crate::svg::escape_attribute(stroke),
             )
             .unwrap();
             render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
@@ -4307,16 +4324,16 @@ fn emit_autonomous_empty_concurrent_state(
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        escape_attr(id),
+        crate::svg::escape_attribute(id),
         autonomous_entity_id(context.entity_ids, id),
-        style.fill,
+        crate::svg::escape_attribute(&style.fill),
         fmt_f(height),
-        style.stroke,
+        crate::svg::escape_attribute(&style.stroke),
         style.border_thickness,
         fmt_f(width),
         fmt_f(box_x),
         fmt_f(box_y),
-        style.stroke,
+        crate::svg::escape_attribute(&style.stroke),
         style.border_thickness,
         fmt_f(box_x),
         fmt_f(box_x + width),
@@ -4374,8 +4391,8 @@ fn emit_autonomous_composite(
             fmt_f(composite.height),
             fmt_f(composite.width),
             fmt_f(box_x),
-            fmt_f(box_y),
-        )
+            fmt_f(box_y), stroke_style = crate::svg::escape_attribute(&stroke_style),
+)
         .unwrap();
     }
     write!(
@@ -4395,7 +4412,7 @@ fn emit_autonomous_composite(
         fmt_f(box_y + STATE_RX),
         fmt_f(box_x + STATE_RX),
         fmt_f(box_y),
-        header_fill,
+        crate::svg::escape_attribute(&header_fill),
         fmt_f(composite.height),
         fmt_f(composite.width),
         fmt_f(box_x),
@@ -4403,8 +4420,8 @@ fn emit_autonomous_composite(
         fmt_f(box_x),
         fmt_f(right),
         fmt_f(header_divider_y),
-        fmt_f(header_divider_y),
-    )
+        fmt_f(header_divider_y), stroke_style = crate::svg::escape_attribute(&stroke_style),
+)
     .unwrap();
     if composite.attribute_height > 0.0 {
         write!(
@@ -4414,6 +4431,7 @@ fn emit_autonomous_composite(
             fmt_f(right),
             fmt_f(title_divider_y),
             fmt_f(title_divider_y),
+            stroke_style = crate::svg::escape_attribute(&stroke_style),
         )
         .unwrap();
     }
@@ -4512,7 +4530,7 @@ fn emit_autonomous_composite(
                     write!(
                         svg,
                         r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        context.skin.stroke,
+                        crate::svg::escape_attribute(&context.skin.stroke),
                         fmt_f(region_offset_x),
                         fmt_f(region_offset_x),
                         fmt_f(inner_offset_y),
@@ -4524,7 +4542,7 @@ fn emit_autonomous_composite(
                     write!(
                         svg,
                         r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        context.skin.stroke,
+                        crate::svg::escape_attribute(&context.skin.stroke),
                         fmt_f(inner_offset_x),
                         fmt_f(inner_offset_x + composite.inner_width + 8.0),
                         fmt_f(region_offset_y),
@@ -5447,7 +5465,7 @@ fn emit_root_state_cluster(
     write!(
         svg,
         r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        escape_attr(&composite.id),
+        crate::svg::escape_attribute(&composite.id),
         composite.decl_line.unwrap_or(composite.source_line),
         autonomous_entity_id(context.entity_ids, &composite.id),
     )
@@ -5457,7 +5475,7 @@ fn emit_root_state_cluster(
             svg,
             r#"<rect fill="none"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
             fmt_f(height),
-            style.stroke,
+            crate::svg::escape_attribute(&style.stroke),
             style.border_thickness,
             fmt_f(width),
             fmt_f(x),
@@ -5482,14 +5500,14 @@ fn emit_root_state_cluster(
         fmt_f(y + STATE_RX),
         fmt_f(x + STATE_RX),
         fmt_f(y),
-        style.fill,
+        crate::svg::escape_attribute(&style.fill),
         fmt_f(height),
-        style.stroke,
+        crate::svg::escape_attribute(&style.stroke),
         style.border_thickness,
         fmt_f(width),
         fmt_f(x),
         fmt_f(y),
-        style.stroke,
+        crate::svg::escape_attribute(&style.stroke),
         style.border_thickness,
         fmt_f(x),
         fmt_f(right),
@@ -6703,8 +6721,8 @@ pub fn render_with_oracle(
     };
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{h}px" preserveAspectRatio="none" style="{root_style}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
-    )
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{h}px" preserveAspectRatio="none" style="{root_style}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#, root_style = crate::svg::escape_attribute(&root_style),
+)
     .unwrap();
 
     svg.push_str("<?plantuml ?>");
@@ -6747,8 +6765,8 @@ pub fn render_with_oracle(
     if has_explicit_background && bg_color != "#FFFFFF" {
         write!(
             svg,
-            r#"<rect fill="{bg_color}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
-        )
+            r#"<rect fill="{bg_color}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#, bg_color = crate::svg::escape_attribute(&bg_color),
+)
         .unwrap();
     }
 
@@ -6939,8 +6957,8 @@ pub fn render_with_oracle(
                         svg,
                         r#"<ellipse cx="{}" cy="{}" fill="{start_fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:1;"/>"#,
                         fmt_f(*cx),
-                        fmt_f(*cy),
-                    )
+                        fmt_f(*cy), start_fill = crate::svg::escape_attribute(start_fill), start_stroke = crate::svg::escape_attribute(start_stroke),
+)
                 .unwrap();
             }
             svg.push_str("</g>");
@@ -6967,8 +6985,8 @@ pub fn render_with_oracle(
                         svg,
                         r#"<ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
                         fmt_f(*cx),
-                        fmt_f(*cy),
-                    )
+                        fmt_f(*cy), end_stroke = crate::svg::escape_attribute(end_stroke),
+)
                 .unwrap();
             }
             if let Some(polygon) = orc_rect.and_then(|r| r.icon_polygon.as_ref()) {
@@ -6978,8 +6996,8 @@ pub fn render_with_oracle(
                         svg,
                         r#"<ellipse cx="{}" cy="{}" fill="{end_inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
                         fmt_f(*cx),
-                        fmt_f(*cy),
-                    )
+                        fmt_f(*cy), end_inner_fill = crate::svg::escape_attribute(end_inner_fill), end_stroke = crate::svg::escape_attribute(end_stroke),
+)
                 .unwrap();
             }
             svg.push_str("</g>");
@@ -7033,8 +7051,8 @@ pub fn render_with_oracle(
                     write!(
                         svg,
                         r#"<g class="start_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
-                        ent_id_of(id),
-                    )
+                        ent_id_of(id), id = crate::svg::escape_attribute(id),
+)
                     .unwrap();
                     let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
                     if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
@@ -7044,8 +7062,8 @@ pub fn render_with_oracle(
                             svg,
                             r#"<ellipse cx="{}" cy="{}" fill="{fill_color}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                             fmt_f(*cx),
-                            fmt_f(*cy),
-                        )
+                            fmt_f(*cy), fill_color = crate::svg::escape_attribute(&fill_color),
+)
                         .unwrap();
                     }
                     svg.push_str("</g>");
@@ -7069,8 +7087,8 @@ pub fn render_with_oracle(
                     write!(
                         svg,
                         r#"<g class="end_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
-                        ent_id_of(id),
-                    )
+                        ent_id_of(id), id = crate::svg::escape_attribute(id),
+)
                     .unwrap();
                     let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
                     if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
@@ -7091,8 +7109,8 @@ pub fn render_with_oracle(
                             svg,
                             r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                             fmt_f(*cx),
-                            fmt_f(*cy),
-                        )
+                            fmt_f(*cy), inner_fill = crate::svg::escape_attribute(&inner_fill),
+)
                         .unwrap();
                     }
                     svg.push_str("</g>");
@@ -7105,6 +7123,7 @@ pub fn render_with_oracle(
                         svg,
                         r#"<g class="entity" data-qualified-name="{id}" id="{}">"#,
                         ent_id_of(id),
+                        id = crate::svg::escape_attribute(id),
                     )
                     .unwrap();
                     let top = cy - CHOICE_SIZE;
@@ -7123,8 +7142,8 @@ pub fn render_with_oracle(
                         fmt_f(right), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(bottom),
                         fmt_f(left), fmt_f(*cy),
-                        fmt_f(*cx), fmt_f(top),
-                    )
+                        fmt_f(*cx), fmt_f(top), fill_color = crate::svg::escape_attribute(&fill_color),
+)
                     .unwrap();
                     svg.push_str("</g>");
                 }
@@ -7310,12 +7329,12 @@ pub fn render_with_oracle(
                         } else {
                             write!(
                                 svg,
-                                r#"<rect fill="{fill_color}"{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                r#"<rect {fill_color}{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                                 fmt_f(*bh),
                                 fmt_f(*bw),
                                 fmt_f(box_x),
-                                fmt_f(box_y),
-                            )
+                                fmt_f(box_y), fill_color = crate::svg::fill_attributes(&fill_color), stroke_style = crate::svg::escape_attribute(&stroke_style),
+)
                             .unwrap();
                         }
 
@@ -7364,6 +7383,7 @@ pub fn render_with_oracle(
                             svg,
                             r#"<g class="entity" data-qualified-name="{id}" id="{}">"#,
                             ent_id_of(id),
+                            id = crate::svg::escape_attribute(id),
                         )
                         .unwrap();
 
@@ -7374,8 +7394,8 @@ pub fn render_with_oracle(
                         if let Some(href) = url {
                             let title =
                                 state_def.and_then(|s| s.tooltip.as_deref()).unwrap_or(href);
-                            let href_e = escape_attr(href);
-                            let title_e = escape_attr(title);
+                            let href_e = crate::svg::escape_attribute(href);
+                            let title_e = crate::svg::escape_attribute(title);
                             write!(
                                 svg,
                                 r#"<a href="{href_e}" target="_top" title="{title_e}" xlink:actuate="onRequest" xlink:href="{href_e}" xlink:show="new" xlink:title="{title_e}" xlink:type="simple">"#,
@@ -7389,12 +7409,12 @@ pub fn render_with_oracle(
                         } else {
                             write!(
                                 svg,
-                                r#"<rect fill="{fill_color}"{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                r#"<rect {fill_color}{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                                 fmt_f(*bh),
                                 fmt_f(*bw),
                                 fmt_f(box_x),
-                                fmt_f(box_y),
-                            )
+                                fmt_f(box_y), fill_color = crate::svg::fill_attributes(&fill_color), stroke_style = crate::svg::escape_attribute(&stroke_style),
+)
                             .unwrap();
                         }
 
@@ -7429,6 +7449,7 @@ pub fn render_with_oracle(
                                 fmt_f(box_x + bw),
                                 fmt_f(div_y),
                                 fmt_f(div_y),
+                                stroke_style = crate::svg::escape_attribute(&stroke_style),
                             )
                             .unwrap();
                         }
@@ -7467,7 +7488,7 @@ pub fn render_with_oracle(
                             // Custom font name (`skinparam stateFontName ...` /
                             // global `defaultFontName ...`): emit the
                             // user-supplied family and the matching width.
-                            let fam = escape_attr(&title_style.family);
+                            let fam = crate::svg::font_family_attribute(&title_style.family);
                             let style_attr = if title_style.italic {
                                 r#" font-style="italic""#
                             } else {
@@ -7481,7 +7502,7 @@ pub fn render_with_oracle(
                             write!(
                                 svg,
                                 r#"<text fill="{}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                title_style.color,
+                                crate::svg::escape_attribute(&title_style.color),
                                 title_style.size as u32,
                                 fmt_f(text_w),
                                 fmt_f(text_x),
@@ -7556,7 +7577,8 @@ pub fn render_with_oracle(
                                         + j as f64 * DESC_LINE_SPACING
                                 });
                             if attribute_style.family != "sans-serif" {
-                                let fam = escape_attr(&attribute_style.family);
+                                let fam =
+                                    crate::svg::font_family_attribute(&attribute_style.family);
                                 let style_attr = if attribute_style.italic {
                                     r#" font-style="italic""#
                                 } else {
@@ -7583,7 +7605,7 @@ pub fn render_with_oracle(
                                 write!(
                                     svg,
                                     r#"<text fill="{}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                    attribute_style.color,
+                                    crate::svg::escape_attribute(&attribute_style.color),
                                     attribute_style.size as u32,
                                     fmt_f(width),
                                     fmt_f(desc_x),
@@ -7695,8 +7717,8 @@ pub fn render_with_oracle(
             let source_line = rect.name_text_x.map(|sl| sl as usize).unwrap_or(0);
             write!(
                 svg,
-                r#"<g class="entity" data-qualified-name="{gmn_name}" data-source-line="{source_line}" id="{entity_id}">"#,
-            )
+                r#"<g class="entity" data-qualified-name="{gmn_name}" data-source-line="{source_line}" id="{entity_id}">"#, entity_id = crate::svg::escape_attribute(&entity_id),
+)
             .unwrap();
             // Replay each captured path with its own style — note
             // bodies and dog-ear folds sometimes use different stroke
@@ -7710,7 +7732,12 @@ pub fn render_with_oracle(
                     if first_d_for_left.is_none() {
                         first_d_for_left = Some(d);
                     }
-                    write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#,).unwrap();
+                    write!(
+                        svg,
+                        r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#,
+                        style = crate::svg::escape_attribute(style),
+                    )
+                    .unwrap();
                 }
             }
             // Note text — use oracle text_y values for vertical positions
@@ -7985,12 +8012,23 @@ pub fn render_with_oracle(
             if arrow_at_start {
                 write!(
                     svg,
-                    "<!--reverse link {} to {}-->",
-                    edge_from_name, edge_to_name
+                    "<!--{svg_comment}-->",
+                    svg_comment = crate::svg::comment_text(&format!(
+                        "reverse link {} to {}",
+                        edge_from_name, edge_to_name
+                    )),
                 )
                 .unwrap();
             } else {
-                write!(svg, "<!--link {} to {}-->", edge_from_name, edge_to_name).unwrap();
+                write!(
+                    svg,
+                    "<!--{svg_comment}-->",
+                    svg_comment = crate::svg::comment_text(&format!(
+                        "link {} to {}",
+                        edge_from_name, edge_to_name
+                    )),
+                )
+                .unwrap();
             }
 
             let link_id = allocated_ids
@@ -8007,8 +8045,8 @@ pub fn render_with_oracle(
 
             write!(
                 svg,
-                r#"<g class="link" data-entity-1="{from_ent}" data-entity-2="{to_ent}" data-link-type="dependency" data-source-line="{source_line}" id="{link_id}">"#,
-            )
+                r#"<g class="link" data-entity-1="{from_ent}" data-entity-2="{to_ent}" data-link-type="dependency" data-source-line="{source_line}" id="{link_id}">"#, from_ent = crate::svg::escape_attribute(from_ent), to_ent = crate::svg::escape_attribute(to_ent), link_id = crate::svg::escape_attribute(&link_id),
+)
             .unwrap();
 
             let (from_cx, from_cy, _from_w, from_h) = pos_of(&from_layout);
@@ -8075,6 +8113,8 @@ pub fn render_with_oracle(
                 write!(
                     svg,
                     r#"<path d="{d}" fill="none" id="{path_id}" style="{link_stroke}"/>"#,
+                    path_id = crate::svg::escape_attribute(&path_id),
+                    link_stroke = crate::svg::escape_attribute(link_stroke),
                 )
                 .unwrap();
 
@@ -8131,8 +8171,8 @@ pub fn render_with_oracle(
                     fmt_f(from_cx), fmt_f(start_y),
                     fmt_f(from_cx), fmt_f(mid_y),
                     fmt_f(to_cx), fmt_f(mid_y),
-                    fmt_f(to_cx), fmt_f(end_y),
-                )
+                    fmt_f(to_cx), fmt_f(end_y), path_id = crate::svg::escape_attribute(&path_id), link_stroke = crate::svg::escape_attribute(link_stroke),
+)
                 .unwrap();
 
                 // Arrowhead.
@@ -8219,14 +8259,17 @@ pub fn render_with_oracle(
             }
             let note = &diagram.notes[position.note_index];
             write!(
-                svg,
-                r#"<!--link {from} to {to}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="{}"><path d="{d}" fill="none" id="{from}-{to}" style="stroke:{};stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
-                endpoint_id(from),
-                endpoint_id(to),
-                note.source_line,
-                spec.link_id,
-                skin.stroke,
-            )
+svg,
+r#"<!--{svg_comment}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="{}"><path d="{d}" fill="none" id="{from_attr}-{to_attr}" style="stroke:{};stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
+endpoint_id(from),
+endpoint_id(to),
+note.source_line,
+crate::svg::escape_attribute(&spec.link_id),
+crate::svg::escape_attribute(&skin.stroke),
+from_attr = crate::svg::escape_attribute(from),
+to_attr = crate::svg::escape_attribute(to),
+svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+)
             .unwrap();
         }
     }
@@ -8440,8 +8483,8 @@ fn render_arrowhead(
         fmt_f(points[2].0), fmt_f(points[2].1),
         fmt_f(points[3].0), fmt_f(points[3].1),
         fmt_f(points[4].0), fmt_f(points[4].1),
-        fmt_f(thickness),
-    )
+        fmt_f(thickness), color = crate::svg::escape_attribute(color),
+)
     .unwrap();
 }
 
@@ -8731,9 +8774,20 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
 
         // HTML comment.
         if is_reverse {
-            write!(svg, "<!--reverse link {to_name} to {from_name}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("reverse link {to_name} to {from_name}")),
+            )
+            .unwrap();
         } else {
-            write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+            write!(
+                svg,
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {from_name} to {to_name}")),
+            )
+            .unwrap();
         }
 
         // Link group wrapper using oracle attributes.
@@ -8745,8 +8799,8 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
 
         write!(
             svg,
-            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
-        )
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
         .unwrap();
 
         // Path element with oracle data.
@@ -8759,6 +8813,7 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             svg,
             r#"<path d="{}" fill="none"{path_id_attr} style="{path_style}"/>"#,
             oracle_edge.d,
+            path_style = crate::svg::escape_attribute(path_style),
         )
         .unwrap();
 
@@ -8772,6 +8827,8 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             write!(
                 svg,
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                poly_style = crate::svg::escape_attribute(poly_style),
             )
             .unwrap();
         }
@@ -8807,7 +8864,12 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
                 let style = style
                     .as_deref()
                     .unwrap_or("stroke:#181818;stroke-width:0.5;");
-                write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#).unwrap();
+                write!(
+                    svg,
+                    r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#,
+                    style = crate::svg::escape_attribute(style),
+                )
+                .unwrap();
             }
         };
         if oracle_edge.extra_paths.is_empty() {
@@ -8868,8 +8930,8 @@ fn emit_oracle_state_note(
     });
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{entity_id}">"#,
-    )
+        r#"<g class="entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{entity_id}">"#, qualified_name = crate::svg::escape_attribute(qualified_name), entity_id = crate::svg::escape_attribute(&entity_id),
+)
     .unwrap();
     let mut first_d_for_left: Option<&str> = None;
     if let Some(paths) = &rect.glyph_path_d {
@@ -8880,7 +8942,12 @@ fn emit_oracle_state_note(
             if first_d_for_left.is_none() {
                 first_d_for_left = Some(d);
             }
-            write!(svg, r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#).unwrap();
+            write!(
+                svg,
+                r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#,
+                style = crate::svg::escape_attribute(style),
+            )
+            .unwrap();
         }
     }
     let body_left_x = first_d_for_left
@@ -8930,7 +8997,12 @@ fn emit_note_connector_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     if let Some(idx) = edge.id.rfind("-GMN") {
         let from = &edge.id[..idx];
         let to = &edge.id[idx + 1..];
-        write!(svg, "<!--link {from} to {to}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+        )
+        .unwrap();
     }
     let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
     let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -8939,8 +9011,8 @@ fn emit_note_connector_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
     write!(
         svg,
-        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
-    )
+        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
     .unwrap();
     let path_style = edge
         .path_style
@@ -8949,7 +9021,9 @@ fn emit_note_connector_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     write!(
         svg,
         r#"<path d="{}" fill="none" id="{}" style="{path_style}"/>"#,
-        edge.d, edge.id,
+        crate::svg::escape_attribute(&edge.d),
+        crate::svg::escape_attribute(&edge.id),
+        path_style = crate::svg::escape_attribute(path_style),
     )
     .unwrap();
     svg.push_str("</g>");
@@ -8965,9 +9039,19 @@ fn emit_oracle_edge_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     // ids are `<from>-to-<to>` / `<from>-backto-<to>`; the comment uses the
     // same names with the verb spelled out.
     if let Some((from, to)) = edge.id.split_once("-backto-") {
-        write!(svg, "<!--reverse link {to} to {from}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("reverse link {to} to {from}")),
+        )
+        .unwrap();
     } else if let Some((from, to)) = edge.id.split_once("-to-") {
-        write!(svg, "<!--link {from} to {to}-->").unwrap();
+        write!(
+            svg,
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("link {from} to {to}")),
+        )
+        .unwrap();
     }
     let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
     let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -8976,8 +9060,8 @@ fn emit_oracle_edge_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     let link_id = edge.link_id.as_deref().unwrap_or("lnk0");
     write!(
         svg,
-        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
-    )
+        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(link_id),
+)
     .unwrap();
     let path_style = edge
         .path_style
@@ -8986,7 +9070,9 @@ fn emit_oracle_edge_verbatim(svg: &mut String, edge: &OracleEdgePath) {
     write!(
         svg,
         r#"<path d="{}" fill="none" id="{}" style="{path_style}"/>"#,
-        edge.d, edge.id,
+        crate::svg::escape_attribute(&edge.d),
+        crate::svg::escape_attribute(&edge.id),
+        path_style = crate::svg::escape_attribute(path_style),
     )
     .unwrap();
     if let Some(points) = &edge.arrow_points {
@@ -8998,6 +9084,8 @@ fn emit_oracle_edge_verbatim(svg: &mut String, edge: &OracleEdgePath) {
         write!(
             svg,
             r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            fill = crate::svg::escape_attribute(fill),
+            poly_style = crate::svg::escape_attribute(poly_style),
         )
         .unwrap();
     }
@@ -9101,8 +9189,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 svg,
                 r#"<g class="start_entity" data-qualified-name="{qname}" data-source-line="{source_line}" id="{entity_id}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                 fmt_f(cx),
-                fmt_f(cy),
-            )
+                fmt_f(cy), qname = crate::svg::escape_attribute(qname), entity_id = crate::svg::escape_attribute(entity_id),
+)
             .unwrap();
         } else {
             let inner_fill = rect.fill.as_deref().unwrap_or(PSEUDO_COLOR);
@@ -9112,8 +9200,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 fmt_f(cx),
                 fmt_f(cy),
                 fmt_f(cx),
-                fmt_f(cy),
-            )
+                fmt_f(cy), qname = crate::svg::escape_attribute(qname), entity_id = crate::svg::escape_attribute(entity_id), inner_fill = crate::svg::escape_attribute(inner_fill),
+)
             .unwrap();
         }
         true
@@ -9184,6 +9272,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 fmt_f(cy),
                 fmt_f(rxy),
                 fmt_f(rxy),
+                fill = crate::svg::escape_attribute(fill),
+                style = crate::svg::escape_attribute(style),
             )
             .unwrap();
             for l in &rect.lines {
@@ -9194,7 +9284,11 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 write!(
                     svg,
                     r#"<line style="{lstyle}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                    l.x1, l.x2, l.y1, l.y2,
+                    l.x1,
+                    l.x2,
+                    l.y1,
+                    l.y2,
+                    lstyle = crate::svg::escape_attribute(lstyle),
                 )
                 .unwrap();
             }
@@ -9223,8 +9317,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 fmt_f(px),
                 fmt_f(py),
                 fmt_f(h_radius),
-                fmt_f(h_radius),
-            )
+                fmt_f(h_radius), h_fill = crate::svg::escape_attribute(h_fill), h_stroke = crate::svg::escape_attribute(h_stroke),
+)
             .unwrap();
             let tw = text_render::measure(label, STATE_FONT_SIZE, false);
             let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
@@ -9233,8 +9327,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
                 r#"<text fill="{h_text}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
                 fmt_f(tw),
                 fmt_f(px - tw / 2.0),
-                fmt_f(text_y),
-            )
+                fmt_f(text_y), h_text = crate::svg::escape_attribute(h_text),
+)
             .unwrap();
             return;
         }
@@ -9256,13 +9350,13 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             write!(
                 svg,
                 r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/></g>"#,
-                st.id,
+                crate::svg::escape_attribute(&st.id),
                 fmt_f(cx), fmt_f(top),
                 fmt_f(right), fmt_f(cy),
                 fmt_f(cx), fmt_f(bottom),
                 fmt_f(left), fmt_f(cy),
-                fmt_f(cx), fmt_f(top),
-            )
+                fmt_f(cx), fmt_f(top), entity_id = crate::svg::escape_attribute(entity_id), fill = crate::svg::escape_attribute(fill),
+)
             .unwrap();
             return;
         }
@@ -9300,12 +9394,12 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" id="{entity_id}"><rect fill="{fill}" height="{}" rx="{rx}" ry="{ry}" style="{style}" width="{}" x="{}" y="{}"/>"#,
-            st.id,
+            crate::svg::escape_attribute(&st.id),
             fmt_f(rect.height),
             fmt_f(rect.width),
             fmt_f(rect.x),
-            fmt_f(rect.y),
-        )
+            fmt_f(rect.y), entity_id = crate::svg::escape_attribute(entity_id), fill = crate::svg::escape_attribute(fill), style = crate::svg::escape_attribute(style),
+)
         .unwrap();
         // Divider line(s) and name/description text come from the oracle's
         // captured children for byte-exact placement.
@@ -9317,7 +9411,11 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             write!(
                 svg,
                 r#"<line style="{lstyle}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                line.x1, line.x2, line.y1, line.y2,
+                line.x1,
+                line.x2,
+                line.y1,
+                line.y2,
+                lstyle = crate::svg::escape_attribute(lstyle),
             )
             .unwrap();
         }
@@ -9736,8 +9834,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             write!(
                 svg,
                 r#"<g class="cluster" data-qualified-name="{}" data-source-line="{source_line}" id="{}">"#,
-                st.id,
-                rect.entity_id.as_deref().unwrap_or("ent0000"),
+                crate::svg::escape_attribute(&st.id),
+                crate::svg::escape_attribute(rect.entity_id.as_deref().unwrap_or("ent0000")),
             )
             .unwrap();
         }
@@ -9745,7 +9843,12 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         // Stored as `d#FILL#<fill>`.
         if let Some(raw) = &rect.glyph_path_d {
             let (d, fill) = raw.split_once("#FILL#").unwrap_or((raw, "#F1F1F1"));
-            write!(svg, r##"<path d="{d}" fill="{fill}"/>"##).unwrap();
+            write!(
+                svg,
+                r##"<path d="{d}" fill="{fill}"/>"##,
+                fill = crate::svg::escape_attribute(fill),
+            )
+            .unwrap();
         }
         let style = rect
             .rect_style
@@ -9759,8 +9862,8 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             fmt_f(rect.height),
             fmt_f(rect.width),
             fmt_f(rect.x),
-            fmt_f(rect.y),
-        )
+            fmt_f(rect.y), style = crate::svg::escape_attribute(style),
+)
         .unwrap();
         for line in &rect.lines {
             let lstyle = line
@@ -9770,7 +9873,11 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             write!(
                 svg,
                 r#"<line style="{lstyle}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                line.x1, line.x2, line.y1, line.y2,
+                line.x1,
+                line.x2,
+                line.y1,
+                line.y2,
+                lstyle = crate::svg::escape_attribute(lstyle),
             )
             .unwrap();
         }

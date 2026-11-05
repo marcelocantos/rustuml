@@ -1,0 +1,8 @@
+{
+  "event": "User relay-result turn interrupted unified exec while final delimiter build was compiling",
+  "completed_focused_test": "logs/focused-delimiter-new-test.log",
+  "interrupted_build": "logs/build-after-delimiters.log",
+  "process_status": "Unified exec session54055 unavailable; no cargo/rustc process remained",
+  "resumed_build": "logs/build-after-delimiters-resumed.log",
+  "tests_repeated": false
+}

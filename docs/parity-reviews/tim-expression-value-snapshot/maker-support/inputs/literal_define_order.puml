@@ -1,0 +1,10 @@
+@startuml
+!define FIRST LATER
+!define LATER changed
+!$word="LATER"
+!function $echo()
+!return "FIRST"
+!endfunction
+!$v=$echo()+"!"
+class "FIRST / $word / $v" as Literal
+@enduml

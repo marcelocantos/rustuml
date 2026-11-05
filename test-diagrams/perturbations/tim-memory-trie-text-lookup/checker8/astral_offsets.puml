@@ -1,0 +1,6 @@
+@startuml
+!$x=%set_variable_value("a😀b","pair")
+!$x=%set_variable_value("a","short")
+!$long="long replacement"
+class "$long / a😁 / a😀b / 😀a / \na / a²" as Offsets
+@enduml

@@ -1,0 +1,3 @@
+@startuml
+class "new birch/ash/fir" as Replaced
+@enduml

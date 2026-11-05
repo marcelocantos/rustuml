@@ -1,0 +1,154 @@
+{
+  "row": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_false.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "empty collector before inactive condition",
+      "tail side-effect suppression"
+    ],
+    "negative": false,
+    "intended_validity": "intended_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  "classification": "welcome_truncation",
+  "reference_valid": false,
+  "java_svg_exit": 0,
+  "java_probe_exit": 0,
+  "xml_valid": true,
+  "factory": null,
+  "reference_comparator_exit": 2,
+  "source_sha256": "213873abf71b3dd2d7bdbc755759f26d8d09c50b7f115d41a6be7571ca506b0e",
+  "golden_sha256": "c45b73dd6d4af673036eaf09101cada9efa5fc70f115252f99708b565bdc54e7",
+  "java_source_sha256": "373c80ed4a4c21214eb3155594b6c85a27760bd85e0de9b2d67bfec04f0013c1",
+  "phases": {
+    "before": {
+      "id": "fresh20/empty_false",
+      "phase": "before",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 1,
+        "seconds": 0.006507708996650763,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "a860e2de16ba95476e2623f1e8fdb3129781344335b58f35d82fef5e7908fddf"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 1,
+        "seconds": 0.006487999999080785,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "a860e2de16ba95476e2623f1e8fdb3129781344335b58f35d82fef5e7908fddf"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_false/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay/before/fresh20/empty_false/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+        "exit": 2,
+        "seconds": 0.0033676659950288013,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": true,
+      "reference_factory": null,
+      "reference_valid": false,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": null
+    },
+    "after": {
+      "id": "fresh20/empty_false",
+      "phase": "after",
+      "env_overrides": {
+        "TZ": "GMT+11:00",
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      },
+      "svg": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/after-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.009361750009702519,
+        "stdout_sha256": "93b11ce262685a51d642f1b12da0640ccad53506ff1d747fe83aeee57f4bc926",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "yaml": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/after-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+        "exit": 0,
+        "seconds": 0.009534917000564747,
+        "stdout_sha256": "848c6ad6dd10cf16df4c9f023030afd4a775e339ae04500a3fa3f3c62581aa86",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compare": {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/probe",
+          "compare",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh-reference/empty_false/java.svg.stdout",
+          "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay/after/fresh20/empty_false/svg.stdout"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+        "exit": 2,
+        "seconds": 0.003781291001359932,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4"
+      },
+      "reference_xml_valid": true,
+      "reference_welcome": true,
+      "reference_factory": null,
+      "reference_valid": false,
+      "membership_valid_agrees": true,
+      "svg_match": false,
+      "panic": false,
+      "model": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Shelter\n"
+      },
+      "exact_source": true
+    }
+  },
+  "direct_source": {
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/source-probe",
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_false.puml",
+      "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new"
+    ],
+    "cwd": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new",
+    "exit": 0,
+    "seconds": 0.0066748340032063425,
+    "stdout_sha256": "373c80ed4a4c21214eb3155594b6c85a27760bd85e0de9b2d67bfec04f0013c1",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "direct_source_equal": true
+}

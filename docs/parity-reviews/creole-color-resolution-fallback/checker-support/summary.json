@@ -1,0 +1,798 @@
+{
+  "retained": {
+    "entries": 1730,
+    "valid": 1609,
+    "before": 709,
+    "after": 709,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [
+        "collateral/0754-checker_live_stack_2",
+        "collateral/0755-checker_live_stack_3",
+        "collateral/0859-checker_recovery_legacy_r0_w0",
+        "collateral/0860-checker_recovery_legacy_r0_w1",
+        "collateral/0863-checker_recovery_teoz_r0_w0",
+        "collateral/0864-checker_recovery_teoz_r0_w1",
+        "collateral/0873-checker_recovery_legacy_r0_w0",
+        "collateral/0874-checker_recovery_legacy_r0_w1",
+        "collateral/0877-checker_recovery_teoz_r0_w0",
+        "collateral/0878-checker_recovery_teoz_r0_w1",
+        "collateral/0903-checker_recovery_legacy_r0_w0",
+        "collateral/0904-checker_recovery_legacy_r0_w1",
+        "collateral/0907-checker_recovery_teoz_r0_w0",
+        "collateral/0908-checker_recovery_teoz_r0_w1",
+        "collateral/0919-checker_focus_half_bottom_n0_e0",
+        "collateral/0920-checker_focus_half_bottom_n0_e1",
+        "collateral/0921-checker_focus_half_bottom_n1_e0",
+        "collateral/0922-checker_focus_half_bottom_n1_e1",
+        "collateral/0923-checker_focus_half_top_n0_e0",
+        "collateral/0924-checker_focus_half_top_n0_e1",
+        "collateral/0925-checker_focus_half_top_n1_e0",
+        "collateral/0926-checker_focus_half_top_n1_e1",
+        "collateral/0927-checker_recovery_legacy_r0_w0",
+        "collateral/0928-checker_recovery_legacy_r0_w1",
+        "collateral/0931-checker_recovery_teoz_r0_w0",
+        "collateral/0932-checker_recovery_teoz_r0_w1",
+        "collateral/0951-checker_recovery_colored_teoz0",
+        "collateral/0952-checker_recovery_colored_teoz1",
+        "collateral/0953-checker_recovery_legacy_r0_w0",
+        "collateral/0954-checker_recovery_legacy_r0_w1",
+        "collateral/0959-checker_recovery_teoz_r0_w0",
+        "collateral/0960-checker_recovery_teoz_r0_w1"
+      ],
+      "after": [
+        "collateral/0754-checker_live_stack_2",
+        "collateral/0755-checker_live_stack_3",
+        "collateral/0859-checker_recovery_legacy_r0_w0",
+        "collateral/0860-checker_recovery_legacy_r0_w1",
+        "collateral/0863-checker_recovery_teoz_r0_w0",
+        "collateral/0864-checker_recovery_teoz_r0_w1",
+        "collateral/0873-checker_recovery_legacy_r0_w0",
+        "collateral/0874-checker_recovery_legacy_r0_w1",
+        "collateral/0877-checker_recovery_teoz_r0_w0",
+        "collateral/0878-checker_recovery_teoz_r0_w1",
+        "collateral/0903-checker_recovery_legacy_r0_w0",
+        "collateral/0904-checker_recovery_legacy_r0_w1",
+        "collateral/0907-checker_recovery_teoz_r0_w0",
+        "collateral/0908-checker_recovery_teoz_r0_w1",
+        "collateral/0919-checker_focus_half_bottom_n0_e0",
+        "collateral/0920-checker_focus_half_bottom_n0_e1",
+        "collateral/0921-checker_focus_half_bottom_n1_e0",
+        "collateral/0922-checker_focus_half_bottom_n1_e1",
+        "collateral/0923-checker_focus_half_top_n0_e0",
+        "collateral/0924-checker_focus_half_top_n0_e1",
+        "collateral/0925-checker_focus_half_top_n1_e0",
+        "collateral/0926-checker_focus_half_top_n1_e1",
+        "collateral/0927-checker_recovery_legacy_r0_w0",
+        "collateral/0928-checker_recovery_legacy_r0_w1",
+        "collateral/0931-checker_recovery_teoz_r0_w0",
+        "collateral/0932-checker_recovery_teoz_r0_w1",
+        "collateral/0951-checker_recovery_colored_teoz0",
+        "collateral/0952-checker_recovery_colored_teoz1",
+        "collateral/0953-checker_recovery_legacy_r0_w0",
+        "collateral/0954-checker_recovery_legacy_r0_w1",
+        "collateral/0959-checker_recovery_teoz_r0_w0",
+        "collateral/0960-checker_recovery_teoz_r0_w1"
+      ]
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 1605,
+          "1": 93,
+          "101": 32
+        },
+        "yaml": {
+          "0": 1622,
+          "1": 93,
+          "101": 15
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 1605,
+          "1": 93,
+          "101": 32
+        },
+        "yaml": {
+          "0": 1622,
+          "1": 93,
+          "101": 15
+        }
+      }
+    }
+  },
+  "maker18": {
+    "entries": 18,
+    "valid": 17,
+    "before": 13,
+    "after": 13,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 18
+        },
+        "yaml": {
+          "0": 18
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 18
+        },
+        "yaml": {
+          "0": 18
+        }
+      }
+    }
+  },
+  "sprites50": {
+    "entries": 50,
+    "valid": 49,
+    "before": 49,
+    "after": 49,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 50
+        },
+        "yaml": {
+          "0": 50
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 50
+        },
+        "yaml": {
+          "0": 50
+        }
+      }
+    }
+  },
+  "checker38": {
+    "entries": 38,
+    "valid": 34,
+    "before": 26,
+    "after": 26,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 38
+        },
+        "yaml": {
+          "0": 38
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 38
+        },
+        "yaml": {
+          "0": 38
+        }
+      }
+    }
+  },
+  "fresh15": {
+    "entries": 15,
+    "valid": 15,
+    "before": 13,
+    "after": 13,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 15
+        },
+        "yaml": {
+          "0": 15
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 15
+        },
+        "yaml": {
+          "0": 15
+        }
+      }
+    }
+  },
+  "fresh26": {
+    "entries": 26,
+    "valid": 25,
+    "before": 24,
+    "after": 24,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 26
+        },
+        "yaml": {
+          "0": 26
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 26
+        },
+        "yaml": {
+          "0": 26
+        }
+      }
+    }
+  },
+  "new15": {
+    "entries": 15,
+    "valid": 14,
+    "before": 12,
+    "after": 12,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 15
+        },
+        "yaml": {
+          "0": 15
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 15
+        },
+        "yaml": {
+          "0": 15
+        }
+      }
+    }
+  },
+  "delimiters4": {
+    "entries": 4,
+    "valid": 4,
+    "before": 0,
+    "after": 0,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 4
+        },
+        "yaml": {
+          "0": 4
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 4
+        },
+        "yaml": {
+          "0": 4
+        }
+      }
+    }
+  },
+  "focused2": {
+    "entries": 2,
+    "valid": 2,
+    "before": 2,
+    "after": 2,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 2
+        },
+        "yaml": {
+          "0": 2
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 2
+        },
+        "yaml": {
+          "0": 2
+        }
+      }
+    }
+  },
+  "checker30": {
+    "entries": 30,
+    "valid": 26,
+    "before": 22,
+    "after": 22,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 30
+        },
+        "yaml": {
+          "0": 30
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 30
+        },
+        "yaml": {
+          "0": 30
+        }
+      }
+    }
+  },
+  "supplement8": {
+    "entries": 8,
+    "valid": 7,
+    "before": 7,
+    "after": 7,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 8
+        },
+        "yaml": {
+          "0": 8
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 8
+        },
+        "yaml": {
+          "0": 8
+        }
+      }
+    }
+  },
+  "fresh12": {
+    "entries": 12,
+    "valid": 12,
+    "before": 11,
+    "after": 11,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 12
+        },
+        "yaml": {
+          "0": 12
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 12
+        },
+        "yaml": {
+          "0": 12
+        }
+      }
+    }
+  },
+  "checker28": {
+    "entries": 28,
+    "valid": 28,
+    "before": 23,
+    "after": 23,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 28
+        },
+        "yaml": {
+          "0": 28
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 28
+        },
+        "yaml": {
+          "0": 28
+        }
+      }
+    }
+  },
+  "fresh16": {
+    "entries": 16,
+    "valid": 16,
+    "before": 14,
+    "after": 14,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 16
+        },
+        "yaml": {
+          "0": 16
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 16
+        },
+        "yaml": {
+          "0": 16
+        }
+      }
+    }
+  },
+  "golden-regressions": {
+    "entries": 6,
+    "valid": 6,
+    "before": 6,
+    "after": 6,
+    "gains": [],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 6
+        },
+        "yaml": {
+          "0": 6
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 6
+        },
+        "yaml": {
+          "0": 6
+        }
+      }
+    }
+  },
+  "checker36": {
+    "entries": 36,
+    "valid": 34,
+    "before": 14,
+    "after": 15,
+    "gains": [
+      "checker36/color_invalid_hex"
+    ],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [
+        "checker36/font_empty_unknown",
+        "checker36/family_slash",
+        "checker36/alias_monospace_padded"
+      ],
+      "after": [
+        "checker36/font_empty_unknown",
+        "checker36/family_slash",
+        "checker36/alias_monospace_padded"
+      ]
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 36
+        },
+        "yaml": {
+          "0": 36
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 36
+        },
+        "yaml": {
+          "0": 36
+        }
+      }
+    }
+  },
+  "fallback16": {
+    "entries": 16,
+    "valid": 14,
+    "before": 1,
+    "after": 11,
+    "gains": [
+      "fallback16/color_invalid_runs",
+      "fallback16/color_nested_current",
+      "fallback16/color_eol_activity",
+      "fallback16/back_invalid",
+      "fallback16/back_nested",
+      "fallback16/image_markup_faces",
+      "fallback16/image_markup_config",
+      "fallback16/image_base_bold",
+      "fallback16/color_wbs_member",
+      "fallback16/grammar_neighbors"
+    ],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 16
+        },
+        "yaml": {
+          "0": 16
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 16
+        },
+        "yaml": {
+          "0": 16
+        }
+      }
+    }
+  },
+  "checker32": {
+    "entries": 32,
+    "valid": 29,
+    "before": 1,
+    "after": 17,
+    "gains": [
+      "checker32/color_restored_prior",
+      "checker32/color_back_cross",
+      "checker32/back_color_cross",
+      "checker32/back_red_inner_invalid",
+      "checker32/color_class_member",
+      "checker32/color_wbs_depth",
+      "checker32/color_hex_invalid",
+      "checker32/color_names_valid",
+      "checker32/color_numeric_names",
+      "checker32/image_sequence_plain_base",
+      "checker32/image_note_plain_base",
+      "checker32/image_activity_plain_base",
+      "checker32/image_state_plain_base",
+      "checker32/image_class_plain_base",
+      "checker32/image_wbs_plain_base",
+      "checker32/image_wbs_base_bold"
+    ],
+    "losses": [],
+    "yaml_byte_changes": [],
+    "new_process_errors": [],
+    "new_panics": [],
+    "new_malformed_xml": [],
+    "panics": {
+      "before": [],
+      "after": []
+    },
+    "malformed_xml": {
+      "before": [],
+      "after": []
+    },
+    "process_exits": {
+      "before": {
+        "svg": {
+          "0": 32
+        },
+        "yaml": {
+          "0": 32
+        }
+      },
+      "after": {
+        "svg": {
+          "0": 32
+        },
+        "yaml": {
+          "0": 32
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3 @@
+@startuml
+Kestrel -> Otter : q<u:blue></u>r<w:red>x</W>s<BaCk:gold>y</back>z
+@enduml

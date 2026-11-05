@@ -1,0 +1,185 @@
+{
+  "prior_distinct_source_hashes": 13947,
+  "fresh": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_courier_new.puml",
+      "sha256": "f39decf5b1d532e45fdf512879b64cf97d2217ad1a140582161acf2eb55849dd",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_courier_trailing.puml",
+      "sha256": "5deefb2e1133683b0863ba2f3b435cfa47cf480ad03101c4d4f5d9a805a40892",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_courier_upper.puml",
+      "sha256": "d23e20a1bdf53e9968bd22e6d098fe0a40f9398aa182ebc6bdd750adf541a64a",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_dialog.puml",
+      "sha256": "5cb80173bdc1c5ac19c0907d7f5c926df671490f28a38b35df6694010fbd59f1",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_dialoginput.puml",
+      "sha256": "4730f54bba5d995e85511ea568953ae199d9ca7d93ad853e9d8e38fb2fe3b42c",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_logical.puml",
+      "sha256": "2d02cfd2add1721aee24ca8a51e71e188dd0551dfe7abec28133932fd979f8ca",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_lucida.puml",
+      "sha256": "02676bf32c49eaffdb675c03eea06a992b15e013aaaf30160b910ff40badba2d",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_mono.puml",
+      "sha256": "f73804441711e8c42826f76bc889391ea3aadb20d7170312996abbd62e0813f9",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_monospace_case.puml",
+      "sha256": "917d1fb22cd05d6e940819acaba287a3485d47b7ccc8bb096406f510c28afc8d",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_monospace_padded.puml",
+      "sha256": "c03cd22f1d38d1bb27649752ff0e1863581504f94ccdbc66c95f685281c7ef48",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_monospaced_case.puml",
+      "sha256": "fb69cd4344ff8d2ba6cf1dacb165c79159ce5c9685ced9965870fb5e738cc189",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/alias_sansserif.puml",
+      "sha256": "7c3e7eb3c3f03b8aba4499c81166f8d3a096f47ecacd9f660a16f247f4e3e279",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/back_forms.puml",
+      "sha256": "92c4e79f096baeed9a2829f3bd65e458ce37616cc65890681f727793da263172",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/back_gradient.puml",
+      "sha256": "f475b71f60a3bd5c7020f60c6364042077d9a05948b51b16870ebc6f6cf44ec6",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/back_hidden_invalid.puml",
+      "sha256": "1c9a6a85f8bcb342347eec80df1689b69a5caa128171d9876274b4031c14865b",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/color_invalid_hex.puml",
+      "sha256": "7cca5dc71695326b747019574b7809660d8c2dbb71f742def8930865e7eae6ed",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/color_named_alias.puml",
+      "sha256": "8016b87d091eee5eeb7586f8db46c6b331c0657b69c604362f08a54a6826cab2",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/color_rgb.puml",
+      "sha256": "99ac9f51527428f9599e85420fe08779b8f24dd09654c89537046b435faf59be",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/color_rgba.puml",
+      "sha256": "89d3c5c0c358fdc1279318fcbf659ee4978f903cbfc4abc7a7b76b560e8dae8b",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/cross_close.puml",
+      "sha256": "2c67aa2ed5a480f824cbad8f631ef698d0e9b15de3eaa8f12090f9f187bb041e",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/family_slash.puml",
+      "sha256": "d1e45ee253be22d50bf3ed180594bb948b057419b81771712a20f2638d551b8b",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/font_attr_order.puml",
+      "sha256": "8ff4e59d4c939c69ae1d946b45feb89522a41dba0740314860ec0e389d0c0384",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/font_curly_nbsp.puml",
+      "sha256": "19bf50694ab160f535d44ca6a6f6222c1477e8dc53e64505bf8067d49db023a6",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/font_empty_unknown.puml",
+      "sha256": "b6cc59a06013afeac48adfd106d0f3c129feeba2ab5e24050220b6c0fb0ef34e",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/font_hidden_precedent.puml",
+      "sha256": "cb795c815c35bb50fa0d2036c517ad31116de2ca691c5d2c18e37c7d2d4991db",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/hidden_selection.puml",
+      "sha256": "b83dec55d3a303b84ecb717663239d093dec42e96060a00308528097574047bb",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/icon_invalid.puml",
+      "sha256": "ea48215196c93f4485053b98317f20bc82060a88f76e5be0278dc35e974db2df",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/icon_valid.puml",
+      "sha256": "46f5e75469e226e23d3d346a034b3622ca216527b1ee9a16f6edd37297f2d8f3",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/image_grammar.puml",
+      "sha256": "98bbcd405ed33806cb7c0e0d472b7524dca09ca802e8a4a81df0d7cfd007ec19",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/image_nested.puml",
+      "sha256": "24df0bbe2842a9c5cc55d52c78c0390fdee9f6728e4ea8fb6ec66dfbe6e348b0",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/parameter_neighbors.puml",
+      "sha256": "5efcbf6b2ff3613f9b2689407553c5c3434361700e6ae2a94993d0ea337c29c8",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/size_overflow.puml",
+      "sha256": "31c74aecb053ecb07ef3bb26c1e18d57a692344fa2ef02d75a19c0719a987286",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/size_signed_decimal.puml",
+      "sha256": "27f441a7dff635bf07c3392081c5fc25e9b3ffa9e99223e6267071d1a77c36c4",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/size_space_boundaries.puml",
+      "sha256": "5b1b7f78614ebb1b13e521632cf0ebb5a1e478f22a17926e6417456cdd0d4409",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/size_zero.puml",
+      "sha256": "3e88f044428d570bac6ae6e23392f2595c60a75d989c31d6f214e1c6c68db967",
+      "new_to_prior": true
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/new/wbs_nested_parameters.puml",
+      "sha256": "632ecbeaae0599e4f4bfa83166c0837a23bb052359b9e27b59ea9f1568a41917",
+      "new_to_prior": true
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-original-macro-scanning",
+  "reviewer": {
+    "task_id": "t3-04b6729a-independent-TIM-checker5",
+    "thread_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ad979fae3-777e-4583-b22b-5ed91f03f235",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no production edits; no children"
+  },
+  "account_commit": "6d46a483aad389d4535e1ba24822fdd116baf517",
+  "implementation_commit": "92647b126f6dc1c83ebdc6213d0c2c0a5b3211b6",
+  "tested_revision": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+  "baseline_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "prior_rejection": "0d30ae99e85195f595e21ca0a80be85f26473ee9",
+  "evidence_import": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_locations": [
+    "tim/TContext.java:applyFunctionsAndVariables,getFunctionNameAt",
+    "tim/VariableManager.java:getVarnameAt,justAfterBackslashN",
+    "tim/FunctionsSet.java:addFunction",
+    "tim/TFunctionImpl.java:finalizeEnddefinelong"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "commands": [
+    "CARGO_TARGET_DIR=<private-cache>/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact before",
+    "CARGO_TARGET_DIR=<private-cache>/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact candidate",
+    "uv run --no-project python <private-cache>/replay.py <fixed cohort>; before and after -pipe and --yaml -pipe; unchanged compare_svg_strict",
+    "Parent relay: /Users/marcelo/rustuml-reference/bin/reference --cwd <worker>/<new|supplement> --timezone GMT+11:00 -- -pipe -tsvg; unchanged SourceProbe.java; exact argv/streams captured per case",
+    "uv run --no-project python <private-cache>/gates.py; exact candidate main tiers once; full command/status manifest in checker5-support/gates.json"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_literals.puml",
+      "golden": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_literals.svg",
+      "axes": [
+        "value versus source",
+        "caller/body indentation"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "2ef3ec84a8602ecef2240010b2eb722329fbe2472509fd771592a4e08bc4bc90",
+      "golden_sha256": "e8ef52f638f787c77dfad58a199b4d335eb214df2c185a61b7b5fb183da1666e",
+      "evidence": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_literals",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_multiline_suffix.puml",
+      "golden": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_multiline_suffix.svg",
+      "axes": [
+        "multiline body",
+        "caller prefix/suffix"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "d1fcd0276e6f2a6adfdd854fc5a7cd6f0a8d5f933de33db042715612db1fdb3b",
+      "golden_sha256": "8401fe4f14e764511c2b899eff2ce4765d95829adbc638ac275470be21632e7e",
+      "evidence": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_multiline_suffix",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_argument_error.puml",
+      "golden": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_argument_error.svg",
+      "axes": [
+        "argument failure",
+        "wrong arity"
+      ],
+      "result": "pass",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 1,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "f052ff8e7cac6795c960417a3d5e59e45b8a91d2a002c9d7828a22c0ef576b81",
+      "golden_sha256": "f8be63cad79961fb70f7a54e2e67ccd12344385dd799ba72aa9cc1fdca5aaa93",
+      "evidence": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_argument_error",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_original_prefix.puml",
+      "golden": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_original_prefix.svg",
+      "axes": [
+        "variable before multiline call",
+        "raw caller prefix versus evaluated prefix"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 1,
+      "source_sha256": "a1c3c3c1c09ac59d639f1f937521a15513fd2765152e9768852a84254530f4d3",
+      "golden_sha256": "1935d3950f1e10e8049ff665c7f655def47b405a914b3bed3554cb1b4e607e19",
+      "evidence": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/evidence/macro_original_prefix",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    }
+  ],
+  "findings": [
+    "REJECT: macro_original_prefix is valid Java source/SVG. For $p LINES() with a multiline legacy macro, Java TContext.applyFunctionsAndVariables sets pendingAdd to str.substring(0,i), the raw caller prefix $p . Rust takes the already evaluated result prefix and emits prefix first. This is an original-source scanning/caller-retention failure, not an arbitrary macro-body execution feature. Preserve the separate raw prefix for LEGACY_DEFINELONG while retaining evaluated prefixes for the distinct procedure path.",
+    "SUPPORTED: macro_literals agrees for direct calls versus variable-produced call text, bare definelong names, backslash-n versus adjacent letters, parameter binding, and caller plus body indentation (three caller spaces plus one body space). macro_multiline_suffix agrees: Java deliberately drops trailing caller text in LEGACY_DEFINELONG, unlike the PROCEDURE branch. The apparent suffix defect was disproved by source and capture.",
+    "macro_argument_error preserves BoolVal argument failure before wrong legacy arity and later model output. No evidence supports full legacy body execution parity: expression evaluation, variable expansion inside bodies, control directives, registration/overloads and Unicode names remain outside this bounded review."
+  ],
+  "next_causal_repair": "Use the original caller substring for multiline legacy pendingAdd; do not reuse the evaluated substitution prefix.",
+  "verdict": "rejected",
+  "bounded_mechanism_observation": "falsified by fresh in-scope counterexample",
+  "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/checker5-support/README.md",
+  "scope": "Only exact1703a272 versus exactee0e4c72. No whole-TIM or combined candidate acceptance. Earlier rejected records and every old reference remain immutable. The mandatory standing perturbation gate is red; negative error references remain failures there, even when rejection behavior is correct. No comparator, baseline, skip rule, reader, date, parser, renderer, target or shipping change."
+}

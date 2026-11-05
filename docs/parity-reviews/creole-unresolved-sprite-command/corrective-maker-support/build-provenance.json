@@ -1,0 +1,88 @@
+{
+  "builds": [
+    {
+      "phase": "before",
+      "source_revision": "6b0ca33e88127a44bad1e564544db7d746816d6d",
+      "source_tree": "57edeec47776a9ba75bb2049098ac449f582a928",
+      "binary": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/before-rustuml",
+      "binary_sha256": "6e4857e3d2401714b9d6da1c5bd518cd7b65f41240feff3b5cf49470ae09d2d2",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/target-before",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-before.log",
+      "status_provenance": "Successful shell build and captured Finished release log; no retroactively invented timing",
+      "source_hashes": {
+        "crates/rustuml-render/src/creole.rs": "1808dc85c6efd65c97e35c24bd385d17d7ca4b766392295886111715f1ed6cae",
+        "crates/rustuml-render/src/text_render.rs": "03df40c764d78539d2679149cf61dbad83d90e31163740b6c3ea4d0dd2165c3a",
+        "crates/rustuml-render/src/wbs.rs": "98b6f5782161f0d029e33bfc302d4b66a48016664b95982475eb2709eec49599",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b",
+        "crates/rustuml-parser/src/parse/class.rs": "434ee97977df8071b7140af7fb0b621b2fea01b92919f34e84b9dc22ad2d314d",
+        "crates/rustuml-parser/src/preprocess/mod.rs": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334"
+      }
+    },
+    {
+      "phase": "after",
+      "source_revision": "59dc60604792260c342f6e6ab96829f10b0a59f5",
+      "source_tree": "38c26eb950a6fd72d4717500e6581fe49c2d57d5",
+      "binary": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/after-rustuml",
+      "binary_sha256": "ceec1206d620933bc24acd3c421a3aef8e6d22a729a26b4141cb9d56b9d64237",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/target-after",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-after-initial.log",
+      "status_provenance": "Successful shell build and captured Finished release log; no retroactively invented timing",
+      "source_hashes": {
+        "crates/rustuml-render/src/creole.rs": "17d9f5bfa96c0217d0ad7ab5fd0feb17576afbcb62429cd0fa5ee4d8ebff3499",
+        "crates/rustuml-render/src/text_render.rs": "a24772ef9b0167d84b4e44aa38963380a438b4231794d032b1e667b21b76e49f",
+        "crates/rustuml-render/src/wbs.rs": "d578e2b15a730df1c34233f199467e9004dd7e7f1e6fa3851ae6f07d02af1df8",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b",
+        "crates/rustuml-parser/src/parse/class.rs": "434ee97977df8071b7140af7fb0b621b2fea01b92919f34e84b9dc22ad2d314d",
+        "crates/rustuml-parser/src/preprocess/mod.rs": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334"
+      }
+    }
+  ],
+  "toolchain": {
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.3\n",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)\n"
+  },
+  "diagnostics": {
+    "probe": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/probe.rs",
+      "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+      "binary_sha256": "9a78d80e60b4a7cae1460d4555ed83c5a619992463f776ee366a2af0a9d7ae3a",
+      "provenance": "Unchanged diagnostic copied from rustuml-unresolved-sprite-checker; original build record retained at checker-support/diagnostic-builds.json"
+    },
+    "source_probe": {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/source_probe.rs",
+      "source_sha256": "3f10c70dc881bbfe6474d2d63ee4153da07af5f3dee670eac4c241f0349b4ae9",
+      "binary_sha256": "c78358955567a3c926b6fd951f05f49f8d0d20ddd94cf13203f34e14625793af",
+      "provenance": "Unchanged diagnostic copied from rustuml-unresolved-sprite-checker; original build record retained at checker-support/diagnostic-builds.json"
+    }
+  }
+}

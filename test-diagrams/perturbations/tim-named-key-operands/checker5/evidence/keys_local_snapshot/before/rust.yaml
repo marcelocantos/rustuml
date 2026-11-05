@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "first/last/$a" as Snapshot
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Snapshot
+  entities:
+  - id: Snapshot
+    label: first/last/$a
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 13
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

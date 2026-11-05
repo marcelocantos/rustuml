@@ -1,0 +1,3 @@
+@startuml
+class "named / pos / tail" as Bound
+@enduml

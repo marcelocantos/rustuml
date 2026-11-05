@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockMarged.java",
+    "sha256": "ac2c4d183df70512aa8b6d219b690b96a620726f27e130f5c98af9e163128980",
+    "matches_pin": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/WElement.java",
+    "sha256": "eaa7aac890c819f1a7fef5aab2632c64f69d8f90c512764dedafedd87851822d",
+    "matches_pin": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/utils/Direction.java",
+    "sha256": "db15589a4cf35ca701440eb6c67a5cc9d68f1f5bcdc43ffe25a069ad81ad3608",
+    "matches_pin": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleMath.java",
+    "sha256": "9ef2ee17a25622f6ad7f58c298b180e51bede9dfa3db7c025a5264d9b3463d05",
+    "matches_pin": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleLatex.java",
+    "sha256": "252aaee3e96825e75c67e542a95bf5d77fe2273f7ff2d308652267be7891a55c",
+    "matches_pin": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/math/ScientificEquationSafe.java",
+    "sha256": "c4dcda183e8d115fbcdb6a87b25abf97c9e1944f37541fd461949b4828b701e8",
+    "matches_pin": true
+  },
+  {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/math/ConverterSvg.java",
+    "sha256": "2e9df8d6f978fabceae7f374faf51171b7ab0a7b84270cad87e9a0476847d720",
+    "matches_pin": true
+  }
+]

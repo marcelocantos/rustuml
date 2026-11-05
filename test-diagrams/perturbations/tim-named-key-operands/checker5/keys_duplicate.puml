@@ -1,0 +1,7 @@
+@startuml
+!function $pair($a="first",$b="last")
+!return $a+"/"+$b
+!endfunction
+!$r=$pair($a="blue",$a="red")
+class "$r" as Duplicate
+@enduml

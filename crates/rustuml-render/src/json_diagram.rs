@@ -967,6 +967,8 @@ fn rounded_rect(x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str, sw: f6
         w = fmt_coord(w),
         x = fmt_coord(x),
         y = fmt_coord(y),
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     )
 }
 

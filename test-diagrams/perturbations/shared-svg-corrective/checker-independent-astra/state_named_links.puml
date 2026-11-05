@@ -1,0 +1,5 @@
+@startuml
+state "Reed--" as R
+state "Stone-" as S
+R --> S
+@enduml

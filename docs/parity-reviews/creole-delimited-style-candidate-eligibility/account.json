@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "imported_rejection": "521fe226d428c01128f4379bb7342584772924d7",
+  "import_commit": "dc796484a0a1ef723b8030ef0fd767da2708533d",
+  "verification": "Private before/after CLI -pipe plus --yaml -pipe, unchanged strict comparator, exact six retained memberships1730+18+50+38+15+26, including all nonpositives and32panics. Fresh reference via parent existing runner only; all raw outcomes preserved. Broad gates once stable. No self-review, baseline/contract changes or old evidence edits.",
+  "mechanism": "creole-delimited-style-candidate-eligibility",
+  "java_locations": [
+    "klimt/creole/command/CommandCreoleStyle#createCreole: nonempty captured V before closing delimiter; matchingSize returns V length",
+    "klimt/font/FontStyle#getUbrexCreoleSyntax",
+    "klimt/creole/legacy/StripeSimple#searchCommand/modifyStripe: failed candidate consumes one literal character",
+    "utils/CharHidder#hide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::walk_segments (**,//,__,--,~~ arms)",
+    "crates/rustuml-render/src/creole.rs::collect_until (not changed for monospace/legacy)"
+  ],
+  "invariant": "Existing Creole style delimiter candidates require a nonempty body and closing delimiter. Failed candidates consume only literal characters, leaving later recognized commands visible. Existing URL-scheme and skip-underline caller policies remain unchanged.",
+  "causal_divergence": "Current delimiter arms eagerly consume both opener characters and the remaining span before checking eligibility. Empty bodies become empty styled runs and unmatched openers swallow later sprite/style commands. Java createCreole has no EOL alternative and uses nonempty V matching before selection.",
+  "planned_change": "Add a private tentative nonempty delimiter-capture helper for the five existing CommandCreoleStyle delimiter families. Commit iterator consumption only when eligible; otherwise preserve the first literal character and continue recognition. Respect escaped candidate delimiters and source command boundaries, retain URL scheme exclusion and skip-underline behavior. Do not change quoted monospace, sub/sup, legacy tspan or URL atom recursion.",
+  "perturbation_axes": [
+    "empty/five-character/nonempty delimiter spans for existing bold/italic/underline/strike/wave",
+    "unclosed delimiter before missing sprite and unknown angle commands",
+    "escaped delimiters and recognized HTML-style neighbors"
+  ]
+}

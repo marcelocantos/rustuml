@@ -207,8 +207,8 @@ fn gantt_text(svg: &mut SvgBuilder, x: f64, y: f64, content: &str, font_size: f6
         fs = fmt_n(font_size),
         tl = fmt_coord(tl),
         x = fmt_coord(x),
-        y = fmt_coord(y),
-    ));
+        y = fmt_coord(y), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 /// Emit a `<text>` element in the Serif font (used by the Gantt
@@ -233,8 +233,8 @@ fn gantt_text_serif_fill(
         fs = fmt_n(font_size),
         tl = fmt_coord(tl),
         x = fmt_coord(x),
-        y = fmt_coord(y),
-    ));
+        y = fmt_coord(y), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 fn gantt_text_bold(svg: &mut SvgBuilder, x: f64, y: f64, content: &str, font_size: f64) {
@@ -255,8 +255,8 @@ fn gantt_line(svg: &mut SvgBuilder, x1: f64, y1: f64, x2: f64, y2: f64, stroke: 
         x1 = fmt_coord(x1),
         x2 = fmt_coord(x2),
         y1 = fmt_coord(y1),
-        y2 = fmt_coord(y2),
-    ));
+        y2 = fmt_coord(y2), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 fn gantt_rect_fill(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
@@ -265,8 +265,8 @@ fn gantt_rect_fill(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &
         h = fmt_coord(h),
         w = fmt_coord(w),
         x = fmt_coord(x),
-        y = fmt_coord(y),
-    ));
+        y = fmt_coord(y), fill = crate::svg::escape_attribute(fill),
+));
 }
 
 fn gantt_rect_outline(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, stroke: &str) {
@@ -275,8 +275,8 @@ fn gantt_rect_outline(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, stro
         h = fmt_coord(h),
         w = fmt_coord(w),
         x = fmt_coord(x),
-        y = fmt_coord(y),
-    ));
+        y = fmt_coord(y), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 /// Render a Gantt diagram with an optional oracle layout.
@@ -851,8 +851,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                     r = fmt_coord(cx + 5.0),
                     cy = fmt_coord(cy),
                     b = fmt_coord(cy + 5.0),
-                    l = fmt_coord(cx - 5.0),
-                ));
+                    l = fmt_coord(cx - 5.0), fill = crate::svg::escape_attribute(&fill),
+));
             } else {
                 let (fill, stroke) = if let Some(color) = task.color.as_deref() {
                     task_fill_stroke(color)
@@ -939,8 +939,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                             r = fmt_coord(r),
                             bot = fmt_coord(bot),
                             l = fmt_coord(left),
-                            top = fmt_coord(top),
-                        ));
+                            top = fmt_coord(top), stroke = crate::svg::escape_attribute(&stroke),
+));
                     } else if last {
                         let r = day_x(ce) - 2.0;
                         svg.raw_inline(&format!(
@@ -948,8 +948,8 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                             l = fmt_coord(left),
                             top = fmt_coord(top),
                             r = fmt_coord(r),
-                            bot = fmt_coord(bot),
-                        ));
+                            bot = fmt_coord(bot), stroke = crate::svg::escape_attribute(&stroke),
+));
                     } else {
                         // Middle run: plain top and bottom border lines
                         // spanning the fill width (left flush, right at the
@@ -972,14 +972,14 @@ pub fn render(diagram: &GanttDiagram, _theme: &Theme) -> String {
                             r#"<line style="stroke:{stroke};stroke-width:1;stroke-dasharray:2,3;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
                             x1 = fmt_coord(gap_left),
                             x2 = fmt_coord(gap_right),
-                            y = fmt_coord(top),
-                        ));
+                            y = fmt_coord(top), stroke = crate::svg::escape_attribute(&stroke),
+));
                         svg.raw_inline(&format!(
                             r#"<line style="stroke:{stroke};stroke-width:1;stroke-dasharray:2,3;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
                             x1 = fmt_coord(gap_left),
                             x2 = fmt_coord(gap_right),
-                            y = fmt_coord(bot),
-                        ));
+                            y = fmt_coord(bot), stroke = crate::svg::escape_attribute(&stroke),
+));
                     }
                 }
             }

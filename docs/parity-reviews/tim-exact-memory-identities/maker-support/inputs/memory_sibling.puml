@@ -1,0 +1,12 @@
+@startuml
+!b="global"
+!$b="dollar"
+!function $inner()
+!return b+"/"+$b
+!endfunction
+!function $outer(b="local",$b="override")
+!return $inner()+"/"+b+"/"+$b
+!endfunction
+!$v=$outer()
+class "$v" as Frames
+@enduml

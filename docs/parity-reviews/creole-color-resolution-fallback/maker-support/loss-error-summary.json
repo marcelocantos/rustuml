@@ -1,0 +1,23 @@
+{
+  "entries": 2050,
+  "valid": 1912,
+  "before": 946,
+  "after": 957,
+  "lost_passes": [],
+  "new_errors": [],
+  "new_panics": [],
+  "retained_svg_panics": 32,
+  "successful_process_malformed_xml": {
+    "before": [
+      "checker36/font_empty_unknown",
+      "checker36/family_slash",
+      "checker36/alias_monospace_padded"
+    ],
+    "after": [
+      "checker36/font_empty_unknown",
+      "checker36/family_slash",
+      "checker36/alias_monospace_padded"
+    ]
+  },
+  "new_malformed_xml": []
+}

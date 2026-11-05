@@ -1,0 +1,13 @@
+{
+  "stable_entries": 1860,
+  "stable_library_pass": 789,
+  "stable_matching_env_cli_before": 804,
+  "stable_matching_env_cli_after": 819,
+  "repair_gain_fixed_membership": 15,
+  "checker_added_observations": 36,
+  "checker_valid": 34,
+  "checker_pass": 14,
+  "post_registration_entries": 1896,
+  "post_registration_broad_gate_run": false,
+  "meaning": "The 14 fresh passes are registration growth, not 14 repairs to the 1860 standing membership."
+}

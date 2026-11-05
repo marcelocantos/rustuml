@@ -1,0 +1,8 @@
+@startuml
+participant Elm
+note right of Elm
+q<color:red><back:yellow><img:fallback-missing572.png></back></color>r
+q<font:Serif><size:21><img:fallback-missing572.png></size></font>r
+q<sub><img:fallback-missing572.png></sub>r
+end note
+@enduml

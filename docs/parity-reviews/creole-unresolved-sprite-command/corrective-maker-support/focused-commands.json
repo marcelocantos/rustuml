@@ -1,0 +1,97 @@
+[
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "log": "logs/focused-creole-initial.log",
+    "status_provenance": "Captured passing test-result line"
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "present_empty_lines"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "log": "logs/focused-empty.log",
+    "status_provenance": "Captured passing test-result line"
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "unknown_angle_candidates"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "log": "logs/focused-traversal.log",
+    "status_provenance": "Captured passing test-result line"
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "text_render::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "log": "logs/focused-text-render.log",
+    "status_provenance": "Captured passing test-result line"
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "wbs::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "log": "logs/focused-wbs.log",
+    "status_provenance": "Captured passing test-result line"
+  }
+]

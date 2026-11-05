@@ -1,0 +1,6 @@
+@startuml
+!$a=%hsl_color(0,100,50)
+!$b=%hsl_color(0,100,50,50)
+!$c=%hsl_color("120",100,50)
+class "$a/$b/$c" as Color
+@enduml

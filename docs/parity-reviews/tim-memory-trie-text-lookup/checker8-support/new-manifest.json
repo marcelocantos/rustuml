@@ -1,0 +1,282 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/terminal_history.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "removed-leaf versus retained-internal-node",
+      "prefix length and reinsertion"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_before.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "override index before first text scan",
+      "global fallback versus local retained prefix"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/lazy_after.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "override index after first text scan",
+      "removal and mutation order"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/punctuation_json.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "arbitrary stored punctuation and spaces",
+      "longer stored key versus JSON projection"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/concat_original.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "output markers versus original boundaries",
+      "function priority and value no-rescan"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/scope_mutations.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "automatic local versus newly introduced global",
+      "override removal and sibling frame"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/astral_offsets.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "valid surrogate-pair trie edges",
+      "original boundary following shorter and longer values"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/markup_literal.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "axes": [
+      "stored name inside markup",
+      "replacement value retained literally"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_typed.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "axes": [
+      "duplicate named JSON and numeric-looking string",
+      "positional cursor across intervening formal"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_positions.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "axes": [
+      "duplicate formal order",
+      "all-positional overwrite versus captured defaults"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_effect_order.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "axes": [
+      "duplicate exact named operands evaluated once each",
+      "bare versus dollar keys"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_required.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "axes": [
+      "required repeated formal",
+      "named read must not consume positional cursor"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/duplicate_negative.puml",
+    "mechanism": "tim-duplicate-formal-binding",
+    "axes": [
+      "RPN distinct named-map cardinality",
+      "required formals without positional coverage"
+    ],
+    "negative": true,
+    "intended_validity": "intended_syntax_negative",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_false.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "empty collector before inactive condition",
+      "tail side-effect suppression"
+    ],
+    "negative": false,
+    "intended_validity": "intended_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_two.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "two preceding model lines",
+      "comment-only body and end-tag suppression"
+    ],
+    "negative": false,
+    "intended_validity": "intended_truncated_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/blank_replay.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "blank body versus empty body",
+      "second includesub and tail continuation"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_nested.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "nested includes with separate execution iterators",
+      "caller procedure continuation and side effects"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_return_include.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "include stops within return function",
+      "return and caller effects continue"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_selected.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "empty selected external sub versus empty collector",
+      "tail errors outside selected body"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/new/empty_loop.puml",
+    "mechanism": "tim-empty-sub-iterator-termination",
+    "axes": [
+      "empty collector upstream of loop",
+      "zero iterations versus termination"
+    ],
+    "negative": false,
+    "intended_validity": "intended_truncated_welcome",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

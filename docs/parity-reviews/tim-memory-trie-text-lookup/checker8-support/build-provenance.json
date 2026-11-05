@@ -1,0 +1,55 @@
+{
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+  "current_revision": "faf463445591a53f17d25c5c16611f8e626ef93d",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.3\n",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)\n",
+  "builds": [
+    {
+      "phase": "before",
+      "revision": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67",
+      "source_module_sha256": "5f52d732c7e89cff134fadfec6df35e7f0691e13c6081c6e3742e08b04b3a4ff",
+      "source_tree": "c98fba3b743da31e46dd698841c43507b1960adc",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release"
+      ],
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-before",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-before.log",
+      "binary_sha256": "ae52f43748e111be5c6315806cda6a6743c0d66efd58ab878fbe2f429b2ef658",
+      "binary": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/before-rustuml",
+      "copy_matches": true
+    },
+    {
+      "phase": "after",
+      "revision": "faf463445591a53f17d25c5c16611f8e626ef93d",
+      "source_module_sha256": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334",
+      "source_tree": "1bcbd6df2d09bd5c37a25a6264c87b9844c566e8",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release"
+      ],
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-after.log",
+      "binary_sha256": "76bd52a52171c3c9c1cd0943e0511fab7485ad076140d2ebcd0181f9230c57da",
+      "binary": "/Users/marcelo/Library/Caches/rustuml-tim8-checker/after-rustuml",
+      "copy_matches": true
+    }
+  ],
+  "comparator_source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "comparator_binary_sha256": "fff122d79ced423770039a9f9bd0061af5bd796b2eee4214ca6748de7d6bf1b9",
+  "comparator_source_revision_unchanged": true
+}

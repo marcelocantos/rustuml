@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-zone-display-width",
+  "rust_revision": "b02ea9cba8e5724790eb767f8e7fa2052bc393a7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "JDK21 java/text/SimpleDateFormat.java:subFormat PATTERN_ZONE_NAME",
+    "JDK21 java/util/TimeZone.java:getDisplayName",
+    "JDK21 sun/util/locale/provider/TimeZoneNameUtility.java:retrieveDisplayName"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "invariant": "z widths below four use SHORT, widths at least four use LONG; names depend on zone identity, daylight state and pinned locale, not merely the offset or abbreviation.",
+  "causal_divergence": "TzSpec stores only an abbreviation; date_format ignores z run width.",
+  "planned_change": "Derive a complete English zone display-name data table from the pinned JDK TimeZone API (all available IDs and both daylight states), with reproducible generator and hash provenance. Embed data without runtime Java; resolve host zone identity and existing libc daylight state, preserve fixed GMT override behavior and select name by width. Do not invent label-based names.",
+  "perturbation_axes": [
+    "Multiple named zones and standard/daylight instants",
+    "z/zzzz with UTC and positive/negative fractional fixed offsets"
+  ],
+  "oracle_plan": [
+    "Frozen checker counterexamples through actual CLI and unchanged SVG comparator; supplemental exact Java source",
+    "Focused fresh maker controls on at least two axes; ALL LOCAL JAVA PAUSED, references await verified Monkey Man environment",
+    "Once stable: parser/CLI suites, both main tiers, guards, format/clippy; explicitly scoped 1038=949+89 locally versus frozen955/checker1044 and parent1449"
+  ],
+  "pending": [
+    "Fresh independent checker; all ten prior claims remain rejected",
+    "No class/sequence renderer changes; no historical reference or baseline changes"
+  ],
+  "scope": "Preprocess and NEW maker evidence only. Root parse error checks and raw assertion preserved."
+}

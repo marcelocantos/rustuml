@@ -1,0 +1,5 @@
+@startuml
+class Juniper
+class Willow
+Juniper --> Willow
+@enduml

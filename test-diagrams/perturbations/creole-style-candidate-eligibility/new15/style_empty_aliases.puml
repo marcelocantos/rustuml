@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : <del></strike>\n<strike></s>\n<B></b>\n<W></w>
+@enduml

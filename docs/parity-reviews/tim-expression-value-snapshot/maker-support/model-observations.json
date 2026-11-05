@@ -1,0 +1,1454 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "dar",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "cedar",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "dar",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "cedar",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "ff",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "fffffffffffffffd",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "fffffffd",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "6",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "b",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "a",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_default.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "2 / 0032",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "2 / 0032",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.puml",
+    "before_entities": [
+      {
+        "id": "{",
+        "label": "{",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "0092",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_named_siblings.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "0072 / local",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "9"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "0072 / local",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "9"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "15 / 5",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "14 / 5",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "changed / changed!",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "NEXT / NEXT!",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_wrap_mul.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "1970-01-01 10:59:59",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "1970-01-01 10:59:59",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_div.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "1901-12-14 07:45:52",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "1901-12-14 07:45:52",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_quotient.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "1970-01-01 10:59:56",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "1970-01-01 10:59:56",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_eager_recursion.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "xxxxx / 0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "xxxxx / 0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_quoted_unicode.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "1 / 0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "1 / 0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "1 / 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "0 / 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "7"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.puml",
+    "before_entities": [
+      {
+        "id": "Spruce",
+        "label": "Spruce",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      },
+      {
+        "id": "Result",
+        "label": "ok 3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "15"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Spruce",
+        "label": "Spruce",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      },
+      {
+        "id": "Result",
+        "label": "ok 3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "15"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "3 / 3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "1 / 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "0062 / 2",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "0052 / 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "4",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "4",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "4"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "3",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "4"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "4",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "4",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "GMT / GMT / Greenwich Mean Time / Greenwich Mean Time / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "GMT / GMT / Greenwich Mean Time / Greenwich Mean Time / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "BST / BST / British Summer Time / British Summer Time / +01:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "BST / BST / British Summer Time / British Summer Time / +01:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "LHDT / LHDT / Lord Howe Daylight Time / Lord Howe Daylight Time / +11:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "LHDT / LHDT / Lord Howe Daylight Time / Lord Howe Daylight Time / +11:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "GMT / GMT / Greenwich Mean Time / Greenwich Mean Time / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "GMT / GMT / Greenwich Mean Time / Greenwich Mean Time / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "NPT / NPT / Nepal Time / Nepal Time / +05:30",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "NPT / NPT / Nepal Time / Nepal Time / +05:30",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "GMT-03:30 / GMT-03:30 / -03:30",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "GMT-03:30 / GMT-03:30 / -03:30",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_nested_procedure.puml",
+    "before_entities": [
+      {
+        "id": "Nested",
+        "label": "Nested",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      },
+      {
+        "id": "Actual",
+        "label": "kept 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "16"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Nested",
+        "label": "Nested",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      },
+      {
+        "id": "Actual",
+        "label": "kept 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "16"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_theme_repeated.puml",
+    "before_entities": [
+      {
+        "id": "Actual",
+        "label": "count 2",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Actual",
+        "label": "count 2",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_binding.puml",
+    "before_entities": [
+      {
+        "id": "Values",
+        "label": "0072 / 10 / \u00e9\u03bb",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "5"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Values",
+        "label": "0072 / 10 / \u00e9\u03bb",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "5"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_lookup_json.puml",
+    "before_entities": [
+      {
+        "id": "Values",
+        "label": "0072 / 3 / 3 / 1970",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Values",
+        "label": "0072 / 3 / 3 / 1970",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_json_scalar.puml",
+    "before_entities": [
+      {
+        "id": "Values",
+        "label": "1.52 / true2 / 0072",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Values",
+        "label": "1.52 / true2 / 0072",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_set_global.puml",
+    "before_entities": [
+      {
+        "id": "Local",
+        "label": "0081",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "5"
+      },
+      {
+        "id": "Global",
+        "label": "0092",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "9"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Local",
+        "label": "0081",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "5"
+      },
+      {
+        "id": "Global",
+        "label": "0092",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "9"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_wrap_quotient.puml",
+    "before_entities": [
+      {
+        "id": "Arithmetic",
+        "label": "7 / -2147483648 / 3 / 0072",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "5"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Arithmetic",
+        "label": "7 / -2147483648 / 3 / 0072",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "5"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_eager_and_or.puml",
+    "before_entities": [
+      {
+        "id": "Effects",
+        "label": "1234 / 1 / 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Effects",
+        "label": "1234 / 1 / 1",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_literal_truth.puml",
+    "before_entities": [
+      {
+        "id": "Literal",
+        "label": "0 / ok",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Literal",
+        "label": "0 / ok",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_caller_relative.puml",
+    "before_entities": [
+      {
+        "id": "Caller",
+        "label": "Caller",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      },
+      {
+        "id": "Child",
+        "label": "Child",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "0"
+      },
+      {
+        "id": "Again",
+        "label": "Again",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      },
+      {
+        "id": "After",
+        "label": "After",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Caller",
+        "label": "Caller",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      },
+      {
+        "id": "Child",
+        "label": "Child",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "0"
+      },
+      {
+        "id": "Again",
+        "label": "Again",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "10"
+      },
+      {
+        "id": "After",
+        "label": "After",
+        "explicit_alias": "false",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "3"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+    "before_entities": [
+      {
+        "id": "Time",
+        "label": "JST / Japan Standard Time / +0900 / +09:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Time",
+        "label": "JST / Japan Standard Time / +0900 / +09:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+    "before_entities": [
+      {
+        "id": "Time",
+        "label": "GMT-04:00 / Eastern Daylight Time / -0400 / -04:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Time",
+        "label": "GMT-04:00 / Eastern Daylight Time / -0400 / -04:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+    "before_entities": [
+      {
+        "id": "Time",
+        "label": "UTC / Coordinated Universal Time / +0000 / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Time",
+        "label": "UTC / Coordinated Universal Time / +0000 / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_boolean_value_kinds.puml",
+    "before_entities": [
+      {
+        "id": "Boolean",
+        "label": "0 / 1 / 0 / 0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Boolean",
+        "label": "0 / 1 / 0 / 0",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "8"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "2024-03-15 WET / Western European Time / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "2024-03-15 WET / Western European Time / Z",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+    "before_entities": [
+      {
+        "id": "Result",
+        "label": "2024-07-01 WEST / Western European Summer Time / +01:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "after_entities": [
+      {
+        "id": "Result",
+        "label": "2024-07-01 WEST / Western European Summer Time / +01:00",
+        "explicit_alias": "true",
+        "kind": "Class",
+        "members": [],
+        "stereotypes": [],
+        "source_line": "2"
+      }
+    ],
+    "entity_count_drop": false,
+    "svg_match": true,
+    "source_equal": true
+  }
+]

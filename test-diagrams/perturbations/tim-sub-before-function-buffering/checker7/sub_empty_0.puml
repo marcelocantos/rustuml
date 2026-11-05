@@ -1,0 +1,7 @@
+@startuml
+class Anchor
+!startsub empty
+!endsub
+class Tail
+Anchor --> Tail
+@enduml

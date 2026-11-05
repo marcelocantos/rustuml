@@ -1,0 +1,5 @@
+@startuml
+state Grove
+Grove : a<font:mono>Wi mi</font>z
+Grove : a<b><size:14><color:navy><font:mono>Wi mi</font></color></size></b>z
+@enduml

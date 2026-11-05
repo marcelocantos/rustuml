@@ -1,0 +1,452 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comment_closure_tail.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_spaces_identity.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_two_dynamic_themes.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_loop_sprite_comment.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_sibling_shadow_remove.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_return_branch_isolation.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_foreach_sibling.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_prefix_collision.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_nested_literal_scope.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_variable_computed_name.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_undef_scope.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_minimum_seconds.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_maximum_seconds.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_before.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_after.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_leap_expression.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "group": "prior42",
+    "cli_exit": 1,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "group": "prior42",
+    "cli_exit": 1,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.puml",
+    "group": "prior42",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_sprite_identity.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_custom_function.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_while.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_conditional_before_theme.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variable_before_theme.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.puml",
+    "group": "original33",
+    "cli_exit": 0,
+    "source_equal": true
+  }
+]

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "9/9/1" as Truth
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Truth
+  entities:
+  - id: Truth
+    label: '9/9/1'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

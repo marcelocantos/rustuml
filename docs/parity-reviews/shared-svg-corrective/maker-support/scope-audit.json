@@ -1,0 +1,348 @@
+{
+  "base": "db8955411",
+  "comment_macros": [
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "base_line": 27391,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "base_line": 28343,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "base_line": 200,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "base_line": 394,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "base_line": 621,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 5283,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 5487,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 6019,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 6477,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 10712,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 10774,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 11097,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 11099,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 11433,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 11435,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "base_line": 13852,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "base_line": 2664,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "base_line": 2992,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "base_line": 3188,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "base_line": 3360,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "base_line": 4526,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "base_line": 820,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "base_line": 963,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "base_line": 3384,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "base_line": 5724,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "base_line": 5726,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "base_line": 1099,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "base_line": 1300,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "base_line": 1499,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "base_line": 2751,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 4113,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 4119,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 8004,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 8011,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 8241,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 8754,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 8756,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 8966,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 9003,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "base_line": 9005,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "base_line": 2705,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "base_line": 2820,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "base_line": 2951,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "base_line": 3500,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "base_line": 3783,
+      "outside_comment_template_identical": true,
+      "non_comment_arguments_identical": true,
+      "whole_body_routed": true
+    }
+  ],
+  "comment_sites": 45,
+  "files": [
+    "crates/rustuml-render/src/activity.rs",
+    "crates/rustuml-render/src/archimate.rs",
+    "crates/rustuml-render/src/class.rs",
+    "crates/rustuml-render/src/component.rs",
+    "crates/rustuml-render/src/deployment.rs",
+    "crates/rustuml-render/src/object.rs",
+    "crates/rustuml-render/src/state.rs",
+    "crates/rustuml-render/src/svg.rs",
+    "crates/rustuml-render/src/usecase.rs"
+  ],
+  "scope": "Only 45 comment producers, shared encoder/unit, visibility and two state fill attribute producers.",
+  "state_fill_sites": [
+    {
+      "base_line": 7323,
+      "attribute": "fill plus optional fill-opacity",
+      "producer": "svg::fill_attributes",
+      "geometry_unchanged": true
+    },
+    {
+      "base_line": 7403,
+      "attribute": "fill plus optional fill-opacity",
+      "producer": "svg::fill_attributes",
+      "geometry_unchanged": true
+    }
+  ],
+  "production_diff_sha256": "333f050986d95c3d90e9ae29518b6ac678d9cac997cedba009e5d429709b904f"
+}

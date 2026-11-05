@@ -1,0 +1,5 @@
+@startuml
+start
+:q<color:BUSINESS>fir</color>r\nq<color:#red>fir</color>r\nq<color:APPLICATION>fir</color>r;
+stop
+@enduml

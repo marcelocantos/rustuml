@@ -1,0 +1,10 @@
+{
+  "archive": "measurements.tar.gz",
+  "sha256": "2c54c31349c6e0fe969d7408109e031ce8857dc0accde31f4fdead71aed21049",
+  "bytes": 33537822,
+  "entries": 176790,
+  "uncompressed_bytes": 302280207,
+  "entry_manifest": "measurement-entries.json.gz",
+  "entry_manifest_sha256": "589f6ed2ff054c0e88b93f8224784de0dfad71a14dc04dd75e3c36b00cd4108a",
+  "readback_verified": true
+}

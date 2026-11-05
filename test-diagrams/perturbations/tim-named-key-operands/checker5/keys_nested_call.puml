@@ -1,0 +1,10 @@
+@startuml
+!function $inner($x="inner")
+!return $x
+!endfunction
+!function $outer($a="first",$b="last")
+!return $a+"/"+$b
+!endfunction
+!$v=$outer($a="blue",$b=$inner())
+class "$v" as Nested
+@enduml

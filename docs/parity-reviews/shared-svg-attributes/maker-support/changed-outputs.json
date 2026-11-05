@@ -1,0 +1,1374 @@
+[
+  {
+    "id": "collateral/0138-custom_grouped_record",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0138-custom_grouped_record/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0138-custom_grouped_record/java.svg",
+    "before_sha": "0c3a1164a003325fcfaad9d881733698594035c6fa4e469bcafc21b995a22b52",
+    "after_sha": "efeddb26647705b4c34013ec2d888aa0b12e734b8e570b5a572bb8fcf74629e2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 7,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 8,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 13,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 14,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 15,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 20,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 21,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 22,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "collateral/0140-grouped_record",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0140-grouped_record/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0140-grouped_record/java.svg",
+    "before_sha": "0c3a1164a003325fcfaad9d881733698594035c6fa4e469bcafc21b995a22b52",
+    "after_sha": "efeddb26647705b4c34013ec2d888aa0b12e734b8e570b5a572bb8fcf74629e2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 7,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 8,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 13,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 14,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 15,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 20,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 21,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 22,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "collateral/0141-grouped_struct",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0141-grouped_struct/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0141-grouped_struct/java.svg",
+    "before_sha": "0c3a1164a003325fcfaad9d881733698594035c6fa4e469bcafc21b995a22b52",
+    "after_sha": "efeddb26647705b4c34013ec2d888aa0b12e734b8e570b5a572bb8fcf74629e2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 7,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 8,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 13,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 14,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 15,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 20,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 21,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 22,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "collateral/0218-current-spot-cascade__grouped_record",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0218-current-spot-cascade__grouped_record/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/0218-current-spot-cascade__grouped_record/java.svg",
+    "before_sha": "0c3a1164a003325fcfaad9d881733698594035c6fa4e469bcafc21b995a22b52",
+    "after_sha": "efeddb26647705b4c34013ec2d888aa0b12e734b8e570b5a572bb8fcf74629e2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 5,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 7,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 8,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 13,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 14,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 15,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#f3969a",
+        "after": "#F3969A"
+      },
+      {
+        "index": 19,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 20,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 21,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      },
+      {
+        "index": 22,
+        "kind": "attribute",
+        "attribute": "style",
+        "before": "stroke:#f8f9fa;stroke-width:0.5208;",
+        "after": "stroke:#F8F9FA;stroke-width:0.5208;"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "collateral/1226-state_valid_hex_surrogate_boundary",
+    "cohort": "retained",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/1226-state_valid_hex_surrogate_boundary/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/1226-state_valid_hex_surrogate_boundary/java.svg",
+    "before_sha": "8e1b39b85ea35c7d3e788358734eade82edd41113305bc572592233d59fbe37c",
+    "after_sha": "e2ff561d30fb5892ff9d98737c48209e8af76c9d9ff71c737e0a6c7e49b5d853",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "collateral/1350-checker2_theme_comment_origin",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/1350-checker2_theme_comment_origin/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/collateral/1350-checker2_theme_comment_origin/java.svg",
+    "before_sha": "2c4ce59a134509810562100356d631442ff6c42428bda07d7d69e14e357116a2",
+    "after_sha": "17e770e52704792be17d602c0edcf3ad5abe604796b19a75effdc0b43f6ff104",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "cohort": "checker28",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker28/hide_link_target/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker28/hide_link_target/java.svg",
+    "before_sha": "50aaee56d417c217ae248291f479bc7a77ae2837faa9e2c6cd459521268c0ef2",
+    "after_sha": "068139f985a02375095419644312c690735534c3d155d1bb79f43d787c899220",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "fresh16/color_forms",
+    "cohort": "fresh16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fresh16/color_forms/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fresh16/color_forms/java.svg",
+    "before_sha": "8ea5bd745f58e3271a117a05f24615712c75499105e3e1c06cc8e2d27a3b7d75",
+    "after_sha": "f0c80a796b8af8d9828fd7a5abaa1a4fab79b5e8557ac2feedca48f241accea2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 36,
+    "element_count_after": 36,
+    "decoded_changes": [
+      {
+        "index": 32,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#123",
+        "after": "#112233"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "fresh16/font_fallback",
+    "cohort": "fresh16",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fresh16/font_fallback/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fresh16/font_fallback/java.svg",
+    "before_sha": "3b0243aced6bb1bb35fc5a58a1ad5aa6d5c55c5dd385fb1f2752ad20d9360dcc",
+    "after_sha": "1753ea3b532778193f05e501bf614b9c1cc3a286662a8f91a2e89bb47dd8472c",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "checker36/color_rgb",
+    "cohort": "checker36",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/color_rgb/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/color_rgb/java.svg",
+    "before_sha": "f8dc6f67016483b78457d6cd52babd36da9f8533626074864f1ec81323bebc36",
+    "after_sha": "429f4668c8d5a21c3e521ea5abeb0d2091db93692604f92686e5f0cb90fc997e",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 14,
+    "element_count_after": 14,
+    "decoded_changes": [
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#4a7",
+        "after": "#44AA77"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "checker36/color_rgba",
+    "cohort": "checker36",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/color_rgba/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/color_rgba/java.svg",
+    "before_sha": "03d760d117b8020c3bf49b8a6f7e3056f8b850ae839d0719d17ade4439845a0f",
+    "after_sha": "023855f7206fadc95b43a77e00ec3765770f72989cf3c873ab3cfe089a3c5aac",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 31,
+    "element_count_after": 31,
+    "decoded_changes": [
+      {
+        "index": 29,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#8044aa77",
+        "after": "#8044AA"
+      },
+      {
+        "index": 29,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.46667"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "checker36/color_named_alias",
+    "cohort": "checker36",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/color_named_alias/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/color_named_alias/java.svg",
+    "before_sha": "1a04bb2df6e24b83b202cdb0a043d3fc19d2cb3dd218525a377663bbe23d230e",
+    "after_sha": "dcdfa0b80be9a594807f54dd727ee36d4250ab1ff0611104488ebf16e7305766",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 25,
+    "element_count_after": 25,
+    "decoded_changes": [
+      {
+        "index": 23,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#44aa77",
+        "after": "#44AA77"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "checker36/font_empty_unknown",
+    "cohort": "checker36",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/font_empty_unknown/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/font_empty_unknown/java.svg",
+    "before_sha": "d66915169627889d9e18d48b59e4924184ebcef3dc0d191371de478ba51dc4aa",
+    "after_sha": "4f5b97f8902687366f0566f82c97d1e2a88d7945ba1d2cf8c22bd3b968feeeee",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 2335",
+    "explanation": "Raw user font-family double quotes or raw metadata angle/ampersand made before XML invalid. Shared normalization/escaping makes after XML well-formed; comparator result remains separately recorded."
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "cohort": "checker36",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/font_hidden_precedent/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/font_hidden_precedent/java.svg",
+    "before_sha": "f2289d072bf1a84e5306605e3841294780b092012592cefaf65701fdb1b7b0b4",
+    "after_sha": "595583495432f6f388f29a29cd23128c3c9d0be053d842773c982599953d2104",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "checker36/parameter_neighbors",
+    "cohort": "checker36",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/parameter_neighbors/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/parameter_neighbors/java.svg",
+    "before_sha": "78b57c198bbf0d465a7022b64b7ccc2effd0f14e84aaeba708b5aad41483258a",
+    "after_sha": "fb9fedb8d5dc674dae1aaee796b768fc02b389dc16de9b4a6960837253c66814",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "checker36/family_slash",
+    "cohort": "checker36",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/family_slash/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/family_slash/java.svg",
+    "before_sha": "3bbd936a70cc1b15ed288cf8f054fa91e48eeca1bf9b7a214ac7305fd7f8f178",
+    "after_sha": "d2f7b2c3146f1abb830c8f264e773cf1ebd1478582a6061091338ec1638c3b56",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 2329",
+    "explanation": "Raw user font-family double quotes or raw metadata angle/ampersand made before XML invalid. Shared normalization/escaping makes after XML well-formed; comparator result remains separately recorded."
+  },
+  {
+    "id": "checker36/alias_monospace_padded",
+    "cohort": "checker36",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/alias_monospace_padded/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker36/alias_monospace_padded/java.svg",
+    "before_sha": "0e3cc822daaea7b31567395d85a5187492486d86d37f3825ece8b871e14f1bc8",
+    "after_sha": "498048c3994a90333d84305b23dbfff88e806fbf50f154046ac1b90ed0954ae7",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 3215",
+    "explanation": "Raw user font-family double quotes or raw metadata angle/ampersand made before XML invalid. Shared normalization/escaping makes after XML well-formed; comparator result remains separately recorded."
+  },
+  {
+    "id": "fallback16/color_valid_neighbors",
+    "cohort": "fallback16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fallback16/color_valid_neighbors/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fallback16/color_valid_neighbors/java.svg",
+    "before_sha": "61d78fd496af1038e7d893a99ded3c7d740a88227442c23179232edbda71bd26",
+    "after_sha": "caa6a3a31cdc928eec6c8bb8108c4f672a93682d69248df25940148c08f67f22",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 25,
+    "element_count_after": 25,
+    "decoded_changes": [
+      {
+        "index": 23,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#123",
+        "after": "#112233"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "fallback16/color_registry_boundary",
+    "cohort": "fallback16",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fallback16/color_registry_boundary/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/fallback16/color_registry_boundary/java.svg",
+    "before_sha": "5c9c704830ef7fb4b9f96c198568596a61238351e410911223bed138c8b1eb34",
+    "after_sha": "49a0ed2851b271a4d090608e681b2a628d602e26ca5791b0b3db7d1b66045ad3",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 37,
+    "element_count_after": 37,
+    "decoded_changes": [
+      {
+        "index": 29,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "BUSINESS",
+        "after": "#FFFFCC"
+      },
+      {
+        "index": 35,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#red",
+        "after": "#FF0000"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "checker32/color_single_nibble",
+    "cohort": "checker32",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker32/color_single_nibble/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker32/color_single_nibble/java.svg",
+    "before_sha": "340eaaf75e4cfae37d5b3bfacd7a40c2ddf187b64b7f6e5cbd4d1fe99c781969",
+    "after_sha": "bf4a5b78651c95796acb42a9911189f297b6a0d8da9cf6927f6d0a77cffdbad9",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 31,
+    "element_count_after": 31,
+    "decoded_changes": [
+      {
+        "index": 29,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "F",
+        "after": "#FFFFFF"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "checker32/color_automatic_transparent",
+    "cohort": "checker32",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker32/color_automatic_transparent/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker32/color_automatic_transparent/java.svg",
+    "before_sha": "f6bcb2494c663f2613e4b84f1f3b390057119bb425d8b9ac27b2f0b03cd3f2f6",
+    "after_sha": "0ec1e5744e3a6d0dbbc805f796edec3fd74d52f214bba991bbf0783bf1287b65",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 14,
+    "element_count_after": 12,
+    "cause": "element count change: inspect",
+    "explanation": "DriverTextSvg transparent-text early return removes only alpha-zero text; atom widths and next-run coordinates preserved. Automatic whole failure remains where present."
+  },
+  {
+    "id": "checker32/back_transparent",
+    "cohort": "checker32",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker32/back_transparent/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/checker32/back_transparent/java.svg",
+    "before_sha": "c0bac3abdbe462f6ca9fe1aff78a8a854eddf902c690960a7e141cb80e72ccb2",
+    "after_sha": "d9b7b01db3df46e441e9ebd80120babe9beb05ae22ce1c4cabb9e96afe9b5b5d",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 16,
+    "element_count_after": 16,
+    "decoded_changes": [
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "flood-color",
+        "before": "transparent",
+        "after": "#000000"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "shared22/attr_font_quotes",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/attr_font_quotes.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/attr_font_quotes/java.svg.stdout",
+    "before_sha": "06fb2f480a6d385d8e61dee258788ad609d2fd6c426190da47f4b4ee94996f24",
+    "after_sha": "e6cf1efbb421522f6caa61fd300cec4de939ae82cfc839d8897058b00654019a",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 1, column 3180",
+    "explanation": "Raw user font-family double quotes or raw metadata angle/ampersand made before XML invalid. Shared normalization/escaping makes after XML well-formed; comparator result remains separately recorded."
+  },
+  {
+    "id": "shared22/attr_font_unicode",
+    "cohort": "shared22",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/attr_font_unicode.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/attr_font_unicode/java.svg.stdout",
+    "before_sha": "5a6edde2193ae6394ae0a90b03f0ed79e87e53d1b24e234075df0ead41c7b828",
+    "after_sha": "f63e695195e0139f767ad83f72deafe427c65a7565d01576239d5b988e4b2a0e",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "shared22/attr_link_whitespace",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/attr_link_whitespace.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/attr_link_whitespace/java.svg.stdout",
+    "before_sha": "f14747d5589a76fed59686c32795af9f07521ec231a3351dbf7a1acae3bfcf71",
+    "after_sha": "fb591a42f740ec47c571c119706b0c7b2671a0d1fcf09ca4d16dc47970ec2c57",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 17,
+        "kind": "attribute",
+        "attribute": "title",
+        "before": "Oak Fir Pine\nElm",
+        "after": "Oak\tFir\rPine\nElm"
+      },
+      {
+        "index": 17,
+        "kind": "attribute",
+        "attribute": "{http://www.w3.org/1999/xlink}title",
+        "before": "Oak Fir Pine\nElm",
+        "after": "Oak\tFir\rPine\nElm"
+      }
+    ],
+    "cause": "mixed decoded changes: inspect",
+    "explanation": "Java ToStream decimal TAB/CR references preserve actual tooltip whitespace. Before raw TAB/CR normalized to spaces on XML parse. URL/tooltip selection still differs from Java; whole failure retained."
+  },
+  {
+    "id": "shared22/attr_link_unicode",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/attr_link_unicode.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/attr_link_unicode/java.svg.stdout",
+    "before_sha": "feae0bb1df749e4af603e57bff63bef5fc108882a9558d97220ccc310a84a5dd",
+    "after_sha": "3b60ee2ebb684a8aaed19c0389a8a63a60107cd9b39db41a1949337a00d30431",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "shared22/attr_actor_metadata",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/attr_actor_metadata.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/attr_actor_metadata/java.svg.stdout",
+    "before_sha": "59a68f56dc5ac3ed56f56c464c43dcf90c626a05b04c49a0a25e304097a679ef",
+    "after_sha": "3b0cceca200164d7fc5339968625ba3e316833de7b934dae3bd8a7d74a1f35a5",
+    "cause": "XML parse transition",
+    "parse_error": "not well-formed (invalid token): line 2, column 44",
+    "explanation": "Raw user font-family double quotes or raw metadata angle/ampersand made before XML invalid. Shared normalization/escaping makes after XML well-formed; comparator result remains separately recorded."
+  },
+  {
+    "id": "shared22/color_short_full",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/color_short_full.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/color_short_full/java.svg.stdout",
+    "before_sha": "1624c8f5290f18ea3528f317148d27cf681a614ff10ef19e0a085adf50850134",
+    "after_sha": "aeddc0b4702572ce9a2aad26199b2cf777337e895b49ea91380dc6b3771d6832",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 25,
+    "element_count_after": 25,
+    "decoded_changes": [
+      {
+        "index": 17,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2ad",
+        "after": "#22AADD"
+      },
+      {
+        "index": 20,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#aBcDeF",
+        "after": "#ABCDEF"
+      },
+      {
+        "index": 23,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#7",
+        "after": "#777777"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "shared22/color_named_hash",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/color_named_hash.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/color_named_hash/java.svg.stdout",
+    "before_sha": "8c59d8a14b705504d64c936f3fb781e97974f260c1e2a80d612bb2a2f9c93b4b",
+    "after_sha": "c0019bafec1a5d3c0a4c8a6688df212e3ddd863ef8ba91020e78b1469d5c0200",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 20,
+    "element_count_after": 20,
+    "decoded_changes": [
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "BUSINESS",
+        "after": "#FFFFCC"
+      },
+      {
+        "index": 9,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#red",
+        "after": "#FF0000"
+      },
+      {
+        "index": 12,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "APPLICATION",
+        "after": "#C2F0FF"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "shared22/color_transparent",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/color_transparent.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/color_transparent/java.svg.stdout",
+    "before_sha": "7fa4e4273c30c975401b14c28f3c087c001c81b6fdb705d2476d09e4a798fbf6",
+    "after_sha": "35eec12ae972daeabf0554795658f7047810c154975abc4df2697eff941831c7",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 37,
+    "element_count_after": 34,
+    "cause": "element count change: inspect",
+    "explanation": "DriverTextSvg transparent-text early return removes only alpha-zero text; atom widths and next-run coordinates preserved. Automatic whole failure remains where present."
+  },
+  {
+    "id": "shared22/color_alpha",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/color_alpha.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/color_alpha/java.svg.stdout",
+    "before_sha": "4110950b19e8d8c7fcd8845a34f6e9f220cce48d1cbeb1a24a3b94817e9b2d2b",
+    "after_sha": "4e2e703afa642d5875d6fa293244760b68ea081c7fd32ba2f831c60ecefc3c57",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 28,
+    "element_count_after": 28,
+    "decoded_changes": [
+      {
+        "index": 17,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#8044aa77",
+        "after": "#8044AA"
+      },
+      {
+        "index": 17,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.46667"
+      },
+      {
+        "index": 20,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2a6b9c01",
+        "after": "#2A6B9C"
+      },
+      {
+        "index": 20,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.00392"
+      },
+      {
+        "index": 23,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2a6b9cfe",
+        "after": "#2A6B9C"
+      },
+      {
+        "index": 23,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.99608"
+      },
+      {
+        "index": 26,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2a6b9cff",
+        "after": "#2A6B9C"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "shared22/color_alpha_nested",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/color_alpha_nested.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/color_alpha_nested/java.svg.stdout",
+    "before_sha": "a1d08f8c144d627d584d2212645b668c1ab9d0d656ac6888003a5efa5a23c812",
+    "after_sha": "6e52fd07b0653107145c6b2a025d0c4085d12ad458cfc3f00e68d1ca7d8b61c2",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 19,
+    "element_count_after": 19,
+    "decoded_changes": [
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2a6b9c77",
+        "after": "#2A6B9C"
+      },
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.46667"
+      },
+      {
+        "index": 11,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2a6b9c88",
+        "after": "#2A6B9C"
+      },
+      {
+        "index": 11,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.53333"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "shared22/back_special_alpha",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/back_special_alpha.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/back_special_alpha/java.svg.stdout",
+    "before_sha": "d165e27208b40969854334d12909969094a0d05c8c79b9cf87608ce3d552c02c",
+    "after_sha": "61882738cc67242b7743438ff664c2ebc2bd0b7029cfab6e5344b3149b533a09",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 30,
+    "element_count_after": 27,
+    "cause": "element count change: inspect",
+    "explanation": "DriverTextSvg BACKCOLOR.toRGB maps transparent and background to #000000; existing FilterRegistry now deduplicates the identical RGB. One redundant filter (three XML elements) disappears; note-height whole failure retained."
+  },
+  {
+    "id": "shared22/color_wbs",
+    "cohort": "shared22",
+    "before_pass": false,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/new/color_wbs.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/fresh-reference/color_wbs/java.svg.stdout",
+    "before_sha": "3112ed82606073731e09cdf71d9b8dfe80f5c5531a5c48a834da429f973337d8",
+    "after_sha": "6b8df1ad6750266f98f85fb0fbadc017e04af1f8a0e28ac5e7469440ae942b4f",
+    "decoded_xml_equivalent": false,
+    "element_count_before": 16,
+    "element_count_after": 16,
+    "decoded_changes": [
+      {
+        "index": 6,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#2ad",
+        "after": "#22AADD"
+      },
+      {
+        "index": 10,
+        "kind": "attribute",
+        "attribute": "fill",
+        "before": "#8044aa77",
+        "after": "#8044AA"
+      },
+      {
+        "index": 10,
+        "kind": "attribute",
+        "attribute": "fill-opacity",
+        "before": null,
+        "after": "0.46667"
+      }
+    ],
+    "cause": "color serialization",
+    "explanation": "HColorSet/XColor normalization and shared fillMe alpha emission; decoded fill/stroke/flood-color and opacity changes source-accounted. Original comparator verdict retained."
+  },
+  {
+    "id": "full-golden/component/comp_unicode_stereotypes",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/component/comp_unicode_stereotypes/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/component/comp_unicode_stereotypes/java.svg",
+    "before_sha": "d4f59dd63f17301688ae24416c2f947dfbed8f4e6864dd181aaad4a419df0fd5",
+    "after_sha": "91a5535a52cb49309b420c75cbd0a90dcf27869cec5991f8a7b546195cf7b595",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_meta_unicode_title",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_meta_unicode_title/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_meta_unicode_title/java.svg",
+    "before_sha": "cd7e07ae342de456821745afdad2e21cb6586e4cc223a965cb571361684eb9d4",
+    "after_sha": "89a3b312a3be0e6b944c041d66f1f317deb33d6354a0a38881699e712d75ef33",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_arabic_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_arabic_class_diagram/java.svg",
+    "before_sha": "99c5d3f757e41240593dd7f30d5e15a37cb1dc376b8ea28bdcb34c236b1114d3",
+    "after_sha": "4c0e86234991d4263a874dfcbe22e74f54dc3ac07c30e0ce088b1c16bc18fb36",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class/java.svg",
+    "before_sha": "2a594970808447dfc1655446ed284f79ca69159a9589277c390f3837c139a126",
+    "after_sha": "5334cf112ef20d755aab60f344152f2491973cd10ade33940228de416567cf95",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_chinese_class_diagram/java.svg",
+    "before_sha": "7cb6ffd8851304cd874905516026f3252b481accf61016b2210d30d8b1d4c8e7",
+    "after_sha": "53ca8372df90af2db004c6baf16da796b328df0f27142d57a984d0360404d7f1",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_emoji_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_emoji_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_emoji_class/java.svg",
+    "before_sha": "40900da1072e6adae32af4b71b2747af062f136581596c5be9fbd9a60c71afb9",
+    "after_sha": "704305aa8709abf9f0d63c4b345406ec787825137a0272caeff54ff157ff2404",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_greek_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_greek_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_greek_class_diagram/java.svg",
+    "before_sha": "afd853bdbb2b4e1a9ccc259b69aeb7f61f1dbc588f0bbac52773dd5406a80412",
+    "after_sha": "e000f5a3ebc77d04ff4648b40b362020c9154edd720b4a34e5c6fd6500d77158",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_hebrew_class_diagram/java.svg",
+    "before_sha": "f8a62461b1a62a0c67ba073b4cf6ec3adfd477aeb1c8eec040d44f0de1883d90",
+    "after_sha": "be85bb616a88c040473cee71850a33738c294db0d9ef47433d5665cef8cca337",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hindi_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_hindi_class_diagram/java.svg",
+    "before_sha": "4821db62208e7d90d9fd677eca277801843039cf5766e7a41357ee659af8a051",
+    "after_sha": "c0f805fd7ea2a143f4b05c2d4d2b88c18efb52a58232ab841ff05f8594cf4984",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class/java.svg",
+    "before_sha": "6c65f5e43a0dfb5bda9bed82010da7bdf489eb1ff8ea14868c278f8a9a25aa96",
+    "after_sha": "c5241ba7d13963c1a6a7bf8754d63521800d243d3dc0e6b92ff2bbbef66458f7",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_japanese_class_diagram/java.svg",
+    "before_sha": "60f22ac678ff3cd7ea9dd6c97d50e4e495fbb8aa3c76b0592029d2d9152390eb",
+    "after_sha": "56233d0d2b1dfadad068d5e8ada5222e61302fc565ecfb7c50266936d4a80778",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class/java.svg",
+    "before_sha": "74a1b5e9472dc51cdf6d9462a5adc56580e328ad2eee614ed281ce3e2080edc7",
+    "after_sha": "f7b2f9caaa8d8b33c3f11bf49894b7139d6f5a49d45ad0c23743d6ab0e12e570",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_korean_class_diagram/java.svg",
+    "before_sha": "2f6e8374606904e98963db9765f33930e3fed053128475cfab0c6ddc7b7c661c",
+    "after_sha": "02e21cd8cceefcd1ef9433fae18e8c04177d430da14abc388c37e2870a8820a6",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_russian_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_russian_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_russian_class_diagram/java.svg",
+    "before_sha": "3ce43e3e87836ac01e32e59a61d5df4d0843478f7f14df1f43cab43a61d075dc",
+    "after_sha": "e6bcb57dbef2954e2580890eac34ba3b7d99b64e8ae296b42a6647c212c45a54",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_thai_class_diagram",
+    "cohort": "full-golden",
+    "before_pass": false,
+    "after_pass": false,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_thai_class_diagram/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/edge-cases/edge_unicode_thai_class_diagram/java.svg",
+    "before_sha": "783a394b8316969db8a105ca10e6302dddc89ea50abc106b28152b415c18b181",
+    "after_sha": "2c8c3d5c4b6910b74f8a36517d74d24fdd96347d5ce6afe7f22b08fd01e1d96b",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  },
+  {
+    "id": "full-golden/rendering/text/text_unicode_class_names",
+    "cohort": "full-golden",
+    "before_pass": true,
+    "after_pass": true,
+    "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/rendering/text/text_unicode_class_names/input.puml",
+    "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/frozen/full-golden/rendering/text/text_unicode_class_names/java.svg",
+    "before_sha": "83dce8d78920b24303e0c6676e0da0fda7597d5e09110f18afaa6611f06df049",
+    "after_sha": "39507f1d97e8df2992d2401b75653b0ef5a218359c8a0e4582fc28eb234c5a67",
+    "decoded_xml_equivalent": true,
+    "cause": "XML-equivalent attribute encoding",
+    "explanation": "Same decoded XML including text, structure and attributes; changed lexical attribute encoding only."
+  }
+]

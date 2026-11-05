@@ -1,0 +1,23 @@
+{
+  "source": "/tmp/rustuml-tim3/new/zone_tokyo_width.puml",
+  "mechanism": "tim-zone-display-width",
+  "negative": false,
+  "zone": "Asia/Tokyo",
+  "debug": "date=1774210426000",
+  "java_exit": 0,
+  "source_exit": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.Bab5N6zr/new",
+    "--timezone",
+    "Asia/Tokyo",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "source_sha256": "f82b37980b472ae600729a472b467bcce153a1b0d798e8a8a9f8102f162f40b5",
+  "runtime": "Monkey Man OpenJDK21.0.5 Graphviz12.2.0 en_AU; exact campaign JAR; headless forced",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_tool_options": "-Djava.awt.headless=true"
+}

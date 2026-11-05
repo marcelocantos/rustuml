@@ -1,0 +1,2 @@
+@startuml
+!$x=$emit($tick(3))

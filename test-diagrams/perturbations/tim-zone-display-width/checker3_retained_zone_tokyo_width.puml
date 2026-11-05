@@ -1,0 +1,4 @@
+@startuml
+!$v=%date("z / zzzz / Z / XXX",0)
+class "$v" as Time
+@enduml

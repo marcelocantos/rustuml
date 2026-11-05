@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-call-operand-resolution",
+  "rust_revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/EaterFunctionCall.java:analyze",
+    "tim/FunctionsSet.java:getFunctionSmart",
+    "tim/expression/ReversePolishInterpretor.java:constructor",
+    "tim/TFunctionImpl.java:canCover,executeReturnFunction"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Plain calls parse literal named operands separately from positional operands, evaluate all argument expressions in order, then resolve signature coverage before executing or checking return-function kind.",
+  "causal_divergence": "Plain builtins count named assignments as positional text; expression procedures are rejected by kind before resolution. Prior canCover failure uses a generic bad-arity diagnostic even when Java lookup returns no function.",
+  "planned_change": "Use named/positional parsing for plain builtins as for user calls, retaining RHS effects. Resolve available signatures before operand consumption/kind diagnostics in expressions. Retain exact-signature shortcut in plain user calls and empty-name-set RPN resolution. No new builtin registration.",
+  "perturbation_axes": [
+    "Plain builtin named-only and mixed positional/named operands",
+    "Procedure expression missing arguments versus valid coverage; argument errors precede resolution"
+  ],
+  "prior_evidence": "5d37f60cbce90a3f3a9efb199c75285d6b7b859f (import 079c1bc1); prior accounts and rejected implementations remain immutable",
+  "oracle_plan": [
+    "Replay unchanged 1516/31/29 and maker15/prior17 memberships with overlap explicit; actual CLI, exact source/model, status/error/XML separate.",
+    "Compact source-guided remote relay controls; no local JVM or SSH. Preserve every failed iteration and negative reference.",
+    "Final main tiers, parser/CLI, guards/standing once stabilized. No acceptance claim; fresh independent checker required."
+  ]
+}

@@ -1,0 +1,5 @@
+@startuml
+!$data={"ok":{"name":"ash"}}
+!$v=$data.absent.name
+class "[$v]" as Missing
+@enduml

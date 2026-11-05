@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "1 / 1" as Return
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Return
+  entities:
+  - id: Return
+    label: '1 / 1'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 13
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

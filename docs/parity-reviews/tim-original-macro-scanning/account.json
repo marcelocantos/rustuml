@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-original-macro-scanning",
+  "rust_revision": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:applyFunctionsAndVariables,getFunctionNameAt",
+    "tim/VariableManager.java:getVarnameAt,justAfterBackslashN",
+    "tim/FunctionsSet.java:addFunction",
+    "tim/TFunctionImpl.java:finalizeEnddefinelong"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Legacy function expansion and variable expansion recognize original source positions once. Appended values are not rescanned; a literal backslash-n permits the following legacy token boundary.",
+  "causal_divergence": "execute_one_line performs a definelong search after substitution, and the preceding-letter test blocks direct tokens following backslash-n.",
+  "planned_change": "Move legacy macro recognition into the original-source scan and remove the later completed-output pass. Only function-call syntax invokes a registered definelong, including zero-argument forms. Retain existing macro body lowering/origins while preventing whole-output rescans; add the Java backslash-n boundary exception.",
+  "perturbation_axes": [
+    "Literal macro names/call text from variables and return values versus direct calls",
+    "Backslash-n boundary versus ordinary adjacent letters; parameterized versus zero-argument macros"
+  ],
+  "oracle_plan": [
+    "Preserved checker4 31 controls, full restored1516, exact source/model and unchanged actual CLI SVG comparator.",
+    "Compact new maker cases via parent checksummed T3 relay only; all outputs/errors retained.",
+    "Main release tiers once stabilized; parser/CLI/guards/touched formatting. No baselines, old records, renderer/date/reader changes or acceptance claim."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "files": 14494,
+  "attribute_counts": {
+    "rx": 71173,
+    "ry": 71168,
+    "d": 43743,
+    "font-size": 167771,
+    "textLength": 167361,
+    "points": 44287
+  },
+  "outside_identity_domain": [],
+  "unparseable_before": [
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/registered/before/creole-parameter-candidate-grammar/checker-independent-e6a64f42/family_slash/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/registered/before/creole-parameter-candidate-grammar/checker-independent-e6a64f42/font_empty_unknown/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/registered/before/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_padded/svg.stdout"
+  ],
+  "domain": "ASCII U+0020..U+007E excluding ampersand/less/greater/doublequote; every character emitted literally by Java-compatible attr encoder"
+}

@@ -1,0 +1,11 @@
+@startuml
+!$n=0
+!$calls=0
+!function $selector($name)
+!$calls=$calls+1
+!return "lib/blocks.inc!"+$name
+!endfunction
+!includesub $selector("chosen")
+!includesub $selector("chosen")
+class "$n / $calls" as Selected
+@enduml

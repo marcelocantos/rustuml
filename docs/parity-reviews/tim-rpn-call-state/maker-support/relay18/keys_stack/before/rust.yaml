@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "prefixtwo/pine" as Stack
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Stack
+  entities:
+  - id: Stack
+    label: prefixtwo/pine
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

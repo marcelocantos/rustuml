@@ -1,0 +1,5 @@
+@startuml
+!$a=%strpos(%chr("66"),"B")
+!$b=%strpos(%chr(%str2json("67")),"C")
+class "$a / $b" as Character
+@enduml

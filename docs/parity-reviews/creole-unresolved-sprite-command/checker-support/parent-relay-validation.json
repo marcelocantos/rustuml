@@ -1,0 +1,25 @@
+{
+  "validated": true,
+  "cases": 38,
+  "resources": 38,
+  "calls": 38,
+  "timeouts": 0,
+  "result_gzip_sha256": "d7ef84c5920c5ae2f9a17c77e90aeebc55e5aa6ce9ab6094ebdb6437f19c3908",
+  "transport_sha256": "04c8e2f80866984c3345fac0f176944359cf9aad28c07fe675cad90aac3b13fe",
+  "request_sha256": "689ab4642e561b4ca32b9fc6c6fb897e9726d1a10e7aa2da8c171cfea819f620",
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.ub9M4mu4",
+  "checks": [
+    "immutable source bytes and hashes",
+    "membership",
+    "all stdout/stderr hashes",
+    "wrapper argv cwd timezone env",
+    "pinned environment",
+    "derived Java argv"
+  ],
+  "java_argv_provenance": "Unchanged pinned wrapper execve construction and exact invocation arguments",
+  "exit_statuses": {
+    "0": 36,
+    "200": 2
+  },
+  "classification": "Left to independent checker; exit zero is not positive validity."
+}

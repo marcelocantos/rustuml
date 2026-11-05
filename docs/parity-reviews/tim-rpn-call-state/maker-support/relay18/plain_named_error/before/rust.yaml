@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "$UNUSED="BIRCH"" as Lost
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity $UNUSED=
+  entities:
+  - id: $UNUSED=
+    label: $UNUSED=
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

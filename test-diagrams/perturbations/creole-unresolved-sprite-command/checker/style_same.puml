@@ -1,0 +1,3 @@
+@startuml
+class "<b>Fir<$north></b><b>Elm</b>!" as Review
+@enduml

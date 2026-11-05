@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "mechanism": "strict-XML prolog DOCTYPE eligibility",
+  "base_revision": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "imported_rejection": "4931481fd495ffff9da55a0c7514f43a487b087e",
+  "import_commit": "2ed88eb55ec5f0974ec2830deccfcc401f6d9885",
+  "java_locations": [
+    "Graphviz SVG export emits the standard SVG1.1 PUBLIC declaration; exact retained26 actual-CLI DOT declarations are identical. This is oracle policy, not a Java production parity change."
+  ],
+  "rust_locations": [
+    "crates/rustuml/tests/pipe_mode.rs::every_cli_golden_and_registered_perturbation_svg_is_strict_xml substring find and unconditional allow_dtd:true",
+    "roxmltree0.20 src/parse.rs:315\u2013345 and tokenizer parse_external_id/parse_entity_def"
+  ],
+  "invariant": "Only a real exact standard PUBLIC declaration immediately after an optional XML declaration and XML whitespace permits DTD parsing. Comments/PIs cannot authorize a later declaration. Any internal subset is rejected. Strict syntax parsing and all other options/limits remain default.",
+  "causal_divergence": "find locates a textual DOCTYPE inside a comment and unconditional allow_dtd:true parses a different later internal-entity DTD. The checker mutation proves both source-hash/count controls can remain satisfied.",
+  "planned_change": "Test-only parser helper checks prolog position, compares exact26-output declaration bytes (including newline), rejects an internal subset, and enables allow_dtd only after eligibility. Without an eligible declaration roxmltree keeps its default DTD rejection, so a declaration after a comment/PI is rejected. Standing checker-decoy negative test plus positive real DOT declaration and independent position/internal/byte perturbations.",
+  "approved_declaration_bytes": "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">",
+  "retained_dot_paths": [
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/type-detection/explicit_startdot/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_node_colors/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_weighted_edges/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_multi_edge/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_simple_cycle/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_rankdir_lr/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_cluster_single/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_edge_colors/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_subgraph_no_cluster/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_edge_styles/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_graph_attributes/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_undirected_path/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_edge_labels/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_simple_5nodes_diamond/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_rankdir_tb/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_node_url/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_record_simple/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_simple_4nodes_star/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_node_shapes/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_simple_3nodes_chain/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_node_labels/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_cluster_two/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_undirected_simple/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_simple_2nodes/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_record_ports/svg.stdout",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/replay/after/full-golden/dot/dot_edge_arrowhead/svg.stdout"
+  ],
+  "perturbation_axes": [
+    "declaration position: optional XML declaration/whitespace versus preceding comment or PI",
+    "DOCTYPE body: exact PUBLIC bytes versus internal subset/altered external identifier/whitespace"
+  ],
+  "production_files": [],
+  "test_files": [
+    "crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "verification": "Reproduce checker dtd_mutation against unchanged old test and corrected test in private scratch; focused test first,26 actual DOT outputs; final full CLI XML corpus once stable. No Java process or external DTD/entity resolution."
+}

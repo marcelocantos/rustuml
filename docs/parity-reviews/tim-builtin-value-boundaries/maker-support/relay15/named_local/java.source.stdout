@@ -1,0 +1,3 @@
+@startuml
+class "root/ash / birch/leaf" as Local
+@enduml

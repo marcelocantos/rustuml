@@ -1,0 +1,3 @@
+@startuml
+class "maple/elm|ash/spruce" as Neighbor
+@enduml

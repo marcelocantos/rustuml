@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "za / a" as Keys
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Keys
+  entities:
+  - id: Keys
+    label: za / a
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

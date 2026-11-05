@@ -1,0 +1,90 @@
+{
+  "candidate": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+  "frozen1449": {
+    "total": 1449,
+    "matches": 520
+  },
+  "standing": {
+    "total": 1576,
+    "passed": 575,
+    "failed": 1001,
+    "exit": 101
+  },
+  "matching_environment_cli": 602,
+  "membership_counts": {
+    "collateral": 1516,
+    "prior31": 31,
+    "fresh29": 29,
+    "maker15": 15,
+    "maker17": 17,
+    "maker18": 18,
+    "fresh25": 25,
+    "fresh4": 4
+  },
+  "unique_source_reference_pairs": {
+    "collateral": 1437,
+    "prior31": 31,
+    "fresh29": 29,
+    "maker15": 15,
+    "maker17": 17,
+    "maker18": 18,
+    "fresh25": 25,
+    "fresh4": 4
+  },
+  "old_union_unique_pairs": 1547,
+  "union_unique_pairs": 1576,
+  "other_valid_errors": [
+    {
+      "suite": "collateral",
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_ownership.puml",
+      "diagnostic": [
+        "parse error: line 5: invalid allowmixing command"
+      ]
+    },
+    {
+      "suite": "fresh25",
+      "source": "/tmp/rustuml-checker6/new/intval_unicode_digits.puml",
+      "diagnostic": [
+        "parse error: line 1: Cannot convert +\uff11\uff12\uff13 to integer."
+      ]
+    },
+    {
+      "suite": "fresh25",
+      "source": "/tmp/rustuml-checker6/new/intval_unicode_json.puml",
+      "diagnostic": [
+        "parse error: line 1: Cannot convert 1\u09683 to integer."
+      ]
+    },
+    {
+      "suite": "fresh4",
+      "source": "/tmp/rustuml-checker6/supplement/sub_defined_in_uncalled.puml",
+      "diagnostic": [
+        "parse error: line 6: cannot include stored"
+      ]
+    },
+    {
+      "suite": "fresh4",
+      "source": "/tmp/rustuml-checker6/supplement/operand_overload_return.puml",
+      "diagnostic": [
+        "parse error: line 7: Unknown built-in function $pick"
+      ]
+    },
+    {
+      "suite": "fresh4",
+      "source": "/tmp/rustuml-checker6/supplement/operand_overload_procedure.puml",
+      "diagnostic": [
+        "parse error: line 7: Unknown built-in function $pick"
+      ]
+    }
+  ],
+  "cohort955": {
+    "total": 955,
+    "matches": 431
+  },
+  "cohort1044": {
+    "total": 1044,
+    "matches": 495
+  }
+}
+panic groups [('panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615', 24), ('panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615', 8)]
+standing differences 27

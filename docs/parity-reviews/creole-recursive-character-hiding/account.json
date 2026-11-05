@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "base_revision": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "imported_rejection": "5ec48be56c4bce12ec646c29ed8e6d4be5e8518b",
+  "import_commit": "f75103e509a5c5cd61341d78421a436f7103603f",
+  "verification": "Actual CLI before/after original source SVG and full YAML, unchanged comparator; all nine original cohorts plus38 fresh checker pairs including5 nonpositives, then compact fresh relay. Keep32existingpanics. No localJVM or self-review; gates once stable.",
+  "mechanism": "creole-recursive-character-hiding",
+  "java_locations": [
+    "utils/CharHidder.java:50-105 hide/isToBeHidden/unhide; backslash-tilde first, tilde consumes exactly one next character; hidden character range E000..E0FF",
+    "klimt/creole/legacy/StripeSimple.java:150-169 analyzeAndAdd hides on each recursive entry before modifyStripe",
+    "klimt/creole/command/CommandCreoleStyle.java:104, CommandCreoleSizeChange.java:85, CommandCreoleColorChange.java:95 recurse via analyzeAndAdd",
+    "klimt/creole/legacy/AtomText.java:80 restores hidden characters before text measurement"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::walk_segments tilde arm",
+    "crates/rustuml-render/src/creole.rs::take_style_delimiter/walk_style_tag scanners",
+    "crates/rustuml-render/src/creole.rs::push_literal"
+  ],
+  "invariant": "Candidate matching and recursively painted content see the same hidden-character stream. Each recursive stripe entry applies the same hide operation; hidden syntax remains inert through recursion and is restored only at literal text-atom construction. Backslash-tilde loses the backslash; tilde consumes one next character, hiding exactly the source-listed characters. Other Unicode and nonhidden pairs preserve their content.",
+  "causal_divergence": "Scanners skip escape pairs for close matching, but raw body recursion paints backslash-tilde literally. The independent tilde painting arm consumes two delimiter characters, preventing an overlapping valid opener. Scanning and paint therefore disagree on one source stream.",
+  "planned_change": "Add a single private source-derived hide operation at walk_segments entry and restore at literal emission, matching the Java reserved escape encoding. Remove scanner-specific escape skipping and old tilde painting rules; all recursive calls use the same operation. Keep public APIs, legacy to_svg_tspans, URL recursion, extended style syntax and other consumer modules unchanged.",
+  "perturbation_axes": [
+    "backslash-tilde versus tilde escaped overlapping openers and literal neighbors",
+    "nested HTML/delimiter/size/color captures and escaped closing candidates",
+    "WBS multiline/leaf versus sequence/note/activity consumers and Unicode boundaries"
+  ]
+}

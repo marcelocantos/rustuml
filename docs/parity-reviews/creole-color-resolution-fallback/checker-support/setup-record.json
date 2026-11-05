@@ -1,0 +1,36 @@
+{
+  "initial_revision": "8ba2e43a3d38ecf27575819a3d25e041d8581cfb",
+  "initial_status": "clean",
+  "branch": "review/creole-fallback-independent-ae47",
+  "evidence_tip": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "snapshot_method": "git archive; no extra worktrees or children",
+  "makefile": "Unchanged tracked Makefile included in both snapshots via git archive; no extra setup or generated Makefile was necessary. Cargo release builds and oracle tests succeeded in reaching execution.",
+  "submodule_attempts": [
+    {
+      "argv": [
+        "git",
+        "submodule",
+        "update",
+        "--init",
+        "test-diagrams/golden"
+      ],
+      "exit": 1,
+      "stderr": "fatal: transport 'file' not allowed; local clone retried and aborted"
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "protocol.file.allow=always",
+        "submodule",
+        "update",
+        "--init",
+        "test-diagrams/golden"
+      ],
+      "exit": 0,
+      "revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+    }
+  ],
+  "golden_snapshot": "Snapshots symlink required golden checkout read-only; diagnostic files are emitted outside the submodule in private snapshot test-diagrams.",
+  "broad_gates": "Executed once on stable evidence-tip snapshot with 1912 standing pairs before registering checker32; fresh32 compared through independently built unchanged comparator. No broad rerun."
+}

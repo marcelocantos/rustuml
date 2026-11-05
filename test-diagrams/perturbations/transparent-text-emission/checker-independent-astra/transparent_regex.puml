@@ -1,0 +1,3 @@
+@startregex
+(?<probe>L<color:#3579bd00><back:#e73>Veil</back></color>R)+
+@endregex

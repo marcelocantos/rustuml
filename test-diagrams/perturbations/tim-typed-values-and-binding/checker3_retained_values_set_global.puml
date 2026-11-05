@@ -1,0 +1,11 @@
+@startuml
+!$n = "007"
+!procedure $mutate($n)
+!$ignored = %set_variable_value("$n", "009")
+!$x = $n + 1
+class "$x" as Local
+!endprocedure
+$mutate("008")
+!$v = %get_variable_value("$n") + 2
+class "$v" as Global
+@enduml

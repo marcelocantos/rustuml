@@ -1,0 +1,6 @@
+@startuml
+state Grove
+Grove : a<size:+14>b</size>z
+Grove : a<size:-14>b</size>z
+Grove : a<size:14.0>b</size>z
+@enduml

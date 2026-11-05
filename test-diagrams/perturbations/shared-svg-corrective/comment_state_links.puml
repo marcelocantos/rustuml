@@ -1,0 +1,5 @@
+@startuml
+state "Stage--"
+state "Pause-"
+"Stage--" --> "Pause-"
+@enduml

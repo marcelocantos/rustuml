@@ -1,0 +1,3 @@
+@startuml
+class "a <$oak/leaf-2> b <#red$ghost{scale=2,color=blue}> c <$ghost,color:red> end" as A
+@enduml

@@ -1,0 +1,128 @@
+[
+  {
+    "case": "color_valid_neighbors",
+    "text_deltas": [
+      {
+        "index": 9,
+        "text": "elm",
+        "attributes": {
+          "fill": [
+            "#112233",
+            "#123"
+          ]
+        }
+      }
+    ],
+    "java_tags": {
+      "svg": 1,
+      "defs": 1,
+      "g": 5,
+      "title": 1,
+      "rect": 3,
+      "line": 1,
+      "text": 11,
+      "path": 2
+    },
+    "rust_tags": {
+      "svg": 1,
+      "defs": 1,
+      "g": 5,
+      "title": 1,
+      "rect": 3,
+      "line": 1,
+      "text": 11,
+      "path": 2
+    },
+    "whole_pass": false
+  },
+  {
+    "case": "color_registry_boundary",
+    "text_deltas": [
+      {
+        "index": 5,
+        "text": "elm",
+        "attributes": {
+          "fill": [
+            "#FFFFCC",
+            "BUSINESS"
+          ]
+        }
+      },
+      {
+        "index": 11,
+        "text": "elm",
+        "attributes": {
+          "fill": [
+            "#FF0000",
+            "#red"
+          ]
+        }
+      }
+    ],
+    "java_tags": {
+      "svg": 1,
+      "defs": 1,
+      "g": 10,
+      "title": 2,
+      "rect": 6,
+      "line": 3,
+      "text": 13,
+      "polygon": 1
+    },
+    "rust_tags": {
+      "svg": 1,
+      "defs": 1,
+      "g": 10,
+      "title": 2,
+      "rect": 6,
+      "line": 3,
+      "text": 13,
+      "polygon": 1
+    },
+    "whole_pass": false
+  },
+  {
+    "case": "back_invalid_gradient",
+    "text_deltas": [
+      {
+        "index": 11,
+        "text": "elm",
+        "attributes": {
+          "filter": [
+            null,
+            "url(#bn0o8869ltaof1)"
+          ]
+        }
+      }
+    ],
+    "java_tags": {
+      "svg": 1,
+      "defs": 1,
+      "filter": 1,
+      "feFlood": 1,
+      "feComposite": 1,
+      "linearGradient": 1,
+      "stop": 2,
+      "g": 10,
+      "title": 2,
+      "rect": 7,
+      "line": 3,
+      "text": 13,
+      "polygon": 1
+    },
+    "rust_tags": {
+      "svg": 1,
+      "defs": 1,
+      "filter": 2,
+      "feFlood": 2,
+      "feComposite": 2,
+      "g": 10,
+      "title": 2,
+      "rect": 6,
+      "line": 3,
+      "text": 13,
+      "polygon": 1
+    },
+    "whole_pass": false
+  }
+]

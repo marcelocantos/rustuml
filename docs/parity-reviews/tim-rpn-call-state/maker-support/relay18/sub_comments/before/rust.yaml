@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "2" as Count
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Count
+  entities:
+  - id: Count
+    label: '2'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 9
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

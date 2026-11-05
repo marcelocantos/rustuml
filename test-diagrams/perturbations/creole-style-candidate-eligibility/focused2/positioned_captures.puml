@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : L **** R; ***** S\nL //// R; ///// S\nL ____ R; _____ S\nL ---- R; ----- S\nL ~~~~ R; ~~~~~ S
+@enduml

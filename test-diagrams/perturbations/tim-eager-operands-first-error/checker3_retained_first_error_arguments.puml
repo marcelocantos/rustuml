@@ -1,0 +1,9 @@
+@startuml
+!$n=0
+!function $tick()
+!$n=$n+1
+!return "late"
+!endfunction
+!$v=%substr(%date("QQ",0),$tick(),%date("XXXX",0))
+class Unreachable
+@enduml

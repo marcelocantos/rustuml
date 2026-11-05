@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName "Quill & Reed"
+robust "Beacon" as Track
+@0
+Track is low
+@30
+Track is high
+@enduml

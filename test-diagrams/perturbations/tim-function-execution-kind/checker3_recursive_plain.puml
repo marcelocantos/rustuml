@@ -1,0 +1,17 @@
+@startuml
+!$count=0
+!procedure $visible($name)
+class $name
+!endprocedure
+!function $walk($n)
+!$count=$count+1
+class Phantom
+!if $n > 0
+!return $walk($n-1)
+!endif
+$visible("Spruce")
+!return "ok"
+!endfunction
+!$result=$walk(2)
+class "$result $count" as Result
+@enduml

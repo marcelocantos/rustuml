@@ -1,0 +1,49 @@
+{
+  "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "files": [
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+      "sha256": "0edd4959c52fff7d3eaa42e22a8b970c883b16fffd6926920ae22ccf4b25aeb8"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+      "sha256": "2f000b9eca5b99f3f492eda8b7e49835e447041327da49be78a2f0bdf51e9d6e"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+      "sha256": "e1d04c9264cd4a0215581f30560917ff44aad2d70ecd7fe6c639dd8f7eec41d3"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "sha256": "853cab1a6ed28d5bbdbf7be524b9d6b7610fbd392804e0ec9df3620ad40910bf"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "sha256": "79d7108561706e96a94086fe3ad44ba9b8ae2b8d08056827d46fd02be37865a0"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/AbstractUGraphic.java",
+      "sha256": "88e891e7a7bd42f9d3965bd7bd05b2e9b6e6ea4e3f2070570304168a1ede1397"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/UGraphicSvg.java",
+      "sha256": "1d4c628aed8a1d30abcc0e5a88f9509cad40ff67e44e242953dc2d162a36289f"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "sha256": "4c7e91766b084ca734321706cac46ca28891109cb5a77297be8daea717894593"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateEmptyDescription.java",
+      "sha256": "8d5c63386e8721b3a8734e6d63bd2213dd0a802e5099c42ca3177335f16fbadb"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageState.java",
+      "sha256": "26b0def08b0af1554f4eedb3167d5879f50a69676ee7b39e27811f337a5e9883"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "sha256": "5aab9c05752a57b4067781ccdba9794c5b7b9cc5eea1acbead12113491c47435"
+    }
+  ]
+}

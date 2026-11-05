@@ -1,0 +1,1001 @@
+[
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/negative_late_mixing.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_1.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_3.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-native-leaf-presentation/checker/negative_mandatory_modifier.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unterminated quote\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unterminated quote\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 3: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 3: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 0: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 3: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_shift_scope.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 0,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unary_variable.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 0,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Substring index out of range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Unknown built-in function %missing_checker3\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Substring index out of range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Illegal call here. Is there a return directive in your function?\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 6: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: X must have one to three letters\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Integer literal outside signed 32-bit range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Substring index out of range\n"
+  },
+  {
+    "suite": "collateral",
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Unknown built-in function %missing_checker3\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Unknown built-in function %strlen\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_index_effect.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Data parsing error: missing intermediate member\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 4: Substring index out of range\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Foreach requires a JSON array or object\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad sub name\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 3: Bad sub name\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Unknown built-in function %fresh_unregistered\n"
+  },
+  {
+    "suite": "prior31",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Unknown built-in function %strlen\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/bool_space_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert  true  to boolean.\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/surrogate_display_residue.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_argument_first.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Division by zero\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_procedure_first.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Unknown built-in function $emit\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_plain_named_builtin.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Function not found %strlen\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_duplicate.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 4: Expression operand stack underflow\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/macro_argument_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Cannot convert bad to boolean.\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_suffix_continuation.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_raw_tail_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Bad sub name\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_local_nested.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot nest sub\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_scalar_null.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Foreach requires a JSON array or object\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_missing_dot.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 2: Data parsing error: missing intermediate member\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_missing_index_residue.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/adjacent_dispatch.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Cannot convert 12.5 to integer.\n"
+  },
+  {
+    "suite": "fresh29",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/keys_nested_call.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 7: Unknown built-in function $inner\n"
+  },
+  {
+    "suite": "maker15",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/boolean_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert 00 to boolean.\n"
+  },
+  {
+    "suite": "maker15",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/arity_missing.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Unknown built-in function %strlen\n"
+  },
+  {
+    "suite": "maker15",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/arity_user_excess.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Unknown built-in function $only\n"
+  },
+  {
+    "suite": "maker15",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/sub_raw_bad_comment.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Bad sub name\n"
+  },
+  {
+    "suite": "maker15",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/foreach_json_boolean.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Foreach requires a JSON array or object\n"
+  },
+  {
+    "suite": "maker15",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/json_missing_traversal.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 2: Data parsing error: missing intermediate member\n"
+  },
+  {
+    "suite": "maker17",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/builtin_negative_length.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 1: Substring index out of range\n"
+  },
+  {
+    "suite": "maker17",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/procedure_value_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Illegal call here. Is there a return directive in your function?\n"
+  },
+  {
+    "suite": "maker17",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/sub_bad_unselected.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 0: Bad sub name\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/keys_stack.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 4: Expression operand stack underflow\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/keys_nested.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Unknown built-in function %upper\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/keys_duplicate.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 4: Expression operand stack underflow\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/plain_named_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Function not found %upper\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/procedure_arity.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Unknown built-in function $emit\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/procedure_kind.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Illegal call here. Is there a return directive in your function?\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/sub_nested_inactive.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot nest sub\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/intval_decimal.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert -7.25 to integer.\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/intval_overflow.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert 2147483648 to integer.\n"
+  },
+  {
+    "suite": "maker18",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/intval_space.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert  7 to integer.\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/rpn_duplicate_underflow.puml",
+    "reference_xml_valid": false,
+    "cli_exit": 1,
+    "comparison_exit": 3,
+    "panic": false,
+    "stderr": "parse error: line 4: Expression operand stack underflow\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/operand_rhs_first_error.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert 4.5 to integer.\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/operand_procedure_missing.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 4: Unknown built-in function $emit\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/operand_procedure_covered.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 9: Illegal call here. Is there a return directive in your function?\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/legacy_prefix_failure.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 7: Cannot convert x to integer.\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/sub_collect_error_precedence.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot nest sub\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/sub_uncalled_function.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": ""
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/intval_invalid_sign.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert +-3 to integer.\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/intval_underflow_bound.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert -2147483649 to integer.\n"
+  },
+  {
+    "suite": "fresh25",
+    "source": "/tmp/rustuml-checker6/new/hsl_bad_arity.puml",
+    "reference_xml_valid": true,
+    "cli_exit": 1,
+    "comparison_exit": 2,
+    "panic": false,
+    "stderr": "parse error: line 1: Cannot convert bad to integer.\n"
+  }
+]

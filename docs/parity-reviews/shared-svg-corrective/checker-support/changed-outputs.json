@@ -1,0 +1,1155 @@
+[
+  {
+    "cohort": "retained",
+    "id": "collateral/1272-checker2_quote_unicode",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "9e41a7d21cb2a0d3562356e86020019afc89d53479d5f3b99e77bb6072b9ddc7",
+    "after_sha256": "07be0af8862a63e95097cf9fc1f92c7eac676fb78011504f20eba45533565648"
+  },
+  {
+    "cohort": "retained",
+    "id": "collateral/1286-checker2_retained_default_explicit_override",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "1936273cd88e900bdd70a0d9708d0f9fa93c533fe920348246afccc769403fd1",
+    "after_sha256": "e2a178d5be3c6728d15d7d60db8166305f228f8c9064171de1fa732ff01c4f11"
+  },
+  {
+    "cohort": "retained",
+    "id": "collateral/1350-checker2_theme_comment_origin",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "17e770e52704792be17d602c0edcf3ad5abe604796b19a75effdc0b43f6ff104",
+    "after_sha256": "c10b110686e3f251f9185b6e05b69289e75fd3958c01db8a8d288dc0fd0007c7"
+  },
+  {
+    "cohort": "retained",
+    "id": "collateral/1493-checker3_retained_values_binding",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "d1f504666c971142d6330ddc69ba4810da666168cafe0b463751ee273702411b",
+    "after_sha256": "419fa913c73f0627f9c22abed45b3f3380185535bc460860c4a4a63956c8f964"
+  },
+  {
+    "cohort": "retained",
+    "id": "prior31/0002-checker4_surrogate_projection",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "6c1805396de7924c4e97f61d5fea00a5b2ce41e1738eb597609a51867c5fb414",
+    "after_sha256": "96b6393550b824b5623f12a23c791888d1058ad27b6951f1179bd41d828b4c9b"
+  },
+  {
+    "cohort": "retained",
+    "id": "fresh29/0004-surrogate_display_residue",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "1aae6089a4ccbbfcc643fcd19c4794c8626bb5d7575aea87c87144c39f2eb00c",
+    "after_sha256": "6317eec0dfc8dce5586dacbf3ba3b68668825e29bb314759eb6931e3e0f87174"
+  },
+  {
+    "cohort": "retained",
+    "id": "maker13/0005-surrogate_prefix",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "578ca5d8d245c555da103e863ee848dc78f52a2b2a26ff36ebaafe325bbb3e49",
+    "after_sha256": "65f9b019e00903d7e1297289b59feebc62dbf9210f2543e4bde8788d6099155c"
+  },
+  {
+    "cohort": "retained",
+    "id": "checker8/astral_offsets",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "8755ccde8872cbe32f3af48f56088ffb317baf8bde9ce90bc306010d18caa045",
+    "after_sha256": "f4e014add69fd6f437649b3f4b427d799fba38079a882138429df6547903e077"
+  },
+  {
+    "cohort": "checker38",
+    "id": "checker38/unicode_name",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "c5ccfdfec4684daf8259a5b5fe3825af6b5d8b20afecf906126c2f6a9263476b",
+    "after_sha256": "b9d79e11901cb5a6aa2a5d02ccd58da288d042507148f3fa5874c2997bcb5310"
+  },
+  {
+    "cohort": "checker38",
+    "id": "checker38/unicode_color",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "ecd5e7625ea9e3789e53717f6156e2932b84497c16bb66179531c745facfa919",
+    "after_sha256": "bb53b49d3bce81a8cd0c93e1f9417f3ac43d6f619b895dd1807d31c85b6abb6a"
+  },
+  {
+    "cohort": "checker38",
+    "id": "checker38/nested_angle",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "97de15dfe795a6606126b9ae970d02032f2178473646c0a25b2b1c9e9adab796",
+    "after_sha256": "505df52fe2a92a592ea736b595bd01c0d928c0b4c47f39d171d5f0c00d6d8150"
+  },
+  {
+    "cohort": "checker87",
+    "id": "checker87/identity_class",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "bd2f52c9b13c459f316d9db89a9fe5b1ee1b30063b45c03a01abf5803a2887bb",
+    "after_sha256": "f1e93d6a328e77af3d0d72a82e9218ba0f4d7d11bbc960cc8448713569799fe9"
+  },
+  {
+    "cohort": "checker87",
+    "id": "checker87/identity_deployment",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "ddd347ca46efbbda35b759f047afadaf787deaeb0781853fbb62866e748ea4c1",
+    "after_sha256": "001f8fb64b5e102ace5810dcc065d6dd92d62baee0096eea6cccfff94c9271da"
+  },
+  {
+    "cohort": "checker87",
+    "id": "checker87/comment_double_hyphen",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "f1793a0b68e480d1bf79fe39ea57639b68124d09efe6a47b3b381c4cabd6052e",
+    "after_sha256": "2712358a294b2c9020264a0f73190168dc36fea040de21b7a4ddfc9fb87b089c"
+  },
+  {
+    "cohort": "checker87",
+    "id": "checker87/shape_alpha",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "022508d4595c702bdc006e253df793b09d0fa5acee7a8d7d5892e85827c64c32",
+    "after_sha256": "9b42fadb5ecb14b778df51a4847a9b2817016a232c50f60975713a031d465b93"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_class_runs",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "8cc8e2f1774099bcedad61b71911b8511452a629d3edc5d18916582c140461c9",
+    "after_sha256": "fc537bfc4510f5c46ce38a361966c218f5e9bed3e219c80a68431968b1617450"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_class_unicode",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "c1f8a1723c012c47b83ef85ac34782cdfc57ddaba0fe45e5f56c7358194d8aa5",
+    "after_sha256": "b3986acb10af827cf0654d755a8cd12a24e07d7109420cea413f569013f7b0e6"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_class_symbols",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "a674751fc3d9c137b6e0abc237880d482d02cb329504ad3d166791ef2d3eae7a",
+    "after_sha256": "fad944ab3c8c2e96d57c00ecfa425a63f8d944d12b055a4931806fff17886ebf"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_class_links",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "7d2443b47aea0024382e181493e808aa5bdfaf6675a9372e7bc6e447ed6676f2",
+    "after_sha256": "8c594a81157f4c232e6ea419440e9ba2b29b07596094517a0484709ae7557d45"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_package",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "50f7d23b7d5a1bec2aa5f52154824576c3a6b4b01c8e115760c088a642fc45ca",
+    "after_sha256": "2dbaa352d10d4211c0c1bb7e5e9f924c6d739ddff640afb0b08d80222bbdb348"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_component",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "13b9bbb789ca036a9c967dba602b4bb953571efbd49685848884a5308c634677",
+    "after_sha256": "e744bda11755e843432a274618b358283481fa6e5ce41dbd8856a8cdfb4d7b09"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_deployment",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "c313a7bc474e4271ea4c3c0a1f7916432ca52e9a503a51794b87bf7c45ab72e6",
+    "after_sha256": "e016ee2a90b59a6d70b40938873924c73560a2e160c0ccdc37b51fc150df74ca"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/comment_usecase",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "5da6eb2808b971d79fc076d48dd5cb19c745fec77fcf29d2b0e767e31396c534",
+    "after_sha256": "e542f0c7a90412bc07a85dffa35462ca3774a0de6208f3782cf7892a72323367"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/state_alpha_empty",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "f08620b7f67d9092dd3e6415ffe0345744a00c451ce2fd0047c31a20756062bb",
+    "after_sha256": "3326327d95ddd1d61c7fe8aea36b4f8e276cc0a7c0ff0a0030b53cbf0d1dbb42"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/state_alpha_description",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "bdf065c89586ad80c9d926d06d8706c77d958ac5aafbf2636f14d78d5b6354d2",
+    "after_sha256": "38c2f57c8f86aff857efbef64e210d5b14055acd29b290c15f57238726f60df2"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/state_alpha_zero",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "485b4c213caad1dddcb13d7891695d2919c9000b88f0e23fb931a4714a048efe",
+    "after_sha256": "038f076fdf2d26ba470f5bf879b3d0f5070dcb3a2791ad736ad7d633929bd078"
+  },
+  {
+    "cohort": "corrective16",
+    "id": "corrective16/state_alpha_opaque",
+    "before_pass": false,
+    "after_pass": true,
+    "before_sha256": "cb2b04792187af05397b7ef33e52bd8498208a90bf13b7ab9587f2323de45ab1",
+    "after_sha256": "b87b478dca4a32b903014454f93b37caf01335423b620c547b9161189ac23b8b"
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/class/class_edge_unicode_names",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "dc059c25aa37bd19668aa3d2114213562c4e73f5af912daf6ad70ad1a5083d00",
+    "after_sha256": "46c2461e4087e1e62ce2daf66d3e3b64fd07679890ee9548e8cac2b531f7b1cf",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u00c5ngstr\u00f6m",
+      "class Fa\u00e7ade"
+    ],
+    "after_comments": [
+      "class ?ngstr?m",
+      "class Fa?ade"
+    ],
+    "java_comments": [
+      "class ?ngstr?m",
+      "class Fa?ade"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/component/comp_unicode_stereotypes",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "91a5535a52cb49309b420c75cbd0a90dcf27869cec5991f8a7b546195cf7b595",
+    "after_sha256": "c3649855cde5560f4b23f92bcf4d4deeee990ae2eec91aa816ae34e86148d12a",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "entity Service ?",
+      "entity Service ?",
+      "link Service \u03b1 to Service \u03b2"
+    ],
+    "after_comments": [
+      "entity Service ?",
+      "entity Service ?",
+      "link Service ? to Service ?"
+    ],
+    "java_comments": [
+      "entity Service ?",
+      "entity Service ?",
+      "link Service ? to Service ?"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/creole/creole_in_stereotype_boundary",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "41072b6110aef2907b573681337af894665288f36044ecdf0545a43e6de45943",
+    "after_sha256": "c0963b5d4a9ca882fc13a4d94a0c869d940e33ee9761ddc030c5d9d26c0480ff",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class **BoundaryClass** \u00abboundary\u00bb"
+    ],
+    "after_comments": [
+      "class **BoundaryClass** ?boundary?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/creole/creole_in_stereotype_controller",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "4594f58360106b01a0259ef53148cfb96f6ed6066c95de38bca172ca021ebb5d",
+    "after_sha256": "e1199705f7275f6498709c7856ed18f19e51eb4838abd708b9f0bc705a69f50f",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class **ControllerClass** \u00abcontroller\u00bb"
+    ],
+    "after_comments": [
+      "class **ControllerClass** ?controller?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/creole/creole_in_stereotype_entity",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "d561b8407d4fbd03e1648c88ebf1155e15369f63b19443f07229b1c6c1f1500d",
+    "after_sha256": "369b76cd02110bac872566f015c6b56a65d91b2a7453c08676c00d93cadf581d",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class **EntityClass** \u00abentity\u00bb"
+    ],
+    "after_comments": [
+      "class **EntityClass** ?entity?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/creole/creole_in_stereotype_repository",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "cf3f4f8e3a95298d6381a1acb9593ea4a314ac266888bbb13954cc80e8718fa1",
+    "after_sha256": "e3e5e6a838701065122db6fcf02f0f40a43ef50bc8a69cb90cd6307acf091141",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class **RepositoryClass** \u00abrepository\u00bb"
+    ],
+    "after_comments": [
+      "class **RepositoryClass** ?repository?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/creole/creole_in_stereotype_service",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "29f067cef44375227aa1132695dd96b2c55ccb31d883f63b713789b309dc3e42",
+    "after_sha256": "57bfae8c9836af8504188c731797692b40b4ef05b73232301cc40d2007b9273b",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class **ServiceClass** \u00abservice\u00bb"
+    ],
+    "after_comments": [
+      "class **ServiceClass** ?service?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/creole/creole_in_stereotype_value",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "9461b0172e4eafcbec2d132f9d469cf2a3aa05029f576dc1e9324fbee26bed10",
+    "after_sha256": "ce197fe4c564f3d32faed662568e8f219ededa7d4c5c7d3be8652fe806b34ebd",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class **ValueClass** \u00abvalue object\u00bb"
+    ],
+    "after_comments": [
+      "class **ValueClass** ?value object?"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/deployment/deploy_unicode",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "a8a105ac7ab5597bfdf80459e730b37788d24104adcafdef5dea6ff02d0d9160",
+    "after_sha256": "c4f35ce8667b10d0f5262822f925aeef660dbb8b3836cd8f00a05a9304b939b7",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "entity \u0421\u0435\u0440\u0432\u0435\u0440 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0439",
+      "entity \u0411\u0430\u0437\u0430 \u0434\u0430\u043d\u043d\u044b\u0445",
+      "entity \u0412\u0435\u0431-\u0441\u0435\u0440\u0432\u0435\u0440",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "after_comments": [
+      "entity ?????? ??????????",
+      "entity ???? ??????",
+      "entity ???-??????",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "java_comments": [
+      "entity SA",
+      "entity BD",
+      "entity WS",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_meta_unicode_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "89a3b312a3be0e6b944c041d66f1f317deb33d6354a0a38881699e712d75ef33",
+    "after_sha256": "d3e79d93c5fef06e81cafa8a553deaa3e4ceec41c38ff2f8da7dd97f2aa224f0",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u7528\u6237",
+      "class \u7cfb\u7edf",
+      "link \u7528\u6237 to \u7cfb\u7edf"
+    ],
+    "after_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "java_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_accented_class",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "07efb0ec67e99f9a1fad8f2fad60e25b4bd677f83fe397298b58432bfe3e2440",
+    "after_sha256": "3b8bc4758d88c8bbb67ed49dfe5e20419af71047d476c89bbfd70c245ddc210e",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u00c9l\u00e8ve",
+      "class Se\u00f1or",
+      "class \u00dcber",
+      "class \u00d8rsted"
+    ],
+    "after_comments": [
+      "class ?l?ve",
+      "class Se?or",
+      "class ?ber",
+      "class ?rsted"
+    ],
+    "java_comments": [
+      "class ?l?ve",
+      "class Se?or",
+      "class ?ber",
+      "class ?rsted"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_arabic_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "4c0e86234991d4263a874dfcbe22e74f54dc3ac07c30e0ce088b1c16bc18fb36",
+    "after_sha256": "46b6c294658831e0f2b4e941ec2077693c3aaa5c3780a147820077c7accb46ab",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u0645\u0633\u062a\u062e\u062f\u0645",
+      "class \u0646\u0638\u0627\u0645",
+      "link \u0645\u0633\u062a\u062e\u062f\u0645 to \u0646\u0638\u0627\u0645"
+    ],
+    "after_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "java_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_arabic_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "5dcadfd2b69330f056fb6725877cf9d7dae74048073f6cea35c213377f1d131f",
+    "after_sha256": "1543f5d4d03566551c487d0717be38dab84648c8276b2b208815c8bb7bd13c6e",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u0645\u0633\u062a\u062e\u062f\u0645"
+    ],
+    "after_comments": [
+      "class ??????"
+    ],
+    "java_comments": [
+      "class ??????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "5334cf112ef20d755aab60f344152f2491973cd10ade33940228de416567cf95",
+    "after_sha256": "4db1659efc4d80a9c5cf6665850b34071d7dfbe34b3b1e7198a1932484f4aab7",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u7528\u6237",
+      "class \u8ba2\u5355",
+      "link \u7528\u6237 to \u8ba2\u5355"
+    ],
+    "after_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "java_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "53ca8372df90af2db004c6baf16da796b328df0f27142d57a984d0360404d7f1",
+    "after_sha256": "736862fd70f8c6cebc1c3cfcaf586596ee89d8d48918a3b5cf37fd317e8565ad",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u7528\u6237",
+      "class \u7cfb\u7edf",
+      "link \u7528\u6237 to \u7cfb\u7edf"
+    ],
+    "after_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "java_comments": [
+      "class ??",
+      "class ??",
+      "link ?? to ??"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_chinese_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "43c535255c84606181e5e3978d1b896c97f19c3bbde4f3a10a2c6d2c1d6316a6",
+    "after_sha256": "daeb6db1db8c80c39fd2bd960c7f2dd4512083f6c4e20a2db2a96611a09cbc66",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u7528\u6237"
+    ],
+    "after_comments": [
+      "class ??"
+    ],
+    "java_comments": [
+      "class ??"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_combining_chars",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "d9a5475443fe763c1fdaf28dc9150d6f0cfbd7cafd3a8d3a12970f0489670551",
+    "after_sha256": "7dad1d44aae4a69d16dca67cb093baa38796a15c48752c4604145fd1f836ffef",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class e\u0301le\u0300ve"
+    ],
+    "after_comments": [
+      "class e?le?ve"
+    ],
+    "java_comments": [
+      "class e?le?ve"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_emoji_class",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "704305aa8709abf9f0d63c4b345406ec787825137a0272caeff54ff157ff2404",
+    "after_sha256": "a81dd7f9c3c3a1a2e331890a3ac12e57542daee84749b65b3647def430b97e41",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \ud83d\ude80 Rocket",
+      "class \ud83c\udf0d Earth",
+      "link \ud83d\ude80 Rocket to \ud83c\udf0d Earth"
+    ],
+    "after_comments": [
+      "class ? Rocket",
+      "class ? Earth",
+      "link ? Rocket to ? Earth"
+    ],
+    "java_comments": [
+      "class ? Rocket",
+      "class ? Earth",
+      "link ? Rocket to ? Earth"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_greek_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "e000f5a3ebc77d04ff4648b40b362020c9154edd720b4a34e5c6fd6500d77158",
+    "after_sha256": "a96ab14faaf93dd22c467aef4c8745db736fba64ac279a7c1ec59d135d082e1f",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2",
+      "class \u03a3\u03cd\u03c3\u03c4\u03b7\u03bc\u03b1",
+      "link \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2 to \u03a3\u03cd\u03c3\u03c4\u03b7\u03bc\u03b1"
+    ],
+    "after_comments": [
+      "class ???????",
+      "class ???????",
+      "link ??????? to ???????"
+    ],
+    "java_comments": [
+      "class ???????",
+      "class ???????",
+      "link ??????? to ???????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_greek_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "9c0354e7bb45afb7fd28eeb1ca6d6cacda41287919dbe1acb877564bdb1e2868",
+    "after_sha256": "ed619f19db800e28e2385f4284fb176e2f08def3950448ddcaf09c3a2611df49",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2"
+    ],
+    "after_comments": [
+      "class ???????"
+    ],
+    "java_comments": [
+      "class ???????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "be85bb616a88c040473cee71850a33738c294db0d9ef47433d5665cef8cca337",
+    "after_sha256": "4f2f145d22ab5e50e8ac7c4820f15f6195ba14eb4d6528e9ff634bec90e42be2",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u05de\u05e9\u05ea\u05de\u05e9",
+      "class \u05de\u05e2\u05e8\u05db\u05ea",
+      "link \u05de\u05e9\u05ea\u05de\u05e9 to \u05de\u05e2\u05e8\u05db\u05ea"
+    ],
+    "after_comments": [
+      "class ?????",
+      "class ?????",
+      "link ????? to ?????"
+    ],
+    "java_comments": [
+      "class ?????",
+      "class ?????",
+      "link ????? to ?????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "785f86320396a681b28eae7fb74347be6969b4e3b1ac8ccfc4132f3e130a3467",
+    "after_sha256": "6608388fd5876700174165a3fcfa8147eea716909fc0fc68caf1d05d15fc86f1",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u05de\u05e9\u05ea\u05de\u05e9"
+    ],
+    "after_comments": [
+      "class ?????"
+    ],
+    "java_comments": [
+      "class ?????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_hindi_class_diagram",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "c0f805fd7ea2a143f4b05c2d4d2b88c18efb52a58232ab841ff05f8594cf4984",
+    "after_sha256": "90ff6b56e3e7c64d5204df0a53826b2eb8225bf8833d172097dc824e4666c287",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e",
+      "class \u092a\u094d\u0930\u0923\u093e\u0932\u0940",
+      "link \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e to \u092a\u094d\u0930\u0923\u093e\u0932\u0940"
+    ],
+    "after_comments": [
+      "class ??????????",
+      "class ???????",
+      "link ?????????? to ???????"
+    ],
+    "java_comments": [],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_hindi_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "8a89ffe8922028c2387802ccd91267d5bf84e5174896fa6300c1ca36a8e50783",
+    "after_sha256": "f5645d2e7073c2140d5bcde6cb979ec8a44a882cad3a3b7c341bb3a30e6a230b",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e"
+    ],
+    "after_comments": [
+      "class ??????????"
+    ],
+    "java_comments": [
+      "class ??????????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "c5241ba7d13963c1a6a7bf8754d63521800d243d3dc0e6b92ff2bbbef66458f7",
+    "after_sha256": "f25c70952c14239d7a126b77ed4c176b524855ebcfb9f004270822057536ffb7",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u30e6\u30fc\u30b6\u30fc",
+      "class \u6ce8\u6587",
+      "link \u30e6\u30fc\u30b6\u30fc to \u6ce8\u6587"
+    ],
+    "after_comments": [
+      "class ????",
+      "class ??",
+      "link ???? to ??"
+    ],
+    "java_comments": [
+      "class ????",
+      "class ??",
+      "link ???? to ??"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "56233d0d2b1dfadad068d5e8ada5222e61302fc565ecfb7c50266936d4a80778",
+    "after_sha256": "f6e65051fdf302f0d0e13dcc3286c1d5a7245a8007ff562e66bf9b3de5709cf5",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u30e6\u30fc\u30b6\u30fc",
+      "class \u30b7\u30b9\u30c6\u30e0",
+      "link \u30e6\u30fc\u30b6\u30fc to \u30b7\u30b9\u30c6\u30e0"
+    ],
+    "after_comments": [
+      "class ????",
+      "class ????",
+      "link ???? to ????"
+    ],
+    "java_comments": [
+      "class ????",
+      "class ????",
+      "link ???? to ????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_japanese_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "8ca2aa86933be30eb8addf529d2db30d61ee2e00f6cbe65ae254eb48e77eafee",
+    "after_sha256": "556326c86deaa0dd9c37c09af327f58d9380d3f5970d0d518f505ce60eed1d64",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u30e6\u30fc\u30b6\u30fc"
+    ],
+    "after_comments": [
+      "class ????"
+    ],
+    "java_comments": [
+      "class ????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_korean_class",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "f7b2f9caaa8d8b33c3f11bf49894b7139d6f5a49d45ad0c23743d6ab0e12e570",
+    "after_sha256": "ca55cb47397319d532a13487d4699aa4dbef72787e07235e109752c7a5fefe08",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \uc0ac\uc6a9\uc790",
+      "class \uc8fc\ubb38",
+      "link \uc0ac\uc6a9\uc790 to \uc8fc\ubb38"
+    ],
+    "after_comments": [
+      "class ???",
+      "class ??",
+      "link ??? to ??"
+    ],
+    "java_comments": [
+      "class ???",
+      "class ??",
+      "link ??? to ??"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_korean_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "02e21cd8cceefcd1ef9433fae18e8c04177d430da14abc388c37e2870a8820a6",
+    "after_sha256": "6ae7de4f6d9b7cad5fd8dd7bd389bb0849fb9e4872544f98784075b73773eec2",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \uc0ac\uc6a9\uc790",
+      "class \uc2dc\uc2a4\ud15c",
+      "link \uc0ac\uc6a9\uc790 to \uc2dc\uc2a4\ud15c"
+    ],
+    "after_comments": [
+      "class ???",
+      "class ???",
+      "link ??? to ???"
+    ],
+    "java_comments": [
+      "class ???",
+      "class ???",
+      "link ??? to ???"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_korean_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "b57517a044b66527d40deee636575a2fa6b628a9fdb4144b354bc86a7d93af36",
+    "after_sha256": "7f0496c667a5da2889a00ac74e9109d08835d21793cea80509336ffa1b6f1bce",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \uc0ac\uc6a9\uc790"
+    ],
+    "after_comments": [
+      "class ???"
+    ],
+    "java_comments": [
+      "class ???"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_math_symbols",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "1ae3329e0a4d946aed24ec8721006f4bbb2d0d80c7f3d9c0ab10bb7b0913c70f",
+    "after_sha256": "98d82e3acf611360881637b5a856e5fe0d71f6eab77bcb71e8ddf3cbca3521cf",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u03a3_Calculator"
+    ],
+    "after_comments": [
+      "class ?_Calculator"
+    ],
+    "java_comments": [
+      "class ?_Calculator"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_mixed_scripts",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "3128754eb929bc032d15a3be9afa7563de9255861fe5dc15e3f3a62dd26bd557",
+    "after_sha256": "d71900cc45d57d3cf1587abfd802be190cc27b2f5c5388e59b977d25490d88eb",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u6df7\u5408 Mixed \u043c\u0435\u0448\u0430\u043d\u044b\u0439"
+    ],
+    "after_comments": [
+      "class ?? Mixed ???????"
+    ],
+    "java_comments": [
+      "class ?? Mixed ???????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_russian_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "e6bcb57dbef2954e2580890eac34ba3b7d99b64e8ae296b42a6647c212c45a54",
+    "after_sha256": "f19041e7dbbfa31b750befa8b797e680a5ee03c45ad5447cca9a0102f403eb93",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c",
+      "class \u0421\u0438\u0441\u0442\u0435\u043c\u0430",
+      "link \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c to \u0421\u0438\u0441\u0442\u0435\u043c\u0430"
+    ],
+    "after_comments": [
+      "class ????????????",
+      "class ???????",
+      "link ???????????? to ???????"
+    ],
+    "java_comments": [
+      "class ????????????",
+      "class ???????",
+      "link ???????????? to ???????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_russian_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "36e8e772da1d1ac738eedf21c0c74f8b479626d6a50cf0b1a30631daa6d43727",
+    "after_sha256": "7314f49bc8a72c1bb387de92364e40c5a98d840d03ed5ed0fa01169c0c35c636",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c"
+    ],
+    "after_comments": [
+      "class ????????????"
+    ],
+    "java_comments": [
+      "class ????????????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_surrogate_pairs",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "0b3b677697f6ae00f045671fec15c8bc733697056dc04c7ab8277a25c5be9801",
+    "after_sha256": "f7a0e006bfc4995b875963b8a12904a75110377498d7bd8ef6ae63ca3dcfd3a9",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \ud83d\ude00 Emoji Class"
+    ],
+    "after_comments": [
+      "class ? Emoji Class"
+    ],
+    "java_comments": [
+      "class ? Emoji Class"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_thai_class_diagram",
+    "before_pass": false,
+    "after_pass": false,
+    "before_sha256": "2c8c3d5c4b6910b74f8a36517d74d24fdd96347d5ce6afe7f22b08fd01e1d96b",
+    "after_sha256": "0caddbe542be5485309dcf724ce80be9822708a627fe16fc08a7a67f99d7d228",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49",
+      "class \u0e23\u0e30\u0e1a\u0e1a",
+      "link \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49 to \u0e23\u0e30\u0e1a\u0e1a"
+    ],
+    "after_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "java_comments": [],
+    "comments_match_java": false
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_thai_title",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "95e6235b2de537ab61b4e3480d46c34a3cf7e5a41ef0332821ae5d45675a8fda",
+    "after_sha256": "3228f559c8f453ffaebfb6256688a0470c6c3fc241ed1e62b7a1f51fde62db0b",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49"
+    ],
+    "after_comments": [
+      "class ??????"
+    ],
+    "java_comments": [
+      "class ??????"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/edge-cases/edge_unicode_zero_width",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "0eb3106409d179b3444feea229d5cae2edfe981463d5981e62649477c97eff59",
+    "after_sha256": "8b2e03d779d9de3679ea6ee7847bd1eb03fc0de8246eda073aff4db0dbbe7695",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class Foo\u200bBar"
+    ],
+    "after_comments": [
+      "class Foo?Bar"
+    ],
+    "java_comments": [
+      "class Foo?Bar"
+    ],
+    "comments_match_java": true
+  },
+  {
+    "cohort": "full-golden",
+    "id": "full-golden/rendering/text/text_unicode_class_names",
+    "before_pass": true,
+    "after_pass": true,
+    "before_sha256": "39507f1d97e8df2992d2401b75653b0ef5a218359c8a0e4582fc28eb234c5a67",
+    "after_sha256": "1ded3ebba9f8a25eca497e95abdfe40453c1d476245fc39c6eb0bb2cac832efe",
+    "outside_comments_byte_identical": true,
+    "decoded_noncomments_equal": true,
+    "xml_equivalent": false,
+    "before_comments": [
+      "class \u00c4rger",
+      "class \u00dcbung",
+      "class \u00d6ffnung",
+      "link \u00c4rger to \u00dcbung",
+      "link \u00dcbung to \u00d6ffnung"
+    ],
+    "after_comments": [
+      "class ?rger",
+      "class ?bung",
+      "class ?ffnung",
+      "link ?rger to ?bung",
+      "link ?bung to ?ffnung"
+    ],
+    "java_comments": [
+      "class ?rger",
+      "class ?bung",
+      "class ?ffnung",
+      "link ?rger to ?bung",
+      "link ?bung to ?ffnung"
+    ],
+    "comments_match_java": true
+  }
+]

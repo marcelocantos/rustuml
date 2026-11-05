@@ -1,0 +1,10 @@
+@startuml
+!a="one"
+!ab="two"
+!abcd="four"
+!undef abcd
+!undef ab
+class "a / ab / abc / abcd / abX" as History
+!ab="again"
+class "a / ab / abc / abcd / abX" as Again
+@enduml

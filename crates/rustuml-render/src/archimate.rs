@@ -146,11 +146,12 @@ fn render_oracle(diagram: &ArchimateDiagram, oracle: &OracleLayout) -> String {
         let id_attr = cluster
             .entity_id
             .as_deref()
-            .map(|i| format!(r#" id="{i}""#))
+            .map(|i| format!(r#" id="{i}""#, i = crate::svg::escape_attribute(i),))
             .unwrap_or_default();
         svg.raw(&format!(
             r#"<g class="{}" data-qualified-name="{}"{source_attr}{id_attr}>"#,
-            cluster.group_class, cluster.qualified_name,
+            crate::svg::escape_attribute(&cluster.group_class),
+            crate::svg::escape_attribute(&cluster.qualified_name),
         ));
         let mut body = String::new();
         emit_oracle_cluster_children(&mut body, cluster);
@@ -196,7 +197,10 @@ fn emit_entity(svg: &mut SvgBuilder, ent: &OracleEntity, elem: &ArchimateElement
     let r = &ent.rect;
     let qn = &ent.qualified_name;
 
-    svg.raw(&format!("<!--entity {}-->", elem.id));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("entity {}", elem.id)),
+    ));
 
     let source_attr = r
         .source_line
@@ -206,6 +210,8 @@ fn emit_entity(svg: &mut SvgBuilder, ent: &OracleEntity, elem: &ArchimateElement
     let id = r.entity_id.as_deref().unwrap_or("ent0000");
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qn}"{source_attr} id="{id}">"#,
+        qn = crate::svg::escape_attribute(qn),
+        id = crate::svg::escape_attribute(id),
     ));
 
     let (x, y, w, h) = (r.x, r.y, r.width, r.height);
@@ -252,8 +258,8 @@ fn emit_entity(svg: &mut SvgBuilder, ent: &OracleEntity, elem: &ArchimateElement
             h_s = fc(h),
             w_s = fc(w),
             x_s = fc(x),
-            y_s = fc(y),
-        ));
+            y_s = fc(y), fill = crate::svg::escape_attribute(fill), style = crate::svg::escape_attribute(style),
+));
     }
 
     // Corner icon (ported from PlantUML's archimate sprite SVGs). The canonical
@@ -388,7 +394,10 @@ fn emit_link(
         .cloned()
         .unwrap_or_default();
     let prefix = if reverse { "reverse link" } else { "link" };
-    svg.raw(&format!("<!--{prefix} {from} to {to}-->"));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("{prefix} {from} to {to}")),
+    ));
 
     let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
     let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -401,11 +410,16 @@ fn emit_link(
     let link_type_attr = edge
         .link_type
         .as_deref()
-        .map(|t| format!(r#" data-link-type="{t}""#))
+        .map(|t| {
+            format!(
+                r#" data-link-type="{t}""#,
+                t = crate::svg::escape_attribute(t),
+            )
+        })
         .unwrap_or_default();
     svg.raw(&format!(
-        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}"{link_type_attr}{source_attr} id="{link_id}">"#,
-    ));
+        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}"{link_type_attr}{source_attr} id="{link_id}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_id = crate::svg::escape_attribute(link_id),
+));
 
     let path_style = edge
         .path_style
@@ -414,12 +428,15 @@ fn emit_link(
     if let Some(path_id) = &edge.path_id {
         svg.raw(&format!(
             r#"<path d="{}" fill="none" id="{path_id}" style="{path_style}"/>"#,
-            edge.d,
+            crate::svg::escape_attribute(&edge.d),
+            path_id = crate::svg::escape_attribute(path_id),
+            path_style = crate::svg::escape_attribute(path_style),
         ));
     } else {
         svg.raw(&format!(
             r#"<path d="{}" fill="none" style="{path_style}"/>"#,
-            edge.d,
+            crate::svg::escape_attribute(&edge.d),
+            path_style = crate::svg::escape_attribute(path_style),
         ));
     }
 
@@ -431,6 +448,8 @@ fn emit_link(
             .unwrap_or("stroke:#000000;stroke-width:1;");
         svg.raw(&format!(
             r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+            fill = crate::svg::escape_attribute(fill),
+            poly_style = crate::svg::escape_attribute(poly_style),
         ));
     }
 
@@ -605,18 +624,22 @@ fn emit_no_oracle_clusters(
             String::new()
         };
         let entity_id = &uids.group_ids[index];
-        svg.raw(&format!("<!--cluster {}-->", escape_text(&group.label)));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!("cluster {}", &group.label)),
+        ));
         svg.raw(&format!(
             r#"<g class="cluster" data-qualified-name="{}"{source_attr} id="{entity_id}">"#,
-            escape_text(&group.label),
+            crate::svg::escape_attribute(&group.label),
+            entity_id = crate::svg::escape_attribute(entity_id),
         ));
         svg.raw(&format!(
             r#"<rect fill="{fill}" height="{}" rx="0.5" ry="0.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
             fc(position.height),
             fc(position.width),
             fc(x),
-            fc(y),
-        ));
+            fc(y), fill = crate::svg::escape_attribute(&fill),
+));
         svg.raw(&format!(
             r##"<text fill="#000000" font-family="{FONT_FAMILY}" font-size="12" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
             fc(title_width),

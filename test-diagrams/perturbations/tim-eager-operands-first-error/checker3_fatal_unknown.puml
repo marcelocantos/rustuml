@@ -1,0 +1,5 @@
+@startuml
+class Before
+!$result=%missing_checker3()+%date("XXXX",0)
+class After
+@enduml

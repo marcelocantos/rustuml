@@ -1,0 +1,9 @@
+@startuml
+!function $choose(a="one",b="two")
+!return a+b
+!endfunction
+!function $choose(c="three",d="four",e="five")
+!return c+d+e
+!endfunction
+class "$choose(c="named")" as Node
+@enduml

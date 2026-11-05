@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-delimited-style-candidate-eligibility",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3Ac2ac4971-4f46-4299-a5b4-2629a816be59",
+    "model": "gpt-6-astra / high / Codex harness in T3 Code",
+    "independence": "New checker; no prior maker involvement; no children; evidence-only isolated checkout"
+  },
+  "account_commit": "3da7456655edffc1f3fc1e4236d832c490c4432e",
+  "implementation_commit": "8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6",
+  "evidence_tip": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git archive a84856637adcd8e8d4e78fd2ee00658c9c612feb and 8df6bb53fac4fdf364a1a9aeea0b203cb6dab8e6 into private source snapshots; cargo build -p rustuml --release -j 4 with distinct private targets (after additionally builds rustuml-oracle)",
+    "uv run --no-project --with pyyaml python replay_check.py before|after (all immutable cohorts; actual CLI -pipe and --yaml -pipe; unchanged compare_svg_strict)",
+    "Parent existing Monkey Man runner: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact request/manifest/streams retained",
+    "uv run --no-project --with pyyaml python fresh_check.py and supplement_check.py; adjudicate.py classifies embedded math failures without rerunning CLI",
+    "cargo test --workspace --lib --release; cargo test -p rustuml --test pipe_mode --release",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle -- --nocapture; golden_pairs, parity_perturbations and harness_guards once each",
+    "cargo clippy --workspace --all-targets -- -D warnings; cargo fmt --all -- --check; rustfmt --edition 2024 --check --config skip_children=true on four touched files"
+  ],
+  "command_records": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support/gates.json",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_bold.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_bold.svg",
+      "axes": [
+        "empty/adjacent commands",
+        "Unicode/unclosed fallback"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "b3a811dc7a9302812e3fd99ec2020dbb7f5b842284c7d50ab9151f78e593dfa7",
+      "golden_sha256": "0f4284f8d6734642905b36603c77ac0b8b9ab2ea3fb6b4e780c2ff2ea3f46e12",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/delimiter_bold",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_italic.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_italic.svg",
+      "axes": [
+        "empty/adjacent commands",
+        "Unicode/unclosed fallback"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "4a21180025d84655645b1fc2e74ac8d5a9095c8793fd29045d00ca8323f40339",
+      "golden_sha256": "dfd02097c0566c3b71f0fd1f2eee7ad1dd1df6e5d7fe0ef2cb870d177faddfda",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/delimiter_italic",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_underline.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_underline.svg",
+      "axes": [
+        "empty/adjacent commands",
+        "Unicode/unclosed fallback"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "4bfcd8a4284878b576b6b9f78cb92645ea9dcadc763d63ced453fbdddeb4e7b0",
+      "golden_sha256": "7f6fa081db015aca2e1f347ba72f6feb34dca234819053557a3b5ccd8ef47a25",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/delimiter_underline",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_strike.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_strike.svg",
+      "axes": [
+        "empty/adjacent commands",
+        "Unicode/unclosed fallback"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "36d3656ed5a0a9379b701c5fd42f6e9db87a99667ae0ba208d22d3d0fca7acd8",
+      "golden_sha256": "46a6c6ce07ad0a67a4cc2483805962b969c82d91681e3efdac8255988c1f9aca",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/delimiter_strike",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_wave.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_wave.svg",
+      "axes": [
+        "empty/adjacent commands",
+        "Unicode/unclosed fallback"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "35596cfcc0c1a90a6fc16ffaf35d2c82502f6860908befd715cb0d84d6c608c8",
+      "golden_sha256": "ded94bd354dad8232b66d0c5c1022e33a4b3eb128dc256284ee5a3e82042268f",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/delimiter_wave",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_escapes.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_escapes.svg",
+      "axes": [
+        "escaped closers",
+        "delimiter families"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "42a2e3b3636b8b20395a87711583d4e4a2d2e1d7465f5da85c478637059bbf48",
+      "golden_sha256": "e3605c407e22e80d6e3119478a89ec148a74b4ec86326e9f596a113e932900d4",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/delimiter_escapes",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_activity.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/delimiter_activity.svg",
+      "axes": [
+        "activity consumer",
+        "empty and nested command"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "50ea1008a6825ac6b6b8e0f9a487aad0fc855192741e84a3bb3cb3c78f78fbcd",
+      "golden_sha256": "3c423c7fc27ce94f6d351b6a5c05b5ee405451c05a3147c57e7ee285f0a63b6a",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/checker30/delimiter_activity",
+      "verdict_excluded": false
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/s_delimiter_escape_overlap.puml",
+      "golden": "test-diagrams/perturbations/creole-delimited-style-candidate-eligibility/checker-independent-20261105/s_delimiter_escape_overlap.svg",
+      "axes": [
+        "escaped opening overlap",
+        "delimiter families"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "observed_classification": "valid_diagram",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "ef1b528abec942196f10b6ec716a2240ce11a88c621639279e8f18c010a4d6f7",
+      "golden_sha256": "76ffe96bbbaa5f3b249add217baf6c0664d96cab8a47b06ff857e97bbfd81f5b",
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "measurements.tar.gz:replay/after/supplement8/s_delimiter_escape_overlap",
+      "verdict_excluded": false
+    }
+  ],
+  "findings": [
+    "Bounded support: all five delimiter families pass fresh mid-line empty/nonempty captures, Unicode bodies, later inner sprites/commands, and unclosed fallback; an activity consumer also passes. The captured-body nonemptiness and no-EOL distinction trace to CommandCreoleStyle.createCreole/matchingSize.",
+    "Counterexample s_delimiter_escape_overlap: Java CharHidder hides exactly one character after ~. q~***x**r becomes literal q*, bold x, literal r. Rust walk_segments special-cases a two-character delimiter after ~ and consumes two characters, leaving q***x**r literal. The same failure holds for underline and strike. This branch predates the packet; the new matcher still receives the wrong lexical stream.",
+    "Counterexample delimiter_escapes: the four ordinary escaped closing families agree, but the wave line keeps the backslash: Java a~~b versus Rust a\\~~b. take_style_delimiter treats backslash-tilde specially for search while walk_segments does not implement CharHidder consumption for the body.",
+    "All four immutable original delimiter controls remain executable failures before and after. SECTION_HEADER ^--([^-]*)--$ and ASTERISK_PREFIXED_LINE_PATTERN in CreoleStripeSimpleParser precede inline commands; sequence whole_strike_label_inner and list processing remain separate obligations. New passing mid-line controls do not replace them."
+  ],
+  "causal_locations": {
+    "java": [
+      "klimt/creole/command/CommandCreoleStyle#createCreole: nonempty captured V before closing delimiter; matchingSize returns V length",
+      "klimt/font/FontStyle#getUbrexCreoleSyntax",
+      "klimt/creole/legacy/StripeSimple#searchCommand/modifyStripe: failed candidate consumes one literal character",
+      "utils/CharHidder#hide"
+    ],
+    "rust": [
+      "crates/rustuml-render/src/creole.rs::walk_segments (**,//,__,--,~~ arms)",
+      "crates/rustuml-render/src/creole.rs::collect_until (not changed for monospace/legacy)"
+    ]
+  },
+  "verdict": "rejected",
+  "reason": "Fresh clean-positive whole-output failures remain executable. Bounded mechanism support is recorded separately; no failures are waived and no pre-existing failure is called a maker regression.",
+  "fresh_counts": {
+    "entries": 8,
+    "clean_positive": 8,
+    "verdict_eligible": 8,
+    "before_pass": 0,
+    "after_pass": 6
+  },
+  "evidence": "docs/parity-reviews/creole-style-candidate-eligibility/checker-support",
+  "reference_limitations": [
+    "Historical font/Graphviz environment equivalence unproved.",
+    "Java argv derived from pinned wrapper, not independently process-traced.",
+    "Pinned runner lacks Batik; math/latex fallback outputs are nonpositive reference-environment evidence, not PlantUML semantics.",
+    "No combined correctness with class candidate 68ab512be964e243ae1943f7a9fefd3537091401 or concurrent sequence work."
+  ],
+  "reviewed_at": "2026-11-04T14:22:12.467316+00:00"
+}

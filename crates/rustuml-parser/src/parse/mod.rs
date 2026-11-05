@@ -1130,6 +1130,14 @@ pub fn parse_with_base(
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),
     };
+    // Java TContext.executeOneLineSafe propagates fatal TIM errors; its partial
+    // result list must not become a successful diagram (account 0530072a).
+    if let Some(error) = preprocess_out.error.take() {
+        return Err(ParseError {
+            line: error.line,
+            message: error.message,
+        });
+    }
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
     if typ == "uml" {
         for (index, line) in preprocess_out.lines.iter().enumerate() {
@@ -1150,6 +1158,13 @@ pub fn parse_with_base(
             }
             None => preprocess::preprocess_full_for_sequence_parse(input, None),
         };
+        // The sequence projection has the same TContext error contract.
+        if let Some(error) = preprocess_out.error.take() {
+            return Err(ParseError {
+                line: error.line,
+                message: error.message,
+            });
+        }
         style_program = style::extract_style_program(&mut preprocess_out.lines);
     }
     let lines = preprocess_out.lines;
@@ -1299,6 +1314,25 @@ pub fn parse_with_base(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn fatal_preprocessing_errors_preserve_origin() {
+        for declaration in ["class Before", "Alice -> Bob: before"] {
+            for (expression, diagnostic) in [
+                ("%date(\"QQ\",0)", "Bad date pattern"),
+                (
+                    "%date(\"yyyy\",2147483648)",
+                    // Java TValue.fromNumber rejects the literal before DateFunction.
+                    "Integer literal outside signed 32-bit range",
+                ),
+            ] {
+                let input = format!("@startuml\n{declaration}\n!$bad = {expression}\n@enduml\n");
+                let error = parse(&input).expect_err("fatal TIM error accepted partial diagram");
+                assert_eq!(error.line, 2, "{input}");
+                assert!(error.message.starts_with(diagnostic), "{error:?}");
+            }
+        }
+    }
 
     #[test]
     fn detects_uml_type() {
@@ -2182,15 +2216,18 @@ Policy --> Retry
     }
 
     #[test]
-    fn leading_blank_lines_do_not_shift_locations_but_internal_blanks_do() {
+    fn raw_reader_preserves_leading_and_internal_blank_line_origins() {
         let input = "@startuml\n\n\n\n\nclass FreshAlpha881\n\n\nclass FreshBeta883\nFreshAlpha881 --> FreshBeta883\n@enduml";
         let Diagram::Class(diagram) = parse(input).expect("class input parses") else {
             panic!("expected class diagram");
         };
 
-        assert_eq!(diagram.entities[0].source_line, 1);
-        assert_eq!(diagram.entities[1].source_line, 4);
-        assert_eq!(diagram.relationships[0].source_line, 5);
+        // Owner-selected Java CLI/file contract (policy commit b62d8ce9).
+        // SourceStringReader preserves these blanks; picoweb GET's
+        // DiagramSourceCompressor.decompress instead produces origins 1/4/5.
+        assert_eq!(diagram.entities[0].source_line, 5);
+        assert_eq!(diagram.entities[1].source_line, 8);
+        assert_eq!(diagram.relationships[0].source_line, 9);
     }
 
     // ── multi-block splitting ─────────────────────────────────────────────────

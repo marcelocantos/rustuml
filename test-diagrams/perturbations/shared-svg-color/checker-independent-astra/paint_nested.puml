@@ -1,0 +1,5 @@
+@startuml
+class Vault {
+A<color:#3579bd80>B<color:#red>C</color>D<font color=#3579bd01>E</font>F</color>G
+}
+@enduml

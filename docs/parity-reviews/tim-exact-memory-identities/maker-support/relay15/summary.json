@@ -1,0 +1,17 @@
+{
+  "total": 15,
+  "valid": 14,
+  "negative": 1,
+  "before_matches": 2,
+  "current_matches": 14,
+  "current_source_matches": 14,
+  "negative_rejected": 1,
+  "lost_passes": [],
+  "valid_failures": [],
+  "new_valid_errors": [],
+  "input_compressed_sha256": "3070c7a788645c0951caba9c6463c4455da2ecc3da8cc42b28d871c4f002cc8e",
+  "output_compressed_sha256": "a9af5ebfeece6d43a4dbfdc8df22b14d2d0db1b7de86d0e3186cf27e49855905",
+  "output_json_sha256": "413527eb57bc46d066e4712fe0a17090fd52b02bbd9ceb75d6dd342be8c71dae",
+  "resources_verified": 16,
+  "calls_verified": 30
+}

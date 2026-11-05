@@ -1,0 +1,4 @@
+@startuml
+class Nested
+class "kept 1" as Actual
+@enduml

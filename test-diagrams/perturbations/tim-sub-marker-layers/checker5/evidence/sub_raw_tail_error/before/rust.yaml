@@ -1,0 +1,31 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Selected
+      class Lost
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Selected
+  - !Entity Lost
+  entities:
+  - id: Selected
+    label: Selected
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  - id: Lost
+    label: Lost
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

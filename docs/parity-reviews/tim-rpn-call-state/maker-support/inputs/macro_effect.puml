@@ -1,0 +1,15 @@
+@startuml
+!$n=0
+!function $tick()
+!$n=$n+1
+!return "expanded"
+!endfunction
+!definelong ROWS()
+one
+two
+!enddefinelong
+note as N
+$tick() ROWS() discarded
+end note
+class "$n" as Count
+@enduml

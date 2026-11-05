@@ -1,0 +1,139 @@
+{
+  "source": "/tmp/rustuml-checker6/supplement/sub_defined_in_uncalled.puml",
+  "mechanism": "tim-local-sub-collection",
+  "axes": [
+    "function collection",
+    "external local replay"
+  ],
+  "negative": false,
+  "cwd": "/tmp/rustuml-checker6/supplement",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "golden": "/tmp/rustuml-checker6/relay4/sub_defined_in_uncalled/java.svg.stdout",
+  "reference_source": "/tmp/rustuml-checker6/relay4/sub_defined_in_uncalled/java.source.stdout",
+  "java_exit": 0,
+  "java_probe_exit": 0,
+  "source_sha256": "9cff639c1732156436385100a6e5d9718b3762ee7ca21003d39a5ac5b4bf876c",
+  "golden_sha256": "7d411aa44d207c1dfc0572002beb1b95d5e3c84e45cb4fb80bb609c3facdf578",
+  "suite": "fresh4",
+  "capture_id": "0000-sub_defined_in_uncalled",
+  "reference_valid": true,
+  "reference_xml_valid": true,
+  "phases": {
+    "before": {
+      "cli_exit": 1,
+      "comparison_exit": 3,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/supplement",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/supplement",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay4/sub_defined_in_uncalled/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh4/0000-sub_defined_in_uncalled/before/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 6: cannot include stored"
+      ],
+      "source_equal": false
+    },
+    "after": {
+      "cli_exit": 1,
+      "comparison_exit": 3,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/supplement",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/supplement",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "15e9d8a5293a9ec9a62d72f674333f79239438c87e477ffa51320293a0c3a938"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay4/sub_defined_in_uncalled/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh4/0000-sub_defined_in_uncalled/after/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 6: cannot include stored"
+      ],
+      "source_equal": false
+    }
+  },
+  "actual_source": "/tmp/rustuml-checker6/supplement/sub_defined_in_uncalled.puml",
+  "actual_golden": "/tmp/rustuml-checker6/relay4/sub_defined_in_uncalled/java.svg.stdout",
+  "committed_source": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_defined_in_uncalled.puml",
+  "committed_golden": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_defined_in_uncalled.svg",
+  "committed_evidence": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/sub_defined_in_uncalled",
+  "java_svg_text": [
+    "Kept"
+  ]
+}

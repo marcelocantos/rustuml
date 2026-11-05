@@ -1,0 +1,15 @@
+{
+  "changed_models": 5,
+  "shape_nodes": 12,
+  "color_fields": 1,
+  "changed_model_ids": [
+    "fresh26/wbs_boxless",
+    "new15/wbs_boxless_tree",
+    "new15/wbs_shape_color",
+    "new15/wbs_literal_underscore",
+    "new15/wbs_boxless_empty"
+  ],
+  "other_semantic_changes": [],
+  "node_count_topology_UID_identity_source_changes": [],
+  "plain_serialization": "Box omitted, old absent field defaults Box; focused serde roundtrip passes. All other model fields including source/depth/side preserved. Sprite_multiple raw map-order change is semantically equal."
+}

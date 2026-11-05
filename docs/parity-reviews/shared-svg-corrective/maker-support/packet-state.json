@@ -1,0 +1,11 @@
+{
+  "production": "346f6b3f680895d3eb457041ed88ae224c583d95",
+  "status": "awaiting NEW independent checker",
+  "self_acceptance": false,
+  "broad_gate_runs": 1,
+  "losses": 0,
+  "new_errors": 0,
+  "new_panics": 0,
+  "old_files_preserved": 11325,
+  "expected_malformed_outputs_still_failing": 7
+}

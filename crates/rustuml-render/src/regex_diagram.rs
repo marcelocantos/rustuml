@@ -173,8 +173,8 @@ impl Ctx<'_> {
             fmt_coord(h),
             fmt_coord(w),
             fmt_coord(ax),
-            fmt_coord(ay)
-        ));
+            fmt_coord(ay), fill = crate::svg::escape_attribute(fill), style_attr = crate::svg::escape_attribute(style_attr),
+));
     }
 
     /// Text element matching PlantUML's `<text ... lengthAdjust="spacing">` format.
@@ -531,7 +531,8 @@ impl Ctx<'_> {
             d.push_str(&fmt_coord(self.dy + *y));
         }
         self.svg.raw(&format!(
-            r#"<path d="{d}" fill="none" style="{style_attr}"/>"#
+            r#"<path d="{d}" fill="none" style="{style_attr}"/>"#,
+            style_attr = crate::svg::escape_attribute(style_attr),
         ));
     }
 }

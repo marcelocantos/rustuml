@@ -1,0 +1,489 @@
+{
+  "new_warning_sites": 0,
+  "diagnostics": [
+    {
+      "code": {
+        "code": "dead_code",
+        "explanation": null
+      },
+      "file": "crates/rustuml-parser/src/parse/component.rs",
+      "line": 72,
+      "message": "function `looks_like_description_bracket_command` is never used",
+      "snippet": "pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::filter_map_bool_then",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 4132,
+      "message": "usage of `bool::then` in `filter_map`",
+      "snippet": "        .filter_map(|(idx, role)| {\n            (*role == PackageRenderRole::Cluster).then(|| package_cluster_id(idx))\n        })",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::question_mark",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11946,
+      "message": "this `let...else` may be rewritten with the `?` operator",
+      "snippet": "    let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {\n        return None;\n    };",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::obfuscated_if_else",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 13305,
+      "message": "this method chain can be written more clearly with `if .. else ..`",
+      "snippet": "    (style.shadow > 0.0)\n        .then(|| {\n            let filter_id =\n                crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(\"\"));\n            format!(r#\" filter=\"url(#{filter_id})\"\"#)\n        })\n        .unwrap_or_default()",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 7005,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "            .chunks_exact(3)",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 5976,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "            .chunks_exact(3)",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/handwritten.rs",
+      "line": 487,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "    for chunk in rest.chunks_exact(3) {",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 320,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "    Some(nums.chunks_exact(2).map(|p| (p[0], p[1])).collect())",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::needless_late_init",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 4384,
+      "message": "unneeded late initialization",
+      "snippet": "        if is_tail {\n            // Tail: text first, figure below.\n            text_y = base_y + ACTOR_TAIL_TEXT_Y_OFFSET;\n            figure_base = base_y + ACTOR_TAIL_FIGURE_Y_OFFSET;\n        } else {\n            // Head: figure first, text below.\n            text_y = base_y + ACTOR_HEAD_TEXT_Y_OFFSET + stereo_shift;\n            figure_base = base_y;\n        }",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11232,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                        &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11246,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                        &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11275,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                        &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11292,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11302,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11322,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                                &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11344,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                                &arrow_color, arrow_pts, &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11344,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                                &arrow_color, arrow_pts, &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11354,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11364,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11388,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11390,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 5577,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "        .chunks_exact(3)",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::filter_map_bool_then",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 4132,
+      "message": "usage of `bool::then` in `filter_map`",
+      "snippet": "        .filter_map(|(idx, role)| {\n            (*role == PackageRenderRole::Cluster).then(|| package_cluster_id(idx))\n        })",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::question_mark",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11946,
+      "message": "this `let...else` may be rewritten with the `?` operator",
+      "snippet": "    let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {\n        return None;\n    };",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::obfuscated_if_else",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 13305,
+      "message": "this method chain can be written more clearly with `if .. else ..`",
+      "snippet": "    (style.shadow > 0.0)\n        .then(|| {\n            let filter_id =\n                crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(\"\"));\n            format!(r#\" filter=\"url(#{filter_id})\"\"#)\n        })\n        .unwrap_or_default()",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 7005,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "            .chunks_exact(3)",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 8387,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "            .chunks_exact(2)",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 5976,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "            .chunks_exact(3)",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/handwritten.rs",
+      "line": 487,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "    for chunk in rest.chunks_exact(3) {",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 320,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "    Some(nums.chunks_exact(2).map(|p| (p[0], p[1])).collect())",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::needless_late_init",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 4384,
+      "message": "unneeded late initialization",
+      "snippet": "        if is_tail {\n            // Tail: text first, figure below.\n            text_y = base_y + ACTOR_TAIL_TEXT_Y_OFFSET;\n            figure_base = base_y + ACTOR_TAIL_FIGURE_Y_OFFSET;\n        } else {\n            // Head: figure first, text below.\n            text_y = base_y + ACTOR_HEAD_TEXT_Y_OFFSET + stereo_shift;\n            figure_base = base_y;\n        }",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11232,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                        &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11246,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                        &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11275,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                        &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11292,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11302,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11322,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                                &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11344,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                                &arrow_color, arrow_pts, &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11344,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                                &arrow_color, arrow_pts, &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11354,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11364,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11388,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::useless_borrows_in_formatting",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "line": 11390,
+      "message": "redundant reference in `write!` argument",
+      "snippet": "                            &arrow_color,",
+      "unchanged_source_at_base": true
+    },
+    {
+      "code": {
+        "code": "clippy::chunks_exact_to_as_chunks",
+        "explanation": null
+      },
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 5577,
+      "message": "using `chunks_exact` with a constant chunk size",
+      "snippet": "        .chunks_exact(3)",
+      "unchanged_source_at_base": true
+    }
+  ]
+}

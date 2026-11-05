@@ -1,0 +1,6 @@
+{
+  "path": "docs/parity-reviews/tim-rpn-call-state/checker6-support/measurements.tar.gz",
+  "bytes": 9829565,
+  "sha256": "e3d2b31d991184d6755cac5c2c534ebc7413bf68590ac95f3556281174442d4c",
+  "contains": "all before/after replay captures, full raw relays, requests, immutable source inputs, scripts, logs, audit records and statuses; binaries/targets separately in private persistent cache"
+}

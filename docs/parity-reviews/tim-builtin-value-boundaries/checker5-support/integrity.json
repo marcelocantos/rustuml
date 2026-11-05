@@ -1,0 +1,24 @@
+{
+  "historical_base": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "historical_files_verified": 6967,
+  "historical_changed": [],
+  "pair_files_verified": 3094,
+  "pairs": 1547,
+  "production_diff_paths": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "account_precedes_production": true,
+  "candidate_shipping_tree_equals_production": true,
+  "binaries": {
+    "before": "73877d71c0a5197b19386bc9e9f565f3bb88769617531ef0263f2db42d024240",
+    "after": "795d9ed676c186ac462b84456700fa9c28b89d576fc16b8c6443760bbbc5131f"
+  },
+  "production_module_sha256": "70876ee52b4c1705a928b7d3b42f411b96c1ff46d6dc3b12893edbad4ef3c317",
+  "probe_sha256": "77821ec15c615f27208e6aafe90135e2aea6147aae078660c51a2d41d7f05f43",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "archive_hashes": {
+    "maker": "dd678abccd4dc722be3b269181e366998af600cd74ec7d06591914c1e4dee7b6",
+    "checker4": "0ef22da528589796b187cf87bbdd7f594622b0f6d3e2ae51dd7209f2164f18a0"
+  }
+}

@@ -1,0 +1,114 @@
+[
+  {
+    "id": "arity_without_later_error",
+    "mechanism": "tim-builtin-typed-contracts",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "wrong arity",
+      "absence of masking later error"
+    ],
+    "provenance": "Strlen.canCover; ReversePolishInterpretor",
+    "source_sha256": "53601e626107b0ab60492b254a26ecb2ed4e3d67ffb630621d31c5f83779edb2",
+    "java_exit": 200,
+    "java_probe_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "reference_valid": false,
+    "svg_match": false,
+    "panic": false,
+    "commands": [
+      {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/candidate-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cb14b5f3",
+        "env_overrides": {
+          "TZ": "GMT+11:00",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+        },
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/candidate-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cb14b5f3",
+        "env_overrides": {
+          "TZ": "GMT+11:00",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+        },
+        "exit": 0
+      }
+    ],
+    "comparison_command": [
+      "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-cb14b5f3/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.svg",
+      "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/supplement-outputs/candidate/arity_without_later_error/rust.svg"
+    ],
+    "source_equal": false
+  },
+  {
+    "id": "named_global_snapshot",
+    "mechanism": "tim-expression-value-snapshot",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_named_global_snapshot.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "named argument symbol also global",
+      "expression versus plain-call parser"
+    ],
+    "provenance": "ShuntingYard named operand; ReversePolishInterpretor named map; EaterFunctionCall",
+    "source_sha256": "0549511aa55d346d9e9b08e8079af4fb80c7f9c94d0ab96776f7e850de0ca547",
+    "java_exit": 0,
+    "java_probe_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "reference_valid": true,
+    "svg_match": false,
+    "panic": false,
+    "commands": [
+      {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/candidate-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cb14b5f3",
+        "env_overrides": {
+          "TZ": "GMT+11:00",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+        },
+        "exit": 0
+      },
+      {
+        "argv": [
+          "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/candidate-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cb14b5f3",
+        "env_overrides": {
+          "TZ": "GMT+11:00",
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+        },
+        "exit": 0
+      }
+    ],
+    "comparison_command": [
+      "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/probe",
+      "compare",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-cb14b5f3/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_named_global_snapshot.svg",
+      "/Users/marcelo/Library/Caches/rustuml-review-cb14b5f3/supplement-outputs/candidate/named_global_snapshot/rust.svg"
+    ],
+    "source_equal": false
+  }
+]

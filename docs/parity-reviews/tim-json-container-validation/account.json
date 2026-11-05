@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-json-container-validation",
+  "rust_revision": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/EaterForeach.java:analyze,isSkip,size",
+    "tim/expression/TValue.java:toJson",
+    "tim/VariableManager.java:replaceJson"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "JSON arrays/objects are foreach collections; JSON scalars are errors while non-JSON values yield no collection. Missing final dot member is empty, but traversing beyond it is fatal.",
+  "causal_divergence": "Rust treats every unsupported collection kind as empty, and returns early on a missing field leaving later path text unconsumed.",
+  "planned_change": "Reject JSON scalar iteration through the existing first-error channel; retain non-JSON skip and empty collection behavior. Distinguish a terminal missing member from attempted continued traversal. Unsupported function-in-index expression grammar remains outside this bounded repair.",
+  "perturbation_axes": [
+    "JSON scalar versus non-JSON and empty collection",
+    "Terminal missing member versus continued dot/bracket access"
+  ],
+  "oracle_plan": [
+    "Preserved checker4 31 controls, full restored1516, exact source/model and unchanged actual CLI SVG comparator.",
+    "Compact new maker cases via parent checksummed T3 relay only; all outputs/errors retained.",
+    "Main release tiers once stabilized; parser/CLI/guards/touched formatting. No baselines, old records, renderer/date/reader changes or acceptance claim."
+  ]
+}

@@ -1,0 +1,460 @@
+[
+  {
+    "id": "collateral/1226-state_valid_hex_surrogate_boundary",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "title",
+        "before": "A \uf600 B A C",
+        "after": "A &#62976; B A C",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "xlink:title",
+        "before": "A \uf600 B A C",
+        "after": "A &#62976; B A C",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "collateral/1350-checker2_theme_comment_origin",
+    "before_pass": false,
+    "after_pass": false,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u00c9rable-to-Oak",
+        "after": "&#201;rable-to-Oak",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "checker28/hide_link_target",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "href",
+        "before": "https://example.test/\ue023part",
+        "after": "https://example.test/&#57379;part",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "title",
+        "before": "https://example.test/\ue023part",
+        "after": "https://example.test/&#57379;part",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "xlink:href",
+        "before": "https://example.test/\ue023part",
+        "after": "https://example.test/&#57379;part",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "xlink:title",
+        "before": "https://example.test/\ue023part",
+        "after": "https://example.test/&#57379;part",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "href",
+        "before": "https://example.test/a\ue07eb",
+        "after": "https://example.test/a&#57470;b",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "title",
+        "before": "https://example.test/a\ue07eb",
+        "after": "https://example.test/a&#57470;b",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "xlink:href",
+        "before": "https://example.test/a\ue07eb",
+        "after": "https://example.test/a&#57470;b",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "xlink:title",
+        "before": "https://example.test/a\ue07eb",
+        "after": "https://example.test/a&#57470;b",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "title",
+        "before": "tip\ue05bx\ue05d",
+        "after": "tip&#57435;x&#57437;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "xlink:title",
+        "before": "tip\ue05bx\ue05d",
+        "after": "tip&#57435;x&#57437;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "fresh16/font_fallback",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "font-family",
+        "before": "color=\ue023123456",
+        "after": "color=&#57379;123456",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "checker36/font_hidden_precedent",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "font-family",
+        "before": "color=\ue02344aa77",
+        "after": "color=&#57379;44aa77",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "font-family",
+        "before": "color=\ue02344aa77",
+        "after": "color=&#57379;44aa77",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "checker36/parameter_neighbors",
+    "before_pass": false,
+    "after_pass": false,
+    "lexical_changes": [
+      {
+        "attribute": "font-family",
+        "before": "color=\ue02344aa77",
+        "after": "color=&#57379;44aa77",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "shared22/attr_font_unicode",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "font-family",
+        "before": "Oak\u00a0\u03a9\ud801\udc37",
+        "after": "Oak&#160;&#937;&#66615;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "font-family",
+        "before": "Oak\u00abFir\u00bb",
+        "after": "Oak&#171;Fir&#187;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "shared22/attr_link_unicode",
+    "before_pass": false,
+    "after_pass": false,
+    "lexical_changes": [
+      {
+        "attribute": "title",
+        "before": "Oak\u00a0\u03a9\ud801\udc37\u00abFir\u00bb",
+        "after": "Oak&#160;&#937;&#66615;&#171;Fir&#187;",
+        "java_contains_before": false,
+        "java_contains_after": false
+      },
+      {
+        "attribute": "xlink:title",
+        "before": "Oak\u00a0\u03a9\ud801\udc37\u00abFir\u00bb",
+        "after": "Oak&#160;&#937;&#66615;&#171;Fir&#187;",
+        "java_contains_before": false,
+        "java_contains_after": false
+      }
+    ],
+    "all_changed_values_match_java_encoding": false
+  },
+  {
+    "id": "full-golden/component/comp_unicode_stereotypes",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "Service \u03b1-to-Service \u03b2",
+        "after": "Service &#945;-to-Service &#946;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_meta_unicode_title",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u7528\u6237-to-\u7cfb\u7edf",
+        "after": "&#29992;&#25143;-to-&#31995;&#32479;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_arabic_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u0645\u0633\u062a\u062e\u062f\u0645-to-\u0646\u0638\u0627\u0645",
+        "after": "&#1605;&#1587;&#1578;&#1582;&#1583;&#1605;-to-&#1606;&#1592;&#1575;&#1605;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u7528\u6237-to-\u8ba2\u5355",
+        "after": "&#29992;&#25143;-to-&#35746;&#21333;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_chinese_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u7528\u6237-to-\u7cfb\u7edf",
+        "after": "&#29992;&#25143;-to-&#31995;&#32479;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_emoji_class",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\ud83d\ude80 Rocket-to-\ud83c\udf0d Earth",
+        "after": "&#128640; Rocket-to-&#127757; Earth",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_greek_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u03a7\u03c1\u03ae\u03c3\u03c4\u03b7\u03c2-to-\u03a3\u03cd\u03c3\u03c4\u03b7\u03bc\u03b1",
+        "after": "&#935;&#961;&#942;&#963;&#964;&#951;&#962;-to-&#931;&#973;&#963;&#964;&#951;&#956;&#945;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hebrew_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u05de\u05e9\u05ea\u05de\u05e9-to-\u05de\u05e2\u05e8\u05db\u05ea",
+        "after": "&#1502;&#1513;&#1514;&#1502;&#1513;-to-&#1502;&#1506;&#1512;&#1499;&#1514;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hindi_class_diagram",
+    "before_pass": false,
+    "after_pass": false,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u0909\u092a\u092f\u094b\u0917\u0915\u0930\u094d\u0924\u093e-to-\u092a\u094d\u0930\u0923\u093e\u0932\u0940",
+        "after": "&#2313;&#2346;&#2351;&#2379;&#2327;&#2325;&#2352;&#2381;&#2340;&#2366;-to-&#2346;&#2381;&#2352;&#2339;&#2366;&#2354;&#2368;",
+        "java_contains_before": false,
+        "java_contains_after": false
+      }
+    ],
+    "all_changed_values_match_java_encoding": false
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u30e6\u30fc\u30b6\u30fc-to-\u6ce8\u6587",
+        "after": "&#12518;&#12540;&#12470;&#12540;-to-&#27880;&#25991;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_japanese_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u30e6\u30fc\u30b6\u30fc-to-\u30b7\u30b9\u30c6\u30e0",
+        "after": "&#12518;&#12540;&#12470;&#12540;-to-&#12471;&#12473;&#12486;&#12512;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\uc0ac\uc6a9\uc790-to-\uc8fc\ubb38",
+        "after": "&#49324;&#50857;&#51088;-to-&#51452;&#47928;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_korean_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\uc0ac\uc6a9\uc790-to-\uc2dc\uc2a4\ud15c",
+        "after": "&#49324;&#50857;&#51088;-to-&#49884;&#49828;&#53596;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_russian_class_diagram",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c-to-\u0421\u0438\u0441\u0442\u0435\u043c\u0430",
+        "after": "&#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100;-to-&#1057;&#1080;&#1089;&#1090;&#1077;&#1084;&#1072;",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_thai_class_diagram",
+    "before_pass": false,
+    "after_pass": false,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u0e1c\u0e39\u0e49\u0e43\u0e0a\u0e49-to-\u0e23\u0e30\u0e1a\u0e1a",
+        "after": "&#3612;&#3641;&#3657;&#3651;&#3594;&#3657;-to-&#3619;&#3632;&#3610;&#3610;",
+        "java_contains_before": false,
+        "java_contains_after": false
+      }
+    ],
+    "all_changed_values_match_java_encoding": false
+  },
+  {
+    "id": "full-golden/rendering/text/text_unicode_class_names",
+    "before_pass": true,
+    "after_pass": true,
+    "lexical_changes": [
+      {
+        "attribute": "id",
+        "before": "\u00c4rger-to-\u00dcbung",
+        "after": "&#196;rger-to-&#220;bung",
+        "java_contains_before": false,
+        "java_contains_after": true
+      },
+      {
+        "attribute": "id",
+        "before": "\u00dcbung-to-\u00d6ffnung",
+        "after": "&#220;bung-to-&#214;ffnung",
+        "java_contains_before": false,
+        "java_contains_after": true
+      }
+    ],
+    "all_changed_values_match_java_encoding": true
+  }
+]

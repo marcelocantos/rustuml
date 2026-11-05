@@ -1,0 +1,11 @@
+@startuml
+!function $pick($a,$b)
+!return $a+"/"+$b
+!endfunction
+!procedure $pick($a)
+class "$a" as First
+!endprocedure
+$pick("elm")
+!$v=$pick("fir","yew")
+class "$v" as Second
+@enduml

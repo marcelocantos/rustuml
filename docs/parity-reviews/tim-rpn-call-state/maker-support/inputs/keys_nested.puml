@@ -1,0 +1,7 @@
+@startuml
+!function $join($a="oak",$b="pine")
+!return $a+"/"+$b
+!endfunction
+!$x=$join($a="one",$b=%upper("two"))
+class Lost
+@enduml

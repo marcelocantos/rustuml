@@ -1,0 +1,3 @@
+@startuml
+class "n=6" as Retained
+@enduml

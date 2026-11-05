@@ -1,0 +1,6 @@
+@startuml
+class Anchor
+note right
+Cedar<$absent>Grove
+end note
+@enduml

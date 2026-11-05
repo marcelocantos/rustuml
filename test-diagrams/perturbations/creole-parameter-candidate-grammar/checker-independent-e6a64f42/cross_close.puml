@@ -1,0 +1,3 @@
+@startuml
+Alder -> Birch : a<size:14><color:navy>seed</SIZE>tail</color>z\na<font size=14><b>seed</FONT>tail</b>z
+@enduml

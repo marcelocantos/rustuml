@@ -1,0 +1,9 @@
+@startuml
+!define NEXT changed
+!$word="NEXT"
+!function $literal()
+!return "NEXT"
+!endfunction
+!$joined=$literal()+"!"
+class "$word / $joined" as Result
+@enduml

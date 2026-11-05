@@ -26,6 +26,41 @@ class Dog extends Animal
 
 const INVALID_PUML: &str = "this is not valid plantuml at all !!@@##";
 
+#[test]
+fn pipe_rejects_fatal_preprocessing_errors() {
+    for declaration in ["class Before", "Alice -> Bob: before"] {
+        for expression in ["%date(\"QQ\",0)", "%date(\"yyyy\",2147483648)"] {
+            let input = format!("@startuml\n{declaration}\n!$bad = {expression}\n@enduml\n");
+            let output = run_pipe(&["-pipe", "-tsvg"], input.as_bytes());
+            assert!(!output.status.success(), "accepted {input}");
+            assert!(
+                output.stdout.is_empty(),
+                "emitted a partial diagram for {input}"
+            );
+            assert!(
+                !output.stderr.is_empty(),
+                "missing fatal diagnostic for {input}"
+            );
+        }
+    }
+}
+
+#[test]
+fn pipe_accepts_valid_dates_and_inactive_errors() {
+    for declaration in ["class Before", "Alice -> Bob: before"] {
+        let input = format!(
+            "@startuml\n{declaration}\n!if 0\n!$bad = %date(\"QQ\",0)\n!endif\n!$ok = %date(\"yyyy\",0)\n@enduml\n"
+        );
+        let output = run_pipe(&["-pipe", "-tsvg"], input.as_bytes());
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(String::from_utf8_lossy(&output.stdout).contains("<svg"));
+    }
+}
+
 const SKINPARAM_PUML: &str = r#"@startuml
 skinparam participantBackgroundColor #AADDFF
 Alice -> Bob: Styled
@@ -333,4 +368,248 @@ fn pipe_multiple_invocations_do_not_hang() {
         let stdout = String::from_utf8_lossy(&output.stdout);
         assert!(stdout.contains("<svg"), "invocation {i} should produce SVG");
     }
+}
+
+// The exact declaration emitted by the retained 26 Graphviz DOT SVGs.
+const STANDARD_SVG_DOCTYPE: &str = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
+
+fn parse_cli_svg(svg: &str) -> Result<bool, String> {
+    let xml_space = |ch: char| matches!(ch, ' ' | '\t' | '\r' | '\n');
+    let mut prolog = svg;
+    if let Some(tail) = prolog.strip_prefix("<?xml")
+        && tail.starts_with(xml_space)
+    {
+        let (_, rest) = tail
+            .split_once("?>")
+            .ok_or("unterminated XML declaration")?;
+        prolog = rest;
+    }
+    prolog = prolog.trim_start_matches(xml_space);
+    let has_doctype = prolog.starts_with("<!DOCTYPE");
+    if has_doctype {
+        let end = prolog.find('>').ok_or("unterminated DOCTYPE")?;
+        let declaration = &prolog[..=end];
+        if declaration.contains('[') || declaration != STANDARD_SVG_DOCTYPE {
+            return Err("unapproved DOCTYPE bytes or internal subset".to_string());
+        }
+    }
+    // roxmltree 0.20 src/parse.rs:315–345: DTD rejection is an optional
+    // policy. Enable it only for the real, approved prolog declaration.
+    // A comment/PI decoy leaves DTD parsing disabled. All other options
+    // and entity-expansion limits stay default; no external I/O is installed.
+    roxmltree::Document::parse_with_options(
+        svg,
+        roxmltree::ParsingOptions {
+            allow_dtd: has_doctype,
+            ..Default::default()
+        },
+    )
+    .map_err(|error| error.to_string())?;
+    Ok(has_doctype)
+}
+
+#[test]
+fn svg_doctype_guard_rejects_comment_decoy_and_internal_subset() {
+    // Exact held-out checker document: the first DOCTYPE text is a comment.
+    let checker = r#"<!--<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">--><!DOCTYPE svg [<!ENTITY checker "unapproved-internal-entity">]><svg xmlns="http://www.w3.org/2000/svg"><text>&checker;</text></svg>"#;
+    assert!(parse_cli_svg(checker).is_err());
+    assert!(parse_cli_svg(r#"<!DOCTYPE svg [<!ENTITY x "value">]><svg>&x;</svg>"#).is_err());
+    for prefix in ["", "<?xml version=\"1.0\"?>\n", "\n\t"] {
+        assert_eq!(
+            parse_cli_svg(&format!("{prefix}{STANDARD_SVG_DOCTYPE}<svg/>")),
+            Ok(true)
+        );
+    }
+    for prefix in ["<!--decoy-->", "<?instruction value?>"] {
+        assert!(parse_cli_svg(&format!("{prefix}{STANDARD_SVG_DOCTYPE}<svg/>")).is_err());
+    }
+    assert!(
+        parse_cli_svg(&format!(
+            "{}<svg/>",
+            STANDARD_SVG_DOCTYPE.replace("\n ", " ")
+        ))
+        .is_err()
+    );
+    assert!(
+        parse_cli_svg(&format!(
+            "{}<svg/>",
+            STANDARD_SVG_DOCTYPE.replace("svg11.dtd", "other.dtd")
+        ))
+        .is_err()
+    );
+    assert_eq!(parse_cli_svg("<!--DOCTYPE-like text--><svg/>"), Ok(false));
+}
+
+/// Every emitted SVG is parsed, including negative/error cases. T14.20 owns
+/// Java's render/export exception contract; these seven existing malformed
+/// outputs stay visible and ratchet in both directions, keyed to source bytes.
+#[test]
+fn every_cli_golden_and_registered_perturbation_svg_is_strict_xml() {
+    use sha2::{Digest, Sha256};
+    use std::path::{Path, PathBuf};
+    use std::sync::Mutex;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    const EXPECTED_MALFORMED: &[(&str, &str, &str, &str)] = &[
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_one.puml",
+            "667816bc90d54c4087e0fef4f1482ca196113f702d63352cdac8e3fbdf3db49a",
+            "T14.20",
+            "U+0001 tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_zero.puml",
+            "40a5258df094ea2f37db2ab595aca578037f774158f898a423bc5ec0cf74295f",
+            "T14.20",
+            "U+0000 tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_escape.puml",
+            "a5d5b51b19d68f8bfa2923e709b8f611a3f88a28e6ad6c0b5efc3226fae40ce6",
+            "T14.20",
+            "U+001B tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml",
+            "f8e49aa31c65047de872fe145933815200748337bf7a7a155bfe218a49288d68",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml",
+            "9db5169301ad8914aef80e6e181f446f978432ede32353a9ac004269ff93c462",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml",
+            "e563876518e6b3ad61d820de64242456ee01aa8c9d2f53f1ab14570b91b180b0",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+        (
+            "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml",
+            "0ad00c5109c7a76ed425ba4f2a545c34818c5020657c6165d130eb9a4a04e35c",
+            "T14.20",
+            "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+        ),
+    ];
+
+    fn collect(dir: &Path, paths: &mut Vec<PathBuf>) {
+        for entry in std::fs::read_dir(dir).expect("required XML census corpus is missing") {
+            let path = entry.expect("unreadable XML census entry").path();
+            if path.is_dir() {
+                collect(&path, paths);
+            } else if path.extension().is_some_and(|e| e == "puml")
+                && path.with_extension("svg").is_file()
+            {
+                paths.push(path);
+            }
+        }
+    }
+
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let mut paths = Vec::new();
+    collect(&root.join("test-diagrams/golden"), &mut paths);
+    assert!(!paths.is_empty(), "golden corpus must be hydrated");
+    let golden_count = paths.len();
+    collect(&root.join("test-diagrams/perturbations"), &mut paths);
+    assert!(
+        paths.len() > golden_count,
+        "registered perturbations are required"
+    );
+    paths.sort();
+    for (path, _, owner, _) in EXPECTED_MALFORMED {
+        assert!(
+            paths.contains(&root.join(path)),
+            "missing expected failure {path} ({owner})"
+        );
+    }
+
+    let next = AtomicUsize::new(0);
+    let standard_dot_doctypes = AtomicUsize::new(0);
+    let observations = Mutex::new(Vec::new());
+    std::thread::scope(|scope| {
+        for _ in 0..4 {
+            scope.spawn(|| loop {
+                let i = next.fetch_add(1, Ordering::Relaxed);
+                let Some(path) = paths.get(i) else { break };
+                let relative = path.strip_prefix(&root).unwrap().to_str().unwrap();
+                let source = std::fs::read(path).expect("cannot read census input");
+                let expected = EXPECTED_MALFORMED.iter().find(|e| e.0 == relative);
+                let source_hash = format!("{:x}", Sha256::digest(&source));
+                let mut child = Command::new(env!("CARGO_BIN_EXE_rustuml"))
+                    .args(["-pipe", "-tsvg"])
+                    .current_dir(&root)
+                    .env("TZ", "GMT+11:00")
+                    .env("RUSTUML_DEBUG", "date=1774210426000,tz=AEDT+1100")
+                    .env("RAYON_NUM_THREADS", "4")
+                    .stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped())
+                    .spawn().expect("cannot start actual CLI XML census");
+                child.stdin.take().unwrap().write_all(&source).expect("cannot send source to CLI");
+                let output = child.wait_with_output().expect("cannot collect CLI SVG");
+                let mut failures = Vec::new();
+                let xml_error = if output.stdout.is_empty() {
+                    None
+                } else {
+                    match std::str::from_utf8(&output.stdout) {
+                        Err(error) => Some(error.to_string()),
+                        Ok(svg) => {
+                            match parse_cli_svg(svg) {
+                                Ok(has_doctype) => {
+                                    if has_doctype {
+                                        if !source.windows(b"@startdot".len()).any(|w| w == b"@startdot") {
+                                            failures.push(format!("unexpected DOT declaration in {relative}"));
+                                        }
+                                        standard_dot_doctypes.fetch_add(1, Ordering::Relaxed);
+                                    }
+                                    None
+                                }
+                                Err(error) => Some(error),
+                            }
+                        },
+                    }
+                };
+                if let Some((_, hash, owner, reason)) = expected {
+                    if source_hash != *hash {
+                        failures.push(format!("stale source hash: {relative} ({owner}): {source_hash} != {hash}"));
+                    }
+                    if xml_error.is_none() {
+                        failures.push(format!("stale expected malformed output: {relative} ({owner}); remove entry after validating improvement: {reason}"));
+                    }
+                    eprintln!("MALFORMED expected {relative} owner={owner}: {reason}; observed={xml_error:?}");
+                } else if let Some(error) = &xml_error {
+                    failures.push(format!("unlisted malformed SVG: {relative}: {error}"));
+                }
+                observations.lock().unwrap().push((
+                    relative.starts_with("test-diagrams/golden/"),
+                    !output.stdout.is_empty(), xml_error.is_some(), !output.status.success(),
+                    String::from_utf8_lossy(&output.stderr).contains("panicked at"), failures,
+                ));
+            });
+        }
+    });
+    assert_eq!(
+        standard_dot_doctypes.load(Ordering::Relaxed),
+        26,
+        "the frozen CLI corpus must retain its 26 standard SVG 1.1 DOT DOCTYPE declarations"
+    );
+    let observations = observations.into_inner().unwrap();
+    for (golden, name) in [(true, "golden"), (false, "perturbation")] {
+        let rows: Vec<_> = observations.iter().filter(|r| r.0 == golden).collect();
+        eprintln!(
+            "XML corpus={name} inputs={} emitted={} malformed={} process_errors={} panics={}",
+            rows.len(),
+            rows.iter().filter(|r| r.1).count(),
+            rows.iter().filter(|r| r.2).count(),
+            rows.iter().filter(|r| r.3).count(),
+            rows.iter().filter(|r| r.4).count()
+        );
+    }
+    let failures: Vec<_> = observations.into_iter().flat_map(|r| r.5).collect();
+    assert!(
+        failures.is_empty(),
+        "strict XML census failed:\n{}",
+        failures.join("\n")
+    );
 }

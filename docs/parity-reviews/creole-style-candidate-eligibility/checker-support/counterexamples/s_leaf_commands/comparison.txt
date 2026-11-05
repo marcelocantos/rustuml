@@ -1,0 +1,26 @@
+SVG structural differences:
+  element count: expected 15, got 13
+  [4] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "7.5527"), ("x", "20"), ("y", "88.7344")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "12.4629"), ("x", "20"), ("y", "88.7344")]
+  [4] <text> text mismatch:
+    expected: Some("q")
+    actual:   Some("qr")
+  [5] tag mismatch: expected <text>, got <line>
+  [6] tag mismatch: expected <line>, got <text>
+  [7] tag mismatch: expected <text>, got <line>
+  [8] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "4.9102"), ("x", "65.2842"), ("y", "88.7344")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "3.9023"), ("x", "75.4629"), ("y", "119.8672")]
+  [8] <text> text mismatch:
+    expected: Some("r")
+    actual:   Some("i")
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "65.4629"), ("x2", "75.4629"), ("y1", "115.332"), ("y2", "115.332")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "65.4629"), ("x2", "65.4629"), ("y1", "92.2656"), ("y2", "115.332")]
+  [10] tag mismatch: expected <text>, got <line>
+  [11] tag mismatch: expected <line>, got <text>
+  [12] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "27.7314"), ("x2", "65.4629"), ("y1", "56.1328"), ("y2", "56.1328")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "46.5972"), ("x2", "46.5972"), ("y1", "36.1328"), ("y2", "56.1328")]
+

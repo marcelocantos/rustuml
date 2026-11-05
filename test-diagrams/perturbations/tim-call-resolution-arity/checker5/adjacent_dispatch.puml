@@ -1,0 +1,7 @@
+@startuml
+!$a=%size(%str2json('"009"'))
+!$b=%size("009")
+!$c=%hsl_color(0,100,50,50)
+!$d=%intval("12.5")
+class "$a/$b/$c/$d" as Dispatch
+@enduml

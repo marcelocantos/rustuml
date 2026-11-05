@@ -1,0 +1,5 @@
+@startuml
+!$a=%boolval(" true ")
+!$b=%strlen()
+class Lost
+@enduml

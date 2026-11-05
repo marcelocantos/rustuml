@@ -1,0 +1,12 @@
+@startuml
+!$n=0
+!startsub first
+!$n=$n+1
+!endsub: closing
+!startsub second
+!$n=$n+2
+!endsub	trailing words
+!includesub first
+!includesub second
+class "n=$n" as Retained
+@enduml

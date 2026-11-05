@@ -1,0 +1,3 @@
+@startuml
+class "oak / ash / fir / elm" as Names
+@enduml

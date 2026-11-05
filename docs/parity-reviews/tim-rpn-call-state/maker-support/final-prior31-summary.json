@@ -1,0 +1,21 @@
+{
+  "total": 31,
+  "valid": 21,
+  "before": 21,
+  "current": 21,
+  "source_matches": 21,
+  "negative_rejected": 8,
+  "panics": 0,
+  "losses": [],
+  "gains": [],
+  "new_valid_errors": [],
+  "model_drops": [],
+  "cohort955": {
+    "total": 0,
+    "current": 0
+  },
+  "cohort1044": {
+    "total": 0,
+    "current": 0
+  }
+}

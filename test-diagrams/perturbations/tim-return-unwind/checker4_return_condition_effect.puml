@@ -1,0 +1,16 @@
+@startuml
+!$n=0
+!function $condition()
+!$n=$n+1
+!return 1
+!endfunction
+!function $choose()
+!while $condition()
+!return "kept"
+!$n=100
+!endwhile
+!return "miss"
+!endfunction
+!$v=$choose()
+class "$v / $n" as Condition
+@enduml

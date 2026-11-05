@@ -1,0 +1,6 @@
+@startwbs
+*_ <size:12></size>X\nY<color:black></color>
+**_ A<size:12></size><color:black></color>B
+***_ <color:blue><size:12></size></color>X<color:red>Q</color>
+--_ <size:12></size>
+@endwbs

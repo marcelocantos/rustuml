@@ -583,8 +583,8 @@ impl ActivityDefRegistry {
         let (x1, x2, y1, y2) = gradient_endpoints(policy);
         write!(
             self.defs,
-            r#"<linearGradient id="{id}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{color1}"/><stop offset="100%" stop-color="{color2}"/></linearGradient>"#,
-        )
+            r#"<linearGradient id="{id}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{color1}"/><stop offset="100%" stop-color="{color2}"/></linearGradient>"#, color1 = crate::svg::escape_attribute(&color1), color2 = crate::svg::escape_attribute(&color2),
+)
         .unwrap();
         self.gradients.push(ActivityGradient {
             color1,
@@ -9012,7 +9012,7 @@ fn emit_action_line(
                 r#"<ellipse cx="{}" cy="{}" fill="{}" rx="2.5" ry="2.5"/>"#,
                 f(cx),
                 f(cy),
-                base.fill
+                crate::svg::escape_attribute(base.fill)
             )
             .unwrap();
             let text_x = base.x + indent + ACTION_LIST_ITEM_TEXT_X;
@@ -10216,11 +10216,16 @@ fn svg_attr_escape(s: &str) -> String {
 fn emit_handwritten_warning(svg: &mut SvgEmitter, warning: &OracleHandwrittenWarning) {
     let mut polygon = format!(
         r#"<polygon fill="{}" points="{}""#,
-        svg_attr_escape(&warning.polygon.fill),
-        svg_attr_escape(&warning.polygon.points),
+        crate::svg::escape_attribute(&warning.polygon.fill),
+        crate::svg::escape_attribute(&warning.polygon.points),
     );
     if let Some(style) = warning.polygon.style.as_deref() {
-        write!(polygon, r#" style="{}""#, svg_attr_escape(style)).unwrap();
+        write!(
+            polygon,
+            r#" style="{}""#,
+            crate::svg::escape_attribute(style)
+        )
+        .unwrap();
     }
     polygon.push_str("/>");
     svg.raw(&polygon);
@@ -11096,7 +11101,11 @@ impl SvgEmitter {
             write!(
                 self.shapes,
                 r#"<polygon fill="{}"{} points="{}" style="stroke:{};stroke-width:{};"/>"#,
-                fill, filter, points, stroke, stroke_width
+                crate::svg::escape_attribute(fill),
+                filter,
+                points,
+                crate::svg::escape_attribute(stroke),
+                stroke_width
             )
             .unwrap();
             return;
@@ -11104,7 +11113,7 @@ impl SvgEmitter {
         write!(
             self.shapes,
             r#"<ellipse cx="{}" cy="{}" fill="{}"{} rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
-            f(cx), f(cy), fill, filter, f(rx), f(ry), stroke, stroke_width
+            f(cx), f(cy), crate::svg::escape_attribute(fill), filter, f(rx), f(ry), crate::svg::escape_attribute(stroke), stroke_width
         )
         .unwrap();
     }
@@ -11127,7 +11136,11 @@ impl SvgEmitter {
             write!(
                 self.shapes,
                 r#"<polygon fill="{}"{} points="{}" style="stroke:{};stroke-width:{};"/>"#,
-                fill, filter, points, stroke, stroke_width
+                crate::svg::escape_attribute(fill),
+                filter,
+                points,
+                crate::svg::escape_attribute(stroke),
+                stroke_width
             )
             .unwrap();
             return;
@@ -11135,7 +11148,7 @@ impl SvgEmitter {
         write!(
             self.shapes,
             r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
-            fill, filter, f(height), f(rx), f(ry), stroke, stroke_width, f(width), f(x), f(y)
+            crate::svg::escape_attribute(fill), filter, f(height), f(rx), f(ry), crate::svg::escape_attribute(stroke), stroke_width, f(width), f(x), f(y)
         )
         .unwrap();
     }
@@ -11177,7 +11190,11 @@ impl SvgEmitter {
             write!(
                 self.shapes,
                 r#"<polygon fill="{}"{} {}="" points="{}" style="stroke:{};stroke-width:1;"/>"#,
-                fill, filter, FORK_BAR_COMPRESS_MARKER, points, stroke
+                crate::svg::escape_attribute(fill),
+                filter,
+                FORK_BAR_COMPRESS_MARKER,
+                points,
+                crate::svg::escape_attribute(stroke)
             )
             .unwrap();
             return;
@@ -11185,7 +11202,7 @@ impl SvgEmitter {
         write!(
             self.shapes,
             r#"<rect fill="{}"{} {}="" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-            fill, filter, FORK_BAR_COMPRESS_MARKER, f(FORK_BAR_HEIGHT), f(FORK_BAR_RX), f(FORK_BAR_RX), stroke, f(width), f(x), f(y)
+            crate::svg::escape_attribute(fill), filter, FORK_BAR_COMPRESS_MARKER, f(FORK_BAR_HEIGHT), f(FORK_BAR_RX), f(FORK_BAR_RX), crate::svg::escape_attribute(stroke), f(width), f(x), f(y)
         )
         .unwrap();
     }
@@ -11261,7 +11278,10 @@ impl SvgEmitter {
         write!(
             self.shapes,
             r#"<path d="{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-            d, fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+            d,
+            crate::svg::escape_attribute(fill),
+            NOTE_STROKE,
+            NOTE_STROKE_WIDTH
         )
         .unwrap();
         // Fold corner (top-right triangle).
@@ -11272,7 +11292,7 @@ impl SvgEmitter {
             f(br - CS), f(bt + CS),
             f(br), f(bt + CS),
             f(br - CS), f(bt),
-            fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+            crate::svg::escape_attribute(fill), NOTE_STROKE, NOTE_STROKE_WIDTH
         )
         .unwrap();
     }
@@ -11297,7 +11317,7 @@ impl SvgEmitter {
             f(br), f(bt + CS),
             f(br - CS), f(bt),
             f(bl), f(bt),
-            fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+            crate::svg::escape_attribute(fill), NOTE_STROKE, NOTE_STROKE_WIDTH
         )
         .unwrap();
         // Fold corner (top-right triangle).
@@ -11308,7 +11328,7 @@ impl SvgEmitter {
             f(br - CS), f(bt + CS),
             f(br), f(bt + CS),
             f(br - CS), f(bt),
-            fill, NOTE_STROKE, NOTE_STROKE_WIDTH
+            crate::svg::escape_attribute(fill), NOTE_STROKE, NOTE_STROKE_WIDTH
         )
         .unwrap();
     }
@@ -11318,7 +11338,7 @@ impl SvgEmitter {
         write!(
             self.shapes,
             r#"<rect fill="{}" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
-            fill,
+            crate::svg::escape_attribute(fill),
             f(height),
             f(width),
             f(x),
@@ -11402,7 +11422,7 @@ impl SvgEmitter {
         write!(
             self.shapes,
             r#"<text fill="{}" font-family="monospace" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-            fill, font_size as u32, f(text_length), f(x), f(y), escaped
+            crate::svg::escape_attribute(fill), font_size as u32, f(text_length), f(x), f(y), escaped
         )
         .unwrap();
     }
@@ -11412,13 +11432,18 @@ impl SvgEmitter {
     fn shape_line(&mut self, stroke: &str, stroke_width: &str, x1: f64, x2: f64, y1: f64, y2: f64) {
         if self.handwritten {
             let d = handwritten_line_path(x1, y1, x2, y2);
-            write!(self.shapes, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
+            write!(
+                self.shapes,
+                r#"<path d="{d}" fill="{stroke}"/>"#,
+                stroke = crate::svg::escape_attribute(stroke),
+            )
+            .unwrap();
             return;
         }
         write!(
             self.shapes,
             r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            stroke,
+            crate::svg::escape_attribute(stroke),
             stroke_width,
             f(x1),
             f(x2),
@@ -11455,13 +11480,22 @@ impl SvgEmitter {
         write!(
             self.shapes,
             r#"<polygon fill="{}"{} points="{}" style="stroke:{};stroke-width:{};"/>"#,
-            fill, filter, pts, stroke, stroke_width
+            crate::svg::escape_attribute(fill),
+            filter,
+            pts,
+            crate::svg::escape_attribute(stroke),
+            stroke_width
         )
         .unwrap();
     }
 
     fn fill_path(&mut self, d: &str, fill: &str) {
-        write!(self.shapes, r#"<path d="{d}" fill="{fill}"/>"#).unwrap();
+        write!(
+            self.shapes,
+            r#"<path d="{d}" fill="{fill}"/>"#,
+            fill = crate::svg::escape_attribute(fill),
+        )
+        .unwrap();
     }
 
     fn raw(&mut self, s: &str) {
@@ -11557,11 +11591,16 @@ impl SvgEmitter {
             if dashed {
                 write!(
                     self.connectors,
-                    r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};{dash}"/>"#
-                )
+                    r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};{dash}"/>"#, stroke = crate::svg::escape_attribute(stroke),
+)
                 .unwrap();
             } else {
-                write!(self.connectors, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
+                write!(
+                    self.connectors,
+                    r#"<path d="{d}" fill="{stroke}"/>"#,
+                    stroke = crate::svg::escape_attribute(stroke),
+                )
+                .unwrap();
             }
             self.last_connector_endpoint = Some((x2, y2));
             self.record_connector_lane_span(start);
@@ -11570,7 +11609,7 @@ impl SvgEmitter {
         write!(
             self.connectors,
             r#"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            stroke,
+            crate::svg::escape_attribute(stroke),
             stroke_width,
             dash,
             f(x1),
@@ -11628,7 +11667,10 @@ impl SvgEmitter {
         write!(
             self.connectors,
             r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:{};"/>"#,
-            fill, pts, stroke, stroke_width
+            crate::svg::escape_attribute(fill),
+            pts,
+            crate::svg::escape_attribute(stroke),
+            stroke_width
         )
         .unwrap();
         self.last_connector_endpoint = None;
@@ -11740,11 +11782,16 @@ impl SvgEmitter {
             if dash.is_some() {
                 write!(
                     self.connectors,
-                    r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};{dash_str}"/>"#
-                )
+                    r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};{dash_str}"/>"#, stroke = crate::svg::escape_attribute(stroke),
+)
                 .unwrap();
             } else {
-                write!(self.connectors, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
+                write!(
+                    self.connectors,
+                    r#"<path d="{d}" fill="{stroke}"/>"#,
+                    stroke = crate::svg::escape_attribute(stroke),
+                )
+                .unwrap();
             }
             self.record_connector_lane_span(start);
             return;
@@ -11752,7 +11799,7 @@ impl SvgEmitter {
         write!(
             self.connectors,
             r#"<line style="stroke:{};stroke-width:{};{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            stroke,
+            crate::svg::escape_attribute(stroke),
             stroke_width,
             dash_str,
             f(x1),
@@ -19582,7 +19629,7 @@ fn swimlane_v2_partition_frame_svg(
     write!(
         out,
         r#"<rect fill="{}" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
-        resolved_fill,
+        crate::svg::escape_attribute(&resolved_fill),
         f(frame.height),
         f(partition_w),
         f(partition_x),
@@ -19746,6 +19793,7 @@ fn swimlane_v2_arrowhead(color: &str, x: f64, y: f64) -> String {
             (x + 4.0, y - 10.0),
             (x, y - 6.0),
         ]),
+        color = crate::svg::escape_attribute(color),
     )
 }
 
@@ -19756,6 +19804,7 @@ fn swimlane_v2_line(color: &str, x1: f64, x2: f64, y1: f64, y2: f64) -> String {
         f(x2),
         f(y1),
         f(y2),
+        color = crate::svg::escape_attribute(color),
     )
 }
 
@@ -21748,11 +21797,11 @@ fn rewrite_fork_bars_for_lane(buf: &str, x: f64, width: f64) -> String {
             write!(
                 out,
                 r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-                fill,
+                crate::svg::escape_attribute(fill),
                 f(FORK_BAR_HEIGHT),
                 f(FORK_BAR_RX),
                 f(FORK_BAR_RX),
-                fill,
+                crate::svg::escape_attribute(fill),
                 f(width),
                 f(x),
                 f(y),
@@ -21899,11 +21948,11 @@ fn rewrite_while_fork_bars_for_lane(
             write!(
                 out,
                 r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-                fill,
+                crate::svg::escape_attribute(fill),
                 f(FORK_BAR_HEIGHT),
                 f(FORK_BAR_RX),
                 f(FORK_BAR_RX),
-                fill,
+                crate::svg::escape_attribute(fill),
                 f(width),
                 f(x),
                 f(y),
@@ -22162,7 +22211,7 @@ fn route_nested_fork_then_if_connectors(
                 (x + 4.0, y - 10.0),
                 (x, y - 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -22172,7 +22221,7 @@ fn route_nested_fork_then_if_connectors(
             f(x2),
             f(y1),
             f(y2),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
 
@@ -22464,7 +22513,7 @@ fn route_if_repeat_cross_lane_connectors(
                 (x + 4.0, y - 10.0),
                 (x, y - 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_left = |x: f64, y: f64| -> String {
@@ -22476,7 +22525,7 @@ fn route_if_repeat_cross_lane_connectors(
                 (x + 10.0, y + 4.0),
                 (x + 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_right = |x: f64, y: f64| -> String {
@@ -22488,7 +22537,7 @@ fn route_if_repeat_cross_lane_connectors(
                 (x - 10.0, y + 4.0),
                 (x - 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_up = |x: f64, y: f64| -> String {
@@ -22500,7 +22549,7 @@ fn route_if_repeat_cross_lane_connectors(
                 (x + 4.0, y + 10.0),
                 (x, y + 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -22510,7 +22559,7 @@ fn route_if_repeat_cross_lane_connectors(
             f(x2),
             f(y1),
             f(y2),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
 
@@ -22686,7 +22735,7 @@ fn route_pure_nested_fork_if_connectors(
                 (x + 4.0, y - 10.0),
                 (x, y - 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_right = |x: f64, y: f64| -> String {
@@ -22698,7 +22747,7 @@ fn route_pure_nested_fork_if_connectors(
                 (x - 10.0, y + 4.0),
                 (x - 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_left = |x: f64, y: f64| -> String {
@@ -22710,7 +22759,7 @@ fn route_pure_nested_fork_if_connectors(
                 (x + 10.0, y + 4.0),
                 (x + 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -22720,7 +22769,7 @@ fn route_pure_nested_fork_if_connectors(
             f(x2),
             f(y1),
             f(y2),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
 
@@ -23000,7 +23049,7 @@ fn route_fork_swimlane_connectors(
                 (x + 4.0, y - 10.0),
                 (x, y - 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -23010,7 +23059,7 @@ fn route_fork_swimlane_connectors(
             f(x2),
             f(y1),
             f(y2),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let slot_x = |bar: ForkBar,
@@ -23322,7 +23371,7 @@ fn route_top_fork_branch_if_connectors(
                 (x + 4.0, y - 10.0),
                 (x, y - 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_right = |x: f64, y: f64| -> String {
@@ -23334,7 +23383,7 @@ fn route_top_fork_branch_if_connectors(
                 (x - 10.0, y + 4.0),
                 (x - 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_left = |x: f64, y: f64| -> String {
@@ -23346,7 +23395,7 @@ fn route_top_fork_branch_if_connectors(
                 (x + 10.0, y + 4.0),
                 (x + 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -23356,7 +23405,7 @@ fn route_top_fork_branch_if_connectors(
             f(x2),
             f(y1),
             f(y2),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let down = |out: &mut String, from: ShapeAnchor, to: ShapeAnchor| {
@@ -23531,7 +23580,7 @@ fn route_nested_fork_with_while_connectors(
                 (x + 4.0, y - 10.0),
                 (x, y - 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_up = |x: f64, y: f64| -> String {
@@ -23543,7 +23592,7 @@ fn route_nested_fork_with_while_connectors(
                 (x + 4.0, y + 10.0),
                 (x, y + 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_right = |x: f64, y: f64| -> String {
@@ -23555,7 +23604,7 @@ fn route_nested_fork_with_while_connectors(
                 (x - 10.0, y + 4.0),
                 (x - 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_left = |x: f64, y: f64| -> String {
@@ -23567,7 +23616,7 @@ fn route_nested_fork_with_while_connectors(
                 (x + 10.0, y + 4.0),
                 (x + 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -23577,7 +23626,7 @@ fn route_nested_fork_with_while_connectors(
             f(x2),
             f(y1),
             f(y2),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
 
@@ -23830,7 +23879,7 @@ fn route_if_cross_lane_connectors(
                 (x + 4.0, y - 10.0),
                 (x, y - 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let head_up = |x: f64, y: f64| -> String {
@@ -23842,7 +23891,7 @@ fn route_if_cross_lane_connectors(
                 (x + 4.0, y + 10.0),
                 (x, y + 6.0),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     // Right-pointing arrowhead (tip at (x,y), entering from the left).
@@ -23855,7 +23904,7 @@ fn route_if_cross_lane_connectors(
                 (x - 10.0, y + 4.0),
                 (x - 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     // Left-pointing arrowhead (tip at (x,y), entering from the right).
@@ -23868,7 +23917,7 @@ fn route_if_cross_lane_connectors(
                 (x + 10.0, y + 4.0),
                 (x + 6.0, y),
             ]),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
     let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -23878,7 +23927,7 @@ fn route_if_cross_lane_connectors(
             f(x2),
             f(y1),
             f(y2),
-            c = arrow_color,
+            c = crate::svg::escape_attribute(arrow_color),
         )
     };
 
@@ -25946,7 +25995,7 @@ fn layout_swimlanes_v2(
                     (x + 4.0, y - 10.0),
                     (x, y - 6.0),
                 ]),
-                c = arrow_color,
+                c = crate::svg::escape_attribute(&arrow_color),
             )
         };
         let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
@@ -25956,7 +26005,7 @@ fn layout_swimlanes_v2(
                 f(x2),
                 f(y1),
                 f(y2),
-                c = arrow_color,
+                c = crate::svg::escape_attribute(&arrow_color),
             )
         };
         let mut snake = String::new();
@@ -26116,9 +26165,9 @@ fn layout_swimlanes_v2(
     write!(
         out,
         r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-        header_fill,
+        crate::svg::escape_attribute(header_fill),
         f(title_text_h),
-        header_stroke,
+        crate::svg::escape_attribute(header_stroke),
         f(header_span + SWIMLANE_HEADER_OVERHANG),
         f(lane_left[0]),
         f(header_top),
@@ -26130,7 +26179,7 @@ fn layout_swimlanes_v2(
         write!(
             out,
             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            chrome.divider,
+            crate::svg::escape_attribute(&chrome.divider),
             f(divider_xs[l]),
             f(divider_xs[l]),
             f(header_top),
@@ -26142,7 +26191,7 @@ fn layout_swimlanes_v2(
     write!(
         out,
         r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        chrome.divider,
+        crate::svg::escape_attribute(&chrome.divider),
         f(divider_xs[n]),
         f(divider_xs[n]),
         f(header_top),
@@ -26169,7 +26218,7 @@ fn layout_swimlanes_v2(
         write!(
             out,
             r#"<text fill="{}" font-family="sans-serif" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-            chrome.title,
+            crate::svg::escape_attribute(&chrome.title),
             LANE_TITLE_FONT as u32,
             f(tw),
             f(tx),
@@ -26290,9 +26339,9 @@ fn emit_swimlanes(
     write!(
         svg.shapes,
         r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-        header_fill,
+        crate::svg::escape_attribute(&header_fill),
         f(header_text_h),
-        header_stroke,
+        crate::svg::escape_attribute(&header_stroke),
         f(total_w + SWIMLANE_HEADER_OVERHANG),
         f(lane_lefts[0]),
         f(header_top),
@@ -26374,9 +26423,9 @@ fn emit_swimlanes(
             write!(
                 svg.shapes,
                 r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
-                fill,
+                crate::svg::escape_attribute(&fill),
                 f(final_last_y - header_top),
-                fill,
+                crate::svg::escape_attribute(&fill),
                 f(lane_widths[lane_idx]),
                 f(lane_lefts[lane_idx]),
                 f(header_top),
@@ -26406,7 +26455,7 @@ fn emit_swimlanes(
             write!(
                 svg.shapes,
                 r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                divider_color,
+                crate::svg::escape_attribute(&divider_color),
                 f(lane_lefts[lane_idx]),
                 f(lane_lefts[lane_idx]),
                 f(header_top),
@@ -26451,7 +26500,7 @@ fn emit_swimlanes(
         write!(
             svg.shapes,
             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            divider_color,
+            crate::svg::escape_attribute(&divider_color),
             f(lane_lefts[last_idx]),
             f(lane_lefts[last_idx]),
             f(header_top),
@@ -26461,7 +26510,7 @@ fn emit_swimlanes(
         write!(
             svg.shapes,
             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            divider_color,
+            crate::svg::escape_attribute(&divider_color),
             f(right_edge),
             f(right_edge),
             f(header_top),
@@ -27340,19 +27389,18 @@ fn emit_legacy_graph_edge(
     shortened[last - 1].1 += shift.1;
 
     write!(
-        body,
-        r##"<!--link {} to {}--><g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{}" style="stroke:#181818;stroke-width:1;"/>"##,
-        escape_xml_attr_local(&from_label),
-        escape_xml_attr_local(&to_label),
-        from_node.entity_id,
-        to_node.entity_id,
-        edge.source_line,
-        edge.link_id,
-        legacy_graph_edge_path(&shortened),
-        escape_xml_attr_local(&from_label),
-        escape_xml_attr_local(&to_label),
-        legacy_graph_arrow_points(control, contact),
-    )
+body,
+r##"<!--{svg_comment}--><g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{}" style="stroke:#181818;stroke-width:1;"/>"##,
+from_node.entity_id,
+to_node.entity_id,
+edge.source_line,
+edge.link_id,
+legacy_graph_edge_path(&shortened),
+crate::svg::escape_attribute(&from_label),
+crate::svg::escape_attribute(&to_label),
+legacy_graph_arrow_points(control, contact),
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , &from_label, &to_label)),
+)
     .unwrap();
     emit_legacy_graph_edge_label(body, edge.center_label.as_deref(), path.label, 1.0);
     emit_legacy_graph_edge_label(body, edge.head_label.as_deref(), path.head_label, 0.0);
@@ -27531,7 +27579,7 @@ fn render_legacy_activity_partition(diagram: &ActivityDiagram) -> Option<String>
     write!(
         body,
         r##"<g class="start_entity" data-qualified-name="{}.start" data-source-line="2" id="ent0003"><ellipse cx="{}" cy="51" fill="#222222" rx="10" ry="10" style="stroke:#222222;stroke-width:1;"/></g>"##,
-        escape_xml_attr_local(&partition_label),
+        crate::svg::escape_attribute(&partition_label),
         f(action_cx),
     )
     .unwrap();
@@ -27549,7 +27597,7 @@ fn render_legacy_activity_partition(diagram: &ActivityDiagram) -> Option<String>
     write!(
         body,
         r##"<g class="end_entity" data-qualified-name="{}.end" data-source-line="{}" id="ent{:04}"><ellipse cx="{}" cy="{}" fill="none" rx="11" ry="11" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="#222222" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"##,
-        escape_xml_attr_local(&partition_label),
+        crate::svg::escape_attribute(&partition_label),
         end_source_line?,
         end_ent,
         f(end_cx),
@@ -28292,33 +28340,33 @@ fn emit_legacy_v1_partition_cluster(
     let tab_right = x + label_w + 6.0;
     let tab_tip = tab_right + 7.0;
     write!(
-        out,
-        r##"<!--cluster {}--><g class="cluster" data-qualified-name="{}" data-source-line="1" id="ent0002"><polygon fill="none" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"##,
-        escape_xml_attr_local(label),
-        escape_xml_attr_local(label),
-        f(x),
-        f(y),
-        f(tab_right),
-        f(y),
-        f(tab_tip),
-        f(header_y),
-        f(right),
-        f(header_y),
-        f(right),
-        f(bottom),
-        f(x),
-        f(bottom),
-        f(x),
-        f(y),
-        f(x),
-        f(tab_tip),
-        f(header_y),
-        f(header_y),
-        f(label_w),
-        f(x + 4.0),
-        f(y + 15.5352),
-        escape_xml_attr_local(label),
-    )
+out,
+r##"<!--{svg_comment}--><g class="cluster" data-qualified-name="{}" data-source-line="1" id="ent0002"><polygon fill="none" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"##,
+crate::svg::escape_attribute(label),
+f(x),
+f(y),
+f(tab_right),
+f(y),
+f(tab_tip),
+f(header_y),
+f(right),
+f(header_y),
+f(right),
+f(bottom),
+f(x),
+f(bottom),
+f(x),
+f(y),
+f(x),
+f(tab_tip),
+f(header_y),
+f(header_y),
+f(label_w),
+f(x + 4.0),
+f(y + 15.5352),
+crate::svg::escape_attribute(label),
+svg_comment = crate::svg::comment_text(&format!("cluster {}" , label)),
+)
     .unwrap();
 }
 
@@ -28332,7 +28380,7 @@ fn emit_legacy_v1_start_edge(out: &mut String, target: &str, x: f64, target_y: f
         f(x),
         f(x),
         f(target_y - 6.28),
-        escape_xml_attr_local(target),
+        crate::svg::escape_attribute(target),
         f(x),
         f(target_y - 0.28),
         f(x + ARROW_HEAD_HALF),
@@ -28357,7 +28405,7 @@ fn emit_legacy_v1_partition_start_edge(out: &mut String, target: &str, x: f64, t
         f(x),
         f(x),
         f(target_y - 6.28),
-        escape_xml_attr_local(target),
+        crate::svg::escape_attribute(target),
         f(x),
         f(target_y - 0.28),
         f(x + ARROW_HEAD_HALF),
@@ -28382,7 +28430,7 @@ fn emit_legacy_v1_up_start_edge(out: &mut String, target: &str, x: f64, target_y
         f(x),
         f(x),
         f(target_y - 6.27),
-        escape_xml_attr_local(target),
+        crate::svg::escape_attribute(target),
         f(x),
         f(target_y - 0.27),
         f(x + ARROW_HEAD_HALF),
@@ -28428,8 +28476,8 @@ fn emit_legacy_v1_action_edge(
         f(to_y - 18.25),
         f(x),
         f(to_y - 6.49),
-        escape_xml_attr_local(from),
-        escape_xml_attr_local(to),
+        crate::svg::escape_attribute(from),
+        crate::svg::escape_attribute(to),
         f(x),
         f(to_y - 0.49),
         f(x + ARROW_HEAD_HALF),
@@ -28522,8 +28570,8 @@ fn emit_legacy_v1_up_edge(
         f(to.y - 12.25),
         f(to.x + 35.42),
         f(to.y - 0.49),
-        escape_xml_attr_local(&from.label),
-        escape_xml_attr_local(&to.label),
+        crate::svg::escape_attribute(&from.label),
+        crate::svg::escape_attribute(&to.label),
         f(arrow_tip_x),
         f(arrow_tip_y),
         f(arrow_tip_x - 8.5081),
@@ -28576,8 +28624,8 @@ fn emit_legacy_v1_right_edge(
         f(y),
         f(end_x),
         f(y),
-        escape_xml_attr_local(&from.label),
-        escape_xml_attr_local(&to.label),
+        crate::svg::escape_attribute(&from.label),
+        crate::svg::escape_attribute(&to.label),
         f(arrow_tip_x),
         f(y),
         f(arrow_tip_x - 9.0),
@@ -28717,7 +28765,7 @@ fn emit_legacy_v1_end_edge(
         f(end_cy - 27.73),
         f(x),
         f(end_cy - 17.18),
-        escape_xml_attr_local(&from.label),
+        crate::svg::escape_attribute(&from.label),
         f(x),
         f(end_cy - 11.18),
         f(x + ARROW_HEAD_HALF),
@@ -28760,7 +28808,7 @@ fn emit_legacy_v1_end_edge_numbered(
         f(end_cy - 27.73),
         f(x),
         f(end_cy - 17.18),
-        escape_xml_attr_local(&from.label),
+        crate::svg::escape_attribute(&from.label),
         f(x),
         f(end_cy - 11.18),
         f(x + ARROW_HEAD_HALF),
@@ -28854,20 +28902,20 @@ fn emit_legacy_cluster(out: &mut String, cluster: &OracleCluster) {
     write!(
         out,
         r#"<g class="{}" data-qualified-name="{}""#,
-        escape_xml_attr_local(&cluster.group_class),
-        escape_xml_attr_local(&cluster.qualified_name),
+        crate::svg::escape_attribute(&cluster.group_class),
+        crate::svg::escape_attribute(&cluster.qualified_name),
     )
     .unwrap();
     if let Some(source_line) = cluster.source_line.as_deref() {
         write!(
             out,
             r#" data-source-line="{}""#,
-            escape_xml_attr_local(source_line),
+            crate::svg::escape_attribute(source_line),
         )
         .unwrap();
     }
     if let Some(id) = cluster.entity_id.as_deref() {
-        write!(out, r#" id="{}""#, escape_xml_attr_local(id)).unwrap();
+        write!(out, r#" id="{}""#, crate::svg::escape_attribute(id)).unwrap();
     }
     out.push('>');
     emit_oracle_cluster_children(out, cluster);
@@ -28885,12 +28933,12 @@ fn emit_legacy_start(out: &mut String, label: &str, rect: &EntityRect) {
     write!(
         out,
         r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1;"/></g>"#,
-        escape_xml_attr_local(label),
+        crate::svg::escape_attribute(label),
         f(cx),
         f(cy),
         f(rx),
-        f(ry),
-    )
+        f(ry), id = crate::svg::escape_attribute(id), fill = crate::svg::escape_attribute(fill),
+)
     .unwrap();
 }
 
@@ -28905,14 +28953,14 @@ fn emit_legacy_end(out: &mut String, label: &str, rect: &EntityRect) {
     write!(
         out,
         r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{source_line}" id="{id}"><ellipse cx="{}" cy="{}" fill="none" rx="{}" ry="{}" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"#,
-        escape_xml_attr_local(label),
+        crate::svg::escape_attribute(label),
         f(cx),
         f(cy),
         f(rx),
         f(ry),
         f(cx),
-        f(cy),
-    )
+        f(cy), id = crate::svg::escape_attribute(id), fill = crate::svg::escape_attribute(fill),
+)
     .unwrap();
 }
 
@@ -28945,30 +28993,30 @@ fn emit_legacy_polygon_entity(
     write!(
         out,
         r#"<g class="entity" data-qualified-name="{}""#,
-        escape_xml_attr_local(label),
+        crate::svg::escape_attribute(label),
     )
     .unwrap();
     if let Some(source_line) = rect.source_line.as_deref() {
         write!(
             out,
             r#" data-source-line="{}""#,
-            escape_xml_attr_local(source_line),
+            crate::svg::escape_attribute(source_line),
         )
         .unwrap();
     }
     if let Some(id) = rect.entity_id.as_deref() {
-        write!(out, r#" id="{}""#, escape_xml_attr_local(id)).unwrap();
+        write!(out, r#" id="{}""#, crate::svg::escape_attribute(id)).unwrap();
     }
     out.push('>');
     write!(
         out,
         r#"<polygon fill="{}" points="{}""#,
-        escape_xml_attr_local(&polygon.fill),
-        escape_xml_attr_local(&polygon.points),
+        crate::svg::escape_attribute(&polygon.fill),
+        crate::svg::escape_attribute(&polygon.points),
     )
     .unwrap();
     if let Some(style) = polygon.style.as_deref() {
-        write!(out, r#" style="{}""#, escape_xml_attr_local(style)).unwrap();
+        write!(out, r#" style="{}""#, crate::svg::escape_attribute(style)).unwrap();
     }
     out.push_str("/></g>");
 }
@@ -28984,12 +29032,12 @@ fn emit_legacy_action(out: &mut String, label: &str, rect: &EntityRect) {
     write!(
         out,
         r#"<rect fill="{}" height="{}" rx="{rx}" ry="{ry}" style="{style}" width="{}" x="{}" y="{}"/>"#,
-        escape_xml_attr_local(fill),
+        crate::svg::escape_attribute(fill),
         f(rect.height),
         f(rect.width),
         f(rect.x),
-        f(rect.y),
-    )
+        f(rect.y), style = crate::svg::escape_attribute(style),
+)
     .unwrap();
     text_render::emit_text(
         out,
@@ -29017,17 +29065,17 @@ fn emit_legacy_edge(out: &mut String, edge: &OracleEdgePath) {
     write!(
         out,
         r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{}" data-source-line="{}" id="{}">"#,
-        escape_xml_attr_local(entity_1),
-        escape_xml_attr_local(entity_2),
-        escape_xml_attr_local(link_type),
-        escape_xml_attr_local(source_line),
-        escape_xml_attr_local(link_id),
+        crate::svg::escape_attribute(entity_1),
+        crate::svg::escape_attribute(entity_2),
+        crate::svg::escape_attribute(link_type),
+        crate::svg::escape_attribute(source_line),
+        crate::svg::escape_attribute(link_id),
     )
     .unwrap();
     let path_id = edge
         .path_id
         .as_deref()
-        .map(|id| format!(r#" id="{}""#, escape_xml_attr_local(id)))
+        .map(|id| format!(r#" id="{}""#, crate::svg::escape_attribute(id)))
         .unwrap_or_default();
     let path_style = edge
         .path_style
@@ -29036,8 +29084,8 @@ fn emit_legacy_edge(out: &mut String, edge: &OracleEdgePath) {
     write!(
         out,
         r#"<path d="{}" fill="none"{path_id} style="{}"/>"#,
-        escape_xml_attr_local(&edge.d),
-        escape_xml_attr_local(path_style),
+        crate::svg::escape_attribute(&edge.d),
+        crate::svg::escape_attribute(path_style),
     )
     .unwrap();
     if let Some(points) = edge.arrow_points.as_deref() {
@@ -29049,9 +29097,9 @@ fn emit_legacy_edge(out: &mut String, edge: &OracleEdgePath) {
         write!(
             out,
             r#"<polygon fill="{}" points="{}" style="{}"/>"#,
-            escape_xml_attr_local(fill),
-            escape_xml_attr_local(points),
-            escape_xml_attr_local(style),
+            crate::svg::escape_attribute(fill),
+            crate::svg::escape_attribute(points),
+            crate::svg::escape_attribute(style),
         )
         .unwrap();
     }
@@ -29064,9 +29112,9 @@ fn emit_legacy_edge(out: &mut String, edge: &OracleEdgePath) {
         write!(
             out,
             r#"<polygon fill="{}" points="{}" style="{}"/>"#,
-            escape_xml_attr_local(fill),
-            escape_xml_attr_local(points),
-            escape_xml_attr_local(style),
+            crate::svg::escape_attribute(fill),
+            crate::svg::escape_attribute(points),
+            crate::svg::escape_attribute(style),
         )
         .unwrap();
     }

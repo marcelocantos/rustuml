@@ -1,0 +1,44 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "negative DST representation in libc versus JDK",
+      "Ramadan versus summer daylight state and display width"
+    ],
+    "zone": "Africa/Casablanca",
+    "debug": "date=1774210426000",
+    "kind": "fresh independent supplemental"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "negative DST representation in libc versus JDK",
+      "Ramadan versus summer daylight state and display width"
+    ],
+    "zone": "Africa/Casablanca",
+    "debug": "date=1774210426000",
+    "kind": "fresh independent supplemental"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "first fatal builtin",
+      "later visible output cancellation"
+    ],
+    "kind": "fresh isolating counterexample",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "first fatal builtin",
+      "later visible output cancellation"
+    ],
+    "kind": "fresh isolating counterexample",
+    "negative_intent": true
+  }
+]

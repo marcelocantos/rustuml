@@ -1,0 +1,7 @@
+@startuml
+!procedure $emit()
+class Unreachable
+!endprocedure
+!$v=%strlen($emit())
+class After
+@enduml

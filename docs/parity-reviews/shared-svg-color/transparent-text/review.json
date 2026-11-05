@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A02b1a747-7512-424a-bf7a-dd53d71bb634",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker with no implementation involvement. No child agents, worktrees or production edits. Native review branch prepared by T3."
+  },
+  "account_commit": "597f067cbb7cdbef350540b0bb11bb588ffb03c5",
+  "implementation_commit": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+  "evidence_revision": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "base_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "OpenJDK 21.0.5 Homebrew",
+  "commands": [
+    "CARGO_TARGET_DIR=<private>/target-before CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml (base revision)",
+    "CARGO_TARGET_DIR=<private>/target-after CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml -p rustuml-oracle (evidence tip, identical production sources)",
+    "uv run --no-project python replay.py (12550 goldens plus 2104 membership-preserved retained/maker observations; actual CLI SVG and YAML both phases)",
+    "uv run --no-project python fresh_measure.py (87 held-out actual CLI before/after; immutable Java relay)",
+    "uv run --no-project python gates.py (eight broad gates once, frozen candidate before registering checker cases)",
+    "reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.L9dFp3l5/new --timezone GMT+11:00 -- -pipe -tsvg (parent existing runner only; Java argv derived, not process-traced)"
+  ],
+  "support": "docs/parity-reviews/shared-svg-attributes/checker-support/",
+  "verdict": "rejected",
+  "policy": "Whole-output failures reject; bounded helper/attribute evidence is not acceptance. No combined correctness claim with concurrent sequence work.",
+  "mechanism": "transparent-text-emission",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_activity.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_activity.svg",
+      "axes": [
+        "activity",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "b3a8463d82f7796877d63c7fa1f6be67bfdc7d2a6c0310df209025de3dbaf394",
+      "golden_sha256": "efb2ebc96519776f585933bcb7cf5956428cb1577581098f92a875348c633fbb",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_class.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_class.svg",
+      "axes": [
+        "class",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "0bcc52ccc079f548548ecb42ef7007f46ce24edce25264c1aa7a9586818b2d44",
+      "golden_sha256": "1697e4495342338fcd2d3c39933799a0e0a13f97c306a953edabd626986d0c2e",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_state.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_state.svg",
+      "axes": [
+        "state",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "e4136e2eca34d76f787df0036b4c46f3d86dfcbe0a8969944eb7a1a705833e5e",
+      "golden_sha256": "2df45c0107f78f29c8e861a451ce4258ffb9c9ac25becdf78bbe25399b953e1c",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_deployment.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_deployment.svg",
+      "axes": [
+        "deployment",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "cad39611732fb82e91a5277098ccf363ff59370088efce72f3b3e1859a0da59d",
+      "golden_sha256": "b2bbe76a0f118c8b5c63af0d8fb9999307070f3902dd2bbdc6b1f61e01b213bc",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_component.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_component.svg",
+      "axes": [
+        "component",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "972e1928eec8e0716ca2fdb2da6e6d1f929ad6fb24bcd0cccf109818ba748f0b",
+      "golden_sha256": "35107014ade9288007bfe912adb82a8dfb740de6b847283cead7fa27142ce17f",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_usecase.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_usecase.svg",
+      "axes": [
+        "usecase",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "119cea0613f981bec3ee45a0026af756638da8578b7098a352121aa4b09bd24f",
+      "golden_sha256": "5169daa2796a5f9d2ffcd4568fd324f4a9380a18e0bdd50f71dfbe9e7db5d505",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_object.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_object.svg",
+      "axes": [
+        "object",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "fe6d6891f97cf35808c00c17a259e56de6845739a18f7795cd3b41585f77db8e",
+      "golden_sha256": "44d4c7697a6ebc50e38e78cf9be5b8de3a60e549a798edcb57f57c2ab4377402",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_archimate.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_archimate.svg",
+      "axes": [
+        "archimate",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "f81458702c1d1b988e067fd35eec393f5f6c9760b27c3421f1d78756d71e909f",
+      "golden_sha256": "1d2cfe0a87de31147e396996ba04abd5c4a50596b3a142923283537a7b412527",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_gantt.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_gantt.svg",
+      "axes": [
+        "gantt",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "7f64a7391c7a2715e8928c5614d7e28ebaacb2da4b83316a907802265cdf6bdf",
+      "golden_sha256": "03b9fba254465679ba681257d54a6454c32bbce89c3581e436a3cd1e20e21bf2",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_timing.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_timing.svg",
+      "axes": [
+        "timing",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "514899841e23b43dd3de4b2c42c371253bc0e5f92c9bdcb1e9a7e1d1d9377056",
+      "golden_sha256": "467a21e81b5d5c894983f63c414f1be6e46508a1ffb15a377e31cad6d73c1042",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_mindmap.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_mindmap.svg",
+      "axes": [
+        "mindmap",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "aaec5927378112c72c4f1f8fba0dbe9c6bfb2a7d34e16737679ec3672615229d",
+      "golden_sha256": "7569edcbf293300b04e989af8441e8608b6660f038391c2c9ed4dc7a46583316",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_wbs.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_wbs.svg",
+      "axes": [
+        "wbs",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "b3468a41c52754f0b5437cbaf906a63fb47e3fcc38008e93c36ab8ed81ffd7de",
+      "golden_sha256": "accedeec2f62d278ce613bc8805e6933eb9154d0ae30f7d9fef580f6f0ce41c0",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_salt.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_salt.svg",
+      "axes": [
+        "salt",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "30b5c96a03a30daa99ec9463f2aef706e33a9aa2057af6a0ddb6cd07a60ceee2",
+      "golden_sha256": "fad3c68a87f83f9fd10c1ef54dfb229b31324133093f35c58ef2a44531d0dd90",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_json.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_json.svg",
+      "axes": [
+        "json",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "06d8ba675593b413933b31a5c8e49be5085be2dcd489eeaf7bf8f99f53e1f7db",
+      "golden_sha256": "08ed46b59b0ca152c561e8982aac2ed293e03e29356a169705b3ec99f47fbe4e",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_nwdiag.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_nwdiag.svg",
+      "axes": [
+        "nwdiag",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "ee9022fee6695cbcbba495a125bbe514faf5364440a590395466f078baa7fb0d",
+      "golden_sha256": "f42baef39aecc576e4e68c78ef248cac3608c2981c9244cce1fb9667a63e21bd",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_regex.puml",
+      "golden": "test-diagrams/perturbations/transparent-text-emission/checker-independent-astra/transparent_regex.svg",
+      "axes": [
+        "regex",
+        "zero alpha inside mixed runs with background"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "36dcb34fd7311fb41c684c71787dbd7c3d89762098c9fe4eac3e29f230b870fd",
+      "golden_sha256": "6f0c84fb59dad3e6121bfbcc3603e55fb17d898fdeb0484616f8af4ade4db1f0",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    }
+  ],
+  "findings": [
+    "DriverTextSvg.draw:94-97 returns before painting transparent foreground and before BACKCOLOR allocation. Rust write_text_element now checks alpha zero before filter/link/text emission; its caller retains measurement/advance. Source and shared unit tests support that narrow mechanism.",
+    "Fresh zero-alpha text inside mixed L/.../R runs with a nested opaque BACKCOLOR matches whole Java output in nine families: activity, class, state, deployment, component, usecase, object, mindmap and WBS. All 16 references are valid; 0\u21929/16 whole passes.",
+    "Seven held-out family outputs still fail: archimate, gantt, timing, salt, json, nwdiag, regex. In salt/json/nwdiag the product emits literal markup rather than shared Creole runs; for example transparent_salt includes the escaped <color:#3579bd00><back:#e73>Veil... text and width355 versus Java180. These are existing consumer-path gaps, not evidence that shared advance was lost. They still reject whole-output acceptance.",
+    "Transparent BACKCOLOR with opaque text remains distinct from transparent foreground. All generated inputs and references, including failures, remain executable."
+  ],
+  "measurements": {
+    "inputs": 16,
+    "valid": 16,
+    "before_pass": 0,
+    "after_pass": 9
+  }
+}

@@ -1,0 +1,8 @@
+@startuml
+!$x=%set_variable_value("twig$tip","expanded")
+!raw="twig"+"$"+"tip"
+!function $literal()
+!return "twig"+"$"+"tip"
+!endfunction
+class "raw / $literal() / twig$tip" as Scan
+@enduml

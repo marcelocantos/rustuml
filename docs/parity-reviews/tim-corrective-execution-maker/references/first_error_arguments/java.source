@@ -1,0 +1,2 @@
+@startuml
+!$v=%substr(%date("QQ",0),$tick(),%date("XXXX",0))

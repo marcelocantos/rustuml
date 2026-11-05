@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "base_revision": "bdfeba117c7af6a527fc66b0acda6d8273fa6d74",
+  "imported_rejection": "f6c84a6215e734955890f6058c309423cf228f1d",
+  "import_commit": "756f7a41db41a373e97aa7714cab22b634721354",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "creole-image-fallback-style",
+  "java_locations": [
+    "klimt/creole/atom/AtomImg.java:104-115 create builds UFontFactory.monospaced(14) and FontConfiguration.blackBlueTrue; :163-181 file fallback constructs AtomTextUtils.createLegacy with this config",
+    "klimt/font/UFontFactory.java::monospaced builds Monospaced with normal face",
+    "klimt/font/FontConfiguration.java:56-78 create/blackBlueTrue/getStyles supplies independent black, plain face, no extended color or position"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::handle_tag Image clones surrounding Style then changes monospace and size only",
+    "crates/rustuml-render/src/text_render.rs:1614-1615 write_text_element ORs TextBase bold/italic with segment style; out of scope"
+  ],
+  "invariant": "Missing-image fallback is an independent plain black monospaced14 text atom, not a recursively inherited markup run. Reset all nested markup style fields for that fallback and restore surrounding style barriers. Base consumer inheritance is a separate limitation.",
+  "causal_divergence": "Cloning Style carries bold/italic/color/background/family/baseline/link decoration into fallback. Java creates a new font configuration. Even cleared booleans cannot override TextBase bold/italic OR in the current shared representation.",
+  "planned_change": "Only creole.rs Image arm: construct fallback Style from default with monospace=true,size=14,fill=#000000. Keep existing image candidate grammar and fallback message/load behavior, command boundaries and surrounding style restoration. No image/icon resolver work, TextBase/API changes or consumer geometry compensation.",
+  "perturbation_axes": [
+    "bold/italic/color/background/family/subscript nesting versus plain",
+    "missing image scale and source spelling, malformed token neighbor",
+    "plain-base note/activity versus consumer-bold WBS root and class title"
+  ],
+  "verification": "Preserve2034 prior observations including1992+sixgoldens+checker36(34valid); before/after actual CLI SVG+YAML, unchanged comparator; compact parent relay and independent classifications. Record losses/errors/panics and map order separately. Broad gates once stable and compare exact library failure-name files. No self-review."
+}

@@ -1,0 +1,6 @@
+@startuml
+skinparam backgroundColor #ffffff
+start
+:A<color:automatic>Bee</color>C;
+stop
+@enduml

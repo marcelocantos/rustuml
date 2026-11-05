@@ -1,0 +1,4 @@
+@startuml
+!includesub lib/bad.inc!chosen
+class Unreachable
+@enduml

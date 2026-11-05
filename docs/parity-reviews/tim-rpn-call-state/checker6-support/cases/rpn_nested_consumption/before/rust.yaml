@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "seed/inner/spruce" as Nested
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Nested
+  entities:
+  - id: Nested
+    label: seed/inner/spruce
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

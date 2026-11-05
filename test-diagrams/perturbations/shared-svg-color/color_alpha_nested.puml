@@ -1,0 +1,5 @@
+@startuml
+start
+:q<color:#2a6b9c77>a<color:red>fir</color>b</color>r\nq<color:navy>a<color:#2a6b9c88>fir</color>b</color>r;
+stop
+@enduml

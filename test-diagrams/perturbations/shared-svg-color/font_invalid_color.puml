@@ -1,0 +1,3 @@
+@startuml
+Elm -> Cedar : q<font color=NoSuchShade>fir</font>r
+@enduml

@@ -1,0 +1,161 @@
+{
+  "before": {
+    "total": 1516,
+    "matches": 553,
+    "invalid": 57,
+    "cli_errors": 67,
+    "valid_cli_errors": 33,
+    "panics": 32,
+    "sources": 34
+  },
+  "after": {
+    "total": 1516,
+    "matches": 567,
+    "invalid": 57,
+    "cli_errors": 70,
+    "valid_cli_errors": 33,
+    "panics": 32,
+    "sources": 48
+  },
+  "gains": [
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.puml",
+    "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.puml",
+    "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.puml",
+    "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+    "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+    "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+    "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml"
+  ],
+  "losses": [],
+  "new_valid_errors": [],
+  "new_panics": [],
+  "cohorts": {
+    "frozen": {
+      "before": {
+        "total": 1449,
+        "matches": 520,
+        "invalid": 38,
+        "cli_errors": 54,
+        "valid_cli_errors": 33,
+        "panics": 32,
+        "sources": 0
+      },
+      "after": {
+        "total": 1449,
+        "matches": 520,
+        "invalid": 38,
+        "cli_errors": 54,
+        "valid_cli_errors": 33,
+        "panics": 32,
+        "sources": 0
+      }
+    },
+    "fresh": {
+      "before": {
+        "total": 42,
+        "matches": 18,
+        "invalid": 10,
+        "cli_errors": 6,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 18
+      },
+      "after": {
+        "total": 42,
+        "matches": 32,
+        "invalid": 10,
+        "cli_errors": 7,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 32
+      }
+    },
+    "retained": {
+      "before": {
+        "total": 21,
+        "matches": 13,
+        "invalid": 7,
+        "cli_errors": 7,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 14
+      },
+      "after": {
+        "total": 21,
+        "matches": 13,
+        "invalid": 7,
+        "cli_errors": 7,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 14
+      }
+    },
+    "supplement": {
+      "before": {
+        "total": 4,
+        "matches": 2,
+        "invalid": 2,
+        "cli_errors": 0,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 2
+      },
+      "after": {
+        "total": 4,
+        "matches": 2,
+        "invalid": 2,
+        "cli_errors": 2,
+        "valid_cli_errors": 0,
+        "panics": 0,
+        "sources": 2
+      }
+    },
+    "cohort955": {
+      "before": {
+        "total": 955,
+        "matches": 431,
+        "invalid": 10,
+        "cli_errors": 4,
+        "valid_cli_errors": 2,
+        "panics": 2,
+        "sources": 0
+      },
+      "after": {
+        "total": 955,
+        "matches": 431,
+        "invalid": 10,
+        "cli_errors": 4,
+        "valid_cli_errors": 2,
+        "panics": 2,
+        "sources": 0
+      }
+    },
+    "cohort1044": {
+      "before": {
+        "total": 1044,
+        "matches": 495,
+        "invalid": 32,
+        "cli_errors": 23,
+        "valid_cli_errors": 2,
+        "panics": 2,
+        "sources": 0
+      },
+      "after": {
+        "total": 1044,
+        "matches": 495,
+        "invalid": 32,
+        "cli_errors": 23,
+        "valid_cli_errors": 2,
+        "panics": 2,
+        "sources": 0
+      }
+    }
+  }
+}

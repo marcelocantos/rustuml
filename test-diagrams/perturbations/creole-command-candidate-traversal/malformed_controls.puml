@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Willow : A<outer<$seed*no>>B<$seed*>C<$seed*0>D
+@enduml

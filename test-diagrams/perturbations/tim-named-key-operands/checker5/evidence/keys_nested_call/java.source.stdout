@@ -1,0 +1,2 @@
+@startuml
+!$v=$outer($a="blue",$b=$inner())

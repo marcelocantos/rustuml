@@ -1,0 +1,17 @@
+{
+  "total": 23,
+  "valid": 19,
+  "svg_matches": 14,
+  "exact_valid_sources": 16,
+  "negative_rejected": 2,
+  "valid_failures": [
+    "key_dollar",
+    "key_combining",
+    "parameter_duplicate",
+    "select_0",
+    "select_1"
+  ],
+  "transport_hash": "221e9e974b5b2b622fa732e7f2f7449722bb535627d19cbd814553cad4c85d30",
+  "resources_verified": 24,
+  "calls_verified": 46
+}

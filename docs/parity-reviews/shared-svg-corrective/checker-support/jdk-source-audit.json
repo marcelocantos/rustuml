@@ -1,0 +1,42 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.base/share/classes/sun/nio/cs/US_ASCII.java",
+    "sha256": "4f5f808facaee7310b6c70c76ca7eece4b8cb1cc6a7cd0a8805756597950936e",
+    "verified": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.base/share/classes/sun/nio/cs/StreamEncoder.java",
+    "sha256": "8f651b31dc6041eeaf5e4f47d6fa55f509c55b5d579b7bd2e8e28d9023782d74",
+    "verified": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/WriterToASCI.java",
+    "sha256": "4fcdf141b2de57a6cc91910ec8fabb3c7c19962ce93a42ea9431d906cf4cac6f",
+    "verified": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToStream.java",
+    "sha256": "5579427642883c4f0666e96eb66197c66bbe9ec109eb870ba9b4f02597262ca2",
+    "verified": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/ToXMLStream.java",
+    "sha256": "06e8db7295be573a20c27ec21a5c0d3a8832c745ece706880238ed62307f2323",
+    "verified": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/CharInfo.java",
+    "sha256": "8743d68a994e3c10beb75c08a8a861cb04f1e16fddd18d2fc997a3412354e868",
+    "verified": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/Encodings.java",
+    "sha256": "3d219f0fe726939f26b5ad4a4c7fd24d22b257946065a462244f163d48c0dfa1",
+    "verified": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.5-ga/src/java.xml/share/classes/com/sun/org/apache/xml/internal/serializer/XMLEntities.properties",
+    "sha256": "5c210d775b6f68feae7b3c83b2de1e33ce55c2af02b729111a56d2b59735e105",
+    "verified": true
+  }
+]

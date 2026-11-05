@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "#FF0000/#FF0000/#00FF00" as Color
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Color
+  entities:
+  - id: Color
+    label: '#FF0000/#FF0000/#00FF00'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

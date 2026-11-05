@@ -1,0 +1,3 @@
+@startuml
+class "blue/inner" as Nested
+@enduml

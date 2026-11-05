@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "uv",
+    "run",
+    "--no-project",
+    "python",
+    "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay.py",
+    "freeze"
+  ],
+  "exit": 1,
+  "error": "KeyError: 'row' at replay.py line 39; supplement schema embeds membership at top level; no product calls occurred"
+}

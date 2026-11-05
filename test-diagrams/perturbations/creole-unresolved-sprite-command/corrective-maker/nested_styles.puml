@@ -1,0 +1,3 @@
+@startuml
+Cedar -> Hazel : <b>X<outer<$twig>>Y</b><color:blue>Z<$leaf>Q</color>
+@enduml

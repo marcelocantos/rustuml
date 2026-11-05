@@ -1,0 +1,12 @@
+{
+  "production_files": [
+    "crates/rustuml-parser/src/diagram/wbs.rs",
+    "crates/rustuml-parser/src/parse/wbs.rs",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/wbs.rs"
+  ],
+  "legacy_prefix_equal": true,
+  "tip_production_equal": true,
+  "text_render_equal": true,
+  "public_signatures_equal": true
+}

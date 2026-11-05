@@ -1,0 +1,3 @@
+@startuml
+class "%not_registered(3) / " as Literal
+@enduml

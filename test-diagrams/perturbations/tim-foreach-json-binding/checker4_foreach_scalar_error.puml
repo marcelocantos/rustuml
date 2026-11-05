@@ -1,0 +1,6 @@
+@startuml
+!foreach $item in %str2json("3")
+class Never
+!endfor
+class After
+@enduml

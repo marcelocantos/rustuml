@@ -1,0 +1,26 @@
+{
+  "account_commit": "d48ed1e7033e5539568a59b63c3d3229d07972db",
+  "approved_by": "parent instruction in this session before edits",
+  "additional_files": [
+    "Cargo.lock"
+  ],
+  "test_dependencies": {
+    "roxmltree": "0.20",
+    "sha2": "0.10"
+  },
+  "invariants": [
+    "Dependencies are dev-only for rustuml pipe_mode; cargo tree -e normal production graph must be unchanged.",
+    "Cargo.lock changes only the two test additions and their necessary dependency nodes.",
+    "Remove unused layout_oracle.rs base687 seven-line private escape_xml_attr. rg shows only its declaration; no caller remains.",
+    "state.rs base8221 approved variant renames only id placeholders to from_attr/to_attr, appending shared escaping arguments and retaining comments and geometry."
+  ],
+  "expected_malformed": {
+    "owner": "T14.20",
+    "entries": [
+      "attr_link_c0_one",
+      "attr_link_c0_zero",
+      "attr_link_c0_escape"
+    ],
+    "approval": "Parent explicitly approved exact source hashes; test must ratchet both failure directions and source bytes."
+  }
+}

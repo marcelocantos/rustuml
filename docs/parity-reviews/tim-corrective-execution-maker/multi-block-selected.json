@@ -1,0 +1,6 @@
+{
+  "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+  "cli_exit": 1,
+  "stdout_bytes": 0,
+  "stderr": "parse error: line 5: Bad date pattern: unsupported letter Q\n"
+}

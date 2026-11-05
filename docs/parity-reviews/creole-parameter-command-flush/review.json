@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-parameter-command-flush",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A6bf7f567-dc02-4379-9129-d18cd9895ff7",
+    "model": "gpt-6-astra, high reasoning; Codex harness in T3 Code",
+    "independence": "New checker, no maker or prior checker involvement; no children or additional worktrees",
+    "branch": "review/creole-hide-flush-independent-20261105"
+  },
+  "account_commit": "5d039c21c9374ee91904fe4da430c22ff6e2c4f3",
+  "implementation_commit": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+  "evidence_tip": "2608469dace1f680a7e90c0895e44e657f8aaf7f",
+  "base_revision": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/creole-hide-flush-independent-20261105 2608469dace1f680a7e90c0895e44e657f8aaf7f",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-hide-checker-20261105/setup.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-hide-checker-20261105/build.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-hide-checker-20261105/build_probe.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-hide-checker-20261105/validate_fresh.py",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-hide-checker-20261105/run_replay.py before retained maker18 sprites50 checker38 fresh15 fresh26 new15 delimiters4 focused2 checker30 supplement8 fresh12 checker28",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-hide-checker-20261105/run_replay.py after retained maker18 sprites50 checker38 fresh15 fresh26 new15 delimiters4 focused2 checker30 supplement8 fresh12 checker28",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-hide-checker-20261105/gates.py",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.0AbSTI3w/new --timezone GMT+11:00 -- -pipe -tsvg (parent existing Monkey Man runner only)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_activity_positions.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_activity_positions.svg",
+      "axes": [
+        "leading/trailing empty commands",
+        "adjacent/nested empty followed by sibling",
+        "consumer activity"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "c77b774f687f2e26fc47300388ba00777228c647ddc6ff308a53efca74bd810e",
+      "golden_sha256": "b7ae5d41a19a17125b924098fa7590173c83a44869380d8ed608741319a3f191",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_state_positions.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_state_positions.svg",
+      "axes": [
+        "leading/trailing empty commands",
+        "adjacent/nested empty followed by sibling",
+        "consumer state"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "5f369b29633174553b1179284892eb9df12c6730ce22498101db9b18ddb126b7",
+      "golden_sha256": "098fe6f2ed8f55bdb0c5e7fb7cfbe792c1e2a1d872992550fb5157800238bdd3",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_note_positions.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_note_positions.svg",
+      "axes": [
+        "leading/trailing empty commands",
+        "adjacent/nested empty followed by sibling",
+        "consumer note"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "f99ac1739ae61cb003f1a3deb6f74f4da577b1a66bef3211a4757981e9b6f149",
+      "golden_sha256": "8bf98891032ad12a03213f40b8b647d61c802292824cdf85550ea33b0d634072",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_member_positions.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_member_positions.svg",
+      "axes": [
+        "leading/trailing empty commands",
+        "adjacent/nested empty followed by sibling",
+        "consumer member"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "47217e5063ff2a700893f9212d3241c48cf726fa973c25d9f0ec6628f5c79f5a",
+      "golden_sha256": "c4a4f208a90bb261a650c1a82d2102f1e355b46463c48f050537538b3943e771",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_eol_nested.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_eol_nested.svg",
+      "axes": [
+        "recursive EOL capture",
+        "consumed-empty versus actual stripe fallback"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "e24f4c8962344f53bee4edbc2282396858bc34c292fb5fdd091131c68183441e",
+      "golden_sha256": "a0242694dd854539b3fd8c087d25038a0f9abdf49fbff4d0fc5594d66271e2a5",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_wbs_leaf.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_wbs_leaf.svg",
+      "axes": [
+        "multiline empty leading/trailing stripes",
+        "leaf side and atomless line"
+      ],
+      "result": "pass",
+      "before_result": "pass",
+      "source_sha256": "b388e1215f1398c7b9a108917297f60a2834b0a862eee3bee9e52f705551321d",
+      "golden_sha256": "d131333c5f4a8b7b267cd135287f0d4769e9a3149eaad7ef086ce162b6082a25",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_wbs_composed.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_wbs_composed.svg",
+      "axes": [
+        "composed versus leaf",
+        "nested command and adjacent sibling",
+        "blank stripe"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "f5085e66a1c35c9055c9388e7bac4ab467f025beb7ae31c1691a4989e4886591",
+      "golden_sha256": "e2d7e205028f2f2297cfb219084f822dce40cd157c24aa47ed61f38ba23e97d7",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_equal_style.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-command-flush/checker-independent-20261105/flush_equal_style.svg",
+      "axes": [
+        "equal style versus restored style",
+        "empty nested inside nonempty command"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "0a70f8142fcf65a5a753a2db25bb071f390c711433daef1d08b4a72f30345e73",
+      "golden_sha256": "152f364d3c69be5d818114b23fe24a2ee2d4855f022685a0cb97a163530a58a6",
+      "reference_valid": true,
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0
+    }
+  ],
+  "findings": [
+    "Java StripeSimple.modifyStripe flushes pending text around every selected command, including atomless size/color bodies; getAtoms adds a base-style space only for an atomless actual stripe. The new private barriers in handle_tag size/color mirror that invariant and are removed before paint.",
+    "7/8 fresh whole outputs pass; all 8 have byte-exact Java text-run counts, content, style attributes, widths and baselines. Activity/state/note/class-member leading, trailing, adjacent and nested empty commands plus nonempty siblings pass. Multiline WBS leaf/composed labels, depth/sides and actual atomless stripes pass without any WBS source or geometry edit.",
+    "flush_eol_nested fails whole output despite exact text atoms: its four-line folded note is 70 px high in Rust versus 71 in Java. Rust note_rendered_height sums individually floored line heights; Java ComponentRoseNote casts total block height plus margins. It also fails before. Under the explicit whole-output rule, bounded flush support cannot become acceptance.",
+    "Prior html_parameters now has separate q/r/s atoms and exactly one remaining difference: size-31 italic baseline 78.3672 versus 95.7695. It remains a failure assigned to the separate sequence work, not a waiver or combined-correctness assertion.",
+    "WBS leaf arithmetic was not retuned. Source, caller, font and geometry hashes are unchanged. Old-order warning chrome and wbs_shape_color remain failures, while s_shape_color_literals is a verified passing whitespace-neighbour control."
+  ],
+  "verdict": "rejected",
+  "bounded_support": "See findings: lexical support is separate from mandatory whole-output rejection.",
+  "evidence": "docs/parity-reviews/creole-recursive-character-hiding/checker-support/README.md",
+  "metrics": {
+    "replay": {
+      "entries": 1948,
+      "valid": 1814,
+      "before": 870,
+      "after": 888,
+      "lost_passes": [],
+      "new_errors": [],
+      "new_panics": [],
+      "svg_panics": 32,
+      "yaml_byte_equal": 1948
+    },
+    "fresh": {
+      "entries": 28,
+      "valid": 28,
+      "before": 2,
+      "after": 21,
+      "lost_passes": [],
+      "new_errors": [],
+      "new_panics": [],
+      "svg_panics": 0,
+      "yaml_byte_equal": 28
+    },
+    "combined": {
+      "entries": 1976,
+      "valid": 1842,
+      "before": 872,
+      "after": 909,
+      "lost_passes": [],
+      "new_errors": [],
+      "new_panics": [],
+      "svg_panics": 32,
+      "yaml_byte_equal": 1976
+    }
+  },
+  "broad_gates": "docs/parity-reviews/creole-recursive-character-hiding/checker-support/gate-summary.json",
+  "residue": [
+    "Java argv derived from wrapper, not process-traced",
+    "Historical font/Graphviz environment equivalence unproved",
+    "Batik absent; no math parity claim",
+    "All explicit preexisting failures and nonpositives preserved; no waivers",
+    "Unintegrated class candidate and concurrent sequence work excluded",
+    "Broad gates ran once before checker-only evidence registration; standing suite is red"
+  ]
+}

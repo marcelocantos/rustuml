@@ -1,0 +1,8 @@
+@startuml
+!$d=["zero","one"]
+!function $index()
+!return 1
+!endfunction
+!$v=$d[$index()]
+class "$v" as Residue
+@enduml

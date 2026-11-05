@@ -1,0 +1,9 @@
+{
+  "owner_approval": "Parent approved allow_dtd:true only, standard26DOT declaration guard, remaining options/default entity expansion limits unchanged; retain initial15/16",
+  "crate_version": "roxmltree0.20.0",
+  "source": "src/parse.rs:315\u2013345; tokenizer.rs:390\u2013430 parse_doctype/parse_external_id and :471\u2013504 parse_entity_def",
+  "external_resolution": "parse_external_id consumes identifiers and discards them; parse_entity_def returns None for external definitions. This version exposes no external resolver and performs no file/network I/O. No external DTD or entity was fetched/resolved. Context7 current docs mention a later-version resolver; implementation trace uses pinned0.20 source.",
+  "initial_failure": "logs/cli-initial-dtd-policy.log",
+  "production_change": false,
+  "rerun": "affected CLI strict-XML test only; other broad gates not repeated"
+}

@@ -1,0 +1,7 @@
+@startuml
+participant Alder
+note right of Alder
+a<b><img:checker-absent871.png{scale=2}></b>z
+a<img:{bad}<color:navy>seed</color>z
+end note
+@enduml

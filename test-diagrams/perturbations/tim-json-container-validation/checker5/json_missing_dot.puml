@@ -1,0 +1,5 @@
+@startuml
+!$d={"row":{}}
+!$v=$d.row.absent.next
+class Lost
+@enduml

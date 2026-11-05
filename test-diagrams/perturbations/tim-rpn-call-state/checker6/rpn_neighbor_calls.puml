@@ -1,0 +1,8 @@
+@startuml
+!function $braid($a="maple",$b="spruce")
+!return $a+"/"+$b
+!endfunction
+!$key="$b"
+!$x=$braid($key="elm")+"|"+$braid("ash")
+class "$x" as Neighbor
+@enduml

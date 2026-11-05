@@ -1,0 +1,7 @@
+@startuml
+!function $join($a="oak",$b="pine")
+!return $a+"/"+$b
+!endfunction
+!$x="prefix"+$join($a="one",$a="two")
+class "$x" as Stack
+@enduml

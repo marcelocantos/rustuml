@@ -1,0 +1,10 @@
+@startuml
+!$p="cooked"
+!definelong STRIP(x)
+first x
+second x
+!enddefinelong
+note as Memo
+%intval("x") STRIP("oak") suffix
+end note
+@enduml

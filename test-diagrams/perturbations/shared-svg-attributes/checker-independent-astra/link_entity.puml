@@ -1,0 +1,5 @@
+@startuml
+usecase "[[https://example.invalid/p?x=2&y=3{Glow&amp;&#34;Dusk}Link]]" as Goal
+actor Visitor
+Visitor --> Goal
+@enduml

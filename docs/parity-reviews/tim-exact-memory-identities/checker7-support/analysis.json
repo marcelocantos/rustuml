@@ -1,0 +1,1182 @@
+{
+  "total_entries": 1672,
+  "unique_pairs": 1593,
+  "membership_counts": {
+    "collateral": 1516,
+    "prior31": 31,
+    "fresh29": 29,
+    "maker15": 15,
+    "maker17": 17,
+    "maker18": 18,
+    "fresh6": 29,
+    "newmaker15": 15,
+    "supplement2": 2
+  },
+  "unique_pairs_by_cohort": {
+    "collateral": 1437,
+    "prior31": 31,
+    "fresh29": 29,
+    "maker15": 15,
+    "maker17": 17,
+    "maker18": 18,
+    "fresh6": 29,
+    "newmaker15": 15,
+    "supplement2": 2
+  },
+  "pair_intersections": {
+    "collateral & prior31": 0,
+    "collateral & fresh29": 0,
+    "collateral & maker15": 0,
+    "collateral & maker17": 0,
+    "collateral & maker18": 0,
+    "collateral & fresh6": 0,
+    "collateral & newmaker15": 0,
+    "collateral & supplement2": 0,
+    "prior31 & fresh29": 0,
+    "prior31 & maker15": 0,
+    "prior31 & maker17": 0,
+    "prior31 & maker18": 0,
+    "prior31 & fresh6": 0,
+    "prior31 & newmaker15": 0,
+    "prior31 & supplement2": 0,
+    "fresh29 & maker15": 0,
+    "fresh29 & maker17": 0,
+    "fresh29 & maker18": 0,
+    "fresh29 & fresh6": 0,
+    "fresh29 & newmaker15": 0,
+    "fresh29 & supplement2": 0,
+    "maker15 & maker17": 0,
+    "maker15 & maker18": 0,
+    "maker15 & fresh6": 0,
+    "maker15 & newmaker15": 0,
+    "maker15 & supplement2": 0,
+    "maker17 & maker18": 0,
+    "maker17 & fresh6": 0,
+    "maker17 & newmaker15": 0,
+    "maker17 & supplement2": 0,
+    "maker18 & fresh6": 0,
+    "maker18 & newmaker15": 0,
+    "maker18 & supplement2": 0,
+    "fresh6 & newmaker15": 0,
+    "fresh6 & supplement2": 0,
+    "newmaker15 & supplement2": 0
+  },
+  "standing": {
+    "total": 1605,
+    "passed": 592,
+    "failed": 1013,
+    "exit": 101
+  },
+  "matching_environment_cli": 619,
+  "environment_discrepancies": [
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=-0330",
+        "TZ": "GMT-03:30",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Australia/Melbourne",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 1: cannot include test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_body.inc!useful",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/tabs.inc!chosen",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/nested.inc!chosen",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/blocks.inc!chosen",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 3: cannot include test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Europe/London",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Europe/London",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Australia/Lord_Howe",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Europe/Dublin",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Asia/Kathmandu",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=FIX-0330",
+        "TZ": "GMT-03:30",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Asia/Tokyo",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "America/New_York",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "UTC",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Africa/Casablanca",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000",
+        "TZ": "Africa/Casablanca",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 5: cannot include checker4-resources/blocks.inc!chosen",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-sub-directive-selection",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "PLANTUML_CHECKER4": "007,oak",
+        "CHECKER4_PRIVATE": "benign-control",
+        "plantuml.security.checker4": "benign-hidden",
+        "PLANTUML_SECURITY_PROFILE": "LEGACY"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "SVG structural differences:",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+        "CHECKER4_PRIVATE": "visible-control",
+        "plantuml.security.checker4": "benign-hidden",
+        "PLANTUML_SECURITY_PROFILE": "UNSECURE"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+      "standing_pass": false,
+      "cli_pass": true,
+      "standing_failure": "parse failed: line 2: cannot include lib/repeated.inc!chosen",
+      "cwd": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new",
+      "env_overrides": {
+        "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+        "TZ": "GMT+11:00",
+        "RAYON_NUM_THREADS": "4",
+        "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+      }
+    }
+  ],
+  "panic_groups": {
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615": [
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml"
+    ],
+    "panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 1 but the index is 18446744073709551615": [
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml"
+    ]
+  },
+  "other_valid_errors": [
+    "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_ownership.puml",
+    "/tmp/rustuml-checker6/new/intval_unicode_digits.puml",
+    "/tmp/rustuml-checker6/new/intval_unicode_json.puml"
+  ],
+  "model_drops": [
+    {
+      "source": "/tmp/rustuml-checker6/new/sub_uncalled_function.puml",
+      "valid": false,
+      "before": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Survivor\n@enduml\n"
+      },
+      "after": {}
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/sub_uncalled_nested.puml",
+      "valid": false,
+      "before": {
+        "type": "Class",
+        "entities": 1,
+        "source": "@startuml\nclass Lost\n@enduml\n"
+      },
+      "after": {}
+    }
+  ],
+  "negative_results": [
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-command-execution-ownership/checker/negative_late_mixing.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_1.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_3.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-native-leaf-presentation/checker/negative_mandatory_modifier.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-typed-values-and-binding/checker3_shift_scope.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unary_variable.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.puml",
+      "suite": "collateral",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml",
+      "suite": "collateral",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+      "suite": "prior31",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_index_effect.puml",
+      "suite": "prior31",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml",
+      "suite": "prior31",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/bool_space_error.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/surrogate_display_residue.puml",
+      "suite": "fresh29",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_argument_first.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_procedure_first.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/arity_plain_named_builtin.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_duplicate.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/macro_argument_error.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_suffix_continuation.puml",
+      "suite": "fresh29",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_raw_tail_error.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/sub_local_nested.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_scalar_null.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_missing_dot.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/json_missing_index_residue.puml",
+      "suite": "fresh29",
+      "before_exit": 0,
+      "after_exit": 0
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/adjacent_dispatch.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/keys_nested_call.puml",
+      "suite": "fresh29",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/boolean_error.puml",
+      "suite": "maker15",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/arity_missing.puml",
+      "suite": "maker15",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/arity_user_excess.puml",
+      "suite": "maker15",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/sub_raw_bad_comment.puml",
+      "suite": "maker15",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/foreach_json_boolean.puml",
+      "suite": "maker15",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-builtin-value-boundaries/maker-support/inputs/json_missing_traversal.puml",
+      "suite": "maker15",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/builtin_negative_length.puml",
+      "suite": "maker17",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/procedure_value_error.puml",
+      "suite": "maker17",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-expression-value-snapshot/maker-support/inputs/sub_bad_unselected.puml",
+      "suite": "maker17",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/keys_stack.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/keys_nested.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/keys_duplicate.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/plain_named_error.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/procedure_arity.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/procedure_kind.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/sub_nested_inactive.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/intval_decimal.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/intval_overflow.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-c0d7c6ac/docs/parity-reviews/tim-rpn-call-state/maker-support/inputs/intval_space.puml",
+      "suite": "maker18",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/rpn_duplicate_underflow.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_rhs_first_error.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_procedure_missing.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/operand_procedure_covered.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/legacy_prefix_failure.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/sub_collect_error_precedence.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/sub_uncalled_function.puml",
+      "suite": "fresh6",
+      "before_exit": 0,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/intval_invalid_sign.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/intval_underflow_bound.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/tmp/rustuml-checker6/new/hsl_bad_arity.puml",
+      "suite": "fresh6",
+      "before_exit": 1,
+      "after_exit": 1
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/sub_uncalled_nested.puml",
+      "suite": "newmaker15",
+      "before_exit": 0,
+      "after_exit": 1
+    }
+  ],
+  "cohort955": {
+    "total": 955,
+    "matches": 431
+  },
+  "cohort1044": {
+    "total": 1044,
+    "matches": 495
+  },
+  "frozen1449": {
+    "total": 1449,
+    "matches": 520
+  }
+}

@@ -1,0 +1,5 @@
+@startuml
+start
+:A<color:d>Bee</color>C<back:d>Dee</back>E;
+stop
+@enduml

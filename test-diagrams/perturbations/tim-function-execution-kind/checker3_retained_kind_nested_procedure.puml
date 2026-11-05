@@ -1,0 +1,18 @@
+@startuml
+!$n = 0
+!procedure $emit()
+class Nested
+!endprocedure
+!function $inner()
+!$n = $n + 1
+class Dropped
+$emit()
+!return "leaf"
+!endfunction
+!function $outer()
+ignored $inner()
+!return "kept"
+!endfunction
+!$v = $outer()
+class "$v $n" as Actual
+@enduml

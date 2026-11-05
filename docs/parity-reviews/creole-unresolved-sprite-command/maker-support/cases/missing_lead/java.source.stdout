@@ -1,0 +1,3 @@
+@startuml
+class "<$absent> Cedar" as A
+@enduml

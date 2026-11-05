@@ -1,0 +1,12 @@
+{
+  "before_binary_sha256": "6e4857e3d2401714b9d6da1c5bd518cd7b65f41240feff3b5cf49470ae09d2d2",
+  "request_sha256": "bac0571bf74abe11f413a8a6507de63d1de854089b4768b2a2337333981f987e",
+  "manifest_sha256": "4a2922bfc9e1a5c88cb6bece040dce368cb49846bc33bc3d4c883e4004fabf90",
+  "bundle_sha256": "fbd17a1f3a75d4c78ad3f58f822fd5b29aa37d3fe9706610905b625bb8127347",
+  "counts": {
+    "retained": 1730,
+    "maker18": 18,
+    "sprites50": 50,
+    "checker38": 38
+  }
+}

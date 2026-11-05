@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "1 / 1 / 2 / 0" as Units
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Units
+  entities:
+  - id: Units
+    label: '1 / 1 / 2 / 0'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

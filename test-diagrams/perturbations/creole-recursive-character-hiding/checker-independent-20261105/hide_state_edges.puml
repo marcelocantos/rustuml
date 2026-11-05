@@ -1,0 +1,6 @@
+@startuml
+state Grove
+Grove : ~***fir**Z
+Grove : <b>~***fir**Z\~</b>~
+Grove : X<i>\~<u>~_fir</u>~</i>Y
+@enduml

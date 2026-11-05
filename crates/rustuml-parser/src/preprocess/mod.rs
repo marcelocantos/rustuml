@@ -3,6 +3,9 @@
 
 //! TIM preprocessor — handles variables, defines, conditionals,
 //! includes, and comments before diagram-specific parsing.
+//
+// Checker7 corrective contracts: precommitted accounts 02fa49de2396c1445a4ddf1a783c973f883a82f4.
+// Checker4 corrective contracts: precommitted causal accounts 6d46a483aad389d4535e1ba24822fdd116baf517.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -12,14 +15,25 @@ use regex::Regex;
 
 use crate::diagram::SpriteData;
 
+mod date_format;
 mod debug;
 mod stdlib;
 mod themes;
 
 use debug::{RenderClock, TzSpec};
 
-/// Output from the preprocessor: expanded lines plus any sprite definitions.
+/// A fatal TIM evaluation error with its source location.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PreprocessError {
+    pub line: usize,
+    pub message: String,
+}
+
+/// Evaluated source and parser projection, or a fatal error with partial output.
 pub struct PreprocessOutput {
+    /// Fatal TIM error. Callers must check this before consuming partial output.
+    /// parse_with_base must map it to ParseError (owned by the parse worker).
+    pub error: Option<PreprocessError>,
     pub lines: Vec<String>,
     pub sprites: HashMap<String, SpriteData>,
     /// PlantUML's post-TIM `UmlSource.getPlainString("\n")`.
@@ -90,122 +104,131 @@ fn preprocess_full_inner(
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
 ) -> PreprocessOutput {
-    let identity_base_dir = base_dir.clone();
+    // Java TContext.resultList is produced once; UmlSource and diagram parsing
+    // consume that same evaluated stream. Never rerun TIM to compute identity.
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-    let input_lines = source_identity_input_lines(input);
-    let mut lines = ctx.process_lines(&input_lines);
-    let expanded_theme_source = expanded_theme_seed_source(input, &ctx.theme_seed_expansions);
-    if let Some(seed_source) = &expanded_theme_source {
-        ctx.theme_tail.push(format!(
+    let events = ctx.process(input);
+    let mut identity = Vec::new();
+    let mut lines = Vec::new();
+    let mut theme_tail = Vec::new();
+    project_events(&events, &mut identity, &mut lines, &mut theme_tail);
+    let uml_source = uml_source_string(&identity, preserve_teoz_pragma);
+    if !theme_tail.is_empty() {
+        theme_tail.push(format!(
             "skinparam __svgIdSeed {}",
-            svg_id_seed_prefix(seed_source)
+            svg_id_seed_prefix(&uml_source)
         ));
+        lines.extend(theme_tail);
     }
-    // Append any accumulated theme expansion to the end of the diagram so
-    // user-source line numbers are preserved (see `theme_tail`).
-    if !ctx.theme_tail.is_empty() {
-        let tail = std::mem::take(&mut ctx.theme_tail);
-        // Find the last `@end…` marker; insert before it if present so the
-        // diagram parser still terminates correctly.
-        let insert_at = lines
-            .iter()
-            .rposition(|l| l.trim_start().starts_with("@end"))
-            .unwrap_or(lines.len());
-        for (i, line) in tail.into_iter().enumerate() {
-            lines.insert(insert_at + i, line);
-        }
-    }
-    let uml_source = expanded_theme_source.unwrap_or_else(|| {
-        let mut identity_ctx = PreprocessContext::new(identity_base_dir, false);
-        identity_ctx.source_identity_mode = true;
-        identity_ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-        let input_lines = source_identity_input_lines(input);
-        let identity_lines = strip_source_line_markers(identity_ctx.process_lines(&input_lines));
-        uml_source_string(&identity_lines, preserve_teoz_pragma)
-    });
+    // Sprite extraction belongs to parser lowering, after TIM evaluation.
+    // Java leaves every evaluated sprite line in TContext.resultList/UmlSource.
+    let sprites = extract_sprites(&mut lines);
     PreprocessOutput {
         lines,
-        sprites: ctx.sprites,
+        sprites,
         uml_source,
+        error: ctx.error,
     }
 }
 
-fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) -> Option<String> {
-    if expansions.is_empty() {
-        return None;
-    }
-
-    // Java provenance: `PSystemBuilder.createPSystem` builds `UmlSource` from
-    // the preprocessor output, and `UmlSource.seed` hashes
-    // `getPlainString("\n")`. Theme includes occupy the original `!theme`
-    // position in that source; parser-oriented flattening and `theme_tail`
-    // relocation happen only after this representation is captured.
-    let mut source = String::new();
-    let mut in_block = false;
-    let mut skip_initial_empty_lines = false;
-    for (index, line) in input.lines().enumerate() {
-        let source_line = index + 1;
-        let trimmed = line.trim_start();
-        if !in_block {
-            if !trimmed.starts_with("@start") {
-                continue;
-            }
-            in_block = true;
-            skip_initial_empty_lines = true;
-        } else if skip_initial_empty_lines && trimmed.is_empty() {
-            continue;
-        } else {
-            skip_initial_empty_lines = false;
-        }
-
-        if let Some(expansion) = expansions
-            .iter()
-            .find(|expansion| expansion.source_line == source_line)
-        {
-            for expanded in &expansion.lines {
-                let expanded =
-                    split_source_line_marker(expanded).map_or(expanded.as_str(), |(_, text)| text);
-                source.push_str(expanded);
-                source.push('\n');
-            }
-        } else {
-            source.push_str(line);
-            source.push('\n');
-        }
-
-        if trimmed.starts_with("@end") {
-            break;
-        }
-    }
-    Some(source)
+/// A TIM execution result, before parser-specific lowering. Plain text has one
+/// owner: both projections see exactly this value, including its origin marker.
+/// Java provenance: TContext.addPlain/executeTheme/executeOption and UmlSource.
+#[derive(Clone, Debug)]
+enum EvaluatedEvent {
+    Plain(String),
+    Boundary(String),
+    ParserOnly(String),
+    Theme {
+        name: String,
+        source_line: usize,
+        body: Vec<EvaluatedEvent>,
+    },
 }
 
-/// Mirror the source reader that runs before Java's TIM expansion.
-///
-/// PlantUML drops empty lines immediately after the `@start…` marker. Empty
-/// lines that appear later in TIM output remain part of `UmlSource` and must
-/// still participate in deterministic SVG resource hashes.
-fn source_identity_input_lines(input: &str) -> Vec<&str> {
-    let mut result = Vec::new();
-    let mut in_block = false;
-    let mut skip_initial_empty_lines = false;
-
-    for line in input.lines() {
-        let trimmed = line.trim_start();
-        if !in_block && trimmed.starts_with("@start") {
-            in_block = true;
-            skip_initial_empty_lines = true;
-            result.push(line);
-        } else if skip_initial_empty_lines && trimmed.is_empty() {
-            continue;
-        } else {
-            skip_initial_empty_lines = false;
-            result.push(line);
+fn project_events(
+    events: &[EvaluatedEvent],
+    identity: &mut Vec<String>,
+    lines: &mut Vec<String>,
+    theme_tail: &mut Vec<String>,
+) {
+    for event in events {
+        match event {
+            EvaluatedEvent::Plain(line) => {
+                identity.push(
+                    split_source_line_marker(line)
+                        .map_or(line.as_str(), |(_, text)| text)
+                        .to_string(),
+                );
+                lines.push(line.clone());
+            }
+            EvaluatedEvent::Boundary(line) => identity.push(line.clone()),
+            EvaluatedEvent::ParserOnly(line) => lines.push(line.clone()),
+            EvaluatedEvent::Theme {
+                name,
+                source_line,
+                body,
+            } => {
+                let mut expanded = Vec::new();
+                let mut nested_tail = Vec::new();
+                project_events(body, identity, &mut expanded, &mut nested_tail);
+                lines.push(source_line_marker(
+                    *source_line,
+                    &format!("skinparam __theme {name}"),
+                ));
+                // Retain the parser's theme envelope contract. Only this
+                // projection flattens grouped properties or relocates them.
+                theme_tail.push(format!("skinparam __theme_body_start {name}"));
+                theme_tail.extend(themes::flatten_theme_output(&expanded));
+                theme_tail.extend(nested_tail);
+                theme_tail.push(format!("skinparam __theme_body_end {name}"));
+            }
         }
     }
+}
 
-    result
+fn extract_sprites(lines: &mut [String]) -> HashMap<String, SpriteData> {
+    let mut sprites: HashMap<String, SpriteData> = HashMap::new();
+    let mut current: Option<String> = None;
+    for line in lines {
+        let text = split_source_line_marker(line)
+            .map_or(line.as_str(), |(_, text)| text)
+            .trim();
+        if let Some(name) = &current {
+            if text == "}" {
+                current = None;
+            } else if !text.is_empty()
+                && text.chars().all(|c| c.is_ascii_hexdigit())
+                && let Some(sprite) = sprites.get_mut(name)
+            {
+                sprite.rows.push(text.to_string());
+                sprite.height = sprite.rows.len() as u32;
+            }
+            line.clear();
+        } else if text.starts_with("sprite ") || text.starts_with("sprite\t") {
+            if text.ends_with('{') {
+                let rest = text["sprite ".len()..].trim_start();
+                let rest = rest.strip_prefix('$').unwrap_or(rest);
+                let name: String = rest
+                    .chars()
+                    .take_while(|c| c.is_alphanumeric() || *c == '_')
+                    .collect();
+                let (width, height) = parse_sprite_dimensions(rest);
+                sprites.insert(
+                    name.clone(),
+                    SpriteData {
+                        width,
+                        height,
+                        rows: Vec::new(),
+                    },
+                );
+                current = Some(name);
+            }
+            line.clear();
+        }
+    }
+    sprites
 }
 
 fn svg_id_seed_prefix(source: &str) -> String {
@@ -270,15 +293,20 @@ pub fn preprocess_full_with_base(input: &str, base_dir: &Path) -> PreprocessOutp
 #[derive(Clone, Debug)]
 enum Value {
     Str(String),
-    Int(i64),
+    // Java String can hold isolated UTF-16 surrogates after substring. Preserve
+    // those units through memory, calls and operators until text projection.
+    Utf16(Vec<u16>),
+    Int(i32),
     Float(f64),
-    Bool(bool),
+    Json(serde_json::Value),
 }
 
 impl Value {
     fn to_display(&self) -> String {
         match self {
             Value::Str(s) => s.clone(),
+            Value::Utf16(units) => String::from_utf16_lossy(units),
+            Value::Json(v) => v.as_str().map_or_else(|| v.to_string(), str::to_string),
             Value::Int(n) => n.to_string(),
             Value::Float(f) => {
                 // Avoid trailing zeros but keep at least one decimal if float
@@ -288,13 +316,20 @@ impl Value {
                     format!("{f}")
                 }
             }
-            Value::Bool(b) => {
-                if *b {
-                    "true".to_string()
-                } else {
-                    "false".to_string()
-                }
-            }
+        }
+    }
+
+    fn utf16_units(&self) -> Vec<u16> {
+        match self {
+            Self::Utf16(units) => units.clone(),
+            _ => self.to_display().encode_utf16().collect(),
+        }
+    }
+
+    fn from_utf16(units: Vec<u16>) -> Self {
+        match String::from_utf16(&units) {
+            Ok(text) => Self::Str(text),
+            Err(_) => Self::Utf16(units),
         }
     }
 
@@ -302,41 +337,45 @@ impl Value {
         match self {
             Value::Int(n) => *n as f64,
             Value::Float(f) => *f,
-            Value::Bool(b) => {
-                if *b {
-                    1.0
-                } else {
-                    0.0
-                }
-            }
             Value::Str(s) => s.parse::<f64>().unwrap_or(0.0),
+            Value::Json(_) | Value::Utf16(_) => 0.0,
         }
     }
 
     fn is_numeric(&self) -> bool {
         match self {
             Value::Int(_) | Value::Float(_) => true,
-            Value::Str(s) => s.parse::<f64>().is_ok(),
-            Value::Bool(_) => true,
+            Value::Str(_) | Value::Utf16(_) | Value::Json(_) => false,
         }
     }
 
-    fn from_str_auto(s: &str) -> Value {
-        let s = s.trim();
-        if s == "true" {
-            return Value::Bool(true);
+    // TValue.toBoolean: only integer zero is false; text/JSON use display length.
+    fn truth(&self) -> bool {
+        match self {
+            Self::Int(n) => *n != 0,
+            Self::Float(n) => *n != 0.0, // Existing Rust float extension.
+            _ => !self.to_display().is_empty(),
         }
-        if s == "false" {
-            return Value::Bool(false);
-        }
-        if let Ok(n) = s.parse::<i64>() {
-            return Value::Int(n);
-        }
-        if let Ok(f) = s.parse::<f64>() {
-            return Value::Float(f);
-        }
-        Value::Str(s.to_string())
     }
+
+    fn java_int(&self) -> i32 {
+        // TValue.toInt returns its integer field (zero for strings and JSON).
+        match self {
+            Self::Int(n) => *n,
+            _ => 0,
+        }
+    }
+}
+
+// ShuntingYard captures variable tokens before ReversePolishInterpretor runs
+// calls. Keep values separate from executable source and defer literal-number
+// conversion until execution, where Java TValue.fromNumber can fail.
+enum Expression {
+    Value(Value),
+    Number(String),
+    Not(Box<Expression>),
+    Binary(Box<Expression>, String, Box<Expression>),
+    Call(String, Vec<(Option<Expression>, Expression)>),
 }
 
 // ---------------------------------------------------------------------------
@@ -484,46 +523,84 @@ fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
     format!("#{r:02X}{g:02X}{b:02X}")
 }
 
+// HslColor.executeReturnFunction -> HSLColor.toRGB/HueToRGB ->
+// XColor.fromFloat -> HColorSimple.asString (Java 71806a2378).
+// All channel constants and f32 operations below are those source equations;
+// this builtin does not share the existing f64 lighten/darken approximation.
+fn tim_hsl_color(values: &[Value]) -> String {
+    let h = (values[0].java_int() as f32 % 360.0) / 360.0;
+    let s = (values[1].java_int() as f32).clamp(0.0, 100.0) / 100.0;
+    let l = (values[2].java_int() as f32).clamp(0.0, 100.0) / 100.0;
+    // HslColor divides alpha as double before casting to float.
+    let alpha = values
+        .get(3)
+        .map_or(1.0, |v| (f64::from(v.java_int()) / 100.0) as f32)
+        .clamp(0.0, 1.0);
+    let q = if l < 0.5 {
+        l * (1.0 + s)
+    } else {
+        (l + s) - (s * l)
+    };
+    let p = 2.0 * l - q;
+    let channel = |mut hue: f32| {
+        if hue < 0.0 {
+            hue += 1.0;
+        }
+        if hue > 1.0 {
+            hue -= 1.0;
+        }
+        let value = if 6.0 * hue < 1.0 {
+            p + ((q - p) * 6.0 * hue)
+        } else if 2.0 * hue < 1.0 {
+            q
+        } else if 3.0 * hue < 2.0 {
+            p + ((q - p) * 6.0 * ((2.0 / 3.0) - hue))
+        } else {
+            p
+        };
+        (value.clamp(0.0, 1.0) * 255.0).round() as u8
+    };
+    let (r, g, b) = (channel(h + 1.0 / 3.0), channel(h), channel(h - 1.0 / 3.0));
+    let a = (alpha * 255.0).round() as u8;
+    match a {
+        0 => "transparent".into(),
+        255 => format!("#{r:02X}{g:02X}{b:02X}"),
+        _ => format!("#{a:02x}{r:02x}{g:02x}{b:02x}"),
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Core context
 // ---------------------------------------------------------------------------
 
 struct PreprocessContext {
-    /// `!$var = value` style variables.
-    defines: HashMap<String, String>,
-    /// `!define TOKEN value` style macros.
-    token_defines: HashMap<String, String>,
+    /// Exact Java variable keys (both `name` and `$name`), including !define.
+    defines: VariableMemory,
     /// `!definelong TOKEN(params)` style multi-line macros.
     definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
-    in_sprite_block: bool,
-    /// The name of the sprite currently being collected (if any).
-    current_sprite_name: Option<String>,
-    /// Sprite definitions parsed from `sprite $name { ... }` blocks.
-    sprites: HashMap<String, SpriteData>,
     archimate_enabled: bool,
     in_diagram_block: bool,
     /// True when inside an @startebnf block — disables single-quote comment
     /// stripping since EBNF uses `'` as a terminal delimiter.
     in_ebnf_block: bool,
     seen_start_tag: bool,
+    /// Rust's parse_block API supports definitions in a shared preamble and
+    /// keeps their one-based file origins (source_with_original_line_offset).
+    preamble_body: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
     while_stack: Vec<WhileState>,
-    functions: HashMap<String, FunctionDef>,
-    collecting_function: Option<String>,
+    functions: HashMap<String, Vec<FunctionDef>>,
+    collecting_function: Option<(String, FunctionDef)>,
     collecting_definelong: Option<String>,
-    subs: HashMap<String, Vec<String>>,
-    sub_blocks: Vec<SubBlock>,
-    collecting_sub: Option<String>,
-    collecting_sub_lines: Vec<String>,
-    /// Seed-only pass: consume `!startsub` markers while processing their
-    /// bodies in place, matching PlantUML's theme include source.
-    expand_subs_inline: bool,
+    subs: HashMap<String, Vec<BufferedLine>>,
+    collecting_sub: Option<(String, usize)>,
+    collecting_sub_lines: Vec<BufferedLine>,
     /// Local variable scopes for function calls (stack of saved scopes).
-    local_vars: Vec<HashMap<String, String>>,
+    local_vars: Vec<LocalMemory>,
     /// Pending return value from a `!return` inside a function body.
     /// Set by process_one_line when `!return` is encountered while active.
     return_signal: Option<Value>,
@@ -534,23 +611,6 @@ struct PreprocessContext {
     /// Defaults to system time + local timezone; both overridable via
     /// `RUSTUML_DEBUG` (see [`debug`]) for deterministic golden tests.
     render_clock: RenderClock,
-    /// Theme expansion output accumulated across `!theme` directives.
-    ///
-    /// Themes emit many `skinparam` lines plus `<style>` blocks. Inlining the
-    /// expansion in place would push every subsequent diagram line down by
-    /// ~150 positions, breaking `data-source-line=` matching in goldens.
-    /// Instead we collect the expansion here and append it once at the end of
-    /// the preprocessed output. Internal body delimiters let the shared style
-    /// parser reconstruct the directive's temporal position without shifting
-    /// user source lines.
-    theme_tail: Vec<String>,
-    /// Unflattened theme expansions keyed by their top-level source line.
-    ///
-    /// PlantUML seeds SVG resource IDs from `UmlSource.source`, after TIM has
-    /// expanded `!theme` in place but before grouped skinparams are flattened
-    /// for individual diagram parsers. Keep only this transient representation;
-    /// the resulting seed prefix is carried as parser metadata.
-    theme_seed_expansions: Vec<ThemeSeedExpansion>,
     /// Once loop expansion produces generated content, subsequent original
     /// lines need explicit source-origin markers because output position no
     /// longer equals PlantUML's `data-source-line`.
@@ -558,18 +618,145 @@ struct PreprocessContext {
     source_line_override: Option<usize>,
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
-    /// Emit Java's post-TIM `UmlSource` stream instead of parser line-number
-    /// placeholders. Used only by the deterministic SVG identity pass.
-    source_identity_mode: bool,
-}
-
-struct ThemeSeedExpansion {
-    source_line: usize,
-    lines: Vec<String>,
+    /// Effects produced while evaluating the current statement expression.
+    error: Option<PreprocessError>,
+    expression_events: Vec<EvaluatedEvent>,
+    text_consumed: bool,
+    execution_kind: FunctionKind,
+    /// CodeIteratorSub's empty replay ends only its current executeLines iterator.
+    iterator_stopped: bool,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
 const MAX_WHILE_ITERATIONS: usize = 10000;
+
+// TrieImpl follows UTF-16 edges without backtracking to an earlier terminal.
+// Removing a name clears only its terminal, retaining the prefix path. Both
+// details affect later lookup even when the remaining value maps are identical.
+#[derive(Default)]
+struct NameTrie {
+    children: HashMap<u16, NameTrie>,
+    terminal: Option<String>,
+}
+
+impl NameTrie {
+    fn insert(&mut self, name: &str) {
+        let mut node = self;
+        for unit in name.encode_utf16() {
+            node = node.children.entry(unit).or_default();
+        }
+        node.terminal = Some(name.to_string());
+    }
+
+    fn remove(&mut self, name: &str) {
+        let mut node = self;
+        for unit in name.encode_utf16() {
+            let Some(child) = node.children.get_mut(&unit) else {
+                return;
+            };
+            node = child;
+        }
+        node.terminal = None;
+    }
+
+    fn match_at(&self, text: &str) -> Option<&str> {
+        let mut node = self;
+        for unit in text.encode_utf16() {
+            let Some(child) = node.children.get(&unit) else {
+                return node.terminal.as_deref();
+            };
+            // TrieImpl treats a child with no remaining edges as a dead end.
+            if child.children.is_empty() && child.terminal.is_none() {
+                return node.terminal.as_deref();
+            }
+            node = child;
+        }
+        node.terminal.as_deref()
+    }
+}
+
+// Keep mutation and name discovery together. TMemoryLocal builds its argument /
+// explicit-override trie lazily; global and automatic-local tries are eager.
+struct VariableMemory {
+    values: HashMap<String, Value>,
+    names: Option<NameTrie>,
+}
+
+impl Default for VariableMemory {
+    fn default() -> Self {
+        Self {
+            values: HashMap::new(),
+            names: Some(NameTrie::default()),
+        }
+    }
+}
+
+impl VariableMemory {
+    fn get(&self, name: &str) -> Option<&Value> {
+        self.values.get(name)
+    }
+
+    fn contains_key(&self, name: &str) -> bool {
+        self.values.contains_key(name)
+    }
+
+    fn insert(&mut self, name: String, value: Value) {
+        if let Some(names) = &mut self.names {
+            names.insert(&name);
+        }
+        self.values.insert(name, value);
+    }
+
+    fn remove(&mut self, name: &str) -> Option<Value> {
+        if let Some(names) = &mut self.names {
+            names.remove(name);
+        }
+        self.values.remove(name)
+    }
+
+    fn match_at(&mut self, text: &str) -> Option<String> {
+        let names = self.names.get_or_insert_with(|| {
+            let mut names = NameTrie::default();
+            for name in self.values.keys() {
+                names.insert(name);
+            }
+            names
+        });
+        names
+            .match_at(text)
+            .filter(|name| !name.is_empty())
+            .map(str::to_string)
+    }
+}
+
+// TLineType's boundary test is Character.isLetter(char), ASCII digit, underscore
+// or either UTF-16 surrogate. It is not a restriction on stored variable names.
+fn variable_boundary_letter(ch: char) -> bool {
+    static LETTER: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\p{L}$").unwrap());
+    ch == '_'
+        || ch.is_ascii_digit()
+        || ch.len_utf16() == 2
+        || LETTER.is_match(ch.encode_utf8(&mut [0; 4]))
+}
+
+// TMemoryLocal separates explicit locals/arguments from automatically local
+// names. A global introduced later takes precedence over an automatic local.
+struct LocalMemory {
+    overrides: VariableMemory,
+    locals: VariableMemory,
+}
+
+impl Default for LocalMemory {
+    fn default() -> Self {
+        Self {
+            overrides: VariableMemory {
+                values: HashMap::new(),
+                names: None,
+            },
+            locals: VariableMemory::default(),
+        }
+    }
+}
 
 struct CondState {
     active: bool,
@@ -577,12 +764,14 @@ struct CondState {
 }
 
 struct ForEachState {
+    nested: usize,
     var_name: String,
-    values: Vec<String>,
+    values: Vec<Value>,
     body_lines: Vec<BufferedLine>,
 }
 
 struct WhileState {
+    nested: usize,
     condition: String,
     body_lines: Vec<BufferedLine>,
 }
@@ -594,21 +783,46 @@ struct BufferedLine {
     source_line: usize,
 }
 
-#[derive(Clone)]
-struct SubBlock {
-    lines: Vec<String>,
+// TContext.executeOneLineNotSafe chooses simulatePlain only for return functions.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum FunctionKind {
+    Procedure,
+    Return,
+    Legacy,
 }
 
 #[derive(Clone)]
 struct FunctionDef {
+    kind: FunctionKind,
     params: Vec<FuncParam>,
     body: Vec<BufferedLine>,
+}
+
+impl FunctionDef {
+    // TFunctionImpl.canCover: exact named keys, positional maximum and defaults.
+    fn can_cover(&self, count: usize, named: Option<&HashMap<String, Value>>) -> bool {
+        if named.is_some_and(|keys| {
+            keys.keys()
+                .any(|key| !self.params.iter().any(|p| &p.name == key))
+        }) {
+            return false;
+        }
+        count <= self.params.len()
+            && count
+                >= self
+                    .params
+                    .iter()
+                    .filter(|p| {
+                        p.default.is_none() && !named.is_some_and(|keys| keys.contains_key(&p.name))
+                    })
+                    .count()
+    }
 }
 
 #[derive(Clone)]
 struct FuncParam {
     name: String,
-    default: Option<String>,
+    default: Option<Value>,
 }
 
 #[derive(Clone)]
@@ -620,18 +834,15 @@ struct DefineLongDef {
 impl PreprocessContext {
     fn new(base_dir: Option<PathBuf>, mark_function_body_source_lines: bool) -> Self {
         Self {
-            defines: HashMap::new(),
-            token_defines: HashMap::new(),
+            defines: VariableMemory::default(),
             definelong_macros: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
-            in_sprite_block: false,
-            current_sprite_name: None,
-            sprites: HashMap::new(),
             archimate_enabled: false,
             in_diagram_block: false,
             in_ebnf_block: false,
             seen_start_tag: false,
+            preamble_body: false,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -640,21 +851,21 @@ impl PreprocessContext {
             collecting_function: None,
             collecting_definelong: None,
             subs: HashMap::new(),
-            sub_blocks: Vec::new(),
             collecting_sub: None,
             collecting_sub_lines: Vec::new(),
-            expand_subs_inline: false,
             local_vars: Vec::new(),
             return_signal: None,
             current_source_line: 0,
             render_clock: RenderClock::from_env(),
-            theme_tail: Vec::new(),
-            theme_seed_expansions: Vec::new(),
             mark_source_lines: false,
             source_line_override: None,
             mark_function_body_source_lines,
             preserve_teoz_pragma: false,
-            source_identity_mode: false,
+            error: None,
+            expression_events: Vec::new(),
+            text_consumed: false,
+            execution_kind: FunctionKind::Procedure,
+            iterator_stopped: false,
         }
     }
 
@@ -670,22 +881,23 @@ impl PreprocessContext {
     /// stream — which the diagram parser indexes 1-based — aligned with that.
     /// Placeholders are only emitted while collecting a single top-level
     /// diagram block; nested includes manage their own numbering.
-    fn push_directive_placeholder(&self, output: &mut Vec<String>) {
-        if self.source_identity_mode {
-            return;
-        }
+    fn push_directive_placeholder(&self, output: &mut Vec<EvaluatedEvent>) {
         // PlantUML `TFunctionImpl.executeReturnFunction` and
         // `executeProcedureInternal` feed their body through
         // `TContext.executeLines`; consumed body directives do not enter the
         // resulting diagram stream. Placeholders only represent directives
         // from the user's top-level source, never generated function bodies.
         if self.include_depth == 0 && self.in_diagram_block && self.local_vars.is_empty() {
-            output.push(String::new());
+            output.push(EvaluatedEvent::ParserOnly(String::new()));
         }
     }
 
     fn current_diagram_source_line(&self) -> usize {
-        if self.include_depth == 0 && self.in_diagram_block && self.seen_start_tag {
+        if self.include_depth == 0
+            && self.in_diagram_block
+            && self.seen_start_tag
+            && !self.preamble_body
+        {
             self.current_source_line.saturating_sub(1)
         } else {
             self.current_source_line
@@ -700,25 +912,23 @@ impl PreprocessContext {
         }
     }
 
-    fn push_content_line(&self, output: &mut Vec<String>, line: String) {
-        // Macro expanders may already attribute a generated statement to the
-        // defining stdlib procedure body. Preserve that explicit marker
-        // instead of nesting the caller's source line around it; downstream
-        // subtype detection and parsers consume exactly one marker layer.
-        if split_source_line_marker(&line).is_some() {
-            output.push(line);
-        } else if self.mark_source_lines && !line.is_empty() {
-            output.push(source_line_marker(
+    fn push_content_line(&self, output: &mut Vec<EvaluatedEvent>, line: String) {
+        let line = if split_source_line_marker(&line).is_none()
+            && (self.mark_source_lines || !self.expression_events.is_empty())
+            && !line.is_empty()
+        {
+            source_line_marker(
                 self.source_line_override
                     .unwrap_or_else(|| self.current_diagram_source_line()),
                 &line,
-            ));
+            )
         } else {
-            output.push(line);
-        }
+            line
+        };
+        output.push(EvaluatedEvent::Plain(line));
     }
 
-    fn process_buffered_line(&mut self, line: &BufferedLine, output: &mut Vec<String>) {
+    fn process_buffered_line(&mut self, line: &BufferedLine, output: &mut Vec<EvaluatedEvent>) {
         let saved_source_line = self.current_source_line;
         let saved_mark_source_lines = self.mark_source_lines;
         let saved_source_line_override = self.source_line_override;
@@ -731,94 +941,158 @@ impl PreprocessContext {
         self.current_source_line = saved_source_line;
     }
 
-    fn get_var(&self, name: &str) -> Option<&String> {
-        // Check local scope first, then global.
-        for scope in self.local_vars.iter().rev() {
-            if let Some(v) = scope.get(name) {
-                return Some(v);
-            }
-        }
-        self.defines.get(name)
+    fn get_var(&self, name: &str) -> Option<&Value> {
+        // TMemoryLocal.getVariable and forkFromGlobal: sibling calls see the
+        // global memory, never their caller's overrides or fresh local names.
+        let local = self.local_vars.last();
+        local
+            .and_then(|scope| scope.overrides.get(name))
+            .or_else(|| self.defines.get(name))
+            .or_else(|| local.and_then(|scope| scope.locals.get(name)))
     }
 
-    fn set_var(&mut self, name: &str, value: &str) {
-        // Update the innermost local scope that already holds this variable,
-        // so that !local variables are updated in-place by plain !$var = ...
-        for scope in self.local_vars.iter_mut().rev() {
-            if scope.contains_key(name) {
-                scope.insert(name.to_string(), value.to_string());
+    fn set_var(&mut self, name: &str, value: &Value) {
+        if self.error.is_some() {
+            return;
+        }
+        // TMemoryLocal.putVariable: override, existing global, then new local.
+        if let Some(scope) = self.local_vars.last_mut() {
+            if scope.overrides.contains_key(name) {
+                scope.overrides.insert(name.to_string(), value.clone());
+                return;
+            }
+            if !self.defines.contains_key(name) {
+                scope.locals.insert(name.to_string(), value.clone());
                 return;
             }
         }
-        self.defines.insert(name.to_string(), value.to_string());
+        self.defines.insert(name.to_string(), value.clone());
     }
 
-    fn set_local_var(&mut self, name: &str, value: &str) {
+    fn set_local_var(&mut self, name: &str, value: &Value) {
+        if self.error.is_some() {
+            return;
+        }
         if let Some(scope) = self.local_vars.last_mut() {
-            scope.insert(name.to_string(), value.to_string());
+            scope.overrides.insert(name.to_string(), value.clone());
         } else {
-            // No local scope active, set global.
             self.set_var(name, value);
         }
     }
 
-    fn process(&mut self, input: &str) -> Vec<String> {
+    fn remove_var(&mut self, name: &str) {
+        // TMemoryLocal.removeVariable uses the same precedence as getVariable.
+        if let Some(scope) = self.local_vars.last_mut() {
+            if scope.overrides.remove(name).is_some() {
+                return;
+            }
+            if !self.defines.contains_key(name) {
+                scope.locals.remove(name);
+                return;
+            }
+        }
+        self.defines.remove(name);
+    }
+
+    fn process(&mut self, input: &str) -> Vec<EvaluatedEvent> {
         let lines: Vec<&str> = input.lines().collect();
         self.process_lines(&lines)
     }
 
-    fn process_lines(&mut self, lines: &[&str]) -> Vec<String> {
+    fn process_lines(&mut self, lines: &[&str]) -> Vec<EvaluatedEvent> {
         let mut output = Vec::new();
+        let outer_stop = std::mem::replace(&mut self.iterator_stopped, false);
 
         let saved_source_line = self.current_source_line;
+        let saved_override = self.source_line_override;
+        let saved_mark = self.mark_source_lines;
         for (idx, &line) in lines.iter().enumerate() {
+            if self.iterator_stopped || self.error.is_some() {
+                break;
+            }
             self.current_source_line = idx + 1;
+            if self.include_depth > 0 {
+                // ReadLineReader gives each included file its own zero-based
+                // LineLocation; a caller's buffered override must not leak in.
+                self.source_line_override = Some(idx);
+                self.mark_source_lines = true;
+            }
             self.process_one_line(line, &mut output);
         }
+        if self.include_depth > 0 {
+            self.mark_source_lines = saved_mark;
+        }
+        self.source_line_override = saved_override;
         self.current_source_line = saved_source_line;
 
+        self.iterator_stopped = outer_stop;
         output
     }
 
-    fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
-        let trimmed = line.trim();
-
-        // Collect sprite pixel-data blocks. Emit empty placeholder lines so
-        // downstream parsers preserve original source line numbers (PlantUML's
-        // `data-source-line` attribute matches the user's editor view).
-        if self.in_sprite_block {
-            if trimmed == "}" {
-                self.in_sprite_block = false;
-                self.current_sprite_name = None;
-            } else if let Some(name) = self.current_sprite_name.clone() {
-                // Accumulate pixel row into the sprite definition.
-                if let Some(sprite) = self.sprites.get_mut(&name) {
-                    // Only accept lines that look like hex pixel data.
-                    if !trimmed.is_empty() && trimmed.chars().all(|c| c.is_ascii_hexdigit()) {
-                        sprite.rows.push(trimmed.to_string());
-                        sprite.height = sprite.rows.len() as u32;
-                    }
-                }
+    // Each TContext.executeLines/executeLinesInternal owns a fresh iterator.
+    // Sub replay within one iterator deliberately uses process_buffered_line
+    // directly instead, so an empty replay cannot be mistaken for a nested call.
+    fn process_buffered_lines(
+        &mut self,
+        lines: &[BufferedLine],
+        output: &mut Vec<EvaluatedEvent>,
+        mark_origins: bool,
+    ) {
+        let outer_stop = std::mem::replace(&mut self.iterator_stopped, false);
+        for line in lines {
+            if self.iterator_stopped || self.error.is_some() || self.return_signal.is_some() {
+                break;
             }
-            output.push(String::new());
+            if mark_origins {
+                self.process_buffered_line(line, output);
+            } else {
+                self.process_one_line(&line.text, output);
+            }
+        }
+        self.iterator_stopped = outer_stop;
+    }
+
+    fn process_one_line(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) {
+        // TContext.resultList is shared by return-value and procedure execution.
+        // Each statement owns a sink; nested statements preserve the caller's
+        // already-emitted effects and contribute their own before its content.
+        if self.error.is_some() || self.return_signal.is_some() || self.iterator_stopped {
             return;
         }
+        let outer = std::mem::take(&mut self.expression_events);
+        let outer_consumed = std::mem::replace(&mut self.text_consumed, false);
+        let mut content = Vec::new();
+        self.execute_one_line(line, &mut content);
+        if !self.expression_events.is_empty() {
+            self.mark_source_lines = true;
+        }
+        if self.error.is_none() {
+            output.append(&mut self.expression_events);
+            output.extend(content);
+        }
+        self.expression_events = outer;
+        self.text_consumed = outer_consumed;
+    }
+
+    fn execute_one_line(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) {
+        let trimmed = line.trim();
 
         // Handle block comments. We emit empty placeholder lines for each
         // comment line so downstream parsers preserve original source line
         // numbers (PlantUML's `data-source-line` attribute matches the
         // user's editor view).
         if self.in_block_comment {
-            if trimmed.contains("'/") {
+            if trimmed.ends_with("'/") {
                 self.in_block_comment = false;
             }
             self.push_directive_placeholder(output);
             return;
         }
-        if trimmed.starts_with("/'") {
-            if !trimmed.contains("'/") || trimmed.ends_with("/'") {
-                self.in_block_comment = true;
-            }
+        // TLineType: a whole-line /'...'/ is a short comment; a /'
+        // without a closing '/ starts a long comment. Prefix comments with
+        // following content are handled by StringLocated.removeInnerComment.
+        if trimmed.starts_with("/'") && (!trimmed.contains("'/") || trimmed.ends_with("'/")) {
+            self.in_block_comment = !trimmed.contains("'/");
             self.push_directive_placeholder(output);
             return;
         }
@@ -831,12 +1105,12 @@ impl PreprocessContext {
             return;
         }
 
-        // Strip inline comments (single-quote comment syntax) — but NOT
-        // inside EBNF blocks.
+        // Java StringLocated.removeInnerComment leaves trailing apostrophes
+        // alone and removes only its supported block-comment forms.
         let line_no_comment = if self.in_ebnf_block {
             line.to_string()
         } else {
-            strip_inline_comment(line)
+            remove_inner_comment(line)
         };
         let trimmed = line_no_comment.trim();
 
@@ -849,15 +1123,13 @@ impl PreprocessContext {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
                     self.in_ebnf_block = trimmed.starts_with("@startebnf");
-                    if self.source_identity_mode {
-                        output.push(line_no_comment);
-                    }
+                    output.push(EvaluatedEvent::Boundary(line_no_comment));
                 }
                 return;
             }
             if trimmed.starts_with("@end") {
-                if self.source_identity_mode && self.in_diagram_block {
-                    output.push(line_no_comment);
+                if self.in_diagram_block {
+                    output.push(EvaluatedEvent::Boundary(line_no_comment));
                 }
                 self.in_diagram_block = false;
                 self.in_ebnf_block = false;
@@ -870,36 +1142,51 @@ impl PreprocessContext {
             return;
         }
 
-        // Parse sprite definitions: `sprite $name [WxH/Z] {`
-        if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
-            if trimmed.ends_with('{') {
-                // Parse: sprite $name [WxH/Z] {
-                let rest = trimmed["sprite ".len()..].trim_start();
-                // Strip leading $ if present.
-                let rest = rest.strip_prefix('$').unwrap_or(rest);
-                // Name is the first word (up to whitespace, '[', or '{').
-                let name: String = rest
-                    .chars()
-                    .take_while(|c| c.is_alphanumeric() || *c == '_')
-                    .collect();
-                // Try to parse [WxH/Z] dimensions if present.
-                let (width, height) = parse_sprite_dimensions(rest);
-                if !name.is_empty() {
-                    self.sprites.insert(
-                        name.clone(),
-                        SpriteData {
-                            width,
-                            height,
-                            rows: Vec::new(),
-                        },
-                    );
-                    self.current_sprite_name = Some(name);
+        // CodeIteratorSub buffers then replays the body at its definition,
+        // before the conditional/function iterators. Capture origins as well
+        // as text; no special theme-only subblock execution path exists.
+        if let Some((name, origin)) = self.collecting_sub.clone() {
+            self.push_directive_placeholder(output);
+            // CodeIteratorSub.peek rejects nesting at the outer declaration,
+            // before replay can execute effects or consume following model lines.
+            if directive_argument(trimmed, "!startsub").is_some() {
+                let previous = self.source_line_override.replace(origin);
+                self.fail("Cannot nest sub".into());
+                self.source_line_override = previous;
+            } else if directive_argument(trimmed, "!endsub").is_some() {
+                self.collecting_sub = None;
+                let body = std::mem::take(&mut self.collecting_sub_lines);
+                self.subs.insert(name, body.clone());
+                // CodeIteratorSub.peek installs an empty iterator and returns
+                // null. No next() occurs to clear it: executeLines stops here.
+                if body.is_empty() {
+                    self.iterator_stopped = true;
+                    return;
                 }
-                self.in_sprite_block = true;
+                for buffered in &body {
+                    self.process_buffered_line(buffered, output);
+                }
+                self.mark_source_lines = true;
+            } else {
+                self.collecting_sub_lines
+                    .push(self.current_buffered_line(&line_no_comment));
             }
-            // Emit a placeholder for the `sprite $name {` opening line so
-            // downstream source-line numbers stay aligned (see block above).
-            output.push(String::new());
+            return;
+        }
+
+        // Startsub.
+        if let Some(name) = directive_argument(trimmed, "!startsub") {
+            if !valid_sub_name(name) {
+                self.fail("Bad sub name".into());
+                return;
+            }
+            self.collecting_sub = Some((name.to_string(), self.current_diagram_source_line()));
+            self.collecting_sub_lines.clear();
+            self.push_directive_placeholder(output);
+            return;
+        }
+        if directive_argument(trimmed, "!endsub").is_some() {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -917,36 +1204,28 @@ impl PreprocessContext {
             return;
         }
 
-        // Collecting sub.
-        if !self.expand_subs_inline && self.collecting_sub.is_some() {
-            if trimmed == "!endsub" {
-                if self.collecting_sub.take().is_some() {
-                    self.sub_blocks.push(SubBlock {
-                        lines: std::mem::take(&mut self.collecting_sub_lines),
-                    });
-                }
-            } else if let Some(name) = self.collecting_sub.clone() {
-                let line = line.to_string();
-                self.subs.entry(name).or_default().push(line.clone());
-                self.collecting_sub_lines.push(line);
-            }
-            self.push_directive_placeholder(output);
-            return;
-        }
-
         // Function definition collection.
         if self.try_function_def(&line_no_comment) {
+            // Derivation: parse_block_keeps_preamble_procedure_body_lines and
+            // parse_block_sequence_with_preamble_meta_procedure_stays_sequence
+            // specify one-based file origins for this Rust API extension.
+            self.preamble_body |= self.include_depth == 0 && !self.seen_start_tag;
             self.push_directive_placeholder(output);
             return;
         }
 
+        // Capture the outer foreach body before interpreting a nested while.
+        // Java CodeIterator contexts keep nested bodies inside the outer loop.
+        if !self.foreach_stack.is_empty() && self.try_foreach(&line_no_comment, output) {
+            return;
+        }
         // While buffering.
-        if self.try_while(trimmed, output) {
+        if self.try_while(&line_no_comment, output) {
             return;
         }
 
         // Foreach buffering.
-        if self.try_foreach(trimmed, output) {
+        if self.try_foreach(&line_no_comment, output) {
             return;
         }
 
@@ -956,22 +1235,9 @@ impl PreprocessContext {
             return;
         }
 
-        // Startsub.
-        if let Some(name) = trimmed.strip_prefix("!startsub ") {
-            if !self.expand_subs_inline {
-                self.collecting_sub = Some(name.trim().to_string());
-                self.collecting_sub_lines.clear();
-            }
-            self.push_directive_placeholder(output);
-            return;
-        }
-        if trimmed == "!endsub" {
-            self.push_directive_placeholder(output);
-            return;
-        }
-
         // Definelong.
         if self.try_definelong(trimmed) {
+            self.preamble_body |= self.include_depth == 0 && !self.seen_start_tag;
             self.push_directive_placeholder(output);
             return;
         }
@@ -997,7 +1263,7 @@ impl PreprocessContext {
             if self.is_active() {
                 // Do NOT pre-substitute here: eval_expr_to_value handles
                 // substitution internally, and pre-substituting first would
-                // cause token_defines with quoted values (e.g. !define VERSION
+                // cause bare definitions with quoted values (e.g. !define VERSION
                 // "2.0") to have their quotes stripped during concatenation.
                 self.return_signal = Some(self.eval_expr_to_value(expr));
             }
@@ -1027,38 +1293,17 @@ impl PreprocessContext {
             return;
         }
         if let Some(theme_lines) = self.try_theme(trimmed) {
-            if self.is_active() {
-                output.extend(theme_lines);
-            }
+            output.extend(theme_lines);
             return;
         }
         if let Some(option_lines) = self.try_option(trimmed) {
-            if self.is_active() {
-                output.extend(option_lines);
-            }
+            output.extend(option_lines);
             return;
         }
 
-        // !dump_memory — emit a comment line with all current defines (debugging aid).
-        if trimmed == "!dump_memory" {
-            if self.is_active() {
-                let mut pairs: Vec<String> = self
-                    .defines
-                    .iter()
-                    .map(|(k, v)| format!("{k}={v}"))
-                    .collect();
-                pairs.sort();
-                let token_pairs: Vec<String> = self
-                    .token_defines
-                    .iter()
-                    .map(|(k, v)| format!("{k}={v}"))
-                    .collect();
-                let mut all = pairs;
-                let mut sorted_tokens = token_pairs;
-                sorted_tokens.sort();
-                all.extend(sorted_tokens);
-                self.push_content_line(output, format!("' [dump] {}", all.join(", ")));
-            }
+        // TContext.executeDumpMemory logs diagnostics only, never resultList.
+        if trimmed == "!dump_memory" || trimmed.starts_with("!dump_memory ") {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -1074,20 +1319,9 @@ impl PreprocessContext {
                 if let Some(expanded) = self.try_expand_archimate(line_no_comment.trim()) {
                     expanded
                 } else {
-                    // Try definelong macro expansion.
-                    let subst = self.substitute_vars(&line_no_comment);
-                    let (after_definelong, expanded_multiline) =
-                        self.try_expand_definelong(&subst).unwrap_or((subst, false));
-                    if expanded_multiline {
-                        // Java TFunctionImpl.executeProcedureInternal feeds
-                        // multiline LEGACY_DEFINELONG bodies back through
-                        // TContext.executeLines with their StringLocated
-                        // definition origins. Following caller lines therefore
-                        // need explicit origins once expansion changes length.
-                        self.mark_source_lines = true;
-                    }
-                    // Expand any inline $func(args) calls in output content.
-                    self.expand_inline_func_calls_in_line(&after_definelong)
+                    // Legacy functions participate in the same original-source
+                    // scan as variables. Never rescan the completed substitution.
+                    self.substitute_vars(&line_no_comment)
                 };
             // A definelong expansion can produce multiple lines joined with '\n'.
             // Split them so each line is processed individually by the parser.
@@ -1095,6 +1329,9 @@ impl PreprocessContext {
             // input file (parsers skip blank lines themselves on the `trim().is_empty()`
             // check, but the index advances). PlantUML's `data-source-line` counts
             // blank lines but excludes the dropped `@startuml`.
+            if self.text_consumed || self.execution_kind == FunctionKind::Return {
+                return;
+            }
             for expanded_line in line_to_process.split('\n') {
                 self.push_content_line(output, expanded_line.to_string());
             }
@@ -1106,7 +1343,17 @@ impl PreprocessContext {
         }
     }
 
-    fn try_silent_directive(&self, line: &str) -> bool {
+    fn try_silent_directive(&mut self, line: &str) -> bool {
+        // EaterLog.analyze evaluates its argument exactly once, even though
+        // the diagnostic text itself never enters TContext.resultList.
+        if let Some(rest) = line.strip_prefix("!log")
+            && (rest.is_empty() || rest.starts_with(char::is_whitespace))
+        {
+            if self.is_active() {
+                self.substitute_vars(rest.trim_start());
+            }
+            return true;
+        }
         // !log, !pragma, !assert — consume silently.
         // !includeurl / !import — URL fetching deferred; strip the line silently.
         if self.preserve_teoz_pragma {
@@ -1138,11 +1385,9 @@ impl PreprocessContext {
 
     fn try_define(&mut self, line: &str) -> bool {
         static RE_DEFINE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!define\s+(\w+)(?:\s+(.+))?$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!define\s+(\$?\w+)(?:\s+(.+))?$").unwrap());
         static RE_VAR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!\$(\w+)\s*=\s*(.+)$").unwrap());
-        static RE_LEGACY_VAR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!(\w+)\s*=\s*(.+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!(\$?\w+)\s*=\s*(.+)$").unwrap());
 
         // !define with args: !define MACRO(a,b) body
         static RE_DEFINE_ARGS: LazyLock<Regex> =
@@ -1174,7 +1419,9 @@ impl PreprocessContext {
             if self.is_active() {
                 let name = caps[1].to_string();
                 let value = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
-                self.token_defines.insert(name, value);
+                // EaterAffectationDefine evaluates the replacement once now.
+                let value = self.substitute_vars(&value);
+                self.defines.insert(name, Value::Str(value));
             }
             return true;
         }
@@ -1183,14 +1430,7 @@ impl PreprocessContext {
                 let name = caps[1].to_string();
                 let raw_value = caps[2].trim();
                 let value = self.eval_expr_to_value(raw_value);
-                self.set_var(&name, &value.to_display());
-            }
-            return true;
-        }
-        if let Some(caps) = RE_LEGACY_VAR.captures(line) {
-            if self.is_active() {
-                self.token_defines
-                    .insert(caps[1].to_string(), caps[2].trim().to_string());
+                self.set_var(&name, &value);
             }
             return true;
         }
@@ -1198,15 +1438,21 @@ impl PreprocessContext {
     }
 
     fn try_local_var(&mut self, line: &str) -> bool {
+        // EaterAffectation.analyze selects LOCAL/GLOBAL before putVariable.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!local\s+\$(\w+)\s*=\s*(.+)$").unwrap());
-
+            LazyLock::new(|| Regex::new(r"^!(local|global)\s+(\$?\w+)\s*=\s*(.+)$").unwrap());
         if let Some(caps) = RE.captures(line) {
             if self.is_active() {
-                let name = caps[1].to_string();
-                let raw_value = caps[2].trim();
-                let value = self.eval_expr_to_value(raw_value);
-                self.set_local_var(&name, &value.to_display());
+                let name = &caps[2];
+                let value = self.eval_expr_to_value(caps[3].trim());
+                if self.error.is_some() {
+                    return true;
+                }
+                if &caps[1] == "global" {
+                    self.defines.insert(name.to_string(), value);
+                } else {
+                    self.set_local_var(name, &value);
+                }
             }
             return true;
         }
@@ -1247,97 +1493,113 @@ impl PreprocessContext {
         false
     }
 
-    fn try_expand_definelong(&self, line: &str) -> Option<(String, bool)> {
-        let trimmed = line.trim();
-        // Try each definelong macro.
-        for (name, dl) in &self.definelong_macros {
-            // Check if line contains a macro call: NAME(args)
-            if let Some(idx) = trimmed.find(&format!("{name}(")) {
-                let after = &trimmed[idx + name.len()..];
-                if let Some(end) = find_matching_paren(after) {
-                    let args_str = &after[1..end];
-                    let args = split_args(args_str);
-
-                    // Expand: substitute params in body using whole-word replacement
-                    // to avoid a short param name (e.g. "a") matching as a
-                    // substring inside another param name (e.g. "label").
-                    let mut result_lines = Vec::new();
-                    for body_line in &dl.body {
-                        let mut expanded = body_line.text.clone();
-                        for (i, param) in dl.params.iter().enumerate() {
-                            if let Some(arg) = args.get(i) {
-                                // Use word-boundary regex so that a param like
-                                // "a" does not replace the "a" inside "label".
-                                if let Ok(re) =
-                                    Regex::new(&format!(r"\b{}\b", regex::escape(param)))
-                                {
-                                    expanded = re.replace_all(&expanded, arg.as_str()).to_string();
-                                }
-                            }
-                        }
-                        // Apply ## token-pasting: collapse "foo##bar" → "foobar".
-                        expanded = expanded.replace("##", "");
-                        // TFunctionImpl.finalizeEnddefinelong converts a
-                        // one-line body to LEGACY_DEFINE, which expands inline
-                        // at the caller. Multiline bodies remain procedures and
-                        // retain each StringLocated definition line.
-                        if dl.body.len() > 1 {
-                            expanded = source_line_marker(body_line.source_line, &expanded);
-                        }
-                        result_lines.push(expanded);
-                    }
-                    // For single-line macros, replace inline.
-                    if result_lines.len() == 1 {
-                        let prefix = &trimmed[..idx];
-                        let suffix = &trimmed[idx + name.len() + end + 1..];
-                        return Some((format!("{prefix}{}{suffix}", result_lines[0]), false));
-                    }
-                    return Some((result_lines.join("\n"), true));
-                }
-            }
-            // Bare name match (no parens, no params).
-            if dl.params.is_empty() && trimmed.contains(name.as_str()) {
-                // Only substitute word-boundary matches.
-                if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name)))
-                    && re.is_match(trimmed)
-                {
-                    let body = dl
-                        .body
-                        .iter()
-                        .map(|line| {
-                            if dl.body.len() > 1 {
-                                source_line_marker(line.source_line, &line.text)
-                            } else {
-                                line.text.clone()
-                            }
-                        })
-                        .collect::<Vec<_>>()
-                        .join("\n");
-                    let result = re.replace_all(trimmed, body.as_str()).to_string();
-                    return Some((result, dl.body.len() > 1));
-                }
-            }
+    fn expand_definelong(&self, name: &str, args: &[String]) -> (String, bool) {
+        let definition = &self.definelong_macros[name];
+        // Bind legacy parameters in one pass over each original body line;
+        // inserted arguments are values and cannot become another parameter.
+        let pattern = definition
+            .params
+            .iter()
+            .map(|p| regex::escape(p))
+            .collect::<Vec<_>>()
+            .join("|");
+        let binding =
+            (!pattern.is_empty()).then(|| Regex::new(&format!(r"\b(?:{pattern})\b")).unwrap());
+        let mut lines = Vec::new();
+        for body in &definition.body {
+            let text = if let Some(binding) = &binding {
+                binding
+                    .replace_all(&body.text, |captures: &regex::Captures<'_>| {
+                        let index = definition
+                            .params
+                            .iter()
+                            .position(|name| name == &captures[0])
+                            .unwrap();
+                        args[index].clone()
+                    })
+                    .into_owned()
+            } else {
+                body.text.clone()
+            };
+            // Retain the existing legacy token-paste lowering. Full legacy
+            // function-body execution is not changed by source-scan selection.
+            let text = text.replace("##", "");
+            lines.push(if definition.body.len() > 1 {
+                source_line_marker(body.source_line, &text)
+            } else {
+                text
+            });
         }
-        None
+        (lines.join("\n"), definition.body.len() > 1)
+    }
+
+    fn register_function(&mut self, name: String, function: FunctionDef) {
+        // FunctionsSet.addFunction / TFunctionSignature.equals replace only
+        // (exact name, declared arity), retaining every other completed overload.
+        let overloads = self.functions.entry(name).or_default();
+        if let Some(previous) = overloads
+            .iter_mut()
+            .find(|f| f.params.len() == function.params.len())
+        {
+            *previous = function;
+        } else {
+            overloads.push(function);
+        }
+    }
+
+    fn resolve_function(
+        &self,
+        name: &str,
+        count: usize,
+        named: Option<&HashMap<String, Value>>,
+    ) -> Option<&FunctionDef> {
+        let overloads = self.functions.get(name)?;
+        if let Some(exact) = overloads.iter().find(|f| f.params.len() == count) {
+            return Some(exact);
+        }
+        // FunctionsSet.getFunctionSmart traverses the ordinary JDK HashMap
+        // buckets after exact lookup. TContext.addStandardFunctions registers
+        // 74 signatures on the JVM (excluding commented LoadJsonLegacy).
+        // JDK21 HashMap defaults: capacity16, load3/4, doubling on overflow;
+        // hashCode then xor-shift16; TFunctionSignature hashes name then arity
+        // with multiplier31. Equal-bucket list order retains insertion order.
+        // Tree-bin tie ordering and unsupported legacy-overload syntax are not
+        // established by this bounded model (account 46528609).
+        const STANDARD_SIGNATURES: usize = 74;
+        let size = STANDARD_SIGNATURES
+            + self.functions.values().map(Vec::len).sum::<usize>()
+            + self.definelong_macros.len();
+        let mut capacity = 16;
+        while size > capacity - capacity / 4 {
+            capacity *= 2;
+        }
+        let name_hash = name
+            .encode_utf16()
+            .fold(0u32, |h, c| h.wrapping_mul(31).wrapping_add(u32::from(c)));
+        overloads
+            .iter()
+            .filter(|f| f.can_cover(count, named))
+            .min_by_key(|f| {
+                let hash = 31u32
+                    .wrapping_add(name_hash)
+                    .wrapping_mul(31)
+                    .wrapping_add(f.params.len() as u32);
+                ((hash ^ (hash >> 16)) as usize) & (capacity - 1)
+            })
     }
 
     fn try_function_def(&mut self, line: &str) -> bool {
         let trimmed = line.trim();
-        // Currently collecting a function body?
-        if let Some(func_name) = &self.collecting_function.clone() {
+        // FunctionsSet publishes a definition only at executeEndfunction.
+        if let Some((name, mut function)) = self.collecting_function.take() {
             if trimmed == "!endfunction" || trimmed == "!endprocedure" {
-                self.collecting_function = None;
+                self.register_function(name, function);
             } else {
-                let raw_source_line = self.current_source_line;
-                let source_line = self.current_diagram_source_line();
-                let buffered = BufferedLine {
-                    text: line.to_string(),
-                    raw_source_line,
-                    source_line,
-                };
-                if let Some(func) = self.functions.get_mut(func_name) {
-                    func.body.push(buffered);
+                if trimmed.starts_with("!return ") && function.kind == FunctionKind::Legacy {
+                    function.kind = FunctionKind::Return;
                 }
+                function.body.push(self.current_buffered_line(line));
+                self.collecting_function = Some((name, function));
             }
             return true;
         }
@@ -1345,15 +1607,17 @@ impl PreprocessContext {
         // TIM also accepts a complete unquoted function on one line:
         // `!unquoted function $name($arg) !return expression`.
         static INLINE_RETURN_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:unquoted\s+)?function\s+\$?(\w+)\s*\(([^)]*)\)\s+!return\s+(.+)$")
+            Regex::new(r"^!(?:unquoted\s+)?function\s+(\$?\w+)\s*\((.*)\)\s+!return\s+(.+)$")
                 .unwrap()
         });
         if let Some(caps) = INLINE_RETURN_RE.captures(trimmed) {
             let name = caps[1].to_string();
-            self.functions.insert(
+            let params = self.parse_func_params(&caps[2]);
+            self.register_function(
                 name,
                 FunctionDef {
-                    params: parse_func_params(&caps[2]),
+                    kind: FunctionKind::Return,
+                    params,
                     body: vec![BufferedLine {
                         text: format!("!return {}", &caps[3]),
                         raw_source_line: self.current_source_line,
@@ -1367,68 +1631,138 @@ impl PreprocessContext {
         // !function $name($param1, $param2 = "default")
         // !procedure name() is also accepted by PlantUML themes.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:function|procedure)\s+\$?(\w+)\s*\(([^)]*)\)$").unwrap()
+            Regex::new(r"^!(?:function|procedure)\s+(\$?\w+)\s*\((.*)\)$").unwrap()
         });
 
         if let Some(caps) = RE.captures(trimmed) {
             let name = caps[1].to_string();
-            let params = parse_func_params(&caps[2]);
+            let params = self.parse_func_params(&caps[2]);
 
-            self.functions.insert(
-                name.clone(),
+            self.collecting_function = Some((
+                name,
                 FunctionDef {
+                    kind: if trimmed.starts_with("!procedure") {
+                        FunctionKind::Procedure
+                    } else {
+                        FunctionKind::Legacy
+                    },
                     params,
                     body: Vec::new(),
                 },
-            );
-            self.collecting_function = Some(name);
+            ));
             return true;
         }
 
         false
     }
 
-    /// Call a function and return its return value (if any) plus any output lines.
-    fn call_function(&mut self, name: &str, args: &[String]) -> (Option<Value>, Vec<String>) {
-        let func = match self.functions.get(name) {
-            Some(f) => f.clone(),
-            None => return (None, Vec::new()),
-        };
-
-        // Save current values, set params.
-        let mut saved: Vec<(String, Option<String>)> = Vec::new();
-        for (i, param) in func.params.iter().enumerate() {
-            saved.push((param.name.clone(), self.get_var(&param.name).cloned()));
-            let arg_val = if let Some(arg) = args.get(i) {
-                arg.clone()
-            } else if let Some(def) = &param.default {
-                def.clone()
-            } else {
-                String::new()
-            };
-            self.set_var(&param.name, &arg_val);
+    fn parse_func_params(&mut self, parameters: &str) -> Vec<FuncParam> {
+        if parameters.trim().is_empty() {
+            return Vec::new();
         }
+        split_builtin_args(parameters)
+            .into_iter()
+            .map(|parameter| {
+                let (name, default) =
+                    parameter
+                        .split_once('=')
+                        .map_or((parameter, None), |(name, expression)| {
+                            // Eater.eatDeclareFunction stores the evaluated TValue now.
+                            (name, Some(self.eval_expr_to_value(expression)))
+                        });
+                FuncParam {
+                    name: name.trim().to_string(),
+                    default,
+                }
+            })
+            .collect()
+    }
 
-        // Push a local scope.
-        self.local_vars.push(HashMap::new());
+    /// Call a function and return its return value (if any) plus any output lines.
+    fn call_function(
+        &mut self,
+        name: &str,
+        args: &[String],
+    ) -> (Option<Value>, Vec<EvaluatedEvent>) {
+        if self.error.is_some() {
+            return (None, Vec::new());
+        }
+        // TFunctionImpl.getNewMemory binds evaluated arguments in a new
+        // sibling frame without temporarily changing global variables.
+        let mut positional = Vec::new();
+        let mut named = HashMap::new();
+        for arg in args {
+            if self.error.is_some() {
+                return (None, Vec::new());
+            }
+            if let Some((key, expr)) = named_argument(arg) {
+                let value = self.eval_expr_to_value(expr);
+                named.insert(key.to_string(), value);
+            } else {
+                positional.push(self.eval_expr_to_value(arg));
+            }
+        }
+        if self.error.is_some() {
+            return (None, Vec::new());
+        }
+        self.call_function_values(name, positional, named, false)
+    }
+
+    fn call_function_values(
+        &mut self,
+        name: &str,
+        positional: Vec<Value>,
+        named: HashMap<String, Value>,
+        expression_call: bool,
+    ) -> (Option<Value>, Vec<EvaluatedEvent>) {
+        if self.error.is_some() {
+            return (None, Vec::new());
+        }
+        let keys = if expression_call { None } else { Some(&named) };
+        let Some(func) = self.resolve_function(name, positional.len(), keys).cloned() else {
+            self.fail(format!("Unknown built-in function {name}"));
+            return (None, Vec::new());
+        };
+        // RPN canCover checks an empty named set even after an exact lookup.
+        if expression_call && !func.can_cover(positional.len(), None) {
+            self.fail(format!("Bad number of arguments for {name}"));
+            return (None, Vec::new());
+        }
+        // TFunctionImpl.executeReturnFunction checks kind after signature lookup.
+        if expression_call && func.kind == FunctionKind::Procedure {
+            self.fail("Illegal call here. Is there a return directive in your function?".into());
+            return (None, Vec::new());
+        }
+        let mut positional = positional.into_iter();
+        let mut scope = LocalMemory::default();
+        for param in &func.params {
+            let value = named
+                .get(&param.name)
+                .cloned()
+                .or_else(|| positional.next())
+                .or_else(|| param.default.clone())
+                .unwrap_or_else(|| Value::Str(String::new()));
+            // TFunctionImpl.getNewMemory preserves the parameter's complete key.
+            scope.overrides.insert(param.name.clone(), value);
+        }
+        let outer_kind = std::mem::replace(&mut self.execution_kind, func.kind);
+        self.local_vars.push(scope);
+        // ExecutionContexts belongs to TMemory too; an early return from a
+        // nested conditional must not leave that conditional in the caller.
+        let outer_conditions = std::mem::take(&mut self.cond_stack);
+        let outer_whiles = std::mem::take(&mut self.while_stack);
+        let outer_foreaches = std::mem::take(&mut self.foreach_stack);
 
         // Save and clear any pending return signal from an outer context.
         let outer_return = self.return_signal.take();
 
         let mut output_lines = Vec::new();
 
-        for body_line in &func.body {
-            // Process through the preprocessor (handles !if/!while/!return etc.)
-            if self.mark_function_body_source_lines {
-                self.process_buffered_line(body_line, &mut output_lines);
-            } else {
-                self.process_one_line(&body_line.text, &mut output_lines);
-            }
-            // Check if process_one_line set a return signal.
-            if self.return_signal.is_some() {
-                break;
-            }
-        }
+        self.process_buffered_lines(
+            &func.body,
+            &mut output_lines,
+            self.mark_function_body_source_lines,
+        );
 
         let return_value = self.return_signal.take();
         // Restore outer return signal.
@@ -1437,29 +1771,29 @@ impl PreprocessContext {
         // Pop local scope.
         self.local_vars.pop();
 
-        // Restore saved values.
-        for (param, old_val) in saved {
-            match old_val {
-                Some(v) => {
-                    self.defines.insert(param, v);
-                }
-                None => {
-                    self.defines.remove(&param);
-                }
-            }
-        }
+        self.cond_stack = outer_conditions;
+        self.while_stack = outer_whiles;
+        self.foreach_stack = outer_foreaches;
 
+        self.execution_kind = outer_kind;
         (return_value, output_lines)
     }
 
-    fn try_function_call(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+    fn try_function_call(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) -> bool {
         // $funcName("arg1", "arg2"). PlantUML themes also use bare
         // procedure calls like `basic_style()` inside skinparam blocks.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\$?(\w+)\s*\(([^)]*)\)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^(\$?\w+)\s*\((.*)\)$").unwrap());
 
         let trimmed = line.trim();
         if let Some(caps) = RE.captures(trimmed) {
+            let open = trimmed
+                .find('(')
+                .expect("call regex includes opening parenthesis");
+            if find_matching_paren_from(trimmed, open) != Some(trimmed.len() - 1) {
+                return false;
+            }
+
             let name = caps[1].to_string();
             let args_str = &caps[2];
 
@@ -1468,6 +1802,7 @@ impl PreprocessContext {
             }
 
             if !self.is_active() {
+                self.push_directive_placeholder(output);
                 return true;
             }
 
@@ -1475,7 +1810,7 @@ impl PreprocessContext {
             let (ret, mut lines) = self.call_function(&name, &args);
             let indent = &line[..line.len() - line.trim_start().len()];
             if !indent.is_empty()
-                && let Some(generated) = lines.first_mut()
+                && let Some(EvaluatedEvent::Plain(generated)) = lines.first_mut()
             {
                 if let Some((source_line, text)) = split_source_line_marker(generated) {
                     *generated = source_line_marker(source_line, &format!("{indent}{text}"));
@@ -1485,37 +1820,22 @@ impl PreprocessContext {
             }
             let trailing = &line[line.trim_end().len()..];
             if !trailing.is_empty()
-                && let Some(generated) = lines.last_mut()
+                && let Some(EvaluatedEvent::Plain(generated)) = lines.last_mut()
             {
                 generated.push_str(trailing);
             }
-            let returned_value = ret.is_some();
-            if lines.is_empty() {
-                // If the function produced no output lines but returned a value,
-                // emit the return value as an output line (e.g. note body calls).
-                if let Some(val) = ret {
-                    let s = val.to_display();
-                    if !s.is_empty() {
-                        output.push(s);
-                    }
+            output.extend(lines);
+            if let Some(value) = ret {
+                let value = value.to_display();
+                if !value.is_empty() && self.execution_kind != FunctionKind::Return {
+                    self.push_content_line(output, value);
                 }
-            } else {
-                output.extend(lines);
             }
 
-            // Procedure bodies keep their own definition-line attribution; pad
-            // after the call so following source lines still retain file-line
-            // attribution.
-            if !returned_value
-                && !self.source_identity_mode
-                && self.include_depth == 0
-                && self.in_diagram_block
-                && self.local_vars.is_empty()
-            {
-                while output.len() < self.current_source_line {
-                    output.push(String::new());
-                }
-            }
+            // Java keeps StringLocated origins on both generated body lines
+            // and subsequent caller lines. Output length is not an origin:
+            // a procedure can emit zero, one or many lines, or a theme event.
+            self.mark_source_lines = true;
 
             return true;
         }
@@ -1523,75 +1843,53 @@ impl PreprocessContext {
         false
     }
 
-    /// Evaluate a function call in an expression context, returning the return value.
-    fn eval_function_call(&mut self, name: &str, args_str: &str) -> Value {
-        let args = parse_call_args(args_str);
-        let (ret, _lines) = self.call_function(name, &args);
-        ret.unwrap_or(Value::Str(String::new()))
-    }
-
-    /// Expand inline `$func(args)` calls within a content line (output line).
-    /// This allows function return values to appear inline in notes and messages.
-    /// Procedures expand to their output lines, matching TIM's textual
-    /// replacement when a procedure call appears after a property name.
-    fn expand_inline_func_calls_in_line(&mut self, line: &str) -> String {
-        static INLINE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)\(").unwrap());
-
-        // Check if there are any $func( patterns at all.
-        if !INLINE_RE.is_match(line) {
-            return line.to_string();
-        }
-
-        let mut result = line.to_string();
-        // Iterate to handle nested or multiple calls, up to a limit.
-        for _ in 0..20 {
-            // Find the LAST (innermost) $func( to evaluate inside-out.
-            let Some(m) = INLINE_RE.find_iter(&result).last() else {
-                break;
-            };
-            let start = m.start();
-            let after_open = m.end();
-            let func_name = &result[start + 1..after_open - 1].to_string();
-
-            // Only expand if this function is defined.
-            if !self.functions.contains_key(func_name.as_str()) {
-                // No more user-defined calls to expand; stop.
-                break;
+    fn try_foreach(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) -> bool {
+        let trimmed = line.trim();
+        let buffered = self.current_buffered_line(line);
+        if let Some(state) = self.foreach_stack.last_mut() {
+            let closes = matches!(trimmed, "!endfor" | "!endforeach");
+            if !closes || state.nested > 0 {
+                if directive_argument(trimmed, "!foreach").is_some() {
+                    state.nested += 1;
+                }
+                if closes {
+                    state.nested -= 1;
+                }
+                state.body_lines.push(buffered);
+                return true;
             }
-
-            let Some(close) = find_matching_paren_from(&result, after_open - 1) else {
-                break;
-            };
-            let args_str = result[after_open..close].to_string();
-            let args = parse_call_args(&args_str);
-            let (return_value, output_lines) = self.call_function(func_name, &args);
-            let replacement = return_value.map_or_else(
-                || output_lines.join("\n"),
-                |return_value| return_value.to_display(),
-            );
-            result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
         }
-
-        result
-    }
-
-    fn try_foreach(&mut self, line: &str, output: &mut Vec<String>) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^!foreach\s+\$(\w+)\s+in\s+\[(.+)\]$"#).unwrap());
+            LazyLock::new(|| Regex::new(r#"^!foreach\s+(\$?\w+)\s+in\s+(.+)$"#).unwrap());
 
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE.captures(trimmed) {
             if !self.is_active() {
                 return true;
             }
             let var_name = caps[1].to_string();
             let values_str = &caps[2];
 
-            let values: Vec<String> = values_str
-                .split(',')
-                .map(|v| v.trim().trim_matches('"').trim_matches('\'').to_string())
-                .collect();
+            // EaterForeach consumes JSON; CodeIteratorForeach binds fromJson
+            // globally. Even numeric JSON elements keep their JSON value kind.
+            let values = match self.eval_expr_to_value(values_str) {
+                Value::Json(serde_json::Value::Array(values)) => {
+                    values.into_iter().map(Value::Json).collect()
+                }
+                Value::Json(serde_json::Value::Object(values)) => values
+                    .keys()
+                    .map(|key| Value::Json(serde_json::Value::String(key.clone())))
+                    .collect(),
+                Value::Json(_) => {
+                    // EaterForeach.size rejects JSON scalars; toJson on a
+                    // non-JSON TValue instead returns null, which is skipped.
+                    self.fail("Foreach requires a JSON array or object".into());
+                    return true;
+                }
+                _ => Vec::new(),
+            };
 
             self.foreach_stack.push(ForEachState {
+                nested: 0,
                 var_name,
                 values,
                 body_lines: Vec::new(),
@@ -1599,24 +1897,24 @@ impl PreprocessContext {
             return true;
         }
 
-        if (line == "!endfor" || line == "!endforeach")
+        if (trimmed == "!endfor" || trimmed == "!endforeach")
             && let Some(foreach) = self.foreach_stack.pop()
         {
             if self.is_active() {
                 for val in &foreach.values {
-                    let old_val = self.get_var(&foreach.var_name).cloned();
-                    self.set_var(&foreach.var_name, val);
+                    if self.return_signal.is_some() || self.error.is_some() || self.iterator_stopped
+                    {
+                        break;
+                    }
+                    self.defines.insert(foreach.var_name.clone(), val.clone());
 
                     for body_line in &foreach.body_lines {
                         self.process_buffered_line(body_line, output);
-                    }
-
-                    match old_val {
-                        Some(v) => {
-                            self.set_var(&foreach.var_name, &v);
-                        }
-                        None => {
-                            self.defines.remove(&foreach.var_name);
+                        if self.return_signal.is_some()
+                            || self.error.is_some()
+                            || self.iterator_stopped
+                        {
+                            break;
                         }
                     }
                 }
@@ -1637,37 +1935,62 @@ impl PreprocessContext {
         false
     }
 
-    fn try_while(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+    fn try_while(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) -> bool {
+        let trimmed = line.trim();
+        let buffered = self.current_buffered_line(line);
+        if let Some(state) = self.while_stack.last_mut() {
+            let closes = trimmed == "!endwhile";
+            if !closes || state.nested > 0 {
+                if directive_argument(trimmed, "!while").is_some() {
+                    state.nested += 1;
+                }
+                if closes {
+                    state.nested -= 1;
+                }
+                state.body_lines.push(buffered);
+                return true;
+            }
+        }
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^!while\s+(.+)$").unwrap());
 
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE.captures(trimmed) {
             if !self.is_active() {
                 return true;
             }
             let condition = caps[1].to_string();
             self.while_stack.push(WhileState {
+                nested: 0,
                 condition,
                 body_lines: Vec::new(),
             });
             return true;
         }
 
-        if line == "!endwhile" {
+        if trimmed == "!endwhile" {
             if let Some(while_state) = self.while_stack.pop()
                 && self.is_active()
             {
                 let mut iterations = 0;
                 loop {
-                    if iterations >= MAX_WHILE_ITERATIONS {
+                    if self.error.is_some()
+                        || self.iterator_stopped
+                        || self.return_signal.is_some()
+                        || iterations >= MAX_WHILE_ITERATIONS
+                    {
                         break;
                     }
-                    let cond_expanded = self.substitute_vars(&while_state.condition);
-                    if !self.eval_bool(&cond_expanded) {
+                    if !self.eval_bool(&while_state.condition) {
                         break;
                     }
 
                     for body_line in &while_state.body_lines {
                         self.process_buffered_line(body_line, output);
+                        if self.return_signal.is_some()
+                            || self.error.is_some()
+                            || self.iterator_stopped
+                        {
+                            break;
+                        }
                     }
 
                     iterations += 1;
@@ -1689,12 +2012,16 @@ impl PreprocessContext {
         false
     }
 
-    fn try_include(&mut self, line: &str) -> Option<Vec<String>> {
+    fn try_include(&mut self, line: &str) -> Option<Vec<EvaluatedEvent>> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|<([^>]+)>|(\S+))$"#).unwrap()
         });
 
         let caps = RE.captures(line)?;
+        // CodeIteratorIf suppresses includes before TContext executes them.
+        if !self.is_active() {
+            return Some(Vec::new());
+        }
         // Group 1: quoted, Group 2: angle-bracket, Group 3: bare path.
         let quoted_path = caps.get(1).map(|m| m.as_str());
         let angle_path = caps.get(2).map(|m| m.as_str());
@@ -1705,9 +2032,9 @@ impl PreprocessContext {
             .unwrap_or("<unknown>");
 
         if self.include_depth >= MAX_INCLUDE_DEPTH {
-            return Some(vec![format!(
+            return Some(vec![EvaluatedEvent::ParserOnly(format!(
                 "' WARNING: max include depth ({MAX_INCLUDE_DEPTH}) reached for {display_path}"
-            )]);
+            ))]);
         }
 
         // Handle known stdlib includes.
@@ -1731,7 +2058,14 @@ impl PreprocessContext {
         match std::fs::read_to_string(&file_path) {
             Ok(content) => {
                 self.include_depth += 1;
+                let saved_base = self
+                    .base_dir
+                    .replace(file_path.parent().unwrap_or(Path::new(".")).to_path_buf());
+                let saved_kind =
+                    std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
                 let lines = self.process(&content);
+                self.execution_kind = saved_kind;
+                self.base_dir = saved_base;
                 self.include_depth -= 1;
                 Some(lines)
             }
@@ -1742,7 +2076,7 @@ impl PreprocessContext {
     /// Resolve and include a stdlib path (from angle-bracket includes).
     /// Returns `Some(lines)` always — the include directive is consumed even
     /// if the stdlib root or file is not found (silently ignored).
-    fn try_include_stdlib(&mut self, include_path: &str) -> Option<Vec<String>> {
+    fn try_include_stdlib(&mut self, include_path: &str) -> Option<Vec<EvaluatedEvent>> {
         let Some(stdlib_root) = stdlib::get_stdlib_root() else {
             return Some(vec![]);
         };
@@ -1752,7 +2086,10 @@ impl PreprocessContext {
         match std::fs::read_to_string(&resolved) {
             Ok(content) => {
                 self.include_depth += 1;
+                let saved_kind =
+                    std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
                 let lines = self.process(&content);
+                self.execution_kind = saved_kind;
                 self.include_depth -= 1;
                 Some(lines)
             }
@@ -1760,19 +2097,28 @@ impl PreprocessContext {
         }
     }
 
-    fn try_includesub(&mut self, line: &str) -> Option<Vec<String>> {
-        // !includesub file.puml!SUBNAME
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^!includesub\s+(?:"([^"]+)"|(\S+))!(\w+)$"#).unwrap());
-
-        let caps = RE.captures(line)?;
-        let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
-        let sub_name = &caps[3];
-
-        if self.include_depth >= MAX_INCLUDE_DEPTH {
-            return Some(vec![]);
+    fn try_includesub(&mut self, line: &str) -> Option<Vec<EvaluatedEvent>> {
+        let argument = directive_argument(line, "!includesub")?;
+        if !self.is_active() {
+            return Some(Vec::new());
         }
-
+        // EaterIncludesub expands the entire selector before splitting at '!'.
+        let selector = self.substitute_vars(argument);
+        if self.error.is_some() || self.include_depth >= MAX_INCLUDE_DEPTH {
+            return Some(Vec::new());
+        }
+        let Some((path_str, sub_name)) = selector.split_once('!') else {
+            let Some(body) = self.subs.get(&selector).cloned() else {
+                self.fail(format!("cannot include {selector}"));
+                return Some(Vec::new());
+            };
+            let saved_kind = std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
+            let mut output = Vec::new();
+            self.process_buffered_lines(&body, &mut output, true);
+            self.execution_kind = saved_kind;
+            return Some(output);
+        };
+        let path_str = path_str.trim_matches('"');
         let file_path = if let Some(base) = &self.base_dir {
             base.join(path_str)
         } else {
@@ -1781,139 +2127,153 @@ impl PreprocessContext {
 
         match std::fs::read_to_string(&file_path) {
             Ok(content) => {
-                // Parse the file to extract subs.
-                let mut temp_ctx = PreprocessContext::new(
-                    self.base_dir.clone(),
-                    self.mark_function_body_source_lines,
-                );
-                temp_ctx.include_depth = self.include_depth + 1;
-                temp_ctx.preserve_teoz_pragma = self.preserve_teoz_pragma;
-                let _ = temp_ctx.process(&content);
-                // Now extract the named sub.
-                if let Some(sub_lines) = temp_ctx.subs.get(sub_name) {
-                    let refs: Vec<&str> = sub_lines.iter().map(|s| s.as_str()).collect();
-                    Some(self.process_lines(&refs))
-                } else {
-                    Some(vec![])
-                }
-            }
-            Err(_) => Some(vec![]),
-        }
-    }
-
-    /// Expand a `!theme NAME` (or `!theme NAME from URL`) directive.
-    ///
-    /// Returns `Some(lines)` when the directive is consumed (whether the
-    /// theme was found or not — unknown themes silently drop just like
-    /// PlantUML when no theme by that name exists). Returns `None` when
-    /// the line is not a theme directive.
-    ///
-    /// In-place output is a single metadata marker. The theme expansion is
-    /// appended to `theme_tail` so the user diagram keeps its original line
-    /// numbers; parser-side body delimiters restore its source-order effects.
-    fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
-        let rest = line.strip_prefix("!theme ")?;
-        let source_line = self.current_source_line;
-        let diagram_source_line = self.current_diagram_source_line();
-        let top_level = self.include_depth == 0;
-        let mut name_part = rest.trim();
-        // `!theme NAME from URL` — strip the `from URL` portion. We always
-        // resolve from the embedded bundle regardless of the URL.
-        if let Some(idx) = name_part.find(" from ") {
-            name_part = name_part[..idx].trim();
-        }
-        if name_part.is_empty() {
-            // Keep a placeholder so subsequent diagram lines retain their
-            // original source-line numbers in the preprocessed output.
-            return Some(vec![String::new()]);
-        }
-        if !self.is_active() {
-            return Some(vec![String::new()]);
-        }
-        if let Some(theme_src) = themes::get_theme_source(name_part) {
-            let body = themes::strip_front_matter(theme_src);
-            if self.include_depth < MAX_INCLUDE_DEPTH {
-                self.theme_tail
-                    .push(format!("skinparam __theme_body_start {name_part}"));
-                let saved_mark_function_body_source_lines = self.mark_function_body_source_lines;
-                self.mark_function_body_source_lines = false;
-                let sub_start = self.sub_blocks.len();
-                self.include_depth += 1;
-                let expanded = self.process(body);
-                self.include_depth -= 1;
-                // Preserve `<style>` blocks for the shared parser-owned style
-                // pass, and flatten grouped `skinparam X { ... }` declarations
-                // so both that pass and every family parser see ordinary keys.
-                self.theme_tail
-                    .extend(themes::flatten_theme_output(&expanded));
-
-                // PlantUML themes keep diagram-family styles in `!startsub`
-                // blocks (activity, sequence, class, arrow, note, etc.). A
-                // `!theme` load makes those family blocks available to the
-                // current diagram; process blocks collected by this theme
-                // through the normal TIM evaluator so procedure calls and
-                // variables are resolved before flattening.
-                let theme_subs: Vec<SubBlock> = self.sub_blocks[sub_start..].to_vec();
-                for sub in theme_subs {
-                    if sub.lines.is_empty() {
+                // Sub.fromFile selects raw StringLocated lines, not an executed
+                // temporary context. Repeated matching blocks append; unselected
+                // prelude/tail never executes (including errors and mutations).
+                let mut selected = Vec::new();
+                let mut found = false;
+                let mut skip = false;
+                for (index, text) in content.lines().enumerate() {
+                    // Sub.fromFile sees raw markers before TIM's comment iterators.
+                    // UncommentReadLine handles embedding prefixes, not TIM comments.
+                    let trimmed = text.trim();
+                    if let Some(name) = directive_argument(trimmed, "!startsub") {
+                        // Sub.fromFile validates every marker, even before a
+                        // selected block. Suppression applies only to body execution.
+                        if !valid_sub_name(name) {
+                            let origin = self.source_line_override.replace(index);
+                            self.fail("Bad sub name".into());
+                            self.source_line_override = origin;
+                            return Some(Vec::new());
+                        }
+                        if name == sub_name {
+                            found = true;
+                            skip = false;
+                        }
                         continue;
                     }
-                    let refs: Vec<&str> = sub.lines.iter().map(String::as_str).collect();
-                    self.include_depth += 1;
-                    let expanded = self.process_lines(&refs);
-                    self.include_depth -= 1;
-                    self.theme_tail
-                        .extend(themes::flatten_theme_output(&expanded));
+                    if directive_argument(trimmed, "!endsub").is_some() && found {
+                        skip = true;
+                    }
+                    if found && !skip {
+                        selected.push(BufferedLine {
+                            text: text.to_string(),
+                            raw_source_line: index + 1,
+                            source_line: index,
+                        });
+                    }
                 }
-                if top_level {
-                    self.expand_subs_inline = true;
-                    self.include_depth += 1;
-                    let seed_expansion = self.process(body);
-                    self.include_depth -= 1;
-                    self.expand_subs_inline = false;
-                    self.theme_seed_expansions.push(ThemeSeedExpansion {
-                        source_line,
-                        lines: seed_expansion,
-                    });
+                if !found {
+                    self.fail(format!("cannot include {selector}"));
+                    return Some(Vec::new());
                 }
-                self.mark_function_body_source_lines = saved_mark_function_body_source_lines;
-                self.theme_tail
-                    .push(format!("skinparam __theme_body_end {name_part}"));
+                let saved_base = self
+                    .base_dir
+                    .replace(file_path.parent().unwrap_or(Path::new(".")).to_path_buf());
+                let saved_kind =
+                    std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
+                self.include_depth += 1;
+                let mut output = Vec::new();
+                self.process_buffered_lines(&selected, &mut output, true);
+                self.include_depth -= 1;
+                self.base_dir = saved_base;
+                self.execution_kind = saved_kind;
+                self.mark_source_lines = true;
+                Some(output)
+            }
+            Err(_) => {
+                self.fail(format!("cannot include {selector}"));
+                Some(Vec::new())
             }
         }
-        // Replacing the directive with one metadata line preserves every
-        // following source-line number while retaining its temporal position.
-        // Keep an explicit marker because an earlier include or macro may make
-        // the output index differ from the user's entity/link source lines.
-        Some(vec![source_line_marker(
-            diagram_source_line,
-            &format!("skinparam __theme {name_part}"),
-        )])
     }
 
-    fn try_option(&self, line: &str) -> Option<Vec<String>> {
+    fn try_theme(&mut self, line: &str) -> Option<Vec<EvaluatedEvent>> {
+        let rest = line.strip_prefix("!theme ")?;
+        let mut output = Vec::new();
+        if !self.is_active() || self.include_depth >= MAX_INCLUDE_DEPTH {
+            self.push_directive_placeholder(&mut output);
+            return Some(output);
+        }
+        // EaterTheme.analyze applies functions and variables to both expressions.
+        let (name, from) =
+            rest.to_ascii_lowercase()
+                .find(" from ")
+                .map_or((rest.trim(), None), |index| {
+                    (
+                        rest[..index].trim(),
+                        Some(rest[index + " from ".len()..].trim()),
+                    )
+                });
+        let from = from.map(|value| self.substitute_vars(value));
+        let name = self.substitute_vars(name);
+        let source = if let Some(from) = from {
+            // Local custom themes use the same naming convention as ThemeUtils.
+            // Remote fetching remains outside the no-runtime-dependency product.
+            let directory = self
+                .base_dir
+                .as_deref()
+                .unwrap_or_else(|| Path::new("."))
+                .join(from);
+            std::fs::read_to_string(directory.join(format!("puml-theme-{name}.puml"))).ok()
+        } else {
+            themes::get_theme_source(&name).map(str::to_string)
+        };
+        if let Some(source) = source {
+            let source_line = self
+                .source_line_override
+                .unwrap_or_else(|| self.current_diagram_source_line());
+            let saved_mark = self.mark_function_body_source_lines;
+            self.mark_function_body_source_lines = false;
+            self.include_depth += 1;
+            let saved_kind = std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
+            let body = self.process(themes::strip_front_matter(&source));
+            self.execution_kind = saved_kind;
+            self.include_depth -= 1;
+            self.mark_function_body_source_lines = saved_mark;
+            output.push(EvaluatedEvent::Theme {
+                name,
+                source_line,
+                body,
+            });
+        } else {
+            self.push_directive_placeholder(&mut output);
+        }
+        // Theme execution can add arbitrary generated content; subsequent
+        // statements retain their StringLocated origin, including inactive loads.
+        self.mark_source_lines = true;
+        Some(output)
+    }
+
+    fn try_option(&self, line: &str) -> Option<Vec<EvaluatedEvent>> {
         let rest = line.strip_prefix("!option ")?;
         let mut parts = rest.split_whitespace();
         let name = parts.next()?;
         let value = parts.next().unwrap_or("true");
-        if name.eq_ignore_ascii_case("handwritten") && value.eq_ignore_ascii_case("true") {
-            Some(vec!["skinparam __optionHandwritten true".to_string()])
+        let mut output = Vec::new();
+        if self.is_active()
+            && name.eq_ignore_ascii_case("handwritten")
+            && value.eq_ignore_ascii_case("true")
+        {
+            output.push(EvaluatedEvent::ParserOnly(
+                "skinparam __optionHandwritten true".to_string(),
+            ));
         } else {
-            Some(vec![String::new()])
+            self.push_directive_placeholder(&mut output);
         }
+        Some(output)
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!undef(?:ine)?\s+\$?(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!undef(?:ine)?\s+(\$?\w+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             // CodeIteratorIf suppresses inactive lines before TContext reaches
             // EaterUndef. An inactive branch must not mutate outer memory.
             if self.is_active() {
                 let name = &caps[1];
-                self.defines.remove(name);
-                self.token_defines.remove(name);
+                self.remove_var(name);
             }
             return true;
         }
@@ -1927,17 +2287,14 @@ impl PreprocessContext {
         static RE_IFDEF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^!ifdef\s+(.+)$").unwrap());
         static RE_IFNDEF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!ifndef\s+\$?(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!ifndef\s+(\$?\w+)$").unwrap());
 
         if let Some(caps) = RE_IFDEF.captures(line) {
             // PlantUML EaterIfdef delegates the complete expression to
             // EvalBoolean, whose Truth callback checks variables and
             // functions. Preserve its !, &&, || and parenthesis grammar.
             let defined = eval_defined_expression(&caps[1], |symbol| {
-                let name = symbol.strip_prefix('$').unwrap_or(symbol);
-                self.get_var(name).is_some()
-                    || self.token_defines.contains_key(name)
-                    || self.functions.contains_key(name)
+                self.get_var(symbol).is_some() || self.functions.contains_key(symbol)
             })
             .unwrap_or(false);
             self.cond_stack.push(CondState {
@@ -1948,9 +2305,7 @@ impl PreprocessContext {
         }
         if let Some(caps) = RE_IFNDEF.captures(line) {
             let name = &caps[1];
-            let defined = self.defines.contains_key(name)
-                || self.token_defines.contains_key(name)
-                || self.get_var(name).is_some();
+            let defined = self.get_var(name).is_some();
             self.cond_stack.push(CondState {
                 active: !defined && self.is_active(),
                 has_matched: !defined,
@@ -1959,8 +2314,7 @@ impl PreprocessContext {
         }
         if let Some(caps) = RE_IF.captures(line) {
             let expr = caps[1].trim();
-            let expanded = self.substitute_vars(expr);
-            let result = self.eval_bool(&expanded);
+            let result = self.is_active() && self.eval_bool(expr);
             self.cond_stack.push(CondState {
                 active: result && self.is_active(),
                 has_matched: result,
@@ -1975,8 +2329,7 @@ impl PreprocessContext {
                 false
             } else {
                 let expr = caps[1].trim();
-                let expanded = self.substitute_vars(expr);
-                self.eval_bool(&expanded)
+                parent_active && self.eval_bool(expr)
             };
             if let Some(cond) = self.cond_stack.last_mut() {
                 if already_matched {
@@ -2010,233 +2363,217 @@ impl PreprocessContext {
     // Expression evaluation
     // ------------------------------------------------------------------
 
-    /// Evaluate an expression string to a Value.
-    fn eval_expr_to_value(&mut self, expr: &str) -> Value {
-        let expr = expr.trim();
+    fn eval_expr_to_value(&mut self, expression: &str) -> Value {
+        let prepared = self.prepare_expression(expression);
+        self.execute_expression(&prepared)
+    }
 
-        // Strip surrounding quotes.
-        // Strip surrounding quotes only when the WHOLE expression is a single
-        // quoted string (i.e. the closing `"` at position len-1 is genuinely
-        // the end of the string that started at position 0, not part of a
-        // later token in a compound expression like `"Hello, " + World + "!"`).
-        if expr.starts_with('"') && expr.ends_with('"') && expr.len() >= 2 {
-            // Walk the interior to find where the opening quote closes.  If the
-            // first closing quote is at the very end, we have a single string.
-            let inner_candidate = &expr[1..expr.len() - 1];
-            // Check for an unescaped quote inside the inner part.  If there is
-            // none, the last `"` is the matching close of the opening `"`.
-            if !inner_candidate.contains('"') {
-                let substituted = self.substitute_vars(inner_candidate);
-                return Value::Str(substituted);
+    fn prepare_expression(&mut self, expression: &str) -> Expression {
+        if self.error.is_some() {
+            return Expression::Value(Value::Str(String::new()));
+        }
+        let expr = expression.trim();
+        // TokenType.QUOTED_STRING: either quote form is a literal token.
+        if let Some(quote) = expr.chars().next().filter(|c| matches!(c, '\'' | '"'))
+            && let Some(end) = expr[1..].find(quote).map(|n| n + 1)
+            && end + 1 == expr.len()
+        {
+            return Expression::Value(Value::Str(expr[1..end].to_string()));
+        }
+        if expr.starts_with('(') && find_matching_paren(expr) == Some(expr.len() - 1) {
+            return self.prepare_expression(&expr[1..expr.len() - 1]);
+        }
+        // TokenOperator precedence and left associativity. Preparing both sides
+        // snapshots their variable values before either side executes a call.
+        for ops in [
+            &["||"][..],
+            &["&&"][..],
+            &["==", "!="][..],
+            &["<=", ">=", "<", ">"][..],
+            &["+", "-"][..],
+            &["*", "/", "%"][..],
+        ] {
+            if let Some((position, op)) = ops
+                .iter()
+                .filter_map(|op| {
+                    let pos = if matches!(*op, "+" | "-" | "*" | "/" | "%") {
+                        find_top_level_op_pos(expr, op.chars().next().unwrap())
+                    } else {
+                        find_top_level_comparison(expr, op)
+                    };
+                    pos.map(|pos| (pos, *op))
+                })
+                .max_by_key(|(pos, _)| *pos)
+            {
+                let left = self.prepare_expression(&expr[..position]);
+                let right = self.prepare_expression(&expr[position + op.len()..]);
+                return Expression::Binary(Box::new(left), op.into(), Box::new(right));
             }
-            // The interior contains quotes — the expression is something like
-            // `"Hello, " + x + "!"`.  Fall through to the general path.
         }
-
-        // If the expression is a bare word that is a token_define, return its
-        // raw value as a string (without further evaluation).  This preserves
-        // quoted token values like `!define VERSION "2.0"` — when VERSION
-        // appears in a string concatenation `"v" + VERSION`, the result is
-        // `v"2.0"` (with quotes), matching PlantUML's text-substitution model.
-        static BARE_WORD_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^[A-Za-z_]\w*$").unwrap());
-        if BARE_WORD_RE.is_match(expr)
-            && let Some(raw) = self.token_defines.get(expr).cloned()
+        if let Some(rest) = expr.strip_prefix('!') {
+            return Expression::Not(Box::new(self.prepare_expression(rest)));
+        }
+        if matches!(expr.chars().next(), Some('{' | '['))
+            && let Ok(json) = serde_json::from_str(expr)
         {
-            return Value::Str(raw);
+            return Expression::Value(Value::Json(json));
         }
-
-        // Boolean literals (plain "true"/"false" without % prefix).
-        if expr == "true" {
-            return Value::Bool(true);
-        }
-        if expr == "false" {
-            return Value::Bool(false);
-        }
-        // %true() and %false() are builtin functions that return 1 and 0 (numeric).
-        // Fall through to the BUILTIN_CALL_RE path which dispatches to
-        // eval_one_builtin_args("true"/"false", ...) returning "1"/"0".
-
-        // If the expression is a bare builtin call (%func(...)), evaluate it
-        // directly and return the result as a string.  This avoids the problem
-        // where substitute_vars eagerly evaluates builtins (e.g. %date()) into
-        // a plain string like "2026-03-23" which is then re-evaluated as
-        // arithmetic by the code below.
-        static BUILTIN_CALL_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^%(\w+)\(([^)]*)\)$").unwrap());
-        if let Some(caps) = BUILTIN_CALL_RE.captures(expr) {
-            let func_name = caps[1].to_string();
-            let args_raw = caps[2].to_string();
-            // Evaluate argument expressions so variables are resolved first.
-            let evaluated = self.eval_builtin_with_expr_args(&func_name, &args_raw);
-            return Value::from_str_auto(&evaluated);
-        }
-
-        // Before substituting variables, try to split at `+` on the original
-        // expression.  This matters when one of the parts is a bare token_define
-        // whose value contains quotes (e.g. `!define VERSION "2.0"`).  If we
-        // substituted first we'd get `"v" + "2.0"` and the `"2.0"` would be
-        // stripped of quotes; instead we want `"v" + VERSION` → `v` + `"2.0"`
-        // → `v"2.0"` (PlantUML's text-substitution model).
+        if let Some(open) = expr.find('(')
+            && find_matching_paren_from(expr, open) == Some(expr.len() - 1)
         {
-            let pre_parts = split_at_top_level_op(expr, '+');
-            if pre_parts.len() > 1 {
-                // Check whether any part is a bare token_define.
-                let has_token_define = pre_parts.iter().any(|p| {
-                    let t = p.trim();
-                    BARE_WORD_RE.is_match(t) && self.token_defines.contains_key(t)
+            let name = expr[..open].trim();
+            let raw = &expr[open + 1..expr.len() - 1];
+            let args = if raw.trim().is_empty() {
+                Vec::new()
+            } else {
+                split_builtin_args(raw)
+                    .into_iter()
+                    .map(|arg| {
+                        // ShuntingYard resolves the AFFECTATION left operand
+                        // through Knowledge too. EaterFunctionCall keeps it literal.
+                        let (key, value) = named_argument(arg)
+                            .map_or((None, arg), |(k, v)| (Some(self.prepare_expression(k)), v));
+                        (key, self.prepare_expression(value))
+                    })
+                    .collect()
+            };
+            return Expression::Call(name.to_string(), args);
+        }
+        // TContext.asKnowledge/fromJson resolves member and index tokens during
+        // ShuntingYard. VariableManager expands index text, then JSON-parses the
+        // resulting display value (numeric-looking non-JSON strings stay text).
+        if (expr.contains('.') || expr.contains('[')) && expr.parse::<f64>().is_err() {
+            let expanded = self.substitute_vars(expr);
+            if let Ok(json) = serde_json::from_str(&expanded) {
+                return Expression::Value(Value::Json(json));
+            }
+            if expanded != expr {
+                return Expression::Value(Value::Str(expanded));
+            }
+        }
+        if let Some(value) = self.get_var(expr) {
+            return Expression::Value(value.clone());
+        }
+        if !expr.is_empty()
+            && expr
+                .trim_start_matches('-')
+                .chars()
+                .all(|c| c.is_ascii_digit())
+        {
+            return Expression::Number(expr.to_string());
+        }
+        if let Ok(number) = expr.parse::<f64>() {
+            return Expression::Value(Value::Float(number)); // Existing extension.
+        }
+        Expression::Value(Value::Str(expr.to_string()))
+    }
+
+    fn execute_expression(&mut self, expression: &Expression) -> Value {
+        // ReversePolishInterpretor owns ONE stack/map for a whole prepared
+        // expression. A called function's body evaluates its own expressions.
+        // Account: tim-rpn-call-state (precommitted c91103f9).
+        let mut stack = Vec::new();
+        let mut named = HashMap::new();
+        self.execute_expression_into(expression, &mut stack, &mut named);
+        stack.pop().unwrap_or_else(|| Value::Str(String::new()))
+    }
+
+    fn expression_pop(&mut self, stack: &mut Vec<Value>) -> Value {
+        // Java ArrayDeque.removeFirst throws on malformed RPN stack state.
+        // Preserve fatality through the existing preprocessing error channel.
+        stack.pop().unwrap_or_else(|| {
+            self.fail("Expression operand stack underflow".into());
+            Value::Str(String::new())
+        })
+    }
+
+    fn execute_expression_into(
+        &mut self,
+        expression: &Expression,
+        stack: &mut Vec<Value>,
+        named: &mut HashMap<String, Value>,
+    ) {
+        if self.error.is_some() {
+            return;
+        }
+        match expression {
+            Expression::Value(value) => stack.push(value.clone()),
+            Expression::Number(text) => match text.parse::<i32>() {
+                Ok(number) => stack.push(Value::Int(number)),
+                Err(_) => self.fail("Integer literal outside signed 32-bit range".into()),
+            },
+            Expression::Not(inner) => {
+                self.execute_expression_into(inner, stack, named);
+                if self.error.is_none() {
+                    let value = self.expression_pop(stack);
+                    stack.push(Value::Int(i32::from(!value.truth())));
+                }
+            }
+            Expression::Binary(left, op, right) => {
+                self.execute_expression_into(left, stack, named);
+                self.execute_expression_into(right, stack, named);
+                if self.error.is_none() {
+                    let right = self.expression_pop(stack);
+                    let left = self.expression_pop(stack);
+                    if self.error.is_none() {
+                        stack.push(self.apply_operator(left, right, op));
+                    }
+                }
+            }
+            Expression::Call(name, args) => {
+                for (key, expression) in args {
+                    if let Some(key) = key {
+                        self.execute_expression_into(key, stack, named);
+                    }
+                    self.execute_expression_into(expression, stack, named);
+                    if self.error.is_some() {
+                        return;
+                    }
+                    if key.is_some() {
+                        let value = self.expression_pop(stack);
+                        let key = self.expression_pop(stack).to_display();
+                        if self.error.is_some() {
+                            return;
+                        }
+                        named.insert(key, value);
+                    }
+                }
+                // RPN OPEN_PAREN_FUNC subtracts the current DISTINCT named keys,
+                // including those assigned before a nested call in this expression.
+                let count = args.len().checked_sub(named.len());
+                let covered = count.is_some_and(|count| {
+                    if let Some(builtin) = name.strip_prefix('%') {
+                        // Unknown arity retains existing Rust extensions; their
+                        // body dispatcher still rejects unimplemented names.
+                        builtin_arity(builtin).is_none_or(|arity| arity.contains(&count))
+                    } else {
+                        self.resolve_function(name, count, None).is_some()
+                    }
                 });
-                if has_token_define {
-                    let mut result = String::new();
-                    for part in &pre_parts {
-                        let val = self.eval_expr_to_value(part.trim());
-                        result.push_str(&val.to_display());
-                    }
-                    return Value::Str(result);
+                if !covered {
+                    self.fail(format!("Unknown built-in function {name}"));
+                    return;
                 }
-            }
-        }
-
-        // Substitute variables first.
-        let substituted = self.substitute_vars(expr);
-        let substituted = substituted.trim();
-
-        // Try to parse as a pure number.
-        if let Ok(n) = substituted.parse::<i64>() {
-            return Value::Int(n);
-        }
-        if let Ok(f) = substituted.parse::<f64>() {
-            return Value::Float(f);
-        }
-
-        // Try string concatenation with +.
-        if let Some(result) = self.try_eval_string_concat(substituted) {
-            return result;
-        }
-
-        // Try arithmetic.
-        if let Some(result) = self.try_eval_arithmetic(substituted) {
-            return result;
-        }
-
-        // Function call: $funcName(args)
-        if let Some(val) = self.try_eval_func_call(substituted) {
-            return val;
-        }
-
-        // Fall back to string.
-        Value::Str(substituted.to_string())
-    }
-
-    fn try_eval_func_call(&mut self, expr: &str) -> Option<Value> {
-        // $funcName(args)
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\$(\w+)\(([^)]*)\)$").unwrap());
-
-        if let Some(caps) = RE.captures(expr) {
-            let name = caps[1].to_string();
-            if self.functions.contains_key(&name) {
-                let args_str = &caps[2];
-                return Some(self.eval_function_call(&name, args_str));
-            }
-        }
-        None
-    }
-
-    fn try_eval_string_concat(&mut self, expr: &str) -> Option<Value> {
-        // Find top-level + that looks like string concatenation.
-        // We check if it's NOT purely numeric.
-        let parts = split_at_top_level_op(expr, '+');
-        if parts.len() <= 1 {
-            return None;
-        }
-
-        // Check if any part is a quoted string.
-        let has_string = parts.iter().any(|p| {
-            let t = p.trim();
-            t.starts_with('"') || (t.parse::<f64>().is_err() && !t.starts_with('$'))
-        });
-
-        if has_string {
-            let mut result = String::new();
-            for part in &parts {
-                let val = self.eval_expr_to_value(part.trim());
-                result.push_str(&val.to_display());
-            }
-            return Some(Value::Str(result));
-        }
-
-        None
-    }
-
-    fn try_eval_arithmetic(&mut self, expr: &str) -> Option<Value> {
-        // Find the lowest-precedence top-level operator.
-        // Precedence (low to high): +/-, */%, unary-
-        // Scan right-to-left for + and - first (to get left-associativity).
-        let expr = expr.trim();
-
-        // Try + and - (lowest precedence).
-        for &op in &['+', '-'] {
-            if let Some(pos) = find_top_level_op_pos(expr, op) {
-                if pos == 0 {
-                    continue; // unary minus
+                let count = count.unwrap(); // Successful coverage above requires a count.
+                if count > stack.len() {
+                    self.fail("Expression operand stack underflow".into());
+                    return;
                 }
-                let left = &expr[..pos];
-                let right = &expr[pos + 1..];
-                let lval = self.eval_expr_to_value(left);
-                let rval = self.eval_expr_to_value(right);
-
-                // If either side is a non-numeric string, do string concat for +.
-                if op == '+' && (!lval.is_numeric() || !rval.is_numeric()) {
-                    return Some(Value::Str(format!(
-                        "{}{}",
-                        lval.to_display(),
-                        rval.to_display()
-                    )));
-                }
-
-                let result = match op {
-                    '+' => lval.to_number() + rval.to_number(),
-                    '-' => lval.to_number() - rval.to_number(),
-                    _ => unreachable!(),
+                let positional = stack.split_off(stack.len() - count);
+                let value = if let Some(builtin) = name.strip_prefix('%') {
+                    self.eval_builtin_values(builtin, &positional)
+                } else {
+                    let (ret, events) =
+                        self.call_function_values(name, positional, named.clone(), true);
+                    self.expression_events.extend(events);
+                    ret.unwrap_or_else(|| Value::Str(String::new()))
                 };
-                return Some(number_value(result));
+                named.clear();
+                if self.error.is_none() {
+                    stack.push(value);
+                }
             }
         }
-
-        // Try *, /, % (higher precedence).
-        for &op in &['*', '/', '%'] {
-            if let Some(pos) = find_top_level_op_pos(expr, op) {
-                let left = &expr[..pos];
-                let right = &expr[pos + 1..];
-                let lval = self.eval_expr_to_value(left);
-                let rval = self.eval_expr_to_value(right);
-                let result = match op {
-                    '*' => lval.to_number() * rval.to_number(),
-                    '/' => {
-                        let r = rval.to_number();
-                        if r == 0.0 { 0.0 } else { lval.to_number() / r }
-                    }
-                    '%' => {
-                        let r = rval.to_number();
-                        if r == 0.0 { 0.0 } else { lval.to_number() % r }
-                    }
-                    _ => unreachable!(),
-                };
-                return Some(number_value(result));
-            }
-        }
-
-        // Parenthesized expression.
-        if expr.starts_with('(') && expr.ends_with(')') {
-            return Some(self.eval_expr_to_value(&expr[1..expr.len() - 1]));
-        }
-
-        // Function call.
-        if let Some(val) = self.try_eval_func_call(expr) {
-            return Some(val);
-        }
-
-        None
     }
 
     // ------------------------------------------------------------------
@@ -2244,236 +2581,344 @@ impl PreprocessContext {
     // ------------------------------------------------------------------
 
     fn eval_bool(&mut self, expr: &str) -> bool {
-        let expr = expr.trim();
+        self.eval_expr_to_value(expr).truth()
+    }
 
-        // Strip outer parens.
-        if expr.starts_with('(') && expr.ends_with(')') {
-            let inner = &expr[1..expr.len() - 1];
-            // Check if parens are balanced (i.e., they truly wrap the whole expression).
-            if parens_balanced(inner) {
-                return self.eval_bool(inner);
-            }
-        }
-
-        // ||
-        if let Some(pos) = find_top_level_logical_op(expr, "||") {
-            let left = &expr[..pos];
-            let right = &expr[pos + 2..];
-            return self.eval_bool(left) || self.eval_bool(right);
-        }
-
-        // &&
-        if let Some(pos) = find_top_level_logical_op(expr, "&&") {
-            let left = &expr[..pos];
-            let right = &expr[pos + 2..];
-            return self.eval_bool(left) && self.eval_bool(right);
-        }
-
-        // Negation: !expr (but not != which is comparison).
-        if let Some(rest) = expr.strip_prefix('!') {
-            let rest = rest.trim();
-            if !rest.is_empty() && !rest.starts_with('=') {
-                return !self.eval_bool(rest);
-            }
-        }
-
-        // Comparison operators: ==, !=, <=, >=, <, >
-        for &op in &["==", "!=", "<=", ">=", "<", ">"] {
-            if let Some(pos) = find_top_level_comparison(expr, op) {
-                let left = expr[..pos].trim();
-                let right = expr[pos + op.len()..].trim();
-                return self.eval_comparison(left, right, op);
-            }
-        }
-
-        // %variable_exists("name")
-        if let Some(name) = expr
-            .strip_prefix("%variable_exists(\"")
-            .and_then(|s| s.strip_suffix("\")"))
-        {
-            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
-        }
-
-        // %is_defined("name") — alias for variable_exists
-        if let Some(name) = expr
-            .strip_prefix("%is_defined(\"")
-            .and_then(|s| s.strip_suffix("\")"))
-        {
-            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
-        }
-
-        // %function_exists("name")
-        if let Some(name) = expr
-            .strip_prefix("%function_exists(\"")
-            .and_then(|s| s.strip_suffix("\")"))
-        {
-            return self.functions.contains_key(name);
-        }
-
-        // %true / %false
-        if expr == "%true" || expr == "%true()" || expr == "true" {
-            return true;
-        }
-        if expr == "%false" || expr == "%false()" || expr == "false" {
-            return false;
-        }
-
-        // Numeric: non-zero is true.
-        if let Ok(n) = expr.parse::<f64>() {
-            return n != 0.0;
-        }
-
-        // Try evaluating as an expression (handles function calls, variable substitution).
-        let val = self.eval_expr_to_value(expr);
-        match val {
-            Value::Bool(b) => b,
-            Value::Int(n) => n != 0,
-            Value::Float(f) => f != 0.0,
-            Value::Str(ref s) => {
-                // If the expression changed after evaluation, re-evaluate as bool.
-                if s.trim() != expr {
-                    let s_clone = s.clone();
-                    return self.eval_bool(&s_clone);
-                }
-                // Non-empty string is true.
-                !s.is_empty()
-            }
+    fn fail(&mut self, message: String) {
+        // EaterException unwinds the Java evaluator: the first diagnostic wins.
+        if self.error.is_none() {
+            self.error = Some(PreprocessError {
+                line: self
+                    .source_line_override
+                    .unwrap_or_else(|| self.current_diagram_source_line()),
+                message,
+            });
         }
     }
 
-    fn eval_comparison(&mut self, left: &str, right: &str, op: &str) -> bool {
-        let lval = self.eval_expr_to_value(left);
-        let rval = self.eval_expr_to_value(right);
-
-        // If both are numeric, compare numerically.
-        if lval.is_numeric() && rval.is_numeric() {
-            let l = lval.to_number();
-            let r = rval.to_number();
-            return match op {
-                "==" => (l - r).abs() < 1e-10,
-                "!=" => (l - r).abs() >= 1e-10,
-                "<" => l < r,
-                ">" => l > r,
-                "<=" => l <= r,
-                ">=" => l >= r,
-                _ => false,
-            };
-        }
-
-        // String comparison.
-        let l = lval.to_display();
-        let r = rval.to_display();
+    fn apply_operator(&mut self, left: Value, right: Value, op: &str) -> Value {
         match op {
-            "==" => l == r,
-            "!=" => l != r,
-            "<" => l < r,
-            ">" => l > r,
-            "<=" => l <= r,
-            ">=" => l >= r,
-            _ => false,
+            "||" => return Value::Int(i32::from(left.truth() || right.truth())),
+            "&&" => return Value::Int(i32::from(left.truth() && right.truth())),
+            "==" | "!=" | "<" | ">" | "<=" | ">=" => {
+                let order = if let (Value::Int(a), Value::Int(b)) = (&left, &right) {
+                    a.cmp(b)
+                } else {
+                    // String.compareTo compares UTF-16 code units.
+                    left.utf16_units().cmp(&right.utf16_units())
+                };
+                return Value::Int(i32::from(match op {
+                    "==" => order.is_eq(),
+                    "!=" => !order.is_eq(),
+                    "<" => order.is_lt(),
+                    ">" => order.is_gt(),
+                    "<=" => !order.is_gt(),
+                    _ => !order.is_lt(),
+                }));
+            }
+            _ => {}
         }
+        if let (Value::Int(a), Value::Int(b)) = (&left, &right) {
+            // TValue.add/minus/multiply/dividedBy operate on signed Java int.
+            return Value::Int(match op {
+                "+" => a.wrapping_add(*b),
+                "-" => a.wrapping_sub(*b),
+                "*" => a.wrapping_mul(*b),
+                "/" | "%" if *b == 0 => {
+                    self.fail("Division by zero".into());
+                    0
+                }
+                "/" => a.wrapping_div(*b),
+                "%" => a.wrapping_rem(*b),
+                _ => unreachable!(),
+            });
+        }
+        // Retain the existing Rust float extension; never cast JSON into int.
+        if (matches!(left, Value::Float(_)) || matches!(right, Value::Float(_)))
+            && left.is_numeric()
+            && right.is_numeric()
+        {
+            let (a, b) = (left.to_number(), right.to_number());
+            return Value::Float(match op {
+                "+" => a + b,
+                "-" => a - b,
+                "*" => a * b,
+                "/" => a / b,
+                _ => a % b,
+            });
+        }
+        let separator = if matches!(op, "+" | "-") { "" } else { op };
+        let mut units = left.utf16_units();
+        units.extend(separator.encode_utf16());
+        units.extend(right.utf16_units());
+        Value::from_utf16(units)
     }
 
     // ------------------------------------------------------------------
     // Variable substitution
     // ------------------------------------------------------------------
 
-    fn substitute_vars(&self, line: &str) -> String {
-        // Preserve sprite icon references `<$name>` — they are rendered as
-        // inline images and must not be stripped or variable-substituted here.
-        // Temporarily replace them with null-byte placeholders, process variable
-        // substitution on the rest, then restore the sprite references.
-        static SPRITE_REF_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<\$(\w+)>").unwrap());
-
-        // Collect sprite ref names in order.
-        let sprite_names: Vec<String> = SPRITE_REF_RE
-            .captures_iter(line)
-            .map(|c| c[1].to_string())
-            .collect();
-
-        // Replace each `<$name>` with a null-byte placeholder `\x00N\x00`.
-        let mut counter = 0usize;
-        let line_protected = SPRITE_REF_RE.replace_all(line, |_: &regex::Captures| {
-            let ph = format!("\x00{counter}\x00");
-            counter += 1;
-            ph
-        });
-        let mut result = line_protected.into_owned();
-
-        // First apply $variable substitution (also checks token_defines).
-        result = self.substitute_inline_func_calls(&result);
-
-        static VAR_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
-
-        result = VAR_RE
-            .replace_all(&result, |caps: &regex::Captures| {
-                let name = &caps[1];
-                self.get_var(name)
-                    .or_else(|| self.token_defines.get(name))
-                    .cloned()
-                    .unwrap_or_else(|| format!("${name}"))
-            })
-            .to_string();
-
-        // Then apply !define token macros (word-boundary bare-word substitution).
-        // Iterate until stable (up to 20 rounds) so that expansions containing
-        // other macro names are themselves expanded (e.g. LABEL = "Step STEP"
-        // with STEP = 1 → "Step 1").
-        if !self.token_defines.is_empty() {
-            for _ in 0..20 {
-                let mut out = String::with_capacity(result.len());
-                let chars: Vec<char> = result.chars().collect();
-                let mut i = 0;
-                let mut changed = false;
-                while i < chars.len() {
-                    // Find the start of a word (alphanumeric or underscore).
-                    if chars[i].is_alphanumeric() || chars[i] == '_' {
-                        // Find end of word.
-                        let word_start = i;
-                        while i < chars.len() && (chars[i].is_alphanumeric() || chars[i] == '_') {
-                            i += 1;
-                        }
-                        let word: String = chars[word_start..i].iter().collect();
-                        if let Some(replacement) = self.token_defines.get(&word) {
-                            out.push_str(replacement);
-                            changed = true;
-                        } else {
-                            out.push_str(&word);
-                        }
-                    } else {
-                        out.push(chars[i]);
-                        i += 1;
-                    }
-                }
-                result = out;
-                if !changed {
-                    break;
-                }
-            }
+    fn variable_name_at(&mut self, text: &str, offset: usize) -> Option<String> {
+        // VariableManager.getVarnameAt / TMemoryLocal.variablesNames3. A longer
+        // returned path wins across scopes before the right boundary is checked.
+        if !text[offset..].starts_with('$')
+            && !text[..offset].ends_with("\\n")
+            && text[..offset]
+                .chars()
+                .next_back()
+                .is_some_and(variable_boundary_letter)
+        {
+            return None;
         }
-
-        let after_vars = result;
-
-        // Evaluate built-in %functions.
-        let mut processed = self.eval_builtin_functions(&after_vars);
-
-        // Restore sprite references (replaced with placeholders above).
-        for (i, name) in sprite_names.iter().enumerate() {
-            let ph = format!("\x00{i}\x00");
-            let sprite_tag = format!("<${name}>");
-            processed = processed.replace(&ph, &sprite_tag);
+        let suffix = &text[offset..];
+        let mut candidates = vec![self.defines.match_at(suffix)];
+        if let Some(scope) = self.local_vars.last_mut() {
+            candidates.push(scope.overrides.match_at(suffix));
+            candidates.push(scope.locals.match_at(suffix));
         }
-
-        processed
+        // All matches are prefixes of one valid UTF-8 string, so byte length
+        // and UTF-16 length give the same ordering (equal lengths are same key).
+        let name = candidates.into_iter().flatten().max_by_key(String::len)?;
+        if text[offset + name.len()..]
+            .chars()
+            .next()
+            .is_some_and(variable_boundary_letter)
+        {
+            return None;
+        }
+        Some(name)
     }
 
-    fn substitute_inline_func_calls(&self, line: &str) -> String {
-        // We need &mut self to call functions, but we're in &self context here.
-        // This is a limitation — inline function calls in output lines require
-        // a different approach. For now, we handle it in eval_builtin_functions
-        // for %string() etc. and rely on the caller to handle $func() calls
-        // in assignment context.
-        line.to_string()
+    fn substitute_vars(&mut self, line: &str) -> String {
+        let mut result = String::new();
+        let mut offset = 0;
+        while offset < line.len() && self.error.is_none() {
+            let ch = line[offset..].chars().next().unwrap();
+            // TContext scans every original position, including sprite markup;
+            // absence of a matching stored name, not markup syntax, preserves it.
+            // TContext.getFunctionNameAt permits $/% after a letter, but bare
+            // names require the same original-text boundary as VariableManager.
+            let bare_boundary = offset == 0
+                || line[..offset].ends_with("\\n")
+                || !line[..offset]
+                    .chars()
+                    .next_back()
+                    .is_some_and(|c| c.is_alphanumeric() || c == '_');
+            if matches!(ch, '$' | '%') || ((ch.is_alphabetic() || ch == '_') && bare_boundary) {
+                let name_start = offset + usize::from(matches!(ch, '$' | '%'));
+                let name_end = line[name_start..]
+                    .char_indices()
+                    .find(|(_, c)| !c.is_alphanumeric() && *c != '_')
+                    .map_or(line.len(), |(i, _)| name_start + i);
+                let name = &line[name_start..name_end];
+                if line[name_end..].starts_with('(')
+                    && ((ch == '%' && registered_builtin(name))
+                        || (ch != '%' && self.functions.contains_key(&line[offset..name_end])))
+                    && let Some(close) = find_matching_paren_from(line, name_end)
+                {
+                    if ch == '%' {
+                        result.push_str(
+                            &self
+                                .eval_builtin_with_expr_args(name, &line[name_end + 1..close])
+                                .to_display(),
+                        );
+                    } else {
+                        let args = parse_call_args(&line[name_end + 1..close]);
+                        let (value, mut events) =
+                            self.call_function(&line[offset..name_end], &args);
+                        if let Some(value) = value {
+                            self.expression_events.extend(events);
+                            result.push_str(&value.to_display());
+                        } else {
+                            // TContext.pendingAdd / appendToLastResult. Keep
+                            // every event variant, including themes and options.
+                            if let Some(EvaluatedEvent::Plain(first)) = events
+                                .iter_mut()
+                                .find(|event| matches!(event, EvaluatedEvent::Plain(_)))
+                            {
+                                let (origin, text) = split_source_line_marker(first)
+                                    .map_or((None, first.as_str()), |(n, t)| (Some(n), t));
+                                let text = format!("{result}{text}");
+                                *first =
+                                    origin.map_or(text.clone(), |n| source_line_marker(n, &text));
+                            }
+                            if let Some(EvaluatedEvent::Plain(last)) = events
+                                .iter_mut()
+                                .rev()
+                                .find(|event| matches!(event, EvaluatedEvent::Plain(_)))
+                            {
+                                last.push_str(&line[close + 1..]);
+                            }
+                            self.expression_events.extend(events);
+                            self.text_consumed = true;
+                            return String::new();
+                        }
+                    }
+                    offset = close + 1;
+                    continue;
+                }
+            }
+            // TContext.applyFunctionsAndVariables scans original characters only;
+            // appended values are never rescanned as legacy macro source.
+            if (ch.is_alphanumeric() || ch == '_')
+                && (offset == 0
+                    // VariableManager.justAfterBackslashN treats literal \n as
+                    // a token boundary without rescanning appended values.
+                    || line[..offset].ends_with("\\n")
+                    || !line[..offset]
+                        .chars()
+                        .next_back()
+                        .is_some_and(|c| c.is_alphanumeric() || c == '_'))
+            {
+                let end = line[offset..]
+                    .char_indices()
+                    .find(|(_, c)| !c.is_alphanumeric() && *c != '_')
+                    .map_or(line.len(), |(i, _)| offset + i);
+                let name = &line[offset..end];
+                if let Some(definition) = self.definelong_macros.get(name)
+                    && line[end..].starts_with('(')
+                    && let Some(close) = find_matching_paren_from(line, end)
+                {
+                    // FunctionsSet registers even zero-argument definelong as
+                    // NAME(. EaterFunctionCall evaluates legacy string arguments
+                    // once; a bare name is not a function invocation.
+                    let expected = definition.params.len();
+                    let raw = &line[end + 1..close];
+                    let parts = if raw.trim().is_empty() {
+                        Vec::new()
+                    } else {
+                        split_builtin_args(raw)
+                    };
+                    let args = parts
+                        .into_iter()
+                        .map(|arg| {
+                            let arg = arg.trim();
+                            let text = if let Some(quote) =
+                                arg.chars().next().filter(|c| matches!(c, '\'' | '"'))
+                                && arg.len() >= 2
+                                && arg.ends_with(quote)
+                            {
+                                &arg[1..arg.len() - 1]
+                            } else {
+                                arg
+                            };
+                            self.substitute_vars(text)
+                        })
+                        .collect::<Vec<_>>();
+                    if args.len() != expected {
+                        self.fail(format!("Function not found {name}"));
+                        return String::new();
+                    }
+                    let (expanded, multiline) = self.expand_definelong(name, &args);
+                    if multiline {
+                        // TContext LEGACY_DEFINELONG pendingAdd uses the RAW
+                        // caller prefix; PROCEDURE uses the evaluated result.
+                        let raw_prefix = &line[..offset];
+                        self.mark_source_lines = true;
+                        for (index, line) in expanded.split('\n').enumerate() {
+                            let (origin, text) = split_source_line_marker(line)
+                                .map_or((None, line), |(n, t)| (Some(n), t));
+                            let text = if index == 0 {
+                                format!("{raw_prefix}{text}")
+                            } else {
+                                text.to_string()
+                            };
+                            self.expression_events.push(EvaluatedEvent::Plain(
+                                origin.map_or(text.clone(), |n| source_line_marker(n, &text)),
+                            ));
+                        }
+                        self.text_consumed = true;
+                        return String::new();
+                    }
+                    result.push_str(&expanded);
+                    offset = close + 1;
+                    continue;
+                }
+            }
+            // VariableManager tests the original source position after function
+            // lookup. Stored names, not a token grammar, define the candidate.
+            if let Some(name) = self.variable_name_at(line, offset)
+                && let Some(value) = self.get_var(&name).cloned()
+            {
+                if result.ends_with("##") {
+                    result.truncate(result.len() - 2);
+                }
+                let (value, end) = self.variable_path(value, line, offset + name.len());
+                result.push_str(&value.to_display());
+                offset = end;
+                if line[offset..].starts_with("##") {
+                    offset += 2;
+                }
+                continue;
+            }
+            result.push(ch);
+            offset += ch.len_utf8();
+        }
+
+        result
+    }
+
+    // VariableManager.replaceJson: member names are identifier text; bracket
+    // text is expanded as a string (not an arithmetic expression). TContext's
+    // expression knowledge subsequently JSON-parses the displayed result.
+    fn variable_path(&mut self, value: Value, text: &str, mut end: usize) -> (Value, usize) {
+        let Value::Json(mut json) = value else {
+            return (value, end);
+        };
+        if !json.is_object() && !json.is_array() {
+            return (Value::Json(json), end);
+        }
+        while end < text.len() && self.error.is_none() {
+            if text[end..].starts_with('.') {
+                end += 1;
+                let start = end;
+                while let Some(c) = text[end..].chars().next() {
+                    if !c.is_alphanumeric() && !matches!(c, '_' | '$') {
+                        break;
+                    }
+                    end += c.len_utf8();
+                }
+                let Some(object) = json.as_object() else {
+                    self.fail("Major parsing error".into());
+                    break;
+                };
+                let Some(field) = object.get(&text[start..end]) else {
+                    // VariableManager.replaceJson allows a final missing field,
+                    // but cannot traverse a subsequent member/index through null.
+                    if text[end..].starts_with(['.', '[']) {
+                        self.fail("Data parsing error: missing intermediate member".into());
+                    }
+                    return (Value::Str(String::new()), end);
+                };
+                json = field.clone();
+            } else if text[end..].starts_with('[') {
+                let Some(close) = syntax_positions(&text[end..])
+                    .into_iter()
+                    .find(|(_, c, d)| *c == ']' && *d == 1)
+                    .map(|(i, _, _)| end + i)
+                else {
+                    self.fail("Data parsing error: unclosed index".into());
+                    break;
+                };
+                let key = self.substitute_vars(&text[end + 1..close]);
+                end = close + 1;
+                let next = if let Some(array) = json.as_array() {
+                    key.parse::<usize>().ok().and_then(|index| array.get(index))
+                } else if let Some(object) = json.as_object() {
+                    object.get(&key)
+                } else {
+                    None
+                };
+                let Some(next) = next else {
+                    self.fail("Data parsing error".into());
+                    break;
+                };
+                json = next.clone();
+            } else {
+                break;
+            }
+        }
+        (Value::Json(json), end)
     }
 
     /// Expand Archimate macros.
@@ -2554,117 +2999,256 @@ impl PreprocessContext {
     // Built-in %functions
     // ------------------------------------------------------------------
 
-    fn eval_builtin_functions(&self, input: &str) -> String {
-        // Handle nested function calls by repeatedly evaluating.
-        let mut result = input.to_string();
-        let mut iterations = 0;
-        loop {
-            let next = self.eval_builtins_once(&result);
-            if next == result || iterations > 10 {
-                break;
-            }
-            result = next;
-            iterations += 1;
-        }
-        result
-    }
-
-    fn eval_builtins_once(&self, input: &str) -> String {
-        // Find the innermost (last/rightmost) %func(...) call to evaluate
-        // inside-out, so that nested calls like %not(%true()) work correctly.
-        static FUNC_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"%(\w+)\(").unwrap());
-
-        let mut result = input.to_string();
-
-        // Find the last (rightmost) %func( match — this is the innermost call
-        // because the last match in a nested expression has no further %func(
-        // calls before its closing paren.
-        if let Some(m) = FUNC_RE.find_iter(&result).last() {
-            let start = m.start();
-            let after_open = m.end(); // position after '('
-            if let Some(close) = find_matching_paren_from(&result, after_open - 1) {
-                let func_name = &result[start + 1..after_open - 1];
-                let args_raw = &result[after_open..close];
-                let replacement = self.eval_one_builtin(func_name, args_raw);
-                result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
-            }
-        }
-
-        result
-    }
-
     /// Evaluate a builtin function call where each argument is itself an
     /// expression (possibly containing `$variables`).  This avoids the
     /// common problem where pre-substituted variable values contain commas
     /// (e.g. `%strlen($str)` with `$str = "Hello, World!"` should pass the
     /// full 13-character string, not split on the comma).
-    fn eval_builtin_with_expr_args(&mut self, func: &str, args_raw: &str) -> String {
-        if args_raw.trim().is_empty() {
-            return self.eval_one_builtin_from_values(func, &[]);
+    fn eval_builtin_with_expr_args(&mut self, func: &str, args_raw: &str) -> Value {
+        if self.error.is_some() {
+            return Value::Str(String::new());
         }
-
-        // Split on top-level commas in the raw arg string (before substitution).
-        let raw_parts = split_builtin_args(args_raw);
-        if func == "get_variable_value" {
-            let args: Vec<&str> = raw_parts
-                .iter()
-                .map(|a| a.trim().trim_matches('"'))
-                .collect();
-            return self.eval_one_builtin_from_values(func, &args);
+        let mut values = Vec::new();
+        if !args_raw.trim().is_empty() {
+            for part in split_builtin_args(args_raw) {
+                // EaterFunctionCall separates named operands before constructing
+                // the positional signature. Builtins ignore the named map, but
+                // each RHS still executes, including effects and errors.
+                if let Some((_, expression)) = named_argument(part) {
+                    self.eval_expr_to_value(expression);
+                } else {
+                    values.push(self.eval_expr_to_value(part));
+                }
+                if self.error.is_some() {
+                    return Value::Str(String::new());
+                }
+            }
         }
-        // Evaluate each argument as an expression.
-        let evaluated: Vec<String> = raw_parts
-            .iter()
-            .map(|a| {
-                let a = a.trim();
-                let val = self.eval_expr_to_value(a);
-                val.to_display()
-            })
-            .collect();
-        let refs: Vec<&str> = evaluated.iter().map(|s| s.as_str()).collect();
-        self.eval_one_builtin_from_values(func, &refs)
+        // TContext.applyFunctionsAndVariables reports failed plain-call lookup
+        // differently from ReversePolishInterpretor's expression lookup.
+        if builtin_arity(func).is_some_and(|arity| !arity.contains(&values.len())) {
+            self.fail(format!("Function not found %{func}"));
+            return Value::Str(String::new());
+        }
+        self.eval_builtin_values(func, &values)
     }
 
-    /// Core builtin dispatcher taking pre-evaluated string arguments.
-    fn eval_one_builtin_from_values(&self, func: &str, args: &[&str]) -> String {
-        self.eval_one_builtin_args(func, args)
+    fn eval_builtin_values(&mut self, func: &str, values: &[Value]) -> Value {
+        if self.error.is_some() {
+            return Value::Str(String::new());
+        }
+        // FunctionsSet.getFunctionSmart / each implemented builtin's canCover.
+        // Argument expressions have executed already; no body runs on mismatch.
+        if builtin_arity(func).is_some_and(|arity| !arity.contains(&values.len())) {
+            self.fail(format!("Unknown built-in function %{func}"));
+            return Value::Str(String::new());
+        }
+        match func {
+            "intval" => {
+                // IntVal.executeReturnFunction uses Integer.parseInt on TValue's
+                // complete display, not numeric coercion or floating truncation.
+                let text = values[0].to_display();
+                return match text.parse::<i32>() {
+                    Ok(value) => Value::Int(value),
+                    Err(_) => {
+                        self.fail(format!("Cannot convert {text} to integer."));
+                        Value::Str(String::new())
+                    }
+                };
+            }
+            "hsl_color" => {
+                return Value::Str(tim_hsl_color(values));
+            }
+            "upper" | "lower" => {
+                // Upper/Lower call Java String case conversion, which preserves
+                // unmatched UTF-16 units. Convert valid spans, not lossy display.
+                let units = values[0].utf16_units();
+                let mut result = Vec::new();
+                let mut span = String::new();
+                for decoded in char::decode_utf16(units) {
+                    match decoded {
+                        Ok(ch) => span.push(ch),
+                        Err(error) => {
+                            append_case_span(&mut result, &span, func == "upper");
+                            span.clear();
+                            result.push(error.unpaired_surrogate());
+                        }
+                    }
+                }
+                append_case_span(&mut result, &span, func == "upper");
+                return Value::from_utf16(result);
+            }
+            "chr" => {
+                // Chr uses TValue.toInt and Character.toChars; the latter
+                // permits BMP surrogate code units and catches invalid points as NUL.
+                let code = values[0].java_int();
+                return Value::from_utf16(if let Ok(unit) = u16::try_from(code) {
+                    vec![unit]
+                } else if let Some(ch) = u32::try_from(code).ok().and_then(char::from_u32) {
+                    ch.encode_utf16(&mut [0; 2]).to_vec()
+                } else {
+                    vec![0]
+                });
+            }
+            "boolval" => {
+                // BoolVal trueValues/falseValues are explicit textual conversions,
+                // not TValue.toBoolean (where nonempty text "false" is truthy).
+                let text = values[0].to_display().to_lowercase();
+                return match text.as_str() {
+                    "true" | "1" => Value::Int(1),
+                    "false" | "0" => Value::Int(0),
+                    _ => {
+                        self.fail(format!("Cannot convert {text} to boolean."));
+                        Value::Str(String::new())
+                    }
+                };
+            }
+            _ => {}
+        }
+        let args: Vec<String> = values.iter().map(Value::to_display).collect();
+        let refs: Vec<&str> = args.iter().map(String::as_str).collect();
+        // Builtin contracts return TValue, not source text to be tokenized again.
+        match func {
+            "getenv" => {
+                // Getenv.canCover and SecurityProfile.canWeReadThisEnvironmentVariable.
+                // JVM properties have no general Rust equivalent; these two are
+                // platform properties explicitly permitted by the Java profile.
+                if values.len() != 1 {
+                    self.fail("Bad number of arguments for %getenv".into());
+                    return Value::Str(String::new());
+                }
+                let name = &args[0];
+                let lower = name.to_lowercase();
+                let unsecure = std::env::var("PLANTUML_SECURITY_PROFILE")
+                    .is_ok_and(|profile| profile.eq_ignore_ascii_case("UNSECURE"));
+                let allowed = !lower.starts_with("plantuml.security")
+                    && (lower.starts_with("plantuml")
+                        || matches!(lower.as_str(), "path.separator" | "line.separator")
+                        || unsecure);
+                let value = if !allowed {
+                    String::new()
+                } else if name == "path.separator" {
+                    if cfg!(windows) { ";" } else { ":" }.into()
+                } else if name == "line.separator" {
+                    if cfg!(windows) { "\r\n" } else { "\n" }.into()
+                } else {
+                    std::env::var(name).unwrap_or_default()
+                };
+                return Value::Str(value);
+            }
+            "strlen" => {
+                return Value::Int(values.first().map_or(0, |v| v.utf16_units().len() as i32));
+            }
+            "string" => {
+                return Value::from_utf16(values.first().map_or_else(Vec::new, Value::utf16_units));
+            }
+            // Substr uses TValue.toInt and Java String UTF-16 bounds. A start
+            // beyond the end returns empty before checking the optional length.
+            "substr" => {
+                if !(2..=3).contains(&values.len()) {
+                    self.fail("Bad number of arguments for %substr".into());
+                    return Value::Str(String::new());
+                }
+                let units = values[0].utf16_units();
+                let start = values[1].java_int();
+                if start < 0 {
+                    self.fail("Substring index out of range".into());
+                    return Value::Str(String::new());
+                }
+                if start as usize >= units.len() {
+                    return Value::Str(String::new());
+                }
+                let available = &units[start as usize..];
+                let length = values.get(2).map(Value::java_int);
+                if length.is_some_and(|length| length < 0) {
+                    self.fail("Substring index out of range".into());
+                    return Value::Str(String::new());
+                }
+                let count = length.map_or(available.len(), |n| (n as usize).min(available.len()));
+                return Value::from_utf16(available[..count].to_vec());
+            }
+            // Strpos returns String.indexOf in UTF-16 code units, not UTF-8 bytes.
+            "strpos" => {
+                if values.len() != 2 {
+                    self.fail("Bad number of arguments for %strpos".into());
+                    return Value::Int(0);
+                }
+                let haystack = values[0].utf16_units();
+                let needle = values[1].utf16_units();
+                let index = if needle.is_empty() {
+                    Some(0)
+                } else {
+                    haystack
+                        .windows(needle.len())
+                        .position(|window| window == needle)
+                };
+                return Value::Int(index.map_or(-1, |i| i as i32));
+            }
+            "dec2hex" => {
+                if values.len() != 1 {
+                    self.fail("Bad number of arguments for %dec2hex".into());
+                    return Value::Str(String::new());
+                }
+                // Dec2hex calls Integer.toHexString, including two's complement.
+                return Value::Str(format!("{:x}", values[0].java_int()));
+            }
+            // LogicalNot.executeReturnFunction uses TValue.toBoolean directly.
+            "not" => return Value::Int(i32::from(!values.first().is_some_and(Value::truth))),
+            "get_variable_value" => {
+                let name = refs.first().copied().unwrap_or("");
+                return self
+                    .get_var(name)
+                    .cloned()
+                    .unwrap_or_else(|| Value::Str(String::new()));
+            }
+            "set_variable_value" if values.len() >= 2 => {
+                // SetVariableValue explicitly uses GLOBAL, preserving its exact key.
+                if args[0].contains('\0') {
+                    self.fail("Fatal parsing error".into());
+                    return Value::Str(String::new());
+                }
+                self.defines.insert(args[0].clone(), values[1].clone());
+                return Value::Str(String::new());
+            }
+            "str2json" => {
+                return serde_json::from_str(refs.first().copied().unwrap_or(""))
+                    .map(Value::Json)
+                    .unwrap_or_else(|_| Value::Str(String::new()));
+            }
+            "size" => {
+                return Value::Int(match values.first() {
+                    Some(Value::Json(serde_json::Value::Array(a))) => a.len() as i32,
+                    Some(Value::Json(serde_json::Value::Object(a))) => a.len() as i32,
+                    Some(Value::Str(s)) => s.encode_utf16().count() as i32,
+                    Some(Value::Utf16(units)) => units.len() as i32,
+                    _ => 0,
+                });
+            }
+            "date" if values.len() >= 2 => {
+                // DateFunction uses TValue.toInt, not parsing its display text.
+                let seconds = values[1].java_int().to_string();
+                return Value::Str(self.eval_one_builtin_args(func, &[refs[0], &seconds]));
+            }
+            _ => {}
+        }
+        let text = self.eval_one_builtin_args(func, &refs);
+        match func {
+            // Each corresponding tim/builtin implementation returns fromInt/fromBoolean.
+            "strlen" | "strpos" | "true" | "false" | "hex2dec" | "variable_exists" => {
+                Value::Int(text.parse().unwrap_or(0))
+            }
+            "is_dark" | "is_light" | "is_defined" | "function_exists" | "file_exists"
+            | "feature" => Value::Int(i32::from(text == "true" || text == "1")),
+            "float" => Value::Float(text.parse().unwrap_or(0.0)), // Existing Rust extension.
+            _ => Value::Str(text),
+        }
     }
 
-    fn eval_one_builtin(&self, func: &str, args_raw: &str) -> String {
-        let args: Vec<&str> = if args_raw.trim().is_empty() {
-            Vec::new()
-        } else {
-            split_builtin_args(args_raw)
-        };
-
-        // Strip quotes from args.
-        let args: Vec<&str> = args.iter().map(|a| a.trim().trim_matches('"')).collect();
-        self.eval_one_builtin_args(func, &args)
-    }
-
-    fn eval_one_builtin_args(&self, func: &str, args: &[&str]) -> String {
+    fn eval_one_builtin_args(&mut self, func: &str, args: &[&str]) -> String {
         match func {
             "strlen" => args
                 .first()
-                .map_or("0".to_string(), |s| s.len().to_string()),
-            "substr" => {
-                let s = args.first().copied().unwrap_or("");
-                let start: usize = args.get(1).and_then(|v| v.parse().ok()).unwrap_or(0);
-                let len: usize = args
-                    .get(2)
-                    .and_then(|v| v.parse().ok())
-                    .unwrap_or_else(|| s.len().saturating_sub(start));
-                s.chars().skip(start).take(len).collect()
-            }
-            "strpos" => {
-                let haystack = args.first().copied().unwrap_or("");
-                let needle = args.get(1).copied().unwrap_or("");
-                haystack
-                    .find(needle)
-                    .map_or("-1".to_string(), |p| p.to_string())
-            }
-            "upper" => args.first().map_or(String::new(), |s| s.to_uppercase()),
-            "lower" => args.first().map_or(String::new(), |s| s.to_lowercase()),
+                .map_or("0".to_string(), |s| s.encode_utf16().count().to_string()),
             "newline" => "\n".to_string(),
             "tab" => "\t".to_string(),
             // PlantUML's %true() and %false() return numeric 1 and 0, not
@@ -2673,12 +3257,28 @@ impl PreprocessContext {
             "true" => "1".to_string(),
             "false" => "0".to_string(),
             "date" => {
-                let fmt = args.first().copied().unwrap_or("");
                 let clock = &self.render_clock;
-                if fmt.is_empty() {
-                    format_java_date(clock.epoch_ms, &clock.tz)
+                if args.is_empty() {
+                    return format_java_date(clock.epoch_ms as i64, &clock.tz);
+                }
+                // DateFunction.executeReturnFunction converts its second TValue
+                // to a signed Java int (seconds), then multiplies by 1000L.
+                let epoch_ms = if let Some(seconds) = args.get(1) {
+                    let Ok(seconds) = seconds.parse::<i32>() else {
+                        self.fail("Date seconds outside signed 32-bit range".into());
+                        return String::new();
+                    };
+                    i64::from(seconds) * 1000
                 } else {
-                    format_java_date_pattern(clock.epoch_ms, &clock.tz, fmt)
+                    clock.epoch_ms as i64
+                };
+                let tz = clock.pattern_timezone_at(epoch_ms);
+                match date_format::format(epoch_ms, &tz, args[0]) {
+                    Ok(formatted) => formatted,
+                    Err(message) => {
+                        self.fail(message);
+                        String::new()
+                    }
                 }
             }
             "size" => {
@@ -2698,23 +3298,6 @@ impl PreprocessContext {
                 }
             }
             "string" => args.first().map_or(String::new(), |s| s.to_string()),
-            "intval" => args
-                .first()
-                .and_then(|s| s.parse::<f64>().ok())
-                .map_or("0".to_string(), |n| format!("{}", n as i64)),
-            "not" => {
-                let val = args.first().copied().unwrap_or("false");
-                if val == "true" || val == "1" {
-                    "false"
-                } else {
-                    "true"
-                }
-                .to_string()
-            }
-            "chr" => {
-                let code: u32 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
-                char::from_u32(code).map_or(String::new(), |c| c.to_string())
-            }
             "darken" => {
                 // PlantUML `%darken(color, ratio)` decreases luminance by a
                 // *relative* fraction: `L -= L * (ratio / 100)`. Match Java's
@@ -2745,13 +3328,6 @@ impl PreprocessContext {
                     color_str.to_string()
                 }
             }
-            "hsl_color" => {
-                let h: f64 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0.0);
-                let s: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(100.0);
-                let l: f64 = args.get(2).and_then(|s| s.parse().ok()).unwrap_or(50.0);
-                let (r, g, b) = hsl_to_rgb(h, s, l);
-                rgb_to_hex(r, g, b)
-            }
             "is_dark" => {
                 let color_str = args.first().copied().unwrap_or("");
                 if let Some((r, g, b)) = parse_color(color_str) {
@@ -2771,17 +3347,18 @@ impl PreprocessContext {
                 }
             }
             "variable_exists" => {
+                // VariableExists delegates the exact name to TMemory.getVariable.
                 let name = args.first().copied().unwrap_or("");
-                if self.defines.contains_key(name) || self.token_defines.contains_key(name) {
-                    "true"
+                if self.get_var(name).is_some() {
+                    "1"
                 } else {
-                    "false"
+                    "0"
                 }
                 .to_string()
             }
             "is_defined" => {
                 let name = args.first().copied().unwrap_or("");
-                if self.defines.contains_key(name) || self.token_defines.contains_key(name) {
+                if self.get_var(name).is_some() {
                     "true"
                 } else {
                     "false"
@@ -2789,27 +3366,14 @@ impl PreprocessContext {
                 .to_string()
             }
             "function_exists" => {
-                // PlantUML requires the function name to include the leading '$'.
-                // %function_exists("$myFunc") → true, %function_exists("myFunc") → false.
+                // FunctionsSet.doesFunctionExist indexes the exact declared name.
                 let name = args.first().copied().unwrap_or("");
-                let lookup = name.strip_prefix('$').unwrap_or("");
-                if !lookup.is_empty() && self.functions.contains_key(lookup) {
+                if self.functions.contains_key(name) {
                     "true"
                 } else {
                     "false"
                 }
                 .to_string()
-            }
-            "get_variable_value" => {
-                let name = args.first().copied().unwrap_or("");
-                name.strip_prefix('$')
-                    .and_then(|name| self.get_var(name).cloned())
-                    .unwrap_or_default()
-            }
-            "set_variable_value" => {
-                // In expression context we can't mutate; handled specially.
-                // Return empty.
-                String::new()
             }
             "filename" => {
                 // PlantUML's `%filename()` returns the source file name (basename
@@ -2831,11 +3395,6 @@ impl PreprocessContext {
                 s.parse::<f64>()
                     .map_or_else(|_| "0".to_string(), |f| format!("{f}"))
             }
-            "dec2hex" => {
-                // %dec2hex(255) → "ff"
-                let n: i64 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
-                format!("{n:x}")
-            }
             "hex2dec" => {
                 // %hex2dec("ff") → "255"
                 let s = args.first().copied().unwrap_or("0");
@@ -2856,9 +3415,8 @@ impl PreprocessContext {
                 "false".to_string()
             }
             _ => {
-                // Unknown function — return empty string.  A non-empty passthrough
-                // like "%func(args)" confuses eval_bool (it would be truthy) and
-                // loops incorrectly.  Returning "" is falsy and safe.
+                // ReversePolishInterpretor rejects an unresolved function.
+                self.fail(format!("Unknown built-in function %{func}"));
                 String::new()
             }
         }
@@ -2873,22 +3431,32 @@ impl PreprocessContext {
 ///
 /// Renders wall clock in the supplied timezone. Java's `Date.toString()`
 /// has no sub-second precision, so the millisecond remainder is discarded.
-fn format_java_date(epoch_ms: u64, tz: &TzSpec) -> String {
+fn format_java_date(epoch_ms: i64, tz: &TzSpec) -> String {
     const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
-    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
+    let s = epoch_ms.div_euclid(1000) + i64::from(tz.offset_secs);
     let secs = ((s % 86400) + 86400) % 86400;
     let hh = secs / 3600;
     let mm = (secs % 3600) / 60;
     let ss = secs % 60;
-    let dow = DAYS[(((s / 86400) % 7 + 7) % 7) as usize];
+    let dow = DAYS[(s.div_euclid(86400).rem_euclid(7)) as usize];
 
     // Days since epoch → year/month/day (civil calendar).
     let mut days = s.div_euclid(86400);
     let mut year = 1970i64;
+    // DateFunction accepts negative epoch seconds; walk the Gregorian calendar
+    // backwards as well as forwards from the Unix epoch.
+    while days < 0 {
+        year -= 1;
+        days += if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+            366
+        } else {
+            365
+        };
+    }
     loop {
         let ylen = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
             366
@@ -2933,175 +3501,146 @@ fn format_java_date(epoch_ms: u64, tz: &TzSpec) -> String {
     )
 }
 
-/// Format epoch milliseconds using a Java `SimpleDateFormat` pattern.
-///
-/// Renders wall clock in the supplied timezone. Supports the most common
-/// tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`, `EEE` (day-of-week),
-/// `MMM` (month abbreviation). Literal text passes through.
-fn format_java_date_pattern(epoch_ms: u64, tz: &TzSpec, pattern: &str) -> String {
-    const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
-    const MONTHS: [&str; 12] = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-    ];
-
-    let _millis = (epoch_ms % 1000) as u32;
-    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
-    let secs = ((s % 86400) + 86400) % 86400;
-    let hh = secs / 3600;
-    let mm_time = (secs % 3600) / 60;
-    let ss = secs % 60;
-    let dow_idx = (((s / 86400) % 7 + 7) % 7) as usize;
-
-    let mut days = s.div_euclid(86400);
-    let mut year = 1970i64;
-    loop {
-        let ylen = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
-            366
-        } else {
-            365
-        };
-        if days < ylen {
-            break;
-        }
-        days -= ylen;
-        year += 1;
-    }
-    let leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-    let mdays = [
-        31,
-        if leap { 29 } else { 28 },
-        31,
-        30,
-        31,
-        30,
-        31,
-        31,
-        30,
-        31,
-        30,
-        31,
-    ];
-    let mut month = 0usize;
-    for (i, &ml) in mdays.iter().enumerate() {
-        if days < ml {
-            month = i;
-            break;
-        }
-        days -= ml;
-    }
-    let day = days + 1;
-
-    let mut result = String::new();
-    let chars: Vec<char> = pattern.chars().collect();
-    let mut i = 0;
-    while i < chars.len() {
-        match chars[i] {
-            'y' => {
-                let start = i;
-                while i < chars.len() && chars[i] == 'y' {
-                    i += 1;
-                }
-                let len = i - start;
-                if len <= 2 {
-                    result.push_str(&format!("{:02}", year % 100));
-                } else {
-                    result.push_str(&format!("{year:04}"));
-                }
-            }
-            'M' => {
-                let start = i;
-                while i < chars.len() && chars[i] == 'M' {
-                    i += 1;
-                }
-                let len = i - start;
-                if len >= 3 {
-                    result.push_str(MONTHS[month]);
-                } else {
-                    result.push_str(&format!("{:02}", month + 1));
-                }
-            }
-            'd' => {
-                while i < chars.len() && chars[i] == 'd' {
-                    i += 1;
-                }
-                result.push_str(&format!("{day:02}"));
-            }
-            'H' => {
-                while i < chars.len() && chars[i] == 'H' {
-                    i += 1;
-                }
-                result.push_str(&format!("{hh:02}"));
-            }
-            'm' => {
-                while i < chars.len() && chars[i] == 'm' {
-                    i += 1;
-                }
-                result.push_str(&format!("{mm_time:02}"));
-            }
-            's' => {
-                while i < chars.len() && chars[i] == 's' {
-                    i += 1;
-                }
-                result.push_str(&format!("{ss:02}"));
-            }
-            'E' => {
-                while i < chars.len() && chars[i] == 'E' {
-                    i += 1;
-                }
-                result.push_str(DAYS[dow_idx]);
-            }
-            '\'' => {
-                // Quoted literal text.
-                i += 1;
-                while i < chars.len() && chars[i] != '\'' {
-                    result.push(chars[i]);
-                    i += 1;
-                }
-                if i < chars.len() {
-                    i += 1;
-                } // skip closing quote
-            }
-            c => {
-                result.push(c);
-                i += 1;
-            }
-        }
-    }
-    result
+// Arity is taken from tim/builtin/<class>.canCover for already implemented
+// dispatch entries. Registration is intentionally separate: unimplemented names
+// remain explicit errors, never synthetic empty results. Rust-only extensions
+// retain their previous contracts.
+fn builtin_arity(name: &str) -> Option<std::ops::RangeInclusive<usize>> {
+    Some(match name {
+        "true" | "false" | "newline" | "tab" | "filename" | "dirpath" => 0..=0,
+        "upper" | "lower" | "chr" | "boolval" | "strlen" | "string" | "dec2hex" | "not"
+        | "get_variable_value" | "getenv" | "str2json" | "size" | "intval" | "hex2dec"
+        | "is_dark" | "is_light" | "variable_exists" | "function_exists" | "file_exists"
+        | "feature" => 1..=1,
+        "strpos" | "set_variable_value" | "darken" | "lighten" => 2..=2,
+        "substr" => 2..=3,
+        "date" => 0..=2,
+        "hsl_color" => 3..=4,
+        _ => return None,
+    })
 }
 
-fn number_value(f: f64) -> Value {
-    if f == (f as i64) as f64 && f.abs() < i64::MAX as f64 {
-        Value::Int(f as i64)
+fn append_case_span(units: &mut Vec<u16>, text: &str, upper: bool) {
+    let mapped = if upper {
+        text.to_uppercase()
     } else {
-        Value::Float(f)
-    }
+        text.to_lowercase()
+    };
+    units.extend(mapped.encode_utf16());
 }
 
-fn parse_func_params(params_str: &str) -> Vec<FuncParam> {
-    if params_str.trim().is_empty() {
-        return Vec::new();
-    }
-    params_str
-        .split(',')
-        .map(|p| {
-            let p = p.trim();
-            // Check for default: $name = "value" or $name = value
-            if let Some(eq_pos) = p.find('=') {
-                let name = p[..eq_pos].trim().trim_start_matches('$').to_string();
-                let default = p[eq_pos + 1..].trim().trim_matches('"').to_string();
-                FuncParam {
-                    name,
-                    default: Some(default),
-                }
-            } else {
-                FuncParam {
-                    name: p.trim_start_matches('$').to_string(),
-                    default: None,
-                }
-            }
-        })
-        .collect()
+// TContext.addStandardFunctions registers these names before text expansion.
+// getFunctionNameAt only recognizes registered calls; RPN separately rejects
+// unknown expression calls. `float` and `is_defined` retain Rust extensions.
+fn registered_builtin(name: &str) -> bool {
+    matches!(
+        name,
+        "and"
+            | "backslash"
+            | "boolval"
+            | "breakline"
+            | "call_user_func"
+            | "chr"
+            | "darken"
+            | "date"
+            | "dec2hex"
+            | "dirpath"
+            | "dollar"
+            | "eval"
+            | "false"
+            | "feature"
+            | "file_exists"
+            | "filedate"
+            | "filename"
+            | "filename_no_extension"
+            | "float"
+            | "function_exists"
+            | "get_all_stdlib"
+            | "get_all_theme"
+            | "get_current_theme"
+            | "get_json_keys"
+            | "get_json_type"
+            | "get_stdlib"
+            | "get_variable_value"
+            | "getenv"
+            | "hex2dec"
+            | "hsl_color"
+            | "intval"
+            | "invoke_procedure"
+            | "is_dark"
+            | "is_defined"
+            | "is_light"
+            | "json_add"
+            | "json_key_exists"
+            | "json_merge"
+            | "json_remove"
+            | "json_set"
+            | "left_align"
+            | "lighten"
+            | "load_json"
+            | "lower"
+            | "mod"
+            | "n"
+            | "nand"
+            | "newline"
+            | "nor"
+            | "not"
+            | "now"
+            | "nxor"
+            | "or"
+            | "ord"
+            | "percent"
+            | "random"
+            | "retrieve_procedure"
+            | "reverse_color"
+            | "reverse_hsluv_color"
+            | "right_align"
+            | "set_variable_value"
+            | "size"
+            | "splitstr"
+            | "splitstr_regex"
+            | "str2json"
+            | "string"
+            | "strlen"
+            | "strpos"
+            | "substr"
+            | "tab"
+            | "true"
+            | "upper"
+            | "variable_exists"
+            | "version"
+            | "xargs"
+            | "xor"
+    )
+}
+
+// TLineType.simpleKeyword recognizes directive boundaries; EaterStartsub
+// consumes intervening whitespace and requires Java's ASCII \w+ block name.
+fn directive_argument<'a>(line: &'a str, directive: &str) -> Option<&'a str> {
+    let rest = line.strip_prefix(directive)?;
+    (rest.is_empty() || rest.starts_with(|c: char| !c.is_alphanumeric() && c != '_'))
+        .then(|| rest.trim_start())
+}
+
+fn valid_sub_name(name: &str) -> bool {
+    !name.is_empty() && name.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
+}
+
+// EaterFunctionCall / TFunctionImpl.getNewMemory: named values are separate
+// from the positional queue, and quoted equality text is not an assignment.
+fn named_argument(text: &str) -> Option<(&str, &str)> {
+    let (index, _, _) = syntax_positions(text).into_iter().find(|(i, c, d)| {
+        *d == 0
+            && *c == '='
+            && !text[*i..].starts_with("==")
+            && !text[..*i].ends_with(['!', '<', '>', '='])
+    })?;
+    let name = text[..index].trim();
+    (!name.is_empty()
+        && name
+            .chars()
+            .all(|c| c.is_alphanumeric() || matches!(c, '$' | '_')))
+    .then_some((name, text[index + 1..].trim()))
 }
 
 fn parse_call_args(args_str: &str) -> Vec<String> {
@@ -3109,255 +3648,104 @@ fn parse_call_args(args_str: &str) -> Vec<String> {
         return Vec::new();
     }
     let args = split_args(args_str);
-    args.into_iter()
-        .map(|a| a.trim().trim_matches('"').to_string())
+    args.into_iter().map(|a| a.trim().to_string()).collect()
+}
+
+// Eater.eatAndGetQuotedString consumes to the next matching quote, with
+// no backslash escape. Keep byte offsets so non-ASCII token contents are safe.
+fn syntax_positions(text: &str) -> Vec<(usize, char, i32)> {
+    let mut result = Vec::new();
+    let mut quote = None;
+    let mut depth = 0;
+    for (index, ch) in text.char_indices() {
+        if let Some(end) = quote {
+            if ch == end {
+                quote = None;
+            }
+        } else if matches!(ch, '\'' | '"') {
+            quote = Some(ch);
+        } else {
+            result.push((index, ch, depth));
+            if matches!(ch, '(' | '[' | '{') {
+                depth += 1;
+            }
+            if matches!(ch, ')' | ']' | '}') {
+                depth -= 1;
+            }
+        }
+    }
+    result
+}
+
+fn split_args(text: &str) -> Vec<String> {
+    split_builtin_args(text)
+        .into_iter()
+        .filter(|s| !s.trim().is_empty())
+        .map(|s| s.trim().to_string())
         .collect()
 }
 
-fn split_args(s: &str) -> Vec<String> {
-    let mut args = Vec::new();
-    let mut current = String::new();
-    let mut depth = 0;
-    let mut in_quotes = false;
-
-    for c in s.chars() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-            current.push(c);
-        } else if in_quotes {
-            current.push(c);
-        } else if c == '(' {
-            depth += 1;
-            current.push(c);
-        } else if c == ')' {
-            depth -= 1;
-            current.push(c);
-        } else if c == ',' && depth == 0 {
-            args.push(current.trim().to_string());
-            current = String::new();
-        } else {
-            current.push(c);
-        }
-    }
-    if !current.trim().is_empty() {
-        args.push(current.trim().to_string());
-    }
-    args
-}
-
-fn split_builtin_args(s: &str) -> Vec<&str> {
-    // Simple comma split respecting quotes and parens.
-    let mut args = Vec::new();
-    let mut start = 0;
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let bytes = s.as_bytes();
-
-    for (i, &b) in bytes.iter().enumerate() {
-        if b == b'"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if b == b'(' {
-                depth += 1;
-            } else if b == b')' {
-                depth -= 1;
-            } else if b == b',' && depth == 0 {
-                args.push(&s[start..i]);
-                start = i + 1;
-            }
-        }
-    }
-    args.push(&s[start..]);
-    args
-}
-
-fn find_matching_paren(s: &str) -> Option<usize> {
-    // s starts with '('
-    if !s.starts_with('(') {
-        return None;
-    }
-    let mut depth = 0;
-    let mut in_quotes = false;
-    for (i, c) in s.chars().enumerate() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-                if depth == 0 {
-                    return Some(i);
-                }
-            }
-        }
-    }
-    None
-}
-
-fn find_matching_paren_from(s: &str, open_pos: usize) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    for (i, c) in s[open_pos..].chars().enumerate() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-                if depth == 0 {
-                    return Some(open_pos + i);
-                }
-            }
-        }
-    }
-    None
-}
-
-/// Find the rightmost top-level position of an operator (not inside parens or quotes).
-fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let mut last_pos = None;
-    let chars: Vec<char> = expr.chars().collect();
-
-    for (i, &c) in chars.iter().enumerate() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-            } else if c == op && depth == 0 {
-                // For -, don't match if it's part of ->
-                if op == '-' && i + 1 < chars.len() && chars[i + 1] == '>' {
-                    continue;
-                }
-                // Skip position 0: a leading operator character is a prefix
-                // (e.g., leading '/' in '/users' is not division), not binary op.
-                if i == 0 {
-                    continue;
-                }
-                // Don't match if preceded by another operator (unary).
-                let prev = chars[i - 1];
-                if prev == '+'
-                    || prev == '-'
-                    || prev == '*'
-                    || prev == '/'
-                    || prev == '%'
-                    || prev == '('
-                    || prev == '='
-                    || prev == '<'
-                    || prev == '>'
-                    || prev == '!'
-                {
-                    continue;
-                }
-                last_pos = Some(i);
-            }
-        }
-    }
-    last_pos
-}
-
-fn split_at_top_level_op(expr: &str, op: char) -> Vec<String> {
+fn split_builtin_args(text: &str) -> Vec<&str> {
     let mut parts = Vec::new();
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let mut current = String::new();
-
-    for c in expr.chars() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-            current.push(c);
-        } else if in_quotes {
-            current.push(c);
-        } else if c == '(' {
-            depth += 1;
-            current.push(c);
-        } else if c == ')' {
-            depth -= 1;
-            current.push(c);
-        } else if c == op && depth == 0 {
-            parts.push(current);
-            current = String::new();
-        } else {
-            current.push(c);
+    let mut start = 0;
+    for (index, ch, depth) in syntax_positions(text) {
+        if ch == ',' && depth == 0 {
+            parts.push(&text[start..index]);
+            start = index + 1;
         }
     }
-    parts.push(current);
+    parts.push(&text[start..]);
     parts
 }
 
-fn find_top_level_logical_op(expr: &str, op: &str) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let bytes = expr.as_bytes();
-    let op_bytes = op.as_bytes();
-    let mut last_pos = None;
+fn find_matching_paren(text: &str) -> Option<usize> {
+    text.starts_with('(')
+        .then(|| find_matching_paren_from(text, 0))
+        .flatten()
+}
 
-    for i in 0..bytes.len() {
-        if bytes[i] == b'"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if bytes[i] == b'(' {
-                depth += 1;
-            } else if bytes[i] == b')' {
-                depth -= 1;
-            } else if depth == 0
-                && i + op_bytes.len() <= bytes.len()
-                && &bytes[i..i + op_bytes.len()] == op_bytes
-            {
-                last_pos = Some(i);
+fn find_matching_paren_from(text: &str, open: usize) -> Option<usize> {
+    syntax_positions(&text[open..])
+        .into_iter()
+        .find(|(_, ch, depth)| *ch == ')' && *depth == 1)
+        .map(|(index, _, _)| open + index)
+}
+
+fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
+    syntax_positions(expr)
+        .into_iter()
+        .filter(|(index, ch, depth)| {
+            if *ch != op || *depth != 0 || *index == 0 {
+                return false;
             }
-        }
-    }
-    last_pos
+            if op == '-' && expr[*index..].starts_with("->") {
+                return false;
+            }
+            let before = expr[..*index].trim_end();
+            !before.is_empty()
+                && !before.ends_with(['+', '-', '*', '/', '%', '(', '=', '<', '>', '!'])
+        })
+        .map(|(index, _, _)| index)
+        .next_back()
 }
 
 fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let bytes = expr.as_bytes();
-    let op_bytes = op.as_bytes();
-
-    // For == and !=, scan from left; for others, also from left.
-    for i in 0..bytes.len() {
-        if bytes[i] == b'"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if bytes[i] == b'(' {
-                depth += 1;
-            } else if bytes[i] == b')' {
-                depth -= 1;
-            } else if depth == 0
-                && i + op_bytes.len() <= bytes.len()
-                && &bytes[i..i + op_bytes.len()] == op_bytes
-            {
-                // For < and >, make sure it's not <= or >= or <> or <<.
-                if op == "<"
-                    && i + 1 < bytes.len()
-                    && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>')
-                {
-                    continue;
-                }
-                if op == ">" {
-                    if i + 1 < bytes.len() && bytes[i + 1] == b'=' {
-                        continue;
-                    }
-                    // Also skip -> (arrow).
-                    if i > 0 && bytes[i - 1] == b'-' {
-                        continue;
-                    }
-                }
-                // For == make sure it's not part of !== or ===.
-                return Some(i);
+    syntax_positions(expr)
+        .into_iter()
+        .filter(|(index, _, depth)| {
+            if *depth != 0 || !expr[*index..].starts_with(op) {
+                return false;
             }
-        }
-    }
-    None
+            if op == "<" && (expr[*index..].starts_with("<=") || expr[*index..].starts_with("<>")) {
+                return false;
+            }
+            if op == ">" && (expr[*index..].starts_with(">=") || expr[..*index].ends_with('-')) {
+                return false;
+            }
+            true
+        })
+        .map(|(index, _, _)| index)
+        .next_back()
 }
 
 fn eval_defined_expression(expression: &str, truth: impl FnMut(&str) -> bool) -> Option<bool> {
@@ -3451,26 +3839,6 @@ where
     }
 }
 
-fn parens_balanced(s: &str) -> bool {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    for c in s.chars() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-                if depth < 0 {
-                    return false;
-                }
-            }
-        }
-    }
-    depth == 0
-}
-
 /// Parse optional `[WxH/Z]` dimension spec from a sprite header line.
 ///
 /// The `rest` parameter is the text after `sprite $` (name included).
@@ -3497,26 +3865,19 @@ fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
     (0, 0)
 }
 
-fn strip_inline_comment(line: &str) -> String {
-    let mut in_quotes = false;
-    let chars: Vec<char> = line.chars().collect();
-    let bytes: Vec<usize> = line
-        .char_indices()
-        .map(|(i, _)| i)
-        .chain(std::iter::once(line.len()))
-        .collect();
-    for (idx, &c) in chars.iter().enumerate() {
-        let byte_pos = bytes[idx];
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if c == '\'' && !in_quotes {
-            let preceded_by_space = idx == 0 || chars[idx - 1].is_whitespace();
-            if preceded_by_space {
-                return line[..byte_pos].to_string();
-            }
-        }
-    }
-    line.to_string()
+// StringLocated.removeInnerComment: only leading/trailing block comments and
+// the special /'''[-\w]*'''/ form are removed; a trailing apostrophe is plain.
+fn remove_inner_comment(line: &str) -> String {
+    let trimmed = line.trim();
+    let content = if trimmed.starts_with("/'") {
+        line.find("'/").map_or(line, |end| &line[end + 2..])
+    } else if trimmed.ends_with("'/") {
+        line.rfind("/'").map_or(line, |start| &line[..start])
+    } else {
+        line
+    };
+    static SPECIAL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"/'''[-\w]*'''/").unwrap());
+    SPECIAL.replace_all(content, "").into_owned()
 }
 
 #[cfg(test)]
@@ -3533,6 +3894,944 @@ mod tests {
             .into_iter()
             .filter(|l| !l.is_empty())
             .collect()
+    }
+
+    #[test]
+    fn stored_names_drive_text_matching_without_token_grammar() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (name, value) in [
+            ("a$b", "oak"),
+            ("twig\u{301}", "ash"),
+            ("two words", "elm"),
+            ("rock.dot", "fir"),
+        ] {
+            ctx.set_var(name, &Value::Str(value.into()));
+        }
+        assert_eq!(
+            ctx.substitute_vars("a$b / twig\u{301} / two words / rock.dot"),
+            "oak / ash / elm / fir"
+        );
+        assert_eq!(
+            ctx.substitute_vars("xa$b / a$b2 / \\na$b / ##a$b##"),
+            "xa$b / a$b2 / \\noak / oak"
+        );
+    }
+
+    #[test]
+    fn trie_path_mismatch_and_removal_do_not_backtrack() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.set_var("ax", &Value::Str("short".into()));
+        ctx.set_var("ax-bc", &Value::Str("long".into()));
+        assert_eq!(
+            ctx.substitute_vars("ax / ax-bc / ax-bX / ax-"),
+            "short / long / ax-bX / ax-"
+        );
+        ctx.remove_var("ax-bc");
+        assert_eq!(
+            ctx.substitute_vars("ax / ax-bX / ax-bc"),
+            "short / ax-bX / ax-bc"
+        );
+        ctx.set_var("ax😀z", &Value::Str("astral".into()));
+        assert_eq!(
+            ctx.substitute_vars("ax😁 / ax😀z / 😀ax / ax²"),
+            "ax😁 / astral / 😀ax / short²"
+        );
+    }
+
+    #[test]
+    fn override_trie_lifetime_and_cross_scope_longest_match() {
+        let mut scope = LocalMemory::default();
+        scope.overrides.insert("a".into(), Value::Int(1));
+        scope.overrides.insert("a-bc".into(), Value::Int(2));
+        scope.overrides.remove("a-bc");
+        assert_eq!(scope.overrides.match_at("a-bX"), Some("a".into()));
+        scope.overrides.insert("a-bc".into(), Value::Int(3));
+        scope.overrides.remove("a-bc");
+        assert_eq!(scope.overrides.match_at("a-bX"), None);
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.set_var("a-bc", &Value::Str("global-long".into()));
+        ctx.local_vars.push(scope);
+        assert_eq!(ctx.substitute_vars("a / a-bc"), "1 / global-long");
+        ctx.set_local_var("a-bc", &Value::Str("override".into()));
+        assert_eq!(ctx.substitute_vars("a-bc"), "override");
+        ctx.remove_var("a-bc");
+        assert_eq!(ctx.substitute_vars("a-bc"), "global-long");
+    }
+
+    #[test]
+    fn variable_values_are_not_rescanned_and_functions_keep_priority() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("!function read()\n!return 7\n!endfunction");
+        ctx.set_var("read", &Value::Str("variable".into()));
+        ctx.set_var("raw", &Value::Str("read()".into()));
+        assert_eq!(
+            ctx.substitute_vars("raw / read / read()"),
+            "read() / variable / 7"
+        );
+        ctx.set_var("a", &Value::Str("n".into()));
+        ctx.set_var("$b", &Value::Str("value".into()));
+        assert_eq!(ctx.substitute_vars("a$b"), "nvalue");
+        assert_eq!(
+            ctx.substitute_vars("<$b> / <$absent>"),
+            "<value> / <$absent>"
+        );
+    }
+
+    #[test]
+    fn duplicate_formals_reuse_named_values_without_consuming_positionals() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("!function $read(b=\"first\",$middle=\"mid\",b=\"last\")\n!return b+2+\"/\"+$middle\n!endfunction");
+        let (value, _) = ctx.call_function_values(
+            "$read",
+            vec![Value::Str("position".into())],
+            HashMap::from([("b".into(), Value::Str("007".into()))]),
+            false,
+        );
+        assert_eq!(value.unwrap().to_display(), "0072/position");
+        let (value, _) = ctx.call_function_values(
+            "$read",
+            vec![Value::Int(1), Value::Str("position".into()), Value::Int(4)],
+            HashMap::new(),
+            false,
+        );
+        assert_eq!(value.unwrap().to_display(), "6/position");
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn empty_sub_terminates_source_before_tail_effects() {
+        for prefix in ["", "!procedure $unused()\n", "!function $unused()\n"] {
+            let source = format!(
+                "@startuml\nclass Anchor\n{prefix}!startsub empty\n/' removed '/\n!endsub\n!$v=%intval(\"bad\")\nclass Lost\n@enduml\n"
+            );
+            let out = preprocess_full(&source, None);
+            assert!(out.error.is_none());
+            assert_eq!(out.uml_source, "@startuml\nclass Anchor\n");
+            assert!(!out.lines.iter().any(|s| s.contains("Lost")));
+        }
+    }
+
+    #[test]
+    fn empty_replay_is_local_to_execution_and_blank_line_is_not_empty() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.include_depth = 1;
+        let mut events = ctx.process("class Head\n!startsub empty\n!endsub\n!$v=%intval(\"bad\")");
+        assert!(!ctx.iterator_stopped);
+        assert!(ctx.error.is_none());
+        ctx.process_one_line("class Tail", &mut events);
+        let mut identity = Vec::new();
+        project_events(&events, &mut identity, &mut Vec::new(), &mut Vec::new());
+        assert_eq!(identity, ["class Head", "class Tail"]);
+        let out = preprocess_full(
+            "@startuml\n!startsub blank\n\n!endsub\nclass Continued\n@enduml",
+            None,
+        );
+        assert_eq!(out.uml_source, "@startuml\n\nclass Continued\n@enduml\n");
+    }
+
+    #[test]
+    fn filename_without_source_environment_remains_empty() {
+        // Filename.executeReturnFunction returns empty when getenv("filename") is null.
+        let mut ctx = PreprocessContext::new(None, false);
+        assert_eq!(ctx.eval_expr_to_value("%filename()").to_display(), "");
+        assert!(ctx.error.is_none());
+        assert_eq!(ctx.substitute_vars("file: %filename()"), "file: ");
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn exact_parameter_keys_survive_memory_and_all_lookup_paths() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!function $mix(b=\"007\",$b=\"08\")\n!return b+2+\"/\"+$b+3+\"/\"+%get_variable_value(\"b\")\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value("$mix()").to_display(),
+            "0072/083/007"
+        );
+        assert_eq!(
+            ctx.substitute_vars(r#"$mix(b="oak",$b="ash")"#),
+            "oak2/ash3/oak"
+        );
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn exact_bare_and_dollar_globals_do_not_alias_local_or_sibling_frames() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!b=\"global\"\n!$b=\"dollar\"\n!function $inner()\n!return b+\"/\"+$b\n!endfunction\n!function $outer(b=\"local\",$b=\"override\")\n!return $inner()+\"/\"+b+\"/\"+$b\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value("$outer()").to_display(),
+            "global/dollar/local/override"
+        );
+        assert_eq!(ctx.substitute_vars("b/$b"), "global/dollar");
+        ctx.process("!undef b");
+        assert!(ctx.get_var("b").is_none());
+        assert_eq!(ctx.get_var("$b").unwrap().to_display(), "dollar");
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"%variable_exists("b")+%variable_exists("$b")"#)
+                .to_display(),
+            "1"
+        );
+    }
+
+    #[test]
+    fn exact_local_mutation_and_global_builtin_assignment_are_separate() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!b=\"root\"\n!$b=\"dollar\"\n!function $edit(b=\"local\",$b=\"override\")\n!b=\"changed\"\n!local $b=\"leaf\"\n!return b+\"/\"+$b\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value("$edit()").to_display(),
+            "changed/leaf"
+        );
+        ctx.eval_expr_to_value(r#"%set_variable_value("b","new")"#);
+        assert_eq!(ctx.substitute_vars("b/$b"), "new/dollar");
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn completed_overloads_keep_arity_and_kind_in_both_declaration_orders() {
+        let function = "!function $pick($a)\n!return \"value \"+$a\n!endfunction\n";
+        let procedure = "!procedure $pick($a,$b)\nclass \"$a/$b\" as Kept\n!endprocedure\n";
+        for definitions in [
+            format!("{function}{procedure}"),
+            format!("{procedure}{function}"),
+        ] {
+            let output = preprocess_full(
+                &format!(
+                    "@startuml\n{definitions}!$v=$pick(7)\nclass \"$v\" as Value\n$pick(\"fir\",\"yew\")\n@enduml"
+                ),
+                None,
+            );
+            assert!(output.error.is_none());
+            assert!(output.uml_source.contains("class \"value 7\" as Value"));
+            assert!(output.uml_source.contains("class \"fir/yew\" as Kept"));
+        }
+    }
+
+    #[test]
+    fn signature_replacement_preserves_other_arities_and_pending_default_capture() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!function $pick($a=\"seed\")\n!return $a\n!endfunction\n!function $pick($a,$b)\n!return $a+\"/\"+$b\n!endfunction\n!function $pick($a=$pick())\n!return \"new \"+$a\n!endfunction");
+        assert_eq!(ctx.eval_expr_to_value("$pick()").to_display(), "new seed");
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"$pick("fir","yew")"#).to_display(),
+            "fir/yew"
+        );
+        assert!(ctx.error.is_none());
+    }
+
+    #[test]
+    fn function_names_preserve_dollars_and_text_token_boundaries() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!function read($a)\n!return \"bare \"+$a\n!endfunction\n!function $read($a)\n!return \"dollar \"+$a\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"read("oak")+"/"+$read("ash")"#)
+                .to_display(),
+            "bare oak/dollar ash"
+        );
+        assert_eq!(
+            ctx.substitute_vars(r#"spread("oak") / read("ash")"#),
+            r#"spread("oak") / bare ash"#
+        );
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"%function_exists("read")+%function_exists("$read")"#)
+                .to_display(),
+            "2"
+        );
+    }
+
+    #[test]
+    fn sub_collection_precedes_uncalled_return_and_procedure_bodies() {
+        for (start, end, ret) in [
+            ("!function $unused()", "!endfunction", "!return 1\n"),
+            ("!procedure $unused()", "!endprocedure", ""),
+        ] {
+            let output = preprocess_full(
+                &format!(
+                    "@startuml\n{start}\n!startsub stored\nclass Kept\n!endsub\n{ret}{end}\n!includesub stored\n@enduml"
+                ),
+                None,
+            );
+            assert!(output.error.is_none());
+            assert_eq!(output.uml_source.matches("class Kept").count(), 1);
+        }
+    }
+
+    #[test]
+    fn collected_sub_body_executes_only_through_its_downstream_consumer() {
+        let source = "@startuml\n!$n=0\n!procedure $tick()\n!startsub saved\n!$n=$n+1\n!endsub\n!endprocedure\n!includesub saved\n$tick()\n!includesub saved\nclass \"$n\" as Count\n@enduml";
+        let output = preprocess_full(source, None);
+        assert!(output.error.is_none());
+        assert!(output.uml_source.contains("class \"3\" as Count"));
+    }
+
+    #[test]
+    fn nested_sub_in_uncalled_body_fails_before_buffered_expression() {
+        let output = preprocess_full(
+            "@startuml\n!procedure $never()\n!startsub outer\n!$v=%intval(\"bad\")\n!startsub inner\n!endsub\n!endprocedure\nclass Survivor\n@enduml",
+            None,
+        );
+        assert_eq!(output.error.unwrap().message, "Cannot nest sub");
+        assert!(!output.uml_source.contains("Survivor"));
+    }
+
+    #[test]
+    fn rpn_named_keys_keep_exact_spelling_and_expression_stack_lifetime() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!$key=\"b\"\n!function $pair($a=\"first\",$b=\"last\")\n!return $a+\"/\"+$b\n!endfunction");
+        assert_eq!(
+            ctx.eval_expr_to_value(r#"$pair($key="violet")"#)
+                .to_display(),
+            "first/last"
+        );
+        assert_eq!(ctx.substitute_vars(r#"$pair($b="blue")"#), "first/blue");
+        // Duplicate assignment leaves one key, hence RPN consumes one operand
+        // from the surrounding expression. The later binary op then underflows.
+        ctx.eval_expr_to_value(r#""prefix"+$pair($a="blue",$a="red")"#);
+        assert_eq!(
+            ctx.error.unwrap().message,
+            "Expression operand stack underflow"
+        );
+    }
+
+    #[test]
+    fn nested_calls_share_named_state_but_body_expressions_are_independent() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!function $inner($v=\"leaf\")\n!return $v\n!endfunction\n!function $pair($a=\"first\",$b=\"last\")\n!return $a+\"/\"+$b\n!endfunction");
+        ctx.eval_expr_to_value(r#"$pair($a="blue",$b=$inner())"#);
+        assert_eq!(
+            ctx.error.unwrap().message,
+            "Unknown built-in function $inner"
+        );
+    }
+
+    #[test]
+    fn plain_builtin_named_rhs_executes_without_becoming_positional() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process(
+            "@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return \"cedar\"\n!endfunction",
+        );
+        assert_eq!(
+            ctx.substitute_vars(r#"%strlen("oak",$ignored=$tick())"#),
+            "3"
+        );
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(1))));
+        ctx.substitute_vars(r#"%strlen($ignored=$tick())"#);
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(2))));
+        assert_eq!(ctx.error.unwrap().message, "Function not found %strlen");
+    }
+
+    #[test]
+    fn procedure_expression_resolves_coverage_before_kind() {
+        for (call, message) in [
+            ("$emit()", "Unknown built-in function $emit"),
+            (
+                "$emit(1)",
+                "Illegal call here. Is there a return directive in your function?",
+            ),
+        ] {
+            let mut ctx = PreprocessContext::new(None, false);
+            ctx.process("@startuml\n!procedure $emit($a)\nclass Phantom\n!endprocedure");
+            ctx.eval_expr_to_value(call);
+            assert_eq!(ctx.error.unwrap().message, message);
+            assert!(ctx.expression_events.is_empty());
+        }
+    }
+
+    #[test]
+    fn multiline_legacy_prefix_is_raw_even_after_effectful_substitution() {
+        let source = "@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return \"expanded\"\n!endfunction\n!definelong ROWS()\none\ntwo\n!enddefinelong\nnote as N\n$tick() ROWS() discarded\nend note\nclass \"$n\" as Count\n@enduml";
+        let output = preprocess_full(source, None);
+        assert!(output.error.is_none());
+        assert!(output.uml_source.contains("$tick() one\ntwo"));
+        assert!(output.uml_source.contains("class \"1\" as Count"));
+        assert!(!output.uml_source.contains("discarded"));
+    }
+
+    #[test]
+    fn nested_sub_collection_rejects_before_effects_and_reports_outer_origin() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!$n=0\n!startsub outer\n!$n=8\n!if 0\n!startsub inner\n!endif\n!endsub\nclass Lost\n@enduml");
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(0))));
+        let error = ctx.error.unwrap();
+        assert_eq!(error.message, "Cannot nest sub");
+        assert_eq!(error.line, 2);
+    }
+
+    #[test]
+    fn intval_parses_complete_signed_display_and_preserves_first_error() {
+        for (expression, expected) in [
+            (r#"%intval("+007")+2"#, 9),
+            (r#"%intval("-2147483648")"#, i32::MIN),
+            (r#"%intval(%str2json("42"))"#, 42),
+        ] {
+            let mut ctx = PreprocessContext::new(None, false);
+            assert!(matches!(ctx.eval_expr_to_value(expression), Value::Int(n) if n == expected));
+            assert!(ctx.error.is_none());
+        }
+        for text in ["12.5", " 7", "2147483648", "", "-2147483649"] {
+            let mut ctx = PreprocessContext::new(None, false);
+            ctx.eval_expr_to_value(&format!("%intval(\"{text}\")+%strlen()"));
+            assert_eq!(
+                ctx.error.unwrap().message,
+                format!("Cannot convert {text} to integer.")
+            );
+        }
+    }
+
+    #[test]
+    fn hsl_uses_typed_integer_channels_and_argb_alpha_serialization() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (expression, expected) in [
+            ("%hsl_color(0,100,50)", "#FF0000"),
+            ("%hsl_color(0,100,50,50)", "#80ff0000"),
+            (r#"%hsl_color("240",100,50)"#, "#FF0000"),
+            (r#"%hsl_color(240,100,50,"50")"#, "transparent"),
+            ("%hsl_color(240,100,50,100)", "#0000FF"),
+        ] {
+            assert_eq!(ctx.eval_expr_to_value(expression).to_display(), expected);
+            assert!(ctx.error.is_none());
+        }
+    }
+
+    #[test]
+    fn builtin_registration_distinguishes_text_and_expression() {
+        let mut ctx = PreprocessContext::new(None, false);
+        assert_eq!(
+            ctx.substitute_vars("%not_registered(3)"),
+            "%not_registered(3)"
+        );
+        assert!(ctx.error.is_none());
+        assert_eq!(
+            ctx.eval_expr_to_value("%getenv(\"plantuml.security.hidden\")")
+                .to_display(),
+            ""
+        );
+        assert_eq!(
+            ctx.eval_expr_to_value("%getenv(\"path.separator\")")
+                .to_display(),
+            if cfg!(windows) { ";" } else { ":" }
+        );
+        ctx.eval_expr_to_value("%not_registered(3)");
+        assert!(ctx.error.is_some());
+    }
+
+    #[test]
+    fn builtin_arguments_keep_types_and_utf16_units() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (expression, expected) in [
+            (r#"%substr("cedar", %str2json("2"))"#, "cedar"),
+            (r#"%substr("cedar", "2", 2)"#, "ce"),
+            (r#"%dec2hex(-3)"#, "fffffffd"),
+            (r#"%dec2hex("17")"#, "0"),
+            (r#"%strpos("🌲ab🌿cd", "cd")"#, "6"),
+            (r#"%substr("🌲ab🌿cd", 2, 2)"#, "ab"),
+            (r#"%strpos(%substr("😀",0,1)+%substr("😀",1,1),"😀")"#, "0"),
+        ] {
+            assert_eq!(ctx.eval_expr_to_value(expression).to_display(), expected);
+            assert!(ctx.error.is_none());
+        }
+    }
+
+    #[test]
+    fn case_conversion_preserves_utf16_and_chr_keeps_typed_contract() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (expr, units) in [
+            (
+                r#"%upper(%substr("🦉",0,1))+%lower(%substr("🦉",1,1))"#,
+                "🦉".encode_utf16().collect(),
+            ),
+            (
+                r#"%upper("oak"+%substr("🦉",0,1))"#,
+                vec![79, 65, 75, 0xd83e],
+            ),
+            (r#"%chr("65")"#, vec![0]),
+            (r#"%chr(%str2json("65"))"#, vec![0]),
+            ("%chr(65)", vec![65]),
+            ("%chr(55296)", vec![55296]),
+        ] {
+            assert_eq!(ctx.eval_expr_to_value(expr).utf16_units(), units, "{expr}");
+            assert!(ctx.error.is_none());
+        }
+    }
+
+    #[test]
+    fn boolval_is_text_conversion_not_truthiness() {
+        let mut ctx = PreprocessContext::new(None, false);
+        for (expr, expected) in [
+            (r#"%boolval("TrUe")+2"#, "3"),
+            (r#"%boolval(%str2json("false"))+3"#, "3"),
+            (r#"%boolval(1)+%boolval("0")"#, "1"),
+        ] {
+            assert_eq!(ctx.eval_expr_to_value(expr).to_display(), expected);
+            assert!(ctx.error.is_none());
+        }
+        ctx.eval_expr_to_value(r#"%boolval("00")"#);
+        assert_eq!(ctx.error.unwrap().message, "Cannot convert 00 to boolean.");
+    }
+
+    #[test]
+    fn arity_failure_occurs_after_arguments_and_before_body_or_next_expression() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return 1\n!endfunction");
+        ctx.eval_expr_to_value(r#"%strlen($tick(),"extra")+%date("Q",0)"#);
+        assert_eq!(
+            ctx.error.as_ref().unwrap().message,
+            "Unknown built-in function %strlen"
+        );
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(1))));
+        let output = preprocess_full(
+            "@startuml\n!function $only($a)\n!return $a\n!endfunction\n!$v=$only()\nclass After\n@enduml",
+            None,
+        );
+        assert!(
+            output
+                .error
+                .unwrap()
+                .message
+                .contains("Unknown built-in function $only")
+        );
+        assert!(!output.uml_source.contains("class"));
+    }
+
+    #[test]
+    fn named_keys_are_expression_operands_but_plain_call_literals() {
+        let source = "@startuml\n!$a=\"$b\"\n!function $pair($a=\"seed\",$b=\"leaf\")\n!return $a+\"/\"+$b\n!endfunction\n!$r=$pair($a=\"oak\",$b=4)\nclass \"$r / $pair($a=\"elm\",$b=5)\" as Keys\n@enduml";
+        // The original source is preserved: its prepared $a and $b keys
+        // are both "$b", so Java's distinct-key count requires a missing
+        // positional operand. The earlier success assertion encoded our bug.
+        let output = preprocess_full(source, None);
+        assert_eq!(
+            output.error.unwrap().message,
+            "Expression operand stack underflow"
+        );
+        assert!(!output.uml_source.contains("class"));
+    }
+
+    #[test]
+    fn legacy_calls_scan_original_text_once_with_newline_boundary() {
+        let source = "@startuml\n!define TOKEN gold\n!definelong STAMP()\nchanged\n!enddefinelong\n!$v=\"STAMP()\"\nclass \"$v / STAMP() / STAMP / north\\nTOKEN / prefixTOKEN\" as Literal\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"STAMP() / changed / STAMP / north\\ngold / prefixTOKEN\" as Literal\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn local_sub_end_suffix_closes_before_following_model() {
+        let source = "@startuml\n!$n=0\n!startsub chosen\n!$n=$n+2\n!endsub: suffix\n!includesub chosen\nclass Record$n\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass Record4\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn json_scalar_iteration_and_intermediate_missing_members_are_fatal() {
+        for expr in ["true", "3", "null", "\"text\""] {
+            let source = format!(
+                "@startuml\n!foreach $x in %str2json('{expr}')\n!endfor\nclass After\n@enduml"
+            );
+            let output = preprocess_full(&source, None);
+            assert!(output.error.is_some(), "{expr}");
+            assert!(!output.uml_source.contains("class"));
+        }
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.eval_expr_to_value(r#"{"present":1}"#);
+        ctx.process("@startuml\n!$data={\"present\":1}");
+        assert_eq!(ctx.eval_expr_to_value("$data.absent").to_display(), "");
+        assert!(ctx.error.is_none());
+        ctx.eval_expr_to_value("$data.absent[0]");
+        assert!(ctx.error.is_some());
+    }
+
+    #[test]
+    fn expression_snapshots_all_variable_operands_before_calls() {
+        let source = "@startuml\n!$n=4\n!function $step()\n!$n=$n+1\n!return 10\n!endfunction\n!$v=$step()+$n+%get_variable_value(\"$n\")\nclass \"$v / $n\" as Snapshot\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"19 / 5\" as Snapshot\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn return_unwinds_nested_loops_without_later_effects() {
+        let source = "@startuml\n!$n=0\n!function $pick()\n!foreach $x in [\"05\",\"06\"]\n!while $n < 3\n!$n=$n+1\n!return $x+2\n!$n=99\n!endwhile\n!endfor\n!return \"miss\"\n!endfunction\n!$v=$pick()\nclass \"$v / $n / $x\" as Pick\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"052 / 1 / 05\" as Pick\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn literal_values_and_captured_defines_are_not_expanded_again() {
+        let source = "@startuml\n!define FIRST LATER\n!define LATER changed\n!$v=\"LATER\"\nclass \"FIRST / $v\" as Literal\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"LATER / LATER\" as Literal\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn json_paths_and_foreach_preserve_json_type_and_global_binding() {
+        let source = "@startuml\n!$data={\"rows\":[\"009\",3]}\n!$i=0\n!$v=$data.rows[$i]+2\n!foreach $item in $data.rows\n!$last=$item+2\n!endfor\nclass \"$v / $last / $item\" as Values\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"0092 / 32 / 3\" as Values\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn builtin_and_call_kind_errors_prevent_later_effects() {
+        for expression in [
+            r#"%substr("abc",-1)"#,
+            r#"%substr("abc",0,-1)"#,
+            "%unregistered()",
+            "$emit()",
+        ] {
+            let source = format!(
+                "@startuml\n!procedure $emit()\nclass Unexpected\n!endprocedure\n!$v={expression}\nclass After\n@enduml"
+            );
+            let output = preprocess_full(&source, None);
+            assert!(output.error.is_some(), "{expression}");
+            assert!(!output.uml_source.contains("class"), "{expression}");
+        }
+    }
+
+    #[test]
+    fn includesub_expands_selector_and_validates_ignored_markers() {
+        let dir =
+            std::env::temp_dir().join(format!("rustuml-sub-selection-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(
+            dir.join("blocks.inc"),
+            "!$bad=%substr(\"a\",-1)\n!startsub\tchosen\n!$n=$n+3\n!endsub\n",
+        )
+        .unwrap();
+        let source = "@startuml\n!$n=0\n!$which=\"blocks.inc!chosen\"\n!includesub $which\nclass Record$n\n@enduml";
+        let output = preprocess_full(source, Some(dir.clone()));
+        assert!(output.error.is_none());
+        assert_eq!(output.uml_source, "@startuml\nclass Record3\n@enduml\n");
+        std::fs::write(
+            dir.join("blocks.inc"),
+            "!startsub bad-name\n!endsub\n!startsub chosen\nclass Selected\n!endsub\n",
+        )
+        .unwrap();
+        let output = preprocess_full(source, Some(dir.clone()));
+        assert_eq!(output.error.unwrap().line, 0);
+        assert!(!output.uml_source.contains("Selected"));
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    #[test]
+    fn typed_arguments_and_lookup_do_not_reinfer_strings() {
+        let source = r#"@startuml
+!$seed = "007"
+!function $suffix($a=$seed, $b=7)
+!return $a + $b
+!endfunction
+!$seed = "changed"
+!$value = $suffix($b=2)
+!$other = %get_variable_value("$value") + 3
+class "$other" as Typed
+@enduml"#;
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"00723\" as Typed\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn return_plain_simulates_nested_calls_but_procedures_emit() {
+        let source = r#"@startuml
+!$count=0
+!procedure $emit()
+class Nested
+!endprocedure
+!function $value()
+!$count=$count+1
+class Phantom
+$emit()
+!return "kept"
+!endfunction
+!$label=$value()
+class "$label $count" as Actual
+@enduml"#;
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass Nested\nclass \"kept 1\" as Actual\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn integer_arithmetic_wraps_but_literal_overflow_is_fatal() {
+        let mut ctx = PreprocessContext::new(None, false);
+        assert!(matches!(
+            ctx.eval_expr_to_value("2147483647 + 1"),
+            Value::Int(i32::MIN)
+        ));
+        assert!(matches!(
+            ctx.eval_expr_to_value("(-2147483647 - 1) - 1"),
+            Value::Int(i32::MAX)
+        ));
+        assert!(matches!(ctx.eval_expr_to_value("7 / 2"), Value::Int(3)));
+        assert!(matches!(
+            ctx.eval_expr_to_value("%str2json(\"1.5\")"),
+            Value::Json(_)
+        ));
+        ctx.eval_expr_to_value("2147483648");
+        assert!(ctx.error.is_some());
+    }
+
+    #[test]
+    fn eager_operands_do_not_execute_literal_values() {
+        let source = r#"@startuml
+!$count=0
+!function $tick()
+!$count=$count+1
+!return 1
+!endfunction
+!$v=(1 || $tick()) && (0 || "$tick()")
+class "$count / $v" as Actual
+@enduml"#;
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"1 / 1\" as Actual\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn first_error_stops_later_arguments_and_mutations() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return 1\n!endfunction");
+        ctx.eval_expr_to_value("%substr(%date(\"QQ\",0),$tick(),%date(\"XXXX\",0))");
+        assert!(
+            ctx.error
+                .as_ref()
+                .unwrap()
+                .message
+                .contains("unsupported letter Q")
+        );
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(0))));
+        ctx.eval_expr_to_value("%set_variable_value(\"$n\",9)");
+        assert!(matches!(ctx.get_var("$n"), Some(Value::Int(0))));
+        assert!(
+            ctx.error
+                .as_ref()
+                .unwrap()
+                .message
+                .contains("unsupported letter Q")
+        );
+    }
+
+    #[test]
+    fn expression_effects_reach_identity_and_parser_once() {
+        let source = "@startuml\n!$calls = 0\n!function $configure()\n!$calls = $calls + 1\n!theme cerulean\n!return \"ok\"\n!endfunction\n!$label = $configure()\nclass \"$label $calls\" as Grove\n@enduml";
+        let output = preprocess_full_for_parse(source, None);
+        assert!(output.error.is_none());
+        assert!(
+            output
+                .uml_source
+                .ends_with("class \"ok 1\" as Grove\n@enduml\n")
+        );
+        assert_eq!(
+            output
+                .uml_source
+                .matches("skinparam backgroundColor transparent")
+                .count(),
+            1
+        );
+        assert!(
+            output
+                .lines
+                .iter()
+                .any(|line| split_source_line_marker(line) == Some((8, "class \"ok 1\" as Grove")))
+        );
+        assert!(output.lines.iter().any(|line| {
+            split_source_line_marker(line)
+                .is_some_and(|(_, text)| text == "skinparam __theme cerulean")
+        }));
+    }
+
+    #[test]
+    fn diagnostic_evaluation_is_ordered_and_not_replayed() {
+        let source = "@startuml\n!$n = 0\n!function $tick($digit)\n!$n = $n * 10 + $digit\n!return $digit\n!endfunction\n!log $tick(1) $tick(2)\n!if 0\n!log $tick(9)\n!endif\n!log $tick(3)\nclass Record$n\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass Record123\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn declaration_defaults_capture_nested_values_once() {
+        let source = "@startuml\n!$seed = \"first\"\n!function $value($ignored)\n!return $seed\n!endfunction\n!procedure $emit($label = $value('é,(x)'))\nclass \"$label\" as Grove\n!endprocedure\n!$seed = \"second\"\n$emit()\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"first\" as Grove\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn quoted_lookup_tokens_preserve_names_and_unicode_boundaries() {
+        let source = "@startuml\n!$cedar = \"green\"\n!function $name($ignored, $key)\n!return $key\n!endfunction\n!$a = %variable_exists(\"$\" + 'cedar')\n!$b = %get_variable_value($name('é,(x)', '$cedar'))\nclass \"$a / $b\" as Grove\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"1 / green\" as Grove\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn a_label_with_parentheses_is_not_a_standalone_call() {
+        let source = "@startuml\n!function $double($n)\n!return $n * 2\n!endfunction\nAlice -> Bob : double(3) = $double(3)\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nAlice -> Bob : double(3) = 6\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn invalid_date_returns_a_located_preprocessing_error() {
+        for expr in [
+            "%date(\"QQ\", 0)",
+            "%date(\"yyyy\", 2147483648)",
+            "%date(\"XXXX\", 0)",
+        ] {
+            let output = preprocess_full(
+                &format!("@startuml\n!$value = {expr}\nclass Lost\n@enduml"),
+                None,
+            );
+            assert_eq!(output.error.as_ref().map(|error| error.line), Some(1));
+            assert!(!output.uml_source.contains("class Lost"));
+        }
+    }
+
+    #[test]
+    fn evaluated_sprite_is_shared_by_identity_and_extraction() {
+        let source = "@startuml\n!$pixels = \"FA\"\nsprite $badge [2x1/16] {\n$pixels\n}\nclass Ledger\n@enduml";
+        let output = preprocess_full(source, None);
+        assert_eq!(
+            output.uml_source,
+            "@startuml\nsprite $badge [2x1/16] {\nFA\n}\nclass Ledger\n@enduml\n"
+        );
+        assert_eq!(output.sprites["badge"].rows, ["FA"]);
+        assert!(!output.lines.iter().any(|line| line == "FA"));
+    }
+
+    #[test]
+    fn subblock_execution_updates_content_and_identity_once() {
+        let source = "@startuml\n!$count = 0\n!startsub setup\n!$count = $count + 1\nskinparam classBorderColor #124578\n!endsub\nclass Record$count\n@enduml";
+        let output = preprocess_full(source, None);
+        assert_eq!(
+            output.uml_source,
+            "@startuml\nskinparam classBorderColor #124578\nclass Record1\n@enduml\n"
+        );
+        assert!(output.lines.iter().any(|line| line == "class Record1"));
+        assert!(
+            output
+                .lines
+                .iter()
+                .any(|line| line == "skinparam classBorderColor #124578")
+        );
+    }
+
+    #[test]
+    fn inactive_theme_and_option_keep_following_source_origin() {
+        let source = "@startuml\n!if 0\n!theme minty\n!option handwritten true\n!endif\nclass Ledger\n@enduml";
+        let output = preprocess_full_for_parse(source, None);
+        assert_eq!(output.uml_source, "@startuml\nclass Ledger\n@enduml\n");
+        assert_eq!(output.lines[4], "class Ledger");
+    }
+
+    #[test]
+    fn procedure_frames_are_siblings_rooted_at_global_memory() {
+        let source = r#"@startuml
+!$shared = "global"
+!procedure $inner()
+inside $shared $fresh
+!endprocedure
+!procedure $outer($shared)
+!$fresh = "private"
+$inner()
+outer $shared $fresh
+!endprocedure
+$outer("argument")
+after $shared $fresh
+@enduml"#;
+        assert_eq!(
+            pp(source),
+            [
+                "inside global $fresh",
+                "outer argument private",
+                "after global $fresh"
+            ]
+        );
+    }
+
+    #[test]
+    fn explicit_global_assignment_does_not_replace_parameter_override() {
+        let source = r#"@startuml
+!$name = "before"
+!procedure $set($name)
+!global $name = "after"
+local $name
+!endprocedure
+$set("argument")
+global $name
+@enduml"#;
+        assert_eq!(pp(source), ["local argument", "global after"]);
+    }
+
+    #[test]
+    fn lookup_names_remain_literal_and_observe_current_frame() {
+        let source = r#"@startuml
+!$shade = "value"
+!procedure $inspect($local)
+%variable_exists("$shade") %variable_exists("shade") %variable_exists("$local")
+!endprocedure
+$inspect("payload")
+%variable_exists("$local")
+@enduml"#;
+        assert_eq!(pp(source), ["1 0 1", "0"]);
+    }
+
+    #[test]
+    fn explicit_date_uses_signed_seconds_and_expression_arguments() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.render_clock.tz = TzSpec {
+            name: "UTC".to_string(),
+            long_name: "Coordinated Universal Time".to_string(),
+            offset_secs: 0,
+        };
+        // Check the formatter independently of the host zone and current year.
+        assert_eq!(
+            date_format::format(-86400000, &ctx.render_clock.tz, "yyyy-MM-dd EEE").unwrap(),
+            "1969-12-31 Wed"
+        );
+        let result = ctx
+            .eval_expr_to_value("%date(\"yyyy\", 946684800)")
+            .to_display();
+        assert_eq!(result, "2000");
+        assert_eq!(
+            ctx.substitute_vars("%date(\"yyyy\", 946684800 + 86400)"),
+            "2000"
+        );
+        assert_eq!(ctx.substitute_vars("%date(\"\", 0)"), "");
+    }
+
+    #[test]
+    fn caller_origin_survives_a_procedure_that_emits_a_theme() {
+        let input = "@startuml\n!procedure $setup()\n!theme cerulean\n!endprocedure\n$setup()\nclass Ledger\n@enduml";
+        let output = preprocess_full_for_parse(input, None);
+        assert!(
+            output
+                .lines
+                .iter()
+                .any(|line| split_source_line_marker(line) == Some((5, "class Ledger")))
+        );
+    }
+
+    #[test]
+    fn legacy_define_names_are_visible_to_lookup() {
+        let source = "@startuml\n!define TOKEN amber\n%variable_exists(\"TOKEN\") %get_variable_value(\"TOKEN\")\n@enduml";
+        assert_eq!(pp(source), ["1 amber"]);
     }
 
     #[test]
@@ -3560,7 +4859,11 @@ mod tests {
     fn define_substitution() {
         let input = "@startuml\n!define NAME Alice\n$NAME -> Bob : hello\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["$Alice -> Bob : hello"]);
     }
 
     #[test]
@@ -3595,7 +4898,11 @@ mod tests {
     fn if_else() {
         let input = "@startuml\n!define MODE prod\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["A -> B : production"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["A -> B : dev"]);
     }
 
     #[test]
@@ -3668,10 +4975,10 @@ now-undefined
     }
 
     #[test]
-    fn inline_comment() {
+    fn trailing_apostrophe_is_plain_text() {
         let input = "@startuml\nAlice -> Bob : hello ' with comment\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello "]);
+        assert_eq!(lines, vec!["Alice -> Bob : hello ' with comment"]);
     }
 
     #[test]
@@ -3700,7 +5007,11 @@ now-undefined
     fn multiple_vars() {
         let input = "@startuml\n!define FROM Alice\n!define TO Bob\n!define MSG hello\n$FROM -> $TO : $MSG\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["$Alice -> $Bob : $hello"]);
     }
 
     #[test]
@@ -3746,7 +5057,11 @@ now-undefined
 
         let input = "@startuml\n!include defs.puml\n$AUTHOR -> Bob : hi\n@enduml";
         let lines = preprocess_with_base(input, &dir);
-        assert_eq!(lines, vec!["Alice -> Bob : hi"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(lines, vec!["$Alice -> Bob : hi"]);
 
         let _ = std::fs::remove_dir_all(&dir);
     }
@@ -3776,7 +5091,14 @@ now-undefined
     fn foreach_preserves_other_vars() {
         let input = "@startuml\n!define WHO Alice\n!foreach $x in [\"hello\", \"world\"]\n$WHO -> Bob : $x\n!endfor\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello", "Alice -> Bob : world"]);
+        // EaterAffectationDefine stores NAME only; ShuntingYard resolves
+        // $NAME independently, while VariableManager scans bare NAME after '$'.
+        // TIM7 supplement2 define_spelling/define_condition confirms this;
+        // the original input and prior assertion are preserved in maker evidence.
+        assert_eq!(
+            lines,
+            vec!["$Alice -> Bob : hello", "$Alice -> Bob : world"]
+        );
     }
 
     #[test]
@@ -3856,7 +5178,8 @@ class QuartzLedger {
 
         let lines = preprocess_full_for_parse(input, None).lines;
         assert_eq!(lines[4], "class QuartzLedger {");
-        assert_eq!(lines[5], "  +token: String");
+        // TContext appends caller prefix and TFunctionImpl legacy return verbatim.
+        assert_eq!(lines[5], "    +token: String");
     }
 
     #[test]
@@ -3980,7 +5303,7 @@ $record(SaffronArchive)\n\
     }
 
     #[test]
-    fn source_identity_drops_only_raw_empty_lines_after_start() {
+    fn source_identity_preserves_raw_empty_lines_after_start() {
         let input = concat!(
             "@startuml\n",
             "\n",
@@ -4004,6 +5327,8 @@ $record(SaffronArchive)\n\
             output.uml_source,
             concat!(
                 "@startuml\n",
+                "\n",
+                "\n",
                 "skinparam shadowing true\n",
                 "start\n",
                 ":Fresh intake;\n",
@@ -4086,22 +5411,17 @@ $record(SaffronArchive)\n\
 
     #[test]
     fn dump_memory_no_vars() {
-        // With no defines, !dump_memory emits an empty dump comment.
+        // Java TContext.executeDumpMemory adds no source line.
         let input = "@startuml\n!dump_memory\nA -> B\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["' [dump] ", "A -> B"]);
+        assert_eq!(lines, vec!["A -> B"]);
     }
 
     #[test]
     fn dump_memory_with_vars() {
         let input = "@startuml\n!$foo = \"bar\"\n!$baz = \"qux\"\n!dump_memory\n@enduml";
         let lines = pp(input);
-        // Output must contain the dump comment. Variable order is sorted.
-        assert_eq!(lines.len(), 1);
-        let dump = &lines[0];
-        assert!(dump.starts_with("' [dump] "), "got: {dump}");
-        assert!(dump.contains("baz=qux"), "got: {dump}");
-        assert!(dump.contains("foo=bar"), "got: {dump}");
+        assert!(lines.is_empty());
     }
 
     #[test]
@@ -4180,11 +5500,11 @@ $record(SaffronArchive)\n\
     }
 
     #[test]
-    fn builtin_feature_returns_false() {
-        // All features are unsupported; always returns "false".
+    fn builtin_feature_returns_numeric_false() {
+        // Feature.executeReturnFunction returns TValue.fromInt(0) for this key.
         let input = "@startuml\n!$f = %feature(\"dark-mode\")\nnote : $f\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["note : false"]);
+        assert_eq!(lines, vec!["note : 0"]);
     }
 
     #[test]

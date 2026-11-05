@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-value-boundaries",
+  "reviewer": {
+    "task_id": "t3-04b6729a-independent-TIM-checker5",
+    "thread_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ad979fae3-777e-4583-b22b-5ed91f03f235",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no production edits; no children"
+  },
+  "account_commit": "6d46a483aad389d4535e1ba24822fdd116baf517",
+  "implementation_commit": "92647b126f6dc1c83ebdc6213d0c2c0a5b3211b6",
+  "tested_revision": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+  "baseline_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "prior_rejection": "0d30ae99e85195f595e21ca0a80be85f26473ee9",
+  "evidence_import": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_locations": [
+    "tim/builtin/Upper.java:executeReturnFunction",
+    "tim/builtin/Lower.java:executeReturnFunction",
+    "tim/builtin/Chr.java:executeReturnFunction",
+    "tim/builtin/BoolVal.java:executeReturnFunction",
+    "tim/expression/TValue.java:toInt"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "commands": [
+    "CARGO_TARGET_DIR=<private-cache>/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact before",
+    "CARGO_TARGET_DIR=<private-cache>/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact candidate",
+    "uv run --no-project python <private-cache>/replay.py <fixed cohort>; before and after -pipe and --yaml -pipe; unchanged compare_svg_strict",
+    "Parent relay: /Users/marcelo/rustuml-reference/bin/reference --cwd <worker>/<new|supplement> --timezone GMT+11:00 -- -pipe -tsvg; unchanged SourceProbe.java; exact argv/streams captured per case",
+    "uv run --no-project python <private-cache>/gates.py; exact candidate main tiers once; full command/status manifest in checker5-support/gates.json"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.svg",
+      "axes": [
+        "UTF16 split position",
+        "upper/lower and expansion"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "f2c4a07a7b473df0992ca55f1a5329e72cf5bc64e5ca6cc7d8109d0308e1bd7f",
+      "golden_sha256": "d6bbbafbd1cd718ac59c6dcc54db1d878499eea238ddcfa62488a8a9bf83d4dc",
+      "evidence": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/evidence/units_rejoin",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/chr_types.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/chr_types.svg",
+      "axes": [
+        "integer/string/JSON",
+        "invalid code point"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "5323e3e3a45ec1271c501bca30b60d6e3b1fc8bc7a49058d240fbb5b721cb8b6",
+      "golden_sha256": "c1934fdd61417c3163415c9a17b61c686ebb7430aff0d03671022e54c80a7bf3",
+      "evidence": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/evidence/chr_types",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/bool_types.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/bool_types.svg",
+      "axes": [
+        "JSON/text/number",
+        "arithmetic result type"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "068168053ad187d5ada3233e6fd869c95354723f70ba702fa39703136179168e",
+      "golden_sha256": "0bb41605b7f51abf537798c851054781cb281f10839dec5e8491a3899992e3d9",
+      "evidence": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/evidence/bool_types",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/bool_space_error.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/bool_space_error.svg",
+      "axes": [
+        "whitespace",
+        "first error before arity"
+      ],
+      "result": "pass",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 1,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "393c0edca8167571677dd2ba1527f7e3fb4d788b0dad9f436d5348d9ad773309",
+      "golden_sha256": "f65647fe52e7728e67855e7302ea86529f892953dea480f8b0d6d16f64107780",
+      "evidence": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/evidence/bool_space_error",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+      "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.svg",
+      "axes": [
+        "surrogate side",
+        "text projection"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "8bd68f21bf9de5cfc752b31bad13d271a5c76bd25de9ea15f6e8b583a015299c",
+      "golden_sha256": "26c71a86b08453517ad5aa4f9699f2b4a1175d1cc00f01864e33941fc00a9b4a",
+      "evidence": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/evidence/surrogate_display_residue",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "known outside-bound residual",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    }
+  ],
+  "findings": [
+    "SUPPORTED WITHIN THE BOUNDED MODEL: units_rejoin preserves unmatched UTF-16 halves through lower/upper, joins them before display and gives typed numeric results2/2/4. chr_types covers integer90, string90, JSON90 and invalid code points: source and actual CLI SVG agree0/0/0/0. bool_types distinguishes explicit conversion from truthiness and proves integer return through arithmetic9/9/1. bool_space_error reports the Boolean conversion before the later strlen arity error.",
+    "Java Upper/Lower use String case mapping; Chr uses TValue.toInt and Character.toChars with NUL fallback; BoolVal accepts only lowercased true/1/false/0. Rust corresponding branches now preserve these tested contracts. New arities, 0/1 conversions and character-domain branches have named Java provenance, not fixture text or fitted constants.",
+    "NO DISPLAY WAIVER: surrogate_display_residue has Java exit0 with a well-formed crash SVG (An error has occured; invalid XML character0xde80), while SourceProbe exits0 and encodes the low surrogate as ?. Rust emits U+FFFD and exits0. This is outside the explicitly bounded maker claim but prevents any invariant asserting faithful UTF-16 text projection. It remains a failing pair, not a valid match.",
+    "No new in-scope conversion failure was found. The review verdict remains rejected for acceptance because the mandatory unchanged standing perturbation gate is red and the preserved display residual fails. This is not a finding that the tested split/rejoin or Chr/BoolVal correction is wrong. Unicode-version/locale equivalence remains unproved."
+  ],
+  "next_causal_repair": "No conversion repair demonstrated by the fresh bounded tests. Track isolated-surrogate projection separately without erasing its negative evidence; do not assert Unicode/locale or text projection parity.",
+  "verdict": "rejected",
+  "bounded_mechanism_observation": "supported on tested axes; acceptance withheld by unchanged red standing gate",
+  "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/checker5-support/README.md",
+  "scope": "Only exact1703a272 versus exactee0e4c72. No whole-TIM or combined candidate acceptance. Earlier rejected records and every old reference remain immutable. The mandatory standing perturbation gate is red; negative error references remain failures there, even when rejection behavior is correct. No comparator, baseline, skip rule, reader, date, parser, renderer, target or shipping change."
+}

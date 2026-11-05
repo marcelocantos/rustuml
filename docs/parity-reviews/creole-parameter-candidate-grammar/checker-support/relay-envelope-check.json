@@ -1,0 +1,12 @@
+{
+  "lossless": true,
+  "files": 36,
+  "hashes": {
+    "request.json": "4fc59e99235ab029f9fb2d39867cd9d49f0945ca2b181cf3dbeca4551d479644",
+    "manifest.json": "667018e7655f61d47918b1ba15110e945febacb84e9c96082d03924366f132d7",
+    "input-bundle.json.gz": "f49260a7b36240513a70e3a4e23ad9f66928abc80d7fae4b3ce11dedabb49d39",
+    "parent-relay-input.json.gz": "7e578f0fb700122c87a700de54de4f4b94021d2e8819dda0b3f4246fba30efed",
+    "reference-results.json.gz": "ac7c26b4847d5ce2bc9ffe64a2aeafcd3438c5618aa7dce1a51eb3f2d25aaa98",
+    "reference-transport.json": "84d60020c52c37fb9b52805b31b37aca8bfa56ec50016b974e4c9f35a0b1c1b0"
+  }
+}

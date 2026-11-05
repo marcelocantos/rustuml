@@ -1,0 +1,5 @@
+@startuml
+!$data={"ok":{}}
+!$bad=$data.absent[0]
+class Lost
+@enduml

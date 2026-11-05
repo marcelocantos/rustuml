@@ -1,0 +1,7 @@
+@startuml
+!$data={"items":["001",2],"flags":{"a":true,"b":null}}
+!$idx="1"
+!$v=$data.items[$idx]+3
+!$w=$data.flags.a+"/"+$data.flags.b
+class "$v / $w" as JsonValues
+@enduml

@@ -1,0 +1,401 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "builtin typed argument boundary",
+      "string/JSON/integer or UTF16"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_default.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "JSON declaration capture",
+      "named override with numeric string"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "JSON field and array indexing",
+      "numeric-looking string type"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_named_siblings.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "sibling/global versus parameter memory",
+      "named/default types"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "variable token capture timing",
+      "function side effect"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "legacy token adapter",
+      "quoted returned text"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_wrap_mul.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "axes": [
+      "signed int arithmetic",
+      "explicit date conversion"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_div.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "axes": [
+      "signed int arithmetic",
+      "explicit date conversion"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_quotient.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "axes": [
+      "signed int arithmetic",
+      "explicit date conversion"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_shift_scope.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "operator grammar boundary",
+      "integer"
+    ],
+    "kind": "fresh independent",
+    "scope_probe": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unary_variable.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "axes": [
+      "unary signed expression",
+      "typed variable"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_eager_recursion.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "recursive effects",
+      "AND and OR eager operand order"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_quoted_unicode.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "Unicode literal function text",
+      "logical truth without reparsing"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "logical eager call",
+      "variable read timing"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "builtin exception before date",
+      "first error cancellation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "unknown builtin before date",
+      "first error cancellation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "nested function origins",
+      "multiple fatal expressions"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "axes": [
+      "integer literal before invalid formatter",
+      "diagnostic and source line"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "axes": [
+      "default evaluation exceptions",
+      "declaration-time order"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "recursive return frames",
+      "nested emitting procedure versus plain suppression"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "return inside while",
+      "post-return mutation"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "typed foreach values",
+      "early return termination"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "procedure versus return call context",
+      "illegal expression invocation"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "declaration kind",
+      "documented no-return extension"
+    ],
+    "kind": "fresh independent",
+    "scope_probe": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape repeated",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape tabs",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape nested",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "raw block selection shape relative",
+      "caller memory and ignored errors"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "evaluated selected name",
+      "ignored fatal prelude"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml",
+    "mechanism": "tim-external-sub-selection",
+    "axes": [
+      "selected fatal versus ignored body",
+      "first diagnostic and file origin"
+    ],
+    "kind": "fresh independent",
+    "negative_intent": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+    "mechanism": "tim-function-execution-kind",
+    "axes": [
+      "external sub in return function",
+      "nested include and execution-kind restoration"
+    ],
+    "kind": "fresh independent"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Europe/London",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Europe/London",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Europe/London",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Europe/London",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Australia/Lord_Howe",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Australia/Lord_Howe",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Europe/Dublin",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Europe/Dublin",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "zone Asia/Kathmandu",
+      "run widths and daylight/instant"
+    ],
+    "kind": "fresh independent",
+    "zone": "Asia/Kathmandu",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "fixed fractional offset",
+      "negative epoch and width"
+    ],
+    "kind": "fresh independent",
+    "zone": "GMT-03:30",
+    "debug": "date=1774210426000,tz=FIX-0330"
+  }
+]

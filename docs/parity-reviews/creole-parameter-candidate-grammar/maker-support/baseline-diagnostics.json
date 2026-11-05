@@ -1,0 +1,57 @@
+[
+  {
+    "name": "product",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/target-before/release/deps/golden_no_oracle-901d5e92a3796558",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4"
+    },
+    "binary_sha256": "28e4ee3de5be1607a96b834a8c2709eb660f30691c6a2b6ad170143a1003b82c",
+    "prior_maker_binary": "/Users/marcelo/Library/Caches/rustuml-creole-hide-flush-maker/target-after/release/deps/golden_no_oracle-901d5e92a3796558",
+    "matches_prior_binary": true,
+    "prior_production": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+    "exit": 101,
+    "initial_losses": [
+      "activity/act_creole_monospace",
+      "creole/creole_font_name_in_activity",
+      "creole/creole_font_name_in_class",
+      "creole/creole_font_name_in_note",
+      "creole/creole_font_name_in_sequence",
+      "creole/creole_font_name_in_title"
+    ],
+    "initial_gains": []
+  },
+  {
+    "name": "assisted",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/target-before/release/deps/golden_pairs-88a993b69eca84e7",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RAYON_NUM_THREADS": "4",
+      "RUST_TEST_THREADS": "4"
+    },
+    "binary_sha256": "6317ffd9cb66577146005ca6609877969ed20ff2a40bd3d44cf5a32419083901",
+    "prior_maker_binary": "/Users/marcelo/Library/Caches/rustuml-creole-hide-flush-maker/target-after/release/deps/golden_pairs-88a993b69eca84e7",
+    "matches_prior_binary": true,
+    "prior_production": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+    "exit": 101,
+    "initial_losses": [
+      "activity/act_creole_monospace",
+      "creole/creole_font_name_in_activity",
+      "creole/creole_font_name_in_class",
+      "creole/creole_font_name_in_sequence",
+      "creole/creole_font_name_in_title"
+    ],
+    "initial_gains": []
+  }
+]

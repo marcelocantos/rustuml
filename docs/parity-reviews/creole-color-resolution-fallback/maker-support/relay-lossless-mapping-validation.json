@@ -1,0 +1,6 @@
+{
+  "transport_bytes_equal": true,
+  "metadata_bytes_equal": true,
+  "resources": 16,
+  "all_resource_bytes_equal": true
+}

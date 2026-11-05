@@ -1,0 +1,32 @@
+{
+  "accounts_unchanged": [
+    "tim-rpn-call-state",
+    "tim-call-operand-resolution",
+    "tim-legacy-raw-caller-prefix",
+    "tim-local-sub-collection",
+    "tim-intval-conversion",
+    "tim-hsl-typed-alpha"
+  ],
+  "chronology": "079c1bc1 < c91103f9 < f663c083 < 4a288dd4; ancestry and blobs checked",
+  "production_only_paths": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "production_equals_candidate": true,
+  "old_evidence_checks": [
+    {
+      "revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+      "files": 7866
+    },
+    {
+      "revision": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+      "files": 8295
+    }
+  ],
+  "java_sources_verified": 19,
+  "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "binaries": {
+    "before": "97be1c5eea770f5cb613df5baaca97572c9301664202ebcaa120ba66042b5f41",
+    "after": "8f2ae378b625379fb7922049bcc02d360b197d79b8b68b82da5be5e7b09f72de"
+  },
+  "probe_sha256": "43ce27167f6ad8697a8043edbb4f580ddbf9ab68b4e0ea4db15f2a69e3fc97b5"
+}

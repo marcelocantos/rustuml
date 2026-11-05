@@ -1,0 +1,3 @@
+@startuml
+class "fir/end/ar/ash/end" as Valid
+@enduml

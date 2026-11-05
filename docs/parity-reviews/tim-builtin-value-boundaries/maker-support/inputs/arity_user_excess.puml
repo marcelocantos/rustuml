@@ -1,0 +1,7 @@
+@startuml
+!function $only($a)
+!return $a
+!endfunction
+!$bad=$only(1,2)
+class Lost
+@enduml

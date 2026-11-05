@@ -1,0 +1,5 @@
+@startuml
+!$a=%substr("cedar",0,-2)
+!$b=%unknown_later()
+class Unreachable
+@enduml

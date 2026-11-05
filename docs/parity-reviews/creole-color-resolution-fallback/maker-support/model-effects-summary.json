@@ -1,0 +1,8 @@
+{
+  "entries": 2050,
+  "all_full_yaml_byte_equal": true,
+  "raw_byte_changes": [],
+  "semantic_changes": [],
+  "UID_identity_factory_source_topology_changes": [],
+  "serialization": "Full YAML semantic models unchanged. Any raw mapping-order delta is retained and independently reported; DiagramMeta.sprites HashMap ordering belongs to T14.6.6. No rerun to force equality."
+}

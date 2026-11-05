@@ -1,0 +1,6 @@
+@startuml
+!$a=%intval("+007")+2
+!$b=%intval("-2147483648")
+!$c=%intval(%str2json("42"))+1
+class "$a/$b/$c" as Integers
+@enduml

@@ -1,0 +1,22 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/supplement/no_rescan.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim8-maker/supplement/markup_scan.puml",
+    "mechanism": "tim-memory-trie-text-lookup",
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "supplement",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

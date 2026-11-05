@@ -1,0 +1,6 @@
+@startwbs
+* Grove
+** East\n<size:20>Branch</size>
+*** Leaf
+-- West
+@endwbs

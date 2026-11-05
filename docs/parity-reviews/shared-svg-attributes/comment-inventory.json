@@ -1,0 +1,509 @@
+{
+  "candidate_count": 50,
+  "emission_count": 49,
+  "user_string_emission_count": 45,
+  "generated_emission_count": 4,
+  "non_emission_candidates": 1,
+  "sites": [
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 11057,
+      "comment_template": "<!--rustuml-ftile-deferred-connector:{}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "ctive: false,\n            swimlane_cross_lane: None,\n        }\n    }\n\n    fn defer_connectors_from(&mut self, start: usize) {\n        if self.connectors.len() == start {\n            return;\n        }\n        let fragment = self.connectors.split_off(start);\n        let marker = format!(\n            \"<!--rustuml-ftile-deferred-connector:{}-->\",\n            self.deferred_connector_fragments.len()\n        );\n        self.connectors.push_str(&marker);\n        self.deferred_connector_fragments.push((marker, fragment));\n    }\n\n    fn flush_deferred_connectors(&mut self, count: usize) {\n        let pending = self\n            .deferred_connect",
+      "dataflow_class": "numeric/generated internal marker",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 11539,
+      "comment_template": "<!--rustuml-swimlane-v2-partition:{id}:{lane}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "       let Some(frame) = self.swimlane_v2_partition_frames.get_mut(id) else {\n                continue;\n            };\n            if frame.lanes.contains(&lane) {\n                continue;\n            }\n            frame.lanes.push(lane);\n            self.shapes\n                .push_str(&format!(\"<!--rustuml-swimlane-v2-partition:{id}:{lane}-->\"));\n        }\n    }\n\n    fn line_styled(\n        &mut self,\n        stroke: &str,\n        stroke_width: &str,\n        x1: f64,\n        x2: f64,\n        y1: f64,\n        y2: f64,\n        dashed: bool,\n    ) {\n        let start = self.connectors.len();\n        let dash = if dashed { \"stroke-dasharray",
+      "dataflow_class": "numeric/generated internal marker",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 13272,
+      "comment_template": "<!--rustuml-swimlane-v2-partition:{id}:{entry_lane}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "              is_group: *is_group,\n                        top: partition_top,\n                        height: partition_h,\n                        entry_lane,\n                        lanes: vec![entry_lane],\n                    });\n                svg.shapes.push_str(&format!(\n                    \"<!--rustuml-swimlane-v2-partition:{id}:{entry_lane}-->\"\n                ));\n                svg.swimlane_v2_partition_stack.push(id);\n            } else {\n                svg.partition_rect(\n                    &resolved_fill,\n                    partition_h,\n                    partition_w,\n                    partition_x,\n                    partitio",
+      "dataflow_class": "numeric/generated internal marker",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 19560,
+      "comment_template": "<!--rustuml-swimlane-v2-partition:{frame_id}:{lane}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": " -> Option<f64> {\n    let i = shapes.find(\"<ellipse\")?;\n    let rest = &shapes[i..];\n    let cy_at = rest.find(r#\"cy=\"\"#)? + 4;\n    let end = rest[cy_at..].find('\"')?;\n    rest[cy_at..cy_at + end].parse().ok()\n}\n\nfn swimlane_v2_partition_marker(frame_id: usize, lane: usize) -> String {\n    format!(\"<!--rustuml-swimlane-v2-partition:{frame_id}:{lane}-->\")\n}\n\nfn swimlane_v2_partition_frame_svg(\n    frame: &SwimlaneV2PartitionFrame,\n    lane_left: f64,\n    lane_w: f64,\n    top: f64,\n) -> String {\n    let title_w = partition_title_width(&frame.name);\n    let partition_x = lane_left + 6.0;\n    let partition_w = (lane_w - 10.0).max(title_w + 15.0);\n   ",
+      "dataflow_class": "numeric/generated internal marker",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 25684,
+      "comment_template": "<!--rustuml-swimlane-v2-partition:\") {\n            let Some(end) = lane_shape[start..].find(\"-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "         lane_left[lane],\n                lane_w[lane],\n                frame.top + lane_dy[lane],\n            );\n            lane_shapes[lane] = lane_shapes[lane].replace(&marker, &frame_svg);\n        }\n    }\n    for lane_shape in &mut lane_shapes {\n        while let Some(start) = lane_shape.find(\"<!--rustuml-swimlane-v2-partition:\") {\n            let Some(end) = lane_shape[start..].find(\"-->\") else {\n                break;\n            };\n            lane_shape.replace_range(start..start + end + 3, \"\");\n        }\n    }\n    let mut compression_lane_conns: Option<Vec<String>> = None;\n    let mut routed_split_collector = false;\n\n    let arrow_color = svg.palette.arrow_color.clone();\n\n    /",
+      "dataflow_class": "search/read pattern, not an emission",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 27344,
+      "comment_template": "<!--link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "ngent_x / tangent_length * 6.0,\n        tangent_y / tangent_length * 6.0,\n    );\n    let last = shortened.len() - 1;\n    shortened[last].0 += shift.0;\n    shortened[last].1 += shift.1;\n    shortened[last - 1].0 += shift.0;\n    shortened[last - 1].1 += shift.1;\n\n    write!(\n        body,\n        r##\"<!--link {} to {}--><g class=\"link\" data-entity-1=\"ent{:04}\" data-entity-2=\"ent{:04}\" data-link-type=\"dependency\" data-source-line=\"{}\" id=\"lnk{}\"><path d=\"{}\" fill=\"none\" id=\"{}-to-{}\" style=\"stroke:#181818;stroke-width:1;\"/><polygon fill=\"#181818\" points=\"{}\" style=\"stroke:#181818;stroke-width:1;\"/>\"##,\n        escap",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/activity.rs",
+      "line": 28296,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "tr,\n    x: f64,\n    y: f64,\n    right: f64,\n    bottom: f64,\n    label_w: f64,\n) {\n    // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_partition.svg.\n    let header_y = y + 22.4883;\n    let tab_right = x + label_w + 6.0;\n    let tab_tip = tab_right + 7.0;\n    write!(\n        out,\n        r##\"<!--cluster {}--><g class=\"cluster\" data-qualified-name=\"{}\" data-source-line=\"1\" id=\"ent0002\"><polygon fill=\"none\" points=\"{},{},{},{},{},{},{},{},{},{},{},{},{},{}\" style=\"stroke:#000000;stroke-width:1.5;\"/><line style=\"stroke:#000000;stroke-width:1.5;\" x1=\"{}\" x2=\"{}\" y1=\"{}\" y2=\"{}\"/><text fill=\"#000000\" font-fa",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "line": 199,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "id.clone(), bare.to_string());\n        }\n    }\n    map\n}\n\n/// Emit a single `<g class=\"entity\">` group: body shape, corner icon, label.\nfn emit_entity(svg: &mut SvgBuilder, ent: &OracleEntity, elem: &ArchimateElement) {\n    let r = &ent.rect;\n    let qn = &ent.qualified_name;\n\n    svg.raw(&format!(\"<!--entity {}-->\", elem.id));\n\n    let source_attr = r\n        .source_line\n        .as_deref()\n        .map(|s| format!(r#\" data-source-line=\"{s}\"\"#))\n        .unwrap_or_default();\n    let id = r.entity_id.as_deref().unwrap_or(\"ent0000\");\n    svg.raw(&format!(\n        r#\"<g class=\"entity\" data-qualified-name=\"{qn}",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "line": 391,
+      "comment_template": "<!--{prefix} {from} to {to}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "| id_to_name.get(i))\n        .cloned()\n        .unwrap_or_default();\n    let to = edge\n        .entity_2\n        .as_deref()\n        .and_then(|i| id_to_name.get(i))\n        .cloned()\n        .unwrap_or_default();\n    let prefix = if reverse { \"reverse link\" } else { \"link\" };\n    svg.raw(&format!(\"<!--{prefix} {from} to {to}-->\"));\n\n    let entity_1 = edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n    let entity_2 = edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n    let link_id = edge.link_id.as_deref().unwrap_or(\"lnk0\");\n    let source_attr = edge\n        .source_line\n        .as_deref()\n        .map(|s| format!(r#\" data",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/archimate.rs",
+      "line": 608,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "with_family(&group.label, FONT_SIZE, FONT_FAMILY);\n        let source_attr = if group.source_line > 0 {\n            format!(r#\" data-source-line=\"{}\"\"#, group.source_line)\n        } else {\n            String::new()\n        };\n        let entity_id = &uids.group_ids[index];\n        svg.raw(&format!(\"<!--cluster {}-->\", escape_text(&group.label)));\n        svg.raw(&format!(\n            r#\"<g class=\"cluster\" data-qualified-name=\"{}\"{source_attr} id=\"{entity_id}\">\"#,\n            escape_text(&group.label),\n        ));\n        svg.raw(&format!(\n            r#\"<rect fill=\"{fill}\" height=\"{}\" rx=\"0.5\" ry=\"0.5\" style=\"",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 5281,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "t oracle_note_entities: Vec<&crate::layout_oracle::OracleNoteEntity> = oracle\n        .map(|o| o.note_entities.iter().collect())\n        .unwrap_or_default();\n    oracle_note_entities.sort_by_key(|n| ent_id_seq(n.entity_id.as_deref()));\n    for cluster in &oracle_pkg_clusters {\n        write!(svg, \"<!--cluster {}-->\", cluster.qualified_name).unwrap();\n        let cluster_id = cluster.entity_id.as_deref().unwrap_or(\"ent0002\");\n        let source_line = cluster.source_line.as_deref().unwrap_or(\"0\");\n        write!(\n            svg,\n            r#\"<g class=\"cluster\" data-qualified-name=\"{}\" data-source-line=\"{}\" ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 5485,
+      "comment_template": "<!--class {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "      emit_no_oracle_lollipop_entity(\n                &mut svg,\n                entity,\n                &generated_name,\n                &current_ent_id,\n                x,\n                y,\n            );\n            continue;\n        }\n\n        // HTML comment before entity.\n        write!(svg, \"<!--class {}-->\", entity.label).unwrap();\n\n        // Entity group wrapper.\n        write!(\n            svg,\n            r#\"<g class=\"entity\" data-qualified-name=\"{}\"\"#,\n            escape_xml(qualified_name),\n        )\n        .unwrap();\n        if let Some(source_line) = oracle_rect\n            .and_then(|r| r.s",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 6014,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "        y: pos.y + MARGIN + body_dy,\n                width: pos.width,\n                height: pos.height,\n            })\n        })\n        .collect()\n}\n\nfn emit_layout_empty_package(\n    svg: &mut String,\n    package: &EmptyPackageLayout,\n    entity_id: &str,\n) {\n    write!(\n        svg,\n        \"<!--entity {}-->\",\n        escape_xml(&package.qualified_name)\n    )\n    .unwrap();\n    write!(\n        svg,\n        r#\"<g class=\"entity\" data-qualified-name=\"{}\" data-source-line=\"{}\" id=\"{}\">\"#,\n        escape_xml(&package.qualified_name),\n        package.source_line,\n        entity_id,\n    )\n    .unwrap();\n    i",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 6470,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "width;\n    let bottom = cluster.y + cluster.height;\n    let tab_join = x + title_w - PACKAGE_ROUND_CORNER / 2.0;\n    let tab_right = x + tab_w;\n    let line_y = y + PACKAGE_TAB_H;\n    let text_x = x + PACKAGE_TAB_TEXT_X;\n    let text_y = y + PACKAGE_TITLE_BASELINE;\n    write!(\n        svg,\n        \"<!--cluster {}-->\",\n        escape_xml(&cluster.qualified_name)\n    )\n    .unwrap();\n    write!(\n        svg,\n        r#\"<g class=\"cluster\" data-qualified-name=\"{}\" data-source-line=\"{}\" id=\"{}\">\"#,\n        escape_xml(&cluster.qualified_name),\n        cluster.source_line,\n        entity_id,\n    )\n    .unwrap();\n    ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 10684,
+      "comment_template": "<!--link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "ints[point_idx + 2].0),\n                    fmt4(points[point_idx + 2].1),\n                )\n                .unwrap();\n                point_idx += 3;\n            }\n            let dash = if dashed { \"stroke-dasharray:7,7;\" } else { \"\" };\n            write!(\n                svg,\n                r#\"<!--link {} to {}--><g class=\"link\" data-entity-1=\"{}\" data-entity-2=\"{}\" data-link-type=\"association\" data-source-line=\"{}\" id=\"lnk{}\"><path d=\"{}\" fill=\"none\" id=\"{}-{}\" style=\"stroke:#181818;stroke-width:1;{}\"/></g>\"#,\n                escape_xml(from_label),\n                escape_xml(to_label),\n                from",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 10744,
+      "comment_template": "<!--link {from} to {to}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "for edge_id in &order {\n            let Some(edge) = oracle.edges.iter().find(|e| &e.id == edge_id) else {\n                continue;\n            };\n            let from = edge_id.split('-').next().unwrap_or(\"\");\n            let to = edge_id.rsplit('-').next().unwrap_or(\"\");\n            write!(svg, \"<!--link {from} to {to}-->\").unwrap();\n\n            let entity_1 = edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n            let entity_2 = edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n            let link_type = edge.link_type.as_deref().unwrap_or(\"association\");\n            let source_line = edge.source_line.as_deref().",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11054,
+      "comment_template": "<!--reverse link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "der, which can differ from source order when multiple edges share\n    // endpoints or target the same class.\n    matches.sort_by_key(|(edge_index, _, _, _)| *edge_index);\n\n    for (_, rel, oracle_edge, is_reverse) in matches {\n        // HTML comment\n        if is_reverse {\n            write!(svg, \"<!--reverse link {} to {}-->\", rel.from, rel.to).unwrap();\n        } else {\n            write!(svg, \"<!--link {} to {}-->\", rel.from, rel.to).unwrap();\n        }\n\n        // Link group wrapper \u2014 use oracle attributes directly.\n        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n        let entity_2 = o",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11056,
+      "comment_template": "<!--link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": " class.\n    matches.sort_by_key(|(edge_index, _, _, _)| *edge_index);\n\n    for (_, rel, oracle_edge, is_reverse) in matches {\n        // HTML comment\n        if is_reverse {\n            write!(svg, \"<!--reverse link {} to {}-->\", rel.from, rel.to).unwrap();\n        } else {\n            write!(svg, \"<!--link {} to {}-->\", rel.from, rel.to).unwrap();\n        }\n\n        // Link group wrapper \u2014 use oracle attributes directly.\n        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n        let link_type = oracle_edge.link",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11381,
+      "comment_template": "<!--reverse link {from_name} to {to_name}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "tes_to(rel);\n    let is_reverse = decorates_from && !decorates_to;\n    let from_name = relationship_output_endpoint_name(diagram, entity_ids, &rel.from);\n    let to_name = relationship_output_endpoint_name(diagram, entity_ids, &rel.to);\n\n    // HTML comment.\n    if is_reverse {\n        write!(svg, \"<!--reverse link {from_name} to {to_name}-->\").unwrap();\n    } else {\n        write!(svg, \"<!--link {from_name} to {to_name}-->\").unwrap();\n    }\n    if rel.style.hidden {\n        return;\n    }\n\n    let entity_1 = no_oracle_entity_id_from(diagram, entity_ids, note_ids, &rel.from);\n    let entity_2 = no_oracle_entity_id_from(diagram, entity_id",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 11383,
+      "comment_template": "<!--link {from_name} to {to_name}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "tionship_output_endpoint_name(diagram, entity_ids, &rel.from);\n    let to_name = relationship_output_endpoint_name(diagram, entity_ids, &rel.to);\n\n    // HTML comment.\n    if is_reverse {\n        write!(svg, \"<!--reverse link {from_name} to {to_name}-->\").unwrap();\n    } else {\n        write!(svg, \"<!--link {from_name} to {to_name}-->\").unwrap();\n    }\n    if rel.style.hidden {\n        return;\n    }\n\n    let entity_1 = no_oracle_entity_id_from(diagram, entity_ids, note_ids, &rel.from);\n    let entity_2 = no_oracle_entity_id_from(diagram, entity_ids, note_ids, &rel.to);\n    write!(\n        svg,\n        r#\"<g class=\"link\" data-ent",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "line": 13799,
+      "comment_template": "<!--link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "      fmt4(points[point_idx].1),\n            fmt4(points[point_idx + 1].0),\n            fmt4(points[point_idx + 1].1),\n            fmt4(points[point_idx + 2].0),\n            fmt4(points[point_idx + 2].1),\n        )\n        .unwrap();\n        point_idx += 3;\n    }\n    write!(\n        svg,\n        r#\"<!--link {} to {}--><g class=\"link\" data-entity-1=\"{}\" data-entity-2=\"{}\" data-link-type=\"association\" data-source-line=\"{}\" id=\"lnk{}\"><path d=\"{}\" fill=\"none\" id=\"{}-{}\" style=\"stroke:#181818;stroke-width:1;stroke-dasharray:7,7;\"/></g>\"#,\n        escape_xml(&from_name),\n        escape_xml(&to_name),\n        from_enti",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 2664,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "     {\n                        break;\n                    }\n                    entity_counter += 1;\n                }\n            }\n            let id = format!(\"ent{entity_counter:04}\");\n            entity_counter += 1;\n            id\n        };\n\n        // HTML comment.\n        svg.raw(&format!(\"<!--entity {}-->\", fold_non_ascii(&comp.id, '?')));\n        if hidden_components.contains(comp.id.as_str()) {\n            continue;\n        }\n\n        // Open entity group. Use qualified name when component lives inside a package.\n        let qualified = fold_non_ascii(\n            &qualified_names\n                ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 2992,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": " \u2014\n    // PlantUML emits them interleaved with regular entities, and connections\n    // that touch a note (e.g. `N1 .. Foo`) come after the note's `<g>`.\n    if let Some(orc) = oracle\n        && !orc.note_entities.is_empty()\n    {\n        for ne in &orc.note_entities {\n            svg.raw(&format!(\"<!--entity {}-->\", ne.qualified_name));\n            let mut group = String::new();\n            let _ = emit_oracle_note_entity(\n                &mut group,\n                ne,\n                \"#181818\",\n                \"#FEFFDD\",\n                13,\n                \"sans-serif\",\n                \"#000000\",\n         ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 3188,
+      "comment_template": "<!--link {from_name} to {to_name}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "            &edge.points,\n                (svek_edge_dx, svek_edge_dy),\n                svek_svg_y_axis,\n                tail_cluster,\n                head_cluster,\n                0.0,\n                0.0,\n            );\n            let path_d = build_path_d(&points);\n            svg.raw(&format!(\"<!--link {from_name} to {to_name}-->\"));\n            svg.raw(&format!(\n                r#\"<g class=\"link\" data-entity-1=\"{entity_1}\" data-entity-2=\"{entity_2}\" data-link-type=\"association\" data-source-line=\"{}\" id=\"lnk{}\">\"#,\n                note.source_line, uid.link_id\n            ));\n            svg.raw(&format!(\n                r#",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 3361,
+      "comment_template": "<!--{comment_prefix} {logical_from} to {logical_to}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "ve_arrow_at_end) =\n                no_oracle_effective_arrow_ends(conn);\n            let comment_prefix = if effective_arrow_at_start && !effective_arrow_at_end {\n                \"reverse link\"\n            } else {\n                \"link\"\n            };\n            svg.raw(&format!(\n                \"<!--{comment_prefix} {logical_from} to {logical_to}-->\"\n            ));\n            if hidden_components.contains(logical_from) || hidden_components.contains(logical_to) {\n                continue;\n            }\n\n            let from_ent_idx = diagram\n                .components\n                .iter()\n                .position(|c| c.id == logical_from",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "line": 4512,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "racle_iface\n        .and_then(|r| r.source_line.as_deref())\n        .map(String::from)\n        .or_else(|| (iface.source_line > 0).then(|| iface.source_line.to_string()))\n        .map(|source_line| format!(r#\" data-source-line=\"{source_line}\"\"#))\n        .unwrap_or_default();\n\n    svg.raw(&format!(\"<!--entity {}-->\", iface.id));\n    svg.raw(&format!(\n        r#\"<g class=\"entity\" data-qualified-name=\"{qualified_name}\"{source_attr} id=\"{ent_id}\">\"#,\n    ));\n\n    // PlantUML renders an `interface` three different ways depending on its\n    // declaration and how it is linked. Discriminate on the oracle entity's\n ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 816,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": " ctx.oracle.entities.get(&node.label));\n        if let Some(rect) = rect {\n            let source_line = rect\n                .source_line\n                .as_deref()\n                .map(str::to_string)\n                .unwrap_or_else(|| node.source_line.to_string());\n            svg.raw(&format!(\"<!--cluster {}-->\", node.label));\n            svg.raw(&format!(\n                r#\"<g class=\"cluster\" data-qualified-name=\"{qname}\" data-source-line=\"{sl}\" id=\"{ent_id}\">\"#,\n                sl = source_line,\n            ));\n            // A `#color` (or a `skinparam <kind> { BackgroundColor }`) fills\n            // ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 959,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "ode.id))\n        .or_else(|| ctx.oracle.entities.get(&node.label));\n    if let Some(rect) = rect {\n        let source_line = rect\n            .source_line\n            .as_deref()\n            .map(str::to_string)\n            .unwrap_or_else(|| node.source_line.to_string());\n        svg.raw(&format!(\"<!--entity {}-->\", node.label));\n        svg.raw(&format!(\n            r#\"<g class=\"entity\" data-qualified-name=\"{qname}\" data-source-line=\"{sl}\" id=\"{ent_id}\">\"#,\n            sl = source_line,\n        ));\n        // Fill precedence: explicit `#color` > `skinparam <kind>\n        // BackgroundColor` > the `#F1F1F1` ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 3340,
+      "comment_template": "<!--{prefix} {comment_from} to {comment_to}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "\n        .map(|e| e.id.contains(\"-backto-\"))\n        .unwrap_or(false);\n    let (comment_from, comment_to) = if is_reverse {\n        (&to_qname, &from_qname)\n    } else {\n        (&from_qname, &to_qname)\n    };\n    let prefix = if is_reverse { \"reverse link\" } else { \"link\" };\n    svg.raw(&format!(\"<!--{prefix} {comment_from} to {comment_to}-->\"));\n\n    let entity_1 = oracle_edge\n        .and_then(|e| e.entity_1.as_deref())\n        .or_else(|| id_for_node.get(&conn.from).map(String::as_str))\n        .unwrap_or(\"ent0002\");\n    let entity_2 = oracle_edge\n        .and_then(|e| e.entity_2.as_deref())\n        .or_else(|| id_for_node.get(&conn.",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 5672,
+      "comment_template": "<!--reverse link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "art_arrow = if reversed {\n            conn.arrow_at_end\n        } else {\n            conn.arrow_at_start\n        };\n        let raw_end_arrow = if reversed {\n            conn.arrow_at_start\n        } else {\n            conn.arrow_at_end\n        };\n        if reversed {\n            svg.raw(&format!(\"<!--reverse link {} to {}-->\", conn.to, conn.from));\n        } else {\n            svg.raw(&format!(\"<!--link {} to {}-->\", conn.from, conn.to));\n        }\n        let link_type = if conn.arrow_at_start || conn.arrow_at_end {\n            \"dependency\"\n        } else {\n            \"association\"\n        };\n        svg.raw(&format!",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "line": 5674,
+      "comment_template": "<!--link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "tart\n        };\n        let raw_end_arrow = if reversed {\n            conn.arrow_at_start\n        } else {\n            conn.arrow_at_end\n        };\n        if reversed {\n            svg.raw(&format!(\"<!--reverse link {} to {}-->\", conn.to, conn.from));\n        } else {\n            svg.raw(&format!(\"<!--link {} to {}-->\", conn.from, conn.to));\n        }\n        let link_type = if conn.arrow_at_start || conn.arrow_at_end {\n            \"dependency\"\n        } else {\n            \"association\"\n        };\n        svg.raw(&format!(\n            r#\"<g class=\"link\" data-entity-1=\"{ent1}\" data-entity-2=\"{ent2}\" data-link-typ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 1099,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "line(&cluster.label, PACKAGE_FONT_SIZE, true);\n    let title_width = label_width + 6.0;\n    let tab_right = position.x + title_width + 7.0;\n    let tab_join = position.x + title_width - 2.5;\n    let right = position.x + position.width;\n    let bottom = position.y + position.height;\n    write!(svg, \"<!--cluster {}-->\", escape_xml(&cluster.qname)).unwrap();\n    if cluster.source_line > 0 {\n        write!(\n            svg,\n            r#\"<g class=\"cluster\" data-qualified-name=\"{}\" data-source-line=\"{}\" id=\"{}\">\"#,\n            escape_xml(&cluster.qname),\n            cluster.source_line,\n            entity_id,\n    ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 1300,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "\n            o.clusters\n                .iter()\n                .filter(|c| c.group_class == \"cluster\")\n                .collect()\n        })\n        .unwrap_or_default();\n    for cluster in &oracle_clusters {\n        let cid = cluster.entity_id.as_deref().unwrap_or(\"ent0002\");\n        write!(svg, \"<!--cluster {}-->\", cluster.qualified_name).unwrap();\n        match cluster.source_line.as_deref() {\n            Some(sl) => write!(\n                svg,\n                r#\"<g class=\"cluster\" data-qualified-name=\"{}\" data-source-line=\"{}\" id=\"{}\">\"#,\n                escape_xml(&cluster.qualified_name),\n             ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 1499,
+      "comment_template": "<!--link {from_base} to {to_base}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "k_base(&previous.from),\n                    link_base(&previous.to),\n                ) == base_path_id\n            })\n            .count();\n        let path_id = object_link_path_id(link, from_base, to_base, parallel_index);\n        let link_type = object_link_type(link.kind);\n\n        write!(svg, \"<!--link {from_base} to {to_base}-->\").unwrap();\n        write!(\n            svg,\n            r#\"<g class=\"link\" data-entity-1=\"{}\" data-entity-2=\"{}\" data-link-type=\"{link_type}\" data-source-line=\"{source_line}\" id=\"{link_id}\">\"#,\n            svg_ids.objects[from_index],\n            svg_ids.objects[to_index],\n        )\n        .unwra",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/object.rs",
+      "line": 2747,
+      "comment_template": "<!--link {from_base} to {to_base}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "     let entity_2 = edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n        let link_type = edge.link_type.as_deref().unwrap_or(\"association\");\n        let source_line = edge.source_line.as_deref().unwrap_or(\"0\");\n        let link_id = edge.link_id.as_deref().unwrap_or(\"lnk0\");\n\n        write!(svg, \"<!--link {from_base} to {to_base}-->\").unwrap();\n        write!(\n            svg,\n            r#\"<g class=\"link\" data-entity-1=\"{entity_1}\" data-entity-2=\"{entity_2}\" data-link-type=\"{link_type}\" data-source-line=\"{source_line}\" id=\"{link_id}\">\"#,\n        )\n        .unwrap();\n\n        let code_line = edge.code_line.as_deref().unwrap_o",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 4109,
+      "comment_template": "<!--reverse link {edge_from_name} to {edge_to_name}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "onomous_endpoint_svg_name(&transition.to, false);\n        let (edge_from_name, edge_to_name) = if solved_reversed {\n            (&to_name, &from_name)\n        } else {\n            (&from_name, &to_name)\n        };\n        if arrow_at_start {\n            write!(\n                svg,\n                \"<!--reverse link {edge_from_name} to {edge_to_name}-->\"\n            )\n            .unwrap();\n        } else {\n            write!(svg, \"<!--link {edge_from_name} to {edge_to_name}-->\").unwrap();\n        }\n        write!(\n            svg,\n            r#\"<g class=\"link\" data-entity-1=\"{}\" data-entity-2=\"{}\" data-link-type=\"dependency\" data-source-line=\"{}",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 4113,
+      "comment_template": "<!--link {edge_from_name} to {edge_to_name}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "me, &from_name)\n        } else {\n            (&from_name, &to_name)\n        };\n        if arrow_at_start {\n            write!(\n                svg,\n                \"<!--reverse link {edge_from_name} to {edge_to_name}-->\"\n            )\n            .unwrap();\n        } else {\n            write!(svg, \"<!--link {edge_from_name} to {edge_to_name}-->\").unwrap();\n        }\n        write!(\n            svg,\n            r#\"<g class=\"link\" data-entity-1=\"{}\" data-entity-2=\"{}\" data-link-type=\"dependency\" data-source-line=\"{}\" id=\"{}\">\"#,\n            autonomous_entity_id(context.entity_ids, edge_from),\n            autonomous_entity_id(context.entity_",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 7988,
+      "comment_template": "<!--reverse link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "(\"{edge_from_name}-backto-{edge_to_name}\")\n                } else {\n                    format!(\"{edge_from_name}-to-{edge_to_name}\")\n                },\n            );\n\n            // HTML comment.\n            if arrow_at_start {\n                write!(\n                    svg,\n                    \"<!--reverse link {} to {}-->\",\n                    edge_from_name, edge_to_name\n                )\n                .unwrap();\n            } else {\n                write!(svg, \"<!--link {} to {}-->\", edge_from_name, edge_to_name).unwrap();\n            }\n\n            let link_id = allocated_ids\n                .link_ids\n         ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 7993,
+      "comment_template": "<!--link {} to {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "      // HTML comment.\n            if arrow_at_start {\n                write!(\n                    svg,\n                    \"<!--reverse link {} to {}-->\",\n                    edge_from_name, edge_to_name\n                )\n                .unwrap();\n            } else {\n                write!(svg, \"<!--link {} to {}-->\", edge_from_name, edge_to_name).unwrap();\n            }\n\n            let link_id = allocated_ids\n                .link_ids\n                .get(transition_idx)\n                .filter(|id| !id.is_empty())\n                .cloned()\n                .unwrap_or_else(|| ids.next_link());\n            let",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8223,
+      "comment_template": "<!--link {from} to {to}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "           fmt_f(remaining[index + 2].0),\n                    fmt_f(remaining[index + 2].1),\n                )\n                .unwrap();\n                index += 3;\n            }\n            let note = &diagram.notes[position.note_index];\n            write!(\n                svg,\n                r#\"<!--link {from} to {to}--><g class=\"link\" data-entity-1=\"{}\" data-entity-2=\"{}\" data-link-type=\"association\" data-source-line=\"{}\" id=\"{}\"><path d=\"{d}\" fill=\"none\" id=\"{from}-{to}\" style=\"stroke:{};stroke-width:1;stroke-dasharray:7,7;\"/></g>\"#,\n                endpoint_id(from),\n                endpoint_id(to),\n            ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8734,
+      "comment_template": "<!--reverse link {to_name} to {from_name}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "      } else {\n            &t.from\n        };\n        let to_name = if t.to == \"[*]\" {\n            \"*end*\"\n        } else if is_history_marker(&t.to) {\n            \"*historical*\"\n        } else {\n            &t.to\n        };\n\n        // HTML comment.\n        if is_reverse {\n            write!(svg, \"<!--reverse link {to_name} to {from_name}-->\").unwrap();\n        } else {\n            write!(svg, \"<!--link {from_name} to {to_name}-->\").unwrap();\n        }\n\n        // Link group wrapper using oracle attributes.\n        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n        let entity_2 = oracle_edge.entity_2.as_deref(",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8736,
+      "comment_template": "<!--link {from_name} to {to_name}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "\"*end*\"\n        } else if is_history_marker(&t.to) {\n            \"*historical*\"\n        } else {\n            &t.to\n        };\n\n        // HTML comment.\n        if is_reverse {\n            write!(svg, \"<!--reverse link {to_name} to {from_name}-->\").unwrap();\n        } else {\n            write!(svg, \"<!--link {from_name} to {to_name}-->\").unwrap();\n        }\n\n        // Link group wrapper using oracle attributes.\n        let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n        let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n        let link_type = oracle_edge.link_type.as_deref().unwrap_or(",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8933,
+      "comment_template": "<!--link {from} to {to}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "h a single\n/// dash; PlantUML's comment spells it `<!--link <state> to GMN<n>-->`.\nfn emit_note_connector_verbatim(svg: &mut String, edge: &OracleEdgePath) {\n    if let Some(idx) = edge.id.rfind(\"-GMN\") {\n        let from = &edge.id[..idx];\n        let to = &edge.id[idx + 1..];\n        write!(svg, \"<!--link {from} to {to}-->\").unwrap();\n    }\n    let entity_1 = edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n    let entity_2 = edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n    let link_type = edge.link_type.as_deref().unwrap_or(\"association\");\n    let source_line = edge.source_line.as_deref().unwrap_or(\"0\");\n    let lin",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8968,
+      "comment_template": "<!--reverse link {to} to {from}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "&OracleEdgePath) {\n    // Reconstruct the HTML comment PlantUML prints before each link. Edge\n    // ids are `<from>-to-<to>` / `<from>-backto-<to>`; the comment uses the\n    // same names with the verb spelled out.\n    if let Some((from, to)) = edge.id.split_once(\"-backto-\") {\n        write!(svg, \"<!--reverse link {to} to {from}-->\").unwrap();\n    } else if let Some((from, to)) = edge.id.split_once(\"-to-\") {\n        write!(svg, \"<!--link {from} to {to}-->\").unwrap();\n    }\n    let entity_1 = edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n    let entity_2 = edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n    let link_type = edg",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "line": 8970,
+      "comment_template": "<!--link {from} to {to}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": ">-backto-<to>`; the comment uses the\n    // same names with the verb spelled out.\n    if let Some((from, to)) = edge.id.split_once(\"-backto-\") {\n        write!(svg, \"<!--reverse link {to} to {from}-->\").unwrap();\n    } else if let Some((from, to)) = edge.id.split_once(\"-to-\") {\n        write!(svg, \"<!--link {from} to {to}-->\").unwrap();\n    }\n    let entity_1 = edge.entity_1.as_deref().unwrap_or(\"ent0002\");\n    let entity_2 = edge.entity_2.as_deref().unwrap_or(\"ent0003\");\n    let link_type = edge.link_type.as_deref().unwrap_or(\"dependency\");\n    let source_line = edge.source_line.as_deref().unwrap_or(\"0\");\n    let link",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 2704,
+      "comment_template": "<!--cluster {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "at!(\"pkg::{}\", pkg.name))\n        .cloned()\n        .unwrap_or_else(|| \"ent0003\".to_string());\n    let src_attr = source_line_attr(pkg.source_line);\n    let fill = pkg\n        .color\n        .as_deref()\n        .map(resolve_fill)\n        .unwrap_or_else(|| \"none\".to_string());\n    svg.raw(&format!(\"<!--cluster {}-->\", sanitize_comment(&pkg.name)));\n    svg.raw(&format!(\n        r#\"<g class=\"cluster\" data-qualified-name=\"{qname}\"{src_attr} id=\"{ent_id}\">\"#,\n    ));\n    let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);\n    let (label_x, label_y) = match pkg.kind {\n        PackageKind::Rectangle => ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 2817,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "ntUML keys the\n    // qualified name and comment on the original label (spaces and all); for an\n    // aliased/bare actor it uses the id.\n    let display_raw = if actor.id == label_to_id(&actor.label) {\n        actor.label.as_str()\n    } else {\n        actor.id.as_str()\n    };\n    svg.raw(&format!(\"<!--entity {}-->\", sanitize_comment(display_raw)));\n    let display = sanitize_qname(display_raw);\n    let src_attr = source_line_attr(actor.source_line);\n    svg.raw(&format!(\n        r#\"<g class=\"entity\" data-qualified-name=\"{display}\"{src_attr} id=\"{ent_id}\">\"#,\n    ));\n    // Per-element `#color` overrides skin",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 2947,
+      "comment_template": "<!--entity {}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "s.get(&uc.id))\n            .or_else(|| orc.entities.get(&uc.label))\n            .and_then(|r| r.entity_id.clone())\n    });\n    let ent_id = oracle_id\n        .or_else(|| id_map.get(&format!(\"uc::{}\", uc.id)).cloned())\n        .unwrap_or_else(|| \"ent0003\".to_string());\n    svg.raw(&format!(\n        \"<!--entity {}-->\",\n        sanitize_comment(display_name(uc))\n    ));\n    let src_attr = source_line_attr(uc.source_line);\n    svg.raw(&format!(\n        r#\"<g class=\"entity\" data-qualified-name=\"{qualified}\"{src_attr} id=\"{ent_id}\">\"#,\n    ));\n    let orc_rect = oracle.and_then(|orc| {\n        orc.entities\n        ",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 3487,
+      "comment_template": "<!--link {from_label} to {to_label}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "tion\");\n        let source_line = oracle_edge.source_line.as_deref();\n        let link_id = oracle_edge.link_id.as_deref().unwrap_or(\"lnk0\");\n        let source_attr = source_line\n            .map(|s| format!(r#\" data-source-line=\"{s}\"\"#))\n            .unwrap_or_default();\n        svg.raw(&format!(\"<!--link {from_label} to {to_label}-->\"));\n        svg.raw(&format!(\n            r#\"<g class=\"link\" data-entity-1=\"{entity_1}\" data-entity-2=\"{entity_2}\" data-link-type=\"{link_type}\"{source_attr} id=\"{link_id}\">\"#,\n        ));\n        let path_style = oracle_edge\n            .path_style\n            .as_deref()\n            .unwrap_or(\"st",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    },
+    {
+      "file": "crates/rustuml-render/src/usecase.rs",
+      "line": 3763,
+      "comment_template": "<!--link {from_label} to {to_label}-->",
+      "class_": "comment_interpolation",
+      "scope": "inventory only; no edits",
+      "context": "t end_decoration = connection_end_decoration(conn);\n        let link_type = if conn.extension {\n            \"extension\"\n        } else if start_decoration.is_some() || end_decoration.is_some() {\n            \"dependency\"\n        } else {\n            \"association\"\n        };\n        svg.raw(&format!(\"<!--link {from_label} to {to_label}-->\"));\n        svg.raw(&format!(\n            r#\"<g class=\"link\" data-entity-1=\"{ent1}\" data-entity-2=\"{ent2}\" data-link-type=\"{link_type}\" data-source-line=\"{line}\" id=\"{link_id}\">\"#,\n            line = conn.source_line,\n        ));\n        let raw_points = quantized_svek_edge_points(edge);\n        le",
+      "dataflow_class": "user-derived name/label in comment",
+      "edited": false
+    }
+  ]
+}

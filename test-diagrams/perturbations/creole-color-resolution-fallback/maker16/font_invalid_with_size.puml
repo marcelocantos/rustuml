@@ -1,0 +1,5 @@
+@startuml
+start
+:q<font size=15 color=NoSuchTone>elm</font>r;
+stop
+@enduml

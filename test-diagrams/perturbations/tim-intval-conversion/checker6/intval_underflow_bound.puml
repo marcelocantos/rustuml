@@ -1,0 +1,4 @@
+@startuml
+!$a=%intval("-2147483649")
+class Lost
+@enduml

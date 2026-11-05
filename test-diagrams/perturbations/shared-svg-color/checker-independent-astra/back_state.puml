@@ -1,0 +1,4 @@
+@startuml
+state Chamber
+Chamber : L<back:transparent>Mist</back>R
+@enduml

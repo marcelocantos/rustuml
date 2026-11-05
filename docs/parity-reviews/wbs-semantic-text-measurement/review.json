@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "mechanism": "wbs-semantic-text-measurement",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3Ad376f038-2e3d-4585-a2e6-77089a4483d8",
+    "model": "gpt-6-astra / Codex harness in T3 Code / high reasoning",
+    "independence": "Separate review task; no maker implementation, account, comparator, baseline, target, or allowlist edits; same model family is disclosed, not presented as cross-family review."
+  },
+  "account_commit": "ee02618929097265e3e48508bdb078242d2f50d4",
+  "account_location_correction_commit": "e25a4a20b4df62f9347afb292fda5940941e8bc7",
+  "implementation_commit": "59dc60604792260c342f6e6ab96829f10b0a59f5",
+  "reviewed_packet": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "clean_before": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.zu5h6zuK/new --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/validate_fresh.py",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py before retained maker18 sprites50 checker38 fresh15",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py after retained maker18 sprites50 checker38 fresh15",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py before fresh26",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/run_replay.py after fresh26",
+    "cargo test --workspace --lib --release",
+    "cargo test -p rustuml --test pipe_mode --release",
+    "cargo test -p rustuml-oracle --release --test golden_no_oracle -- --nocapture",
+    "cargo test -p rustuml-oracle --release --test golden_pairs -- --nocapture",
+    "cargo test -p rustuml-oracle --release --test parity_perturbations -- --nocapture",
+    "cargo test -p rustuml-oracle --release --test harness_guards -- --nocapture",
+    "cargo clippy --workspace --all-targets -- -D warnings",
+    "cargo fmt --all -- --check",
+    "rustfmt --edition 2024 --check --config skip_children=true crates/rustuml-render/src/creole.rs crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/wbs.rs",
+    "git diff --check"
+  ],
+  "command_records": "docs/parity-reviews/creole-unresolved-sprite-command/corrective-checker-support/gates.json",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_plain_depth.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_plain_depth.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "pass",
+      "before_match": true,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "d261fbc9fdb5a35134c4d54dafc221592eeb0b3dbd228067fa40c6fefb394193",
+      "golden_sha256": "cb6126fe2f4df64d29fcba786695ad3c84226353e13a01e5c6f8f0149686b611",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_plain_depth"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_mixed_depth.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_mixed_depth.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "58edfc1566d2bad13596a2a4198160b6239e74003bf851d1ec0ef2f14f97baa8",
+      "golden_sha256": "77ab51ee9e7d0785a857444d44edc9123a4d8997b6ec13500956defe23030109",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_mixed_depth"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_multiline_root.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_multiline_root.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "3e8c0936ff8ce9891dec56232e7f18266f7c55935f39a582df53c967d0c0b903",
+      "golden_sha256": "b20cca547aed5a7ed7c93dc12a3d8f1b88da5a9c608d02f1b2f759ced4b96700",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_multiline_root"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_multiline_child.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_multiline_child.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "5c0e352d844201cb12859658cc28c5efd4a6d066522f97680168782446e98707",
+      "golden_sha256": "402938f7c6dd9914f76b41590f1da8366e52943a8da6b86740969cd364d89f0c",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_multiline_child"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_empty_root.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_empty_root.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "e0ca97c4e3eef89cd1aa8927af4304fce7a3504d47fdf42bc33e054d30a45517",
+      "golden_sha256": "ea09c852d58914a79d747754fa311b7c1ab753b838a2c449266e2a1643172af5",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_empty_root"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_empty_children.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_empty_children.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "353b1b942b7281cb14bccd97c64ac4f3aea5d10f9533c0c6ad5ff51710fda286",
+      "golden_sha256": "48ab42f286ae754ca4154fcdbe53fd679af8ddea918caeaaee11e77df7a52f84",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_empty_children"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_boxless.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_boxless.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "2a7b782968977681fd74ff4df9e7f1ec3da15dc919c9b5b2c87e5e3cc12da383",
+      "golden_sha256": "971b828829d998e7c7356928b4302bc5a73de7c232d9269f1d961f824e1705ee",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_boxless"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_mixed_baseline.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_mixed_baseline.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "pass",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "aaac96f5d74069679068dc17f3137661996d3407cb0e09d989e2003af1c6290b",
+      "golden_sha256": "1230d9da3c99d93f38f5d91e7d575386d45c5ee03f15936e1aceae650979a840",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_mixed_baseline"
+    },
+    {
+      "source": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_newline_empty.puml",
+      "golden": "test-diagrams/perturbations/wbs-semantic-text-measurement/wbs_newline_empty.svg",
+      "axes": [
+        "label styles/empty/multiline",
+        "root-child/depth/direction/shape"
+      ],
+      "result": "fail",
+      "before_match": false,
+      "reference_valid": true,
+      "observed_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "source_sha256": "842e814c2790084840c4d0b4be0e5879fedc157aa6d842dcea63b888efb5d420",
+      "golden_sha256": "ffdee2905ea4a1866f9f79ea53d577105f19e26126fd2d83bf9aabce2331e435",
+      "reference_exit": 0,
+      "reference_timed_out": false,
+      "actual_cli_before_exit": 0,
+      "actual_cli_after_exit": 0,
+      "evidence_path": "replay/after/fresh26/wbs_newline_empty"
+    }
+  ],
+  "findings": [
+    "Bounded support: fresh plain depth4, mixed-size/bold depth and direction, consumed-empty root/children, and mixed-size/subscript baselines pass. Fresh WBS membership is5/9 after versus1/9 before, with no lost pass. Measured main height replaces BOX_H in the pre-existing subtree/attachment equations. Default Padding10 and font12 are corroborated by pinned plantuml.skin; no unexplained new geometry constant found.",
+    "Counterexamples wbs_multiline_root, wbs_multiline_child and wbs_newline_empty remain whole-output failures. WBSDiagram.addIdea calls Display.getWithNewlines before FtileBoxOld creates a SheetBlock. SheetBlock1.initMap stacks stripe heights and takes the maximum stripe width. Rust parse_wbs stores literal backslash-n in WbsNode.label, and wbs::measure/emit_box send the whole label through single-line APIs. Root multiline canvas is Java152x163 versus Rust152x149; multiline child Java205x221 versus Rust231x207; leading/interior/trailing blank lines Java94x205 versus Rust139x149. The correction improves styled dimensions but does not supply a display-level multiline model.",
+    "Counterexample wbs_boxless: Java CommandWBSItemOld captures the underscore as SHAPE, IdeaShape.fromDesc selects the non-box branch of WBSTextBlock.buildMain, and text gets margins0,3,1,1. Rust WbsNode has no shape field, parse_wbs leaves underscore inside the label, and emit_box always paints a padded rectangle. Java181x187 versus Rust222x205. This is an existing parser/model/consumer dependency, not permission to compensate coordinates or introduce a feature in this review.",
+    "WBS repair is supported for tested single-line box labels only. Four valid shape/multiline counterexamples reject the whole claimed result under the unchanged acceptance rule; no scope waiver or combined sibling correctness is asserted."
+  ],
+  "causal_locations": {
+    "java": [
+      "wbs/WBSDiagram.java:125-134",
+      "wbs/CommandWBSItemOld.java::getRegexConcat/executeArg",
+      "wbs/WBSTextBlock.java:87-98",
+      "activitydiagram3/ftile/vertical/FtileBoxOld.java:134-173,225",
+      "klimt/creole/SheetBlock1.java::initMap",
+      "wbs/ITFComposed.java::calculateDimensionSlow/drawU",
+      "src/main/resources/skin/plantuml.skin:339-345"
+    ],
+    "rust": [
+      "crates/rustuml-parser/src/parse/wbs.rs::parse_wbs",
+      "crates/rustuml-parser/src/diagram/wbs.rs::WbsNode",
+      "crates/rustuml-render/src/wbs.rs::measure/emit_box/draw_itf/draw_fork",
+      "crates/rustuml-render/src/text_render.rs::label_height/total_width"
+    ]
+  },
+  "verdict": "rejected",
+  "reason": "Fresh valid whole-SVG counterexamples remain executable. Bounded gains do not waive whole-output failures or standing red gates.",
+  "evidence": "docs/parity-reviews/creole-unresolved-sprite-command/corrective-checker-support",
+  "reference_limitations": [
+    "Fresh Java argv derived from pinned wrapper construction, not process-traced.",
+    "Historical font/Graphviz environment equivalence remains unproved.",
+    "No Java SourceProbe exists for checker38, corrective15 or fresh26."
+  ],
+  "reviewed_at": "2026-11-04T13:19:39.947604+00:00",
+  "reference_command_records": "measurements.tar.gz: fresh-reference/*/reference-command.json",
+  "reference_stdin_contract": "26 exact original manifest sources, hashes and bytes retained in request.json, manifest.json and input-bundle.json.gz."
+}

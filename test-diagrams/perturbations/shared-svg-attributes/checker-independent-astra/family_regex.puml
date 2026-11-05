@@ -1,0 +1,4 @@
+@startregex
+skinparam defaultFontName "Quill & Reed"
+(?<probe>Beacon)+
+@endregex

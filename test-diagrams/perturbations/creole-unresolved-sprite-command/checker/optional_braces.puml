@@ -1,0 +1,3 @@
+@startuml
+class "A<$north{>B<$south}>C<$east,>D" as Review
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+state Grove
+Grove : a<&home{scale=-2}>z
+Grove : a<&home{color=~#44aa77}>z
+Grove : a<&home{color=#44aa77zz}>z
+@enduml

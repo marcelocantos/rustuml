@@ -1,0 +1,7 @@
+{
+  "fresh": 32,
+  "distinct": 32,
+  "no_existing_source_hashes": true,
+  "comparison_source_count": 13917,
+  "design": "Different consumers, multi-image adjacency, paired explicit base styles, first-close cross-nesting, numeric width selection, valid-special colors, gradient separator and grammar contrasts; source-guided, never adapted to candidate output."
+}

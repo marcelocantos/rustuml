@@ -1,0 +1,65 @@
+[
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused.log",
+    "exit": 101,
+    "passed": 0,
+    "failed": 0,
+    "note": "Compile error in new test: strip_markup misspelled existing stripped_text; test identifier corrected."
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-corrected.log",
+    "exit": 101,
+    "passed": 91,
+    "failed": 3,
+    "note": "Two new tests incorrectly assumed balanced same-name closers, contrary to source first-close semantics. Existing image test expected inherited color; source blackBlueTrue requires explicit black. No production change for these test failures."
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-final.log",
+    "exit": 0,
+    "passed": 94,
+    "failed": 0,
+    "note": "Use different outer font closer for nested color test; assert first-close background behavior; update image color expectation from named Java source. Alias resolver tests and public APIs unchanged."
+  }
+]

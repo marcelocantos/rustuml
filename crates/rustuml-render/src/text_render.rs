@@ -47,15 +47,31 @@ pub struct TextBase<'a> {
     pub skip_underline: bool,
 }
 
+/// Project an actual text line, including a present empty line. Absent
+/// displays are handled by callers before asking to measure or paint a line;
+/// lexical `creole::parse_segments` deliberately keeps its zero-atom result.
+fn line_segments(content: &str, skip_underline: bool) -> Vec<Segment> {
+    let mut segments = if skip_underline {
+        creole::parse_segments_no_underline(content)
+    } else {
+        creole::parse_segments(content)
+    };
+    if segments.is_empty() {
+        // StripeSimple.getAtoms inserts a space after recursive commands have
+        // restored the surrounding configuration, also for an ordinary blank.
+        segments.push(Segment {
+            text: " ".to_string(),
+            style: Style::default(),
+        });
+    }
+    segments
+}
+
 /// Emit one or more `<text>` elements covering `content` with creole markup
 /// resolved. Writes to `buf`. Returns the total advance width.
 pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     emit_segments(buf, &segments, base)
 }
 
@@ -66,11 +82,7 @@ pub fn emit_text(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
 /// is consumed and the inner text falls back to the surrounding font.
 pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let mut segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let mut segments = line_segments(&content, base.skip_underline);
     for seg in &mut segments {
         seg.style.monospace = false;
     }
@@ -82,11 +94,7 @@ pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -
 /// one baseline; mixed font sizes/families can consume multiple oracle y slots.
 pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     if segments.is_empty() {
         return 1;
     }
@@ -118,11 +126,7 @@ pub fn emitted_baseline_count(content: &str, base: &TextBase<'_>) -> usize {
 /// safely override the line start.
 pub fn emitted_text_element_count(content: &str, base: &TextBase<'_>) -> usize {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     if segments.is_empty() {
         return 1;
     }
@@ -227,7 +231,7 @@ pub fn label_height(content: &str, font_size: f64) -> f64 {
 
 /// Height of `content` using the caller's base font family.
 pub fn label_height_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_text_height(font_size, metric_family(font_family));
     }
@@ -262,7 +266,7 @@ pub fn label_ascent(content: &str, font_size: f64) -> f64 {
 
 /// Ascent of `content` using the caller's base font family.
 pub fn label_ascent_with_family(content: &str, font_size: f64, font_family: &str) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_ascent(font_size, metric_family(font_family));
     }
@@ -292,7 +296,7 @@ pub fn label_first_baseline_ascent_with_family(
     font_size: f64,
     font_family: &str,
 ) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     if segments.is_empty() {
         return family_ascent(font_size, metric_family(font_family));
     }
@@ -332,7 +336,7 @@ pub(crate) fn label_limit_finder_height_with_family(
     font_size: f64,
     font_family: &str,
 ) -> f64 {
-    let segments = creole::parse_segments(content);
+    let segments = line_segments(content, false);
     let first_baseline = label_first_baseline_ascent_with_family(content, font_size, font_family);
     let Some(first) = segments.first() else {
         return first_baseline + 1.5;
@@ -421,11 +425,7 @@ fn sub_extra_space(segments: &[Segment]) -> f64 {
 /// total advance for layout before deciding `x`.
 pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
     let content = normalize_tab_escapes(content);
-    let segments = if base.skip_underline {
-        creole::parse_segments_no_underline(&content)
-    } else {
-        creole::parse_segments(&content)
-    };
+    let segments = line_segments(&content, base.skip_underline);
     let mut advance = 0.0;
     for seg in &segments {
         advance = segment_advance(seg, base, advance);
@@ -1436,20 +1436,49 @@ pub(crate) fn single_pass_unescape(s: &str) -> String {
     out
 }
 
-/// Normalise a colour spec to PlantUML's preferred form: lower-case hex
-/// (`#RRGGBB`) for known named colours, pass-through otherwise.
-///
-/// PlantUML emits resolved hex colours in SVG output even when the source
-/// uses HTML colour names — `<color:blue>` becomes `fill="#0000FF"`.
+/// HColorSet.parseSimpleColor / XColor.toSvg: expand short hex and use
+/// uppercase RGB, retaining the alpha byte until the paint role is known.
 pub(crate) fn normalize_color(s: &str) -> String {
-    if s.starts_with('#') {
-        return s.to_string();
+    let value = s.strip_prefix('#').unwrap_or(s);
+    if value.bytes().all(|ch| ch.is_ascii_hexdigit()) {
+        match value.len() {
+            1 => return format!("#{}", value.repeat(6).to_ascii_uppercase()),
+            3 => {
+                let mut rgb = String::from("#");
+                for ch in value.chars() {
+                    rgb.push(ch.to_ascii_uppercase());
+                    rgb.push(ch.to_ascii_uppercase());
+                }
+                return rgb;
+            }
+            6 | 8 => return format!("#{}", value.to_ascii_uppercase()),
+            _ => {}
+        }
     }
-    let lower = s.to_ascii_lowercase();
+    let lower = value.to_ascii_lowercase();
+    // HColors.none() is transparent black. Automatic needs the consumer's
+    // active/default background, and must not be guessed here (T14.15).
+    if matches!(lower.as_str(), "transparent" | "background") {
+        return "#00000000".to_string();
+    }
     match css_color_hex(&lower) {
         Some(hex) => hex.to_string(),
         None => s.to_string(),
     }
+}
+
+/// Split Java RRGGBBAA into the RGB value and its non-default opacity.
+/// The renderer-only Style carries the byte without a floating-point model.
+pub(crate) fn color_with_opacity(value: &str) -> (String, Option<u8>) {
+    let color = normalize_color(value);
+    if color.len() == 9
+        && color.starts_with('#')
+        && color[1..].bytes().all(|ch| ch.is_ascii_hexdigit())
+    {
+        let alpha = u8::from_str_radix(&color[7..], 16).unwrap();
+        return (color[..7].to_string(), (alpha != u8::MAX).then_some(alpha));
+    }
+    (color, None)
 }
 
 /// CSS3 named colours, lowercased keys. PlantUML accepts the same names
@@ -1458,6 +1487,14 @@ fn css_color_hex(name: &str) -> Option<&'static str> {
     // Listed in case-insensitive lookup order; values are uppercase
     // `#RRGGBB` to match PlantUML's golden SVG output.
     match name {
+        // HColorSet delegates to ColorTrieNode's Archimate palette.
+        "business" => Some("#FFFFCC"),
+        "application" => Some("#C2F0FF"),
+        "motivation" => Some("#CCCCFF"),
+        "strategy" => Some("#F8E7C0"),
+        "technology" => Some("#C9FFC9"),
+        "physical" => Some("#97FF97"),
+        "implementation" => Some("#FFE0E0"),
         "aliceblue" => Some("#F0F8FF"),
         "antiquewhite" => Some("#FAEBD7"),
         "aqua" | "cyan" => Some("#00FFFF"),
@@ -1655,7 +1692,15 @@ fn write_text_element(
         _ => (nominal_size, line_descent_diff),
     };
     let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
-    let fill = normalize_color(raw_fill);
+    let (fill, parsed_opacity) = color_with_opacity(raw_fill);
+    let opacity = style.fill_opacity.or(parsed_opacity);
+    // DriverTextSvg.draw:94-97 suppresses transparent text before painting.
+    // The caller still measures and advances this atom. Shape fill-none
+    // serialization is a separate SvgGraphics path.
+    if opacity == Some(0) {
+        return;
+    }
+    let opacity_attr = crate::svg::fill_opacity_attribute(opacity);
 
     // `<back:color>` segments carry an SVG `<filter>` reference. The id is
     // allocated lazily in the active `FilterRegistry`; the filter element
@@ -1697,10 +1742,10 @@ fn write_text_element(
     // When the segment carries a link URL, PlantUML wraps the <text> in an
     // <a> element with both modern (href) and legacy (xlink:*) attributes.
     if let Some(url) = style.link_url.as_deref() {
-        let escaped = escape_xml_attr(url);
+        let escaped = crate::svg::escape_attribute(url);
         // `title` / `xlink:title` is the `{tooltip}` when supplied, else the URL.
         let normalized_title = normalize_svg_link_title(style.link_title.as_deref().unwrap_or(url));
-        let title = escape_xml_attr(&normalized_title);
+        let title = crate::svg::escape_attribute(&normalized_title);
         write!(
             buf,
             r#"<a href="{escaped}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{escaped}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
@@ -1724,24 +1769,15 @@ fn write_text_element(
     let content = content.replace('\u{00a0}', "&#160;");
     write!(
         buf,
-        r#"<text fill="{fill}"{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
+        r#"<text fill="{fill}"{opacity_attr}{filter_attr} font-family="{font_family}" font-size="{font_size}"{style_attr}{weight_attr} lengthAdjust="spacing"{text_decoration} textLength="{tl}" x="{x_s}" y="{y_s}">{content}</text>"#,
         tl = pm::fmt_coord(width),
         x_s = pm::fmt_coord(x),
-        y_s = pm::fmt_coord(effective_y),
-    )
+        y_s = pm::fmt_coord(effective_y), fill = crate::svg::escape_attribute(&fill), font_family = crate::svg::font_family_attribute(font_family),
+)
     .unwrap();
     if style.link_url.is_some() {
         buf.push_str("</a>");
     }
-}
-
-/// Escape characters that have special meaning in an XML attribute value.
-fn escape_xml_attr(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\n', "&#10;")
 }
 
 #[cfg(test)]
@@ -1769,6 +1805,19 @@ mod tests {
     }
 
     #[test]
+    fn transparent_text_advances_without_painting() {
+        let style = base(0.0, 20.0);
+        for color in ["transparent", "background", "#8044aa00"] {
+            let source = format!("q<color:{color}>fir</color>r");
+            let mut output = String::new();
+            let advance = emit_text(&mut output, &source, &style);
+            assert_eq!(advance, total_width("qfirr", &style));
+            assert_eq!(output.matches("<text ").count(), 2);
+            assert!(!output.contains(">fir</text>"));
+        }
+    }
+
+    #[test]
     fn plain_text_emits_one_element() {
         let mut buf = String::new();
         emit_text(&mut buf, "hello", &base(10.0, 20.0));
@@ -1777,6 +1826,52 @@ mod tests {
         );
         assert!(buf.contains(">hello</text>"));
         assert_eq!(buf.matches("<text").count(), 1);
+    }
+
+    #[test]
+    fn unresolved_sprite_commands_share_emission_and_measurement() {
+        let style = base(0.0, 20.0);
+        let mut output = String::new();
+        let advance = emit_text(&mut output, "Oak<$missing>Grove", &style);
+        assert_eq!(output.matches("<text ").count(), 2);
+        assert!(!output.contains("missing"));
+        assert_eq!(advance, total_width("OakGrove", &style));
+        assert_eq!(advance, total_width("Oak<$missing>Grove", &style));
+        output.clear();
+        let blank = emit_text(&mut output, "<$missing>", &style);
+        assert_eq!(blank, total_width(" ", &style));
+        assert!(output.contains("&#160;"));
+    }
+
+    #[test]
+    fn present_empty_lines_share_the_restored_space_atom() {
+        for size in [8, 12, 24] {
+            let mut style = base(0.0, 20.0);
+            style.font_size = size;
+            style.bold = true;
+            let mut expected = String::new();
+            let width = emit_text(&mut expected, " ", &style);
+            for content in [
+                "",
+                "<$leaf>",
+                "<size:31></size>",
+                "<size:31><color:red><$leaf>",
+            ] {
+                let mut output = String::new();
+                assert_eq!(emit_text(&mut output, content, &style), width, "{content}");
+                assert_eq!(output, expected, "{content}");
+                assert_eq!(total_width(content, &style), width);
+                assert_eq!(
+                    label_height(content, size as f64),
+                    label_height(" ", size as f64)
+                );
+                assert_eq!(
+                    label_ascent(content, size as f64),
+                    label_ascent(" ", size as f64)
+                );
+                assert_eq!(emitted_text_element_count(content, &style), 1);
+            }
+        }
     }
 
     #[test]

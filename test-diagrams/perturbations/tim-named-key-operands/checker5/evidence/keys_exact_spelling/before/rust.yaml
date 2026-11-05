@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "first/last/first/blue" as Spelling
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Spelling
+  entities:
+  - id: Spelling
+    label: first/last/first/blue
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

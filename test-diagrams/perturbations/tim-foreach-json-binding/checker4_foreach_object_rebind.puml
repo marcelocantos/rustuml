@@ -1,0 +1,9 @@
+@startuml
+!$object={"z":"Z","a":"A","m":"M"}
+!$out=""
+!foreach $key in $object
+!$out=$out+$key
+!$object={"new":"N"}
+!endfor
+class "$out / $key" as ObjectOrder
+@enduml

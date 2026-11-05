@@ -1,0 +1,9 @@
+@startuml
+!function $window($start="1", $size=%str2json("2"))
+!return %substr("maple",$start,$size)
+!endfunction
+!$a=$window()
+!$b=%substr("maple",%intval("1"),3)
+!$c=%dec2hex(%str2json("-7"))
+class "$a / $b / $c" as Window
+@enduml

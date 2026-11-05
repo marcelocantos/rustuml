@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "maple/elm|ash/spruce" as Neighbor
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Neighbor
+  entities:
+  - id: Neighbor
+    label: maple/elm|ash/spruce
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

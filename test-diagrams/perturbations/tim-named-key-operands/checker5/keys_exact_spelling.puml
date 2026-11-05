@@ -1,0 +1,8 @@
+@startuml
+!$key="b"
+!function $pair($a="first",$b="last")
+!return $a+"/"+$b
+!endfunction
+!$r=$pair($key="violet")
+class "$r/$pair($b="blue")" as Spelling
+@enduml

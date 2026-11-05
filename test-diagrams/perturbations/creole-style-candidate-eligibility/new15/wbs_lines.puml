@@ -1,0 +1,5 @@
+@startwbs
+* Root\n<$twig>\nEnd
+** <size:20>Large</size>\nSmall
+*** Leaf
+@endwbs

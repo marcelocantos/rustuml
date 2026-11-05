@@ -18,7 +18,7 @@
 
 use std::fmt::Write;
 
-use rustuml_parser::diagram::wbs::{WbsDiagram, WbsNode, WbsSide};
+use rustuml_parser::diagram::wbs::{WbsDiagram, WbsNode, WbsShape, WbsSide};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
@@ -26,13 +26,9 @@ use crate::style::Theme;
 use crate::text_render;
 
 const FONT_SIZE: f64 = 12.0;
+// plantuml.skin wbsDiagram Padding 10; SheetBlock1 uses the same padding
+// for preferred dimensions and painting (FtileBoxOld.createWbs).
 const PAD_X: f64 = 10.0;
-/// Exact box height: text height (14.1328125 at size 12) + 20px vertical
-/// padding.  Kept un-rounded so accumulated row offsets match PlantUML's
-/// per-coordinate HALF_UP rounding.
-const BOX_H: f64 = 34.1328125;
-/// Baseline offset inside a box: (box_h − text_height)/2 + ascent.
-const TEXT_BASELINE: f64 = 21.6015625;
 const MARGIN: f64 = 20.0;
 /// `ITFComposed.delta1x` / `Fork.delta1x` between sibling vertical stacks; also
 /// the length of an elbow stub line from a parent trunk to a child box edge.
@@ -49,10 +45,13 @@ const STROKE: &str = "#181818";
 
 /// A measured WBS node: PlantUML's `ITF` (either `ITFLeaf` or `ITFComposed`).
 struct Itf {
-    label: String,
+    lines: Vec<TextLine>,
+    shape: WbsShape,
+    text_x: f64,
+    text_top: f64,
     fill: String,
-    text_w: f64,
     main_w: f64,
+    main_h: f64,
     /// Children that grow leftward (`--` prefix), in source order.
     left: Vec<Itf>,
     /// Children that grow rightward (`**` prefix), in source order.
@@ -83,9 +82,83 @@ fn coll_height(children: &[Itf]) -> f64 {
         .sum::<f64>()
 }
 
+struct TextLine {
+    content: String,
+    height: f64,
+    baseline: f64,
+}
+
+/// WBSDiagram.addIdea projects Display.getWithNewlines before constructing
+/// its text block. Keep this caller projection separate from the raw label
+/// stored in the model and from other consumers' display/escape policies.
+fn display_lines(label: &str) -> Vec<String> {
+    let mut lines = Vec::new();
+    let mut current = String::new();
+    let mut chars = label.char_indices().peekable();
+    let mut raw = false;
+    while let Some((offset, c)) = chars.next() {
+        let rest = &label[offset..];
+        if rest.starts_with("<math>") || rest.starts_with("<latex>") || rest.starts_with("[[") {
+            raw = true;
+        } else if rest.starts_with("</math>")
+            || rest.starts_with("</latex>")
+            || rest.starts_with("]]")
+        {
+            raw = false;
+        }
+        if c == '\\'
+            && !raw
+            && let Some((_, next)) = chars.next()
+        {
+            match next {
+                'n' => lines.push(std::mem::take(&mut current)),
+                '\\' => current.push('\\'),
+                't' => current.push('\t'),
+                _ => {
+                    current.push(c);
+                    current.push(next);
+                }
+            }
+        } else {
+            current.push(c);
+        }
+    }
+    // Display preserves the final line even when it is empty.
+    lines.push(current);
+    lines
+}
+
 fn measure(node: &WbsNode, is_root: bool) -> Itf {
-    let text_w = pm::text_width(&node.label, FONT_SIZE, false);
-    let main_w = text_w + PAD_X * 2.0;
+    // FtileBoxOld and the unboxed Display block measure and paint the same
+    // SheetBlock stripes: maximum width and accumulated line heights.
+    let mut text_w: f64 = 0.0;
+    let mut text_h = 0.0;
+    let lines = display_lines(&node.label)
+        .into_iter()
+        .map(|content| {
+            text_w = text_w.max(text_render::measure(&content, FONT_SIZE, false));
+            let height = text_render::label_height(&content, FONT_SIZE);
+            let baseline = text_render::label_first_baseline_ascent_with_family(
+                &content,
+                FONT_SIZE,
+                "sans-serif",
+            );
+            text_h += height;
+            TextLine {
+                content,
+                height,
+                baseline,
+            }
+        })
+        .collect();
+    // WBSTextBlock.buildMain / ITFLeaf: BOX uses the style padding; NONE
+    // uses TextBlockUtils.withMargin(text, 0, 3, 1, 1), i.e. left/right/top/bottom.
+    let (text_x, right, text_top, bottom) = match node.shape {
+        WbsShape::Box => (PAD_X, PAD_X, PAD_X, PAD_X),
+        WbsShape::None => (0.0, 3.0, 1.0, 1.0),
+    };
+    let main_w = text_w + text_x + right;
+    let main_h = text_h + text_top + bottom;
     let fill = node
         .color
         .as_deref()
@@ -108,19 +181,22 @@ fn measure(node: &WbsNode, is_root: bool) -> Itf {
 
     // ITFComposed.calculateDimension / ITFLeaf.calculateDimension.
     let (width, height) = if left.is_empty() && right.is_empty() {
-        (main_w, BOX_H)
+        (main_w, main_h)
     } else {
         let w = (main_w / 2.0).max(DELTA_X + coll_width(&left))
             + (main_w / 2.0).max(DELTA_X + coll_width(&right));
-        let h = BOX_H + coll_height(&left).max(coll_height(&right));
+        let h = main_h + coll_height(&left).max(coll_height(&right));
         (w, h)
     };
 
     Itf {
-        label: node.label.clone(),
+        lines,
+        shape: node.shape,
+        text_x,
+        text_top,
         fill,
-        text_w,
         main_w,
+        main_h,
         left,
         right,
         width,
@@ -143,32 +219,37 @@ fn emit_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
 }
 
 fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
-    write!(
+    if node.shape == WbsShape::Box {
+        write!(
         buf,
         r#"<rect fill="{fill}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        fill = node.fill,
-        h = pm::fmt_coord(BOX_H),
+        fill = crate::svg::escape_attribute(&(node.fill)),
+        h = pm::fmt_coord(node.main_h),
         w = pm::fmt_coord(node.main_w),
         x = pm::fmt_coord(x),
         y = pm::fmt_coord(y),
     )
     .unwrap();
-    let _ = node.text_w; // width is recomputed inside emit_text via the segmenter
-    text_render::emit_text(
-        buf,
-        &node.label,
-        &text_render::TextBase {
-            x: x + PAD_X,
-            y: y + TEXT_BASELINE,
-            font_size: FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: "#000000",
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
-    );
+    }
+    let mut line_top = y + node.text_top;
+    for line in &node.lines {
+        text_render::emit_text(
+            buf,
+            &line.content,
+            &text_render::TextBase {
+                x: x + node.text_x,
+                y: line_top + line.baseline,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        line_top += line.height;
+    }
 }
 
 /// `ITFComposed.drawU` (and `ITFLeaf.drawU`): draw this subtree with its frame
@@ -176,15 +257,21 @@ fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
 /// then left children (each preceded by its elbow line), then right children,
 /// then the trunk vertical.
 fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
-    let x = node.w1(); // trunk x within this frame
+    // ITFLeaf.drawU paints its block at the supplied origin. Only
+    // ITFComposed.drawU applies the trunk/collection offset from getw1.
+    let x = if node.is_leaf() {
+        node.main_w / 2.0
+    } else {
+        node.w1()
+    };
     emit_box(buf, ox + x - node.main_w / 2.0, oy, node);
 
     if node.left.is_empty() && node.right.is_empty() {
         return;
     }
 
-    let mut last_y1 = BOX_H;
-    let mut y = BOX_H;
+    let mut last_y1 = node.main_h;
+    let mut y = node.main_h;
     for child in &node.left {
         y += MARGIN_BOTTOM;
         // child.getF2 = (childW, childH/2) for leaf, or (w1+mainW/2, mainH/2).
@@ -202,8 +289,8 @@ fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
         y += child.height;
     }
 
-    let mut last_y2 = BOX_H;
-    y = BOX_H;
+    let mut last_y2 = node.main_h;
+    y = node.main_h;
     for child in &node.right {
         y += MARGIN_BOTTOM;
         let f1x = child.f1_x();
@@ -220,7 +307,13 @@ fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
         y += child.height;
     }
 
-    emit_line(buf, ox + x, oy + BOX_H, ox + x, oy + last_y1.max(last_y2));
+    emit_line(
+        buf,
+        ox + x,
+        oy + node.main_h,
+        ox + x,
+        oy + last_y1.max(last_y2),
+    );
 }
 
 impl Itf {
@@ -245,7 +338,7 @@ impl Itf {
     }
     /// `getF1.y` / `getF2.y`: vertical mid of this node's own box.
     fn f_y(&self) -> f64 {
-        BOX_H / 2.0
+        self.main_h / 2.0
     }
 }
 
@@ -254,7 +347,7 @@ impl Itf {
 /// caller can size the canvas and stack multiple roots.
 fn draw_fork(buf: &mut String, root: &Itf, ox: f64, oy: f64) -> (f64, f64) {
     let main_w = root.main_w;
-    let y0 = BOX_H;
+    let y0 = root.main_h;
     let y1 = y0 + FORK_DELTA_Y / 2.0;
     let y2 = y0 + FORK_DELTA_Y;
 
@@ -375,6 +468,20 @@ pub fn render(diagram: &WbsDiagram, _theme: &Theme) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn display_projection_preserves_blanks_and_escaped_content() {
+        assert_eq!(super::display_lines(r"\nRoot\n\n"), ["", "Root", "", ""]);
+        assert_eq!(super::display_lines(r"A\\nB\nC"), [r"A\nB", "C"]);
+        assert_eq!(
+            super::display_lines(r"[[https://example.test/a\nb label]]\nTail"),
+            [r"[[https://example.test/a\nb label]]", "Tail"]
+        );
+        assert_eq!(
+            super::display_lines(r"<math>a\nb</math>\n"),
+            [r"<math>a\nb</math>", ""]
+        );
+    }
+
     #[test]
     fn renders_simple_wbs() {
         let input = "@startwbs\n* Project\n** Phase 1\n*** Task A\n** Phase 2\n@endwbs";

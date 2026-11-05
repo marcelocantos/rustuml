@@ -1,0 +1,6 @@
+@startwbs
+* <b>Canopy<$twig>Top</b>
+** <size:20>Branch<$leaf>End</size>
+*** Small
+** Plain
+@endwbs

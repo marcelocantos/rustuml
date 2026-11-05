@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "base_revision": "a3afe487a66ae26c73e2f1853d6c26fc2d228875",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "imported_rejection": "5ec48be56c4bce12ec646c29ed8e6d4be5e8518b",
+  "import_commit": "f75103e509a5c5cd61341d78421a436f7103603f",
+  "verification": "Actual CLI before/after original source SVG and full YAML, unchanged comparator; all nine original cohorts plus38 fresh checker pairs including5 nonpositives, then compact fresh relay. Keep32existingpanics. No localJVM or self-review; gates once stable.",
+  "mechanism": "creole-parameter-command-flush",
+  "java_locations": [
+    "klimt/creole/legacy/StripeSimple.java:275-295 modifyStripe calls addPending for every selected command and after recursive body",
+    "klimt/creole/command/CommandCreoleSizeChange.java:74-88 parameter-driven capture; recursive font restore",
+    "klimt/creole/command/CommandCreoleColorChange.java:83-98 parameter-driven capture; recursive font restore",
+    "klimt/creole/legacy/StripeSimple.java:124-128 getAtoms supplies a space only when no atoms"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/creole.rs::handle_tag size/color arms",
+    "crates/rustuml-render/src/creole.rs::push_segment/parse_segments_inner private flush barriers",
+    "crates/rustuml-render/src/wbs.rs::measure/emit_box/draw_itf (unchanged consumers)"
+  ],
+  "invariant": "A selected size/color command flushes pending text before execution and at recursive body end even if body has no atoms or font style equals surrounding style. Empty commands separate adjacent text atoms without adding drawable padding; an entire atomless actual stripe projects a restored base-style space.",
+  "causal_divergence": "Size/color bodies currently recurse without barriers. push_segment merges equal-style q and r across an empty command, unlike Java atom construction. WBS positions and dimensions can be correct while whole SVG atom counts differ.",
+  "planned_change": "Use existing private barrier representation around supported size/color recursive bodies, with surrounding style restoration; no new syntax. Preserve line projection, leaf origin and all WBS geometry unchanged. Verify nonempty same-style bodies, empty bodies, nested combinations and existing absent/blank controls.",
+  "perturbation_axes": [
+    "empty/nonempty/consumed-empty and same versus changed style",
+    "adjacent parameter commands and nested HTML/delimiter commands",
+    "multiline WBS root/leaf/composed nodes versus other shared text consumers"
+  ]
+}

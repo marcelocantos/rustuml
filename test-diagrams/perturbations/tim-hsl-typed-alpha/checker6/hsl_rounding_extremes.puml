@@ -1,0 +1,6 @@
+@startuml
+!$a=%hsl_color(2147483647,51,49,1)
+!$b=%hsl_color(-2147483648,99,1,99)
+!$c=%hsl_color(361,50,50,50)
+class "$a/$b/$c" as Rounding
+@enduml

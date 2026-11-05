@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "%not_registered(3) / " as Literal
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Literal
+  entities:
+  - id: Literal
+    label: '%not_registered(3) / '
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

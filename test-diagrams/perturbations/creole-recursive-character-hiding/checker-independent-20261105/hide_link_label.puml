@@ -1,0 +1,8 @@
+@startuml
+participant Grove
+note right of Grove
+X[[https://example.test ~***fir**]]Y
+X[[https://example.test <b>a\~</b>]]Y
+X~[[https://example.test fir]]Y
+end note
+@enduml

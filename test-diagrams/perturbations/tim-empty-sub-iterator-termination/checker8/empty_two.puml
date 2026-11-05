@@ -1,0 +1,8 @@
+@startuml
+class Harbor
+class Pier
+!startsub quiet
+/' only comment '/
+!endsub
+class Lost
+@enduml

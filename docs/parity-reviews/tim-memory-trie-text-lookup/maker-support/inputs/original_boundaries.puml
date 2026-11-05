@@ -1,0 +1,9 @@
+@startuml
+!$x=%set_variable_value("sap$tip","leaf")
+!$x=%set_variable_value("$tip","bud")
+!raw="sap$tip"
+!function $emit()
+!return "sap$tip"
+!endfunction
+class "sap$tip / xsap$tip / sap$tip2 / raw / $emit() / \nsap$tip / ##sap$tip##" as Boundaries
+@enduml

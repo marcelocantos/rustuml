@@ -1,0 +1,7 @@
+@startuml
+participant Cypress
+note right of Cypress
+P<size:13></size>Q
+P<b>a\~</b>Q
+end note
+@enduml

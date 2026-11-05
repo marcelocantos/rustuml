@@ -1,0 +1,6 @@
+@startuml
+class Perch {
+<color:teal>a<color:NoTint77>b</color>c
+<back:NoTint77>field</back>
+}
+@enduml

@@ -1,0 +1,21 @@
+SVG structural differences:
+  element count: expected 31, got 29
+  [26] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "8.1821"), ("x", "42.4438"), ("y", "63.0566")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "20.1284"), ("x", "42.4438"), ("y", "63.0566")]
+  [26] <text> text mismatch:
+    expected: Some("q")
+    actual:   Some("qrs")
+  [27] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "5.3193"), ("x", "50.626"), ("y", "63.0566")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "41.4883"), ("x", "62.5723"), ("y", "63.0566")]
+  [27] <text> text mismatch:
+    expected: Some("r")
+    actual:   Some("</B>t")
+  [28] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "6.627"), ("x", "55.9453"), ("y", "63.0566")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "31"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "74.4727"), ("x", "42.4438"), ("y", "78.3672")]
+  [28] <text> text mismatch:
+    expected: Some("s")
+    actual:   Some("</I>")
+

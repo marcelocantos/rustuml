@@ -1,0 +1,5 @@
+@startuml
+node "Host--Tail-" {
+component "Disk--"
+}
+@enduml

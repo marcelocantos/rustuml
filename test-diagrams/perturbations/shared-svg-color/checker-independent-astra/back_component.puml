@@ -1,0 +1,5 @@
+@startuml
+component "L<back:transparent>Mist</back>R" as Core
+component Tail
+Core --> Tail
+@enduml

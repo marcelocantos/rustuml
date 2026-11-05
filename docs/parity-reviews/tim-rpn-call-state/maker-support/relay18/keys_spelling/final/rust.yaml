@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "oak/pine/oak/jade/oak/cobalt" as Key
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Key
+  entities:
+  - id: Key
+    label: oak/pine/oak/jade/oak/cobalt
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

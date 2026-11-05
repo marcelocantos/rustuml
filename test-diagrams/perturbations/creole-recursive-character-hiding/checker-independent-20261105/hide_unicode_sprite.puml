@@ -1,0 +1,8 @@
+@startuml
+start
+:X\~<$absent>~***fir**Y;
+:X~<$absent>Y;
+:Xé\~<b>~***fir**</b>Y;
+:X~𐐀<b>\~</b>Y;
+stop
+@enduml

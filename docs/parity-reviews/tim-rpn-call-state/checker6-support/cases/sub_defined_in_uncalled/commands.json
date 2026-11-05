@@ -1,0 +1,73 @@
+{
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.1302675000042655,
+  "stdout_sha256": "7d411aa44d207c1dfc0572002beb1b95d5e3c84e45cb4fb80bb609c3facdf578",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "id": "sub_defined_in_uncalled",
+  "timezone": "GMT+11:00",
+  "source": "/tmp/rustuml-checker6/supplement/sub_defined_in_uncalled.puml",
+  "source_sha256": "9cff639c1732156436385100a6e5d9718b3762ee7ca21003d39a5ac5b4bf876c",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement/sub_defined_in_uncalled.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement/sub_defined_in_uncalled.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement/sub_defined_in_uncalled.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.yDxfr8P1/supplement",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.5164702920010313,
+    "stdout_sha256": "5b7cd5415dc3f25391e1b079bec9824354b64bbe64fb487c81cfb13e03e26b6c",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}

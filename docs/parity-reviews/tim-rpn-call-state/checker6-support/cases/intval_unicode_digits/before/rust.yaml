@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "0/0" as Unicode
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Unicode
+  entities:
+  - id: Unicode
+    label: '0/0'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

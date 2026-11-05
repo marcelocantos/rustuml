@@ -1,0 +1,64 @@
+{
+  "source": "/tmp/rustuml-tim4/new/return_while_nested.puml",
+  "mechanism": "tim-return-unwind",
+  "intended_negative": false,
+  "source_sha256": "4811e1c5df2edde21f80e5878ac85abc5b2286d9f13bad0f35208cbe3ab99d7a",
+  "java_exit": 0,
+  "java_probe_exit": 0,
+  "java_svg_xml_valid": true,
+  "java_valid_reference": true,
+  "cli_exit": 0,
+  "comparison_exit": 0,
+  "svg_match": true,
+  "source_equal": true,
+  "source_diagnostic_error": null,
+  "java_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_probe_argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new",
+    "--timezone",
+    "GMT+11:00",
+    "--probe",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/SourceProbe.java",
+    "--classpath",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP",
+    "--",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new/return_while_nested.puml",
+    "/Users/marcelo/rustuml-reference/scratch/worker.5NhExUKP/new"
+  ],
+  "rust_calls": [
+    {
+      "argv": [
+        "/tmp/rustuml-tim4/final-rustuml",
+        "-pipe"
+      ],
+      "cwd": "/tmp/rustuml-tim4/new",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/tmp/rustuml-tim4/final-rustuml",
+        "--yaml",
+        "-pipe"
+      ],
+      "cwd": "/tmp/rustuml-tim4/new",
+      "exit_code": 0
+    }
+  ],
+  "comparison_argv": [
+    "/tmp/rustuml-tim4/probe",
+    "compare",
+    "/tmp/rustuml-tim4/relay-completion/return_while_nested/java.svg",
+    "/tmp/rustuml-tim4/relay-completion/return_while_nested/rust.svg"
+  ]
+}

@@ -1,0 +1,610 @@
+[
+  {
+    "name": "run_edges",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "run_spaces",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "style_same",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "style_nested",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "empty_closed",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "empty_eol",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "empty_adjacent",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "empty_lines",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "case_keywords",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "optional_braces",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "color_separator",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "unicode_name",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "unicode_color",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "malformed_names",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "nested_angle",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "missing_close",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "escaped",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "double_escape",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "entity_escape",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "scale_dot",
+    "intended_validity": "intended_valid",
+    "observed_validity": "runtime_error_svg",
+    "positive_reference": false,
+    "initial_mechanical_category": "syntax_negative",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 2,
+      "stderr": "java.lang.NumberFormatException: For input string: \".\"\n\tat java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)\n\tat java.base/jdk.internal.ma",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "scale_doubledot",
+    "intended_validity": "intended_valid",
+    "observed_validity": "runtime_error_svg",
+    "positive_reference": false,
+    "initial_mechanical_category": "syntax_negative",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 2,
+      "stderr": "java.lang.NumberFormatException: multiple points\n\tat java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1914)\n\tat java.base/jdk.internal.math.Flo",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "scale_zero",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "scale_negative",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "scale_overflow",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "url_label",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "url_after",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "empty_link",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "note_undefined",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "note_defined",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "note_defined_scale",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "deploy_defined",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": true,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "class_defined",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "seq_defined",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "legacy_title",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": true,
+    "standing_match": true
+  },
+  {
+    "name": "legacy_wbs",
+    "intended_validity": "intent_uncertain_nested_start",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "wbs",
+    "intended_validity": "intended_valid",
+    "observed_validity": "positive_reference",
+    "positive_reference": true,
+    "initial_mechanical_category": "positive_reference",
+    "evidence": {
+      "java_exit": 0,
+      "comparator_exit": 0,
+      "stderr": "",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "empty_diagram",
+    "intended_validity": "intent_empty_or_welcome",
+    "observed_validity": "empty_description_welcome_error_svg",
+    "positive_reference": false,
+    "initial_mechanical_category": "syntax_negative",
+    "evidence": {
+      "java_exit": 200,
+      "comparator_exit": 2,
+      "stderr": "ERROR\n1\nEmpty description (Assumed diagram type: sequence)\n",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  },
+  {
+    "name": "syntax_negative",
+    "intended_validity": "intended_syntax_negative",
+    "observed_validity": "syntax_error_svg_with_welcome",
+    "positive_reference": false,
+    "initial_mechanical_category": "syntax_negative",
+    "evidence": {
+      "java_exit": 200,
+      "comparator_exit": 2,
+      "stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+      "xml_valid": true
+    },
+    "before_match": false,
+    "after_match": false,
+    "standing_match": false
+  }
+]

@@ -1,0 +1,6 @@
+@startuml
+class Grove {
+a<font:Serif>Wi mi</font>z
+a<b><size:14><color:navy><font:Serif>Wi mi</font></color></size></b>z
+}
+@enduml

@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-json-container-validation",
+  "reviewer": {
+    "task_id": "t3-04b6729a-independent-TIM-checker5",
+    "thread_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3Ad979fae3-777e-4583-b22b-5ed91f03f235",
+    "model": "gpt-6-astra / high; Codex harness through T3 Code",
+    "role": "independent adversarial checker; no production edits; no children"
+  },
+  "account_commit": "6d46a483aad389d4535e1ba24822fdd116baf517",
+  "implementation_commit": "92647b126f6dc1c83ebdc6213d0c2c0a5b3211b6",
+  "tested_revision": "1703a2727fa364ee8004ba59a22b4c6934ee5d3d",
+  "baseline_revision": "ee0e4c72fb222f1312d1aaf7d5a152cc97f12781",
+  "prior_rejection": "0d30ae99e85195f595e21ca0a80be85f26473ee9",
+  "evidence_import": "47a723b6fd424a2584dc3d89ac0dc0328eeb0ae7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_locations": [
+    "tim/EaterForeach.java:analyze,isSkip,size",
+    "tim/expression/TValue.java:toJson",
+    "tim/VariableManager.java:replaceJson"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "commands": [
+    "CARGO_TARGET_DIR=<private-cache>/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact before",
+    "CARGO_TARGET_DIR=<private-cache>/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release at exact candidate",
+    "uv run --no-project python <private-cache>/replay.py <fixed cohort>; before and after -pipe and --yaml -pipe; unchanged compare_svg_strict",
+    "Parent relay: /Users/marcelo/rustuml-reference/bin/reference --cwd <worker>/<new|supplement> --timezone GMT+11:00 -- -pipe -tsvg; unchanged SourceProbe.java; exact argv/streams captured per case",
+    "uv run --no-project python <private-cache>/gates.py; exact candidate main tiers once; full command/status manifest in checker5-support/gates.json"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_terminal_and_skip.puml",
+      "golden": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_terminal_and_skip.svg",
+      "axes": [
+        "terminal missing",
+        "nonJSON versus containers"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "27106f21eff06b5362e79d61f49c181dba05934ac7bfe0c11ed169f075e7fbff",
+      "golden_sha256": "5eddb5715e8bd564948e5a1c29fbd218480544274137f933f1e75640c7097132",
+      "evidence": "test-diagrams/perturbations/tim-json-container-validation/checker5/evidence/json_terminal_and_skip",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_scalar_null.puml",
+      "golden": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_scalar_null.svg",
+      "axes": [
+        "JSON null",
+        "foreach versus nonJSON"
+      ],
+      "result": "pass",
+      "reference_valid": false,
+      "reference_xml_valid": false,
+      "rust_cli_exit": 1,
+      "source_equal": false,
+      "comparison_exit": 3,
+      "source_sha256": "5a2a584943a97cb2a2bdf7fb24ad50f865459abab4114ac41ed0b8dce7cc1f1e",
+      "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence": "test-diagrams/perturbations/tim-json-container-validation/checker5/evidence/json_scalar_null",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 1,
+      "java_probe_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_missing_dot.puml",
+      "golden": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_missing_dot.svg",
+      "axes": [
+        "nested prefix",
+        "dot continuation"
+      ],
+      "result": "pass",
+      "reference_valid": false,
+      "reference_xml_valid": false,
+      "rust_cli_exit": 1,
+      "source_equal": false,
+      "comparison_exit": 3,
+      "source_sha256": "04374cb88467ae49647a6dff3660c5b9a51df3b76fefd7324fc5d765ffde1dee",
+      "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence": "test-diagrams/perturbations/tim-json-container-validation/checker5/evidence/json_missing_dot",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "claimed mechanism",
+      "java_exit": 1,
+      "java_probe_exit": 1
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_missing_index_residue.puml",
+      "golden": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_missing_index_residue.svg",
+      "axes": [
+        "function in index",
+        "valid array operand"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": false,
+      "comparison_exit": 2,
+      "source_sha256": "d690d8ef0f89b6c1128b5ec99f81b5f619ddc2cf7ae9c45b7fe51825a1bbfa1d",
+      "golden_sha256": "9f177ad2e77b1c30e90f5d8da9e50089456a6d42bb1b37b4951b5204d56d9311",
+      "evidence": "test-diagrams/perturbations/tim-json-container-validation/checker5/evidence/json_missing_index_residue",
+      "classification": "negative; rejection and first-error assessed separately from SVG",
+      "standing_oracle_result": "fail",
+      "scope": "known outside-bound residual",
+      "java_exit": 200,
+      "java_probe_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_empty_object.puml",
+      "golden": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_empty_object.svg",
+      "axes": [
+        "empty object versus array",
+        "terminal missing dot versus JSON typed string"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "reference_xml_valid": true,
+      "rust_cli_exit": 0,
+      "source_equal": true,
+      "comparison_exit": 0,
+      "source_sha256": "eeda380989e95eff02c4cf0f3363c5eb0f0afe4a33986a0ae29993a1518ea0eb",
+      "golden_sha256": "e9d1bd889db5a6df4055d11ddccb7fffb57f09529351462844ae50e435f75f1d",
+      "evidence": "test-diagrams/perturbations/tim-json-container-validation/checker5/evidence/json_empty_object",
+      "classification": "valid source/SVG",
+      "standing_oracle_result": "pass",
+      "scope": "claimed mechanism",
+      "java_exit": 0,
+      "java_probe_exit": 0
+    }
+  ],
+  "findings": [
+    "SUPPORTED WITHIN THE BOUNDED MODEL: json_terminal_and_skip and json_empty_object match exact evaluated source and actual CLI SVG. They distinguish typed JSON string007 plus1 =>0071, terminal missing-dot empty text, plain-string/nonJSON skip, invalid str2json yielding nonJSON empty, empty arrays/objects, and nonempty array iteration/global final binding.",
+    "json_scalar_null and json_missing_dot reject before class output. Java exits1 with empty non-XML streams; Rust exits1 with located Foreach requires a JSON array or object / missing intermediate member diagnostics. These establish rejection and causal first failure, not identical JVM exception formatting. EaterForeach.toJson/isSkip/size and VariableManager.replaceJson support the new branches.",
+    "NO GRAMMAR WAIVER: json_missing_index_residue remains Java-negative Parsing syntax error about ] while Rust accepts function-in-index syntax and emits one. It is explicitly outside the bounded maker repair, but prevents claims of general JSON-access grammar or eager expression parity. The negative remains executable and failing.",
+    "No new in-scope container/missing-chain failure was found. Acceptance is withheld: the unchanged standing gate is red, including the preserved function-in-index residual. The rejected acceptance verdict must not be read as disproving terminal-missing behavior or scalar-foreach rejection."
+  ],
+  "next_causal_repair": "No bounded container repair demonstrated. Resolve the separately scoped function-in-index grammar residual before claiming full JSON-access parity.",
+  "verdict": "rejected",
+  "bounded_mechanism_observation": "supported on tested axes; acceptance withheld by unchanged red standing gate",
+  "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/checker5-support/README.md",
+  "scope": "Only exact1703a272 versus exactee0e4c72. No whole-TIM or combined candidate acceptance. Earlier rejected records and every old reference remain immutable. The mandatory standing perturbation gate is red; negative error references remain failures there, even when rejection behavior is correct. No comparator, baseline, skip rule, reader, date, parser, renderer, target or shipping change."
+}

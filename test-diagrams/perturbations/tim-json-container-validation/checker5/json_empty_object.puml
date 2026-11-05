@@ -1,0 +1,13 @@
+@startuml
+!$n=0
+!foreach $x in {}
+!$n=80
+!endfor
+!foreach $x in []
+!$n=90
+!endfor
+!$d={"v":"007"}
+!$a=$d.missing
+!$b=$d.v+1
+class "$n/$a/$b" as Empty
+@enduml

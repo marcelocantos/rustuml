@@ -1,0 +1,7 @@
+@startuml
+!function $braid($a="maple",$b="spruce")
+!return $a+"/"+$b
+!endfunction
+!$x=7+$braid($b="one",$b="two")
+class Lost
+@enduml

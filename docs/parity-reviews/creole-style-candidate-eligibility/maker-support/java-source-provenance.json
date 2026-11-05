@@ -1,0 +1,151 @@
+{
+  "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "files": [
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/activitydiagram3/ftile/vertical/FtileBoxOld.java",
+      "sha256": "f4678763063b50991e68e2bea002625da9ae13477b5606de9ef6265905de51f8",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+      "sha256": "742fc602d073e06b494e24b4d932db4cfded4c6ae98bf463648854e7a2c0a19d",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java",
+      "sha256": "fc54ae0fee21d32b68b2a3c920427d3e04066769eeb7db80f66ffd819d3147b3",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "sha256": "7aba3c7b36008abccd5a61e8b64bc9540fdf7873a153d4c24cac50b9987107c2",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/Parser.java",
+      "sha256": "3c49c4944c5e22e469a078d7ef362c076cec42d595b99e3b1e31d628c52985bf",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "sha256": "c92f38502c07378f84ab91283eb27ea3e763e8d935cab5cb8d051fb2d12f3986",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleColorChange.java",
+      "sha256": "998aa4667e3dad25ae265afb8badd42baeaa91683fe1e644223d5d2ff5acf268",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleSizeChange.java",
+      "sha256": "afb698b1551b955f49066666d66934ab6bd22a5ae390af93ceab5b4eaee52ca2",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleSprite.java",
+      "sha256": "c5572f8d5ef5ac350aaae127a8a32ae5282aaa01cc653e3068b9f511cca52d9a",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleStyle.java",
+      "sha256": "1c4eae3b8cc1ea7d231a5e65ab1a7befb744e6deb7901200287e7c59a24ea792",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/Splitter.java",
+      "sha256": "66f7c4901532da772c4d3a8915a0eff8c29d0fbde378bd95f1a18a159830bbe4",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java",
+      "sha256": "90e62fb331a47aab282ba79c672c65e9386ac31024049d00f93ddcd8df3b9642",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CommandCreoleBuilder.java",
+      "sha256": "dad36e8983d828c8949e2ffeec0acc52ca2fa450deeef3d55abec313ceb22ea1",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CreoleParser.java",
+      "sha256": "91fb2e6780b9b021a7754d0ad04f4f6e465a9c540ea9b235745e63cb3dd78db3",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CreoleStripeSimpleParser.java",
+      "sha256": "7985b2a08ab14aa377d88a68f9ffdd86c7ae1af8e109fffb8a155b13496da6a5",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeSimple.java",
+      "sha256": "5da5e0b2ec483a26ee58e63a58e79ab37f7a881f465701bfddac9ba1d8967eec",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/FontStyle.java",
+      "sha256": "82ae22373e5b948b65f634e37493d6e349ebea823bfc09f2e8750fbf17407837",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockUtils.java",
+      "sha256": "5f50a286e6819d84e2a4be2dacb61cdaa9e3df409d75cca8382090081ed373d7",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/mindmap/IdeaShape.java",
+      "sha256": "7a049afa035b4e60878421a76d1a8f99a712c627896378a2a2dae8f06235d63c",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/text/Guillemet.java",
+      "sha256": "8a8256a5946295c7242ee9ff2247a4e8c3a54e1b2cb62eb2d113a84da69040d1",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/utils/CharHidder.java",
+      "sha256": "db440b9903a7ff58b2ee9185f7776635b9ab5e3ecaa1fb384eb31a40d130acd3",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/CommandWBSItemNew.java",
+      "sha256": "36c5adfe98f2905a2d60814c8055ef8f0ca8f78ae0dd3b87f0cd1d560a4a4d69",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/CommandWBSItemOld.java",
+      "sha256": "9435b5e715d1da00ebeebb7f37ad195d4b9531907405ad3b92373a6fd1d8a9b0",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/Fork.java",
+      "sha256": "acdd5f473be2a2f823042225f0a1fe8c5ab8b6389e04e8da7f4fdbc8201e4d07",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/ITFComposed.java",
+      "sha256": "423f979206394053e289d309c3738b14bb348e08618fcc509e8c5a6a5db0b3b3",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/ITFLeaf.java",
+      "sha256": "d8396d94187770dc1320fbe7c14272e7ee647ff6499b27a61d6f77beb30d84f3",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/WBSDiagram.java",
+      "sha256": "b82120c107e58caa1387688c63bbb3983e4d4888a7cdfb461177e6b95f0cedad",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/wbs/WBSTextBlock.java",
+      "sha256": "e6cc7b858d5f5f53ec7a870b7c933776f0ea343a73ac00361ceef246c07d4bc3",
+      "matches_pin": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/resources/skin/plantuml.skin",
+      "sha256": "efc1747ec10be10c62b7d69bc280196c4f64fac618a5556d15c1fe3858017bbb",
+      "matches_pin": true
+    }
+  ],
+  "execution": "Parent existing Monkey Man only. Derived Java argv is not process-traced. No historical font/Graphviz environment equivalence claim."
+}

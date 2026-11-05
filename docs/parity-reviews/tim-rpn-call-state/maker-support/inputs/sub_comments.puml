@@ -1,0 +1,11 @@
+@startuml
+!$n=0
+!startsub outer
+/'
+!startsub ignored
+'/
+!$n=$n+1
+!endsub
+!includesub outer
+class "$n" as Count
+@enduml

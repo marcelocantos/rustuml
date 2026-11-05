@@ -1,0 +1,19 @@
+SVG structural differences:
+  element count: expected 10, got 25
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "68px"), ("preserveAspectRatio", "none"), ("style", "width:69px;height:68px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 69 68"), ("width", "69px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("height", "265px"), ("preserveAspectRatio", "none"), ("style", "width:585px;height:265px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 585 265"), ("width", "585px"), ("zoomAndPan", "magnify")]
+  [3] tag mismatch: expected <g>, got <text>
+  [4] tag mismatch: expected <rect>, got <text>
+  [5] tag mismatch: expected <ellipse>, got <text>
+  [6] tag mismatch: expected <path>, got <text>
+  [7] <text> depth mismatch: expected 4, got 3
+  [7] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "17.7051"), ("x", "36"), ("y", "28.291")]
+    actual:   [("fill", "#000000"), ("font-family", "monospace"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "122.8184"), ("x", "5"), ("y", "72.6699")]
+  [7] <text> text mismatch:
+    expected: Some("14")
+    actual:   Some("Bob->Alice:\u{a0}Hello")
+  [8] tag mismatch: expected <line>, got <text>
+  [9] tag mismatch: expected <line>, got <text>
+

@@ -1,0 +1,5 @@
+@startuml
+start
+:<color:automatic>a</color><color:transparent>b</color><color:background>c</color>;
+stop
+@enduml

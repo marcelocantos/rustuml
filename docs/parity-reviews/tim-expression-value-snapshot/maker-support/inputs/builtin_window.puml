@@ -1,0 +1,8 @@
+@startuml
+!$a=%substr("forest",%str2json("3"),2)
+!$b=%dec2hex(-2147483648)
+!$c=%dec2hex("17")
+!$d=%substr("🌲ab🌿cd",2,2)
+!$e=%strpos("🌲ab🌿cd","cd")
+class "$a / $b / $c / $d / $e" as Window
+@enduml
