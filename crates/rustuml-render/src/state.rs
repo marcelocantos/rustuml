@@ -4319,13 +4319,15 @@ fn emit_autonomous_scope_links(
                     if arrow_at_start { "backto" } else { "to" },
                 ),
             );
-            write!(
-                svg,
-                r#"<path d="{path}" fill="none" id="{path_id}" style="{stroke}"/>"#,
-                path_id = crate::svg::escape_attribute(&path_id),
-                stroke = crate::svg::escape_attribute(stroke),
-            )
-            .unwrap();
+            if svek_dot_path_is_drawn(color) {
+                write!(
+                    svg,
+                    r#"<path d="{path}" fill="none" id="{path_id}" style="{stroke}"/>"#,
+                    path_id = crate::svg::escape_attribute(&path_id),
+                    stroke = crate::svg::escape_attribute(stroke),
+                )
+                .unwrap();
+            }
             render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
 
             if let Some(label) = &transition.label {
@@ -8241,13 +8243,15 @@ pub fn render_with_oracle(
                     .unwrap();
                     i += 3;
                 }
-                write!(
-                    svg,
-                    r#"<path d="{d}" fill="none" id="{path_id}" style="{link_stroke}"/>"#,
-                    path_id = crate::svg::escape_attribute(&path_id),
-                    link_stroke = crate::svg::escape_attribute(link_stroke),
-                )
-                .unwrap();
+                if svek_dot_path_is_drawn(link_color) {
+                    write!(
+                        svg,
+                        r#"<path d="{d}" fill="none" id="{path_id}" style="{link_stroke}"/>"#,
+                        path_id = crate::svg::escape_attribute(&path_id),
+                        link_stroke = crate::svg::escape_attribute(link_stroke),
+                    )
+                    .unwrap();
+                }
 
                 // Arrowhead polygon.
                 render_arrowhead(
@@ -8296,15 +8300,17 @@ pub fn render_with_oracle(
 
                 // Path as cubic bezier.
                 let mid_y = (start_y + end_y) / 2.0;
-                write!(
-                    svg,
-                    r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{path_id}" style="{link_stroke}"/>"#,
-                    fmt_f(from_cx), fmt_f(start_y),
-                    fmt_f(from_cx), fmt_f(mid_y),
-                    fmt_f(to_cx), fmt_f(mid_y),
-                    fmt_f(to_cx), fmt_f(end_y), path_id = crate::svg::escape_attribute(&path_id), link_stroke = crate::svg::escape_attribute(link_stroke),
-)
-                .unwrap();
+                if svek_dot_path_is_drawn(link_color) {
+                    write!(
+                        svg,
+                        r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{path_id}" style="{link_stroke}"/>"#,
+                        fmt_f(from_cx), fmt_f(start_y),
+                        fmt_f(from_cx), fmt_f(mid_y),
+                        fmt_f(to_cx), fmt_f(mid_y),
+                        fmt_f(to_cx), fmt_f(end_y), path_id = crate::svg::escape_attribute(&path_id), link_stroke = crate::svg::escape_attribute(link_stroke),
+                    )
+                    .unwrap();
+                }
 
                 // Arrowhead.
                 let control = (to_cx, end_y - ARROW_LEN);
@@ -8438,10 +8444,12 @@ fn state_transition_paint(
         transition.source_line,
     );
     let css_stroke = resolved.stroke(skin.arrow_thickness);
+    // WithLinkType.applyOneStyle: an inline arrow colour is
+    // HColorSet.getColorOrWhite, the same resolution as ValueImpl.asColor.
     let color = inline
         .color
         .as_deref()
-        .map(crate::sequence::resolve_color)
+        .map(resolve_state_line_color)
         .or_else(|| resolved.property("lineColor").map(resolve_state_line_color))
         .unwrap_or_else(|| skin.arrow_color.clone());
     let thickness = transition_stroke_thickness(&inline, css_stroke.thickness);
@@ -8594,6 +8602,12 @@ fn arrowhead_points(control: (f64, f64), endpoint: (f64, f64)) -> [(f64, f64); 5
 
 /// Render a filled arrowhead polygon at the endpoint, pointing in the direction
 /// from control to endpoint.
+/// `DriverDotPathSvg.draw` writes nothing for a transparent (alpha 0) colour,
+/// which `resolve_state_line_color` serializes as `none`.
+fn svek_dot_path_is_drawn(color: &str) -> bool {
+    color != "none"
+}
+
 fn render_arrowhead(
     svg: &mut String,
     control: (f64, f64),
@@ -8602,6 +8616,22 @@ fn render_arrowhead(
     thickness: f64,
 ) {
     let points = arrowhead_points(control, endpoint);
+    if !svek_dot_path_is_drawn(color) {
+        // SvekEdge.drawRainbow: a transparent head draws
+        // ExtremityArrow.drawLineIfTransparent, one ULine from polygon point 0
+        // to point 2, with stroke.onlyThickness().
+        write!(
+            svg,
+            r#"<line style="stroke:none;stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fmt_f(thickness),
+            fmt_f(points[0].0),
+            fmt_f(points[2].0),
+            fmt_f(points[0].1),
+            fmt_f(points[2].1),
+        )
+        .unwrap();
+        return;
+    }
     write!(
         svg,
         r#"<polygon {state_fill_0} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{color};stroke-width:{};"/>"#,

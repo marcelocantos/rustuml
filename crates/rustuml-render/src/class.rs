@@ -3828,9 +3828,9 @@ fn empty_package_dims(pkg: &Package) -> (f64, f64) {
             PackageKind::Database => (10.0, 10.0, 24.0, 5.0, 0.0, 0.0),
             PackageKind::Rectangle => (10.0, 10.0, 10.0, 10.0, 0.0, 0.0),
             PackageKind::Cloud => (15.0, 15.0, 15.0, 15.0, 0.0, 0.0),
-            PackageKind::Package | PackageKind::Namespace => unreachable!(
-                "ordinary package kinds do not retain an explicit USymbol"
-            ),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
         };
         return (
             content_width.max(title_width) + left + right,
@@ -6077,9 +6077,9 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
             PackageKind::Database => emit_layout_empty_symbol_database(svg, package),
             PackageKind::Rectangle => emit_layout_empty_symbol_rectangle(svg, package),
             PackageKind::Cloud => emit_layout_empty_symbol_cloud(svg, package),
-            PackageKind::Package | PackageKind::Namespace => unreachable!(
-                "ordinary package kinds do not retain an explicit USymbol"
-            ),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
         }
         svg.push_str("</g>");
         return;
@@ -6180,13 +6180,10 @@ fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayou
     let y = package.y;
     let right = x + package.width;
     let bottom = y + package.height;
-    let title_width =
-        SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let title_width = SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
     let tab_join = x + title_width - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + title_width + PACKAGE_TAB_SLOPE_WIDTH;
-    let line_y = y
-        + SYMBOL_FOLDER_TAB_TITLE_HEIGHT
-        + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let line_y = y + SYMBOL_FOLDER_TAB_TITLE_HEIGHT + 2.0 * PACKAGE_TITLE_MARGIN_X;
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -6256,9 +6253,7 @@ fn emit_layout_empty_symbol_text(
             stereotype,
             &TextBase {
                 x: body_x + (content_width - width) / 2.0,
-                y: body_y
-                    + preceding_height
-                    + text_render::label_ascent(stereotype, FONT_SIZE),
+                y: body_y + preceding_height + text_render::label_ascent(stereotype, FONT_SIZE),
                 font_size: FONT_SIZE as u32,
                 font_family: "sans-serif",
                 fill: &package.font_fill,
@@ -6275,9 +6270,7 @@ fn emit_layout_empty_symbol_text(
         &package.label,
         &TextBase {
             x: body_x + (content_width - label_width) / 2.0,
-            y: body_y
-                + preceding_height
-                + text_render::label_ascent(&package.label, FONT_SIZE),
+            y: body_y + preceding_height + text_render::label_ascent(&package.label, FONT_SIZE),
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: &package.font_fill,
@@ -6454,12 +6447,7 @@ fn emit_layout_empty_symbol_rectangle(svg: &mut String, package: &EmptyPackageLa
         fmt4(package.y),
     )
     .unwrap();
-    emit_layout_empty_symbol_text(
-        svg,
-        package,
-        package.x + 10.0,
-        package.y + 10.0,
-    );
+    emit_layout_empty_symbol_text(svg, package, package.x + 10.0, package.y + 10.0);
 }
 
 fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout) {
@@ -6492,12 +6480,7 @@ fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout
         BORDER_WIDTH,
     )
     .unwrap();
-    emit_layout_empty_symbol_text(
-        svg,
-        package,
-        package.x + 15.0,
-        package.y + 15.0,
-    );
+    emit_layout_empty_symbol_text(svg, package, package.x + 15.0, package.y + 15.0);
 }
 
 fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
