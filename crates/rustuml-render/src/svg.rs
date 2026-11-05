@@ -1020,6 +1020,9 @@ mod tests {
     #[test]
     fn shared_paints_follow_java_rgb_alpha_and_transparency_roles() {
         assert_eq!(fill_attributes("#2ad"), r##"fill="#22AADD""##);
+        // 0.46667 = 0x77 / 255 = 119 / 255 formatted "%1.5f", as in
+        // SvgGraphics.fillMe (lines 894-895: parseInt(fill.substring(7), 16)
+        // / 255.0, String.format(Locale.US, "%1.5f", opacity)).
         assert_eq!(
             fill_attributes("#8044aa77"),
             r##"fill="#8044AA" fill-opacity="0.46667""##
