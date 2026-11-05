@@ -1,0 +1,20 @@
+{
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "status": "preimplementation account; independent review required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "obligation": "4: implement or explicitly warn instead of silently wrong output for multiple stereotypes, URL tooltips, re-declaration move-to-last and box membership, and colours that are not painted",
+ "java_trace": {
+  "url_tooltip": "sequencediagram.command.CommandParticipant#executeArg: UrlBuilder(topurl, STRICT)#getUrl(URL capture) -> Participant#setUrl; url.Url#getTooltip is the {tooltip} part, else the URL; SVG anchors use it as title/xlink:title",
+  "multiple_stereotypes": "CommandParticipant#executeArg: Stereotype#build(STEREO capture) splits '<<a>><<b>>' into one label per stereotype; each label is drawn as its own guillemet line",
+  "redeclaration": "CommandParticipant#executeArg: when CODE exists, SequenceDiagram#putParticipantInLast(code) removes the participant, re-adds it with SequenceDiagram#addWithOrder (before the first participant with a greater order) and records the current ParticipantEnglober (box)",
+  "group_colours": "sequencediagram.command.CommandGrouping#executeArg: COLORS[0] is backColorElement (header tab), COLORS[1] is backColorGeneral (whole group area), passed to SequenceDiagram#grouping",
+  "return_label": "sequencediagram.command.CommandReturn#getRegexConcat: COLOR is (#\\w+) followed by spaceOneOrMore; '#PaleGreen/Indigo pollen' is MESSAGE text, which creole renders as an ordered-list item ('1.'), not a colour"
+ },
+ "planned_change": [
+  "Implement: Participant url tooltip (model field + legacy anchor title), mirroring Url#getTooltip",
+  "Warn (explicit residue): multiple stereotype labels rendered as one label; teoz participant link anchors not emitted; a [[link]] inside a quoted participant display (creole link label/tooltip); re-declaration that Java moves to last or into another box; CommandGrouping COLORS[1] backColorGeneral not painted",
+  "No warning keyed to label text: the return-label creole ordered list and note/hnote/rnote across/over-several geometry are recorded as residue with evidence that their fills are painted"
+ ],
+ "precommitted_measurement": "same cohorts and gates as docs/parity-reviews/sprite-command-post-tim-ownership/maker-results/account.json; for the 24 colour probes, a paint-attribute multiset audit (Java vs Rust fill/stroke colours)"
+}
