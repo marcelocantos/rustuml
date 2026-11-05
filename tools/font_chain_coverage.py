@@ -7,10 +7,14 @@ into the generated provenance header (the drift gate compares that hash with the
 and every <file.tsv> is read from it. Face names are the generated constants font_chain::ChainFace
 reads; identical run tables are shared between faces.
 
-Per face the HarfBuzz 8.2.2 plan facts (#hb_plan) decide zeroes_unmapped_marks: glyph 0 is a mark
-(no GDEF glyph classes, so hb_synthesize_glyph_classes classifies by Unicode category, or a GDEF mark
-class) and zero_marks holds (no kerx, no state-machine kern; hb-ot-shape.cc 136-189). An extraction
-without #hb_plan lines (round-5 tool) takes its facts from --plan-facts (lines "<face file>\t<facts>").
+Per face the HarfBuzz plan facts (#hb_plan; HarfBuzz 10.0.1, which the reference JDK links) decide
+zeroes_unmapped_marks: glyph 0 is a mark (no GDEF glyph classes, so hb_synthesize_glyph_classes
+classifies by Unicode category, or a GDEF mark class) and zero_marks holds (no kerx, no state-machine
+kern; hb-ot-shape.cc 136-189); and fallback_positions_marks: adjust_mark_positioning_when_zeroing (no
+GPOS, no kerx, no cross-stream kern; 192-201), which with a fallback-positioning shaper runs
+_hb_ot_shape_fallback_mark_position. --plan-facts adds facts per face file (lines
+"<face file>\t<key=value>..."): every fact for an extraction without #hb_plan (round-5 tool), or the
+cross_kern bit, which the extraction does not record.
 """
 import hashlib, os, sys
 
@@ -70,8 +74,11 @@ for face, name in specs:
     notdef = float(info["#notdef_advance_units"][0])
     upem = int(info["#notdef_advance_units"][2])
     assert upem == 2048 and notdef == int(notdef), (face, notdef, upem)
-    facts = info.get("#hb_plan") or plan_facts[name]
+    facts = list(info.get("#hb_plan") or []) + plan_facts.get(name, [])
     zeroes, fact_map = zeroes_unmapped_marks(facts)
+    # hb_ot_layout_has_cross_kerning matters only when kern applies (no GPOS, no kerx).
+    fallback = (fact_map["gpos"] == "0" and fact_map["kerx"] == "0"
+                and (fact_map["kern"] == "0" or fact_map["cross_kern"] == "0"))
     names = []
     for kind, kind_runs in (("S", runs["S"]), ("C", runs["C"])):
         key = (kind, tuple(kind_runs))
@@ -80,8 +87,10 @@ for face, name in specs:
             tables[key] = f"{'SIMPLE_MISSING' if kind == 'S' else 'COMPLEX_MAPPED'}_{counts[kind]}"
         names.append(tables[key])
     plan_source = "extraction" if "#hb_plan" in info else "--plan-facts"
+    if "#hb_plan" in info and name in plan_facts:
+        plan_source += " + --plan-facts"
     faces.append((face, int(notdef), names, info["#family"][1], info["#family"][2], info["#host"][0], zeroes,
-                  " ".join(facts), plan_source))
+                  " ".join(facts), plan_source, fallback))
 
 hosts = sorted({f[5] for f in faces})
 lines = [
@@ -92,8 +101,8 @@ lines = [
     "// tools/font_chain_coverage.py; do not edit by hand. Host: " + "; ".join(hosts) + ".",
     "// Per face: the .notdef advance in 2048ths of an em (glyph 0 of the primary font,",
     "// CTFontGetAdvancesForGlyphs), the BMP runs the JDK simple path cannot map, the runs the",
-    "// complex path (CFont.createCompositeFont cascade) maps, and whether HarfBuzz zeroes the",
-    "// .notdef of an unmapped nonspacing mark (plan facts per face).",
+    "// complex path (CFont.createCompositeFont cascade) maps, and the HarfBuzz plan facts that",
+    "// decide whether an unmapped nonspacing mark's .notdef is zeroed.",
     "",
     "use crate::font_chain::FaceCoverage;",
     "",
@@ -111,7 +120,7 @@ for (kind, key), name in tables.items():
         lines.append(table(key))
     lines.append("];")
     lines.append("")
-for face, notdef, (s_name, c_name), family, font_path, _, zeroes, facts, plan_source in faces:
+for face, notdef, (s_name, c_name), family, font_path, _, zeroes, facts, plan_source, fallback in faces:
     lines.append(f"/// {family}, {font_path}.")
     lines.append(f"/// HarfBuzz plan facts ({plan_source}): {facts}.")
     lines.append(f"pub(crate) const {face}: FaceCoverage = FaceCoverage {{")
@@ -119,6 +128,7 @@ for face, notdef, (s_name, c_name), family, font_path, _, zeroes, facts, plan_so
     lines.append(f"    simple_missing: {s_name},")
     lines.append(f"    complex_mapped: {c_name},")
     lines.append(f"    zeroes_unmapped_marks: {'true' if zeroes else 'false'},")
+    lines.append(f"    fallback_positions_marks: {'true' if fallback else 'false'},")
     lines.append("};")
 open(out_path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
 print(len(faces), "faces,", len(tables), "tables,", sum(len(k[1]) for k in tables), "runs; SHA256SUMS", sums_sha)

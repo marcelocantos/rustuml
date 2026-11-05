@@ -1,41 +1,44 @@
 #host	Version 27.2 (Build 26B123)
-#family	Helvetica-Bold	Helvetica-Bold	/System/Library/Fonts/Helvetica.ttc
-#notdef_advance_units	1479.0	units_per_em	2048
-#slot	LucidaGrande-Bold	/System/Library/Fonts/LucidaGrande.ttc
-#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf
-#slot	PingFangSC-Semibold	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
-#slot	PingFangTC-Semibold	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
-#slot	PingFangHK-Semibold	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
-#slot	PingFangMO-Semibold	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc
-#slot	HiraginoSans-W6	/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc
-#slot	HiraginoSansGB-W6	/System/Library/Fonts/Hiragino Sans GB.ttc
-#slot	AppleSDGothicNeo-Bold	/System/Library/Fonts/AppleSDGothicNeo.ttc
-#slot	GeezaPro-Bold	/System/Library/Fonts/GeezaPro.ttc
-#slot	NotoNastaliqUrdu-Bold	/System/Library/Fonts/NotoNastaliq.ttc
-#slot	NotoSansMyanmar-Bold	/System/Library/Fonts/NotoSansMyanmar.ttc
-#slot	NotoSansZawgyi-Bold	/System/Library/Fonts/NotoSansMyanmar.ttc
-#slot	Thonburi-Bold	/System/Library/Fonts/Supplemental/Thonburi.ttc
-#slot	KohinoorDevanagari-Bold	/System/Library/Fonts/Kohinoor.ttc
-#slot	Kailasa-Bold	/System/Library/Fonts/Supplemental/Kailasa.ttc
-#slot	KohinoorBangla-Bold	/System/Library/Fonts/KohinoorBangla.ttc
-#slot	KohinoorGujarati-Bold	/System/Library/Fonts/KohinoorGujarati.ttc
-#slot	MuktaMahee-Bold	/System/Library/Fonts/MuktaMahee.ttc
-#slot	NotoSansKannada-Bold	/System/Library/Fonts/NotoSansKannada.ttc
-#slot	KhmerSangamMN	/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf
-#slot	LaoSangamMN	/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf
-#slot	MalayalamSangamMN-Bold	/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc
-#slot	NotoSansOriya-Bold	/System/Library/Fonts/NotoSansOriya.ttc
-#slot	SinhalaSangamMN-Bold	/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc
-#slot	TamilSangamMN-Bold	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
-#slot	KohinoorTelugu-Bold	/System/Library/Fonts/KohinoorTelugu.ttc
-#slot	NotoSansArmenian-Bold	/System/Library/Fonts/NotoSansArmenian.ttc
-#slot	EuphemiaUCAS-Bold	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
-#slot	Menlo-Bold	/System/Library/Fonts/Menlo.ttc
-#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
-#slot	Galvji-Bold	/System/Library/Fonts/Supplemental/Galvji.ttc
-#slot	KefaIII-Bold	/System/Library/Fonts/Supplemental/KefaIII.ttf
-#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc
-#slot	GeezaPro	/System/Library/Fonts/GeezaPro.ttc
+#family	CourierNewPSMT	CourierNewPSMT	/System/Library/Fonts/Supplemental/Courier New.ttf	system
+#notdef_advance_units	1229.0	units_per_em	2048
+#hb_plan	gdef_glyph_classes=1	notdef_gdef_class=1	gsub=1	gpos=1	morx=0	kerx=0	kern=0	kern_formats=	machine_kern=0
+#cascade_languages	631
+#slot	Menlo-Regular	/System/Library/Fonts/Menlo.ttc	system	registered
+#slot	Monaco	/System/Library/Fonts/Monaco.ttf	system	registered
+#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf	system	registered
+#slot	Helvetica	/System/Library/Fonts/Helvetica.ttc	system	registered
+#slot	LucidaGrande	/System/Library/Fonts/LucidaGrande.ttc	system	registered
+#slot	GeezaPro	/System/Library/Fonts/GeezaPro.ttc	system	registered
+#slot	HiraginoSans-W3	/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc	system	registered
+#slot	HiraginoSansGB-W3	/System/Library/Fonts/Hiragino Sans GB.ttc	system	registered
+#slot	AppleSDGothicNeo-Regular	/System/Library/Fonts/AppleSDGothicNeo.ttc	system	registered
+#slot	NotoNastaliqUrdu	/System/Library/Fonts/NotoNastaliq.ttc	system	registered
+#slot	NotoSansMyanmar-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc	system	by_name
+#slot	PingFangSC-Regular	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc	asset	registered
+#slot	PingFangTC-Regular	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc	asset	registered
+#slot	PingFangHK-Regular	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc	asset	registered
+#slot	PingFangMO-Regular	/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc	asset	registered
+#slot	NotoSansZawgyi-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc	system	by_name
+#slot	Ayuthaya	/System/Library/Fonts/Supplemental/Ayuthaya.ttf	system	registered
+#slot	KohinoorDevanagari-Regular	/System/Library/Fonts/Kohinoor.ttc	system	registered
+#slot	Kailasa	/System/Library/Fonts/Supplemental/Kailasa.ttc	system	registered
+#slot	KohinoorBangla-Regular	/System/Library/Fonts/KohinoorBangla.ttc	system	registered
+#slot	KohinoorGujarati-Regular	/System/Library/Fonts/KohinoorGujarati.ttc	system	registered
+#slot	MuktaMahee-Regular	/System/Library/Fonts/MuktaMahee.ttc	system	registered
+#slot	NotoSansKannada-Regular	/System/Library/Fonts/NotoSansKannada.ttc	system	registered
+#slot	KhmerSangamMN	/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf	system	registered
+#slot	LaoSangamMN	/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf	system	registered
+#slot	MalayalamSangamMN	/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc	system	registered
+#slot	NotoSansOriya	/System/Library/Fonts/NotoSansOriya.ttc	system	registered
+#slot	SinhalaSangamMN	/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc	system	registered
+#slot	TamilSangamMN	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc	system	registered
+#slot	KohinoorTelugu-Regular	/System/Library/Fonts/KohinoorTelugu.ttc	system	registered
+#slot	NotoSansArmenian-Regular	/System/Library/Fonts/NotoSansArmenian.ttc	system	by_name
+#slot	EuphemiaUCAS	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc	system	registered
+#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf	system	registered
+#slot	Galvji	/System/Library/Fonts/Supplemental/Galvji.ttc	system	registered
+#slot	KefaIII-Regular	/System/Library/Fonts/Supplemental/KefaIII.ttf	system	registered
+#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc	system	registered
 C	0	7F
 C	A0	36F
 C	374	375
@@ -49,9 +52,8 @@ S	38D	38D
 C	38E	3A1
 S	3A2	3A2
 C	3A3	3CE
-C	3D0	3E1
-C	3F0	486
-C	48A	4F9
+C	3D0	486
+C	488	4F9
 C	4FE	513
 C	51A	51D
 S	528	52D
@@ -66,9 +68,7 @@ C	589	58A
 S	58B	58C
 C	58D	58F
 S	590	590
-C	591	5A1
-C	5A3	5B9
-C	5BB	5C4
+C	591	5C7
 S	5C8	5CF
 C	5D0	5EA
 S	5EB	5EF
@@ -431,9 +431,9 @@ C	135D	137C
 S	137D	137F
 C	1380	1399
 S	139A	139F
-C	13A0	13FF
-C	1401	1676
-C	1680	169C
+C	13A0	13F5
+C	13F8	13FD
+C	1400	169C
 S	169D	169F
 C	16A0	16F0
 S	16F1	16FF
@@ -449,6 +449,7 @@ C	17E0	17E9
 S	17EA	17EF
 C	17F0	17F9
 S	17FA	17FF
+C	18B0	18F5
 S	18F6	18FF
 S	191F	191F
 S	192C	192F
@@ -489,19 +490,7 @@ C	1CF2	1CF5
 S	1CF6	1CF7
 C	1CF8	1CF9
 S	1CFA	1CFF
-C	1D00	1D6E
-C	1D71	1D73
-C	1D75	1D75
-C	1D77	1D78
-C	1D7A	1D7B
-C	1D81	1D81
-C	1D84	1D85
-C	1D8A	1D8A
-C	1D8D	1D8E
-C	1D98	1D98
-C	1D9B	1DB7
-C	1DB9	1DC1
-C	1DC4	1DCA
+C	1D00	1DCA
 S	1DD0	1DD2
 S	1DDA	1DDA
 S	1DE7	1DF4
@@ -549,7 +538,6 @@ S	208F	208F
 C	2090	2094
 S	209D	209F
 C	20A0	20B5
-S	20B7	20B7
 C	20B8	20BA
 C	20BC	20BE
 S	20C0	20C0
@@ -562,7 +550,7 @@ S	20F1	20FF
 C	2100	2184
 S	2187	2188
 C	2189	2189
-S	218A	218F
+S	218C	218F
 C	2190	2426
 S	2427	243F
 C	2440	244A
@@ -781,53 +769,34 @@ C	E815	E864
 C	F506	F511
 C	F6C3	F6C3
 C	F6C5	F6C5
-S	D7A4	F79F
 C	F7A0	F7A9
-S	F7AA	F801
+S	D7A4	F7FF
 C	F802	F80C
-S	F80D	F816
-S	F83C	F83C
 C	F83D	F83D
-S	F83E	F83E
 C	F840	F850
-S	F851	F85E
 C	F85F	F86B
-S	F86C	F86F
 C	F870	F87F
-S	F882	F8FE
 C	F8FF	FA2D
 C	FA30	FA6D
-S	FA6E	FAFF
 C	FB00	FB04
 C	FB06	FB06
-S	FB07	FB0E
-S	FB10	FB12
+C	FB0F	FB0F
 C	FB13	FB17
-S	FB18	FB1C
-C	FB1F	FB1F
-C	FB2A	FB2D
-C	FB31	FB36
-S	FB37	FB37
+C	FB1D	FB36
 C	FB38	FB3C
-S	FB3D	FB3D
 C	FB3E	FB3E
-S	FB3F	FB3F
 C	FB40	FB41
-S	FB42	FB42
 C	FB43	FB44
-S	FB45	FB45
-C	FB46	FB4B
-C	FB50	FBC1
-S	FBC2	FBD2
+C	FB46	FBC1
 C	FBD3	FD3F
-S	FD40	FD4F
+S	FD47	FD4F
 C	FD50	FD8F
 S	FD90	FD91
 C	FD92	FDC7
 S	FDC8	FDEF
 C	FDF0	FDFD
 C	FE00	FE00
-S	FDFE	FE0D
+S	FDFE	FE0F
 C	FE0E	FE19
 S	FE1A	FE1F
 C	FE20	FE23
@@ -883,6 +852,7 @@ C	11357	11357
 C	1135D	11363
 C	11366	1136C
 C	11370	11374
+C	11AB0	11ABF
 C	11FC0	11FF1
 C	11FFF	11FFF
 C	1D100	1D108
@@ -4586,3 +4556,6 @@ C	30F91	30F91
 C	E0061	E007A
 C	E007F	E007F
 S	FFFE	FFFF
+#simple_substitutions	asset	29276
+#simple_substitutions	system	22807
+#simple_substitutions	user	351

@@ -1,39 +1,41 @@
 #host	Version 27.2 (Build 26B123)
-#family	TimesNewRomanPSMT	TimesNewRomanPSMT	/System/Library/Fonts/Supplemental/Times New Roman.ttf
+#family	TimesNewRomanPSMT	TimesNewRomanPSMT	/System/Library/Fonts/Supplemental/Times New Roman.ttf	system
 #notdef_advance_units	1593.0	units_per_em	2048
+#hb_plan	gdef_glyph_classes=1	notdef_gdef_class=1	gsub=1	gpos=1	morx=0	kerx=0	kern=1	kern_formats=0	machine_kern=0
+#cascade_languages	631
 #slot_dropped	.TimesFB
-#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf
-#slot	LucidaGrande	/System/Library/Fonts/LucidaGrande.ttc
-#slot	GeezaPro	/System/Library/Fonts/GeezaPro.ttc
-#slot	NotoNastaliqUrdu	/System/Library/Fonts/NotoNastaliq.ttc
-#slot	Kokonor	/System/Library/Fonts/Supplemental/Kokonor.ttf
-#slot	STSongti-SC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
-#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc
-#slot	HiraMinProN-W3	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc
-#slot	AppleMyungjo	/System/Library/Fonts/Supplemental/AppleMyungjo.ttf
-#slot	NotoSerifMyanmar-Regular	/System/Library/Fonts/NotoSerifMyanmar.ttc
-#slot	NotoSansZawgyi-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc
-#slot	Thonburi	/System/Library/Fonts/Supplemental/Thonburi.ttc
-#slot	ITFDevanagari-Book	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc
-#slot	KohinoorBangla-Regular	/System/Library/Fonts/KohinoorBangla.ttc
-#slot	KohinoorGujarati-Regular	/System/Library/Fonts/KohinoorGujarati.ttc
-#slot	MuktaMahee-Regular	/System/Library/Fonts/MuktaMahee.ttc
-#slot	KannadaMN	/System/Library/Fonts/Supplemental/Kannada MN.ttc
-#slot	KhmerMN	/System/Library/Fonts/Supplemental/Khmer MN.ttc
-#slot	LaoMN	/System/Library/Fonts/Supplemental/Lao MN.ttc
-#slot	MalayalamMN	/System/Library/Fonts/Supplemental/Malayalam MN.ttc
-#slot	OriyaMN	/System/Library/Fonts/Supplemental/Oriya MN.ttc
-#slot	SinhalaMN	/System/Library/Fonts/Supplemental/Sinhala MN.ttc
-#slot	TamilSangamMN	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc
-#slot	KohinoorTelugu-Regular	/System/Library/Fonts/KohinoorTelugu.ttc
-#slot	NotoSansArmenian-Regular	/System/Library/Fonts/NotoSansArmenian.ttc
-#slot	EuphemiaUCAS	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc
-#slot	Helvetica	/System/Library/Fonts/Helvetica.ttc
-#slot	Menlo-Regular	/System/Library/Fonts/Menlo.ttc
-#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf
-#slot	Galvji	/System/Library/Fonts/Supplemental/Galvji.ttc
-#slot	KefaIII-Regular	/System/Library/Fonts/Supplemental/KefaIII.ttf
-#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc
+#slot	AppleSymbols	/System/Library/Fonts/Apple Symbols.ttf	system	registered
+#slot	LucidaGrande	/System/Library/Fonts/LucidaGrande.ttc	system	registered
+#slot	GeezaPro	/System/Library/Fonts/GeezaPro.ttc	system	registered
+#slot	NotoNastaliqUrdu	/System/Library/Fonts/NotoNastaliq.ttc	system	registered
+#slot	Kokonor	/System/Library/Fonts/Supplemental/Kokonor.ttf	system	registered
+#slot	HiraMinProN-W3	/System/Library/Fonts/ヒラギノ明朝 ProN.ttc	system	registered
+#slot	AppleMyungjo	/System/Library/Fonts/Supplemental/AppleMyungjo.ttf	system	registered
+#slot	NotoSerifMyanmar-Regular	/System/Library/Fonts/NotoSerifMyanmar.ttc	system	registered
+#slot	STSongti-SC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc	system	registered
+#slot	STSongti-TC-Regular	/System/Library/Fonts/Supplemental/Songti.ttc	system	registered
+#slot	NotoSansZawgyi-Regular	/System/Library/Fonts/NotoSansMyanmar.ttc	system	by_name
+#slot	Thonburi	/System/Library/Fonts/Supplemental/Thonburi.ttc	system	registered
+#slot	ITFDevanagari-Book	/System/Library/Fonts/Supplemental/ITFDevanagari.ttc	system	registered
+#slot	KohinoorBangla-Regular	/System/Library/Fonts/KohinoorBangla.ttc	system	registered
+#slot	KohinoorGujarati-Regular	/System/Library/Fonts/KohinoorGujarati.ttc	system	registered
+#slot	MuktaMahee-Regular	/System/Library/Fonts/MuktaMahee.ttc	system	registered
+#slot	KannadaMN	/System/Library/Fonts/Supplemental/Kannada MN.ttc	system	registered
+#slot	KhmerMN	/System/Library/Fonts/Supplemental/Khmer MN.ttc	system	registered
+#slot	LaoMN	/System/Library/Fonts/Supplemental/Lao MN.ttc	system	registered
+#slot	MalayalamMN	/System/Library/Fonts/Supplemental/Malayalam MN.ttc	system	registered
+#slot	OriyaMN	/System/Library/Fonts/Supplemental/Oriya MN.ttc	system	registered
+#slot	SinhalaMN	/System/Library/Fonts/Supplemental/Sinhala MN.ttc	system	registered
+#slot	TamilSangamMN	/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc	system	registered
+#slot	KohinoorTelugu-Regular	/System/Library/Fonts/KohinoorTelugu.ttc	system	registered
+#slot	NotoSansArmenian-Regular	/System/Library/Fonts/NotoSansArmenian.ttc	system	by_name
+#slot	EuphemiaUCAS	/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc	system	registered
+#slot	Helvetica	/System/Library/Fonts/Helvetica.ttc	system	registered
+#slot	Menlo-Regular	/System/Library/Fonts/Menlo.ttc	system	registered
+#slot	STIXTwoMath-Regular	/System/Library/Fonts/Supplemental/STIXTwoMath.otf	system	registered
+#slot	Galvji	/System/Library/Fonts/Supplemental/Galvji.ttc	system	registered
+#slot	KefaIII-Regular	/System/Library/Fonts/Supplemental/KefaIII.ttf	system	registered
+#slot	AppleColorEmoji	/System/Library/Fonts/Apple Color Emoji.ttc	system	registered
 C	0	7F
 C	A0	36F
 C	374	375
@@ -528,7 +530,6 @@ S	208F	208F
 C	2090	2094
 S	209D	209F
 C	20A0	20B5
-S	20B7	20B7
 C	20B8	20BA
 C	20BC	20BE
 S	20C0	20C0
@@ -541,7 +542,7 @@ S	20F1	20FF
 C	2100	2184
 S	2187	2188
 C	2189	2189
-S	218A	218F
+S	218C	218F
 C	2190	2426
 S	2427	243F
 C	2440	244A
@@ -780,49 +781,33 @@ C	F506	F511
 C	F6C3	F6C3
 C	F6C5	F6C5
 C	F7A0	F7A9
-S	D7A4	F801
+S	D7A4	F7FF
 C	F802	F80C
-S	F80D	F816
-S	F83C	F83C
 C	F83D	F83D
-S	F83E	F83E
 C	F840	F84F
-S	F851	F85E
 C	F860	F869
-S	F86C	F86F
 C	F870	F87D
 C	F87F	F87F
-S	F882	F8FE
 C	F8FF	FA2D
 C	FA30	FA6D
-S	FA6E	FAFF
 C	FB00	FB04
 C	FB06	FB06
-S	FB07	FB0E
-S	FB10	FB12
 C	FB13	FB17
-S	FB18	FB1C
 C	FB1D	FB36
-S	FB37	FB37
 C	FB38	FB3C
-S	FB3D	FB3D
 C	FB3E	FB3E
-S	FB3F	FB3F
 C	FB40	FB41
-S	FB42	FB42
 C	FB43	FB44
-S	FB45	FB45
 C	FB46	FBC1
-S	FBC2	FBD2
 C	FBD3	FD3F
-S	FD40	FD4F
+S	FD47	FD4F
 C	FD50	FD8F
 S	FD90	FD91
 C	FD92	FDC7
 S	FDC8	FDEF
 C	FDF0	FDFD
 C	FE00	FE00
-S	FDFE	FE0D
+S	FDFE	FE0F
 C	FE0E	FE19
 S	FE1A	FE1F
 C	FE20	FE23
@@ -2609,3 +2594,6 @@ C	2FA07	2FA07
 C	E0061	E007A
 C	E007F	E007F
 S	FFFE	FFFF
+#simple_substitutions	asset	41
+#simple_substitutions	system	52013
+#simple_substitutions	user	351

@@ -22,14 +22,17 @@
 //! (`tools/FontChainExtract.swift`, `tools/font_chain_coverage.py`) of the
 //! reference host's fonts.
 //!
-//! HarfBuzz also zeroes the advance of an unmapped nonspacing mark when the
-//! primary face has no GDEF glyph classes: `hb_synthesize_glyph_classes`
-//! (hb-ot-shape.cc 879-899, HarfBuzz 8.2.2 in JDK 21.0.5) makes a general
-//! category Mn character a MARK, and the default shaper's
-//! `zero_mark_widths_by_gdef` (BY_GDEF_LATE, 1089-1100) zeroes it. The run's
-//! script comes from JDK's `ScriptRun` over `ScriptRunData` (Unicode 3.2);
-//! with morx, any shaper but the default one becomes `_hb_ot_shaper_dumber`,
-//! which zeroes nothing (94-96).
+//! HarfBuzz (10.0.1, which the reference JDK's libfontmanager links) also
+//! zeroes the advance of an unmapped nonspacing mark (Unicode 16 Mn) in two
+//! ways. With no GDEF glyph classes, `hb_synthesize_glyph_classes` makes the
+//! mark a MARK glyph and the default shaper's `zero_mark_widths_by_gdef`
+//! (BY_GDEF_LATE) zeroes it; with morx, any other shaper becomes
+//! `_hb_ot_shaper_dumber`, which zeroes nothing here (hb-ot-shape.cc 94-96).
+//! Without GPOS, kerx or cross-stream kern, a shaper with `fallback_position`
+//! (default, arabic, hebrew) also runs `_hb_ot_shape_fallback_mark_position`,
+//! which zeroes every Mn that follows a base in its cluster
+//! (hb-ot-shape-fallback.cc 188-205, 412-462). The run's script comes from
+//! JDK's `ScriptRun` over `ScriptRunData` (Unicode 3.2).
 
 use crate::font_chain_coverage as coverage;
 use crate::font_chain_unicode as unicode;
@@ -45,6 +48,10 @@ pub(crate) struct FaceCoverage {
     /// HarfBuzz zeroes the `.notdef` of an unmapped nonspacing mark in a
     /// default-shaped run (glyph 0 is a mark and the plan zeroes marks).
     pub(crate) zeroes_unmapped_marks: bool,
+    /// `adjust_mark_positioning_when_zeroing` holds (no GPOS, kerx or
+    /// cross-stream kern), so fallback-positioning shapers zero marks that
+    /// follow a base.
+    pub(crate) fallback_positions_marks: bool,
 }
 
 /// The physical faces RustUML measures (`SansSerif` resolves to Lucida
@@ -76,15 +83,28 @@ pub(crate) enum ChainGlyph {
     Hidden,
 }
 
-/// Which JDK measuring path a character takes, and for complex text whether
-/// HarfBuzz shapes its script run with the default shaper.
+/// Which JDK measuring path a character takes and, for complex text, how
+/// HarfBuzz shapes its script run.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Complexity {
     /// `FontUtilities.isComplexText` is false for the measured string.
     Simple,
-    /// `TextLayout` path; `default_shaped_run` is false when the run's script
-    /// selects a complex HarfBuzz shaper.
-    Complex { default_shaped_run: bool },
+    /// `TextLayout` path: the run's shaper and whether a base (a character
+    /// that is not a Unicode mark) precedes this one in its run with only
+    /// marks between.
+    Complex { shaper: RunShaper, after_base: bool },
+}
+
+/// The class of shaper `hb_ot_shaper_categorize` picks for a run's script on
+/// a face without GSUB.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum RunShaper {
+    /// The default shaper (zeroes marks late, positions them by fallback).
+    Default,
+    /// arabic or hebrew: positions marks by fallback.
+    FallbackPositioned,
+    /// Any other complex shaper (no fallback positioning).
+    Other,
 }
 
 /// Units per em of the extracted advances.
@@ -117,17 +137,19 @@ impl ChainFace {
     pub(crate) fn resolve(self, ch: char, complexity: Complexity) -> ChainGlyph {
         let code = ch as u32;
         let coverage = self.coverage();
-        let default_shaped_run = match complexity {
-            Complexity::Simple => true,
-            Complexity::Complex { default_shaped_run } => default_shaped_run,
+        let (shaper, after_base) = match complexity {
+            Complexity::Simple => (RunShaper::Default, false),
+            Complexity::Complex { shaper, after_base } => (shaper, after_base),
         };
         if code >= FIRST_SUPPLEMENTARY || complexity != Complexity::Simple {
+            let mark = in_runs(unicode::NONSPACING_MARKS, code);
+            let zeroed_by_gdef = coverage.zeroes_unmapped_marks && shaper == RunShaper::Default;
+            let zeroed_by_fallback =
+                coverage.fallback_positions_marks && shaper != RunShaper::Other && after_base;
             return if in_runs(coverage.complex_mapped, code) {
                 ChainGlyph::Mapped
             } else if is_hidden_default_ignorable(code)
-                || (coverage.zeroes_unmapped_marks
-                    && default_shaped_run
-                    && in_runs(unicode::NONSPACING_MARKS, code))
+                || (mark && (zeroed_by_gdef || zeroed_by_fallback))
             {
                 ChainGlyph::Hidden
             } else {
@@ -172,10 +194,27 @@ pub(crate) fn complexity_per_token(text: &str) -> Vec<Complexity> {
     if !is_complex_text(text) {
         return vec![Complexity::Simple; codes.len()];
     }
-    script_run_codes(&codes)
-        .into_iter()
-        .map(|script| Complexity::Complex {
-            default_shaped_run: !unicode::COMPLEX_SHAPED_SCRIPTS.contains(&script),
+    let scripts = script_run_codes(&codes);
+    (0..codes.len())
+        .map(|index| {
+            let script = scripts[index];
+            let shaper = if !unicode::COMPLEX_SHAPED_SCRIPTS.contains(&script) {
+                RunShaper::Default
+            } else if unicode::FALLBACK_POSITIONED_SCRIPTS.contains(&script) {
+                RunShaper::FallbackPositioned
+            } else {
+                RunShaper::Other
+            };
+            // `_hb_ot_shape_fallback_mark_position`: a cluster is a base and
+            // the Unicode marks after it, inside the run's buffer.
+            // Walking back inside the run over marks, the first non-mark is
+            // the base.
+            let after_base = (0..index)
+                .rev()
+                .take_while(|&before| scripts[before] == script)
+                .find(|&before| !in_runs(unicode::UNICODE_MARKS, codes[before]))
+                .is_some();
+            Complexity::Complex { shaper, after_base }
         })
         .collect()
 }
@@ -316,7 +355,8 @@ mod tests {
     use super::*;
 
     const COMPLEX: Complexity = Complexity::Complex {
-        default_shaped_run: true,
+        shaper: RunShaper::Default,
+        after_base: true,
     };
 
     #[test]
@@ -360,28 +400,56 @@ mod tests {
 
     #[test]
     fn harfbuzz_zeroes_unmapped_nonspacing_marks_of_default_shaped_runs() {
-        // Synthesized glyph classes (no GDEF): Mn U+180F, U+1D17B and U+16FE4
-        // are marks; the default shaper zeroes them.
+        // Synthesized glyph classes (no GDEF): Mn U+180F, U+1D17B, U+16FE4 and
+        // the Unicode 16 U+1E5EE are marks; the default shaper zeroes them,
+        // with or without a base before them.
+        let leading = Complexity::Complex {
+            shaper: RunShaper::Default,
+            after_base: false,
+        };
         for face in [
             ChainFace::LucidaGrande,
             ChainFace::LucidaGrandeBold,
             ChainFace::Helvetica,
             ChainFace::Menlo,
         ] {
-            for ch in ['\u{180F}', '\u{1D17B}', '\u{16FE4}', '\u{1DFA}'] {
+            for ch in [
+                '\u{180F}',
+                '\u{1D17B}',
+                '\u{16FE4}',
+                '\u{1DFA}',
+                '\u{1E5EE}',
+            ] {
                 assert_eq!(
                     face.resolve(ch, COMPLEX),
                     ChainGlyph::Hidden,
                     "{face:?} {ch:?}"
                 );
+                assert_eq!(
+                    face.resolve(ch, leading),
+                    ChainGlyph::Hidden,
+                    "{face:?} {ch:?}"
+                );
             }
-            // The dumber shaper (morx and a complex script) zeroes nothing.
-            let dumber = Complexity::Complex {
-                default_shaped_run: false,
+            // Hebrew (fallback-positioned, dumber under morx): zeroed only
+            // after a base.
+            let hebrew = |after_base| Complexity::Complex {
+                shaper: RunShaper::FallbackPositioned,
+                after_base,
             };
-            assert_eq!(face.resolve('\u{1D17B}', dumber), ChainGlyph::Missing);
+            assert_eq!(face.resolve('\u{1D17B}', hebrew(true)), ChainGlyph::Hidden);
+            assert_eq!(
+                face.resolve('\u{1D17B}', hebrew(false)),
+                ChainGlyph::Missing
+            );
+            // Thai/Indic/USE: never.
+            let other = Complexity::Complex {
+                shaper: RunShaper::Other,
+                after_base: true,
+            };
+            assert_eq!(face.resolve('\u{1D17B}', other), ChainGlyph::Missing);
         }
-        // GDEF classes glyph 0 as a base glyph: never a mark.
+        // GDEF classes glyph 0 as a base and GPOS disables fallback marks.
         for face in [ChainFace::Arial, ChainFace::Verdana, ChainFace::CourierNew] {
             assert_eq!(
                 face.resolve('\u{1D17B}', COMPLEX),
@@ -394,9 +462,9 @@ mod tests {
             ChainFace::LucidaGrande.resolve('\u{1AB0}', Complexity::Simple),
             ChainGlyph::Missing
         );
-        // Mc (U+1D165) and an Mn unassigned in Unicode 15.1 (U+1E5EE) are not marks.
+        // Mc (U+1D165 is mapped elsewhere; U+11F03 Kawi Mc) is not zeroed.
         assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{1E5EE}', COMPLEX),
+            ChainFace::LucidaGrande.resolve('\u{11F03}', COMPLEX),
             ChainGlyph::Missing
         );
     }
@@ -409,26 +477,49 @@ mod tests {
                 .map(|c| match c {
                     Complexity::Simple => 's',
                     Complexity::Complex {
-                        default_shaped_run: true,
+                        shaper: RunShaper::Default,
+                        ..
                     } => 'd',
                     Complexity::Complex {
-                        default_shaped_run: false,
-                    } => 'c',
+                        shaper: RunShaper::FallbackPositioned,
+                        ..
+                    } => 'f',
+                    Complexity::Complex {
+                        shaper: RunShaper::Other,
+                        ..
+                    } => 'o',
+                })
+                .collect::<String>()
+        };
+        let bases = |text: &str| {
+            complexity_per_token(text)
+                .into_iter()
+                .map(|c| match c {
+                    Complexity::Complex {
+                        after_base: true, ..
+                    } => 'b',
+                    _ => '-',
                 })
                 .collect::<String>()
         };
         assert_eq!(runs("Vault"), "sssss");
         // Weak characters (unassigned in Unicode 3.2) join the Latin run.
         assert_eq!(runs("Vault \u{1D17B}"), "ddddddd");
-        // Hebrew is complex-shaped; the mark after it joins its run.
-        assert_eq!(runs("a \u{05D0}\u{1D17B}"), "ddcc");
-        // A leading mark takes the first strong script after it.
-        assert_eq!(runs("\u{1D17B}\u{05D0}"), "cc");
+        // Hebrew is fallback-positioned; the mark after it joins its run.
+        assert_eq!(runs("a \u{05D0}\u{1D17B}"), "ddff");
+        assert_eq!(bases("a \u{05D0}\u{1D17B}"), "-b-b");
+        // A leading mark takes the first strong script after it, and has no base.
+        assert_eq!(runs("\u{1D17B}\u{05D0}"), "ff");
+        assert_eq!(bases("\u{1D17B}\u{05D0}"), "--");
+        // Thai is neither default nor fallback-positioned.
+        assert_eq!(runs("\u{0E01}\u{1D17B}"), "oo");
         // A closing bracket takes its opener's run script.
-        assert_eq!(runs("\u{05D0}(\u{1D17B})"), "cccc");
+        assert_eq!(runs("\u{05D0}(\u{1D17B})"), "ffff");
         // When that script ends the current run, the opener is already popped:
         // the bracket starts a weak (COMMON, default-shaped) run.
-        assert_eq!(runs("\u{05D0}(a)\u{1D17B}"), "ccddd");
+        assert_eq!(runs("\u{05D0}(a)\u{1D17B}"), "ffddd");
+        // Marks between the base and the mark keep the cluster.
+        assert_eq!(bases("\u{05D0}\u{0301}\u{1D17B}"), "-bb");
     }
 
     /// Drift gate (T14.6.8): the generated table is the stored reference-host
@@ -493,6 +584,14 @@ mod tests {
                             face.coverage().zeroes_unmapped_marks,
                             "{name}"
                         );
+                        // Fallback marks need no GPOS and no kerx; with a
+                        // kern table the cross-stream bit (not extracted)
+                        // also decides, so only the extracted part is gated.
+                        if fact("gpos") == "1" || fact("kerx") == "1" {
+                            assert!(!face.coverage().fallback_positions_marks, "{name}");
+                        } else if fact("kern") == "0" {
+                            assert!(face.coverage().fallback_positions_marks, "{name}");
+                        }
                     }
                     "S" | "C" => {
                         let run = (
