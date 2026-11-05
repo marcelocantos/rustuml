@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+[o-> Cedar: incoming
+Cedar o->o]: outgoing
+[<-o Cedar: reverse incoming
+Cedar o<--]: reverse outgoing
+@enduml

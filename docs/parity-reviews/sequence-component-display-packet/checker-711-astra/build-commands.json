@@ -1,0 +1,140 @@
+[
+  {
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "--bin",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 0,
+    "seconds": 82.18638014793396,
+    "log": "before-build.log",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-before",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4"
+    }
+  },
+  {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/.cache/rustuml-review-711-5c023380/compare_cli.rs",
+      "-L",
+      "dependency=/Users/marcelo/.cache/rustuml-review-711-5c023380/target-before/release/deps",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/.cache/rustuml-review-711-5c023380/target-before/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-o",
+      "/Users/marcelo/.cache/rustuml-review-711-5c023380/before-bin/compare_cli"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 0,
+    "seconds": 0.14070606231689453,
+    "log": "before-comparator.log",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-before",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4"
+    }
+  },
+  {
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "--bin",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 0,
+    "seconds": 77.84212875366211,
+    "log": "intermediate-build.log",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-intermediate",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4"
+    }
+  },
+  {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/.cache/rustuml-review-711-5c023380/compare_cli.rs",
+      "-L",
+      "dependency=/Users/marcelo/.cache/rustuml-review-711-5c023380/target-intermediate/release/deps",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/.cache/rustuml-review-711-5c023380/target-intermediate/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-o",
+      "/Users/marcelo/.cache/rustuml-review-711-5c023380/intermediate-bin/compare_cli"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 0,
+    "seconds": 0.13418889045715332,
+    "log": "intermediate-comparator.log",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-intermediate",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4"
+    }
+  },
+  {
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "--bin",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 0,
+    "seconds": 77.0802550315857,
+    "log": "after-build.log",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4"
+    }
+  },
+  {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/.cache/rustuml-review-711-5c023380/compare_cli.rs",
+      "-L",
+      "dependency=/Users/marcelo/.cache/rustuml-review-711-5c023380/target-after/release/deps",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/.cache/rustuml-review-711-5c023380/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-o",
+      "/Users/marcelo/.cache/rustuml-review-711-5c023380/after-bin/compare_cli"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 0,
+    "seconds": 0.1489548683166504,
+    "log": "after-comparator.log",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-after",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4"
+    }
+  }
+]

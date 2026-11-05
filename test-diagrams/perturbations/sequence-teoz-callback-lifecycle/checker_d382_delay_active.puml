@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+A -> B ++ : start
+... asleep ...
+B -> A : resume
+deactivate B
+@enduml

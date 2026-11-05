@@ -1,0 +1,5 @@
+@startuml
+!pragma teoz true
+Quartz -> Fern : call
+note right : tiny\rconsiderably longer\lEnd
+@enduml

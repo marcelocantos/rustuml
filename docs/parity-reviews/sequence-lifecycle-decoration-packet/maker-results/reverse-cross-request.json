@@ -1,0 +1,96 @@
+{
+  "cases": [
+    {
+      "name": "reverse_cross_e0_d0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/reverse_cross_e0_d0.puml",
+      "source_sha256": "444401e0c5ab4dce00dcbc5d64701b5db6edd7339e0c3b14d29ad6e7b0ce9727",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "engine",
+        "live depth",
+        "true reverse source cross and lowered return"
+      ]
+    },
+    {
+      "name": "reverse_cross_e0_d2",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/reverse_cross_e0_d2.puml",
+      "source_sha256": "32699c599fc9e0f02a3681db8a5a6bfb8742cc6706c9ba89e9ba980272090b54",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "engine",
+        "live depth",
+        "true reverse source cross and lowered return"
+      ]
+    },
+    {
+      "name": "reverse_cross_e1_d0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/reverse_cross_e1_d0.puml",
+      "source_sha256": "4234b28ba2242fcad38b0de282646b94b44664a6a9ef9e22d197261bceb061d0",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "engine",
+        "live depth",
+        "true reverse source cross and lowered return"
+      ]
+    },
+    {
+      "name": "reverse_cross_e1_d2",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/reverse_cross_e1_d2.puml",
+      "source_sha256": "303f5257abef8a92ab4139aca5746a7a425378cf05188d4f18eedbb6de2fda73",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "engine",
+        "live depth",
+        "true reverse source cross and lowered return"
+      ]
+    }
+  ]
+}

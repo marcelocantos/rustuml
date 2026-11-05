@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+skinparam noteFontSize 12
+Quartz -> Fern : call
+note right
+short\n**Wide words**\tZ\\q
+end note
+Fern --> Quartz : done
+@enduml

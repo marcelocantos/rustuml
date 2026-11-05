@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+box Habitat
+actor Kite <<pilot>>
+database Store <<archive>>
+collections Pages <<batch>>
+end box
+Kite -> Store: persist
+Store -> Pages: publish
+@enduml

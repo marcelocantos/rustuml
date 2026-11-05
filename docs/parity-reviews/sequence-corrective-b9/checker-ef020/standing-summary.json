@@ -1,0 +1,51 @@
+{
+  "product": {
+    "matches": 11181,
+    "eligible": 11251,
+    "sequence_matches": 1411,
+    "sequence_eligible": 1411,
+    "exit": 101
+  },
+  "assisted": {
+    "matches": 10497,
+    "eligible": 11251,
+    "total": 12550,
+    "excluded": 1299,
+    "exit": 101
+  },
+  "units": {
+    "parser": 568,
+    "render": 787,
+    "exit": 0
+  },
+  "cli": {
+    "passed": 13,
+    "exit": 0
+  },
+  "guards": {
+    "passed": 4,
+    "total": 6,
+    "exit": 101,
+    "failures": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ]
+  },
+  "perturbations": {
+    "total": 1279,
+    "failures": 603,
+    "matches": 676,
+    "new_pairs": 39,
+    "new_failures": 22,
+    "exit": 101,
+    "cwd": "Cargo package cwd; includes standing theme resource resolution difference from root CLI"
+  },
+  "format": {
+    "owned": 0,
+    "workspace": 1
+  },
+  "clippy": {
+    "parser_render": 101,
+    "render_only": 101
+  }
+}

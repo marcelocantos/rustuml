@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-head-englober-component-height",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3A3586e3c0-433f-4984-bdab-61d183d23ec6",
+    "model": "gpt-6-astra / Codex harness in T3 Code",
+    "role": "Independent checker; did not implement candidate; no children",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "branch": "review/sequence-711dbca7-5c023380"
+  },
+  "account_commit": "9e6a899c153c4816f71f2c93b717f8e1e6a2b05b",
+  "implementation_commit": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "tested_packet_commit": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "tested_production_commit": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "intermediate_revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent's existing Monkey Man relay: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; exact per-input actual wrapper argv/cwd/status/streams in checker evidence; Java argv derived from pinned wrapper, not process-traced",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/fresh52.json PRIVATE_CACHE/after-bin PRIVATE_CACHE/after-fresh; separately followup12.json -> after-followup (same checkout cwd); before binaries likewise",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_legacy.svg",
+      "axes": [
+        "box closure contrast",
+        "member composition",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "baf5ddb969aa203f3ce92aa7a6e6ac7662050cffc4ba0f8ecd8742e8a212c400",
+      "reference_sha256": "1193683af464a3a12a546da192d1665c942e437207432566589a4ea7e3742410",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_teoz.svg",
+      "axes": [
+        "box closure contrast",
+        "member composition",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "a4b2f0562013a8ac0e7baa3a0c6d5e623e66535742ab1dfd6c05de009ad468c4",
+      "reference_sha256": "0aebb54ea63a819804cdd2bb69b238bee21c772fe77d8d4169cbd58aa7598f60",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_queue_actor_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_queue_actor_legacy.svg",
+      "axes": [
+        "unboxed taller member",
+        "queue/englober maxima",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "4147316df7b6d4074b1a97ddc068ff75d699b27f18ad409ae9d73f095667ab26",
+      "reference_sha256": "924822bd59ab257ee5d7721499445f8664604f269e91f263ec89a531351cf5ac",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_queue_actor_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_queue_actor_teoz.svg",
+      "axes": [
+        "unboxed taller member",
+        "queue/englober maxima",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "7315983af9676cb0f9f8f0ac35fefbde9641cdd6ab675884c11a324966152f1e",
+      "reference_sha256": "b53012b4ec27c136e885069b29fa2ade5782db044d64e197ae3c7776dc458b13",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_actor_queue_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_actor_queue_legacy.svg",
+      "axes": [
+        "boxed taller member",
+        "actor/queue composition",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "44d8dc2be226b2a3e369f26c9b16c7db9cbe4a1f51bce888f11edff6497bcce4",
+      "reference_sha256": "77cc0eff0d2b0fdb1603ecb29150f5c30fd65709e063a6003552880a673733fd",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_actor_queue_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_actor_queue_teoz.svg",
+      "axes": [
+        "boxed taller member",
+        "actor/queue composition",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "016c825357d61ef6eae8edb4ca1fcc2b9d55b86810dbd75048bad533c2b1c443",
+      "reference_sha256": "ddfde02fe0b748cb71dbace03910a91f13657ec3c087b167667f4328aa5860ed",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_multiline_title_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_multiline_title_legacy.svg",
+      "axes": [
+        "multiline title",
+        "mixed boxed/unboxed members",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "28833e72ad6a4e982fbb9827d1fbf20f219a930250488038911166fa623eeba5",
+      "reference_sha256": "ed054c04b36729338307e84ab0b4747ed48567bc83a0035d183dca94e520f2bd",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_multiline_title_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_multiline_title_teoz.svg",
+      "axes": [
+        "multiline title",
+        "mixed boxed/unboxed members",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "d062351cf6a333adf2a0bbf4bdc356574aa0252ab4619dc4632fa2b766826982",
+      "reference_sha256": "fbfd90589b56fa9e8a826e28b295a373a475c4617fb5cc0d01609d0c07830c4f",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_nested_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_nested_legacy.svg",
+      "axes": [
+        "nested englobers",
+        "mixed member kinds/multiline",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "20934dd0e4eab681dd218142aaaeb072627f5a81d33c74e8159832792ebe990a",
+      "reference_sha256": "329c7ecf8cb18b79663bb63b69a0b69289ad18f8107b56c41bf7b464d8d65664",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_nested_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_nested_teoz.svg",
+      "axes": [
+        "nested englobers",
+        "mixed member kinds/multiline",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "2b0331d0183d3b2ff688a88d0a58c67b617e0e3086dd53a3b45aceddd1b920ef",
+      "reference_sha256": "57af02428d360556f1b954597de76963f58e3492f5ba2e48968ff32fa92f1d93",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_stereo_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_stereo_legacy.svg",
+      "axes": [
+        "boxed stereotype",
+        "queue/participant multiline",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "c571d61e99a19c22218b738863ce139d882c5f89d02f3cfa0ef2d58a82d1347f",
+      "reference_sha256": "96b40cf94ac34f79ee3513d0c20acc95c471fac76f760ac1627da5f485fe978b",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_stereo_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_stereo_teoz.svg",
+      "axes": [
+        "boxed stereotype",
+        "queue/participant multiline",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "2091518828e3c416ff6039829608eeb777d465791e265edc6435ff97741fc2f5",
+      "reference_sha256": "fe06c6a4266576d97f0293584aa4f9050d3ce231c9e9caf02ff221c390802d61",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    }
+  ],
+  "findings": [
+    "ComponentRoseEnglober passes marginY1 to AbstractTextualComponent and adds3 to preferred height, yielding text height+1+1+3. Queue kind does not delete this band; USymbolQueue margins5,15,5,5 are independently sourced.",
+    "Whole mixed Teoz box cases, multiline box titles and nested Teoz boxes still fail. Both engines use fixed text_height(13) rather than evaluated box-title Display; Teoz Dolls.getOffsetForEnglobers sums each ancestor title, whereas the Rust band retains one title height. Bounded legacy queue alignment recovery does not accept these cases."
+  ],
+  "verdict": "rejected",
+  "acceptance_policy": "Any failing whole case rejects. Mechanisms with green fresh cases only have bounded support, not acceptance: required standing perturbations and guards remain red. No prior acceptance transfers and no failure is waived.",
+  "evidence": "docs/parity-reviews/sequence-component-display-packet/checker-711-astra/README.md",
+  "fresh_outcomes": {
+    "entries": 12,
+    "outcomes": {
+      "0": 7,
+      "1": 5
+    },
+    "cli_panics": []
+  }
+}

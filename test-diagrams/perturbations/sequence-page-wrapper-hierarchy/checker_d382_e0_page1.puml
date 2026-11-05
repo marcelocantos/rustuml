@@ -1,0 +1,17 @@
+@startuml
+title A title wider than the tiny participants
+header Header
+legend left
+legend body
+endlegend
+caption First line\nSecond long line
+footer Footer
+hide footbox
+participant I
+participant J
+I -> J ++ : enter
+newpage
+J <- J ++ : second page reversed recursion
+return back
+return done
+@enduml

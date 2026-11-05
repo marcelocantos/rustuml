@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Finch
+create Cedar
+create Finch
+Finch <-]: arrive
+create Cedar
+Finch -> Cedar: ordinary create
+@enduml

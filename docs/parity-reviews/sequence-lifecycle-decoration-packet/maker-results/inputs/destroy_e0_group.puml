@@ -1,0 +1,11 @@
+@startuml
+participant First
+create Second
+First -> Second ++ : born
+Second -> Second ++ : nested
+group close
+Second -> First : finish
+end
+destroy Second
+First -> First : after
+@enduml

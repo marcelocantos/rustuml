@@ -1,0 +1,13 @@
+{
+  "import_commit": "82020a168c622ea109f1a61074c942072f37327e",
+  "local_import": "cd4a5ab71d68aaaa8915bb89a2a5450151609b68",
+  "prior_evidence_paths": 8782,
+  "imported_paths": 245,
+  "prior_and_imported_byte_unchanged": true,
+  "modified_existing_files": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ascii": "No ASCII edit. All2281 measured AST/ASCII stdout, stderr and statuses are identical before/after; no behavior/parity claim beyond this observation.",
+  "comparator_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9"
+}

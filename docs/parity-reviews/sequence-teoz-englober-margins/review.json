@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-teoz-englober-margins",
+  "account_commit": "3c9a9e67c7742ef7a70a4645ba499073366c069f",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested0.svg",
+      "source_sha256": "3c077b29d5f6055e428534ce90b2dbfbb50cba5ddf2973979d40c0c326c9dc59",
+      "golden_sha256": "c7f907df38050c5439164cc16fa7bd0cbcadf03bda149af9974d1c0db847bd97",
+      "axes": [
+        "boxed participant count",
+        "nested englobers",
+        "boxPadding and hidden footbox"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested1.svg",
+      "source_sha256": "cf183023adc4940a0e844d55412c08c76a1c845b18537171ee98d21a312d6fe0",
+      "golden_sha256": "29ebe0e847d16c40f69b1db417072c452ac386cb0a4361d8bfe41ce8bff329c8",
+      "axes": [
+        "boxed participant count",
+        "nested englobers",
+        "boxPadding and hidden footbox"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested0.svg",
+      "source_sha256": "6ba4a0c9a0c7de3a2018c4d047224e6100829bcd740f219a16fdba267836c044",
+      "golden_sha256": "30501380bcf13c4487c560392448167947a6fb43645caa1a508f3dc467f7ef74",
+      "axes": [
+        "boxed participant count",
+        "nested englobers",
+        "boxPadding and hidden footbox"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested1.svg",
+      "source_sha256": "8f94ac493b45770ad0399ebaaece397c6587fae750e2f9e028fc6a80eb1d4ab7",
+      "golden_sha256": "7a80e5d8e9ae09b7b1b8af249c53ddba099432ecd7042b508b5191cc34042950",
+      "axes": [
+        "boxed participant count",
+        "nested englobers",
+        "boxPadding and hidden footbox"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-teoz-englober-margins",
+    "java_files": [
+      "sequencediagram/Doll.java",
+      "sequencediagram/teoz/Dolls.java",
+      "sequencediagram/teoz/LivingSpace.java",
+      "skin/rose/ComponentRoseEnglober.java"
+    ],
+    "rust_locations": [
+      "sequence.rs:8694-8738",
+      "sequence.rs:10951-10984",
+      "sequence.rs:11625-11695"
+    ],
+    "source_supported": "Captured positive margin=(preferredTitle+10-initialSpan)/2, head-before/after propagation and frame posA-4/posE+4 are sourced. Teoz skips legacy postsolve title expansion. Box padding enters interbox constraints.",
+    "adversarial_boundary": "Doll.drawMe walks parent englobers and subtracts ancestor title heights. Rust participant boxes have no parent representation in the new margin model and compute title with fixed bold_text_width. Nested and count/boxPadding controls target the incomplete hierarchy; no fitted coordinates are proposed."
+  },
+  "findings": [
+    "Captured positive margin=(preferredTitle+10-initialSpan)/2, head-before/after propagation and frame posA-4/posE+4 are sourced. Teoz skips legacy postsolve title expansion. Box padding enters interbox constraints.",
+    "All four count/nesting/boxPadding/hide-footbox/footer controls fail. Even flat one-participant box is317x158 Java versus296x154 Rust, with frame x23 versus16, exactly the chosen boxPadding7 missing from the outer placement. Nested cases additionally lose parent title-height and containment: inner title is drawn at outer y instead of below it. Model ancestor englobers and outer margins before final frame/canvas composition; no coordinate tuning is justified.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

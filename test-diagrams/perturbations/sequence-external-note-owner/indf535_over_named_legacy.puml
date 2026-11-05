@@ -1,0 +1,8 @@
+@startuml
+participant Heather
+Heather ->]: pollen
+note over Heather
+seed
+stem
+end note
+@enduml

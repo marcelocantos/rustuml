@@ -1,0 +1,9 @@
+@startuml
+participant Probe
+participant Relay
+autoactivate on
+group gate
+Probe <-[ : crossing Wi.f
+[<-- Probe : settle
+end
+@enduml

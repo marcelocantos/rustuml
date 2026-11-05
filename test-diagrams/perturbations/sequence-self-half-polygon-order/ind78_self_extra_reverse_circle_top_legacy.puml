@@ -1,0 +1,11 @@
+@startuml
+participant Vela
+participant Tucana
+participant Pavo
+activate Vela
+activate Vela
+Vela o/-o Vela: inward
+deactivate Vela
+deactivate Vela
+Pavo o/-o Pavo: outward
+@enduml

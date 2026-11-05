@@ -1,0 +1,10 @@
+@startuml
+participant Lead as L
+participant S
+S -> S ++ : recursive
+S -> S ++ : recursive
+S -> S : WWW thick label WWW
+return unwind
+return unwind
+L -> S !! : destroy
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition bottom
+box Canopy
+participant Kestrel
+end box
+box Understory
+create queue Spruce <<芽>>
+end box
+Kestrel -> Spruce: sprout
+hide stereotype
+@enduml

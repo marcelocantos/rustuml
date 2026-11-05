@@ -1,0 +1,15 @@
+@startuml
+participant Clover
+participant Lotus
+group Bed
+loop water
+[-> Clover: enter
+note right: petal water
+end
+Lotus ->]: leave
+note left
+mud
+root
+end note
+end
+@enduml

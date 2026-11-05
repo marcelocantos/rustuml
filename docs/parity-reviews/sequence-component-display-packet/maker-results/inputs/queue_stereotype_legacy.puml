@@ -1,0 +1,10 @@
+@startuml
+box Couriers
+queue "Entry\nSecond" as Mail <<parcel>>
+participant Gate
+end box
+create Mail
+Gate -> Mail ++: enqueue
+Mail --> Gate --: reply
+destroy Mail
+@enduml

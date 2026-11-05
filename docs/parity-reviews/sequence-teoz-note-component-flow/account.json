@@ -1,0 +1,51 @@
+{
+  "status": "maker causal account; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": [
+    "teoz/NoteTile.java#getUsedWidth,#getX,#getMinX,#getMaxX: fractional origins, OVER_SEVERAL allocates max(component width,posD-posB), bounds union both participant edges",
+    "teoz/CommunicationTileNoteLeft,#getNotePosition and CommunicationTileNoteRight#getNotePosition: left center minus preferred width, right center plus history-mode live delta",
+    "teoz/CommunicationTileSelfNoteLeft and CommunicationTileSelfNoteRight#getNotePosition: self tile min minus note width and self tile max",
+    "skin/rose/ComponentRoseNote.java#drawInternalU: integer text width when unstretched; integer allocated width minus two paddingX when stretched, text moves by half allocation excess",
+    "graphic/Step1Abstract.java#createNoteBox: push a self note by arrow width only on the loop side (right for ordinary, left for reverse)"
+  ],
+  "rust": [
+    "crates/rustuml-render/src/sequence.rs#note_group_extent",
+    "left_missing_space",
+    "Teoz min_tile",
+    "max_note_right",
+    "Event::Note painter",
+    "self_msg_right_note_left_by_event"
+  ],
+  "invariant": "A Teoz note has one fractional component origin and allocation reused by bounds and paint. Legacy NoteBox quantization applies only in the legacy engine, and self notes are displaced only on the loop side.",
+  "divergence": "Teoz canvas, groups and paint independently reconstruct widths and round origins, including a fractional-threshold adjustment in the right-self-note envelope. Reverse legacy right notes are incorrectly pushed by the arrow width.",
+  "change": "Resolve a sequence-local note component geometry from participants, self tile bounds and raw event-history mode. Reuse it for group, canvas and paint. Correct legacy reverse loop-side displacement using Step1Abstract, preserving legacy truncation.",
+  "axes": [
+    "attached versus standalone, left/right/over spanning",
+    "reverse self direction and active depth",
+    "padding, shadow and participant declaration order"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-note-component-flow",
+  "java_locations": [
+    "teoz/NoteTile.java#getUsedWidth,#getX,#getMinX,#getMaxX: fractional origins, OVER_SEVERAL allocates max(component width,posD-posB), bounds union both participant edges",
+    "teoz/CommunicationTileNoteLeft,#getNotePosition and CommunicationTileNoteRight#getNotePosition: left center minus preferred width, right center plus history-mode live delta",
+    "teoz/CommunicationTileSelfNoteLeft and CommunicationTileSelfNoteRight#getNotePosition: self tile min minus note width and self tile max",
+    "skin/rose/ComponentRoseNote.java#drawInternalU: integer text width when unstretched; integer allocated width minus two paddingX when stretched, text moves by half allocation excess",
+    "graphic/Step1Abstract.java#createNoteBox: push a self note by arrow width only on the loop side (right for ordinary, left for reverse)"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs#note_group_extent",
+    "left_missing_space",
+    "Teoz min_tile",
+    "max_note_right",
+    "Event::Note painter",
+    "self_msg_right_note_left_by_event"
+  ],
+  "causal_divergence": "Teoz canvas, groups and paint independently reconstruct widths and round origins, including a fractional-threshold adjustment in the right-self-note envelope. Reverse legacy right notes are incorrectly pushed by the arrow width.",
+  "planned_change": "Resolve a sequence-local note component geometry from participants, self tile bounds and raw event-history mode. Reuse it for group, canvas and paint. Correct legacy reverse loop-side displacement using Step1Abstract, preserving legacy truncation.",
+  "perturbation_axes": [
+    "attached versus standalone, left/right/over spanning",
+    "reverse self direction and active depth",
+    "padding, shadow and participant declaration order"
+  ]
+}

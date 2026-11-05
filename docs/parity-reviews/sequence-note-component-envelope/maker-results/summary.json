@@ -1,0 +1,37 @@
+{
+  "account_commit": "6f36fedfba38ca19244a81454e3f7d9c900f2974",
+  "status": "candidate; independent checker required",
+  "observations": {
+    "before": {
+      "product": {
+        "0": 7,
+        "1": 53
+      },
+      "assisted": {
+        "0": 7,
+        "1": 53
+      },
+      "cli_equivalence": 60
+    },
+    "current": {
+      "product": {
+        "0": 30,
+        "1": 30
+      },
+      "assisted": {
+        "0": 30,
+        "1": 30
+      },
+      "cli_equivalence": 60
+    }
+  },
+  "logs": {
+    "/tmp/rustuml-seq-recovery/shadow-main.log": "b6b8c56522a7e97f4f23675270ee112ba5e89062975b9f9c7eaed051dd8f890e",
+    "/tmp/rustuml-seq-recovery/shadow-before.log": "139be4f69732d6349e3ebfe7db554d028399909b3a7832569c4ac26d7f843ca0",
+    "/tmp/rustuml-seq-recovery/shadow-main-3.log": "9ea834ad3dea97d4a734477235e25aca961c776476ad71b9d8459a61d69fd39d",
+    "/tmp/rustuml-seq-recovery/shadow-current.log": "6d90ecaf09d3a47b0a621f1705ba624ce4322c6897cde00bbba28a7ca766c861",
+    "/tmp/rustuml-seq-recovery/shadow-build.log": "a3cad6a895352823031ad5778bbe12164db0681be5f6d30bf979ef3f68bb1bd5",
+    "/tmp/rustuml-seq-recovery/shadow-build-3.log": "9f6da977f2894a3ab4bcc2edfb7575f069e975a4d623e58910fcbb6970bc7870",
+    "/tmp/rustuml-seq-recovery/shadow-build-2.log": "1e6c4b6fe7e2ecaa8a3b32d35b4416172080451542fff2c3eb7e917cdd620175"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-created-participant-component",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.graphic.ArrowAndParticipant#constructor/#getPreferredWidth/#getPreferredHeight/#drawInternalU",
+    "sequencediagram.graphic.ParticipantBox#getPreferredWidth/#getHeadHeight/#drawParticipantHead",
+    "sequencediagram.teoz.CommunicationTile#getPoint2/#drawU",
+    "skin.rose.ComponentRoseParticipant#getPreferredWidth/#getPreferredHeight/#drawInternalU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout",
+    "crates/rustuml-render/src/sequence.rs::create_msg_extra",
+    "crates/rustuml-render/src/sequence.rs::draw_created_head"
+  ],
+  "invariant": "Initial, created and tail participant consumers share the resolved component preferred bounds and paint context. Creation arrow constraints reserve half preferred head width, and vertical composition uses max(arrow,head) preferred height.",
+  "causal_divergence": "Creation constraints use visible box width, legacy flow uses unshadowed height plus old creation constants, and scratch SVG omits resolved shadow filter. Other kinds must be traced rather than assumed to share rectangle geometry.",
+  "planned_change": "Carry preferred height and resolved paint data with the participant component, consume preferred width for creation spacing/endpoints, and derive creation scheduling from the arrow/head composite. Audit sibling kinds and stereotypes without editing shared style APIs or activationBox fallback.",
+  "perturbation_axes": [
+    "creation direction/live history/engine",
+    "numeric shadow and head/message font heights",
+    "participant kinds/stereotypes"
+  ],
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "evidence_import": "9d81627b",
+  "account_date": "2026-11-04",
+  "status": "preimplementation hypothesis; independent review required"
+}

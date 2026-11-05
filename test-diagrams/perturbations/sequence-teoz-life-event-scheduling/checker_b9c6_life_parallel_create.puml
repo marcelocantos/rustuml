@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Birch
+Cedar -> Birch : first
+create Maple
+& Birch -> Maple ++ : born
+Maple -> Birch : done
+destroy Maple
+@enduml

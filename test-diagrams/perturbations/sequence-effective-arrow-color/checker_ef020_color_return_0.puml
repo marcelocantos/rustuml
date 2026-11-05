@@ -1,0 +1,9 @@
+@startuml
+participant Tern
+[-> Tern ++ : enter
+return #application exit
+Tern -> Tern ++ : recurse
+return #2468ac00 invisible
+Tern -> Tern ++ : again
+return #2468acff opaque
+@enduml

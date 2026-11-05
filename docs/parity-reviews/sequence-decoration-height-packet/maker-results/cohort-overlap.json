@@ -1,0 +1,14 @@
+{
+  "entries": 1966,
+  "unique_source_paths": 1966,
+  "unique_source_bytes": 1918,
+  "duplicate_entries_by_source_bytes": 48,
+  "retained1901": 1901,
+  "fresh_checker37": 37,
+  "maker28": 28,
+  "checker_registered39_includes_two_prior_maker_copies": true,
+  "parent1449_overlap": 1123,
+  "parent_only_not_replayed": 326,
+  "overlap_provenance": "../../sequence-corrective-b9/maker-results/cohort-overlap.json",
+  "note": "Frozen parent1449 and maker1938 overlap; do not sum. Every retained entry is measured, including duplicates. No unrelated parent growth imported."
+}

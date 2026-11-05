@@ -1,0 +1,121 @@
+{
+  "entries": 2371,
+  "yaml_by_cohort": {
+    "frozen2281": {
+      "entries": 2281,
+      "stdout_equal": 2281,
+      "before_exits": {
+        "0": 2207,
+        "101": 17,
+        "1": 57
+      },
+      "after_exits": {
+        "0": 2207,
+        "101": 17,
+        "1": 57
+      }
+    },
+    "checker64": {
+      "entries": 64,
+      "stdout_equal": 54,
+      "before_exits": {
+        "0": 58,
+        "101": 2,
+        "1": 4
+      },
+      "after_exits": {
+        "0": 58,
+        "101": 2,
+        "1": 4
+      }
+    },
+    "maker24": {
+      "entries": 24,
+      "stdout_equal": 4,
+      "before_exits": {
+        "0": 20,
+        "1": 4
+      },
+      "after_exits": {
+        "0": 24
+      }
+    },
+    "creole_handoff2": {
+      "entries": 2,
+      "stdout_equal": 2,
+      "before_exits": {
+        "0": 2
+      },
+      "after_exits": {
+        "0": 2
+      }
+    }
+  },
+  "yaml_stdout_changes": [
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_legacy.puml",
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_hide_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_hide_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_below_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_below_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_teoz.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_legacy.puml",
+    "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_kinds_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_kinds_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_created_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hide_created_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_order_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_order_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_created_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/bottom_created_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_in_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_in_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_out_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_out_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_stale_owner_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_stale_owner_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_right_in_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_right_in_teoz.puml"
+  ],
+  "yaml_existing_panics": [
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review2_external_live_depth_autonumber.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_four_way_combined.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_left_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_right_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_left_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_right_isolated.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review4_autonumber_literal_angle_formats.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_left_depth_repeat.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_right_depth_repeat.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_prefix_suffix_resume.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_styled_hash_resume.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_mixed_required_field.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_spatial_reverse_order.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_right_divider_intervening.puml",
+    "test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_legacy.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_teoz.puml",
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_legacy.puml",
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_teoz.puml"
+  ],
+  "yaml_explanation": "All 2281 frozen full YAML stdout captures byte-identical, including empty stdout on errors. Both new fields are serde-default and omitted when false; old models round-trip unchanged. Thirty fresh/supplement stdout changes:16 nondefault Display fields,10 external Note events,4 valid shape terminator parse recoveries. Nineteen pre-existing --yaml panics remain in both revisions: CLI main.rs serializing nested enums in YAML is unsupported; per-process PIDs change stderr and are preserved, not new render panics.",
+  "changed_ascii": [
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_legacy.puml",
+    "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/rect_rows_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/hex_rows_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_in_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_note_in_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_right_in_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-0cde/reference-inputs/exo_right_in_teoz.puml"
+  ],
+  "ascii_note": "Ten actual output/status changes from parser ownership/terminator repairs; no ASCII behavior-invariance or parity claim. Only three fixture defaults touched. Complete AST/ASCII/YAML streams and statuses retained."
+}

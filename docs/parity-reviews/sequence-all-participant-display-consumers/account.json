@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "bce6bea405d8b5efd55136f4768117115e7f634f",
+  "evidence_import": "f3913f3cb7094d8aedd5618f1ba27830a2804713",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-all-participant-display-consumers",
+  "java_locations": [
+    "sequencediagram.Participant#getDisplay",
+    "sequencediagram.graphic.DrawableSetInitializer#createParticipant",
+    "skin.rose.ComponentRoseParticipant#constructor/#drawInternalU/#getPreferredHeight",
+    "skin.rose.ComponentRoseActor#drawInternalU/#getPreferredHeight",
+    "skin.rose.ComponentRoseBoundary#drawInternalU",
+    "skin.rose.ComponentRoseControl#drawInternalU",
+    "skin.rose.ComponentRoseEntity#drawInternalU",
+    "skin.rose.ComponentRoseDatabase#drawInternalU",
+    "skin.rose.ComponentRoseQueue#constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout/render_participant_shape/participant_box/actor_shape/boundary_shape/control_shape/entity_shape/database_shape/collections_shape/queue_shape"
+  ],
+  "invariant": "Every participant component measures and paints the same complete filtered ordered Display. Figure heads paint Display after symbol; legacy tails paint Display before symbol and advance symbol by complete Display height. Collections uses ComponentRoseParticipant with collection offset, not a separate stereotype rule.",
+  "causal_divergence": "The previous ordered Display is consumed only by queue paint. Other components reconstruct stereotype-first text and gate bare figure stereotype height/paint on in_box, contrary to Participant.getDisplay supplied by the initializer.",
+  "planned_change": "Reuse ordered Display in all component text consumers and their dimension calculations. Remove only boxed-only stereotype reservation/paint suppression. Preserve symbol-specific margins, head/tail order, shadow and existing creation transforms. Keep spot/multiplicity/style, box/envelope and fonts outside this change; no new model fields or ASCII edits.",
+  "perturbation_axes": [
+    "all eight kinds with top/bottom and final hide/show",
+    "bare/boxed/created heads, tails, multiline labels and both engines"
+  ]
+}

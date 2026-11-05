@@ -1,0 +1,14 @@
+@startuml
+actor Roe
+participant Mint
+activate Mint
+loop renew
+create Roe
+Mint -> Roe ++: create
+Roe --> Mint --: response
+end
+create Roe
+Mint -> Roe ++: renew
+Roe --> Mint --: response
+deactivate Mint
+@enduml

@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--release",
+    "-p",
+    "rustuml-oracle",
+    "--test",
+    "harness_guards",
+    "parity_review_records_are_complete",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b9c6cf04",
+  "exit": 101,
+  "environment": {
+    "CARGO_BUILD_JOBS": "4",
+    "RAYON_NUM_THREADS": "4",
+    "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/target-after",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+  }
+}

@@ -1,0 +1,9 @@
+@startuml
+participant Remote
+participant "Harbour 7" as end
+Remote -> end: inbound
+rnote right of "end"
+line one
+line two
+end note
+@enduml

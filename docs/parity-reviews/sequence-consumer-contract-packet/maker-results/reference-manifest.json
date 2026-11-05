@@ -1,0 +1,754 @@
+{
+  "schema_version": 1,
+  "purpose": "Pattern2 whitespace/rejection contracts, all-kind ordered Display and Teoz self-note components",
+  "cases": [
+    {
+      "name": "participant_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/participant_ordered_legacy.puml",
+      "source_sha256": "725387f8df0885827938449ba6156d18077e8d06a0032b82955d2e5bc664205b",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind participant",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "participant_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/participant_ordered_teoz.puml",
+      "source_sha256": "d28f49e211d0162be5a42e2306c15f43585f436c9326eb8afbf8f8306efce11a",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind participant",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "actor_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/actor_ordered_legacy.puml",
+      "source_sha256": "e90acb3278562a0acafa38d9fc8859fc350a1050504b18f4d2f2e959f90916f3",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind actor",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "actor_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/actor_ordered_teoz.puml",
+      "source_sha256": "e7f784a90426e64d9bc5957f035d47c3911fa9f60900fd40cf116882ab11aaeb",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind actor",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "boundary_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/boundary_ordered_legacy.puml",
+      "source_sha256": "23aad4d84b48f3141f5e5f40193d633df99b3345b7fdcbd33d5f634d2b7a5620",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind boundary",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "boundary_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/boundary_ordered_teoz.puml",
+      "source_sha256": "5e4861451805881199753d7cda54ec45beb1851ccdf2709f16402315e040da8f",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind boundary",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "control_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/control_ordered_legacy.puml",
+      "source_sha256": "9413e1a9c23e457ae91a63ca6aee1c9392902e98839e351f1302baab33274cf5",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind control",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "control_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/control_ordered_teoz.puml",
+      "source_sha256": "edd51847aec0ac52dfd66345c54b27ae2519358f5a2a7c3c8f22f86d5b4a8606",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind control",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "entity_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/entity_ordered_legacy.puml",
+      "source_sha256": "704cc6c9d37e08e44b00e8945b11528266aa2453c645c98c9d8e5508dd7592a3",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind entity",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "entity_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/entity_ordered_teoz.puml",
+      "source_sha256": "79a7f1d0e749091f209845d2abf23927cec0f61c13e32303bdfde28fe4f04f44",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind entity",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "database_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/database_ordered_legacy.puml",
+      "source_sha256": "6dc38c420c7ab8cb130bda76c312d8d7ecc08aa1ab57663cd1fcf46d39d4ef50",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind database",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "database_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/database_ordered_teoz.puml",
+      "source_sha256": "a5de645c56e95f4c5810c86ffa9685ac7c896908a8d93e9ff2efcbaabef675a5",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind database",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "collections_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/collections_ordered_legacy.puml",
+      "source_sha256": "bea79e55cb8cbd6ed92a8117631f397827ce3b7561463a88d65618310377b415",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind collections",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "collections_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/collections_ordered_teoz.puml",
+      "source_sha256": "22ddc8ecee34f2d42649b82f757d37bbf6723360c8c3de3a7500995af54c347f",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind collections",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "queue_ordered_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/queue_ordered_legacy.puml",
+      "source_sha256": "1bcc507a63a15513e373d8a0002afaa4a2032267d5a19067305c93b330ad449b",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind queue",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "queue_ordered_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/queue_ordered_teoz.puml",
+      "source_sha256": "c3f186b64e3aef495bcb9d7197fba3595154745505d960df9bcd44cba39cfc12",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "kind queue",
+        "declaration-time opposite orders",
+        "rich multiline label and unequal widths",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "message_gap_nbsp_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_nbsp_legacy.puml",
+      "source_sha256": "b0574682a2a3654e8d936bdf3501ab36d145383a21f39a5e6e83ebc68bb7cc80",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Pattern2 message whitespace",
+        "nbsp",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "terminator_gap_nbsp_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_nbsp_teoz.puml",
+      "source_sha256": "9060c2d8deaed0116f7cb7091df1f2d2549020f2b1b114e171b0e52a956ec2cc",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Pattern2 terminator whitespace",
+        "nbsp",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "message_gap_em_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_em_legacy.puml",
+      "source_sha256": "5b0b36c2cbdcb2871fd9bd2b1e6709ae967d4b586776f2127777fc266a616e2c",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Pattern2 message whitespace",
+        "em",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "terminator_gap_em_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_em_teoz.puml",
+      "source_sha256": "984d1aad53a6775e4916b324c27bfed2b9630fadbece0eeced44e4016da5e73c",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Pattern2 terminator whitespace",
+        "em",
+        "teoz"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "message_gap_narrow_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_narrow_legacy.puml",
+      "source_sha256": "e1d6c8d1e5c95ca1abe72f019a236c8554c50d3b0e818079912b854ae5a62722",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Pattern2 message whitespace",
+        "narrow",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "terminator_gap_narrow_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/terminator_gap_narrow_teoz.puml",
+      "source_sha256": "6daba60b3ebeb1ea408d96eee0995363e08c48146ce8e8621314b3c65d9e5d72",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Pattern2 terminator whitespace",
+        "narrow",
+        "teoz"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "self_left_rnote_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/self_left_rnote_legacy.puml",
+      "source_sha256": "f36521f4a3098ff90382de9eed953d719af576f4af79d45d2bcc9284ddb5cdb4",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Teoz self component selection",
+        "left",
+        "rnote",
+        "rich multiline",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "self_left_rnote_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/self_left_rnote_teoz.puml",
+      "source_sha256": "82a6d4ad0cbc3f10705cb3c27c3c5ae4650037a9d5a61c3eb94132fd563c7fd0",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Teoz self component selection",
+        "left",
+        "rnote",
+        "rich multiline",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "self_right_hnote_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/self_right_hnote_legacy.puml",
+      "source_sha256": "0c37a35b20b89d7331f249af374263ffa116deb3b48e473a172c51bf453209f9",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Teoz self component selection",
+        "right",
+        "hnote",
+        "rich multiline",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "self_right_hnote_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/self_right_hnote_teoz.puml",
+      "source_sha256": "662fa0709d26369f5f4a6bb7d8fb60e2893741ee3819a35183e0f495f311eae6",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "Teoz self component selection",
+        "right",
+        "hnote",
+        "rich multiline",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "bare_over_inline_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_legacy.puml",
+      "source_sha256": "3352bb6fef15f64727dca928439516fd63a6d235ea6d0d4acc0a46978e8fe30d",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "bare over requires named target",
+        "inline",
+        "external predecessor",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "bare_over_inline_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_inline_teoz.puml",
+      "source_sha256": "13fc50f69454e45e0f15babdee4f60e331d2aac59af6b2068ea6d5b3f666bb1d",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "bare over requires named target",
+        "inline",
+        "external predecessor",
+        "teoz"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "bare_over_multiline_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_legacy.puml",
+      "source_sha256": "cfffa4333704544206aa40c22ad608864675bfd24dcb8cfc7841d61bdbce504a",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "bare over requires named target",
+        "multiline",
+        "external predecessor",
+        "legacy"
+      ],
+      "intended_valid": false
+    },
+    {
+      "name": "bare_over_multiline_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/bare_over_multiline_teoz.puml",
+      "source_sha256": "81022c7a85f2c637a58e8225d1f0cf5492e2d7f05633017e469551ca4cb00e3b",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "bare over requires named target",
+        "multiline",
+        "external predecessor",
+        "teoz"
+      ],
+      "intended_valid": false
+    }
+  ]
+}

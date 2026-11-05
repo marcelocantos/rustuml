@@ -1,0 +1,12 @@
+@startuml
+!pragma teoz true
+participant A
+participant B
+A -> B ++ : enter
+B -> B : active call
+deactivate B
+activate B #pink
+note over A: separator
+B -> A : notify
+destroy B
+@enduml

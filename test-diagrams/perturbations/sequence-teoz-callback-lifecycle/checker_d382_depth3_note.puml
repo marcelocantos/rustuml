@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+participant S
+participant T
+activate S #lightblue
+S -> T ++ : enter
+T -> T ++ : recursion
+T -> T ++ : recursion
+note over T: ownership reset
+deactivate T
+deactivate T
+T -> S : after closes
+activate T #pink
+T -> T : reopened
+deactivate T
+@enduml

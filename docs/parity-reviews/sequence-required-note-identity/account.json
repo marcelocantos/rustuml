@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "evidence_import": "e654acb9ba31aec53329c739e8151d5bf46659f7",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-required-note-identity",
+  "java_locations": [
+    "command.note.sequence.FactorySequenceNoteCommand#getRegexConcatSingleLine/getRegexConcatMultiLine/executeInternal",
+    "command.note.sequence.FactorySequenceNoteOverSeveralCommand#getRegexConcatSingleLine/getRegexConcatMultiLine",
+    "command.note.sequence.FactorySequenceNoteOnArrowCommand#getRegexConcatSingleLine"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_note"
+  ],
+  "invariant": "A named note requires a participant after an optional of prefix; the prefix may be absent even when the participant itself spells of. Pair notes have two required identities and no of prefix. Attached left/right notes use a separate grammar.",
+  "causal_divergence": "The combined Rust expression makes both prefix and participant optional. Its successful empty capture prevents the regex from reconsidering of as the mandatory participant and a post-match guard rejects valid inputs.",
+  "planned_change": "Separate mandatory single-identity and pair expressions from attached-note expressions. Preserve single-line one-whitespace versus multiline one-or-more prefix grammar; use explicit required captures and quoted/Unicode identity grammar. Keep bare-over rejection in a separate domain check. No fixture-label branch.",
+  "perturbation_axes": [
+    "identity of versus prefixed and renamed/quoted identities",
+    "inline/multiline, shape, pair, color, both engines"
+  ]
+}

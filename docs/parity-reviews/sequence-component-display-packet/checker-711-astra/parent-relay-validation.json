@@ -1,0 +1,24 @@
+{
+  "validated": true,
+  "calls": 52,
+  "sources": 52,
+  "timeouts": 0,
+  "result_gzip_sha256": "faf2119c470cd6293b5e12fe0f13ce52f53d5c06e3a20cbf3572dbb541817ce9",
+  "transport_sha256": "3fddfcbc15b28a40d683aa9ef11195d1bf6431ef2126100898ad843fb5c700c7",
+  "manifest_sha256": "81508a66934ee73c4af590221071c9c1ecba69fc635aa2b0f6569feaffaf04e1",
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.zmbIPPf0",
+  "checks": [
+    "immutable source bytes and both path identities",
+    "membership",
+    "raw streams",
+    "argv cwd timezone env",
+    "pinned environment",
+    "derived Java argv"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "exit_statuses": {
+    "200": 6,
+    "0": 46
+  },
+  "classification": "Independent checker must classify observed validity."
+}

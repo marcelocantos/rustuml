@@ -1,0 +1,4 @@
+@startuml
+S -> S ++ : start
+return settled
+@enduml

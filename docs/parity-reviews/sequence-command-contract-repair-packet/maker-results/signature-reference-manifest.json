@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "purpose": "Preserve full-command signature scope through create declaration parsing",
+  "cases": [
+    {
+      "name": "create_outer_bit_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_outer_bit_legacy.puml",
+      "source_sha256": "53cef15293a39bd16f05c39d552c6e657260b868362c21c59de58218f89822c9",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "FoxSignature full command vs parsed declaration tail",
+        "outer_bit",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "create_outer_bit_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_outer_bit_teoz.puml",
+      "source_sha256": "4e11ff44534c01f59ac233b489b475830bb4af1a0000f120d5e5a269d2715fce",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "FoxSignature full command vs parsed declaration tail",
+        "outer_bit",
+        "teoz"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "create_inner_bit_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_inner_bit_legacy.puml",
+      "source_sha256": "2bf05f534b51d92e7599d5589202f168ea53ff781f7808aa7015e6b54035f122",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "FoxSignature full command vs parsed declaration tail",
+        "inner_bit",
+        "legacy"
+      ],
+      "intended_valid": true
+    },
+    {
+      "name": "create_inner_bit_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_inner_bit_teoz.puml",
+      "source_sha256": "41d8e450a257298b5890ab1a2ef011b723556eb3871807484abb5e5bedcdc69c",
+      "cwd": "PRIVATE_CWD",
+      "timezone": "GMT+11:00",
+      "env": {},
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "FoxSignature full command vs parsed declaration tail",
+        "inner_bit",
+        "teoz"
+      ],
+      "intended_valid": true
+    }
+  ]
+}

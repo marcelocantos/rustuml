@@ -1,0 +1,5 @@
+@startuml
+Wren o->o Lark : two circles
+Lark o-->>o Wren : two circles open
+Wren -/o Lark : half head
+@enduml

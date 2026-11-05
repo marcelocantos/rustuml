@@ -1,0 +1,1146 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "triple overwrite",
+      "four kinds/order",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "triple overwrite",
+      "four kinds/order",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_interleaved_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_interleaved_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "consumed plus overwritten",
+      "mixed kinds",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_interleaved_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_interleaved_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "consumed plus overwritten",
+      "mixed kinds",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_valid_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_valid_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "pending before return",
+      "return destination",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_valid_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_valid_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "pending before return",
+      "return destination",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "pending before return",
+      "wrong receiver",
+      "legacy"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "pending before return",
+      "wrong receiver",
+      "teoz"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_activate_between_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_activate_between_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "unattached initial activation",
+      "pending retention",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_activate_between_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_activate_between_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "unattached initial activation",
+      "pending retention",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_deactivate_between_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_deactivate_between_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "deactivation between",
+      "mixed kind",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_deactivate_between_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_deactivate_between_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "deactivation between",
+      "mixed kind",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_left_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_left_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "incoming_left",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_left_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_left_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "incoming_left",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_right_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_right_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "incoming_right",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_right_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_incoming_right_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "incoming_right",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "outgoing_left",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "outgoing_left",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "outgoing_right",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "external direction",
+      "outgoing_right",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_group_scope_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_group_scope_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "pending crosses nested group",
+      "overwrite kinds",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_group_scope_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_group_scope_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "pending crosses nested group",
+      "overwrite kinds",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_box_scope_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_box_scope_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "box membership",
+      "overwritten pending",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_box_scope_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_box_scope_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "box membership",
+      "overwritten pending",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "autonumber",
+      "triple pending",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "autonumber",
+      "triple pending",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_participant_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_participant_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "end without consumer",
+      "participant",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_participant_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_participant_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "end without consumer",
+      "participant",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_actor_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_actor_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "end without consumer",
+      "actor",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_actor_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_actor_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "end without consumer",
+      "actor",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_queue_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_queue_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "end without consumer",
+      "queue",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_queue_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_dangling_queue_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "end without consumer",
+      "queue",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "self receiver",
+      "queue",
+      "legacy"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "self receiver",
+      "queue",
+      "teoz"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "source receiver",
+      "queue",
+      "legacy"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "source receiver",
+      "queue",
+      "teoz"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "neither receiver",
+      "actor",
+      "legacy"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-single-pending-create",
+    "axes": [
+      "neither receiver",
+      "actor",
+      "teoz"
+    ],
+    "intended_valid": false,
+    "observed_valid": false
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_rich_stereo_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_rich_stereo_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "rich_stereo",
+      "tails",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_rich_stereo_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_rich_stereo_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "rich_stereo",
+      "tails",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_plain_no_stereo_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_plain_no_stereo_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "plain_no_stereo",
+      "tails",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_plain_no_stereo_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_plain_no_stereo_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "plain_no_stereo",
+      "tails",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_first_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_first_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "blank_first",
+      "tails",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_first_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_first_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "blank_first",
+      "tails",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_stereo_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_stereo_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "blank_stereo",
+      "tails",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_stereo_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_blank_stereo_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "first/late/blank stripe",
+      "blank_stereo",
+      "tails",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_created_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_created_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "created queue",
+      "stereotype",
+      "three lines",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_created_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_created_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "created queue",
+      "stereotype",
+      "three lines",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "queue box",
+      "actor sibling",
+      "rich label",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "queue box",
+      "actor sibling",
+      "rich label",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "three participants",
+      "small-large-small",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-queue-stripe-origin",
+    "axes": [
+      "three participants",
+      "small-large-small",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "forward",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "forward",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "reverse",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "reverse",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "self",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "self",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "reverse_self",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "reverse_self",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "external",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "four alternating sizes",
+      "external",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_heading_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_heading_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "heading and size",
+      "four lines",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_heading_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_heading_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "heading and size",
+      "four lines",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "inline style",
+      "alternating size",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "inline style",
+      "alternating size",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_note_divider_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_note_divider_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "separate consumer control",
+      "note and divider",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_note_divider_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_note_divider_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-message-stripe-baselines",
+    "axes": [
+      "separate consumer control",
+      "note and divider",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_top_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_top_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "top",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_top_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_top_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "top",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "bottom",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "bottom",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "reverse_top",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "reverse_top",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_bottom_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_bottom_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "reverse_bottom",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_bottom_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_bottom_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "reverse_bottom",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_open_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_open_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "open",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_open_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_open_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "open",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_circle_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_circle_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "circle",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_circle_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_circle_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "circle",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_full_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_full_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "full",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_full_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_full_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "first and last participant",
+      "nested activation",
+      "full",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_sibling_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_sibling_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-collections-source-clarification",
+    "axes": [
+      "plain versus collections",
+      "multiline sizes",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_sibling_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_sibling_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-collections-source-clarification",
+    "axes": [
+      "plain versus collections",
+      "multiline sizes",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_font_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_font_legacy.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-collections-source-clarification",
+    "axes": [
+      "font size",
+      "order",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_font_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_collection_font_teoz.svg",
+    "cohort": "fresh86",
+    "mechanism": "sequence-collections-source-clarification",
+    "axes": [
+      "font size",
+      "order",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  }
+]

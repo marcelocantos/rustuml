@@ -1,0 +1,4 @@
+@startuml
+Cedar -> Birch ++ : enter
+return #transparent vanish
+@enduml

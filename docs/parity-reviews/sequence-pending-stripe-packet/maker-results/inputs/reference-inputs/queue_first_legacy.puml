@@ -1,0 +1,5 @@
+@startuml
+queue "<size:23>First</size>\nEnd" as Mail
+participant Gate
+Gate -> Mail: enqueue
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+skinparam stereotypePosition bottom
+queue "<size:20>Mailbox</size>\nsmall" as M <<work>>
+skinparam stereotypePosition top
+queue Other <<top>>
+M -> Other: put
+@enduml

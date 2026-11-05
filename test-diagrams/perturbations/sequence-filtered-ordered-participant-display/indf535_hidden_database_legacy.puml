@@ -1,0 +1,8 @@
+@startuml
+hide stereotype
+database "EnormouslyLongCedarName" as Cedar5 <<s>>
+participant Wren
+show stereotypes
+Wren -> Cedar5: seed
+hide stereotypes
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+skinparam Padding 3
+skinparam shadowing false
+participant "Broad heron" as H
+participant "I" as I
+group enclosing
+H -> I : x
+opt inner
+note over H,I : span
+I -> H : finish
+end
+end
+@enduml

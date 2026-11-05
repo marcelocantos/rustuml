@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-pattern2-class-composition",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "5dccddca",
+  "account_date": "2026-11-05",
+  "java_locations": [
+    "regex.Pattern2#QUOTED_REPLACEMENTS/transform",
+    "klimt.color.ColorParser#simpleColor/getRegex"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::sequence_regex"
+  ],
+  "invariant": "Pattern2 expands the %s token wherever it appears within a character class, including composite and negated classes; adjoining excluded characters remain excluded.",
+  "causal_divergence": "The existing helper replaced only the complete spellings [%s] and [^%s]. The newly introduced [^%s:] note-color class therefore remained literal and admitted whitespace into color tokens, introducing 29 golden sequence losses at 5dccddca. The first broad run and exact failure names are preserved in the private cache.",
+  "planned_change": "Replace the token %s itself with the source-derived class contents (ASCII TAB..CR plus SPACE/NBSP), leaving brackets, negation and adjoining characters intact. Test composite positive/negative classes and color capture whitespace, then rerun affected and broad gates because production changed.",
+  "perturbation_axes": [
+    "positive/negative/composite character-class composition",
+    "color separator whitespace versus tight colon, note shapes and named/attached forms"
+  ]
+}

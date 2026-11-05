@@ -1,0 +1,10 @@
+@startuml
+participant Larch
+participant Alder
+Larch -> Larch: inspect
+rnote left of Larch
+<size:13>row0twig</size>
+<size:16>row1twig</size>
+end note
+Larch -> Alder: resume
+@enduml

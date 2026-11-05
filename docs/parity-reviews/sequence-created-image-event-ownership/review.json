@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-created-image-event-ownership",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3A3586e3c0-433f-4984-bdab-61d183d23ec6",
+    "model": "gpt-6-astra / Codex harness in T3 Code",
+    "role": "Independent checker; did not implement candidate; no children",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "branch": "review/sequence-711dbca7-5c023380"
+  },
+  "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+  "implementation_commit": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "tested_packet_commit": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "tested_production_commit": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "intermediate_revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent's existing Monkey Man relay: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; exact per-input actual wrapper argv/cwd/status/streams in checker evidence; Java argv derived from pinned wrapper, not process-traced",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/fresh52.json PRIVATE_CACHE/after-bin PRIVATE_CACHE/after-fresh; separately followup12.json -> after-followup (same checkout cwd); before binaries likewise",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_repeat_actor_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_repeat_actor_legacy.svg",
+      "axes": [
+        "three creations/interleaved history",
+        "actor/multiline/activation",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "a203d5bb8b54ceffa0996b86114fd934bd195942c85a41eb8ffa2686ddbc96d2",
+      "reference_sha256": "c3232d299c78d2e0f7d58590456421f53fe28997f2c4b6d40fc255eacf7fd40b",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_repeat_actor_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_repeat_actor_teoz.svg",
+      "axes": [
+        "three creations/interleaved history",
+        "actor/multiline/activation",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "fa18577de7c2d4e592c7211174450482e10daefda3a70c05bb54d97543e90c00",
+      "reference_sha256": "6df0bfc07e36eb177a6dec660b910aebb7bb22c8cb2b2c39f2650b46e404ad6c",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_reverse_queue_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_reverse_queue_legacy.svg",
+      "axes": [
+        "reverse declaration/message direction",
+        "repeated queue/multiline",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "f9fab205e8d3ce753d40d4f18af5ecfaf614fde2b0bc03a0897435746f5a9936",
+      "reference_sha256": "1112516fd35dbbe68d08b57c7f7fa1ceb6ee0b1a51ab4e24d52c7e09659fc0fe",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_reverse_queue_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_reverse_queue_teoz.svg",
+      "axes": [
+        "reverse declaration/message direction",
+        "repeated queue/multiline",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "5b39a7826a46f4474d67a6fd8d110cfb0952b397bed385131f744005024ea257",
+      "reference_sha256": "592eb6e8f7b2e3e6288a5510386a3d967dfdff27cd4dca25c7c6ec281b47034b",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_group_live_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_group_live_legacy.svg",
+      "axes": [
+        "scope/activation",
+        "repeated creation/direction",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "11e86011ae35793ed8546efba5cd5c69d1139cc26a8df461ac97b496a7ff2670",
+      "reference_sha256": "88da8b13115b5cb383598567dd144d901d7c9da7a7383f2f700eb32bbfbe30b6",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_group_live_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_group_live_teoz.svg",
+      "axes": [
+        "scope/activation",
+        "repeated creation/direction",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "53e02351f3e840c9a3de719859917ff94c04c6e3835bc94d4ecfa18cace2e6d6",
+      "reference_sha256": "0ea95736a506c016d71796332ed3ed0d8c5690cad0939192ab0941a1e3fa88e9",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.svg",
+      "axes": [
+        "consecutive pending creation",
+        "message ownership",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "c13bdd53d674e984ed96c0414557117625ad64fb977147bffc9e601e0132858d",
+      "reference_sha256": "65bdc7eea44009d7d34c13406cd061b97ebcbddd3d66c985742db5fb0a42c00e",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "invalid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.svg",
+      "axes": [
+        "consecutive pending creation",
+        "message ownership",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "e6ad760a897f809cbfbb21f6875835e264a2501c3b067ef8b99e385f9b1b215d",
+      "reference_sha256": "e943ac67deeef061fa1ddb6d21d9419d89956d46db75154580b532dcc028472c",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "invalid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_legacy.svg",
+      "axes": [
+        "two different pending CREATEs",
+        "overwrite/order",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "16730cd2ad7fd08242e9930800661ef8d123bbedeeba46d115a16b21c42b0c06",
+      "reference_sha256": "fc313731ae2d73cf024cb4101add0106bf6153edd93609b67f034adea85c7b45",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_teoz.svg",
+      "axes": [
+        "two different pending CREATEs",
+        "overwrite/order",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "fbb59e58f822516d13d2cf80a7e7b6a5cdbf509d5150277ef1f6fa4b305bae12",
+      "reference_sha256": "b8d7538cbc44cee2d4937c6a9f02a9a882924d995b41995d086e883a2aa613f5",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    }
+  ],
+  "findings": [
+    "SequenceDiagram.activate assigns a single pendingCreate field; addMessage attaches and clears only that one event. Rust sequence_create_message_indices stores a Vec of pending IDs, so two consecutive creates are incorrectly queued and consumed by separate future messages. The account invariant that every pending CREATE survives is too strong.",
+    "Java-valid double-pending same-participant input has two Roe label occurrences (one created head plus tail); Rust before also has two, but candidate has three. This is an introduced semantic regression inside a case already failing whole SVG before: zero lost whole-case passes does not mean zero regressions. Different-participant pending overwrite fails in both engines too.",
+    "Repeated creates separated by compatible messages, three iterations, multiline actors, reverse queues and active group scope support the intended event-vs-lifeline separation. LifeLine.setCreate and LivingSpace.goCreate overwrite the final origin; CommunicationTile.drawU translates the complete head. Five of ten fresh whole cases pass; reverse created queue legacy still has width213 versus Java223."
+  ],
+  "verdict": "rejected",
+  "acceptance_policy": "Any failing whole case rejects. Mechanisms with green fresh cases only have bounded support, not acceptance: required standing perturbations and guards remain red. No prior acceptance transfers and no failure is waived.",
+  "evidence": "docs/parity-reviews/sequence-component-display-packet/checker-711-astra/README.md",
+  "fresh_outcomes": {
+    "entries": 10,
+    "outcomes": {
+      "0": 5,
+      "1": 5
+    },
+    "cli_panics": []
+  }
+}

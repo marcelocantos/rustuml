@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+queue "Work\nroom" as Mail <<dispatch>>
+create Mail
+Cedar -> Mail: first
+create Mail
+Cedar -> Mail: second
+@enduml

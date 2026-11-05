@@ -1,0 +1,15 @@
+@startuml
+<style>
+sequenceDiagram {
+lifeLine {
+LineColor #b23456
+}
+activationBox {
+LineColor #3467b2
+}
+}
+</style>
+Lark -> Wren ++ : seed
+Wren -> Wren : self
+return complete
+@enduml

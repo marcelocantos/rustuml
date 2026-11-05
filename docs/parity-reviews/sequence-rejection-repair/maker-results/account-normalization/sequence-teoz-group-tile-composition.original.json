@@ -1,0 +1,10 @@
+{
+  "status": "maker causal account; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": ["teoz/GroupingTile.java constructor lines137-158: min(child.min-16), max(child.max+16, min+headerPreferredWidth+16); ELSE contributes preferred width from parent min; empty min=xOrigin", "GroupingTile#getMinX/#getMaxX: external child margins3 and9", "teoz/CommunicationTile#getMinX/#getMaxX: participant centers (create target uses preferred head boundary), independent of paint live shifts", "teoz/CommunicationTileSelf and CommunicationExoTile bounds: component width and raw history maximum; exo bounds independent of paint borders", "teoz/LifeEventTile#getMinX/#getMaxX: post-event raw level", "teoz/NoteTile#getUsedWidth and TileBuilder: retain declared participant1/participant2 order; no spatial sorting", "skin/rose/ComponentRoseGroupingHeader#getPreferredWidth: text margins15+30; optional comment adds15 plus padded comment width"],
+  "rust": ["crates/rustuml-render/src/sequence.rs#measure_group_frames", "GroupAccum", "teoz_note_geometry"],
+  "invariant": "Teoz groups compose child tile envelopes, including preferred note allocations and raw-history life tiles; participant heads are not implicit members. Child external margins apply at each parent boundary. Explicit span endpoint order remains source order.",
+  "divergence": "The Teoz branch reconstructs group extent from participant extrema and legacy note hacks, dropping attached-self-note bounds and using rounded span origins. It adds implicit participant box bounds and spatially sorts declared note endpoints.",
+  "change": "Use existing ordered group membership storage with actual Teoz tile bounds and recursive child margins. Derive header and ELSE preferred-width floors from their components, retaining separate legacy group semantics. Preserve note source endpoint order.",
+  "axes": ["nested group and attached self-note versus standalone span", "declaration order versus note endpoint order", "padding, shadow, lifecycle depth and external arrows"]
+}

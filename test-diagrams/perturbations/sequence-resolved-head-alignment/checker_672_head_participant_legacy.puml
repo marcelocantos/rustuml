@@ -1,0 +1,8 @@
+@startuml
+skinparam actorShadowing false
+skinparam participantShadowing true
+participant "Tall\nMaple" as Maple
+actor Cedar
+Cedar -> Maple: reverse
+Maple -> Cedar: answer
+@enduml

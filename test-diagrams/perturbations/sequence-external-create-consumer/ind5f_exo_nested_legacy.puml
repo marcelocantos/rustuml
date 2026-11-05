@@ -1,0 +1,12 @@
+@startuml
+participant Lyra
+database Alder
+group enclosing
+alt permitted
+create Alder
+[-> Alder: open
+else denied
+Lyra -> Alder: wait
+end
+end
+@enduml

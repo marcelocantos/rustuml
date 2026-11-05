@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Willow
+hnote over Willow
+reed
+end hnote extra
+Willow -> Willow: outside
+@enduml

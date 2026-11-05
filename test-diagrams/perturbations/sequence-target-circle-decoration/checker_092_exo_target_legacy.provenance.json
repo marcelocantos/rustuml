@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 136,
+    "name": "exo_target_legacy",
+    "remote_name": "exo_target_legacy.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_target_legacy.puml",
+    "source_sha256": "d301097809da5f133828fce55316ba676c934d6aed4e2a334d47c7671f69de4c",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1264074589998927,
+    "stdout_sha256": "89c0f685ec9c8feb5efa18b4b8aef0d339a7c69a3470ee294cbfedfa485998e3",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/exo_target_legacy.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/exo_target_legacy.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_target_legacy.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/exo_target_legacy.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/exo_target_legacy.puml"
+    }
+  },
+  "request": {
+    "name": "exo_target_legacy",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_target_legacy.puml",
+    "remote_name": "exo_target_legacy.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/exo_target_legacy.puml",
+    "source_sha256": "d301097809da5f133828fce55316ba676c934d6aed4e2a334d47c7671f69de4c",
+    "bytes": 136,
+    "axes": [
+      "external target decoration",
+      "border/open head/live depth",
+      "legacy"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandExoArrowLeft/Right#getRegexConcat; CommandExoArrowAny#executeArg"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "exo_target_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 136,
+    "stdout_bytes": 3802,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_target_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_target_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_target_legacy",
+    "axes": [
+      "external target decoration",
+      "border/open head/live depth",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d301097809da5f133828fce55316ba676c934d6aed4e2a334d47c7671f69de4c",
+    "golden_sha256": "89c0f685ec9c8feb5efa18b4b8aef0d339a7c69a3470ee294cbfedfa485998e3",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "e7f8d7cad057c8a1746bdea3dd77e4dec804bc5fe0d357cf69cc5f0df46713ed",
+      "svg": "772f3446fcbe90474368.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 33, got 29\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"181px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:216px;height:181px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 216 181\"), (\"width\", \"216px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"181px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:208px;height:181px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 208 181\"), (\"width\", \"208px\"), (\"zoomAndPan\", \"magnify\")]\n  [18] tag mismatch: expected <ellipse>, got <polygon>\n  [19] tag mismatch: expected <polygon>, got <line>\n  [20] tag mismatch: expected <line>, got <text>\n  [21] tag mismatch: expected <text>, got <g>\n  [22] tag mismatch: expected <g>, got <polygon>\n  [23] tag mismatch: expected <ellipse>, got <line>\n  [24] tag mismatch: expected <line>, got <text>\n  [25] tag mismatch: expected <line>, got <g>\n  [26] tag mismatch: expected <line>, got <polygon>\n  [27] tag mismatch: expected <text>, got <line>\n  [28] tag mismatch: expected <g>, got <text>\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 33, got 29\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"181px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:216px;height:181px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 216 181\"), (\"width\", \"216px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"181px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:208px;height:181px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 208 181\"), (\"width\", \"208px\"), (\"zoomAndPan\", \"magnify\")]\n  [18] tag mismatch: expected <ellipse>, got <polygon>\n  [19] tag mismatch: expected <polygon>, got <line>\n  [20] tag mismatch: expected <line>, got <text>\n  [21] tag mismatch: expected <text>, got <g>\n  [22] tag mismatch: expected <g>, got <polygon>\n  [23] tag mismatch: expected <ellipse>, got <line>\n  [24] tag mismatch: expected <line>, got <text>\n  [25] tag mismatch: expected <line>, got <g>\n  [26] tag mismatch: expected <line>, got <polygon>\n  [27] tag mismatch: expected <text>, got <line>\n  [28] tag mismatch: expected <g>, got <text>\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 33, got 29\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"181px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:216px;height:181px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 216 181\"), (\"width\", \"216px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"181px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:208px;height:181px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 208 181\"), (\"width\", \"208px\"), (\"zoomAndPan\", \"magnify\")]\n  [18] tag mismatch: expected <ellipse>, got <polygon>\n  [19] tag mismatch: expected <polygon>, got <line>\n  [20] tag mismatch: expected <line>, got <text>\n  [21] tag mismatch: expected <text>, got <g>\n  [22] tag mismatch: expected <g>, got <polygon>\n  [23] tag mismatch: expected <ellipse>, got <line>\n  [24] tag mismatch: expected <line>, got <text>\n  [25] tag mismatch: expected <line>, got <g>\n  [26] tag mismatch: expected <line>, got <polygon>\n  [27] tag mismatch: expected <text>, got <line>\n  [28] tag mismatch: expected <g>, got <text>\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_target_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_target_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_target_legacy",
+    "axes": [
+      "external target decoration",
+      "border/open head/live depth",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d301097809da5f133828fce55316ba676c934d6aed4e2a334d47c7671f69de4c",
+    "golden_sha256": "89c0f685ec9c8feb5efa18b4b8aef0d339a7c69a3470ee294cbfedfa485998e3",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "120fea0ac4822ac4057a51a28fb8aa5e65f4bc692062da4f42a271e45c5ffeec",
+      "svg": "772f3446fcbe90474368.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

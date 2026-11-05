@@ -1,0 +1,8 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+autonumber 37
+Quartz -> Vale: count
+Vale -> Quartz: counted
+@enduml

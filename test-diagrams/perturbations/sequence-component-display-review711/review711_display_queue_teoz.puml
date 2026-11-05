@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+queue "Tiny\n<size:21>Large</size>\nEnd" as Q
+queue "Three\nsmall\nrows" as R
+Q -> R: relay
+@enduml

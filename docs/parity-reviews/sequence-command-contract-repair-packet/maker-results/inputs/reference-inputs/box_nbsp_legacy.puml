@@ -1,0 +1,6 @@
+@startuml
+box "Northern Shore" #pink
+participant N
+end box
+N -> S: cross
+@enduml

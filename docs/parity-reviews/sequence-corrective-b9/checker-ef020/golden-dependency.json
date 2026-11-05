@@ -1,0 +1,9 @@
+{
+  "revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "source": "/Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden",
+  "method": "git archive of exact pinned clean submodule; no .git pointer copied",
+  "archive_sha256": "64a7715807717f9a464919993a6570ca778fab1bfc023e51730d57e55cd69ee6",
+  "pairs": 12550,
+  "initial_main_exit": 101,
+  "reason": "Prepared worktree submodule empty; initial main tiers measured no cases"
+}

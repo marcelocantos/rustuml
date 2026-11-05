@@ -1,0 +1,9 @@
+@startuml
+participant Rush
+rnote over Rush
+outer
+hnote over Rush
+inner
+end rnote
+Rush -> Rush: outside
+@enduml

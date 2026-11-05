@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--release",
+    "--no-fail-fast",
+    "-p",
+    "rustuml-oracle",
+    "--test",
+    "golden_no_oracle",
+    "--test",
+    "golden_pairs",
+    "--test",
+    "harness_guards",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b9c6cf04",
+  "exit": 101,
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "setup": "readonly git archive from local submodule into this checkout; no corpus edits"
+}

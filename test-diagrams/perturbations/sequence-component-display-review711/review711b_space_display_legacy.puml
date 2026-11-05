@@ -1,0 +1,5 @@
+@startuml
+participant " " as P
+queue " " as Q
+P -> Q: whitespace display
+@enduml

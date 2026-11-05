@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "evidence_import": "e654acb9ba31aec53329c739e8151d5bf46659f7",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-command-fox-space",
+  "java_locations": [
+    "regex.RegexLeaf#getFoxSignature",
+    "regex.RegexConcat#foxRegex/match",
+    "text.FoxSignature#getMask/getFoxSignatureFromRealString"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::sequence_regex",
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser command consumers"
+  ],
+  "invariant": "The command matcher rejects a line lacking the required signature whitespace bit before regex matching. The bit accepts SPACE TAB CR LF FF NBSP anywhere in the complete line, but not VT. Only direct mandatory RegexLeaf children contribute; nested optional leaves do not.",
+  "causal_divergence": "Rust has the Pattern2 class including VT, but not the command-level signature test. Testing only separator characters would also be wrong: whitespace in a quoted name or label supplies the global bit.",
+  "planned_change": "Add a sequence-local command regex wrapper with explicit required-space metadata traced per Java command. Apply its prefilter before captures on the full line. Keep plain Pattern2 helper fragments and terminators unfiltered. Do not infer requiredness from flattened Rust regex substrings or change global unconsumed-line handling (T14.17).",
+  "perturbation_axes": [
+    "only VT versus VT plus whitespace elsewhere in the line",
+    "required top-level leaves versus optional/nested whitespace and both engines"
+  ]
+}

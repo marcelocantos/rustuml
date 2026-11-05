@@ -1,0 +1,51 @@
+{
+  "fmt-workspace": {
+    "sha256": "dbf726c6b5abd7f894b5336e4d214452ba2ddd15060cbe1207f51a6f66816e3d",
+    "errors": [],
+    "format_paths": [
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-parser/src/parse/class.rs:352:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:3826:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:6004:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:6031:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:6134:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:6210:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:6229:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:6408:",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1/crates/rustuml-render/src/class.rs:6444:"
+    ]
+  },
+  "clippy": {
+    "sha256": "d874f86e2009877fa2ee50ea139e5ffbc720491ec0933af39764b14c08e24ac2",
+    "errors": [
+      "error: function `looks_like_description_bracket_command` is never used",
+      "error: could not compile `rustuml-parser` (lib) due to 1 previous error"
+    ],
+    "format_paths": []
+  },
+  "clippy-render": {
+    "sha256": "4dc94a17b97542e7cfa5f91bf3a5e931bbbc032f89d2eb50f4923c16f1281487",
+    "errors": [
+      "error: usage of `bool::then` in `filter_map`",
+      "error: this `let...else` may be rewritten with the `?` operator",
+      "error: this method chain can be written more clearly with `if .. else ..`",
+      "error: using `chunks_exact` with a constant chunk size",
+      "error: using `chunks_exact` with a constant chunk size",
+      "error: using `chunks_exact` with a constant chunk size",
+      "error: using `chunks_exact` with a constant chunk size",
+      "error: this `if` has identical blocks",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: redundant reference in `write!` argument",
+      "error: using `chunks_exact` with a constant chunk size",
+      "error: could not compile `rustuml-render` (lib) due to 19 previous errors"
+    ],
+    "format_paths": []
+  }
+}

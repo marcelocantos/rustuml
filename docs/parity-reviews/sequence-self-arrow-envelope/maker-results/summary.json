@@ -1,0 +1,37 @@
+{
+  "account_commit": "2b7dbb908b3a5d129ff5897d8493366286018e25",
+  "status": "candidate; independent checker required",
+  "observations": {
+    "before": {
+      "product": {
+        "0": 22,
+        "1": 22
+      },
+      "assisted": {
+        "0": 22,
+        "1": 22
+      },
+      "cli_equivalence": 44
+    },
+    "current": {
+      "product": {
+        "0": 42,
+        "1": 2
+      },
+      "assisted": {
+        "0": 42,
+        "1": 2
+      },
+      "cli_equivalence": 44
+    }
+  },
+  "logs": {
+    "/tmp/rustuml-seq-recovery/envelope-current.log": "7b50f97d1fcf0e5506faab81f33e8c307d625ac2f294ed7da49fdb37fbc2194a",
+    "/tmp/rustuml-seq-recovery/envelope-main-3.log": "b022cc2604a7031202297cbdaa3de26b70c6b8a5690daf5ba3016e9c9a91e2b8",
+    "/tmp/rustuml-seq-recovery/envelope-main.log": "d3d685424cb870268ea12d0866dc39ce240696cfea824fc48163108b0213fd8a",
+    "/tmp/rustuml-seq-recovery/envelope-before.log": "5c180e110f61c7c0d3c0f90c289e5c8674732391f340f7b6b4db8d80733ef7ef",
+    "/tmp/rustuml-seq-recovery/envelope-build.log": "b3d94807067386aaa7b8be7ce77b2f82966c7bb5db454939301681c1a8f3e3cc",
+    "/tmp/rustuml-seq-recovery/envelope-build-2.log": "527470e9eb926a4448bd3f4b890f5158ae7bb358e94625ff6eca60c407ea2d6b",
+    "/tmp/rustuml-seq-recovery/envelope-build-3.log": "751c1c860cdc2739ed973301fb1823a177d19985dd2cc48c5849d475dfb618eb"
+  }
+}

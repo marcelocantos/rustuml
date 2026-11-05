@@ -1,0 +1,7 @@
+{
+  "local_java_launches": "paused by owner; await verified Monkey Man invocation",
+  "audit": "No campaign-owned Java process running. Every saved generator in /tmp/rustuml-seq-recovery uses explicit -Djava.awt.headless=true. Checker generate.py also uses explicit flag and inherits os.environ. Current return generation used explicit flag. No unguarded saved invocation found. Unrelated Unity Java processes left untouched.",
+  "prior_JAVA_TOOL_OPTIONS": "unset",
+  "future_JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true",
+  "policy": "Preserve existing options, append headless to task command environment and inherit into subprocesses. No new local Java launch including probes/version checks. Existing source/reference captures unchanged."
+}

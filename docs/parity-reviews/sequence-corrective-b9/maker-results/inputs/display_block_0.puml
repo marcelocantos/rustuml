@@ -1,0 +1,8 @@
+@startuml
+Harbor -> Orchard ++ : notify
+note right
+first narrow
+second wider text
+end note
+return done
+@enduml

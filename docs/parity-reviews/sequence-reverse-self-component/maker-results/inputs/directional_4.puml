@@ -1,0 +1,15 @@
+@startuml
+skinparam Padding 3
+participant "Long otter" as O
+participant "Elm relay" as E
+O -> E ++ : enter
+O -> E ++ : enter
+E ->> E : inspect longer payload
+note right
+first detail
+second detail
+end note
+E -> O : complete
+deactivate E
+deactivate E
+@enduml

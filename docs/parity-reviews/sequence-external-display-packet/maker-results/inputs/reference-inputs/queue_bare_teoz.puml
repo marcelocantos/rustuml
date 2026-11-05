@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+queue "<size:21>Mail</size>\nsmall" as Mail <<dispatch-wide>>
+participant Cedar
+Cedar -> Mail: enqueue
+@enduml

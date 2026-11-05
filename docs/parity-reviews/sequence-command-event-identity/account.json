@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "sequence-command-event-identity",
+  "java_locations": [
+    "sequencediagram.command.CommandReturn#executeArg",
+    "sequencediagram.SequenceDiagram#activate/#addMessage",
+    "sequencediagram.AbstractMessage#addLifeEvent/#isParallelWith",
+    "klimt.color.HColorSet#parseSimpleColor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs::sequence_lifelines/render"
+  ],
+  "invariant": "Return destinations and parallel message identity belong to command-event history, independent of accepted drawable life variations. A message cannot reactivate a participant after its own close/destroy. Return color is validated by HColorSet before the message is added.",
+  "causal_divergence": "Rust loses & identity; it resolves returns from a stack popped only on accepted painted closes. A destroyed participant can prevent a return pop and duplicate the next return. Parser permits forbidden same-message transitions and arbitrary return color names.",
+  "planned_change": "Retain parallel flags; resolve return messages from shared source-history logic before geometry, preserving stack ownership through destroy and group END. Validate transitions per owning message and validate the CommandReturn color grammar using the pinned color-name domain. Keep parser error status separate from valid SVG parity.",
+  "perturbation_axes": [
+    "engine and parallel chain topology",
+    "destroy/deactivate/return history and participant order",
+    "valid/invalid color forms and case"
+  ]
+}

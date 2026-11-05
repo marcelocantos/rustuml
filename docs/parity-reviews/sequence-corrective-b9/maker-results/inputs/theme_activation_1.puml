@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+!theme cerulean
+Birch -> Hazel ++ : start
+Hazel -> Hazel ++ : nested
+note right : themed component
+return inner
+return outer
+@enduml

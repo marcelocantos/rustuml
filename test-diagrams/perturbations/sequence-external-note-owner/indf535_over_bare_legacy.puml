@@ -1,0 +1,5 @@
+@startuml
+participant Thistle
+[-> Thistle: frost
+note over: ice
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Quartz
+group Batch
+loop retry
+createboundary Depot
+Quartz -> Depot: receive
+end
+end
+Depot -> Quartz: confirm
+@enduml

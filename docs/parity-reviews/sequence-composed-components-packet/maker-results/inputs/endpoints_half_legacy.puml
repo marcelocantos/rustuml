@@ -1,0 +1,8 @@
+@startuml
+participant Delta
+activate Delta
+Delta o\\-- Delta: thin reverse
+Delta o\-- Delta: filled reverse
+Delta o<->o Delta: two heads
+deactivate Delta
+@enduml

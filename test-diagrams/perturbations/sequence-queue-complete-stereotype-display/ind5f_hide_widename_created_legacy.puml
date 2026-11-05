@@ -1,0 +1,6 @@
+@startuml
+hide stereotype
+participant Sender
+create queue "Long Storage Inbox" as Inbox <<x>>
+Sender -> Inbox: deliver
+@enduml

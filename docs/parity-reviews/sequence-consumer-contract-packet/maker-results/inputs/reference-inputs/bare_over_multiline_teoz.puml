@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Birch
+[-> Birch: arrive
+note over
+forbidden
+end note
+@enduml

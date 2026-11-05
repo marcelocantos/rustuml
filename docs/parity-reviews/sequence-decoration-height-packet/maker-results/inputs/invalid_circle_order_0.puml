@@ -1,0 +1,3 @@
+@startuml
+Wren -[#a]o> Lark : invalid decoration order
+@enduml

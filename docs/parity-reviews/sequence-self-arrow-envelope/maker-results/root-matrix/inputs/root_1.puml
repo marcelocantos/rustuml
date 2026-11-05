@@ -1,0 +1,5 @@
+@startuml
+participant Lead as L
+participant S
+S -> S : q
+@enduml

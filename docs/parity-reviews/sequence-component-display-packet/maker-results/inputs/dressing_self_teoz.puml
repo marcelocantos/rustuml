@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Harbor
+Harbor o<<--/o Harbor: self lower
+Harbor o\\-->>o Harbor ++: self open
+Harbor o<--\\o Harbor --: self close
+@enduml

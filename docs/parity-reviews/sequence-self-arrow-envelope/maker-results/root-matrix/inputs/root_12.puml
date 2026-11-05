@@ -1,0 +1,6 @@
+@startuml
+participant S
+S -> S ++ : recursive
+S -> S : q
+return unwind
+@enduml

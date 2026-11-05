@@ -1,0 +1,9 @@
+@startuml
+participant Remote
+participant "Harbour 3" as right
+Remote -> right: inbound
+note right of "right"
+line one
+line two
+end note
+@enduml

@@ -1,0 +1,39 @@
+{
+  "status": "maker causal account; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": [
+    "Doll#addInternalConstraints computes marginBefore/After=(ComponentRoseEnglober preferredWidth+10 - current posD-posB)/2, captured before Real compile",
+    "Doll#addConstraintAfter constrains next posA >= posE +20+2*boxPadding",
+    "Doll#drawMe bounds posA-4,posE+4; ComponentRoseEnglober preferredWidth=text+3+3+globalPadding*2, paint centers pure text",
+    "Doll#getMinX/getMaxX feeds PlayingSpace bounds; margin storage starts zero",
+    "CommandBoxStart NAME2 captures trailing whitespace before color; Display preserves preferred-width spacer atoms"
+  ],
+  "rust": [
+    "sequence.rs titled participant-box widening, max_participant_box_right and paint reconstruct a legacy text+6 frame for both engines"
+  ],
+  "invariant": "Teoz englober margins captured from preferred dimensions before constraints move participant heads and remain part of frame anchors after solving. Legacy englober sizing remains distinct.",
+  "divergence": "Teoz applies legacy frame width to both layout and paint, omitting the Doll extra constraint margin and using head bounds instead of posA/posE.",
+  "change": "Compute Teoz box margins from initial contiguous preferred heads, feed first/last participant constraints, and reuse margins for frame and envelope. Preserve unquoted title spaces in parser and preferred width while painting text ink.",
+  "axes": [
+    "wide and narrow box labels, quoted/unquoted with color and footer",
+    "single/multiple boxed participants, both engines and hide footbox"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-englober-margins",
+  "java_locations": [
+    "Doll#addInternalConstraints computes marginBefore/After=(ComponentRoseEnglober preferredWidth+10 - current posD-posB)/2, captured before Real compile",
+    "Doll#addConstraintAfter constrains next posA >= posE +20+2*boxPadding",
+    "Doll#drawMe bounds posA-4,posE+4; ComponentRoseEnglober preferredWidth=text+3+3+globalPadding*2, paint centers pure text",
+    "Doll#getMinX/getMaxX feeds PlayingSpace bounds; margin storage starts zero",
+    "CommandBoxStart NAME2 captures trailing whitespace before color; Display preserves preferred-width spacer atoms"
+  ],
+  "rust_locations": [
+    "sequence.rs titled participant-box widening, max_participant_box_right and paint reconstruct a legacy text+6 frame for both engines"
+  ],
+  "causal_divergence": "Teoz applies legacy frame width to both layout and paint, omitting the Doll extra constraint margin and using head bounds instead of posA/posE.",
+  "planned_change": "Compute Teoz box margins from initial contiguous preferred heads, feed first/last participant constraints, and reuse margins for frame and envelope. Preserve unquoted title spaces in parser and preferred width while painting text ink.",
+  "perturbation_axes": [
+    "wide and narrow box labels, quoted/unquoted with color and footer",
+    "single/multiple boxed participants, both engines and hide footbox"
+  ]
+}

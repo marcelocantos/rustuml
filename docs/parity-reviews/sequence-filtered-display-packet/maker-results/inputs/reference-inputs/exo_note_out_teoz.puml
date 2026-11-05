@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Hub
+Hub ->]: leave
+note left
+first
+second
+end note
+@enduml

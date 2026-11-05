@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+skinparam participantFontSize 9
+skinparam queueFontSize 19
+skinparam actorFontSize 22
+queue "Queue\nhead" as Q
+participant "Plain\nhead" as P
+actor "Actor\nhead" as A
+A -> Q: route
+Q -> P: forward
+@enduml

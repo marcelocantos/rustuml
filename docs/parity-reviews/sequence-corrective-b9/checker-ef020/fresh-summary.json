@@ -1,0 +1,21 @@
+{
+  "entries": 37,
+  "unique_sources": 37,
+  "before": {
+    "1": 33,
+    "2": 2,
+    "0": 2
+  },
+  "after": {
+    "1": 18,
+    "2": 2,
+    "0": 17
+  },
+  "valid_reference_count": 35,
+  "invalid_reference_count": 2,
+  "valid_cli_errors": 0,
+  "invalid_accepted": 2,
+  "gains": 15,
+  "losses": 0,
+  "retained_theme_copies": 2
+}

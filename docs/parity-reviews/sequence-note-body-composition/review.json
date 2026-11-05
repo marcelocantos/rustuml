@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-body-composition",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3Ac792f275-d5e8-406c-bb85-740990ccfb83",
+    "model": "OpenAI gpt-6-astra, high reasoning, Codex harness in T3 Code",
+    "role": "Independent checker; no production implementation, no children"
+  },
+  "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+  "implementation_commit": "c921945aac3bfaf7d61dd323498f0e4899f32182",
+  "implementation_commits": [
+    "689f00cb730100e6640ebec8bfb026f942c1cf03",
+    "c921945aac3bfaf7d61dd323498f0e4899f32182"
+  ],
+  "reviewed_candidate": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "reviewed_production": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent existing Monkey Man runner only: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; actual argv/cwd/status/raw bytes in captures.tar.gz reference-results.json and supplement-reference-results.json",
+    "uv run --no-project python PRIVATE_CACHE/checks.py candidate (private target, jobs4): parser572/render791/CLI13 pass; main library11181/11251 and10497/11251, guards4/6; original golden-submodule outage preserved and unresolved tiers rerun after exact9efdc12f initialization",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/fresh-candidate",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/supplement-reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/supplement-candidate",
+    "uv run --no-project python PRIVATE_CACHE/checks.py before; replay_before.py; checks.py intermediate; queue_replay.py; all exact commands, exits, bindings and raw streams in support archive"
+  ],
+  "perturbations": [
+    {
+      "name": "body_blocks_legacy",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_blocks_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_blocks_legacy.svg",
+      "axes": [
+        "empty and nonempty multiple sections",
+        "title and body width",
+        "legacy"
+      ],
+      "result": "fail",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "e0a23a8605ba11dacedeea1b25728755a4c6d3f2a8a0608d4ab484b1e3171520",
+      "golden_sha256": "f140764c2eafe93fd41ef24ccb9d5992bf48712a14ab33e505126d7339955af0"
+    },
+    {
+      "name": "body_right_legacy",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_right_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_right_legacy.svg",
+      "axes": [
+        "right alignment and font size",
+        "standalone self topology",
+        "legacy"
+      ],
+      "result": "pass",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 1,
+      "source_sha256": "07da1c73938d058014d0c80760587537b3cf8249e7db9dd0b64de537d85e6cf3",
+      "golden_sha256": "25ce288e4369bda4d8d22232c05fc37c0b9b5af086820aa68c14707ccb6b517e"
+    },
+    {
+      "name": "body_center_legacy",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_center_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_center_legacy.svg",
+      "axes": [
+        "center alignment",
+        "multiple sections across participants",
+        "legacy"
+      ],
+      "result": "fail",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "8fa2019f55b15e47cd3aaf7cde53577d0d2bffb41d35467f5462a9b9e35e35ae",
+      "golden_sha256": "5220308eedf7dded7c70eb9e18d1cf947ddf428294c376d6cb449ce4226e0b35"
+    },
+    {
+      "name": "body_blocks_teoz",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_blocks_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_blocks_teoz.svg",
+      "axes": [
+        "empty and nonempty multiple sections",
+        "title and body width",
+        "teoz"
+      ],
+      "result": "fail",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "29e925d8252d0633b149e40c569a22084bdb1a44cbf491027133f66d0fba2a29",
+      "golden_sha256": "241b482dc0e7b49854055f7a39c3f853b246e242b127b7218da64dbdc8bab0a1"
+    },
+    {
+      "name": "body_right_teoz",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_right_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_right_teoz.svg",
+      "axes": [
+        "right alignment and font size",
+        "standalone self topology",
+        "teoz"
+      ],
+      "result": "pass",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 1,
+      "source_sha256": "cbd62b988ea3eb5cf0bbd943d6324a4bf53cf536dba2a21649c35890cccd024d",
+      "golden_sha256": "374f2483f77dbf541337f90fd905cecc80ceb683a40c33b644a5d222f94902a0"
+    },
+    {
+      "name": "body_center_teoz",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_center_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_center_teoz.svg",
+      "axes": [
+        "center alignment",
+        "multiple sections across participants",
+        "teoz"
+      ],
+      "result": "pass",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 1,
+      "source_sha256": "bd6d9b72727943cb73952467b63e9c58dcaa904c8ccc349e6fe7eb12a000c7a2",
+      "golden_sha256": "b1164b5416121377d0239b2cde56d822497bef2bdf278a8a803b441f6fd0315c"
+    },
+    {
+      "name": "body_unclosed_legacy",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_legacy.svg",
+      "axes": [
+        "body_unclosed",
+        "legacy"
+      ],
+      "result": "fail",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": false,
+      "observed_java_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 0,
+      "comparison_exit": 2,
+      "before_comparison_exit": 2,
+      "source_sha256": "6e5d065a7ed15ecc6ede5b07543bc99da9dda9d1d3bbdadab56cb49111d21b5b",
+      "golden_sha256": "85edd4770e341475f668a3c14737eef78823bfa372f3305f73a59c786a4d31ee"
+    },
+    {
+      "name": "body_unclosed_teoz",
+      "source": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-body-composition/checker_672_body_unclosed_teoz.svg",
+      "axes": [
+        "body_unclosed",
+        "teoz"
+      ],
+      "result": "fail",
+      "claim": "sequence-note-body-composition",
+      "intended_valid": false,
+      "observed_java_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 0,
+      "comparison_exit": 2,
+      "before_comparison_exit": 2,
+      "source_sha256": "ca91d72f59e986037607e01a15596d188b6ea89c54b20ef36c8dc76ad6bd15b9",
+      "golden_sha256": "d5311d7d499385c4d2dc65591453d5f42aed323255e90e39fabfa574054cc51f"
+    }
+  ],
+  "findings": [
+    "Block segmentation, body margin(right6, topH/2, bottom4), title minimum(width+8,height), outer topH/2 and body-before-titled-rule painting trace to Java object composition. Measurement and painting reconstruct the same EnhancedNoteBody model; not a fitted independent height correction.",
+    "DISPROVED: empty titled separator .. .. creates empty Display whose Java StripeSimple.getAtoms inserts a space. Rust emits an empty title with zero width; fresh body_blocks fails both engines (Java textLength4.1133 at font13 versus0). The raw title, both rule gaps and whole-output failure remain.",
+    "Right-aligned font17 controls match both engines; centered body passes Teoz but fails legacy complete note geometry. Shared text/tables/tabs/URLs/natural alignment remain explicit dependencies; no extracted acceptance.",
+    "Prior complete ordinary-child allocation and underline-surcharge removal remain unchanged by this delta. Unclosed note negatives are Java200/Rust0 in both engines.",
+    "Rejected under whole-output/fresh-counterexample gate. Passing subsets are bounded observations, not extracted acceptance. Earlier accounts/reviews/counterexamples and all failures remain unchanged.",
+    "Account chronology and precise Java/Rust source hashes/line locations independently checked in checker-672-astra/integrity.json and source-audit.json. Exact Java local source blobs agree with pinned revision."
+  ],
+  "verdict": "rejected",
+  "support": "docs/parity-reviews/sequence-composed-components-packet/checker-672-astra/README.md",
+  "standing_registration": "Every fresh pair is registered under test-diagrams/perturbations and automatically collected by the unchanged standing harness. Last executed candidate standing suite714/1310 before these42 additions; no broad rerun after evidence-only registration. All42 checked through real CLI and unchanged library diagnostics.",
+  "residue": [
+    "Historical frozen failures, factory_component/factory_quoted, shared tabs/URL second Display/natural alignment/logical fonts, themed self Real/padder/envelope, other component/style/page/ASCII contracts, welcome-factory TIM handoff remain unresolved.",
+    "No native/layout/fault review retry, production/account/baseline/comparator/skip/target/reader changes, shared style/font fixes, unrelated production imports, shipping, or self-acceptance."
+  ]
+}

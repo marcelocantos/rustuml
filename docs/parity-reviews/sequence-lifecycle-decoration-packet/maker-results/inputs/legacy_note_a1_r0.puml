@@ -1,0 +1,9 @@
+@startuml
+participant LeftNode
+participant RightNode
+LeftNode -> RightNode ++ : setup
+LeftNode -> RightNode : forward
+note right: a considerably wider attached explanation
+return #purple response
+return again
+@enduml

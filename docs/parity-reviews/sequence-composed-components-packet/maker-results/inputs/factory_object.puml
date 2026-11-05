@@ -1,0 +1,5 @@
+@startuml
+object Elm
+object Ash
+Elm o-- Ash
+@enduml

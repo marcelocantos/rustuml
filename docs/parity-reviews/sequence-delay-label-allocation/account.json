@@ -1,0 +1,41 @@
+{
+  "status": "maker causal account; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": [
+    "sequencediagram/command/CommandDelay.java#getRegexConcat/#executeArg: LABEL captures (.*) verbatim between delimiters and passes it to Display.getWithNewlines",
+    "skin/rose/ComponentRoseDelayText.java#getPreferredWidth: pure TextBlock width including source whitespace and skin padding",
+    "teoz/DelayTile.java#getMinX/#getMaxX: center of first/last participant centers plus/minus half preferred width",
+    "ComponentRoseDelayText#drawInternalU: draws the same block centered in the allocated width; textual SVG atoms omit leading/trailing spacer atoms"
+  ],
+  "rust": [
+    "crates/rustuml-parser/src/parse/sequence.rs#try_delay",
+    "crates/rustuml-render/src/sequence.rs#Event::Delay",
+    "Teoz group delay member"
+  ],
+  "invariant": "Delay label whitespace participates in preferred dimensions and text-block positioning even when it paints no ink.",
+  "divergence": "The parser trims LABEL before storage, irreversibly losing allocation width. Reconstructed Teoz group delay bounds are too narrow by the removed whitespace, while symmetric whitespace hides the difference in text paint.",
+  "change": "Preserve the captured delay label in the model and derive component width and visible text translation from it. Keep no-label delay distinct from a delimited label.",
+  "axes": [
+    "asymmetric and repeated leading/trailing spaces",
+    "grouped and ungrouped delays with global padding, both engines"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-delay-label-allocation",
+  "java_locations": [
+    "sequencediagram/command/CommandDelay.java#getRegexConcat/#executeArg: LABEL captures (.*) verbatim between delimiters and passes it to Display.getWithNewlines",
+    "skin/rose/ComponentRoseDelayText.java#getPreferredWidth: pure TextBlock width including source whitespace and skin padding",
+    "teoz/DelayTile.java#getMinX/#getMaxX: center of first/last participant centers plus/minus half preferred width",
+    "ComponentRoseDelayText#drawInternalU: draws the same block centered in the allocated width; textual SVG atoms omit leading/trailing spacer atoms"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs#try_delay",
+    "crates/rustuml-render/src/sequence.rs#Event::Delay",
+    "Teoz group delay member"
+  ],
+  "causal_divergence": "The parser trims LABEL before storage, irreversibly losing allocation width. Reconstructed Teoz group delay bounds are too narrow by the removed whitespace, while symmetric whitespace hides the difference in text paint.",
+  "planned_change": "Preserve the captured delay label in the model and derive component width and visible text translation from it. Keep no-label delay distinct from a delimited label.",
+  "perturbation_axes": [
+    "asymmetric and repeated leading/trailing spaces",
+    "grouped and ungrouped delays with global padding, both engines"
+  ]
+}

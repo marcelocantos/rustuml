@@ -1,0 +1,69 @@
+{
+  "before": {
+    "standing": {
+      "entries": 1416,
+      "failures": 622,
+      "passes": 794
+    },
+    "main_results": [
+      "golden_no_oracle: 11181/11251 eligible pairs pass per family:",
+      "  sequence          1411/1411",
+      "golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped"
+    ],
+    "unit_results": [
+      "test result: ok. 575 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s",
+      "test result: ok. 795 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s"
+    ],
+    "ascii_count": 12,
+    "cli_results": [
+      "test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s"
+    ],
+    "focused_results": [
+      "test result: ok. 60 passed; 0 failed; 0 ignored; 0 measured; 735 filtered out; finished in 0.05s"
+    ],
+    "renderer_clippy_error_count": 19
+  },
+  "after": {
+    "standing": {
+      "entries": 1512,
+      "failures": 637,
+      "passes": 875
+    },
+    "main_results": [
+      "golden_no_oracle: 11181/11251 eligible pairs pass per family:",
+      "  sequence          1411/1411",
+      "golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped"
+    ],
+    "unit_results": [
+      "test result: ok. 575 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s",
+      "test result: ok. 797 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s"
+    ],
+    "ascii_count": 12,
+    "cli_results": [
+      "test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s"
+    ],
+    "focused_results": [
+      "test result: ok. 62 passed; 0 failed; 0 ignored; 0 measured; 735 filtered out; finished in 0.05s"
+    ],
+    "renderer_clippy_error_count": 19
+  },
+  "no_oracle_failure_names.txt": {
+    "identical": true,
+    "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910"
+  },
+  "golden_failure_names.txt": {
+    "identical": true,
+    "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+  },
+  "focused_filter_reconciliation": {
+    "maker_filter": "sequence (64 tests)",
+    "checker_filter": "sequence::tests (62 tests)",
+    "extra_maker_names": [
+      "skinparam::tests::sequence_extra_params",
+      "skinparam::tests::sequence_response_message_below_arrow"
+    ],
+    "maker64_covered_green_by_full_unit_gate": 64,
+    "maker64_missing": [],
+    "no_rerun": "All64 exact maker names already passed in the 797-unit run; no redundant broad or focused rerun."
+  }
+}

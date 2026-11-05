@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "purpose": "Independent source-guided follow-up: retain two invalid grammar controls and add valid primitive coverage, plus Display raw link boundary",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "remote_private_directory": "allocate with existing runner",
+  "cases": [
+    {
+      "name": "color_primitives_valid_0",
+      "remote_name": "color_primitives_valid_0.puml",
+      "mechanism": "sequence-effective-arrow-color",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_valid_0.puml",
+      "source_sha256": "9c71231256da076137c2434f9430b910649b84d6616d59cf32f5a49815a94887",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+      "resources": [],
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "alpha 01/80/fe/no-paint/grayscale",
+        "line/polygon/ellipse/path/self/cross",
+        "CommandArrow ARROW_DRESSING2 orders head before o; original invalid input retained"
+      ]
+    },
+    {
+      "name": "display_raw_link_0",
+      "remote_name": "display_raw_link_0.puml",
+      "mechanism": "sequence-note-display-normalization",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_raw_link_0.puml",
+      "source_sha256": "dc498ef992347c39bd3232ca2b66e77ce7a4fa7569b52778b6f8e38c1293e327",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+      "resources": [],
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "raw link boundary versus following inline escape",
+        "engine/escaped backslash"
+      ]
+    },
+    {
+      "name": "color_primitives_valid_1",
+      "remote_name": "color_primitives_valid_1.puml",
+      "mechanism": "sequence-effective-arrow-color",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_valid_1.puml",
+      "source_sha256": "31029767868ac9dbf7ec0e45f78c6da4134cacb6200edc724d1e040da659df5f",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+      "resources": [],
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "alpha 01/80/fe/no-paint/grayscale",
+        "line/polygon/ellipse/path/self/cross",
+        "CommandArrow ARROW_DRESSING2 orders head before o; original invalid input retained"
+      ]
+    },
+    {
+      "name": "display_raw_link_1",
+      "remote_name": "display_raw_link_1.puml",
+      "mechanism": "sequence-note-display-normalization",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/display_raw_link_1.puml",
+      "source_sha256": "023ba5518975221d1e03cc91162c9614eed430d365abae70e6503cc3203e6a5d",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+      "resources": [],
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_CHECK_EF020AA1",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "raw link boundary versus following inline escape",
+        "engine/escaped backslash"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,526 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "ordinary_live_legacy",
+    "axes": [
+      "head/open/filled",
+      "direction/activation/alpha",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d711d7718e9ffaac34f968a1da44ebf894b1467af59ff1f1fb258e055a11fb2c",
+    "golden_sha256": "1eb89cbc1809afbb8f636c386e195d3a0e87c0ddc14e06b8831448063385847a",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "bidir_legacy",
+    "axes": [
+      "both endpoints",
+      "bidirectional/declaration order",
+      "legacy"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "b7bb58b6f39da6c94c99e9eeaf6dc227047e72ffafbd3ba357808a9fa0d3e18f",
+    "golden_sha256": "e0139ee7ec45ef85d81c7638195711dbc5e1686f1d8d872717ecf9494f99ea76",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "self_half_legacy",
+    "axes": [
+      "self/open half",
+      "reverse/live depth",
+      "legacy"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "fd1c675642c49c60b73d7ab75d99c34356a7357130cbb8f495f45d9e239cf0d8",
+    "golden_sha256": "c36db5e27ea27aaa421205820ff6cb4c58191304353fe4c5097ca18a8eb42fe2",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_source_legacy",
+    "axes": [
+      "external source decoration",
+      "border/direction/activation",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "b86c4e518fc16ad3cd6ea51998d6301b27f2756d120ed9c8337005f90e4e29b3",
+    "golden_sha256": "49167857c3aa5201fdcd3ea4eccfe36bbbfafbe17c695a94d200c39028e175d9",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_target_legacy",
+    "axes": [
+      "external target decoration",
+      "border/open head/live depth",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d301097809da5f133828fce55316ba676c934d6aed4e2a334d47c7671f69de4c",
+    "golden_sha256": "89c0f685ec9c8feb5efa18b4b8aef0d339a7c69a3470ee294cbfedfa485998e3",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "both_dispatch_legacy",
+    "axes": [
+      "both circle dispatch",
+      "open dotted head/labels",
+      "legacy"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "72678d974d8cbcc6097713005ed9acf30a2cd50bca523916f5bf69431b0f9057",
+    "golden_sha256": "92732922b53f21945ca007234fc91e38bd583d58ac9ef5333035456a8f1da231",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_legacy",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "e195cdf75e7c1c4b0d98d22e49d34203773f6fcac4c1b8dcb07c4b25c88888b0",
+    "golden_sha256": "2fb55671a41c8207c551fe276ffee0c294c7befbd3b97a7ed8026ae79fa6fdef",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_multi_legacy",
+    "axes": [
+      "unequal child heights",
+      "reverse/multiple children/padding",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "86cec4f9681ee1514862fff0f8ce69421479f6e5ca1837ea9ac315dc465d049b",
+    "golden_sha256": "704963e76c511dcd63c3ad2d55a47d0e25217a8e3344f198830c775a6b96b9b6",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_alone_legacy",
+    "axes": [
+      "title wrapper",
+      "font relationship/underline",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "c338acd02e4f2191e219b62b5db4ad850454e1130c420f846de9a124e47b6524",
+    "golden_sha256": "3828988f3fb2ac38515af2476a51fbf7d67cb373997ce38fdd43a34b930b2223",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_body_legacy",
+    "axes": [
+      "nonempty title body",
+      "font relationship/underline",
+      "legacy"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "41e921312a23c98d8acee8a521b3c051064e4ce22af4d1f2eba9145a757a5623",
+    "golden_sha256": "a5c45ab85cf6f80259cdddcb6ff59428ae5f8fc500ad7ba801615d5c6dcb8237",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "underline_legacy",
+    "axes": [
+      "underline inline/whole",
+      "multiline/font",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "208af12c3c5d8a84ffe70f306cc051f897fcbc49c7f67b1449136a54c9f1ce2c",
+    "golden_sha256": "e5d53a8d6ce75bfca7937d9f5f56a243b6a6501901693ab88cec94a4c5a470b7",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_lines_legacy",
+    "axes": [
+      "root versus sibling selectors",
+      "activation/note/return",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "671cc0dfb0f9babe68446100fdbe4c55a708e7933a0240f85754f458e296dfb4",
+    "golden_sha256": "ef6312b5454b6da1061986cba074dc47accc57bb481de70b1f436a8eedce6727",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_shadow_legacy",
+    "axes": [
+      "numeric participant/root shadow",
+      "activation/note override",
+      "legacy"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "f85fa266826574ed4459da69da104a0157d1a8086505b281afdcb2d8c07138e8",
+    "golden_sha256": "edf8cc10fcfafb8fdaa466f9e024772666fe86d953ba613958f5854ca5491952",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_create_legacy",
+    "axes": [
+      "creation consumer",
+      "numeric shadow/event history",
+      "legacy"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "afa19a642aca954c76c470c22d0b54dc89a21a7605ff200bc567eb00b3f4133c",
+    "golden_sha256": "11f2b370c2c938378c1750bdddc7a30843f023b49bf24a82b02f0496684d9054",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "ordinary_live_teoz",
+    "axes": [
+      "head/open/filled",
+      "direction/activation/alpha",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "ff9fccf05e500636827e0baf20a64b63d31f60f0a08d24d3351a10a79ba5e1c2",
+    "golden_sha256": "a52046cc719f7c9331b6506c0254db99584d6125b506eeb7a7be0d1dc85d72d4",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "bidir_teoz",
+    "axes": [
+      "both endpoints",
+      "bidirectional/declaration order",
+      "teoz"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "525da7bc23aac82ee93d1e1fb4900fd46a9489a08433b92532f27cc943cfa456",
+    "golden_sha256": "2218d73e3ca7c1c7f2ccf01c98685922d1bdc102d0c8f6e991c4a1936c54b8d2",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "self_half_teoz",
+    "axes": [
+      "self/open half",
+      "reverse/live depth",
+      "teoz"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "f6df40ea1a472fed4c81b6fe415e31ded52a5ccef33a71afc73d1bb298d967b9",
+    "golden_sha256": "b660dcd49a328bc95ac34d1213a9f956548a23fec3cb550f59b88168ea044b0a",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_source_teoz",
+    "axes": [
+      "external source decoration",
+      "border/direction/activation",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "41355e493ef3a1a1add8efa11c3623625a113f66bd1fffa57ca38b6664095d62",
+    "golden_sha256": "d6b371745ab8218ce0cd71ea796199b31d8feb1128be0492a544494e71802e9d",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_target_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_target_teoz",
+    "axes": [
+      "external target decoration",
+      "border/open head/live depth",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "5ec6ce79ea3110fd3417bf5b6569e264f86555ca6f10eb535f266e910d87eecc",
+    "golden_sha256": "678ec2f09e8d0db4f56e4a621e91c88966ffcdd52906458661a0ea8d0d25442e",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "both_dispatch_teoz",
+    "axes": [
+      "both circle dispatch",
+      "open dotted head/labels",
+      "teoz"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "44629e6b7ac180b027ffd8837d37785a825b8980b4cc49f389b28efae627ea27",
+    "golden_sha256": "333c830f76484e5844d0bba7d40e7505d66c141c8e22d25d81febb005a89d1f6",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_teoz",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d6e5794214d980da68347f55e8d6abc36a615858bdfeafab9e004c7a29e1409a",
+    "golden_sha256": "f332badeb74b27088ecae1778e9ba9ec4f9385648477220bf2abe2abe0860667",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_multi_teoz",
+    "axes": [
+      "unequal child heights",
+      "reverse/multiple children/padding",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "9dd0ba901c015ac29b87fad0cbc4f3305d21e6806b12964fc503b0bb0f51417f",
+    "golden_sha256": "1a90f117807f1754f76b27d4c9c664681e17fc3f24eaa3155bf383f50ef36b34",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_alone_teoz",
+    "axes": [
+      "title wrapper",
+      "font relationship/underline",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "3a46531fcb0f14e50033c6c62797a369136e23e691b27d81995f9a0616365d7e",
+    "golden_sha256": "30038d78c794bdb425b08716838456453226650ce2473b9bc1695a87030625a6",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "rule_body_teoz",
+    "axes": [
+      "nonempty title body",
+      "font relationship/underline",
+      "teoz"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "38d9b25bccada785fbe93e2081b86dca360ef83d3d5931e81d108680af2675cc",
+    "golden_sha256": "488434fd3263ee633a9940395bae7da24e4b6ed6c90587675e9bccf7047c00da",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-message-text-component-height/checker_092_underline_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "underline_teoz",
+    "axes": [
+      "underline inline/whole",
+      "multiline/font",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "50a8c68828c21f603128b2ae91c8f683febbafe3b12b494c9c752b1f36ef68a0",
+    "golden_sha256": "acb913babc8ed6ff1178210a0b9acd929e28c07c36c17cb6d46cabdd6a6c02dd",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_lines_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_lines_teoz",
+    "axes": [
+      "root versus sibling selectors",
+      "activation/note/return",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "e97bf2dd92e693bf6619964c0d7d908e8a4a4b20bfa687a962a32eeaa4d0c213",
+    "golden_sha256": "fc1dba4261047796130a1b371574836c95b065ec1511b237101a3b2a6db0825c",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_shadow_teoz",
+    "axes": [
+      "numeric participant/root shadow",
+      "activation/note override",
+      "teoz"
+    ],
+    "result": "pass",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "1987467f5532ae8302f47cc70d3d9e4d1d02fce8ff62a807bbd13ec9a875515e",
+    "golden_sha256": "f7f6eb1ba530e625a1af6b30748a249aea7b4bce40c77d6d3f55eadbe6516114",
+    "cli_exit": 0,
+    "comparator_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_create_teoz",
+    "axes": [
+      "creation consumer",
+      "numeric shadow/event history",
+      "teoz"
+    ],
+    "result": "fail",
+    "reference_classification": "valid_sequence",
+    "source_sha256": "d8d703d40c2db98801e663dc19880a7d4360354a780edc714d964b9789834595",
+    "golden_sha256": "64c4b211320f8810c9e6e566bc5828db39f3f0686ed348c5be247ac0d241fca5",
+    "cli_exit": 0,
+    "comparator_exit": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_inner.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "invalid_inner",
+    "axes": [
+      "interior decoration",
+      "ordinary/external"
+    ],
+    "result": "fail",
+    "reference_classification": "java_error",
+    "source_sha256": "13a6ca5000f1be669d1e925f5d56c56e9236c1fe50f6bd293e36c08f06204dcd",
+    "golden_sha256": "86586287818c7b594c33e26cb0c5840cebfca8c1f804469ac2832b5eacd34eaa",
+    "cli_exit": 1,
+    "comparator_exit": 2
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "invalid_exo",
+    "axes": [
+      "interior decoration",
+      "ordinary/external"
+    ],
+    "result": "fail",
+    "reference_classification": "java_error",
+    "source_sha256": "ee37b1241132638c0c027650648667cd90c38b3bf8730aaf1bb1f931a6d016ba",
+    "golden_sha256": "054ead29488b374b562514f7f76b5d4ca5db471f31e6034d63342fa28354fa2e",
+    "cli_exit": 1,
+    "comparator_exit": 2
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+    "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "empty",
+    "axes": [
+      "zero bytes",
+      "pipe front end"
+    ],
+    "result": "fail",
+    "reference_classification": "empty_output",
+    "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli_exit": 0,
+    "comparator_exit": 2
+  }
+]

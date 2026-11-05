@@ -1,0 +1,7 @@
+@startuml
+participant Remote
+participant "Harbour 4" as as
+Remote -> as: inbound
+rnote over as: ledger
+as -> Remote: outward
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+skinparam sequenceStereotypeFontSize 19
+participant Kite
+queue Q <<dispatch>>
+Kite -> Q: deliver
+@enduml

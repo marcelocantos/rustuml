@@ -1,0 +1,18 @@
+{
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "golden_hydration": "git archive from existing /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden into this isolated checkout before any gates; all archive blobs verified",
+  "setup_observations": [
+    "Initial read attempted /Users/marcelo/work/github.com/rustuml/test-diagrams/golden (missing org component); exited128. Correct local clone found via git worktree list. No build or test was run on missing corpus.",
+    "Initial top-level *.puml count was zero because corpus is recursive; corrected with recursive count and complete Git blob verification.",
+    "First archive-integrity traversal was stopped after roughly30seconds due to repeated gzip random seeks; switched to one streaming verification pass. No product gate was rerun."
+  ],
+  "build_jobs": 4,
+  "build_target_policy": "Separate private before-target and after-target; no shared maker/parent build output.",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/build_gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/all-inputs.json replay2281",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/fresh60.json fresh60",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup4.json followup4",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing Monkey Man relay; exact substituted JSON-array argv retained per result)"
+  ]
+}

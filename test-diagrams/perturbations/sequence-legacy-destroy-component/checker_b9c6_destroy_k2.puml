@@ -1,0 +1,9 @@
+@startuml
+Cedar -> Birch ++ : begin
+group frame
+Birch -> Cedar : reply
+end
+destroy Birch
+destroy Cedar
+Cedar -> Birch : after
+@enduml

@@ -1,0 +1,13 @@
+{
+  "retained_entries": 1828,
+  "new_checker_entries": 49,
+  "new_maker_entries": 24,
+  "total": 1901,
+  "unique_source_paths": 1901,
+  "unique_source_bytes": 1853,
+  "duplicate_entries_by_source_bytes": 48,
+  "parent_entries": 1449,
+  "old1728_parent_overlap": 1123,
+  "parent_only_not_replayed": 326,
+  "provenance": "Prior maker cohort-overlap.json and checker cohort-provenance.json; no unrelated parent growth imported or replayed. Do not sum overlapping cohorts. No duplicates removed."
+}

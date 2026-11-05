@@ -1,0 +1,6 @@
+@startuml
+participant "Pier @ east"
+participant Remote
+Remote -> "Pier @ east": inbound
+note left of "Pier @ east": cargo
+@enduml

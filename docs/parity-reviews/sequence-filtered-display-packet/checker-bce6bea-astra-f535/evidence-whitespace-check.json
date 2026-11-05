@@ -1,0 +1,14 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--cached",
+    "--check"
+  ],
+  "exit": 2,
+  "findings": [
+    "Verbatim production.diff contains unified-diff blank context lines consisting of one space.",
+    "Both indf535_terminator_spaces inputs deliberately retain trailing spaces around the terminator; immutable source bytes match relay manifest."
+  ],
+  "action": "Preserved exact evidence; no whitespace rewrite and no ignore/allow-list changes."
+}

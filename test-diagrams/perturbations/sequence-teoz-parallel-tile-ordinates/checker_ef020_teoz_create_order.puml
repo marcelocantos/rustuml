@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Lark
+Lark -> Lark ++ : first
+create participant Dove
+& Lark -> Dove : born
+Dove -> Dove ++ : own
+Dove --> Dove -- : done
+destroy Dove
+@enduml

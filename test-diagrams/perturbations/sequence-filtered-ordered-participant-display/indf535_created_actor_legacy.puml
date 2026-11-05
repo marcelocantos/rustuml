@@ -1,0 +1,6 @@
+@startuml
+skinparam stereotypePosition bottom
+participant Juniper
+create actor "FernWithLongName" as Fern <<tiny>>
+Juniper -> Fern: recruit
+@enduml

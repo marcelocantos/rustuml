@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-dressing-owned-parts",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "skin.ArrowConfiguration#withPart/#reverse",
+    "sequencediagram.command.CommandArrow#executeArg",
+    "skin.rose.ComponentRoseArrow#drawDressing1/#drawDressing2",
+    "skin.rose.ComponentRoseSelfArrow#drawRightSide/#drawLeftSide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/sequence.rs::Arrow",
+    "crates/rustuml-parser/src/parse/sequence.rs::parse_arrow",
+    "crates/rustuml-render/src/sequence.rs::message_endpoint_pair"
+  ],
+  "invariant": "Each normalized dressing carries its own head and part. CommandArrow begins with destination dressing2, so withPart updates that destination; reversal moves the complete dressing. Source head remains FULL.",
+  "causal_divergence": "Rust documents and applies a single destination head_half to both heads, dropping source wings and shortening its stroke incorrectly.",
+  "planned_change": "Clarify existing serialized head_half as destination part; construct independent local head/part pairs for ordinary and self rendering. Keep existing source_dressing/head fields and defaults. No additional ASCII constructor edits are needed.",
+  "perturbation_axes": [
+    "mixed normal/async half heads and both visual directions",
+    "ordinary/self/external topology and activation"
+  ],
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "evidence_import": "16b28fc6de23d3920150efe50cfad7d065985c1a",
+  "account_date": "2026-11-04"
+}

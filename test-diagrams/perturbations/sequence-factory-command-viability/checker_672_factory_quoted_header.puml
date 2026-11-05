@@ -1,0 +1,10 @@
+@startuml
+header
+class Fake o-- Node
+endheader
+participant "Cedar o-- class" as C
+participant Maple as M
+C o-->>o M: quoted
+' class Decoy
+M o<--o C: reply
+@enduml

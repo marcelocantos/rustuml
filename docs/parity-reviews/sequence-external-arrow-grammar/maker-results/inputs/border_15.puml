@@ -1,0 +1,8 @@
+@startuml
+participant Probe
+participant Relay
+group gate
+[<<- Probe : crossing Wi.f
+Probe <<--[ : settle
+end
+@enduml

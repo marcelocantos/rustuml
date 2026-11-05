@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+Juniper -> Juniper ++ : begin
+return #transparent clear
+Juniper -> Juniper ++ : again
+return #39abef80 translucent
+@enduml

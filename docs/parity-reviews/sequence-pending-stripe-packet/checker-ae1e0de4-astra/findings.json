@@ -1,0 +1,49 @@
+{
+  "sequence-single-pending-create": {
+    "verdict": "rejected",
+    "findings": [
+      "SequenceDiagram.activate overwrites one pending CREATE; addMessage validates, attaches and clears. Message.compatibleForCreate excludes source and self; MessageExo accepts its sole real participant. The new event-index helper follows these parser ownership rules, and no serialized field was added. LifeLine.setCreate and LivingSpace.goCreate independently overwrite their origins.",
+      "NEW REGRESSION: all four ind78_outgoing_left/right legacy/teoz cases match Java before but panic after at crates/rustuml-render/src/sequence.rs:14287:81. The helper now attaches outgoing MessageExo CREATE events; create_msg_idx feeds created_inline/is_create_msg, and the ordinary creation endpoint code unwraps id_to_idx[msg.to], which is '[' or ']'. Valid Java input reaches this panic. Incoming exo cases remain whole failures.",
+      "The Java render consumers are distinct: DrawableSetInitializer.prepareMessageExo dispatches Step1MessageExo, which creates MessageExoArrow without Step1Message.createArrowCreate; Teoz CommunicationExoTile has no CommunicationTile goCreate/head branch. Accepting an exo CREATE attachment does not authorize ordinary participant-target creation geometry. A null check alone would not establish semantic parity.",
+      "Fresh triple/interleaved overwrite, lowered compatible return, intervening activation/deactivation, autonumber and dangling participant/actor/queue CREATE controls exercise both engines. Raw event counts, head/tail groups where present, total shapes and exact label multiplicities are preserved. In prior double-pending legacy Roe labels fall 3 to Java 2; in maker pending_same actor ellipses/labels fall 4 to Java 3 while all three raw CREATEs remain. Group/box controls retain whole failures and are not waived.",
+      "Eight fresh Java command-error references (source, self, neither receiver, incompatible lowered return in both engines) change from successful Rust rendering to real parser exit1; all valid fresh AST/ASCII commands remain exit0. No Java-valid fresh source becomes a parse rejection. Four valid SVG commands instead panic, which refutes any broader no-new-valid-input-error claim."
+    ],
+    "next_obligations": ["Separate pending ownership from engine-specific ordinary/external creation drawing and origin behavior, then retain and rerun all four outgoing counterexamples.", "Resolve the incoming external and group/box whole failures before mechanism acceptance; do not weaken comparator or reference validity."]
+  },
+  "sequence-queue-stripe-origin": {
+    "verdict": "rejected",
+    "findings": [
+      "USymbolQueue.getMargin returns Margin(5,15,5,5); asSmall translates the composed block by margin. SheetBlock1 positions each Sea at cumulative preceding height. The new first-ascent origin repair is source-backed and passes rich no-stereotype, blank-first, order/mixed-kind and boxed controls.",
+      "The sequence consumer needs more precise provenance than the generic symbol alone: ComponentRoseQueue passes getTextBlock() as label and an EMPTY stereotype to USymbolQueue.asSmall. Participant.getDisplay composes the stereotype into the Display, then AbstractTextualComponent creates the complete creole block. The Rust sequence path instead gates stereo_ref and stereotype height on ParticipantLayout.in_box.",
+      "Six fresh valid bare/created stereotyped queue cases remain whole failures. Their real AST contains stereotype Some(dispatch), but Rust paints zero dispatch labels versus Java two (head and tail), with missing text elements and wrong dimensions. These deficits exist before and after; they are not introduced regressions, but they disprove whole queue/stereotype composition. Existing failures do not become acceptance by correcting the ascent."
+    ],
+    "next_obligations": ["Carry the complete participant Display/stereotype into queue measurement and paint independent of box membership, following ComponentRoseQueue and Participant.getDisplay.", "Preserve and pass bare/created/stereotyped queue pairs, including blank-first and mixed-size tails, before acceptance."]
+  },
+  "sequence-message-stripe-baselines": {
+    "verdict": "rejected",
+    "findings": [
+      "SheetBlock1.initMap aligns each Sea, translates minY to cumulative height, then advances by that Sea height. Sea.doAlign uses atom dimensions and starting altitude. emit_message_label's current-minus-previous ascent increment is algebraically consistent with this baseline transition, with no fitted constant.",
+      "Twelve fresh valid four-stripe alternating-size, forward/reverse/self/reverse-self/external and inline bold/italic/underline controls match after. Two heading-form controls remain whole failures: Java paints Crest/Ridge, while Rust paints literal '= Crest'/'== Ridge' and measures different text/canvas. This is present before and after and remains a consumer/creole limitation, not a new regression.",
+      "Rust notes and dividers do not call emit_message_label: Event::Note owns line_top plus line_metrics.ascent / EnhancedNoteBody; Event::Divider directly calls text_render::emit_text. Their two control sources remain whole failures in both revisions and are explicitly outside the changed message emitter. No transfer of the new baseline formula is claimed.",
+      "present_bold_empty and style_parameter_contrast are both whole failures in before and after exact CLI replay. This checkout has no concurrent shared style/creole/text_render/WBS production, and these findings certify no combined behavior."
+    ],
+    "next_obligations": ["Complete heading/Display stripe semantics and separately integrate shared text changes under a new exact-tree review.", "Keep note/divider and both shared handoff whole failures active; do not count a localized baseline improvement as their repair."]
+  },
+  "sequence-self-half-polygon-order": {
+    "verdict": "accepted",
+    "findings": [
+      "Pinned ComponentRoseSelfArrow.getPolygon emits TOP outer-upper, inner-tip, outer-baseline and BOTTOM outer-baseline, inner-tip, outer-lower, with direction affecting x. The production diff changes only the TOP vertex serialization order in this consumer, preserving the existing numeric vertices. It introduces no coordinate constant or fixture lookup.",
+      "Acceptance is bounded to the fresh whole-output self-consumer matrix: full/half, forward/reverse, circle/open heads, first/last participant and nested activation on both engines. Exact polygons and whole CLI SVG comparisons are retained; prior rejected ordinary dressing, geometry, activation and box claims remain rejected at their own revisions."
+    ],
+    "next_obligations": ["Preserve the bounded matrix as an executable regression net; this record does not accept the pending-CREATE packet or inherited self/box geometry obligations."]
+  },
+  "sequence-collections-source-clarification": {
+    "verdict": "accepted",
+    "findings": [
+      "Rose.createComponentParticipant selects ComponentRoseParticipant(collections=true) for COLLECTIONS_HEAD and COLLECTIONS_TAIL. Its constructor supplies marginY7 and getDeltaCollection returns4. The new citation names the correct pinned classes.",
+      "The collections_shape function is byte-identical before/after after removing comment-only lines; no numeric behavior changed. Four fresh plain/collection sibling, multiline size, font and declaration-order controls match whole output in both revisions and both engines.",
+      "This accepts a present-day citation clarification only. It is not retroactive provenance for an earlier constant introduction, account rewrite, or transfer of any historical acceptance."
+    ],
+    "next_obligations": ["Keep original accounts and prior rejections immutable; evaluate other collection/style behavior under its own exact-revision evidence."]
+  }
+}

@@ -1,0 +1,40 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "before": {
+      "cli_comparison": {
+        "exit": 2,
+        "stdout": "",
+        "stderr": "invalid reference (retained negative evidence)\n"
+      },
+      "product_library": {
+        "exit": 101,
+        "stdout": "",
+        "stderr": "\nthread 'main' (14128763) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      },
+      "assisted_library": {
+        "exit": 101,
+        "stdout": "",
+        "stderr": "\nthread 'main' (14128774) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      }
+    },
+    "after": {
+      "cli_comparison": {
+        "exit": 2,
+        "stdout": "",
+        "stderr": "invalid reference (retained negative evidence)\n"
+      },
+      "product_library": {
+        "exit": 101,
+        "stdout": "",
+        "stderr": "\nthread 'main' (14565446) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      },
+      "assisted_library": {
+        "exit": 101,
+        "stdout": "",
+        "stderr": "\nthread 'main' (14565462) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      }
+    },
+    "classification": "Unchanged diff_one panic on an invalid empty Java reference; CLI returns success, retained as negative acceptance, not a new valid-input renderer panic."
+  }
+]

@@ -1,0 +1,8 @@
+@startuml
+participant S
+participant R
+S -> R : first page
+newpage Continuation
+S -> S ++ : call
+return second page unwind with wide label WWWWWW
+@enduml

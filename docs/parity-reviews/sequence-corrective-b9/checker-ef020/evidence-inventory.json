@@ -1,0 +1,1887 @@
+[
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/README.md",
+    "size": 11359,
+    "sha256": "49659cd30c5451d109218e9aedff116bdcd041f6ef219ecabd88b1235e70a348"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/after-binaries.json",
+    "size": 421,
+    "sha256": "c1167e646293a354082565dcdf34a9caee37dd4d8f320233a368cf19f3d9a504"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/after-build.log.gz",
+    "size": 1901,
+    "sha256": "f4745e2a691e9c8dd925fdd0a1e3cecba1587d95724d271b82763141351ef2b4"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/after-comparator.log.gz",
+    "size": 20,
+    "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/after-switch.log.gz",
+    "size": 154,
+    "sha256": "7997091cb3c61cc94666041b37a250415979d2503f0da921b7830610007cb151"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/before-binaries.json",
+    "size": 422,
+    "sha256": "4c50846c91ab72ae9983079b20018132889ec3e017fc1708428ee2be2d4df070"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/before-build.log.gz",
+    "size": 1890,
+    "sha256": "09522e6ec4fec485d72faa8490bfef52e67300fc23ab78117183e51d6337b493"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/before-comparator.log.gz",
+    "size": 20,
+    "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/before-switch.log.gz",
+    "size": 97,
+    "sha256": "6d57cbd2bdd9b633a9e3c56133bb79142bf001a718272bb1b8ae8bc64cb9b4ef"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/build.py",
+    "size": 2031,
+    "sha256": "9bcc5391860671096086cb6f6a39374b6a6890e798ddd8a69031f075a1364260"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/cli-replays.tar.gz",
+    "size": 5191754,
+    "sha256": "2b4101934284a3f1c52b9afe47e36415ff573dc3c5a372643bc7948168e1c40f"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/cli.log.gz",
+    "size": 670,
+    "sha256": "dfe8b27f0c337f2a0c0e54b67b2e1bf42150b7d2ef24bd07339e3b84959c3e88"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/clippy-render.log.gz",
+    "size": 2207,
+    "sha256": "ac5b2fa27ca1138dae15d674b1867ca7b3828569cddfee6d9ae7724e72adb8f4"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/clippy.log.gz",
+    "size": 1585,
+    "sha256": "885cad70fcb3d9c34408103b01dc4526cfb34e4ecbe12356157e1765d0b058f8"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/cohort-after.log.gz",
+    "size": 1182,
+    "sha256": "4b7c1cbd82997771ae6552d6abe6458b5c7afdb3c19acc8998c57f8ae0bf0e61"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/cohort-before.log.gz",
+    "size": 1219,
+    "sha256": "d7f69de0b2688425c63d1246a82f4d4d70b23d7d168f345ae398b681457b8b25"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/commands.json",
+    "size": 12305,
+    "sha256": "cd8ccdd6f2da02e3c107bfbe0bde6b716b921463b5ae8b0fd81e550557f7e749"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/compare_cli.rs",
+    "size": 1011,
+    "sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/denominators.json",
+    "size": 354,
+    "sha256": "d1d5aad1c2b1de1558acafc0afc5b8a537bb47c4600b8b3641f6fed00453c3b5"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/final-registration.log.gz",
+    "size": 386684,
+    "sha256": "00c3a4ee6b877a9bc151e04feb29f300d27f8a23a19dbf7634e51dce4170746a"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/final_registration.py",
+    "size": 1330,
+    "sha256": "db24d69176fad6801f6263866b9c6ad32ecf72203f9499f6c3512140024b754a"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/finalize_evidence.py",
+    "size": 3750,
+    "sha256": "7f4cd2fdb3669eab882103013827d14705ec6f9c24286ec41ec32963605a92fc"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/findings.json",
+    "size": 16091,
+    "sha256": "e07bab3aabaa26699b3b95fc744d5ac507dd99830d41fe2b30666586d184ad72"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/fmt-owned.log.gz",
+    "size": 20,
+    "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/fmt-workspace.log.gz",
+    "size": 1399,
+    "sha256": "fcb7fd35acdd878714a959354e5f357e39dcfc656c5dcbbc6f5115192959df63"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/followup-manifest.json",
+    "size": 1959,
+    "sha256": "7d478a8cdfdd95190da28007f7f82db77d0d78158463201d46aced98c22f3ba9"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/fresh-after.log.gz",
+    "size": 106,
+    "sha256": "a34a8815a648eb09278617f1eedb2f49b6227c51e04425eae79010a204164e6e"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/fresh-before.log.gz",
+    "size": 104,
+    "sha256": "6ab7d9148df874d3899824116255909a4a4c7d00fbf0064222d86c317dbaec74"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/fresh-manifest.json",
+    "size": 14067,
+    "sha256": "f3ba2f6856621570fce2141daf9bb7fbc1b4d29d5518c87d8395262d43a43934"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/fresh-summary.json",
+    "size": 327,
+    "sha256": "dfb65de959d9c3680ae28c5b974461878a82be77306de8d0eed95d804faa376f"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/generate.py",
+    "size": 5938,
+    "sha256": "a061b190a3d52a6d051fb53a5f97b1c9afb4857627088dc6697c6221fc7f41b3"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/generate_followup.py",
+    "size": 1529,
+    "sha256": "9a3d1b504fe89bc7608a5cdbb0559b8a9435afa06c9cb9cf91ef2d36b24e38ba"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/golden-dependency.json",
+    "size": 453,
+    "sha256": "bf2498b8c0a051ea7adcd511c3c4cf384c690be3845f27cd4e51ec22bcbee7ef"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/import_followup.py",
+    "size": 2039,
+    "sha256": "9be3d15194c371b1f2e7d97c057357c72474a8be07e095b5b2e98a5abd6031cf"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/import_relay.py",
+    "size": 1985,
+    "sha256": "22069b872f72cb3d48ec10b7904d1c78f3c43eda2499f0ec7f44315f2feeb429"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/java-source-inventory.json",
+    "size": 6696,
+    "sha256": "5470d399e5b8e66003ced2b8b4024e24cb0ba7d56ff784633ae25aa9ab3f16ca"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/main-with-corpus.log.gz",
+    "size": 8686,
+    "sha256": "ef21f21a12145d04de60cc56903ff1ab3565f06ab0b0f99a4e62b1147102b40f"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/main.log.gz",
+    "size": 378768,
+    "sha256": "2e338c1492af32a9d99c803642f14aa839b80fb7849ab555584a836f6cbbe651"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/maker-intermediate-audit.json",
+    "size": 17873,
+    "sha256": "d698d22d91fee886e97eb7b0bff5597d98dc99fabf1e1774d2914bb29307eaf4"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/operational-nonzero.json",
+    "size": 2340,
+    "sha256": "0e68cecd964d23d96b7dda69e907ad095a9a6e23072be4eaea4d9ed1334f12a6"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/overlap-independent.json",
+    "size": 190,
+    "sha256": "10ed61f7f4e5041d68c12b63b8745a915601d2f6ddd3539bd9a03322429b33aa"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/package_review.py",
+    "size": 13244,
+    "sha256": "774e93d7bda68cbdbb617f7ca5bf7d168a6725160d3fa19c611333da58ec6594"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/pairs.json",
+    "size": 63095,
+    "sha256": "469199f31f03022c6cab9f92c39c4bd7eb7cc2f4441835a91afa7e1a5814d594"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/prior468-inventory.json",
+    "size": 124185,
+    "sha256": "86d7fc5741428e912fa7fa1adfd4b0852309d99f94d9b226c729e2830d11b498"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/production-source-inventory.json",
+    "size": 669,
+    "sha256": "ea6ac71ba8cb47ca76d613067f58e707979d719e1e24134f0eb0c45c15af4c1a"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/production.diff.gz",
+    "size": 13526,
+    "sha256": "90dab4bb749bbe954c8f499637179abff052844eb827d6b0b2c0fd8d71f0ce82"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/provenance-check.json",
+    "size": 2541,
+    "sha256": "9f097f8cbec3f4b4906230744a03742a723c2a885f88ee343d408038997661d6"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/reference-followup-manifest.json",
+    "size": 3891,
+    "sha256": "8bdf9522940ffd729e1320c446761c237a9048e9d50dbe8bad3624baadc75dfe"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/reference-followup-results.json.gz",
+    "size": 7307,
+    "sha256": "9881de403651ba6d3a2c6a31f3dfee13600930034ab27e9f5a89f6293950324d"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/reference-followup-transport.json.gz",
+    "size": 7476,
+    "sha256": "66c57c495fe1bbad4ce5d26d97d8761a1405ac60300b379948500cb091cf0a11"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/reference-manifest.json",
+    "size": 26771,
+    "sha256": "bc01a1c84391d1f5fe0d8dae5e7d50bdd38ae71f12c1ca3fb243d51aecc471aa"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/reference-results.json.gz",
+    "size": 36227,
+    "sha256": "c508565a1c422e1602f20e73518c4d767d29b907391a891ef8ab67aeaae57747"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/reference-transport.json.gz",
+    "size": 36548,
+    "sha256": "c7352c067007f96e51f3c952da526fb7279e462c29d74f7a7766dc35a6937e78"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/replay-summary.json",
+    "size": 7542,
+    "sha256": "a354bf62fb590e839b7a927f73db19b5eaba9b1a160470158f778f1ff86fc0c3"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/replay_checks.py",
+    "size": 2038,
+    "sha256": "b2b9a45b1d72612d221bd883f67f277b304ae52bffe1e897ebea5b20e2aa1205"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/standing-summary.json",
+    "size": 927,
+    "sha256": "eb6ecc0f0e7049db3cb106d104f9d829506453d3facad8c3dbf844020fbaa2b9"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/tool-identity.json",
+    "size": 391,
+    "sha256": "4d433bb528fe401829b4b30306b4c1b95fee586e501221f051c5558266e3868e"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/units.log.gz",
+    "size": 20557,
+    "sha256": "185186b46033fe117a727e0ac325c801bb757df08e9d4de32492b7b0531c2923"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-effective-arrow-color/review.json",
+    "size": 18091,
+    "sha256": "a3b32e18ec6640a6674a171fd97cd47c82027e37f4d896d41925a053210f2b4c"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-effective-note-activation-style/review.json",
+    "size": 21411,
+    "sha256": "ba804db8621cd9a53e69b284bb98cff4a32a611b649255b959b4abe2416b0cab"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-legacy-raw-life-variations/review.json",
+    "size": 11510,
+    "sha256": "fd6a12e8bb18165aba5188fa5fc1af473152124f1c870f1a3bba3fbe4cb79a3f"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-note-display-normalization/review.json",
+    "size": 24100,
+    "sha256": "e310faaec238849427f5800a5b3b8ca3bc4d9ca4f6bdbc52e1a5cd078912ba94"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-note-shadow-value-materialization/review.json",
+    "size": 17315,
+    "sha256": "10422fac5e0512d83f85fa55e68a204c39749f00dd5c3c19051e6291837bc4d1"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-note-textblock-dimensions/review.json",
+    "size": 25185,
+    "sha256": "06fcdbb0b469c0ae2d912c0bb4ecf9be4f7120b090a86a33f177bb562101bcee"
+  },
+  {
+    "path": "docs/parity-reviews/sequence-teoz-parallel-tile-ordinates/review.json",
+    "size": 12014,
+    "sha256": "0cdbc38bde48fe413d30864d9a5e6bca8b705d6df5d4b0c799160e1743386d82"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.after.rust.svg",
+    "size": 5454,
+    "sha256": "af6635db3154e493863fbf53e6645f9361577fd28b84ca224989681cad47073c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.before.rust.svg",
+    "size": 5406,
+    "sha256": "046b94ce1d4c54841560d4ed9265696e53c53ab4c04f0e5a03c92f1a7375b6c6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.provenance.json",
+    "size": 1154,
+    "sha256": "c9e7299f94883fdcdb1f4e017dde25487c8ae7e2c6d7b0d939ae6bc7ed9c1739"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.puml",
+    "size": 175,
+    "sha256": "25e641cec188dec27b03e7f2d0352b69339ce0ea6db36babac1b5855a944f307"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.stderr",
+    "size": 55,
+    "sha256": "8481c0a5d50dbfbda6a99bfaa70bbbfb5c263cc9c1d90eac7de8e4ddd58b4245"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.svg",
+    "size": 1899,
+    "sha256": "581918a8bf242cb5ebce26d6e2e30999914278fb3f7c414b39f2c8d7e8b80ecd"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.after.rust.svg",
+    "size": 4203,
+    "sha256": "970776bca20fd3e06b9a75a1ce322f0d79804d6e2bf3f8ff7dba83ad398c3332"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.before.rust.svg",
+    "size": 4155,
+    "sha256": "1762d4bb0861106284141912e15b44e953827fe56f5240c1bcb1ea4f424dbce3"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.provenance.json",
+    "size": 1154,
+    "sha256": "70ad816e4d870cf7c7454deef169687589d3dbe12ecfed293d187c447ee9cb56"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.puml",
+    "size": 193,
+    "sha256": "6f3820f5da23f35a288e229546c0c6663e69abed78ae1c29f96fe7f6a7c0fd33"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.stderr",
+    "size": 55,
+    "sha256": "4a76805d0d6bb20b007b57a87061087ee0e86035af1ccc7e9a12f7ef484c927a"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.svg",
+    "size": 2090,
+    "sha256": "7f0ece0b30813b3d24433a74dc82f5c3ea973ffb925aba00b6a52cba324b3f57"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.after.rust.svg",
+    "size": 5454,
+    "sha256": "af6635db3154e493863fbf53e6645f9361577fd28b84ca224989681cad47073c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.before.rust.svg",
+    "size": 5406,
+    "sha256": "046b94ce1d4c54841560d4ed9265696e53c53ab4c04f0e5a03c92f1a7375b6c6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.provenance.json",
+    "size": 1209,
+    "sha256": "fb3edea64c56925c8418332a1cf4ec319474eb7d023b6f309266cc0b024199a3"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.puml",
+    "size": 175,
+    "sha256": "9c71231256da076137c2434f9430b910649b84d6616d59cf32f5a49815a94887"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.svg",
+    "size": 5715,
+    "sha256": "71fb27c070420edeec188c5ef8efc03ae4e9f4a53523e61f3801805c35b75d9c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.after.rust.svg",
+    "size": 4203,
+    "sha256": "970776bca20fd3e06b9a75a1ce322f0d79804d6e2bf3f8ff7dba83ad398c3332"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.before.rust.svg",
+    "size": 4155,
+    "sha256": "1762d4bb0861106284141912e15b44e953827fe56f5240c1bcb1ea4f424dbce3"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.provenance.json",
+    "size": 1208,
+    "sha256": "74da05988520ba7bd84b320511eeb0c3c510ec1cf9cffdab24fc4f6047c16fc4"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.puml",
+    "size": 193,
+    "sha256": "31029767868ac9dbf7ec0e45f78c6da4134cacb6200edc724d1e040da659df5f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.svg",
+    "size": 4484,
+    "sha256": "cfffd59e02bc2cbf05b5bb0ca88ffec0f5db72102b3e7ca94a535b2882474ede"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.after.rust.svg",
+    "size": 6147,
+    "sha256": "30cfa4f2ae6e0b8c7d92da7b1f9da90cbf5c7fbabc055495456290c0ea1fe7f2"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.before.rust.svg",
+    "size": 6182,
+    "sha256": "a33fa74fff51609461c726373a63e3bba802b0cdd74fe1a3f89f7a2f542bba8e"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.provenance.json",
+    "size": 1143,
+    "sha256": "5dd5970bbdb54c156829fca0e6efbad982085c34ef9d8f0cafcef79c38df9752"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.puml",
+    "size": 181,
+    "sha256": "5cbc767edc78af51c79138fc36ff7f6bc29512695674ad166086e9a11e944d4f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.svg",
+    "size": 6308,
+    "sha256": "51e06a29d1d3877d810763f401540feedf7c5fadd075aa0f0a4950e1534b40d2"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.after.rust.svg",
+    "size": 4752,
+    "sha256": "e5381ffb0a99c1d96e27efd1ccfcc9dbc4ccf8f0d41b946af931ac1fc6c96399"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.before.rust.svg",
+    "size": 4787,
+    "sha256": "8921a942641b8db42206c7be09e4412ffd1ad73285c323209bec3891f51970a7"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.provenance.json",
+    "size": 1144,
+    "sha256": "b351cc78d77ea6c4d050c7119b87cfd7785238e43e1118acd774f71706bbc797"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.puml",
+    "size": 199,
+    "sha256": "6661d9871ffff9f5e61a7fd887789881e4a424a844d7199d028e96beadb72c0a"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.svg",
+    "size": 4908,
+    "sha256": "db83795dc488232e16ad4fec5ab0bcc2a2dca26052a983fa5bd84c235d566f0d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.after.rust.svg",
+    "size": 5723,
+    "sha256": "d087c0c4a1b5b9bd7c36f7628ecbcb4d6fb90ab94128e6ee913bb31bb3cb99e9"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.before.rust.svg",
+    "size": 5723,
+    "sha256": "366ceec2a44590466ba0fa6e8425e4929b574fd598e917f48096372a6b090532"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.provenance.json",
+    "size": 1140,
+    "sha256": "31d21dda952e29017389eb5aa0a52080c831c84539365440f396bf86fe3bfeb8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.puml",
+    "size": 197,
+    "sha256": "52c5b67e5e48b1b99079bb54634cd786b1b29973ba1e2813f5c420c64c5288b9"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_0.svg",
+    "size": 5904,
+    "sha256": "aaea779e5ed27c9493c9e5bd22fa380988cb5398ab9e762afea5d931f5d4c951"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.after.rust.svg",
+    "size": 4245,
+    "sha256": "aa9bfbda63264b5a4ab04d12d580fbfdbe061132d730b3719fbd5e3114631a3d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.before.rust.svg",
+    "size": 4245,
+    "sha256": "aa4c770bcda9b1c461e015668dca6698565e9b4cb596f1c4b3d9f4451678ee65"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.provenance.json",
+    "size": 1140,
+    "sha256": "cbab80613285934053bf90db5531a4ccc4f248eac4809d645057a84699a3459f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.puml",
+    "size": 215,
+    "sha256": "e8439ac2560c421ccfa0a610d3e38a58c1da39dfa68e5c09cfecda3854ab4bb5"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_root_1.svg",
+    "size": 4428,
+    "sha256": "cb965d89ca412657ba45ee78b208334d1492d2027177d856b2e23cbdb68f9485"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.after.rust.svg",
+    "size": 4922,
+    "sha256": "c1074d4ce37757c8d447b73821046af2147e655bcaacb9777a34f22ac06824ba"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.before.rust.svg",
+    "size": 4401,
+    "sha256": "9addb9dfefcde7bad00e30057aa1201fa9210c529fee8beaaa8590e0d9a52430"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.provenance.json",
+    "size": 1148,
+    "sha256": "cdb611705bfa6cb37d83061784ec62c817dbea1678d65d5abc03236b4e4c5fa6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.puml",
+    "size": 320,
+    "sha256": "02d4f2e3225692ea335272bd6c1d2ff88a93364fa9239276ce20834a32c8c2a1"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_0.svg",
+    "size": 5207,
+    "sha256": "8af0eb33b5ed5227fa96bb5984fd0e591ece3f31ce7e84910398a0fe34bd1417"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.after.rust.svg",
+    "size": 3849,
+    "sha256": "ee2ad3f586a58ae35e72404703a9f754a2b83e51dfbad085fc0f4f6811cdeaf8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.before.rust.svg",
+    "size": 3320,
+    "sha256": "d4e7f16ddc1cf5cd541af4161bc4c5f8536d33910b74eb37cd9cb2c6b509671c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.provenance.json",
+    "size": 1148,
+    "sha256": "567a4a0e2c23b90a9670135c6568c3f5c4995f1a8302a5defe6858ddf66b13e3"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.puml",
+    "size": 338,
+    "sha256": "1a4b33372002e9f5aba82df02888c41854de7bfc2ad24638370d006df6e5b80c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-effective-note-activation-style/checker_ef020_style_siblings_1.svg",
+    "size": 4143,
+    "sha256": "20be5a60985995aab24508ae1169eb463867e4cfee7a05613649cdb742ea2758"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.after.rust.svg",
+    "size": 6299,
+    "sha256": "1f66fb4a06c8d40771907dab4ebde9a79c9a53cb156ab2738abcea5aea2b4d1b"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.before.rust.svg",
+    "size": 6299,
+    "sha256": "1f66fb4a06c8d40771907dab4ebde9a79c9a53cb156ab2738abcea5aea2b4d1b"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.provenance.json",
+    "size": 1158,
+    "sha256": "282c48255e4713d5e8a44340f8425e9fda913f6b96ea47f304cb2f5425a70c66"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.puml",
+    "size": 170,
+    "sha256": "f116fd5a738700075f7bde853347d60396e703c10588fc2f085c70b622f29032"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_return_ownership.svg",
+    "size": 6444,
+    "sha256": "e94af5f4e27d5ade1746a7e3a4171509158fa323ed5b38945138ff07381f62d6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.after.rust.svg",
+    "size": 5298,
+    "sha256": "562759594ac4ebda5829a3daa35091c5818f623077e0b3232735d3d9a7439990"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.before.rust.svg",
+    "size": 5584,
+    "sha256": "9aadb404124191b60ceea97bfaf78c5f1fe6fbe16bcf94e32afcad0b69ee5500"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.provenance.json",
+    "size": 1148,
+    "sha256": "3cfab6fde27ecf00f5a0e6c8ed1809648c25e239bfdfaf5191ce7edf18c847b8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.puml",
+    "size": 208,
+    "sha256": "106cb0e577b78ba8dae451e952230f1c988a140f0d63a797b8c28d96b7be26f6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_0.svg",
+    "size": 5427,
+    "sha256": "62ff912679733ff8ac5e18c1b75d40974955dbb66fd366619a7b49e1e2d9379c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.after.rust.svg",
+    "size": 5581,
+    "sha256": "b826de26eaa90be6182d89a7ea12eb05c72d85958c4071e344faa0aa057b07ce"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.before.rust.svg",
+    "size": 5583,
+    "sha256": "88f7c0c9ebe556f2e92567ab50549bccd0ed6bfdde72f3c417351518357582f8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.provenance.json",
+    "size": 1147,
+    "sha256": "d548aec1dbb30d1915b1ced1c78f51c795e87ba352ef36db32c3064f8796199d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.puml",
+    "size": 225,
+    "sha256": "af029656ff6a1284e31f75aaf71c0adcd903fc1dbd6d9e8045f540a2ffe604ea"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_1.svg",
+    "size": 5710,
+    "sha256": "7ce71694f82e530b47f82d6160f5f95468f9cd84e665b4d837f3f5d8d1fecfef"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.after.rust.svg",
+    "size": 5582,
+    "sha256": "264e7af7789a58760345d4b285ae4ebf92a4c4ef1c96b1ea6609be5fa82c5c8f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.before.rust.svg",
+    "size": 5582,
+    "sha256": "264e7af7789a58760345d4b285ae4ebf92a4c4ef1c96b1ea6609be5fa82c5c8f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.provenance.json",
+    "size": 1148,
+    "sha256": "4768b5b472bdcaa8d2ce6af31e32a5130e6f92b596e49f728a070a9872f3bbd5"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.puml",
+    "size": 242,
+    "sha256": "2cf40c2aa5ce0b62b05293a9c12c8e0e658617146c280c1c6e3e7d545ef3be15"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-legacy-raw-life-variations/checker_ef020_life_unmatched_2.svg",
+    "size": 5715,
+    "sha256": "91fe9fc69e7720c247f648e9876fa91893791108f4ac26b6439d7cdb3859d377"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.after.rust.svg",
+    "size": 4375,
+    "sha256": "9f80e825f2c7d59fd4587c6cc8c75b4a7f5fb1c1c1a4ee206e38d61685696182"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.before.rust.svg",
+    "size": 4375,
+    "sha256": "9f80e825f2c7d59fd4587c6cc8c75b4a7f5fb1c1c1a4ee206e38d61685696182"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.provenance.json",
+    "size": 1146,
+    "sha256": "db1ff37a879cb9d266f5451ec72241c1f49f7d7efee4617512a8f5d70e6104a7"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.puml",
+    "size": 137,
+    "sha256": "ac73fffb083394d9341ef53c5c2bd006a4b64809517607c720e2660c3930c81f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_0.svg",
+    "size": 4533,
+    "sha256": "de36d35230a6ecaf43453ef00e410420b58afdb399a12ef25a45049bb9ca1093"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.after.rust.svg",
+    "size": 3477,
+    "sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.before.rust.svg",
+    "size": 3477,
+    "sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.provenance.json",
+    "size": 1146,
+    "sha256": "c753d56c7b6dd77df71f5486f537c7cb39c492c910f568970d4ef1cebaf6b5cb"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.puml",
+    "size": 155,
+    "sha256": "96cbcde643f9f9c39c838447b771534a0da490ba5f09a19bac7963a48d1a7d83"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_block_1.svg",
+    "size": 3650,
+    "sha256": "cf4eb168cc5832d0ffd0cc28a47f472310080d73d7c7c3764bcb6ecc15ad7268"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.after.rust.svg",
+    "size": 4366,
+    "sha256": "c96caf365b3a8bbb3df746fc5c59ac37fcb01ee573631e130bb810fb1f924149"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.before.rust.svg",
+    "size": 4375,
+    "sha256": "b21eb8960a083bf895ccfd9720909d6b9df60d344349e6baed1e604eea1f87a6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.provenance.json",
+    "size": 1148,
+    "sha256": "beef6790bae83b09341dc34754dfc0cd965bedc38fd018c63a8d53884fa891f7"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.puml",
+    "size": 130,
+    "sha256": "5dbdd932f7776d4e1763a4ef32d091649d7e5c142ebee36d4294ee02cf8a2a34"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_0.svg",
+    "size": 4534,
+    "sha256": "441ac4c3c835a00d12217ffcda0151fc6aab10ea1748d9cc9cc8a22c82d3a883"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.after.rust.svg",
+    "size": 3473,
+    "sha256": "c7a1ca88491a6a31bc5510c22b2393b7e6131c2bd3680776ec2f8a12de86b5ae"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.before.rust.svg",
+    "size": 3477,
+    "sha256": "3fa81f660b234e6082910203829837a8d9aa1b53e59587a680e097c7857712af"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.provenance.json",
+    "size": 1146,
+    "sha256": "dc0c372031317f8461c49ca8258eeddf4cc95aca9973735d25099beca163594a"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.puml",
+    "size": 148,
+    "sha256": "d62003d3da9789ef92868694edf97bfa6964e7354ae1ac10f869ca994fbb2985"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_inline_1.svg",
+    "size": 3641,
+    "sha256": "4955c04c98f3884dd6510ad3f76df2859ae6b54ca1832fa99b8400a4bef8002b"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.after.rust.svg",
+    "size": 3601,
+    "sha256": "c8ce3c17440dac1e481d4fb837996b943a24f2cf0196598007b20b39a1974c93"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.before.rust.svg",
+    "size": 3601,
+    "sha256": "c8ce3c17440dac1e481d4fb837996b943a24f2cf0196598007b20b39a1974c93"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.provenance.json",
+    "size": 1149,
+    "sha256": "cae1b3cdccca3ab8be6a7e638598d0156db3367d5456ef60213e361a4cb41d56"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.puml",
+    "size": 84,
+    "sha256": "ba4ef8a15bdbf62e5686096fe125ceaabf7b962e06eb983b94453a1006a8903d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_0.svg",
+    "size": 3973,
+    "sha256": "ebeb17aaa9ecea724f6d84346f832eb22c98caac43945695b49733d423a75706"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.after.rust.svg",
+    "size": 2785,
+    "sha256": "e9f485268674ec7b873c10b0706898bac58231633e129e3be49b82f6c2890383"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.before.rust.svg",
+    "size": 2785,
+    "sha256": "e9f485268674ec7b873c10b0706898bac58231633e129e3be49b82f6c2890383"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.provenance.json",
+    "size": 1150,
+    "sha256": "46163869577cd80017f9370d40e9376e6308b55ff31e3d86da06911f4948a9fb"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.puml",
+    "size": 102,
+    "sha256": "223ff201b91ee082b0213bdbc6445c8e6ade925b357b630572b0f9aecf7c5b8b"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_natural_1.svg",
+    "size": 3188,
+    "sha256": "e252120f6915aa64456f9c4a288cfd570d4d6279b642f7c903a99a4400609dfb"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.after.rust.svg",
+    "size": 3972,
+    "sha256": "45e734cd17efa48761aecbd885e7897d3acc03b064f8089e7e0cd41d42a64d89"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.before.rust.svg",
+    "size": 3974,
+    "sha256": "b3c2d47675a2f3142361cfe0584dfaef39542f6fefb1fb2ef1dad303d5d53a26"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.provenance.json",
+    "size": 1190,
+    "sha256": "1419f0cce521924148ee9feaa385bfb8cd804775017666f3da4640d07227d40d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.puml",
+    "size": 104,
+    "sha256": "dc498ef992347c39bd3232ca2b66e77ce7a4fa7569b52778b6f8e38c1293e327"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_0.svg",
+    "size": 4475,
+    "sha256": "ae81dcd1a9701a944ff996f198c907c428aa21bb64e62fe03453b90f23b8681f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.after.rust.svg",
+    "size": 3161,
+    "sha256": "28cf802cec0c7d5c25635943a64f84d0ea8c530dec0c7650b41b23ba50159857"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.before.rust.svg",
+    "size": 3158,
+    "sha256": "2bf5ffa61cf900ef4c00eb8c8898cd2fa8885d46c7c13d7707575abf48dd49f0"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.provenance.json",
+    "size": 1191,
+    "sha256": "9608ecbe76ddcd12322eb74c2819d2b7c0e5003128a411b7042c606fc2b61003"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.puml",
+    "size": 122,
+    "sha256": "023ba5518975221d1e03cc91162c9614eed430d365abae70e6503cc3203e6a5d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-display-normalization/checker_ef020_display_raw_link_1.svg",
+    "size": 3686,
+    "sha256": "0e5f066abfa2881fd7f8e7f6da86138dd4a19205ab0f15bb8ee69f678555b42a"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.after.rust.svg",
+    "size": 3708,
+    "sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.before.rust.svg",
+    "size": 3572,
+    "sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.provenance.json",
+    "size": 1150,
+    "sha256": "def90144ff4193102bf622a638c94b114ea132f6a1a84ba74d4aeee3ea9726a6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.puml",
+    "size": 155,
+    "sha256": "df292b60bdad843d03af99382c582a7c583609a92afd714a74837831b8781915"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_0.svg",
+    "size": 3877,
+    "sha256": "f6724d4b1b8c3c1e29d051260885d021d8b5fd646360b0d5d9820a014f39c1f1"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.after.rust.svg",
+    "size": 2897,
+    "sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.before.rust.svg",
+    "size": 2756,
+    "sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.provenance.json",
+    "size": 1150,
+    "sha256": "3c4d1b325bd537843b49468bc4750099e9ab755ac1812c512aa356c680d6ec58"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.puml",
+    "size": 173,
+    "sha256": "2b436b24460ee1b089ad4c04df753bf70d6407f70554687e8a706d55fabb295d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_1.svg",
+    "size": 3082,
+    "sha256": "1aac123f77ac61782c9229eedfab22fe4d42ff4c65ce892524f11e48954378a8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.after.rust.svg",
+    "size": 3708,
+    "sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.before.rust.svg",
+    "size": 3572,
+    "sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.provenance.json",
+    "size": 1150,
+    "sha256": "6d37561ed85577c3ab00110a9aab3a82d9d89c18bc12c2d50a1f797404faceba"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.puml",
+    "size": 154,
+    "sha256": "fd61353d1c3cb15413f902c3bed42b3d2d8a11f2c0c5bcd8bfcfd474f4cd7989"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_2.svg",
+    "size": 3873,
+    "sha256": "7e587dff09ace4b1d57bafc64a01516e451879b22be709b78c44f828975f7720"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.after.rust.svg",
+    "size": 2897,
+    "sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.before.rust.svg",
+    "size": 2756,
+    "sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.provenance.json",
+    "size": 1149,
+    "sha256": "bec4251d7d94ecf3ebe7de495b7288aea90b179cd2716c7e367299b935eda72e"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.puml",
+    "size": 173,
+    "sha256": "791cd0df665e9da265dcdf77ad20c354f798bd5b110234d0a9b07ee36933c3df"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_3.svg",
+    "size": 3082,
+    "sha256": "05be3711b9f4eb90f97f4a9bbb31f4133d7a368114ff6c00a9760bf2c086a815"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.after.rust.svg",
+    "size": 3708,
+    "sha256": "23c1854c92e0841682bfe7fc1c3a87c5ea2a1cbfd3ce15f5a2ff4f4a498cdf65"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.before.rust.svg",
+    "size": 3572,
+    "sha256": "a7ea75e946722bb5e7edc3deefaeb13b027e0b6c7b1f4731b270f1db49ccaebc"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.provenance.json",
+    "size": 1150,
+    "sha256": "5fd394c584c9b7f3640f721a558950d7d13a12dff741cf8a3caf21a47b49d757"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.puml",
+    "size": 156,
+    "sha256": "74ef5c005b511826bd1926ad8a3c258391f463fccb177ccbaa3b4d611b14116e"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_4.svg",
+    "size": 3869,
+    "sha256": "7aee4c704d00b2e232923bbb995eda7380a458f54b30c7235ac8a594615ccf3a"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.after.rust.svg",
+    "size": 2897,
+    "sha256": "f43592dd26df212262ce8ff91c654d7b72cdc5d7bb0eed7c09e67f11de9cf590"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.before.rust.svg",
+    "size": 2756,
+    "sha256": "95b8c3041bd94e1040bf02e2a6c251edd3bb8e3f5791c8428ad10fa850e5e54c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.provenance.json",
+    "size": 1150,
+    "sha256": "9c74f1fe362df8d7fb6dff23ef24e0cc9db596005747c20b5bfe154394c0d8f8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.puml",
+    "size": 170,
+    "sha256": "5561272e8efc5965857b299963e24a7ce88892574d0bf1e724ab64d75a62b80d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_boundary_5.svg",
+    "size": 3078,
+    "sha256": "1a22b70855163347ac31916bae541941d8653f0d46a034970026e995b158be1b"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.after.rust.svg",
+    "size": 4121,
+    "sha256": "bb53da809f325663449fb3b7bb696fb1591f4c80deb35b671e7de0fa38630552"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.before.rust.svg",
+    "size": 3595,
+    "sha256": "fc7a4d0558ca94abd9e5a85c5987eef5eaf43c0448b11c91f7b3959fc391c8b6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.provenance.json",
+    "size": 1154,
+    "sha256": "d72fd71d40e246a4f257e5db8ced504617958d88cd44b9e0713eb2b5fd1c86ac"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.puml",
+    "size": 171,
+    "sha256": "7fe10f6e9e610764878f583c5f94b96431d742bfad40d6f633da89b4c5f720c5"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-shadow-value-materialization/checker_ef020_shadow_global_scope.svg",
+    "size": 4418,
+    "sha256": "058b005ad93941e80b2e19d4a77262ca89421bff84cf83c115bcfad93cd00ce0"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.after.rust.svg",
+    "size": 7000,
+    "sha256": "e2cdccb11a1b1104f136a2f3fd3f2f57c5d86f4956d1c87c14539ce29abefcb7"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.before.rust.svg",
+    "size": 7000,
+    "sha256": "939d582a49bb7dfe24c8bc228ab7cea29aa0de6ef9a3a097118abca4b35cc74b"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.provenance.json",
+    "size": 1389,
+    "sha256": "fbbed8501f0446c1775e61d613047f153061b4a9bc85868c4d6cedea54c7890b"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.puml",
+    "size": 143,
+    "sha256": "8880e7a9bb81beda17b67f23d65ec78dcbbc838e7e00ad718757dc096a22b3d9"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_0.svg",
+    "size": 7141,
+    "sha256": "2771e13300835af9f871983b046e3100c067e9fc35ff21c08a80f2692dcb9e1f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.after.rust.svg",
+    "size": 5492,
+    "sha256": "e5e03dc3e21e29042020fe2242cbf5b3e6c666bf55899d3aa005954d1a466af3"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.before.rust.svg",
+    "size": 5492,
+    "sha256": "297072582c362ff52fd85cc1bfc2e99a5558ae270b1f6557eb9ebbe10c3727e6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.provenance.json",
+    "size": 1389,
+    "sha256": "a237982010a824d4e12f6a5768f5c44e2b3fb5a94ce4ef2b50c63379e5d78a71"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.puml",
+    "size": 161,
+    "sha256": "04375eefcf83339e53d38bf39e9130a87683095241f842cd02c0c9cb827ba0e6"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_retained_theme_activation_1.svg",
+    "size": 5651,
+    "sha256": "11ac0887a4c1741382b126920cb1b8f62ac386471c13b6cc131ea905fa718486"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.after.rust.svg",
+    "size": 4361,
+    "sha256": "a70a2c3007ef97eac9fc514df420cf5cdc00525bb5d036efd2964871f386f108"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.before.rust.svg",
+    "size": 4223,
+    "sha256": "ca9e0f129fca4685d2753e92b0ac44f4f36074169e97f4d502a1837dd9e11edc"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.provenance.json",
+    "size": 1148,
+    "sha256": "b3669d37fe7a1e8d2bcb5512cd5dad9240716b0bedc27e81f734b51a1493b8e1"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.puml",
+    "size": 175,
+    "sha256": "8edc2eb0ec7dd0e75744641d7ffeab8cda03196b3cb0ecf25bbc9cc1f9913228"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_0.svg",
+    "size": 4541,
+    "sha256": "b91073550ea80ad2c60e9f1ff7489b86d1bb6b7d9ca4aaefa4b33dcdc4bb92b2"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.after.rust.svg",
+    "size": 3439,
+    "sha256": "fd5b2e4ab2cef9254290b1c1d63d171720e15f610de5df562e5430d329df7755"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.before.rust.svg",
+    "size": 3302,
+    "sha256": "f8de48d52c4db9eca960ba84048bf86ee2ef115a876aef35fe5e19dd6c931d3c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.provenance.json",
+    "size": 1148,
+    "sha256": "2381e726bef2a90c77b24dce7f47856345b6a3830195ac47b739904d15d5fbad"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.puml",
+    "size": 193,
+    "sha256": "7c65994116f7768d6cbe74dd65537087c4d48eab53e29bfb3fa70128a04dc52f"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_precision_1.svg",
+    "size": 3632,
+    "sha256": "f34ba9527ce07658c8514fa612f4e0774cd82dcedd0d5620b1f220be8d574893"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.after.rust.svg",
+    "size": 7156,
+    "sha256": "a903e934e0afb20d4b9a8018204c459f1d451c20f14e9a9120edf9ca6bca2a83"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.before.rust.svg",
+    "size": 7008,
+    "sha256": "4cc51994e0d6204ecc612469018f7fe4dbbc040abbd6be8091a931e06fec3c19"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.provenance.json",
+    "size": 1150,
+    "sha256": "21f02eae23dc293f5fb2d3341d0b8e94e16415b88f34338cc5e0dc006c5f5b0e"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.puml",
+    "size": 161,
+    "sha256": "f86414b2d29082a4ffab0901f005e3ab8acfc3382db41946073fc259d4f2e96d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_0.svg",
+    "size": 7317,
+    "sha256": "10c48509e1598c989bebac70aef4e60b42ebd38cbf169dfe38d89d83bc4f4483"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.after.rust.svg",
+    "size": 5649,
+    "sha256": "7e34bba76eed034e874ab311c28a6a6950c873cd49d4d7eae5604f15137036d5"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.before.rust.svg",
+    "size": 5517,
+    "sha256": "b74819c62c8949ddec33d4c69acfe42674991e506fc22bc7c7f38819d17c6a84"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.provenance.json",
+    "size": 1149,
+    "sha256": "f8d019f22024e070b1b5626f84adc813f062815cf956e4bc684740c53f207ad8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.puml",
+    "size": 179,
+    "sha256": "6df1e1a9de826ec7b991b73d6e7b01cc419a32f1ddcc6af327bdcaba98e827a7"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-note-textblock-dimensions/checker_ef020_text_theme_self_1.svg",
+    "size": 5825,
+    "sha256": "efc6db175e35e2ba1e0f57398f7a9416b96e1f2903ae07be8613b05631f5b511"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.after.rust.svg",
+    "size": 5068,
+    "sha256": "fd7b5424773cc05acdd8b0a101b54ff4bef14ddd28d23c1f7916f4f8457c1f95"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.before.rust.svg",
+    "size": 5068,
+    "sha256": "51b124d69f72e25d522e33c568d58d808c8cf98968139a1129837feb0cb89cfd"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.provenance.json",
+    "size": 1144,
+    "sha256": "31304bf12bb2f513e4d1480a22560249a9baf327788d3fb703ef1289bc7b0b51"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.puml",
+    "size": 216,
+    "sha256": "8f62dd2df487ff6bbc119c1d6a6881200d62c599e902b0ddaa1eb1a9236b99e0"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_0.svg",
+    "size": 5224,
+    "sha256": "32a04384451066435b9e4c271d12d661c14c6d564495631ff502e99f540c8e16"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.after.rust.svg",
+    "size": 4776,
+    "sha256": "a3a04d974cd53c8e6c10fbf73e10d59ae44aefb707f2df3bf74fbb8d19c27b53"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.before.rust.svg",
+    "size": 4684,
+    "sha256": "a2e0a1b41f4ea4e7caf920ae509e3becff89d3a97e68306868a0ccbb3a1af3ed"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.provenance.json",
+    "size": 1144,
+    "sha256": "f43ae685263218f0b4f57dd782c57cb1bb3688bd7ab14f048f41c5e7f90e5be9"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.puml",
+    "size": 220,
+    "sha256": "bfd1795b9a0da6f13a3f62dde440ccff012621b42f1c3bf1025ec2d3c9281080"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_1.svg",
+    "size": 4947,
+    "sha256": "894cce8dac63853deae55df83c8f2874648cf6d83c8817d4c06bcfb0928cc9b8"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.after.rust.svg",
+    "size": 4748,
+    "sha256": "9d31e30826017b51d50e8bdec14fc0c7afc9598cc915c73214f75db78c37d129"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.before.rust.svg",
+    "size": 4748,
+    "sha256": "851abcc228aefab41c11c34b9a8ed6526de7375b0c7b27ac11134ff80db8217d"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.provenance.json",
+    "size": 1144,
+    "sha256": "e7ceca7e6500b971ab5e36feb00e647406b432f8f0780c29e0b069e706fdb0d5"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.puml",
+    "size": 212,
+    "sha256": "19797a4be41b6cba5b6ed849c990c0b31273fb304fb1e077cdeee21033afa0b2"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_contact_2.svg",
+    "size": 4896,
+    "sha256": "b42ff087d26c7bca48f75e6f542a541be13b8b68731c620855e87adab5041eb5"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.after.rust.svg",
+    "size": 4403,
+    "sha256": "7720e4656ebfcf55288e1835d89301d57ec356986a074dfc37f795c0d3cb3127"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.after.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.before.rust.svg",
+    "size": 4403,
+    "sha256": "569acca800186f8669c2df0bae206824631d219c3649f935ac70aca47f5bb105"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.before.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.provenance.json",
+    "size": 1149,
+    "sha256": "8c1d6eaa3e68257b1700e7adf99b6c779d1d22f6aa4217f685eadc82a5ce9b6c"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.puml",
+    "size": 182,
+    "sha256": "ff67a6c858b1b54711d4cb08320bd05f0d18193f1c756ffeddeda64d6c9ac313"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.stderr",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "test-diagrams/perturbations/sequence-teoz-parallel-tile-ordinates/checker_ef020_teoz_create_order.svg",
+    "size": 4554,
+    "sha256": "325003517735fc359fe4c9f64b2c02e3030692f523ed5821998d8cc238dc5826"
+  }
+]

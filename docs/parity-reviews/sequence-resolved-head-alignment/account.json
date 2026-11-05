@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-resolved-head-alignment",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.graphic.ParticipantBox#drawHeadTailU",
+    "skin.rose.ComponentRoseActor#getPreferredHeight",
+    "skin.ActorStickMan#getPreferredHeight",
+    "sequencediagram.teoz.LivingSpace#drawHead"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::shadow_vertical_pad",
+    "crates/rustuml-render/src/sequence.rs::head_base_y"
+  ],
+  "invariant": "Head alignment subtracts each resolved head preferred height from the common head-band bottom; unequal component shadow must not shift the smaller unshadowed head above that baseline.",
+  "causal_divergence": "Actor preferred shadow is included in total row height and lifeline start but ordinary head positioning still subtracts only visible box heights. The new scoped actor-shadow controls expose the smaller participant five pixels above its Java position.",
+  "planned_change": "Share the resolved existing kind-specific head band used by maximum-height reservation with ordinary head placement. Preserve queue row alignment versus component preferred-size distinction; do not change unrelated paint or padding.",
+  "perturbation_axes": [
+    "actor-only versus participant-only/global shadow",
+    "creation direction and legacy versus Teoz"
+  ],
+  "before_revision": "c921945aac3bfaf7d61dd323498f0e4899f32182",
+  "account_date": "2026-11-04",
+  "evidence": "Preserved actor_scoped_forward/reverse source/reference pairs, all raw capture status0. No new Java executions."
+}

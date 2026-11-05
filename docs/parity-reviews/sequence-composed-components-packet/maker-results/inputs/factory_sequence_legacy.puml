@@ -1,0 +1,7 @@
+@startuml
+participant Elm
+participant Ash
+Elm o-->>o Ash: first
+Ash o-->>o Elm: second
+Elm o-->>o Ash: third
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant Vega
+actor Lyra
+queue Draco
+participant Corvus
+create Draco
+[-> Draco: edge
+@enduml

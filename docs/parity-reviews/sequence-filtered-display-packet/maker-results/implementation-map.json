@@ -1,0 +1,31 @@
+{
+  "mechanisms": [
+    {
+      "mechanism": "sequence-filtered-ordered-participant-display",
+      "account_commit": "ca2aae93f8056b9ff0a93e08cd6bafda7be2360a",
+      "implementation_commit": "7c05cfcf8cc65be31e2f69d68bf3ee432532f9a1"
+    },
+    {
+      "mechanism": "sequence-note-aggregate-paint-height",
+      "account_commit": "ca2aae93f8056b9ff0a93e08cd6bafda7be2360a",
+      "implementation_commit": "fc71fafc7f372be708ec077dba7d82748ba7667a"
+    },
+    {
+      "mechanism": "sequence-external-note-owner",
+      "account_commit": "ca2aae93f8056b9ff0a93e08cd6bafda7be2360a",
+      "implementation_commit": "aa5ac30e6660b2623a8ceb8fd1e72c3108c8458c"
+    },
+    {
+      "mechanism": "sequence-note-shape-terminator",
+      "account_commit": "5d4858fb269c68ec8e6ec7261f41c9c84a7a4618",
+      "implementation_commit": "61e6aeed6eaf686b3497fbc696aadc03a64e69a2"
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ascii_authorization": "Exactly three mechanical test constructor defaults in 7c05cfcf8; exact diff in ascii-authorized.diff. Actual CLI ASCII outputs retained separately."
+}

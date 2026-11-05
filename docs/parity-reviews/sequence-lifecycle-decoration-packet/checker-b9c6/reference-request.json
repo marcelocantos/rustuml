@@ -1,0 +1,1100 @@
+{
+  "schema_version": 1,
+  "purpose": "Independent b9c6 source-guided checker matrix; raw CLI policy; no local Java",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "cases": [
+    {
+      "name": "checker_b9c6_identity_chain_e0",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_chain_e0.puml",
+      "remote_relative_name": "checker_b9c6_identity_chain_e0.puml",
+      "source_sha256": "6d2ba0afac189e3a64d8677b83ca11eb98f447785a4ab7dc201633b376bc35bd",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "parallel ancestry length three",
+        "destroy with nested return ownership",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_exo_e0",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_exo_e0.puml",
+      "remote_relative_name": "checker_b9c6_identity_exo_e0.puml",
+      "source_sha256": "3cd01fd4d3c37f8c4d9824b096ca1fbaaf1b1670c3fefc2c40ba8330205a0b3e",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "external return ownership",
+        "RGBA return color",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_symbolic_e0",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_symbolic_e0.puml",
+      "remote_relative_name": "checker_b9c6_identity_symbolic_e0.puml",
+      "source_sha256": "3309b5a0ce2912abdb3fee47e3e4cfa591dab862a7631f1bb5fcd68b3bd4a074",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "activation close",
+        "symbolic valid return color",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_gray_e0",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_gray_e0.puml",
+      "remote_relative_name": "checker_b9c6_identity_gray_e0.puml",
+      "source_sha256": "ce156cb4d7d2966496368a2b5c8b544868057c2cc41146312a3b93174709f285",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "fallback repeated return",
+        "one and eight digit valid colors",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_other_e0",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_other_e0.puml",
+      "remote_relative_name": "checker_b9c6_identity_other_e0.puml",
+      "source_sha256": "34c87ccc0905ce78936bc35eff392161cb1b14a0791d59b3a0f1ba33aeef60c8",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "self event ignores other participant prohibition",
+        "command stack owns unrelated activation",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_reopen_e0",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_reopen_e0.puml",
+      "remote_relative_name": "checker_b9c6_identity_reopen_e0.puml",
+      "source_sha256": "f8ef2f25d7d3724bab9c050e8731ebf65b1e5154631244aef5ff6c1d36d48df9",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "negative same-message reactivation",
+        "note preserves owner",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_badcolor_e0",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_badcolor_e0.puml",
+      "remote_relative_name": "checker_b9c6_identity_badcolor_e0.puml",
+      "source_sha256": "62ed277b2e6b93229110c0b637cecf73541d64291429cbf104a51e9111d5c30f",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "negative unknown return color",
+        "internal fallback",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_chain_e1",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_chain_e1.puml",
+      "remote_relative_name": "checker_b9c6_identity_chain_e1.puml",
+      "source_sha256": "6762d26901f4babef9d6bacdeb43966091c22ea57c56400dadfe15973587ac8a",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "parallel ancestry length three",
+        "destroy with nested return ownership",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_exo_e1",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_exo_e1.puml",
+      "remote_relative_name": "checker_b9c6_identity_exo_e1.puml",
+      "source_sha256": "0c78713272fa350cc28db4115b9664baf76d433754cec77a89d1538e6d21b8a6",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "external return ownership",
+        "RGBA return color",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_symbolic_e1",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_symbolic_e1.puml",
+      "remote_relative_name": "checker_b9c6_identity_symbolic_e1.puml",
+      "source_sha256": "7dc206004d4d560ff1b09c24fc24ec21fba41ae359f90ba49f0c768523c5db5f",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "activation close",
+        "symbolic valid return color",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_gray_e1",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_gray_e1.puml",
+      "remote_relative_name": "checker_b9c6_identity_gray_e1.puml",
+      "source_sha256": "69e93a6d30f3929e8dc5bbc160330591b547561a7338b60cc74fed434280c48d",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "fallback repeated return",
+        "one and eight digit valid colors",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_other_e1",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_other_e1.puml",
+      "remote_relative_name": "checker_b9c6_identity_other_e1.puml",
+      "source_sha256": "eccb7a3c19a95e32c767c620c606986161a5c304fd7b2073cc027bd20a8124dd",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "self event ignores other participant prohibition",
+        "command stack owns unrelated activation",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_reopen_e1",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_reopen_e1.puml",
+      "remote_relative_name": "checker_b9c6_identity_reopen_e1.puml",
+      "source_sha256": "371a9b045223378f2a6ad8a8fa2ca6186ce1e62d225fd941ac01a7f7b3688129",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "negative same-message reactivation",
+        "note preserves owner",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_identity_badcolor_e1",
+      "mechanism": "sequence-command-event-identity",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_identity_badcolor_e1.puml",
+      "remote_relative_name": "checker_b9c6_identity_badcolor_e1.puml",
+      "source_sha256": "99fbae871ab4a5a856f0bf2ffc0c842fc3c4eb25a63f990063c21bde89e37c98",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "negative unknown return color",
+        "internal fallback",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_life_parallel_note",
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_life_parallel_note.puml",
+      "remote_relative_name": "checker_b9c6_life_parallel_note.puml",
+      "source_sha256": "836a5408eea3d1ff7821a5fc1a0c3e34da5fe76aef0a9a857a4f164fc9292b1b",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "parallel history crosses standalone note",
+        "deactivate callback",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_life_parallel_multiline",
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_life_parallel_multiline.puml",
+      "remote_relative_name": "checker_b9c6_life_parallel_multiline.puml",
+      "source_sha256": "d5058b46592519d817259effcb0c3186f55e46ae18371c476d55850589717d3c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "parallel contact maximum",
+        "self multiline and nested close",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_life_create_forward",
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_life_create_forward.puml",
+      "remote_relative_name": "checker_b9c6_life_create_forward.puml",
+      "source_sha256": "880c1eb7654bc3cb6c4c28ae582265283a4fb6e9b60fa1c228e5ed322af7d831",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "create arrow taller than head",
+        "destroy nested activation",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_life_create_reverse",
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_life_create_reverse.puml",
+      "remote_relative_name": "checker_b9c6_life_create_reverse.puml",
+      "source_sha256": "3134c2e9145646f3a01115226f0b9add84b61c5214c62770676e38bf4a6b2750",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "reverse creation direction",
+        "return before destroy",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_life_parallel_create",
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_life_parallel_create.puml",
+      "remote_relative_name": "checker_b9c6_life_parallel_create.puml",
+      "source_sha256": "e4d96f1f1fad12fb0098ee3a7503991dd8dc1c66ffa5d63e8f0c697638fddc04",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "CREATE in parallel suffix",
+        "creation and destruction attachment",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_life_standalone_destroy",
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_life_standalone_destroy.puml",
+      "remote_relative_name": "checker_b9c6_life_standalone_destroy.puml",
+      "source_sha256": "4a3bbd2d376bf6cb095717390c2ca5ec585eb8108c8ad2b3be700563a692579e",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "standalone destroy after group END",
+        "depth two",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e0_k0",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e0_k0.puml",
+      "remote_relative_name": "checker_b9c6_cross_e0_k0.puml",
+      "source_sha256": "6837fa2161ab07ff91773632e97a456619c87057eea06023c10b996d03ad3f4c",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=x--x",
+        "depth two with lifecycle=''",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e0_k1",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e0_k1.puml",
+      "remote_relative_name": "checker_b9c6_cross_e0_k1.puml",
+      "source_sha256": "66e97e26f520fe4ec59bf1f82f5846655b2815c4ffc3e47cb22ce77dda8a58a6",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=<--x",
+        "depth two with lifecycle=' ++'",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e0_k2",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e0_k2.puml",
+      "remote_relative_name": "checker_b9c6_cross_e0_k2.puml",
+      "source_sha256": "e00b9a383e9bcbc304f80ae99c4a5c392b4efffd208f532bd0c58c2e5b2a0242",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=x-->",
+        "depth two with lifecycle=' --'",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e0_k3",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e0_k3.puml",
+      "remote_relative_name": "checker_b9c6_cross_e0_k3.puml",
+      "source_sha256": "5f8416ef06a3077d921b94510bd5c25c0d51c31c97e858a75a9714bc671c4712",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=--x",
+        "depth two with lifecycle=' --'",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e1_k0",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e1_k0.puml",
+      "remote_relative_name": "checker_b9c6_cross_e1_k0.puml",
+      "source_sha256": "19bb368a9d24533a16b17d72641ecc7db8bbcfc0c12bd2fbaddb534da7390ce8",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=x--x",
+        "depth two with lifecycle=''",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e1_k1",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e1_k1.puml",
+      "remote_relative_name": "checker_b9c6_cross_e1_k1.puml",
+      "source_sha256": "47d0d803c04908961f5546470b2dab382cd4fef5879e8da62ef3e19fabd95d10",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=<--x",
+        "depth two with lifecycle=' ++'",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e1_k2",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e1_k2.puml",
+      "remote_relative_name": "checker_b9c6_cross_e1_k2.puml",
+      "source_sha256": "c6f097dc7da876f158477b70384cac6aad1c91ca3d27b6edb07595834a81811f",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=x-->",
+        "depth two with lifecycle=' --'",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_cross_e1_k3",
+      "mechanism": "sequence-self-cross-decoration",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_cross_e1_k3.puml",
+      "remote_relative_name": "checker_b9c6_cross_e1_k3.puml",
+      "source_sha256": "21bdf4538ff3e24611ca8e0a0daae6da94b5e64d3b6187a347f087b2464ff615",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "cross dressing=--x",
+        "depth two with lifecycle=' --'",
+        "engine=1"
+      ]
+    },
+    {
+      "name": "checker_b9c6_destroy_k0",
+      "mechanism": "sequence-legacy-destroy-component",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_destroy_k0.puml",
+      "remote_relative_name": "checker_b9c6_destroy_k0.puml",
+      "source_sha256": "e3a935719e9c2b522c881278d6d9863b5168c939cef6bbe115235364494aa2e6",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_destroy_k1",
+      "mechanism": "sequence-legacy-destroy-component",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_destroy_k1.puml",
+      "remote_relative_name": "checker_b9c6_destroy_k1.puml",
+      "source_sha256": "ad051c5d362d35e32134feef30e1de2deae16f98b0a3155b009da0832aaa45c4",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_destroy_k2",
+      "mechanism": "sequence-legacy-destroy-component",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_destroy_k2.puml",
+      "remote_relative_name": "checker_b9c6_destroy_k2.puml",
+      "source_sha256": "613ba34418bf46c4ff817973f90b8114e6765fe5c96e31992116ebb4befb74f3",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_destroy_k3",
+      "mechanism": "sequence-legacy-destroy-component",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_destroy_k3.puml",
+      "remote_relative_name": "checker_b9c6_destroy_k3.puml",
+      "source_sha256": "0d1cd14db61ee90ebd87dbda4ae3186f2f00827517ee1b6b48c42326b33b44a7",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "ownership self/note/group",
+        "activation depth or CREATE ordering",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_envelope_k0",
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_envelope_k0.puml",
+      "remote_relative_name": "checker_b9c6_envelope_k0.puml",
+      "source_sha256": "5534746ce7fcafefda16f4ef774660d71ecf674f6e463a3a09b223f3295c7e6e",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "direction and activation transition",
+        "preferred arrow versus actual width / note side",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_envelope_k1",
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_envelope_k1.puml",
+      "remote_relative_name": "checker_b9c6_envelope_k1.puml",
+      "source_sha256": "6026bac2157a93e017f704db92c7cb3510137a2898f489d161543e91e7b320ce",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "direction and activation transition",
+        "preferred arrow versus actual width / note side",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_envelope_k2",
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_envelope_k2.puml",
+      "remote_relative_name": "checker_b9c6_envelope_k2.puml",
+      "source_sha256": "6721d0ee224588dc197d9cfc852167cc5cd2fded23d36b1b9b20b08706349579",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "direction and activation transition",
+        "preferred arrow versus actual width / note side",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_envelope_k3",
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_envelope_k3.puml",
+      "remote_relative_name": "checker_b9c6_envelope_k3.puml",
+      "source_sha256": "42b0218a32d448b2b38d27a7d2c1d3f03050bda8e2c9d78851d223876e7e9c32",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "direction and activation transition",
+        "preferred arrow versus actual width / note side",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k0",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k0.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k0.puml",
+      "source_sha256": "9a3cbb587337ee24f5bd04262e36518513e93b2db9656b93eabd9fa46928ef29",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k1",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k1.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k1.puml",
+      "source_sha256": "df1ff506fa2256f06ce3025daa80a368402cb1c0623cf2b1c9410e4b79669118",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k2",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k2.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k2.puml",
+      "source_sha256": "131b2547a8d6dbf7ab08f7bf1e6aee9aa93b3833ae3ff424e389dbb8dd0e7d39",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k3",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k3.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k3.puml",
+      "source_sha256": "57379117ac907a511e6fe24626595d4a3d08b40285733642b8daeedad00eb3f2",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k4",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k4.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k4.puml",
+      "source_sha256": "b29036bbd5da4e78edb0b4227c9f8ba07bce37333345a64961e37908921ddea8",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ]
+    },
+    {
+      "name": "checker_b9c6_alignment_k5",
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/reference-inputs/checker_b9c6_alignment_k5.puml",
+      "remote_relative_name": "checker_b9c6_alignment_k5.puml",
+      "source_sha256": "b1567484d3e4fd32432eedaac9ac97b34d034ae0a186ad476a526cd7062e2754",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_CWD",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_CWD",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "stdin": "exact source bytes",
+      "resources": [],
+      "axes": [
+        "alignment via style/theme/skinparam",
+        "shadow and activation/direction",
+        "engine=0"
+      ]
+    }
+  ]
+}

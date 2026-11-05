@@ -1,0 +1,10 @@
+@startuml
+participant Cedar
+actor Roe
+create Roe
+create Roe
+Cedar -> Roe: one
+Cedar -> Roe: ordinary
+create Roe
+Cedar -> Roe: two
+@enduml

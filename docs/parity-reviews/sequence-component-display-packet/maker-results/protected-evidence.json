@@ -1,0 +1,15 @@
+{
+  "import_commit": "4dd330b62f6497365de55856853b2bdafa145fbb",
+  "local_import": "16b28fc6de23d3920150efe50cfad7d065985c1a",
+  "prior_evidence_paths": 8221,
+  "imported_paths": 103,
+  "prior_and_imported_byte_unchanged": true,
+  "modified_existing_files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ascii": "No ASCII file changes in this packet; existing constructor authorizations not expanded.",
+  "comparator_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9"
+}

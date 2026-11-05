@@ -1,0 +1,135 @@
+{
+  "request_sha256": "9ee2340e082cd7abbb1d2c8e3c31079cd06eebf73c1d41c8d33d9c24df1fe082",
+  "gzip_sha256": "a0c561ea1c9790543bfe1d8d2e77c01e54d224f5f48e920980ec3db263427147",
+  "validated": true,
+  "cases": [
+    {
+      "name": "queue_multiline_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_multiline_legacy.puml",
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "queue_multiline",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "valid": true,
+      "disagreement": false,
+      "exit": 0,
+      "bytes": 4693,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "e603683ae133bd09aa942f4aef2bf4d8889ae42730c7c5c06a05e100cde426e3",
+      "stdout_sha256": "1005f43a19ff190eac8af5ba6a3a417bcbde5f36b19bcfc8054aba4d309b89af",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "body_unclosed_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_unclosed_legacy.puml",
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "body_unclosed",
+        "legacy"
+      ],
+      "intended_valid": false,
+      "valid": false,
+      "disagreement": false,
+      "exit": 200,
+      "bytes": 15902,
+      "diagram_type": null,
+      "error_markers": [
+        "Syntax Error",
+        "[From string",
+        "Error"
+      ],
+      "xml_error": null,
+      "source_sha256": "6e5d065a7ed15ecc6ede5b07543bc99da9dda9d1d3bbdadab56cb49111d21b5b",
+      "stdout_sha256": "85edd4770e341475f668a3c14737eef78823bfa372f3305f73a59c786a4d31ee",
+      "stderr_sha256": "4a76805d0d6bb20b007b57a87061087ee0e86035af1ccc7e9a12f7ef484c927a"
+    },
+    {
+      "name": "create_duplicate_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_duplicate_legacy.puml",
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "create_duplicate",
+        "legacy"
+      ],
+      "intended_valid": false,
+      "valid": true,
+      "disagreement": true,
+      "exit": 0,
+      "bytes": 3897,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "2be32158dd5af11e82a04f1fbd96e261dda04de68f02e1a16b4ea9eae58df8bf",
+      "stdout_sha256": "646aa1228f767162b44ad16104e02e89b8ddda481a3b584c72e0bd783d0d1e6d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "queue_multiline_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/queue_multiline_teoz.puml",
+      "claim": "sequence-queue-preferred-component",
+      "axes": [
+        "queue_multiline",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "valid": true,
+      "disagreement": false,
+      "exit": 0,
+      "bytes": 3871,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "720f85ffc778f72d582c6b76c4912d82033edceb42a761d53c40470e10be3fce",
+      "stdout_sha256": "20514a9f229b5f7ba42a299c400f82c36b69d8747b1bd9d46093d4482030a741",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "body_unclosed_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/body_unclosed_teoz.puml",
+      "claim": "sequence-note-body-composition",
+      "axes": [
+        "body_unclosed",
+        "teoz"
+      ],
+      "intended_valid": false,
+      "valid": false,
+      "disagreement": false,
+      "exit": 200,
+      "bytes": 16085,
+      "diagram_type": null,
+      "error_markers": [
+        "Syntax Error",
+        "[From string",
+        "Error"
+      ],
+      "xml_error": null,
+      "source_sha256": "ca91d72f59e986037607e01a15596d188b6ea89c54b20ef36c8dc76ad6bd15b9",
+      "stdout_sha256": "d5311d7d499385c4d2dc65591453d5f42aed323255e90e39fabfa574054cc51f",
+      "stderr_sha256": "1d7a04c314053625e8032b83c30cdfad8bc1b42ae26faf47334543fa1f97ba88"
+    },
+    {
+      "name": "create_duplicate_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_duplicate_teoz.puml",
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "create_duplicate",
+        "teoz"
+      ],
+      "intended_valid": false,
+      "valid": true,
+      "disagreement": true,
+      "exit": 0,
+      "bytes": 3072,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "77eab9005525f91936c2e1445c6e6706d78c434314460859f8c534d2f157ddfe",
+      "stdout_sha256": "d859848668f9fe701cd6cb39a7f34d935073574cb7d15177636ac0b81251b41b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

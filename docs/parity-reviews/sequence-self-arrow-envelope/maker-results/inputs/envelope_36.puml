@@ -1,0 +1,8 @@
+@startuml
+participant L
+create S
+L -> S ++ : construct
+S -> S ++ : nested
+S -> S : Wide WWWWWWWWWW
+return done
+@enduml

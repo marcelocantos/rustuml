@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+skinparam padding 3
+box "A wider component boundary" #lightyellow
+participant Kite as K
+end box
+participant Nuthatch as N
+K -> N : cross boundary
+hide footbox
+@enduml

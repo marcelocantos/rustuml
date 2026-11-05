@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Vega
+actor Lyra
+queue Draco
+participant Corvus
+Vega -> Lyra: call
+activate Lyra
+create Vega
+return back
+@enduml

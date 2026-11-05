@@ -1,0 +1,11 @@
+@startuml
+participant S
+participant D
+participant C
+C -[#purple]> S ++ : entry
+S -[#purple]> S ++ : recursion
+S -[#purple]> D ++ : dispatch
+return result of delegation
+return local result
+return complete
+@enduml

@@ -1,0 +1,99 @@
+{
+  "runs": [
+    {
+      "candidate": "candidate1",
+      "revision": "5dccddca0c94fa2d436afd4a8c6ff0f09f028170",
+      "tier": "no_oracle_failure_names.txt",
+      "newly_failing": [
+        "sequence/seq_hnote_left_of_A_clightblue",
+        "sequence/seq_hnote_left_of_A_cred",
+        "sequence/seq_hnote_over_A_B_clightblue",
+        "sequence/seq_hnote_over_A_B_cred",
+        "sequence/seq_hnote_over_A_clightblue",
+        "sequence/seq_hnote_over_A_cred",
+        "sequence/seq_hnote_over_B_clightblue",
+        "sequence/seq_hnote_over_B_cred",
+        "sequence/seq_hnote_right_of_B_clightblue",
+        "sequence/seq_hnote_right_of_B_cred",
+        "sequence/seq_note_color_EEFFEE",
+        "sequence/seq_note_color_FFEEAA",
+        "sequence/seq_note_color_blue",
+        "sequence/seq_note_color_green",
+        "sequence/seq_note_color_lightblue",
+        "sequence/seq_note_color_pink",
+        "sequence/seq_note_color_red",
+        "sequence/seq_note_color_yellow",
+        "sequence/seq_note_colored",
+        "sequence/seq_rnote_left_of_A_clightblue",
+        "sequence/seq_rnote_left_of_A_cred",
+        "sequence/seq_rnote_over_A_B_clightblue",
+        "sequence/seq_rnote_over_A_B_cred",
+        "sequence/seq_rnote_over_A_clightblue",
+        "sequence/seq_rnote_over_A_cred",
+        "sequence/seq_rnote_over_B_clightblue",
+        "sequence/seq_rnote_over_B_cred",
+        "sequence/seq_rnote_right_of_B_clightblue",
+        "sequence/seq_rnote_right_of_B_cred"
+      ],
+      "sha256": "d32cd7ee617bd75c9030220c5ed9f66e92f5d5cb52834a73c57adc8b9304581d"
+    },
+    {
+      "candidate": "candidate2",
+      "revision": "70bc20cf1efe456fa5dd83e3a726c2796717ce9b",
+      "tier": "no_oracle_failure_names.txt",
+      "newly_failing": [],
+      "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910"
+    },
+    {
+      "candidate": "candidate1",
+      "revision": "5dccddca0c94fa2d436afd4a8c6ff0f09f028170",
+      "tier": "golden_failure_names.txt",
+      "newly_failing": [
+        "sequence/seq_hnote_left_of_A_clightblue",
+        "sequence/seq_hnote_left_of_A_cred",
+        "sequence/seq_hnote_over_A_B_clightblue",
+        "sequence/seq_hnote_over_A_B_cred",
+        "sequence/seq_hnote_over_A_clightblue",
+        "sequence/seq_hnote_over_A_cred",
+        "sequence/seq_hnote_over_B_clightblue",
+        "sequence/seq_hnote_over_B_cred",
+        "sequence/seq_hnote_right_of_B_clightblue",
+        "sequence/seq_hnote_right_of_B_cred",
+        "sequence/seq_note_color_EEFFEE",
+        "sequence/seq_note_color_FFEEAA",
+        "sequence/seq_note_color_blue",
+        "sequence/seq_note_color_green",
+        "sequence/seq_note_color_lightblue",
+        "sequence/seq_note_color_pink",
+        "sequence/seq_note_color_red",
+        "sequence/seq_note_color_yellow",
+        "sequence/seq_note_colored",
+        "sequence/seq_rnote_left_of_A_clightblue",
+        "sequence/seq_rnote_left_of_A_cred",
+        "sequence/seq_rnote_over_A_B_clightblue",
+        "sequence/seq_rnote_over_A_B_cred",
+        "sequence/seq_rnote_over_A_clightblue",
+        "sequence/seq_rnote_over_A_cred",
+        "sequence/seq_rnote_over_B_clightblue",
+        "sequence/seq_rnote_over_B_cred",
+        "sequence/seq_rnote_right_of_B_clightblue",
+        "sequence/seq_rnote_right_of_B_cred"
+      ],
+      "sha256": "258ac6244f80e94892f9eb260f0a41864628d1e46cdf4226634546eea0722f97"
+    },
+    {
+      "candidate": "candidate2",
+      "revision": "70bc20cf1efe456fa5dd83e3a726c2796717ce9b",
+      "tier": "golden_failure_names.txt",
+      "newly_failing": [],
+      "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+    }
+  ],
+  "broad_execution_count": 3,
+  "reasons": [
+    "5dccddca first broad run exposed29 colored-note losses, both tiers; source-account2a0441642 and production70bc20cf1 correct composite whitespace expansion.",
+    "70bc20cf1 rerun restores prior main counts; subsequent source audit finds full-command signature context leak. Four supplementary references prove2 intermediate lost passes, preserved in candidate2-signature4.",
+    "b4849a500 final broad run after full-command context correction, accountd4fc86b24."
+  ],
+  "note": "Every intermediate failure retained. Final stable code was gated once; repeats were justified by actual production changes."
+}

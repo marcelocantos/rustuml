@@ -1,0 +1,703 @@
+{
+  "kind": "Maker evidence only; new independent checker required",
+  "baseline": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "implementation": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "before": {
+    "entries": 2169,
+    "matches": 1490,
+    "valid_failures": 610,
+    "invalid": 69,
+    "invalid_cli_exits": {
+      "0": 24,
+      "1": 45
+    },
+    "valid_cli_errors": [],
+    "cli_panics": [],
+    "render_panics": [],
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 610,
+        "0": 1490,
+        "2": 69
+      },
+      "product_library": {
+        "1": 610,
+        "0": 1490,
+        "2": 67,
+        "101": 2
+      },
+      "assisted_library": {
+        "1": 652,
+        "0": 1448,
+        "2": 67,
+        "101": 2
+      }
+    },
+    "diagnostic_panics": {
+      "product_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+        "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+      ],
+      "assisted_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+        "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+      ]
+    },
+    "cli_equals_library": 2102
+  },
+  "after": {
+    "entries": 2169,
+    "matches": 1514,
+    "valid_failures": 586,
+    "invalid": 69,
+    "invalid_cli_exits": {
+      "0": 20,
+      "1": 49
+    },
+    "valid_cli_errors": [],
+    "cli_panics": [],
+    "render_panics": [],
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 586,
+        "0": 1514,
+        "2": 69
+      },
+      "product_library": {
+        "1": 586,
+        "0": 1514,
+        "2": 67,
+        "101": 2
+      },
+      "assisted_library": {
+        "1": 628,
+        "0": 1472,
+        "2": 67,
+        "101": 2
+      }
+    },
+    "diagnostic_panics": {
+      "product_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+        "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+      ],
+      "assisted_library": [
+        "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+        "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+      ]
+    },
+    "cli_equals_library": 2102
+  },
+  "cohorts": {
+    "preserved2083": {
+      "before": {
+        "entries": 2083,
+        "matches": 1448,
+        "valid_failures": 576,
+        "invalid": 59,
+        "invalid_cli_exits": {
+          "0": 16,
+          "1": 43
+        },
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 576,
+            "0": 1448,
+            "2": 59
+          },
+          "product_library": {
+            "1": 576,
+            "0": 1448,
+            "2": 57,
+            "101": 2
+          },
+          "assisted_library": {
+            "1": 618,
+            "0": 1406,
+            "2": 57,
+            "101": 2
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+          ],
+          "assisted_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+          ]
+        },
+        "cli_equals_library": 2026
+      },
+      "after": {
+        "entries": 2083,
+        "matches": 1448,
+        "valid_failures": 576,
+        "invalid": 59,
+        "invalid_cli_exits": {
+          "0": 16,
+          "1": 43
+        },
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 576,
+            "0": 1448,
+            "2": 59
+          },
+          "product_library": {
+            "1": 576,
+            "0": 1448,
+            "2": 57,
+            "101": 2
+          },
+          "assisted_library": {
+            "1": 618,
+            "0": 1406,
+            "2": 57,
+            "101": 2
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+          ],
+          "assisted_library": [
+            "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml"
+          ]
+        },
+        "cli_equals_library": 2026
+      }
+    },
+    "checker64": {
+      "before": {
+        "entries": 64,
+        "matches": 42,
+        "valid_failures": 16,
+        "invalid": 6,
+        "invalid_cli_exits": {
+          "0": 4,
+          "1": 2
+        },
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "2": 6,
+            "0": 42,
+            "1": 16
+          },
+          "product_library": {
+            "2": 6,
+            "0": 42,
+            "1": 16
+          },
+          "assisted_library": {
+            "2": 6,
+            "0": 42,
+            "1": 16
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "cli_equals_library": 58
+      },
+      "after": {
+        "entries": 64,
+        "matches": 50,
+        "valid_failures": 8,
+        "invalid": 6,
+        "invalid_cli_exits": {
+          "0": 4,
+          "1": 2
+        },
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "2": 6,
+            "0": 50,
+            "1": 8
+          },
+          "product_library": {
+            "2": 6,
+            "0": 50,
+            "1": 8
+          },
+          "assisted_library": {
+            "2": 6,
+            "0": 50,
+            "1": 8
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "cli_equals_library": 58
+      }
+    },
+    "maker20": {
+      "before": {
+        "entries": 20,
+        "matches": 0,
+        "valid_failures": 16,
+        "invalid": 4,
+        "invalid_cli_exits": {
+          "0": 4
+        },
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 16,
+            "2": 4
+          },
+          "product_library": {
+            "1": 16,
+            "2": 4
+          },
+          "assisted_library": {
+            "1": 16,
+            "2": 4
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "cli_equals_library": 16
+      },
+      "after": {
+        "entries": 20,
+        "matches": 16,
+        "valid_failures": 0,
+        "invalid": 4,
+        "invalid_cli_exits": {
+          "1": 4
+        },
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 16,
+            "2": 4
+          },
+          "product_library": {
+            "0": 16,
+            "2": 4
+          },
+          "assisted_library": {
+            "0": 16,
+            "2": 4
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "cli_equals_library": 16
+      }
+    },
+    "handoff2": {
+      "before": {
+        "entries": 2,
+        "matches": 0,
+        "valid_failures": 2,
+        "invalid": 0,
+        "invalid_cli_exits": {},
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 2
+          },
+          "product_library": {
+            "1": 2
+          },
+          "assisted_library": {
+            "1": 2
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "cli_equals_library": 2
+      },
+      "after": {
+        "entries": 2,
+        "matches": 0,
+        "valid_failures": 2,
+        "invalid": 0,
+        "invalid_cli_exits": {},
+        "valid_cli_errors": [],
+        "cli_panics": [],
+        "render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 2
+          },
+          "product_library": {
+            "1": 2
+          },
+          "assisted_library": {
+            "1": 2
+          }
+        },
+        "diagnostic_panics": {
+          "product_library": [],
+          "assisted_library": []
+        },
+        "cli_equals_library": 2
+      }
+    }
+  },
+  "gains": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_legacy.svg",
+      "source_sha256": "d2336f957fd0d0675ff1ce0dbd28b970fd5f285e48c06dfe65dded5782b6293a",
+      "golden_sha256": "53e5c0b6e1674d6433dca07663293dac7f59a22043ebd9860adf05be79d9e6a5",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "d8ef916e4a02c87da0d7dbde67053e0837a7cb1ea6e1414e3cfb78a154ed661a",
+      "after_svg_sha256": "e2dda4056fb510317b9e0bcd4a704465f0ecc32782c76acecf6610547460e457"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_teoz.svg",
+      "source_sha256": "142d5edd8cfbbdf60a4c586c1b9b9754abfa4ad3f67556a721d093a88560edcd",
+      "golden_sha256": "86ceed21c2ce55b7464956459a9fd5ec43649e1cb1ce923d22327f0864144889",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "8a5cab1fff29da2ba280a3233ae116c3bb3ff3f7b258033daae8ce0367150c51",
+      "after_svg_sha256": "fb5b3d20fd505b271543492e680ffcb45fec2add02c46357d4365c22829f5933"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.svg",
+      "source_sha256": "c13bdd53d674e984ed96c0414557117625ad64fb977147bffc9e601e0132858d",
+      "golden_sha256": "65bdc7eea44009d7d34c13406cd061b97ebcbddd3d66c985742db5fb0a42c00e",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "581446ec6d370c2ae8df2d7bddf34ab40bc583f18e956c58c61848f7f9fa15fd",
+      "after_svg_sha256": "5797131b267aa9498144abf5afde672f3fed68b20ca0e240a210b8c4ae12c786"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.svg",
+      "source_sha256": "e6ad760a897f809cbfbb21f6875835e264a2501c3b067ef8b99e385f9b1b215d",
+      "golden_sha256": "e943ac67deeef061fa1ddb6d21d9419d89956d46db75154580b532dcc028472c",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "c0ce9927bf2e511c602a889db7b3588b273c30630dd1f9b8d9db8caf653e6cba",
+      "after_svg_sha256": "0121a0dde0c3c20c152449b64e434dcf6ae9550ec334ee84e5adf0e416a09783"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_legacy.svg",
+      "source_sha256": "979b0ca1250fc87aeef5455b67379f67ca60f3724b7c017db29c5140ab1596c3",
+      "golden_sha256": "0f580b46ba7b11c3b2eb493a46117a5f3f4e02de2d078917713258afb1c2aa85",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "b70828468e8c31aba4838195a5153c53e02b397c74e2c3a651ae4ba5c796a15b",
+      "after_svg_sha256": "2f29f74d0400b3f9a54e7b940a338cae7c03c3be0334cae9679f6cc1957cd13e"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_teoz.svg",
+      "source_sha256": "6b2ce0d34ec166622ad90f1e6e94d42d4986c04e1cd51eb57f8df61791a7e6ed",
+      "golden_sha256": "4630fd2f9c3109178f6c1f43084f0c6e1528bb3c8aac3b132b31b6d16f99322e",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "3b92096a804ce774ec7f17cac153ced9ebbf7f1c79b2403eb057ad1b4d4c08d0",
+      "after_svg_sha256": "0ea19d2c91167debd15169358485044a16b476e74d8364d16ef1feb6ec754dfa"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_legacy.svg",
+      "source_sha256": "16730cd2ad7fd08242e9930800661ef8d123bbedeeba46d115a16b21c42b0c06",
+      "golden_sha256": "fc313731ae2d73cf024cb4101add0106bf6153edd93609b67f034adea85c7b45",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "4036e860aded10cac4c1e5dfa785b546ee373ef6626ab2c0342875e3396d2385",
+      "after_svg_sha256": "8c081f6a2d2e159aa3a48abda1866b0988e8e1f75065021db6245fa39e6163d5"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_teoz.svg",
+      "source_sha256": "fbb59e58f822516d13d2cf80a7e7b6a5cdbf509d5150277ef1f6fa4b305bae12",
+      "golden_sha256": "b8d7538cbc44cee2d4937c6a9f02a9a882924d995b41995d086e883a2aa613f5",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "3c443f1fffc6f922729ede41631ee6af7536ec999d0790031a4417511873a8a3",
+      "after_svg_sha256": "2b1a069897d3bc3a7b68190b14276431cd23f4fb572c44a7aaa831aea60ab69f"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_same_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_same_legacy.svg",
+      "source_sha256": "dd9baf46d2850ff684865002c512441fb15c06c287bdf1295fd7d109e1ac931c",
+      "golden_sha256": "5ef970d70f29c64d0bac1bb5d09ea0c75fb26dfffae962df3125e6642d9e12b0",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "451ee75c8db5992fd0506a5ffb560036532bac393e419efcbd137007254820f3",
+      "after_svg_sha256": "db67bcde67231c363da53cdadfb9bf856657229f25035446dcb3e5993c6ab687"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_same_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_same_teoz.svg",
+      "source_sha256": "df15f41a50bf35b09c51afa41f455c79be4fe4db0e9f9f0fc6bd95559991ca7f",
+      "golden_sha256": "8b7c34495e8a55130b3e65fcae08a84ff09000254d4ba33dff0c02e62051a2df",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "443c9c084ed6dd9411a832cbbfd0b43e55fb95235cc13c13f08b8a7aff64ffee",
+      "after_svg_sha256": "51bbd3c318ef9e4dac2ccda40fe8696aa3a63f91f9aaeb7e378f60bf6e41f503"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_different_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_different_legacy.svg",
+      "source_sha256": "01a923c1d119bacf6a720a2b932eee5a37068fa6f1c1d5cd8b2bbe3ee768cbb6",
+      "golden_sha256": "e34b3d527aad430fbccf2619e06861c20522a6bffcfca184b85ea1f985a67253",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "80fbb0c3f9f963ca424272b050c61ef62fdb1fde8a8c8cf098fbaf46e37785a0",
+      "after_svg_sha256": "27947bf1d0a53a75df9a113826ef98c6f6ffef911d5ecb2422718525290433c4"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_different_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_different_teoz.svg",
+      "source_sha256": "53a6c8c3abb8dd96a1d7ddd090971c49279865814f97703d40cc94bfee30aab2",
+      "golden_sha256": "3afa3eecf66d015d412b5694cf80551b631daf06538e24cb5ab5a5a906a7348c",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "46f4b871b8739b025f47e123bf1723c1b4878ae8dc82073c4dd90c481fa460b1",
+      "after_svg_sha256": "5dfe3576785cc147bc820eb54bb2d32183e4ddfdfce0461833bb154856b63505"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_first_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_first_legacy.svg",
+      "source_sha256": "59edad891daec6e7a85f5e77e3d3c6ab8b970ff12af00a7e05fe9ca5b811addc",
+      "golden_sha256": "5a1c068504be44b1a779f47a9721541aae07d8a55ef759d74a3a00d86e09bd0e",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "1252d6e53268c368d3edbee5c288a011dc68842f9c75b7e01cb470c7db6aa9b8",
+      "after_svg_sha256": "93334032fda550dfadd61465a9347d5bb9a9dd2a0c2f833dec67075ba6dd8e31"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_first_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_first_teoz.svg",
+      "source_sha256": "529087c94a96ceff134f9a8f4d4dc19e25f0e75c33e38ad1246da60814208e32",
+      "golden_sha256": "8b003bebaacdb49ed393cd0096b71d9bb662d9c92ff78745849c4c6ac70b9501",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "09a4d7c8b0d6fb1245ce2376cfd2642f3f16adb2d59b469ef274c7209aeb32b5",
+      "after_svg_sha256": "f1bb3701de066b5e5e462b05f8ac93e68d4c6114d90dd1b2f0e2385ba4246b69"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_created_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_created_legacy.svg",
+      "source_sha256": "25aaf6bbdc37a7f2db31bf2902c84f57ac7fc0b74abe9a59ab7785ce8794306a",
+      "golden_sha256": "7940da20bae022307e09e99622a40878c33031a4d5c6b22ebed312eb7c9fb4e5",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "a9628d538cf852cb9d4103fc73c17cc73a90aa4ad8060770f5dd962dcf6227be",
+      "after_svg_sha256": "7c00ca2de052fa027741eed4d0b3c97d33aa3eb8439b716e301e73e1c472f4c6"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_created_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/queue_created_teoz.svg",
+      "source_sha256": "3b155c5ef3f2047808c73a9a044f6ffcd5523dd676133b93c99c3b1e607956d5",
+      "golden_sha256": "2ef42fc8857010115ee3a91de9abd06164a4fe31cb6bd2cf87bf83aa70b11c48",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "0fbbaf34815930a4b730dd0cafa434dcfa49c234096df01cedd56f84ce87d707",
+      "after_svg_sha256": "3c55058b87956db0da325b3a187577daec943e0f02950cf950dcdb9fa3169f49"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_rise_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_rise_legacy.svg",
+      "source_sha256": "9e07f11af09523d898fef613ef5a7c23fdbbbd21ac748b3e7589a083713e072f",
+      "golden_sha256": "1e914446bedb635f86c699216e4c8c24129be99e78ee213203ad81f051323576",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "4db9c7b7fdabae4628b2cb98231c79e46c6dbb8a41d23bb8730f3c49ba2faf8b",
+      "after_svg_sha256": "276ba10dd707e2c55e2bfc81d0626a4f6b0ceb87095634a2968a3d515637b1fc"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_rise_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_rise_teoz.svg",
+      "source_sha256": "722d5eed4a327cee1a124817c80a8a4cfce82836cfed5476addc6ca758cfc7d5",
+      "golden_sha256": "7ddfbc11fbf8d53ef99641560ee8d5f3951c7463e9e841f1bd8d7d335ceb3fa4",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "ca444a8f902cf4b1400f9abfec1ba095b47854e57b36e960b5b8c46b1554bdb9",
+      "after_svg_sha256": "b36ac93e48d71c34775f7d66a5d3d0dbb4a1cc7fc3ad6021a7dfe251c1271275"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_fall_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_fall_legacy.svg",
+      "source_sha256": "291d870315c0f77d123330991d8e919725fbe31ecdcbd69280c320e0a5e3e642",
+      "golden_sha256": "0f37b316f949b71b43d1c1313e0aef479e567e3b892959ca85b214c1f77cb4cc",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "4f8e4639f0b77beaf0e2c75530ef2a96d0c68a8d6b2b1c6f35859339c3d16cad",
+      "after_svg_sha256": "aadac9410c6bcf94e7014451decf211a695f61806978b9d4f1271b7ccbb39d4c"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_fall_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/message_fall_teoz.svg",
+      "source_sha256": "8592541d5ba0211a5e5fa3bb420a6bbe8c9f08f0828a63052557cee06119e524",
+      "golden_sha256": "dbec27a394fd0916cc2b37d50a5d95272624210eafccace8f70820b942948d1e",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "8a5cdd15b7684213fef42d473d950b4a2198f4793783e55d5acc74ade38e6915",
+      "after_svg_sha256": "52cbdd8a6c332dc3534de397f87f410a5914725b7f590203adaab956f65da8cc"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_halves_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_halves_legacy.svg",
+      "source_sha256": "272f999dd0625b57bf11e8230947a95e4efc19bcdd5b3d3f7799e6f1119a7fc3",
+      "golden_sha256": "828919e9ab1237722c87829fb9148d9eb5b29ab0552165d8ec6793fb3010e5cf",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "6bd288e3d326db2c2f82068f5bdb46d576db9035a4530637eaceaf1586594080",
+      "after_svg_sha256": "8a33eec5f9e60a66c7af46a3ad24052f790a917ede680c29b9a3c8b08fb72b4a"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_halves_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_halves_teoz.svg",
+      "source_sha256": "960e12862f94689c0e321f99c942d0606bece386d1bf2dceab4cd3bff04be486",
+      "golden_sha256": "8c25e01e18e7f8a0fd80cef5b30edae4ae3efb9a6642de9853912f3a31eeca27",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "a004d2f29d7e285ee5a47d99bb225f134174b650f15114b3c2244eed761940a4",
+      "after_svg_sha256": "27adaa5d6f1db1feb559a6dbb1f40818a6036a1025f866ad19fb518800692028"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_live_legacy.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_live_legacy.svg",
+      "source_sha256": "4bed2f51baa6a43fc678c0e3dc9004fc74a0e7a038a9625c1ffa946b8b2dd694",
+      "golden_sha256": "5ef70cf504cb0536dec768b5bc3e06ca60282ebe30eee606c27d729e3487bad2",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "7ffbd434ef30115cbf20e2890c0549cc058bcea0d2f01442c65a2934d880f2ed",
+      "after_svg_sha256": "d3813dafac9a5374bded38a352bef5f33548cf7357c1b31f1d09a0cc45b49ec1"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_live_teoz.puml",
+      "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/self_live_teoz.svg",
+      "source_sha256": "37e3cc612470ab1e7b17f933bb133b8535ec6dedfa3ee7b09e703222015b8752",
+      "golden_sha256": "7d9e191bc639ed02b9f8f44f307ff370273c23d8d5c0f16fcaa07dae0a656d1f",
+      "before_comparator": 1,
+      "after_comparator": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "daac447f905331acfad0f37a6fee9e7e9353847cebd1321ae02a63cb0277299f",
+      "after_svg_sha256": "61111bbf383eca908351decba2b2018f7bb74da25b06ce7bd9aab666ffb44c99"
+    }
+  ],
+  "losses_by_mode": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "main_library_tiers": {
+    "product_pass": 11181,
+    "eligible": 11251,
+    "assisted_pass": 10497,
+    "assisted_failures": 754,
+    "skipped": 1299,
+    "sequence": "1411/1411",
+    "changes": {
+      "no_oracle_failure_names.txt": {
+        "recovered": [],
+        "newly_failing": [],
+        "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+        "snapshot": "Copied immediately after main tiers and guard command; never read mutable repository names for packaging. Before is711 maker retained exact final snapshot, not checker overwritten intermediate names."
+      },
+      "golden_failure_names.txt": {
+        "recovered": [],
+        "newly_failing": [],
+        "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+        "snapshot": "Copied immediately after main tiers and guard command; never read mutable repository names for packaging. Before is711 maker retained exact final snapshot, not checker overwritten intermediate names."
+      }
+    },
+    "label": "Library APIs, not11251 CLI subprocesses"
+  },
+  "units": {
+    "parser": 575,
+    "renderer": 795,
+    "cli_pipe": 13,
+    "ascii_included": 12
+  },
+  "guards": "4/6",
+  "standing_perturbations": {
+    "entries": 1416,
+    "failures": 622,
+    "matches": 794,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/crates/rustuml-oracle"
+  },
+  "broad_runs": 1
+}

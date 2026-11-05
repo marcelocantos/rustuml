@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+A -> B : first
+group delay
+... one\ntwo ...
+end
+B -> A : end
+@enduml

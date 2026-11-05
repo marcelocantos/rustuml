@@ -1,0 +1,58 @@
+{
+  "before": {
+    "revision": "d491d4bda47faf90d4751484d45aa1387fb1b290",
+    "binaries": {
+      "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+      "diff_one": "8a98e03e7ccf1302883f7c0a2b93eed8438bc2a0daea184c942e511e31876f48",
+      "rustuml": "b0dd240908a6f7fa2e4925ee62c783e1615d48ca7699c7c2d362b689ad6a3241"
+    },
+    "source_files": {
+      "crates/rustuml-parser/src/diagram/sequence.rs": "1f28f3d69b9a1c770d085ab1b0cbf0a8215beb5be1d650eb8d74487183a4de10",
+      "crates/rustuml-parser/src/parse/sequence.rs": "b4a3e4e98b942a457cdcfda8cc5be7022dc898c62c3d30e431a3e51ff39ab9d3",
+      "crates/rustuml-render/src/sequence.rs": "0274dd8fa558c2a9b1d4bc226b6d0d013290c84c66ba7a7ebe488dacd6f4bc6b"
+    }
+  },
+  "before_evidence_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "after": {
+    "revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+    "binaries": {
+      "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+      "diff_one": "9ebcc7831eda8f4beefaf7d2e8a683c9e183cbdd00957f907e22380aa953d96c",
+      "rustuml": "a6cbce9526a6becc06b07ba099d881c38bc16358b5d70ab9d629f724e309a007"
+    },
+    "source_files": {
+      "crates/rustuml-parser/src/diagram/sequence.rs": "1f28f3d69b9a1c770d085ab1b0cbf0a8215beb5be1d650eb8d74487183a4de10",
+      "crates/rustuml-parser/src/parse/sequence.rs": "946951ed84c8684a2c30d86a19af6ccddafaff2ad9faaa5b9261de65848d514f",
+      "crates/rustuml-render/src/sequence.rs": "e33bf591c86364dfa99e7d3a6b9ea5aefb0fc0d64324ebc186d1e0ec0cab31a0"
+    }
+  },
+  "intermediate": [
+    {
+      "revision": "5dccddca0c94fa2d436afd4a8c6ff0f09f028170",
+      "binaries": {
+        "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+        "diff_one": "cfce0852183f36a54900179042c7f1ce205aa328f8fe5ac06da249802564f65e",
+        "rustuml": "5e215f202dfe29d6f5a3b2e5953e5dc330cf57e4e403a5e9a2f88ddfe0b19949"
+      },
+      "source_files": {
+        "crates/rustuml-parser/src/diagram/sequence.rs": "1f28f3d69b9a1c770d085ab1b0cbf0a8215beb5be1d650eb8d74487183a4de10",
+        "crates/rustuml-parser/src/parse/sequence.rs": "b5b3709701f92c487807a5af802f3147bc63ea8a217cfbe959a6e6db88d44e5e",
+        "crates/rustuml-render/src/sequence.rs": "e33bf591c86364dfa99e7d3a6b9ea5aefb0fc0d64324ebc186d1e0ec0cab31a0"
+      }
+    },
+    {
+      "revision": "70bc20cf1efe456fa5dd83e3a726c2796717ce9b",
+      "binaries": {
+        "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+        "diff_one": "0515e3739dc7e74b517d3d968da55f50b51d364077f5262935eef94ac0181e02",
+        "rustuml": "9ce938039e19339d708d2d07a2ef72c33825c791c9bf0f65a221bf979624457d"
+      },
+      "source_files": {
+        "crates/rustuml-parser/src/diagram/sequence.rs": "1f28f3d69b9a1c770d085ab1b0cbf0a8215beb5be1d650eb8d74487183a4de10",
+        "crates/rustuml-parser/src/parse/sequence.rs": "d8fb877b0e3528ed6de6f3ebedddde56bada2ab261463a072c97f91bb13dce6c",
+        "crates/rustuml-render/src/sequence.rs": "e33bf591c86364dfa99e7d3a6b9ea5aefb0fc0d64324ebc186d1e0ec0cab31a0"
+      }
+    }
+  ],
+  "note": "Exact private binary/source hashes; before production d491d4bda is source-identical to9784 evidence. Comparator copied byte-identically. No comparator/harness edit; jobs4."
+}

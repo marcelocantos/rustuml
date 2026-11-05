@@ -1,0 +1,8 @@
+@startuml
+hide stereotype
+queue "LongMailbox" as M <<x>>
+actor Gate <<role>>
+participant Hub <<service>>
+Hub -> M: put
+M -> Gate: send
+@enduml

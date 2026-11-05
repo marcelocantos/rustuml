@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant East
+participant West
+West o<<->o East: narrow
+East o<-->>o West: longer answer
+West <-->o East: final
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+hide stereotype
+participant "Fir" as Cedar0 <<ExtremelyWideTransportRole>>
+participant Wren
+show stereotypes
+Wren -> Cedar0: seed
+hide stereotypes
+@enduml

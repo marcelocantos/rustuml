@@ -1,0 +1,10 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+autonumber 5
+Juniper -> Kestrel: first
+autonumber stop
+autonumberresume3
+Juniper -> Kestrel: resumed
+@enduml

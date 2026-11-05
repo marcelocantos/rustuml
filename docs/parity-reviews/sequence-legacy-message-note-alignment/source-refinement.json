@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-04",
+  "account_commit": "76972e36",
+  "finding": "The alignment correction alone does not restore the metal control: it uses left alignment. The ordinary composite has moved from max_note_right to max_arrow_note_right, but note_envelope_dominates still ignores the latter. This drops the existing surrounding theme margin despite the note still winning the canvas.",
+  "java_dataflow": "DrawableSetInitializer#prepareMissingSpace iterates all graphical elements, comparing getStartingX + getPreferredWidth irrespective of whether the graphical element is NoteBox or ArrowAndNoteBox; a composite remains an event envelope.",
+  "planned_change": "Include the ordinary arrow-note composite in the existing note/event-envelope dominance comparison. Reuse its already normalized preferred extent; do not add new geometric offsets.",
+  "scope": "Repair the dataflow regression introduced by 07aa1611; no general theme/PageTextBlock reconstruction.",
+  "axes": [
+    "themed versus unthemed attached notes",
+    "composite-dominated versus participant-dominated width"
+  ]
+}

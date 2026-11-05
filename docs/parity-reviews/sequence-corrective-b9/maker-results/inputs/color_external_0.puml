@@ -1,0 +1,7 @@
+@startuml
+participant Quartz
+[-> Quartz ++ : enter
+return #c gray
+Quartz -> Quartz ++ : loop
+return #10203000 invisible alpha
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition bottom
+hide footbox
+boundary "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+boundary "Q" as Q <<longer classification>> #pink
+M -> Q: register
+@enduml

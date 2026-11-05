@@ -1,0 +1,1152 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-required-note-identity",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A481a605b-38ce-49c2-a334-2037d4b478a3",
+    "model": "gpt-6-astra, high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+    "branch": "review/sequence-command-contract-independent-20261105",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+  "implementation_commit": "8cb61e5dce9006a570549de0fd11f2bc9f1dfcc3",
+  "tested_rust_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "baseline_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (exact per-revision cwd/env/targets in before-build.json and after-build.json)",
+    "Parent existing Monkey Man relay only: [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]; every expanded argv and source byte hash retained in reference-results.json.gz and supplement/reference-results.json.gz",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN_DIR PRIVATE_OUTPUT_DIR (unchanged comparator, before/after3111 and fresh358/fresh64)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO_ROOT NEGATIVE_MANIFEST BEFORE_RUSTUML AFTER_RUSTUML OUTPUT_JSON"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_of_legacy.svg",
+      "axes": [
+        "keyword identity of",
+        "reverse declaration and arrow order",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "abdf870c64928a3b078920526ebfc6564d6dd5eaecbbcbaa66986d2373f27382",
+      "golden_sha256": "8f52f0f4076213665cfc49d8b8b016d247939a3c545f329071a0540b045937b6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_of_teoz.svg",
+      "axes": [
+        "keyword identity of",
+        "reverse declaration and arrow order",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "1655dc224af23b2198ecfa4d5f9db83a4f4ca5005c5c256f9d135f2bcae2a0ac",
+      "golden_sha256": "4ec20b5e500384a24a6e141a89be2ed2d4e4742bc52e9ff73bad54b37fe81520",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_of_legacy.svg",
+      "axes": [
+        "quoted keyword of",
+        "right prefix",
+        "multiline",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ec7d518e5a382b3557a0132f186401fc9e6bf54f5e052113f9ad46b0e527cadb",
+      "golden_sha256": "3e01e20643a8b8ac9856860f039e7e7a83336cc844da5d69e6370a65ae96492f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_of_teoz.svg",
+      "axes": [
+        "quoted keyword of",
+        "right prefix",
+        "multiline",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "3ed7db4591def0dcafd97e808cab70b1f61b6ae4febb2af092270c34329e9c5f",
+      "golden_sha256": "41108a618126f4988fd7eca2d65e397e8c4c307d4140cdd32346bc567e6ac568",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_over_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_over_legacy.svg",
+      "axes": [
+        "keyword identity over",
+        "reverse declaration and arrow order",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "b88aabc4ed429603ff61a919bc188d15b5fff51589772414ad3713897f23c7b6",
+      "golden_sha256": "c4c05c698a9c7513c51d74e1203207513352bcc6e4887b71470f9a6f01dc25b5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_over_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_over_teoz.svg",
+      "axes": [
+        "keyword identity over",
+        "reverse declaration and arrow order",
+        "rnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f9a739220a6f81d0bad0384d1cd12e1ef9da487722de8a793d76791ecb9662dc",
+      "golden_sha256": "3c5856f8e09ff10dbe24ac72810a5274fa8990e64ffa9e74000884e08b1452ea",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_over_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_over_legacy.svg",
+      "axes": [
+        "quoted keyword over",
+        "right prefix",
+        "multiline",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "72f617fa76f4e25bb467c41e041732274fe2b41dd150d389e1ed52a2f5e6bf7b",
+      "golden_sha256": "5f1571b0dbdc2b1fadd0b6ebc4302ad9c235d66f96035389fb98dd8badbde994",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_over_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_over_teoz.svg",
+      "axes": [
+        "quoted keyword over",
+        "right prefix",
+        "multiline",
+        "rnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "bd58021e698649fd837d0fd877850be9af4fbfd65840e2eed54062a373cd5110",
+      "golden_sha256": "b638e48f5b8c627acf870bd1e100cceca8a780f9742daf8fff7938b7482284e5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_left_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_left_legacy.svg",
+      "axes": [
+        "keyword identity left",
+        "reverse declaration and arrow order",
+        "hnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "3420fe0b657bb53b7490a5edee769b054b625de84849385d13543b21ce1fcfd2",
+      "golden_sha256": "a8b1d144a1a71743104cb7788d093749eb986e1cea73a205638f89fbd4e68e32",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_left_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_left_teoz.svg",
+      "axes": [
+        "keyword identity left",
+        "reverse declaration and arrow order",
+        "hnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "3798be51eb49f59d39260511f654ae799764bb9844945a8cfc52181d01a52457",
+      "golden_sha256": "a0877642d298d732187f19ad90077af55422728f4b8a00e1db43eabfca3ae05d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_left_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_left_legacy.svg",
+      "axes": [
+        "quoted keyword left",
+        "right prefix",
+        "multiline",
+        "hnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "24ab154a62c89984b56554305ba8e19459530d3a537c8fbbb2eeb7d8b195e894",
+      "golden_sha256": "f5efcdff3bb2aed0837a201819f2a902a5e6703cc6f560cff92905a29546487f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_left_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_left_teoz.svg",
+      "axes": [
+        "quoted keyword left",
+        "right prefix",
+        "multiline",
+        "hnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "21ffaf6cd5373e219875bfcd97c546adda8cd9301a305ab55abb6269cb042cd9",
+      "golden_sha256": "0447431a485571da33eb467978e28792047f01ad0abb451c59eae2fe99aca7fe",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_right_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_right_legacy.svg",
+      "axes": [
+        "keyword identity right",
+        "reverse declaration and arrow order",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "611394cf51aa4f6469a82583a148079bf41b1ff03e0a6615b5a3056aec3363ae",
+      "golden_sha256": "c7c9b2c8e987c5b75f491209afea88b0d62f7cc9d9bad100eef539519395317c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_right_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_right_teoz.svg",
+      "axes": [
+        "keyword identity right",
+        "reverse declaration and arrow order",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "3ab2ccbff265ae37949d3a22a081d372b8e2f196c448a198679562422eb12f94",
+      "golden_sha256": "b2d459ab86aeb9c348865495070b380b0f0b335475e3c609c6864e4c867da073",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_right_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_right_legacy.svg",
+      "axes": [
+        "quoted keyword right",
+        "right prefix",
+        "multiline",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "81d5f87a4c33ef1967cb19fabf904e455133989981565cb101ceb29a553ebf92",
+      "golden_sha256": "d2e2bdd344861a44e749e38f9441b8d6c6cdfb6349787587e05b84a988424508",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_right_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_right_teoz.svg",
+      "axes": [
+        "quoted keyword right",
+        "right prefix",
+        "multiline",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b987d45b53d650de2822d33099098a98c110fcf807685bf27ab0163aab982dfa",
+      "golden_sha256": "7f0c432834ba122b0f43e1db5ac3324886a67dc55b9eb9bdf75c535f575a8536",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_as_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_as_legacy.svg",
+      "axes": [
+        "keyword identity as",
+        "reverse declaration and arrow order",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "5315e3984ea7f5d22731f2fd6aa5627a05b046d005429fdc9efcd816383774b3",
+      "golden_sha256": "1b93627fda5d8083da9657ef1e361c38e8b8aebc4cd18b9409227fe5b3c21227",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_as_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_as_teoz.svg",
+      "axes": [
+        "keyword identity as",
+        "reverse declaration and arrow order",
+        "rnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "0d75864754f3ca2856bb6dfb3de3117f09dc039981f02008741c070db1cdb1d7",
+      "golden_sha256": "9850e26bb5f491bcd6360d6492841a9a3f0dc9b88baffdc14b8a1d5e09003e78",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_as_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_as_legacy.svg",
+      "axes": [
+        "quoted keyword as",
+        "right prefix",
+        "multiline",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "8c390df27f94faea328877d6cd2fa08e96f382e55e8fc5e7611614c2c998110c",
+      "golden_sha256": "ab5e899431c9c158eadc589ca008cdc83a1a4474ecf07e3184540d10925b7bcc",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_as_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_as_teoz.svg",
+      "axes": [
+        "quoted keyword as",
+        "right prefix",
+        "multiline",
+        "rnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f228b8cd9c4ef58296d250598a522c8766ee609432e79cca88ca4d5bb7c268de",
+      "golden_sha256": "16efe91ac0e209c00cdee3b0b9ab42620e15400685db02b68a6f80838a08a293",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_across_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_across_legacy.svg",
+      "axes": [
+        "keyword identity across",
+        "reverse declaration and arrow order",
+        "hnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "447aa494a14e5ff17f2956a3174ae53331dc922de1a069f0d1159dce43b71e93",
+      "golden_sha256": "3014275af77963681be984aa49b9e507db16fbf9a342826c78ccd186f6f4f242",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_across_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_across_teoz.svg",
+      "axes": [
+        "keyword identity across",
+        "reverse declaration and arrow order",
+        "hnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b9f31f6fd732b700630e4950cef2aa218614cfb9bdecf51617cbc9f23ed88ca8",
+      "golden_sha256": "e832cfd613f1b0a3ba5ad82e38183e9a64cb1a01542a85fab5b83063fa742859",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_across_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_across_legacy.svg",
+      "axes": [
+        "quoted keyword across",
+        "right prefix",
+        "multiline",
+        "hnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "24f5c85a9a1bc4d3ca5c61398cb38aa241992a0c9740326dfbd80cf18f76ab8b",
+      "golden_sha256": "3532baeacdd84d2359d5aad066ae5c547f665f3e772bbf56996b6124dcb4fc56",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_across_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_across_teoz.svg",
+      "axes": [
+        "quoted keyword across",
+        "right prefix",
+        "multiline",
+        "hnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "2a985128cb39cead7194a649602311a684e2961ef5a5b2c332bcb9f018284e8c",
+      "golden_sha256": "b8ba1e7a11896e5662bb0cf8ba555a2019e35ca29b875023530f3c88032a36d4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_on_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_on_legacy.svg",
+      "axes": [
+        "keyword identity on",
+        "reverse declaration and arrow order",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "2b32fe3c1040e962e1492b0c1a190d70acf44f205c6ccebecd76316d38353a60",
+      "golden_sha256": "2a159224648b32338ea33d5ac4ade5f226863a628c0a39e57c279f7358eef71c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_on_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_on_teoz.svg",
+      "axes": [
+        "keyword identity on",
+        "reverse declaration and arrow order",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "5b10f810c883b73f57bc1ebbb73ea2d9e6b5b04d766b0d69cd8fb70abbe3b723",
+      "golden_sha256": "b1bf4d90925beeaa4254c46f1215912fe598c49abe353ac2d3cc570665fd9e6d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_on_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_on_legacy.svg",
+      "axes": [
+        "quoted keyword on",
+        "right prefix",
+        "multiline",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "40dc2a08711713c65f1d3cd38fc56169d0cdab7107a4bb8f99bc02fac10ea64d",
+      "golden_sha256": "9b5ade700a6c7d932d2e7ec92f09e204ac238bf7a7fc71ecf0b3b3fda954f8d2",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_on_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_on_teoz.svg",
+      "axes": [
+        "quoted keyword on",
+        "right prefix",
+        "multiline",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "75709e612c28fecb46eaf59210dc2457f1cc19991a3d64cf717a50c1904b65b3",
+      "golden_sha256": "5a64b2fc2d33db27397413d7f1d4376fe77baeb644f745a2eba9d9482667a7d5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_end_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_end_legacy.svg",
+      "axes": [
+        "keyword identity end",
+        "reverse declaration and arrow order",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "3c58e3f1cb68ac45461b711eb594ef9b4cc9a86ccdea0ef1a976b1fa9a4167ed",
+      "golden_sha256": "4d6cdf34f799eece78619784e4a281767567f78cd0226e7ba98a39a56d696dc6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_end_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_alias_end_teoz.svg",
+      "axes": [
+        "keyword identity end",
+        "reverse declaration and arrow order",
+        "rnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f99f7892195c7ee18b192bbe6d569f20b1aa24fd586ddd68cf453835529b5db7",
+      "golden_sha256": "6033819280761ee4a2701767cc9e49639aee1ab59a4bd39bb968a9cccaa24f89",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_end_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_end_legacy.svg",
+      "axes": [
+        "quoted keyword end",
+        "right prefix",
+        "multiline",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "f5fdb18100b10fa0ff553d841ecee6108123ee3a1793199fde7156b675c83c89",
+      "golden_sha256": "e548ce398a7e1bbc2b007ad6aa95815a345978fa1623f8b0f7e4029ba4860d1a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_end_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_quoted_end_teoz.svg",
+      "axes": [
+        "quoted keyword end",
+        "right prefix",
+        "multiline",
+        "rnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "110dac44b21c03da3338759cbf759fb59a7f4d6b36b0d8ed6b2e9e00cc3c4185",
+      "golden_sha256": "06087e35404b0ee227b620ff1ad1db162232482e1b449536800bcab8abfffbd1",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_left_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_left_of_legacy.svg",
+      "axes": [
+        "prefix versus identity",
+        "left",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "0e22a04f660c3a09bb2b89d40019739b3351d07ae565de9a8aef28121276ca88",
+      "golden_sha256": "7ff067939ff9227762c76ecd2d0527acf8d3a7d2a78da6a1cba1b8327a54d8b6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_left_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_left_of_teoz.svg",
+      "axes": [
+        "prefix versus identity",
+        "left",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "5545f4666149456d22d046806b89a369814f01cb654274c4f836f4504baacb1c",
+      "golden_sha256": "505b6e7ace28a8e30553fba4a3522a2938fb35663485321cc7af3aa410d93807",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_right_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_right_of_legacy.svg",
+      "axes": [
+        "prefix versus identity",
+        "right",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "3029a4ee4cdf331a1c21c3bd2e89ea00094ac7bb8629ef50a048a82c48281187",
+      "golden_sha256": "2d138192bbc69fbcfdd72e05b4273d7a4d254d2d717d9a40b942a5d93d9c6503",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_right_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_right_of_teoz.svg",
+      "axes": [
+        "prefix versus identity",
+        "right",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "6bc176ff46be408091cc4fa0eb8e5fb0c9ebb731064c51b5dc57610c054d2573",
+      "golden_sha256": "7a0a1d496b11af6d1d0b21c3787533c038eec1f99b4833181e4af66d97afc70e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_pair_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_pair_of_legacy.svg",
+      "axes": [
+        "pair identities",
+        "declaration order",
+        "multiline",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "30e7309430ee3f864abf1c2d8c85278a58dde14550538d6160d769cc9e7b6491",
+      "golden_sha256": "00514d0c4e38f626c5baede17bd406c5a0a00f37859d20cd62838eae451b9cd9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_pair_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_pair_of_teoz.svg",
+      "axes": [
+        "pair identities",
+        "declaration order",
+        "multiline",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d31e75ed56c027b16bbeb098e2b23e46ba4b9b4c75e32cbc7111139ee0aeb898",
+      "golden_sha256": "06d16d0bc52f2c47a0ee6cc2e0a5671f979d4393a7aff71ba5c661ab6d14b9ac",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_space_identity_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_space_identity_legacy.svg",
+      "axes": [
+        "quoted space/punctuation",
+        "declaration without alias",
+        "note",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "b988c9a9b2b465e2be1b42aa837e64c9a5c8c9a99033dda73450bdd7644acc8c",
+      "golden_sha256": "600b694048f9c1455d71903374682286ef518a2ad47997088d9a41699a1693de",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_space_identity_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_note_space_identity_teoz.svg",
+      "axes": [
+        "quoted space/punctuation",
+        "declaration without alias",
+        "note",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "44ce1043d2ee47a2e7c2e4d6f8067685c4946aa21106119dcac5b0fd62e806dc",
+      "golden_sha256": "648d85d88493c55fe408cd95afeb585e5d948b0c316c67dbab4eee6dadd62ba5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_left_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_left_of_legacy.svg",
+      "axes": [
+        "prefix versus identity",
+        "left",
+        "rnote",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "d0aa1e5bb675f2475709fa3dc0261c85931ce286bb92f06fd8518dbaee6873ac",
+      "golden_sha256": "1423b71d1be5e6ec70bb9a8504d2910df544eae520ab4927591d2dc94eb67278",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_left_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_left_of_teoz.svg",
+      "axes": [
+        "prefix versus identity",
+        "left",
+        "rnote",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "396a67c7edafb7c36ab45a778f08d2a0d79623be6b00b7b56e17f13eec84da4a",
+      "golden_sha256": "61a9f0fd838ce37b767cd280c4f6b812788b406fc61fc4c270171b165e32344b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_right_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_right_of_legacy.svg",
+      "axes": [
+        "prefix versus identity",
+        "right",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "5390758e5651beccfaaf8844cbd83138fdeba20edfc991a55733228b189687d6",
+      "golden_sha256": "b4d09a40e7618114318765c9bb5ad8e6b972851ca279bbc59b770c8cb9cb815d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_right_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_right_of_teoz.svg",
+      "axes": [
+        "prefix versus identity",
+        "right",
+        "rnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "ab68fdfb4840413845a23f22538fbfb8169c3dc27756d2c931d0d986a93e8d1d",
+      "golden_sha256": "7da8ae15baac8b33f37031564ef5312b6958c1b722cbb99dc2665f086330bac8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_pair_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_pair_of_legacy.svg",
+      "axes": [
+        "pair identities",
+        "declaration order",
+        "multiline",
+        "rnote",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "9e59afe472b050c1182b3c0977e792cb9e8ba1a7ed6600b9a41038b18e188bd6",
+      "golden_sha256": "32337a7f39a8e374c29bd1108179743ec16caa437aff33de98058e381c1c5bef",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_pair_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_pair_of_teoz.svg",
+      "axes": [
+        "pair identities",
+        "declaration order",
+        "multiline",
+        "rnote",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "b494ae34b74b9a42aa26a8fd202dfc5c69707d2dd6a9a536b97349a5fe61546f",
+      "golden_sha256": "8cefc1d3b9f1d963e2559d3a73f517c966dbfdaadb0af697929ad3e903b7e4a5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_space_identity_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_space_identity_legacy.svg",
+      "axes": [
+        "quoted space/punctuation",
+        "declaration without alias",
+        "rnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "1ece07aebc6f26c31e55e77731e6830cc3a0a0fcaf846229a66b6293c8a66819",
+      "golden_sha256": "a7e21d41c5aab6fee68d11d35ae8e5dcef554c52babfeeb04d8e7083251fd2a4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_space_identity_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_rnote_space_identity_teoz.svg",
+      "axes": [
+        "quoted space/punctuation",
+        "declaration without alias",
+        "rnote",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "0ea16d3416690ba2900656c38c4a29f8440255ba0513468c569774edfd14256b",
+      "golden_sha256": "258a87b9872c412b4221a58b9f0d51582121d07aa519d28e16cdac557e6f7dfa",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_left_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_left_of_legacy.svg",
+      "axes": [
+        "prefix versus identity",
+        "left",
+        "hnote",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "0fe2085abc6d1b1023398d29fb45cd233499a77760fde238222116bceac26b36",
+      "golden_sha256": "ed9b6b3f939d369a0859235757e88dc7a0fee25ae1259c70676e63736d2744e7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_left_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_left_of_teoz.svg",
+      "axes": [
+        "prefix versus identity",
+        "left",
+        "hnote",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "256af3dd85c20217cc0f7420c02b8e64ca5ab4063338ae9ea17091e8d1f22a8a",
+      "golden_sha256": "79e879c9d740d990d73fba1412a6a77f9d9dd027416e55390087888be00f1f9e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_right_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_right_of_legacy.svg",
+      "axes": [
+        "prefix versus identity",
+        "right",
+        "hnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "778c36b52bd53176117a3a4cf2d73e55147315ed05506aeeca9bc6baedf5d80c",
+      "golden_sha256": "4e1121a887987e0f1cbdb1d94d69b4363ec35ac2b83e2182d5add4d724f9e4b8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_right_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_right_of_teoz.svg",
+      "axes": [
+        "prefix versus identity",
+        "right",
+        "hnote",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "4d13ff8f9178cb9034f2acbc2b59ec4f845e16fd9d9c5d5583918b99e8889a5e",
+      "golden_sha256": "75019113c56161e9a37a996841ef63e31ad9316957e3dd34a0e1c4eebed13b36",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_pair_of_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_pair_of_legacy.svg",
+      "axes": [
+        "pair identities",
+        "declaration order",
+        "multiline",
+        "hnote",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "de93a2c73a682517b0ef7796ef0154fea798f894ef5b06d709fc7268e010da27",
+      "golden_sha256": "c0b24957a679f2a235f9375887b116d4b2dd8db2c96a4db781055bdafc744682",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_pair_of_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_pair_of_teoz.svg",
+      "axes": [
+        "pair identities",
+        "declaration order",
+        "multiline",
+        "hnote",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "c44d2ac8cea84dd042bbb61df4b6f4278a642c27f713e7c073adf26a28fa9a29",
+      "golden_sha256": "c444d5156d8a83950ce2c3370642ef4356eac17c36664a998c058dcb1b45b17b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_space_identity_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_space_identity_legacy.svg",
+      "axes": [
+        "quoted space/punctuation",
+        "declaration without alias",
+        "hnote",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "986a0e90ffaa7a72da389871d797fb8149aebf64115e0cf8789afaeba18d4117",
+      "golden_sha256": "d11ff5e0c89fc3a1a12af596b7a453af2c6e7c267a430594c6910bd222d0d17e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_space_identity_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-required-note-identity/c2b0_hnote_space_identity_teoz.svg",
+      "axes": [
+        "quoted space/punctuation",
+        "declaration without alias",
+        "hnote",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "671f7b4d5296e5a1df5adcff38c87121339127d005c009c4d342d23c309d4e15",
+      "golden_sha256": "1829cb455010f0cfe27e212d99e3e1ce117a8a561343c10f129beb3c59c54043",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    }
+  ],
+  "findings": [
+    "Java FactorySequenceNoteCommand requires PARTICIPANT and backtracks over optional of; the Rust required single/pair captures preserve that mechanism without an alias-specific branch. All16 historical alias follow-ups pass. Fresh aliases of/over/left/right/as/across/on/end, quoted aliases, quoted identities containing spaces, left/right of of, over of/of2, all3 shapes and multiline sources introduce no valid CLI errors.",
+    "Fresh whole-output result46/56;10 shaped-note geometry/box-envelope mismatches remain. They are not new lost matches: before26/56. Naming/grammar support does not waive note geometry, source consumption or historical whole-output failures."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output packet acceptance, not a claim that every locally supported mechanism is wrong.",
+  "fresh_counts": {
+    "before": {
+      "entries": 56,
+      "match": 26,
+      "mismatch": 30,
+      "nonpositive": 0,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    },
+    "after": {
+      "entries": 56,
+      "match": 46,
+      "mismatch": 10,
+      "nonpositive": 0,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    }
+  },
+  "evidence": "docs/parity-reviews/sequence-command-contract-repair-packet/checker-2b056ca1-astra",
+  "inherited_failed_dependencies": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/remaining-dependencies.json",
+  "reference_limits": [
+    "Java argv is derived, not process-traced.",
+    "OpenJDK21.0.5/Graphviz12.2 historical equivalence remains unproved.",
+    "No correctness claim for concurrent shared SVG serialization work."
+  ],
+  "bounded_next_obligations": [
+    "Fresh whole-output result46/56;10 shaped-note geometry/box-envelope mismatches remain. They are not new lost matches: before26/56. Naming/grammar support does not waive note geometry, source consumption or historical whole-output failures."
+  ]
+}

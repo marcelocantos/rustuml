@@ -1,0 +1,10 @@
+@startuml
+participant Caller
+participant Work
+participant Receiver
+Caller -> Work ++ : enter
+Work -> Work : WWWiii extended self message
+Work -> Work ++ : activate
+return close local
+return unwind
+@enduml

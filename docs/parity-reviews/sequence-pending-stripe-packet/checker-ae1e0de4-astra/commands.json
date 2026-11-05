@@ -1,0 +1,294 @@
+[
+  {
+    "revision": "before",
+    "name": "build",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "--bin",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 75.01159405708313
+  },
+  {
+    "revision": "before",
+    "name": "comparator",
+    "argv": [
+      "rustc",
+      "--edition",
+      "2024",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/compare_cli.rs",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/target-before/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/target-before/release/deps",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/before-bin/compare_cli"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 0.1357569694519043
+  },
+  {
+    "revision": "before",
+    "name": "units",
+    "argv": [
+      "cargo",
+      "test",
+      "--release",
+      "--lib",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 39.00129199028015
+  },
+  {
+    "revision": "before",
+    "name": "cli",
+    "argv": [
+      "cargo",
+      "test",
+      "--release",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 23.0849928855896
+  },
+  {
+    "revision": "before",
+    "name": "tiers",
+    "argv": [
+      "cargo",
+      "test",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--test",
+      "parity_perturbations",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 101,
+    "seconds": 7.811636924743652
+  },
+  {
+    "revision": "before",
+    "name": "fmt",
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 1,
+    "seconds": 1.26180100440979
+  },
+  {
+    "revision": "before",
+    "name": "clippy",
+    "argv": [
+      "cargo",
+      "clippy",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 101,
+    "seconds": 18.135321855545044
+  },
+  {
+    "revision": "before",
+    "name": "clippy-render",
+    "argv": [
+      "cargo",
+      "clippy",
+      "-p",
+      "rustuml-render",
+      "--no-deps",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 101,
+    "seconds": 14.766998052597046
+  },
+  {
+    "revision": "after",
+    "name": "build",
+    "argv": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "--bin",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 73.69741797447205
+  },
+  {
+    "revision": "after",
+    "name": "comparator",
+    "argv": [
+      "rustc",
+      "--edition",
+      "2024",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/compare_cli.rs",
+      "--extern",
+      "rustuml_oracle=/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/target-after/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/target-after/release/deps",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/after-bin/compare_cli"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 0.1268749237060547
+  },
+  {
+    "revision": "after",
+    "name": "units",
+    "argv": [
+      "cargo",
+      "test",
+      "--release",
+      "--lib",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 39.570931911468506
+  },
+  {
+    "revision": "after",
+    "name": "cli",
+    "argv": [
+      "cargo",
+      "test",
+      "--release",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 0,
+    "seconds": 23.831378936767578
+  },
+  {
+    "revision": "after",
+    "name": "tiers",
+    "argv": [
+      "cargo",
+      "test",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--test",
+      "parity_perturbations",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 101,
+    "seconds": 7.883624315261841
+  },
+  {
+    "revision": "after",
+    "name": "fmt",
+    "argv": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 1,
+    "seconds": 1.2293708324432373
+  },
+  {
+    "revision": "after",
+    "name": "clippy",
+    "argv": [
+      "cargo",
+      "clippy",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 101,
+    "seconds": 20.54115605354309
+  },
+  {
+    "revision": "after",
+    "name": "clippy-render",
+    "argv": [
+      "cargo",
+      "clippy",
+      "-p",
+      "rustuml-render",
+      "--no-deps",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "exit": 101,
+    "seconds": 15.604962825775146
+  }
+]

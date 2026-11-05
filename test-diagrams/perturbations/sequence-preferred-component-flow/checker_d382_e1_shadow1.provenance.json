@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.puml",
+  "source_sha256": "84db093ef3977d950db7fbab4fdaa1d4483ad3f2cb0edf9f6d651d4af9ba5506",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1401189169991994,
+  "stdout_sha256": "fce162a60657060de739e00dc65f5c43cbf1beb9d257bf32980864b0b8ecdaea",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

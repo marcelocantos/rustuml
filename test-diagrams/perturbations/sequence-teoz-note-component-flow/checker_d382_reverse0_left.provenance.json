@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_left.puml",
+  "source_sha256": "f2d23c68e13b63bfba5a1aa0d846dc7a057e60be69441e155243823189296ad1",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1476302920054877,
+  "stdout_sha256": "560716f74e91c3735954fc870ca94ac3ab01545d719524f904923486947e39ae",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

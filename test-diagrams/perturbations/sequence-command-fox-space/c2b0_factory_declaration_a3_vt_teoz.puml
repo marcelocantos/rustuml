@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+actorFreighterasDepot
+Depot -> Vale: dock
+@enduml

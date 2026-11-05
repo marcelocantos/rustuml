@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-04",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "skin.rose.ComponentRoseNote#getPreferredWidth",
+    "sequencediagram.graphic.ArrowAndNoteBox#getPreferredWidth",
+    "sequencediagram.graphic.DrawableSetInitializer#prepareMissingSpace"
+  ],
+  "invariant": "The ordinary message/note preferred extent includes deltaShadow once. prepareMissingSpace measures the complete extent; it does not add shadow again after selecting that composite.",
+  "finding": "After restoring theme dominance and CENTER margins, both pre-existing shadowed main controls still gain 3px in root canvas only. The new composite includes note_shadow_delta and the shared legacy root then adds SHADOW_CANVAS_RIGHT_PAD again.",
+  "planned_change": "Track ordinary message-note preferred extent distinctly, convert it into the existing pre-shadow canvas comparison domain by removing the exact shared root shadow term, and retain the raw complete extent for event dominance. Leave other component shadow geometry and painter unchanged.",
+  "perturbation_axes": [
+    "shadow on versus off",
+    "default versus thick arrow stroke and note widths"
+  ],
+  "scope": "Integration correction to the new ordinary composite only; deferred per-kind shadow geometry remains unresolved."
+}

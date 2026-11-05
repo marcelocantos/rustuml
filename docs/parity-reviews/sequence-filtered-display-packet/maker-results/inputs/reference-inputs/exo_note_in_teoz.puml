@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Hub
+[-> Hub: arrive
+note right: attached
+@enduml

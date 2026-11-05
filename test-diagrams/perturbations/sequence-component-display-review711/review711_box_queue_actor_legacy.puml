@@ -1,0 +1,7 @@
+@startuml
+actor "Tall\nOutside" as A
+box "Mailbox"
+queue "Q" as Q
+end box
+A -> Q: relay
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+participant D
+participant S
+participant C
+C -> S ++ : entry
+S -> S ++ : recursion
+S -> D ++ : dispatch
+return done
+return local result
+return complete
+@enduml

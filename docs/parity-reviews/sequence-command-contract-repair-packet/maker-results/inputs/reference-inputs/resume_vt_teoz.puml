@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant N
+autonumber
+N -> S: first
+autonumber stop
+N -> S: unnumbered
+autonumberresume
+N -> S: last
+@enduml

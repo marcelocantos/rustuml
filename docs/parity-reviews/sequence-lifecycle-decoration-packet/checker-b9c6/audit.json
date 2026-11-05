@@ -1,0 +1,182 @@
+{
+  "candidate": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "before": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "accounts": [
+    {
+      "mechanism": "sequence-command-event-identity",
+      "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+      "implementation_commits": [
+        "e6a4d41b3a2210cc5c0a8f6047d25edd39bbb07d"
+      ],
+      "account_sha256": "39ab02f0b316c2c132b8449c37750aee1e1077af1b071ddee87551c152f31779",
+      "account_creation": "ea313c6203844a0087bc40261366f5bace617d43",
+      "preceded_all": true,
+      "implementation_messages": [
+        "fix(sequence): resolve return and parallel identity from command history\n\nAccount ea313c62 precedes production. Validate same-message reactivation and return colors; resolve command returns independently of accepted graphical variations. Preserve parallel flags for the following tile-model correction. Two authorized ASCII test constructors receive the required default field. Focused parser command tests pass; all seven fresh checker negatives reject. Geometry acceptance remains pending."
+      ]
+    },
+    {
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+      "implementation_commits": [
+        "19074587f391b3b0bd5306cdce116fb564d06f97"
+      ],
+      "account_sha256": "33b6a2b350bc358e8413ef0797be1fefa8d61456f85e1d42411ffdfc8729b37a",
+      "account_creation": "ea313c6203844a0087bc40261366f5bace617d43",
+      "preceded_all": true,
+      "implementation_messages": [
+        "fix(sequence): carry creation and destruction through lifecycle tiles\n\nPreimplementation accounts ea313c62 and bc18300d. Preserve directional parallel ancestry and contact-point tile composition, neutral CREATE events, destroy metadata through stairs, creating head placement and preferred height, and standalone destroy allocation. Keep callback traversal history and folded-note Real phases. Focused raw-history unit and lifecycle CLI probes pass; full final checks follow in durable maker evidence."
+      ]
+    },
+    {
+      "mechanism": "sequence-self-cross-decoration",
+      "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+      "implementation_commits": [
+        "a8d717ca3bc8733c9b1deb2e14dbb569e6e547bc"
+      ],
+      "account_sha256": "fda0d4c903a2be6eca077c77b3f8d7ee5ca46d07f05be1b98b91f284a1139110",
+      "account_creation": "ea313c6203844a0087bc40261366f5bace617d43",
+      "preceded_all": true,
+      "implementation_messages": [
+        "fix(sequence): apply self-cross decoration before body endpoints\n\nAccounts ea313c62 and pre-edit refinement 42ec7126. Keep x-- as a forward source cross; apply source/final CROSSX shifts and solid strokes for forward and true reverse self arrows. Fresh engine/depth and reverse-return controls match the pinned remote Java references; prior checker cross now matches."
+      ]
+    },
+    {
+      "mechanism": "sequence-legacy-destroy-component",
+      "account_commit": "bc18300d13f13f31b50018abe57bfff4bec637db",
+      "implementation_commits": [
+        "19074587f391b3b0bd5306cdce116fb564d06f97"
+      ],
+      "account_sha256": "729742902426ab28992eab34e047f2d5fa860d1249e1caf8be50779567a3c9ab",
+      "account_creation": "bc18300d13f13f31b50018abe57bfff4bec637db",
+      "preceded_all": true,
+      "implementation_messages": [
+        "fix(sequence): carry creation and destruction through lifecycle tiles\n\nPreimplementation accounts ea313c62 and bc18300d. Preserve directional parallel ancestry and contact-point tile composition, neutral CREATE events, destroy metadata through stairs, creating head placement and preferred height, and standalone destroy allocation. Keep callback traversal history and folded-note Real phases. Focused raw-history unit and lifecycle CLI probes pass; full final checks follow in durable maker evidence."
+      ]
+    },
+    {
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "account_commit": "bc18300d13f13f31b50018abe57bfff4bec637db",
+      "implementation_commits": [
+        "07aa161142fa8631629f6d94bfa776d11812820d",
+        "41e2ce88aec0c6856d57f0c2322ca097ecd55de4"
+      ],
+      "account_sha256": "957710d95efb5b87cb5d845bceb49d11b970436fc116e5c60a8f5c8955772d42",
+      "account_creation": "bc18300d13f13f31b50018abe57bfff4bec637db",
+      "preceded_all": true,
+      "implementation_messages": [
+        "fix(sequence): derive legacy message-note envelope from live endpoints\n\nPreimplementation account bc18300d. Use max(preferred arrow width, actual endpoint span), note component width and right shift at arrow component start. The repeated-return checker canvas now matches; four new direction/activation controls remain passing. Teoz right-note and other decoration dependencies are unchanged.",
+        "fix(sequence): preserve complete styled note composite bounds\n\nFollow causal account 76972e36 and source refinements 09eec925/14228d60. Carry alignment, event-envelope dominance and already included note shadow through the ordinary composite canvas comparison. Update the old history unit to assert the newly validated rejection of same-message reactivation; preserve its valid lifecycle-mode checks."
+      ]
+    },
+    {
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "account_commit": "76972e36bd9abbeb264934bc112dea72314a54c5",
+      "implementation_commits": [
+        "41e2ce88aec0c6856d57f0c2322ca097ecd55de4"
+      ],
+      "account_sha256": "625a96651f90bb53b4a065c8a1172b9c94bb93549664481367df8fc646073484",
+      "account_creation": "76972e36bd9abbeb264934bc112dea72314a54c5",
+      "preceded_all": true,
+      "implementation_messages": [
+        "fix(sequence): preserve complete styled note composite bounds\n\nFollow causal account 76972e36 and source refinements 09eec925/14228d60. Carry alignment, event-envelope dominance and already included note shadow through the ordinary composite canvas comparison. Update the old history unit to assert the newly validated rejection of same-message reactivation; preserve its valid lifecycle-mode checks."
+      ]
+    }
+  ],
+  "source_refinement_commits": [
+    {
+      "commit": "42ec7126f6559d832d7ba5bbb9c293d152ca8afa",
+      "message": "docs: refine cross-only arrow dressing before implementation"
+    },
+    {
+      "commit": "09eec925d59a83a461606ca26b7138f903ee999e",
+      "message": "docs: trace composite note envelope through existing theme bounds"
+    },
+    {
+      "commit": "14228d60539c365b92f96d3051c99cdf05f22e2c",
+      "message": "docs: account for composite shadow in existing canvas domain"
+    }
+  ],
+  "production_file_hashes": {
+    "crates/rustuml-parser/src/diagram/sequence.rs": {
+      "expected": "ff5cab9494c1c1bd2b2e9c5163eb634e4d6b99083d950ee97aa763a970ce0dd6",
+      "actual": "ff5cab9494c1c1bd2b2e9c5163eb634e4d6b99083d950ee97aa763a970ce0dd6"
+    },
+    "crates/rustuml-parser/src/parse/sequence.rs": {
+      "expected": "1661ec00047258984bf3201c9763f4ced33c56898d4b9ba7c9edc1f7a664778f",
+      "actual": "1661ec00047258984bf3201c9763f4ced33c56898d4b9ba7c9edc1f7a664778f"
+    },
+    "crates/rustuml-render/src/ascii.rs": {
+      "expected": "72d8cc0497f113f7b6b230897870c2d034d288726866aac3bcd0a1d2cd0009c2",
+      "actual": "72d8cc0497f113f7b6b230897870c2d034d288726866aac3bcd0a1d2cd0009c2"
+    },
+    "crates/rustuml-render/src/sequence.rs": {
+      "expected": "8c203b0ed8bb5176f16d87df209b7ef30a754bc7015b93a4eec437a1deaa98a3",
+      "actual": "8c203b0ed8bb5176f16d87df209b7ef30a754bc7015b93a4eec437a1deaa98a3"
+    }
+  },
+  "ascii_diff": "diff --git a/crates/rustuml-render/src/ascii.rs b/crates/rustuml-render/src/ascii.rs\nindex 3942e09b..7d82afa1 100644\n--- a/crates/rustuml-render/src/ascii.rs\n+++ b/crates/rustuml-render/src/ascii.rs\n@@ -523,6 +523,7 @@ mod tests {\n \n     fn simple_message(from: &str, to: &str, label: &str) -> Event {\n         Event::Message(Message {\n+            parallel: false,\n             from: from.to_string(),\n             to: to.to_string(),\n             label: label.to_string(),\n@@ -544,6 +545,7 @@ mod tests {\n \n     fn reply_message(from: &str, to: &str, label: &str) -> Event {\n         Event::Message(Message {\n+            parallel: false,\n             from: from.to_string(),\n             to: to.to_string(),\n             label: label.to_string(),",
+  "candidate_vs_production_crates_diff": "",
+  "corpus_entries": 1828,
+  "unique_source_byte_strings": 1780,
+  "source_and_capture_hash_problems": [],
+  "archived_before_counts": {
+    "1": 581,
+    "0": 1208,
+    "2": 39
+  },
+  "archived_after_counts": {
+    "1": 557,
+    "0": 1232,
+    "2": 39
+  },
+  "archived_gains": [
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_e0_depth1.puml",
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_parallel.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_parallel.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_create_then_destroy.puml",
+    "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_standalone_destroy.puml",
+    "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_cross.puml",
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_nested_after_destroy.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e0_d3.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e0_p1.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e0_d2.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_note.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e0_group.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d1.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/return_e1_d3.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/parallel_e1_p1.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/cross_e1_d2.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_note.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/destroy_e1_group.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e0_d2.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d0.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/reverse_cross_e1_d2.puml"
+  ],
+  "archived_lost": [],
+  "archived_corrected_negatives": [
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+    "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.puml",
+    "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+    "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.puml",
+    "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.puml"
+  ]
+}

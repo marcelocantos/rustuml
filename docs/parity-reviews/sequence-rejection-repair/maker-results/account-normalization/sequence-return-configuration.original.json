@@ -1,0 +1,16 @@
+{
+  "status": "maker causal account; independent review required",
+  "base": "abcf592b8f31436997f6b4ad8a3d4826aef241a7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": [
+    "sequencediagram/command/CommandReturn.java#getRegexConcat: optional (#\\w+) followed by whitespace is COLOR; remainder is MESSAGE",
+    "sequencediagram/command/CommandReturn.java#executeArg: activating message else last EventWithDeactivate only if internal Message; inherited configuration.withBody(DOTTED).withColor(COLOR); generated message becomes last message",
+    "sequencediagram/SequenceDiagram.java#addMessage,#activate,#grouping: activationState records AbstractMessage independent of drawable acceptance; END replaces lastEventWithDeactivate; notes do not clear it"
+  ],
+  "rust": ["crates/rustuml-parser/src/parse/sequence.rs#try_return", "crates/rustuml-parser/src/diagram/sequence.rs#ReturnMessage", "crates/rustuml-render/src/sequence.rs#sequence_lifelines and return lowering"],
+  "invariant": "Return color is configuration, not label. An empty activation stack permits fallback only to an internal last message. Absence of both destinations is a source parse error. Return-generated configuration is inherited by subsequent returns.",
+  "divergence": "Parser stores the entire suffix as label and accepts orphan returns; renderer inherits configuration without optional override. Error inputs can reach an unrelated SVG fallback.",
+  "change": "Parse optional return color separately. Validate return destination availability from source events using SequenceDiagram's activation-stack/last-event transitions, independent of rendering geometry. Apply and propagate color through return lowering.",
+  "axes": ["self versus internal versus external and fallback versus active stack", "color spelling and sequential returns, group END and notes, both engines"],
+  "negative_contract": "Preserve Java invalid controls and compare error status separately; no error SVG counted as positive parity. Full color-name validation outside this bounded correction remains explicit residue if not implemented."
+}

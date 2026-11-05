@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-shadow-value-materialization",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "style.Style#getShadowing",
+    "style.ValueImpl#extractDigitsAndDot/#asDoubleDefaultTo",
+    "style.FromSkinparamToStyle#getShadowingValue",
+    "skin.rose.ComponentRoseNote#getPreferredWidth/#getPreferredHeight"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs note_shadow_delta materialization"
+  ],
+  "invariant": "A present scoped Shadowing value uses Java numeric extraction/default semantics; absent style falls back to existing translated boolean skinparam semantics.",
+  "causal_divergence": "Source audit after positive-numeric controls found direct Rust float parsing plus max(0) does not match ValueImpl: Java strips non-digits except dot, then defaults malformed/empty values to 1.5. Negative signs and units are not ordinary Rust float grammar.",
+  "planned_change": "Keep sequence-local style consumption; extract ASCII digits and dots before parsing and use the source-defined present-property fallback. Remove unsupported nonnegative clamp. Preserve existing raw captures and positive-numeric replays; new unit axes exercise value grammar directly. No shared style consumer edit.",
+  "perturbation_axes": [
+    "plain/fractional versus signed/unit-suffixed numeric text",
+    "present empty/malformed values versus absent style translated skinparam fallback"
+  ],
+  "chronology": "New account committed after 8d668d3f source audit, before this numeric materialization correction."
+}

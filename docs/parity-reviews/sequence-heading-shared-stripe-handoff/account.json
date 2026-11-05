@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "evidence_import": "82020a168c622ea109f1a61074c942072f37327e",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-heading-shared-stripe-handoff",
+  "java_locations": [
+    "klimt.creole.legacy.CreoleParser#createStripes/#createSheetSlow",
+    "klimt.creole.legacy.CreoleStripeSimpleParser#constructor",
+    "klimt.creole.legacy.StripeSimple#analyzeAndAdd/#fontConfigurationForHeading"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::emit_message_label/Event::Note/Event::Divider",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/text_render.rs"
+  ],
+  "invariant": "Heading recognition is shared stripe semantics: equals prefixes are consumed after horizontal-rule recognition, trimmed text is retained, and heading order selects font configuration before atom measure and paint. Sequence messages are consumers, not the grammar owner.",
+  "causal_divergence": "Rust shared inline text projection preserves literal heading markers and does not expose complete heading stripe measure/paint semantics. Sequence notes and dividers use other consumers, so a message-only text rewrite would not establish shared behavior.",
+  "planned_change": "No production draft for this objective under current ownership. Preserve exact heading and note/divider controls, document Java precedence and font derivation, and hand off to the concurrent shared creole/text owner; keep whole failures and no combined correctness claim.",
+  "perturbation_axes": [
+    "heading order versus horizontal-rule grammar",
+    "message/self/external versus note/divider consumers"
+  ]
+}

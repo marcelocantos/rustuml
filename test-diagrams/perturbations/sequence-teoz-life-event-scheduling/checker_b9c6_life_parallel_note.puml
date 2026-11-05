@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+Cedar -> Birch ++ : first
+note over Birch : separated
+& Birch -> Cedar : second
+deactivate Birch
+Cedar -> Birch : tail
+@enduml

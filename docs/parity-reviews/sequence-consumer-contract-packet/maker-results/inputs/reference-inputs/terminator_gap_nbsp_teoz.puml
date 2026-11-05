@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Birch
+hnote over Birch
+first
+second
+end hnote
+Birch -> Birch: later
+@enduml

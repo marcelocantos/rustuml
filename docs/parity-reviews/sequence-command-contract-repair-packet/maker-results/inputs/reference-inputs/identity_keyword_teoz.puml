@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant "North Pier" as of
+participant South
+of -> South: seed
+note over of #pink: keyed
+@enduml

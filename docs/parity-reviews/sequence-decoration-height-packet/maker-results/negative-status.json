@@ -1,0 +1,472 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+    "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.svg",
+    "source_sha256": "bd459ece56c5d2936bb3aac851a20a1ec98a3dda83aefe583b48a75d3f2747fc",
+    "golden_sha256": "03e5e09df57d391ace81d9ce74ede33bf9b2b7aa0dc5ecb4333786816540d052",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+    "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.svg",
+    "source_sha256": "2234390984d7f1897ab96421b5ee920fb9bcf7673faf4441fffdb1e99ab56f0d",
+    "golden_sha256": "84b9fa2fcf7c4905b9b7f43b1c6ac6c4cb40b3267ddf3fa48d5cb18a4dcf58e0",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.svg",
+    "source_sha256": "ff9a71a022e2e9572d0d7d26a2a3f1f991f51461665e71535dd0203f4b0e0444",
+    "golden_sha256": "4aa141f851a45a5d0f0ea2e510de31a8bc3e9d5b6e7477d3cf122c3f602603b6",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+    "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.svg",
+    "source_sha256": "b94a48a13ee2b8601b80040fca6464a18146ef53bbd830f07eae2b6f90bfc78a",
+    "golden_sha256": "c2e0c937576a87e29da5dca74f137e77fb5e696759ba6ec2c56d834e624d5a41",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+    "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.svg",
+    "source_sha256": "dfa5b14281e9b8555d63c87ad0f18ff74f5c2c7d683988eb33ea8cf33999f3e2",
+    "golden_sha256": "26ff429511d73f5443c677e3ff0baab17bf3f6a6a7f32204acbbd024eea1ddd5",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.svg",
+    "source_sha256": "ac95b61ab59c0bb4ce966eed0196cc3b521d01b28d972b98c273e8be3a574bf6",
+    "golden_sha256": "ff77cc49e87715c66c8e39233f368f225e2f84572f7d763d2cbd042024bcc909",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "golden": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.svg",
+    "source_sha256": "bdabbc27dcb8454179d80c7af6c5581ffeff2cf1bf591a66cc6313df9699ee7d",
+    "golden_sha256": "cdce326e26f0a4aaf1c75fdd15b89ecfeb23978c5e8f141d448a3601e1857de7",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.svg",
+    "source_sha256": "f15f329c74d6dc30b1d8bf7719e87689c7f10dae627d48e60958b8a0543edc95",
+    "golden_sha256": "077250790d9a8af47a18e001d523a558952af13366916386caaeb5e06f612e39",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.svg",
+    "source_sha256": "e4b7a8ea2482d5e18e80974b4000946a7b421aa5e2aa1069958764b1c0b82046",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.svg",
+    "source_sha256": "0feb1fb4b863b31d30ae1f8051e69e6582e0fedcb9568e069340d51ec081dce6",
+    "golden_sha256": "02c917510a0c0b837ef0933316e7c0f406b21089aba50e8d2dc33cd864a80139",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.svg",
+    "source_sha256": "912dc57c2bcc8b7758c1333a0aff748c367ff384d078763926c6d8f40bf1f92e",
+    "golden_sha256": "2b85f6343d1f3756f2a74ed5de20b024a2a1477748e15e8023d0cff79a53c035",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.svg",
+    "source_sha256": "82e0d1a8cba230ec2da2bf01d70aec66b148cfda3f0fe22a6b9c757d804ee7d3",
+    "golden_sha256": "de45b18e491222e9151f4748438f1bec1b5766d913094250b6cef73c6e6acfa8",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.svg",
+    "source_sha256": "465bbadd39eb080fe3df6c40dcfaca52a8fb42d2a71d184c4fa60c3835f9b896",
+    "golden_sha256": "52094ec5eb61ccf528752065a2b9676da68c5b41998aea06490339fd5ae85a4e",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.svg",
+    "source_sha256": "fee8ffdd30d197b2035c6adb2b877b429499ee60b41db6418146736c541c2b73",
+    "golden_sha256": "4e8756ab4c8837f0d2507ee5a2fc52bb4c4626b4070f7caf9480dd80d7d152e6",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.svg",
+    "source_sha256": "c5616fb1e5e6491bca636b53461f87b5048e2d98a2eb7452575fb7765a66c3a7",
+    "golden_sha256": "3527f3c7d9651d834e1a454a741f3a5dcb8ad761325f943a62910b32e428c2dc",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.svg",
+    "source_sha256": "a0f00e67e30a4399c88f34532abf136ae8a3c039fe5d3d99f044944958a15cb1",
+    "golden_sha256": "779eeb22035282efbbb55235582788ae1e51524833be6ecb54c61be7609a8836",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.svg",
+    "source_sha256": "b842715aae16ab703afcb8514db1375a69fb38c11000da5f511fd20171010705",
+    "golden_sha256": "cd74f21866960d2b7e3044c433718e77c7af2b34ad7c855b0c9b56c66de0fa4f",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.svg",
+    "source_sha256": "08e04ed2e19c2bd216108c6589259a3fb57c5e905d848e1354c4df85122b3841",
+    "golden_sha256": "7aa6068babe657f16319df1b990b35091567ba5418ba9935508002a087327f14",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.svg",
+    "source_sha256": "137f00e4dfd6e9c8437a92c1f77b021ab6cbb7573e2d62042f4bf9006fbc7348",
+    "golden_sha256": "e74d55d6d289f57944c97735c14f3ade68a697803bc9f501c73f299cd4f22460",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.svg",
+    "source_sha256": "085fbc299fe5eb3f88106e6697051dcbf2c7e4b96922ac995bb2690c7b8e349c",
+    "golden_sha256": "ee72bd138bcb1d44994d2943facc9e2fcbeda56c3fea57aca3283bc3e69661af",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.svg",
+    "source_sha256": "75ea2ef2813dc501b4e9ac40be5fb901148954c25c6120fddb512e6784f638e3",
+    "golden_sha256": "8437657fef860cb4fd13fb5428aef2a3ed99f9bab6266dedab9c125d36579118",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.svg",
+    "source_sha256": "3640807699c61a1087c69209b2569fa1802e5331a8aa9de8425a93828869f4e3",
+    "golden_sha256": "83d6de6bef2eede4f4e1b47bf8aee7be0586e4cc66f3fbd6306cae6656e718ea",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.svg",
+    "source_sha256": "dee174cfcd0e4bebeaf7937c2fe8aaa5d4530fbd49d0625654c250a55df70a0a",
+    "golden_sha256": "7391e4c4dce734fba3469b5690daee43d1eef1871caf8d3ee1c7107812b59833",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.svg",
+    "source_sha256": "69d10ae38e0b1e7f73397f049cd887a0cce26837a38f44a50c2d4e76cd75c959",
+    "golden_sha256": "d87b19c152cebbe578c7a2695d13cd01dd8d0631be3b6bd1189e8612db9943b7",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.svg",
+    "source_sha256": "ca187f5a0759def9b58b65c0aef65812caa85f65fc2db2ae87141138e684d8a0",
+    "golden_sha256": "43e8e4fd00f22bc322a53ad446a8e7619ac08ea8bdd20ab1ddec8bec96477b59",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+    "golden": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.svg",
+    "source_sha256": "23f5f72e76a5e313cd30af94258b63fe4343023522b6ed43786d051cac9de9b8",
+    "golden_sha256": "8103dddc303742187bb5430e95c188d2142a67b789430ee48e8cbbfd34619391",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.svg",
+    "source_sha256": "10e52600f992c7da59f0f3cf23c718c67e299f6c75e87b4ba363e1380f449ae9",
+    "golden_sha256": "6fcccb56d151ae131d7dcdcbe319a28751bc618f4ffcdc5c23c413b6472858de",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.svg",
+    "source_sha256": "fb4e409a4db8d4e60070d5dea36b6d7b3a28ac6725b02232a1b6980273022cd7",
+    "golden_sha256": "c5107c4d3211cce7614fb153ffef856c067d7f30a355d3c3f0ea0ab50ebc282b",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.svg",
+    "source_sha256": "c8ec460832419ea8b415599db7496137dae2ada8a71de9933d7e970001f4939a",
+    "golden_sha256": "ec01b8a402cd8da4ec6f62da7356cda153be93195fb666c6926426246986314b",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.svg",
+    "source_sha256": "6e9783bcf61eb0ad45168e947c73439129cba3f8f222e3ef74dd7ff1a59d21f5",
+    "golden_sha256": "6321988b085807e07bad3af3c4f366309772c192293cdf444824ada50b9cb4e8",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.svg",
+    "source_sha256": "95c83f3738bf68d24d6fb4da163a659ae017d86cced4483d33ef1a44059a77fd",
+    "golden_sha256": "e3f5f7eb110a3b91bf738a3944bf1094c66c20ed7d96fd6a68227cd2b4dc7fee",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.svg",
+    "source_sha256": "f1c3ce0bc9462c552c80887a65e0db794680b2677ed7ddf01ab7e210858c1fb8",
+    "golden_sha256": "99746e4d19cdb0b08d4928f5e7984069e5e8ea497c1d68147ba0f1e2e0176553",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.svg",
+    "source_sha256": "4f9bec1386be0b78218fa56dbc63970e74a7bcc10ea91f4bc8ea715e01fbb180",
+    "golden_sha256": "b60e68e4d40886fc24e7324168b312ec680f9e01c1c2d3311f2faa836e34b295",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_deactivate.svg",
+    "source_sha256": "b553c58a8393e9f36e506fd9e844c50a793e2574486f74d16416e75484d98a44",
+    "golden_sha256": "980b8db325410736aeb2961511d9b12d8ac4c0eb55e8e59de3c25391fb6484d4",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e0_destroy.svg",
+    "source_sha256": "dcd32d6e4c31cef4dc1c83f40e6272011ce9b4482f5df696597c6653aaca8a26",
+    "golden_sha256": "81fa9b82ebf063cefb88ed31201bce6c0a3c6d52adbfa17c64f3bebd0b3ff279",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e0_notAPlantColor912.svg",
+    "source_sha256": "6b3de2113c407050e2565eeedf2f408088f9952468ce425ac9b89a7e493aa0c5",
+    "golden_sha256": "2e97b58874c8124c03a27f5b69eb890beac25544e04d8527ef674b91f3fa6c5c",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_deactivate.svg",
+    "source_sha256": "365f5ffabc465f4a9526ac28e77aec4fa9dbe0082e342474a5d39c7ecfb032e7",
+    "golden_sha256": "bfc90108f83763f0d52036a3347636c0c642043dbb684f7548b3bcd8868cddae",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/negative_reopen_e1_destroy.svg",
+    "source_sha256": "8f83be05367add36ac37415765c2dd870b8d93c96c1331bcc4ef6bfe476b1b28",
+    "golden_sha256": "820738c1d5c16fba03bf3ec60f41359f2ab67d98ebd8b992509af6d23cce1f91",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.puml",
+    "golden": "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/inputs/color_e1_notAPlantColor912.svg",
+    "source_sha256": "46f5de4e6d43fa511a97bb0e6a0cf8600f16e6e84d35f4d7405424eb8e97bfc8",
+    "golden_sha256": "bce43b5aa223416bd351f10989bdcf70da6801cfc2086ebec59be8c66ca4ebd6",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.svg",
+    "source_sha256": "f8ef2f25d7d3724bab9c050e8731ebf65b1e5154631244aef5ff6c1d36d48df9",
+    "golden_sha256": "182873cd84c7f7858494b929245eacc938db7deddf5466583e6079ec2954361c",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.svg",
+    "source_sha256": "62ed277b2e6b93229110c0b637cecf73541d64291429cbf104a51e9111d5c30f",
+    "golden_sha256": "63de38a5837d67923611eb8ad5a09cb82adbf473bce9207652bc405815c40faa",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.svg",
+    "source_sha256": "371a9b045223378f2a6ad8a8fa2ca6186ce1e62d225fd941ac01a7f7b3688129",
+    "golden_sha256": "2e6c92f4dbbc2fc0e75e7811ab1ef81e893910ed27761fc744e724bb3a9b206a",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.svg",
+    "source_sha256": "99fbae871ab4a5a856f0bf2ffc0c842fc3c4eb25a63f990063c21bde89e37c98",
+    "golden_sha256": "bd81d883c551717a10a7c9db8663ca971a58825b547456661e30d742b175d1c3",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 1,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.svg",
+    "source_sha256": "25e641cec188dec27b03e7f2d0352b69339ce0ea6db36babac1b5855a944f307",
+    "golden_sha256": "581918a8bf242cb5ebce26d6e2e30999914278fb3f7c414b39f2c8d7e8b80ecd",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 1
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.puml",
+    "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.svg",
+    "source_sha256": "6f3820f5da23f35a288e229546c0c6663e69abed78ae1c29f96fe7f6a7c0fd33",
+    "golden_sha256": "7f0ece0b30813b3d24433a74dc82f5c3ea973ffb925aba00b6a52cba324b3f57",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 1
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/invalid_circle_order_0.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/invalid_circle_order_0.svg",
+    "source_sha256": "da9882520763946dd21b43d883b545a5be9936cdfaae7cef77d4797e50e2276e",
+    "golden_sha256": "69ba5c06755b82947dd8c9a140cebc07af7916a7922c7e4f8be7405c2184ca3e",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 1
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/invalid_circle_order_1.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/reference-inputs/invalid_circle_order_1.svg",
+    "source_sha256": "e804ada487ecde1b8c606f28efe35e5dbf10886786adb6329ac0b44457f38c7b",
+    "golden_sha256": "fcf61d2a9a7c5126583bcbfa61e52db9a3dee0fb1a913eeb9706dbab29899479",
+    "before_comparator": 2,
+    "after_comparator": 2,
+    "before_cli": 0,
+    "after_cli": 1
+  }
+]

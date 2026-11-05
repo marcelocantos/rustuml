@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant "Outpost" as O
+participant "Worker station" as W
+O -> W ++ : first
+W -> W ++ : descend
+W -> W ++ : descend
+note right: return owner remains
+return #335577 response
+return #darkgreen unwind
+return #darkgreen unwind
+return #orange fallback
+return inherited
+@enduml

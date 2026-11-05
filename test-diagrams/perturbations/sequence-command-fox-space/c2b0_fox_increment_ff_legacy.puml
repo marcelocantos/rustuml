@@ -1,0 +1,8 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+autonumber 1.2
+autonumberincA
+Quartz -> Vale: next
+@enduml

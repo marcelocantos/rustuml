@@ -1,0 +1,1019 @@
+{
+  "prior_paths": 9499,
+  "prior_changed": [],
+  "imported_paths": 487,
+  "import_changed_at_import": [],
+  "import_changed_at_tip": [],
+  "existing_paths_modified": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "production_baseline_equivalence": [],
+  "production_tip_equivalence": [],
+  "account_ancestry": [
+    {
+      "implementation": "df9078e2e162752328ffa52ebb28f227e56bc8f6",
+      "account_is_ancestor": true,
+      "message": "fix: share exact Pattern2 whitespace across sequence regexes\n\nPreimplementation account 0b512262a (sequence-pattern2-whitespace). Use ASCII whitespace plus NBSP, including negation; preserve Unicode non-whitespace grammar and explicit rejection-contract evidence.\n\n"
+    },
+    {
+      "implementation": "f4b3db075f61e2a5444777a305ab9bb64fd3685d",
+      "account_is_ancestor": true,
+      "message": "fix: share ordered Display across every sequence participant component\n\nPreimplementation account 0b512262a: sequence-all-participant-display-consumers. Remove boxed-only stereotype suppression; reuse one ordered Display painter and complete text height for heads, tails and created figures. Preserve component-specific margins and symbol geometry.\n\n"
+    },
+    {
+      "implementation": "47fb7bd3a27d62ed80cdca112721be7ca61fc2e6",
+      "account_is_ancestor": true,
+      "message": "fix: select the folded Teoz self-note component before layout\n\nPreimplementation account 0b512262a: sequence-teoz-self-note-component. Follow CommunicationTileSelfNoteLeft/Right for measure and paint after return lowering, without mutating the parsed Note shape.\n\n"
+    },
+    {
+      "implementation": "d491d4bda47faf90d4751484d45aa1387fb1b290",
+      "account_is_ancestor": true,
+      "message": "fix: reject bare sequence note-over commands\n\nPreimplementation account 0b512262a: sequence-note-over-command-domain. Arrow note grammar permits left/right only; over requires a named participant. Preserve across and explicit over commands.\n\n"
+    }
+  ],
+  "regex_source_map": [
+    {
+      "rust_consumer": "MESSAGE_RE",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b",
+      "pinned_sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b",
+      "working_sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b",
+      "matches": true
+    },
+    {
+      "rust_consumer": "EXTERNAL_MESSAGE_IN_RE",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowLeft.java",
+      "sha256": "97c0f744c0fa01bce1f1cb61ecd19296d41bca857dac2f7f7c14d64f301e548b",
+      "pinned_sha256": "97c0f744c0fa01bce1f1cb61ecd19296d41bca857dac2f7f7c14d64f301e548b",
+      "working_sha256": "97c0f744c0fa01bce1f1cb61ecd19296d41bca857dac2f7f7c14d64f301e548b",
+      "matches": true
+    },
+    {
+      "rust_consumer": "EXTERNAL_MESSAGE_OUT_RE",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowRight.java",
+      "sha256": "ed229434c93f7226764e8228bd3bb57d66576b8020a1c2c346d26e5057f62c95",
+      "pinned_sha256": "ed229434c93f7226764e8228bd3bb57d66576b8020a1c2c346d26e5057f62c95",
+      "working_sha256": "ed229434c93f7226764e8228bd3bb57d66576b8020a1c2c346d26e5057f62c95",
+      "matches": true
+    },
+    {
+      "rust_consumer": "NOTE_END",
+      "java_path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "pinned_sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "working_sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_participant_decl",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "pinned_sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "working_sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_note",
+      "java_path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "pinned_sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "working_sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_group",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandGrouping.java",
+      "sha256": "fa1736360451c1a8a01d860a6a124b0031ce56a925d2c699330ff5c25654d5cb",
+      "pinned_sha256": "fa1736360451c1a8a01d860a6a124b0031ce56a925d2c699330ff5c25654d5cb",
+      "working_sha256": "fa1736360451c1a8a01d860a6a124b0031ce56a925d2c699330ff5c25654d5cb",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_divider",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDivider.java",
+      "sha256": "02b14eff2e2eee29b7277e978287e2e81c7d67e0f7a87d858fa23fcfd1814e02",
+      "pinned_sha256": "02b14eff2e2eee29b7277e978287e2e81c7d67e0f7a87d858fa23fcfd1814e02",
+      "working_sha256": "02b14eff2e2eee29b7277e978287e2e81c7d67e0f7a87d858fa23fcfd1814e02",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_autonumber",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumber.java",
+      "sha256": "546c672dff29eb3edebe20bad232b5e831c50250c8aa78ce8d4241960e7ab6b6",
+      "pinned_sha256": "546c672dff29eb3edebe20bad232b5e831c50250c8aa78ce8d4241960e7ab6b6",
+      "working_sha256": "546c672dff29eb3edebe20bad232b5e831c50250c8aa78ce8d4241960e7ab6b6",
+      "matches": true
+    },
+    {
+      "rust_consumer": "autonumber resume",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberResume.java",
+      "sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321",
+      "pinned_sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321",
+      "working_sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_activation/create/destroy",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandActivate.java",
+      "sha256": "8d653402d29619ab112333ffb17e5e188ae84661fc1e1f75df676de54cf81299",
+      "pinned_sha256": "8d653402d29619ab112333ffb17e5e188ae84661fc1e1f75df676de54cf81299",
+      "working_sha256": "8d653402d29619ab112333ffb17e5e188ae84661fc1e1f75df676de54cf81299",
+      "matches": true
+    },
+    {
+      "rust_consumer": "create declaration parsing",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "pinned_sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "working_sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "matches": true
+    },
+    {
+      "rust_consumer": "return color boundary",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReturn.java",
+      "sha256": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53",
+      "pinned_sha256": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53",
+      "working_sha256": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_ref inline",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceOverSeveral.java",
+      "sha256": "9948cf0d17ee31420cd89bb69a04b36ef4a9d96ed47ac937a8ae56021072dac7",
+      "pinned_sha256": "9948cf0d17ee31420cd89bb69a04b36ef4a9d96ed47ac937a8ae56021072dac7",
+      "working_sha256": "9948cf0d17ee31420cd89bb69a04b36ef4a9d96ed47ac937a8ae56021072dac7",
+      "matches": true
+    },
+    {
+      "rust_consumer": "try_ref multiline",
+      "java_path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceMultilinesOverSeveral.java",
+      "sha256": "11e6d7dadc1d8d924bd3df29098bf01f54bf36b04caaee8ae0d67a013487adae",
+      "pinned_sha256": "11e6d7dadc1d8d924bd3df29098bf01f54bf36b04caaee8ae0d67a013487adae",
+      "working_sha256": "11e6d7dadc1d8d924bd3df29098bf01f54bf36b04caaee8ae0d67a013487adae",
+      "matches": true
+    },
+    {
+      "rust_consumer": "STEREOTYPE_VISIBILITY",
+      "java_path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByGender.java",
+      "sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4",
+      "pinned_sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4",
+      "working_sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4",
+      "matches": true
+    },
+    {
+      "rust_consumer": "shared character class",
+      "java_path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "pinned_sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "working_sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "matches": true
+    },
+    {
+      "rust_consumer": "shared command space leaf",
+      "java_path": "src/main/java/net/sourceforge/plantuml/regex/RegexLeaf.java",
+      "sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b",
+      "pinned_sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b",
+      "working_sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b",
+      "matches": true
+    }
+  ],
+  "account_java_sources": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/RegexLeaf.java",
+      "sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/Participant.java",
+      "sha256": "b805f43d700c8453e6b837f3f272bc189f5eec1d10bc6df6f7b958ef202a28be",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+      "sha256": "db8c1bd54e44ea2e86802952936032c9db59c00dcf858b0987314cfaa2d2c897",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelfNoteLeft.java",
+      "sha256": "c77929b69f1c371988ae347c1d3f18313003f0e63662c6589b4bcee8b19ce876",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelfNoteRight.java",
+      "sha256": "477afe4e7c52011fbfed7fa571a70efa8441931d103b72ed6e6a710b43012d81",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseActor.java",
+      "sha256": "c6939f2876b59ff22a68e6d0bddb0517d760b05842ddcb6da5a5ca1c9ca4c06c",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseBoundary.java",
+      "sha256": "23fbb112c6bc98bb042ae51828325a3bede69f676267decd3fcbc068b930424e",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseControl.java",
+      "sha256": "9b23e2204ad065fbf2a537a2aee39a8b0c7d1f9ef674c481d998913f33bebf0e",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseDatabase.java",
+      "sha256": "fecc4af48215042cc29ec34a7faf53b01015f50d67b68b1f39ed854f4239e444",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseEntity.java",
+      "sha256": "7cbf9ef2ec08fa4dcf20675edd3d3e7a5343009ace6ffd2b79e35e8bd3a63896",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseParticipant.java",
+      "sha256": "92d7d7d85bd53c2516064c42c9046dc8e3cff5ab0d34e8ea9e395a05fd2d80bc",
+      "working_matches_pinned": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseQueue.java",
+      "sha256": "60d53361642742332622c335437748c8a200853108250e288c4c6429d5ad5f08",
+      "working_matches_pinned": true
+    }
+  ],
+  "artifact_integrity": [
+    {
+      "path": "README.md",
+      "matches": true
+    },
+    {
+      "path": "all-inputs.json",
+      "matches": true
+    },
+    {
+      "path": "before-after.json.gz",
+      "matches": true
+    },
+    {
+      "path": "before-binding.json",
+      "matches": true
+    },
+    {
+      "path": "before-measurements.json.gz",
+      "matches": true
+    },
+    {
+      "path": "binaries.json",
+      "matches": true
+    },
+    {
+      "path": "candidate1-binding.json",
+      "matches": true
+    },
+    {
+      "path": "capture_models.py",
+      "matches": true
+    },
+    {
+      "path": "captures.tar.gz",
+      "matches": true
+    },
+    {
+      "path": "checks.json",
+      "matches": true
+    },
+    {
+      "path": "cohort-overlap.json",
+      "matches": true
+    },
+    {
+      "path": "combine.py",
+      "matches": true
+    },
+    {
+      "path": "creation-witnesses.json.gz",
+      "matches": true
+    },
+    {
+      "path": "dependencies.json",
+      "matches": true
+    },
+    {
+      "path": "final-binaries.json",
+      "matches": true
+    },
+    {
+      "path": "final-model-and-ascii.json.gz",
+      "matches": true
+    },
+    {
+      "path": "final_checks.py",
+      "matches": true
+    },
+    {
+      "path": "implementation-map.json",
+      "matches": true
+    },
+    {
+      "path": "import_references.py",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/actor_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/actor_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/actor_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/actor_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/actor_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/actor_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_inline_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_inline_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_inline_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_inline_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_inline_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_inline_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_multiline_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_multiline_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_multiline_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_multiline_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_multiline_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/bare_over_multiline_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/boundary_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/boundary_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/boundary_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/boundary_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/boundary_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/boundary_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/collections_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/collections_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/collections_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/collections_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/collections_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/collections_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/control_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/control_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/control_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/control_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/control_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/control_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/database_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/database_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/database_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/database_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/database_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/database_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/entity_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/entity_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/entity_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/entity_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/entity_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/entity_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_em_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_em_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_em_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_narrow_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_narrow_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_narrow_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_nbsp_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_nbsp_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/message_gap_nbsp_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/participant_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/participant_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/participant_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/participant_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/participant_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/participant_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/queue_ordered_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/queue_ordered_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/queue_ordered_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/queue_ordered_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/queue_ordered_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/queue_ordered_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_left_rnote_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_left_rnote_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_left_rnote_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_left_rnote_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_left_rnote_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_left_rnote_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_right_hnote_legacy.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_right_hnote_legacy.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_right_hnote_legacy.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_right_hnote_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_right_hnote_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/self_right_hnote_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_em_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_em_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_em_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_narrow_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_narrow_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_narrow_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_nbsp_teoz.puml",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_nbsp_teoz.stderr",
+      "matches": true
+    },
+    {
+      "path": "inputs/reference-inputs/terminator_gap_nbsp_teoz.svg",
+      "matches": true
+    },
+    {
+      "path": "local-reference-validation.json",
+      "matches": true
+    },
+    {
+      "path": "logs/after-model.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/after30-model.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/bare-over-unit.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/before-model.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/before2519.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/before30-model.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/before30.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/build-candidate.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/candidate1-148.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/display-check.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/display-unit.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-check-driver.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-failure-names/golden_failure_names.txt.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-failure-names/no_oracle_failure_names.txt.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-logs/cli.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-logs/clippy-render.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-logs/clippy.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-logs/format-owned.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-logs/format-workspace.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-logs/main-tiers-and-guards.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final-logs/units.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final2519.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/final30.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/package.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/rejection-contract.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/self-note-unit-2.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/self-note-unit.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/semantic-summary.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/whitespace-unit-2.log.gz",
+      "matches": true
+    },
+    {
+      "path": "logs/whitespace-unit.log.gz",
+      "matches": true
+    },
+    {
+      "path": "measurement-label-recovery.json",
+      "matches": true
+    },
+    {
+      "path": "measurements.json.gz",
+      "matches": true
+    },
+    {
+      "path": "model-ascii-yaml-summary.json",
+      "matches": true
+    },
+    {
+      "path": "model-event-counts.json.gz",
+      "matches": true
+    },
+    {
+      "path": "model-output-changes.json.gz",
+      "matches": true
+    },
+    {
+      "path": "nonpositive-contract-inputs.json",
+      "matches": true
+    },
+    {
+      "path": "nonpositive-status.json",
+      "matches": true
+    },
+    {
+      "path": "package.py",
+      "matches": true
+    },
+    {
+      "path": "parent-relay-input.json.gz",
+      "matches": true
+    },
+    {
+      "path": "parent-relay-validation.json",
+      "matches": true
+    },
+    {
+      "path": "parent-upload-validation.json",
+      "matches": true
+    },
+    {
+      "path": "participant-kind-results.json.gz",
+      "matches": true
+    },
+    {
+      "path": "prepare.py",
+      "matches": true
+    },
+    {
+      "path": "protected-evidence.json",
+      "matches": true
+    },
+    {
+      "path": "reference-classification.json",
+      "matches": true
+    },
+    {
+      "path": "reference-input-bundle.json.gz",
+      "matches": true
+    },
+    {
+      "path": "reference-manifest.json",
+      "matches": true
+    },
+    {
+      "path": "reference-results.json.gz",
+      "matches": true
+    },
+    {
+      "path": "reference-transport.json",
+      "matches": true
+    },
+    {
+      "path": "regex-source-map.json",
+      "matches": true
+    },
+    {
+      "path": "rejection-contract.json",
+      "matches": true
+    },
+    {
+      "path": "rejection_contract.py",
+      "matches": true
+    },
+    {
+      "path": "remaining-failures.json.gz",
+      "matches": true
+    },
+    {
+      "path": "report.py",
+      "matches": true
+    },
+    {
+      "path": "semantic-inventory.json.gz",
+      "matches": true
+    },
+    {
+      "path": "semantic-summary.json",
+      "matches": true
+    },
+    {
+      "path": "semantic_inventory.py",
+      "matches": true
+    },
+    {
+      "path": "summary.json",
+      "matches": true
+    }
+  ],
+  "measurement_label_recovery": {
+    "original_rows": 2519,
+    "combined_rows": 2549,
+    "nonmetadata_row_changes": [],
+    "stdout_capture_changes": [],
+    "manifest_nonmetadata_changes": [],
+    "original_log": "Traceback (most recent call last):\n  File \"/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py\", line 73, in <module>\n    measure(Path(sys.argv[1]).resolve(), Path(sys.argv[2]).resolve(),\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n            Path(sys.argv[3]).resolve(), Path(sys.argv[4]).resolve() if len(sys.argv) > 4 else ROOT)\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py\", line 63, in measure\n    for cohort in sorted({r[\"cohort\"] for r in rows}):\n                          ~^^^^^^^^^^\nKeyError: 'cohort'\n"
+  },
+  "maker_inventory_read": {
+    "participant-kind-results.json.gz": {
+      "entries": 8,
+      "sha256": "22739631fdfda576700a622cdfe4e7ee9ef0758373c5f679a8d8c50a038f19f1"
+    },
+    "semantic-inventory.json.gz": {
+      "entries": 2549,
+      "sha256": "70a58d62101fcaa62de8526932ed1de69464492ca3193a8cfc0d3b1c90ec59ca"
+    },
+    "remaining-failures.json.gz": {
+      "entries": 740,
+      "sha256": "8dd40a041812eae77e620e262adba1fd1f237dc6ebaac8cff35499f31ae67cbb"
+    }
+  },
+  "maker_kind_claims": {
+    "participant": {
+      "entries": 6,
+      "before": 2,
+      "after": 6
+    },
+    "actor": {
+      "entries": 6,
+      "before": 2,
+      "after": 6
+    },
+    "boundary": {
+      "entries": 6,
+      "before": 2,
+      "after": 6
+    },
+    "control": {
+      "entries": 6,
+      "before": 2,
+      "after": 6
+    },
+    "entity": {
+      "entries": 6,
+      "before": 2,
+      "after": 6
+    },
+    "database": {
+      "entries": 6,
+      "before": 2,
+      "after": 6
+    },
+    "collections": {
+      "entries": 6,
+      "before": 2,
+      "after": 6
+    },
+    "queue": {
+      "entries": 6,
+      "before": 6,
+      "after": 6
+    }
+  },
+  "cohort_counts": {
+    "entries": 2549,
+    "unique": 2501,
+    "duplicates": 48,
+    "fresh": 518,
+    "fresh_unique": 514,
+    "fresh_overlaps_old": []
+  }
+}

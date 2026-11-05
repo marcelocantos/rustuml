@@ -1,0 +1,44 @@
+{
+  "before": {
+    "entries": 2281,
+    "source_hash_differences": [],
+    "reference_hash_differences": [],
+    "svg_hash_differences": [],
+    "status_differences": [],
+    "comparison_differences": {
+      "cli_comparison": [],
+      "product_library": [],
+      "assisted_library": []
+    }
+  },
+  "after": {
+    "entries": 2281,
+    "source_hash_differences": [],
+    "reference_hash_differences": [],
+    "svg_hash_differences": [],
+    "status_differences": [],
+    "comparison_differences": {
+      "cli_comparison": [],
+      "product_library": [],
+      "assisted_library": []
+    }
+  },
+  "parent1449": {
+    "entries": 1449,
+    "overlap_paths": 1123,
+    "unreplayed_paths": 326,
+    "overlap_unique_bytes": 1097,
+    "unreplayed_unique_bytes": 286,
+    "exclusive_unreplayed_unique_bytes": 278
+  },
+  "fresh_source_overlap": [],
+  "fresh_unique": 64,
+  "ast_ascii_status_changes": {
+    "ast": [],
+    "ascii": []
+  },
+  "comparator_source_diff": "",
+  "comparator_note": "Same adapter source compiled against each exact release rlib; binary hashes differ because releases were built independently in different private targets. No comparator algorithm, slack, skip rule or allowance changed.",
+  "adapter_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "adapter_imported_unchanged": true
+}

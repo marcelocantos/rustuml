@@ -1,0 +1,10 @@
+{
+  "source_refinements_precede_production": true,
+  "modified_existing_since_import": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "comparator_sha256": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5"
+}

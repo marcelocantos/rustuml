@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 165,
+    "name": "ordinary_live_teoz",
+    "remote_name": "ordinary_live_teoz.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/ordinary_live_teoz.puml",
+    "source_sha256": "ff9fccf05e500636827e0baf20a64b63d31f60f0a08d24d3351a10a79ba5e1c2",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.121529041993199,
+    "stdout_sha256": "a52046cc719f7c9331b6506c0254db99584d6125b506eeb7a7be0d1dc85d72d4",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/ordinary_live_teoz.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/ordinary_live_teoz.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/ordinary_live_teoz.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/ordinary_live_teoz.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/ordinary_live_teoz.puml"
+    }
+  },
+  "request": {
+    "name": "ordinary_live_teoz",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/ordinary_live_teoz.puml",
+    "remote_name": "ordinary_live_teoz.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/ordinary_live_teoz.puml",
+    "source_sha256": "ff9fccf05e500636827e0baf20a64b63d31f60f0a08d24d3351a10a79ba5e1c2",
+    "bytes": 165,
+    "axes": [
+      "head/open/filled",
+      "direction/activation/alpha",
+      "teoz"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandArrow#getRegexConcat/#executeArg; Rose#createComponentArrow"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "ordinary_live_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 165,
+    "stdout_bytes": 3309,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.puml",
+  "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_ordinary_live_teoz.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/ordinary_live_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/ordinary_live_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "ordinary_live_teoz",
+    "axes": [
+      "head/open/filled",
+      "direction/activation/alpha",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "ff9fccf05e500636827e0baf20a64b63d31f60f0a08d24d3351a10a79ba5e1c2",
+    "golden_sha256": "a52046cc719f7c9331b6506c0254db99584d6125b506eeb7a7be0d1dc85d72d4",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "819d30ee19ed2fabf462c3f57bf63389541ecb819103e5ca8ee8abe6309cc883",
+      "svg": "33b1767e5c0c75e3d5c6.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 28, got 25\n  [19] tag mismatch: expected <ellipse>, got <polygon>\n  [20] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#42719B80;stroke-width:1;\"), (\"x1\", \"141.9111\"), (\"x2\", \"131.9111\"), (\"y1\", \"70.7988\"), (\"y2\", \"66.7988\")]\n    actual:   [(\"style\", \"stroke:#42719B80;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"143.4111\"), (\"y1\", \"70.7988\"), (\"y2\", \"70.7988\")]\n  [21] tag mismatch: expected <line>, got <text>\n  [22] tag mismatch: expected <line>, got <polygon>\n  [23] tag mismatch: expected <text>, got <line>\n  [24] tag mismatch: expected <ellipse>, got <text>\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 28, got 25\n  [19] tag mismatch: expected <ellipse>, got <polygon>\n  [20] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#42719B80;stroke-width:1;\"), (\"x1\", \"141.9111\"), (\"x2\", \"131.9111\"), (\"y1\", \"70.7988\"), (\"y2\", \"66.7988\")]\n    actual:   [(\"style\", \"stroke:#42719B80;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"143.4111\"), (\"y1\", \"70.7988\"), (\"y2\", \"70.7988\")]\n  [21] tag mismatch: expected <line>, got <text>\n  [22] tag mismatch: expected <line>, got <polygon>\n  [23] tag mismatch: expected <text>, got <line>\n  [24] tag mismatch: expected <ellipse>, got <text>\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 28, got 25\n  [19] tag mismatch: expected <ellipse>, got <polygon>\n  [20] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#42719B80;stroke-width:1;\"), (\"x1\", \"141.9111\"), (\"x2\", \"131.9111\"), (\"y1\", \"70.7988\"), (\"y2\", \"66.7988\")]\n    actual:   [(\"style\", \"stroke:#42719B80;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"143.4111\"), (\"y1\", \"70.7988\"), (\"y2\", \"70.7988\")]\n  [21] tag mismatch: expected <line>, got <text>\n  [22] tag mismatch: expected <line>, got <polygon>\n  [23] tag mismatch: expected <text>, got <line>\n  [24] tag mismatch: expected <ellipse>, got <text>\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/ordinary_live_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/ordinary_live_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "ordinary_live_teoz",
+    "axes": [
+      "head/open/filled",
+      "direction/activation/alpha",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "ff9fccf05e500636827e0baf20a64b63d31f60f0a08d24d3351a10a79ba5e1c2",
+    "golden_sha256": "a52046cc719f7c9331b6506c0254db99584d6125b506eeb7a7be0d1dc85d72d4",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "60f5b3da3dc88fc88cfaf6a374b8b6459947af3c2d3606d7c6cc16bed2c92d48",
+      "svg": "33b1767e5c0c75e3d5c6.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

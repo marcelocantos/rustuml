@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Maple
+Cedar o//--\o Maple: crossed halves
+Maple o\\--/o Cedar: reverse
+Cedar o<-->>o Maple ++: activate
+Maple o<<-->o Cedar --: close
+@enduml

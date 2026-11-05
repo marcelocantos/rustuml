@@ -1,0 +1,105 @@
+[
+  {
+    "mechanism": "sequence-delay-label-allocation",
+    "status": "Unresolved, deferred next packet; not waived",
+    "sources": [
+      "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_multiline.puml"
+    ]
+  },
+  {
+    "mechanism": "sequence-page-wrapper-hierarchy",
+    "status": "Unresolved, deferred next packet; not waived",
+    "sources": [
+      "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page0.puml",
+      "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.puml",
+      "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page0.puml",
+      "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e1_page1.puml",
+      "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_top_legend.puml",
+      "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_styled_caption.puml"
+    ]
+  },
+  {
+    "mechanism": "sequence-preferred-component-flow",
+    "status": "Unresolved, deferred next packet; not waived",
+    "sources": [
+      "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.puml"
+    ]
+  },
+  {
+    "mechanism": "sequence-teoz-englober-margins",
+    "status": "Unresolved, deferred next packet; not waived",
+    "sources": [
+      "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested0.puml",
+      "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi0_nested1.puml",
+      "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested0.puml",
+      "test-diagrams/perturbations/sequence-teoz-englober-margins/checker_d382_multi1_nested1.puml"
+    ]
+  },
+  {
+    "mechanism": "sequence-teoz-group-tile-composition",
+    "status": "Unresolved, deferred next packet; not waived",
+    "sources": [
+      "test-diagrams/perturbations/sequence-teoz-group-tile-composition/checker_d382_hex_note.puml"
+    ]
+  },
+  {
+    "mechanism": "sequence-teoz-note-component-flow",
+    "status": "Unresolved, deferred next packet; not waived",
+    "sources": [
+      "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.puml",
+      "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.puml"
+    ]
+  },
+  {
+    "mechanism": "Logical fonts and shared family serialization",
+    "target": "T14.11",
+    "status": "Unowned unresolved dependency",
+    "sources": [
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_sansserif.puml",
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_serif.puml"
+    ],
+    "details": "SansSerif family quoting and Serif metrics/family remain failed. No host font import or compensating geometry."
+  },
+  {
+    "mechanism": "Shared entity sequence stereotypes",
+    "status": "Independent downstream parser dependency; no event-model cause identified",
+    "provenance": "../../sequence-lifecycle-decoration-packet/maker-results/dependencies/shared-entity/provenance.json",
+    "details": "Preserved exact bare_quoted and order_stereo_entity source/reference pairs from fc698b9b; no class/shared parser changes."
+  },
+  {
+    "mechanism": "Other retained corpus mismatches",
+    "status": "All 542 prior valid mismatches remain active",
+    "inventory": "remaining-failures.json.gz"
+  },
+  {
+    "mechanism": "Remaining invalid input acceptance",
+    "status": "12 invalid references still accepted by CLI; not positive parity",
+    "inventory": "negative-input-status.json",
+    "details": "Includes two spaced right-border negatives. Owned same-message reactivation and unknown return color negatives reject."
+  },
+  {
+    "mechanism": "Builtin include cwd",
+    "target": "T14.6.2",
+    "status": "Separate dependency",
+    "details": "Repository-root is the declared CLI comparison base. Cargo package cwd retains one additional include failure."
+  },
+  {
+    "mechanism": "Standing gates",
+    "status": "Not green and not waived",
+    "details": "Frozen ratchets, existing main failures, rejected reviews and new unreviewed accounts, decimal guard, existing class format/parser dead code/20 renderer Clippy findings."
+  },
+  {
+    "mechanism": "Themed self-arrow/note preferred allocation",
+    "status": "Two new valid mismatches retained; no acceptance or geometry waiver",
+    "sources": [
+      "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_0.puml",
+      "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/theme_activation_1.puml"
+    ],
+    "details": "Cerulean legacy self-note is 10px left and the canvas 10px short; Teoz counterpart has participant/note/canvas allocation differences. Existing constraint_global_padding discards theme padding in self_arrow_by_event while Java AbstractComponentRoseArrow.getTextBlock -> sequenceDiagramPadder -> MessageSelfArrow.getPreferredWidth -> Step1Abstract.createNoteBox uses the component width. The Teoz counterpart additionally needs CommunicationTileSelf/CommunicationTileNote allocation audit. Activation border colors now agree; do not tune geometry to hide this separate preferred-component dependency."
+  },
+  {
+    "mechanism": "Broader Display/color semantics outside tested correction",
+    "status": "Source coverage limits, not waived or claimed accepted",
+    "details": "This packet normalizes inline backslash-n/tab/backslash and preserves raw math/link and block text. Display natural-alignment backslash-r/backslash-l and other Jaws controls are not ported here. HColorAutomagic is accepted by existing grammar but reference HColor.toColor throws unless a caller resolves getAppropriateColor; arrow automatic paint has no captured positive reference in this packet. No grammar narrowing or automatic-color acceptance claim."
+  }
+]

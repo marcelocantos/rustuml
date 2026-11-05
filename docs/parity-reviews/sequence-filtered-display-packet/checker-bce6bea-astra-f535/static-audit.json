@@ -1,0 +1,294 @@
+{
+  "prior_paths": 9145,
+  "prior_differences": [],
+  "imported_paths": 205,
+  "import_differences": [],
+  "import_commit_tree_delta_equal": true,
+  "modified_existing": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "production_baseline_source_identical": true,
+  "production_final_source_identical": true,
+  "ascii_exact_authorized_diff": true,
+  "ascii_added_lines": [
+    "+                    stereotype_position_bottom: false,",
+    "+            hide_stereotypes: false,",
+    "+            hide_stereotypes: false,"
+  ],
+  "causal_order": [
+    {
+      "mechanism": "sequence-filtered-ordered-participant-display",
+      "account": "ca2aae93f8056b9ff0a93e08cd6bafda7be2360a",
+      "implementation": "7c05cfcf8cc65be31e2f69d68bf3ee432532f9a1",
+      "account_precedes_implementation_parent": true,
+      "account_unchanged_since_precommit": true,
+      "implementation_message": "fix: derive filtered ordered sequence participant Display\n\nCausal account ca2aae93f: sequence-filtered-ordered-participant-display. Preserve raw stereotypes, serde-default and omit inactive fields, capture declaration-time order, and reuse the filtered Display for queue heads and tails. Includes exactly three authorized ASCII test-constructor defaults.\n\n"
+    },
+    {
+      "mechanism": "sequence-note-aggregate-paint-height",
+      "account": "ca2aae93f8056b9ff0a93e08cd6bafda7be2360a",
+      "implementation": "fc71fafc7f372be708ec077dba7d82748ba7667a",
+      "account_precedes_implementation_parent": true,
+      "account_unchanged_since_precommit": true,
+      "implementation_message": "fix: cast aggregate rectangular and hexagonal note heights once\n\nCausal account ca2aae93f: sequence-note-aggregate-paint-height. Retain the already-correct folded-note rule and derive other margins from ComponentRoseNoteBox/Hexagonal constructors.\n\n"
+    },
+    {
+      "mechanism": "sequence-external-note-owner",
+      "account": "ca2aae93f8056b9ff0a93e08cd6bafda7be2360a",
+      "implementation": "aa5ac30e6660b2623a8ceb8fd1e72c3108c8458c",
+      "account_precedes_implementation_parent": true,
+      "account_unchanged_since_precommit": true,
+      "implementation_message": "fix: retain external messages as bare note owners\n\nCausal account ca2aae93f: sequence-external-note-owner. Match SequenceDiagram.getLastEventWithNote and FactorySequenceNoteOnArrowCommand using normalized MessageExo endpoints.\n\n"
+    },
+    {
+      "mechanism": "sequence-note-shape-terminator",
+      "account": "5d4858fb269c68ec8e6ec7261f41c9c84a7a4618",
+      "implementation": "61e6aeed6eaf686b3497fbc696aadc03a64e69a2",
+      "account_precedes_implementation_parent": true,
+      "account_unchanged_since_precommit": true,
+      "implementation_message": "fix: consume standalone sequence note shape terminators\n\nCausal account 5d4858fb2. Follow FactorySequenceNoteCommand END grammar without rewriting immutable valid rectangular and hexagonal controls; keep arrow-note terminators distinct.\n\n"
+    }
+  ],
+  "java_sources": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByGender.java",
+      "sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+      "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/AbstractMessage.java",
+      "sha256": "797c379c39e7677047cb32223d2460bebb88fa38883cc64852db265ac340f27e",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/Participant.java",
+      "sha256": "b805f43d700c8453e6b837f3f272bc189f5eec1d10bc6df6f7b958ef202a28be",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java",
+      "sha256": "e929fbe92bf0c987c0e5f0f9f6ae1f87e20a099bffb1a4026a3e2a97b35e2f17",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1MessageExo.java",
+      "sha256": "afb53e97b66ece723aaf1641e8763167c4ba062ea816a9ac83c214bf9e977463",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "sha256": "3b34cd97df5bd5fcea39e132bffb8d42390842f21cfc7a92163f6e6200c59862",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "sha256": "f28ef36b9b56933f91052c51bc90cd03bb462be1797ed3d5ef9f2208953d6dd4",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "sha256": "78f64269ceccf430d3e31a6298acc35f2a563f5d699e5db1c86ab8239edf7d49",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNoteBox.java",
+      "sha256": "9437f60797ad216cc011ca330dbb94d41e2e6676c0c8a5ad7f323858b3b8c93d",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNoteHexagonal.java",
+      "sha256": "d9a4b5dfd2c10efa8f605abd440a64077b2e41d8c46533df8de2115680d2e1af",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseQueue.java",
+      "sha256": "60d53361642742332622c335437748c8a200853108250e288c4c6429d5ad5f08",
+      "matches_pin": true
+    }
+  ],
+  "java_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "golden_head": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "frozen_tools": [
+    {
+      "path": "crates/rustuml-oracle/src/compare.rs",
+      "sha256": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5",
+      "unchanged": true
+    },
+    {
+      "path": "crates/rustuml-oracle/src/harness.rs",
+      "sha256": "0542e56ff01abb53d7e977228c49d9610fab4940061973da2924f82d8619770d",
+      "unchanged": true
+    },
+    {
+      "path": "crates/rustuml-oracle/tests/harness_guards.rs",
+      "sha256": "83a17e7b7e412b7e0c544a1558da7ee24e4a7dc8e14537ca4fd4b418f8fe7a1e",
+      "unchanged": true
+    },
+    {
+      "path": "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9",
+      "unchanged": true
+    }
+  ],
+  "maker_evidence_read": [
+    {
+      "path": "creation-witnesses.json.gz",
+      "sha256": "e483a05b6997b4a7a8db89ff1c46aebcc48867b587d700548d4e3f15c792feeb",
+      "type": "list",
+      "entries": 28,
+      "keys": [
+        "source",
+        "comparator_before",
+        "comparator_after",
+        "changed",
+        "counts_changed",
+        "shapes",
+        "excess"
+      ]
+    },
+    {
+      "path": "final-model-and-ascii.json.gz",
+      "sha256": "f9433ddcc2ae14f7dc1f46edd2025399d3668f384a29d2949f354b8b178daf8a",
+      "type": "list",
+      "entries": 2371,
+      "keys": [
+        "source",
+        "source_sha256",
+        "results",
+        "ascii_equal"
+      ]
+    },
+    {
+      "path": "remaining-failures.json.gz",
+      "sha256": "808e1ff616debc361a8dc2211f598211a02bb6cb2173067eecb415943bf1db91",
+      "type": "list",
+      "entries": 697,
+      "keys": [
+        "source",
+        "golden",
+        "cohort",
+        "source_sha256",
+        "golden_sha256",
+        "cli",
+        "cli_comparison",
+        "product_library",
+        "assisted_library",
+        "cli_equals_library",
+        "library_render_exit",
+        "cwd"
+      ]
+    },
+    {
+      "path": "cohort-overlap.json",
+      "sha256": "0e9558bf0824a3cdc2eb7bf69c8832adc62af44b05df8462f105d84203b44db9",
+      "type": "dict",
+      "entries": 7,
+      "keys": [
+        "entries",
+        "unique_paths",
+        "unique_source_bytes",
+        "duplicate_entries",
+        "cohorts",
+        "parent1449",
+        "note"
+      ]
+    },
+    {
+      "path": "protected-evidence.json",
+      "sha256": "89c220f2c3041aa4e9a7f1bfa2cb954c617408cfc36f3c756b533c44441f9a44",
+      "type": "dict",
+      "entries": 10,
+      "keys": [
+        "import_commit",
+        "local_import",
+        "prior_evidence_paths",
+        "imported_paths",
+        "prior_and_imported_byte_unchanged",
+        "modified_existing_files",
+        "ascii_authorization",
+        "ascii_diff",
+        "comparator_sha256",
+        "measure_sha256"
+      ]
+    },
+    {
+      "path": "dependencies.json",
+      "sha256": "625d3ef2dc3cfacb083b9e1a81ab87e27c709141ddb15a9797752c1276695ba8",
+      "type": "list",
+      "entries": 9,
+      "keys": [
+        "mechanism",
+        "scope",
+        "sources",
+        "finding",
+        "source_path",
+        "next"
+      ]
+    },
+    {
+      "path": "model-ascii-yaml-summary.json",
+      "sha256": "2a74ed4c49ec430f0f0b366ae22b96e7772cb6ed9460a778dbe7d2f5147ba9ff",
+      "type": "dict",
+      "entries": 7,
+      "keys": [
+        "entries",
+        "yaml_by_cohort",
+        "yaml_stdout_changes",
+        "yaml_existing_panics",
+        "yaml_explanation",
+        "changed_ascii",
+        "ascii_note"
+      ]
+    }
+  ],
+  "additional_checker_java_sources": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+      "sha256": "db8c1bd54e44ea2e86802952936032c9db59c00dcf858b0987314cfaa2d2c897",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelfNoteRight.java",
+      "sha256": "477afe4e7c52011fbfed7fa571a70efa8441931d103b72ed6e6a710b43012d81",
+      "matches_pin": true
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelfNoteLeft.java",
+      "sha256": "c77929b69f1c371988ae347c1d3f18313003f0e63662c6589b4bcee8b19ce876",
+      "matches_pin": true
+    }
+  ]
+}

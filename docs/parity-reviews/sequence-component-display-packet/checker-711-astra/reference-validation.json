@@ -1,0 +1,52 @@
+{
+  "manifest_sha256": "81508a66934ee73c4af590221071c9c1ecba69fc635aa2b0f6569feaffaf04e1",
+  "entries": 52,
+  "classification": {
+    "invalid": 6,
+    "valid": 46
+  },
+  "disagreements": [
+    "review711_ordinary_parts_legacy",
+    "review711_ordinary_parts_teoz",
+    "review711_create_double_pending_legacy",
+    "review711_create_double_pending_teoz",
+    "review711_blank_display_legacy",
+    "review711_blank_display_teoz"
+  ],
+  "validation": "Exact membership/bytes/base64/path/hash/streams/wrapperargv/cwd/timezone/resources and pinned revision/JAR validated independently. Java argv derived from wrapper, not process-traced. Historical font/Graphviz equivalence not proved.",
+  "environment": {
+    "batch": "sequence-review711-5c023380",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.zmbIPPf0",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "headless": true,
+    "encoding": "UTF-8",
+    "locale": "en_AU",
+    "input_compressed_sha256": "8509881389625feb4f1517cd2ba69cb601b608132a9fe374f2ed427705f538e1",
+    "manifest_sha256": "81508a66934ee73c4af590221071c9c1ecba69fc635aa2b0f6569feaffaf04e1",
+    "env_overrides": {},
+    "environment_policy": "Inherited environment; wrapper removes JAVA_TOOL_OPTIONS, _JAVA_OPTIONS, JDK_JAVA_OPTIONS, CLASSPATH and sets GRAPHVIZ_DOT",
+    "timeout_seconds": 60,
+    "classification_performed": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "manifest_original_path": "/Users/marcelo/rustuml-reference/scratch/transfer.7RERwydM/relay-manifest.json.gz",
+    "manifest_original_bytes": 46398,
+    "manifest_provenance": "Exact original manifest bytes decompressed from uploaded gzip; SHA256 verified",
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.7RERwydM/relay-manifest.json.gz",
+    "requested_cwd": "PRIVATE_CWD",
+    "timezone": "GMT+11:00",
+    "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  }
+}

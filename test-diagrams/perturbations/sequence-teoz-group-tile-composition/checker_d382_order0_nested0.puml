@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+skinparam padding 2
+participant A
+participant "Very wide back office" as B
+group outer [ready]
+A <- A : reverse
+note left: attached
+note over B,A: x
+...  wait   ...
+end
+A -> B : follow
+@enduml

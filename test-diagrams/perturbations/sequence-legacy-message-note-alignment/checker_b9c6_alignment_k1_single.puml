@@ -1,0 +1,10 @@
+@startuml
+skinparam noteTextAlignment right
+skinparam shadowing true
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : begin
+Birch -> Cedar -- : body
+note right : a much longer single line
+return after
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Mica
+Juniper <-/ Mica: half normal
+Juniper <<-\\ Mica: open mix
+Juniper o<-/o Mica: circles
+@enduml

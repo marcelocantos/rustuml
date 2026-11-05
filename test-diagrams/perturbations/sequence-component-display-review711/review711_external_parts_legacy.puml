@@ -1,0 +1,9 @@
+@startuml
+participant Quartz
+[-> Quartz: incoming
+[->> Quartz: open
+[->o Quartz: ring
+Quartz ->]: outgoing
+Quartz -/]: half
+Quartz -\\]: open half
+@enduml

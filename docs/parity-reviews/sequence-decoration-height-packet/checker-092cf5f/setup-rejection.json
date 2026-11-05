@@ -1,0 +1,60 @@
+{
+  "provenance_kind": "Verbatim T3 message records retrieved by parent; no wrapper or JVM execution repeated.",
+  "thread_link": "<t3-thread://v2/3c79d792-9490-4acd-bb63-804d4b196ca1/mcp:launch:367fc66751effa4261f7a1ec935e86bdb66d0d10711cad0c7ba5a32897aa7132>",
+  "original_setup_run_status": "completed with setup blockage; no wrapper process exit status exists",
+  "calls_executed": 0,
+  "files_changed": 0,
+  "records": [
+    {
+      "position": 459,
+      "visibility": "local",
+      "sourceThreadId": "mcp:launch:367fc66751effa4261f7a1ec935e86bdb66d0d10711cad0c7ba5a32897aa7132",
+      "itemId": "turn-item:message:message%3Amcp%3Aclient%253A2e9b0b84-32dd-44f6-b8c3-cb0248c27b22%3Athread-send%3Af06aab45-c8af-466d-aa7a-00cbe57faff8",
+      "runId": "run:thread:mcp%3Alaunch%3A367fc66751effa4261f7a1ec935e86bdb66d0d10711cad0c7ba5a32897aa7132:ordinal:37",
+      "messageId": "message:mcp:client%3A2e9b0b84-32dd-44f6-b8c3-cb0248c27b22:thread-send:f06aab45-c8af-466d-aa7a-00cbe57faff8",
+      "createdBy": "agent",
+      "creationSource": "mcp",
+      "type": "user_message",
+      "status": "completed",
+      "title": null,
+      "text": "Direct origin->Monkey Man SSH/SCP restored by owner. Root uploaded and roundtrip-hash-verified input bundle already on YOUR disk: /Users/marcelo/rustuml-reference/scratch/transfer.Uuk73bPN/input.json.gz SHA2562a77b7eed3e345673d6f0e1c66717f97de50094e8298e9ef4ea8ac443a834f32 (14541bytes). Process with EXISTING runner, no new agents. Payload batch/manifest/manifest_base64/inputs31 with exact source_base64 and metadata; manifest SHA f5bffd6c351c960bcdcb011a846f6e59e3cd16310b1bea002821faa7448efe5c. This request has an EXACT private cwd /Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra rather than a placeholder: create exclusively if absent; if already exists stop and report, do not overwrite or silently substitute. Each manifest invocation/remote_source names it. Validate all31source bytes/hashes/sizes/safe paths incl zero-byte pipe input, no resources. Pinned JAR aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053, headless raw -pipe -tsvg GMT+11:00,60sec/call. Preserve all actual stdout/stderr/statuses including two intended syntax negatives and zero-byte input, no validity classification. Standard SVG result schema original name/source/hash plus actual wrapper/Javaargv/cwd/TZ/environment/hashes. Return full results.json.gz and transport.json on remote disk; FINAL MUST provide exact absolute paths and gzip SHA. Root will PULL using SCP, so no base64 tool-output chunks necessary this run. Preserve all evidence. No installs/global changes/source rewriting/local-origin Java.",
+      "textTruncated": false,
+      "nextTextOffset": null,
+      "updatedAt": "2026-11-04T10:56:52.425Z"
+    },
+    {
+      "position": 468,
+      "visibility": "local",
+      "sourceThreadId": "mcp:launch:367fc66751effa4261f7a1ec935e86bdb66d0d10711cad0c7ba5a32897aa7132",
+      "itemId": "turn-item:provider:codex:native-item:msg_0a5e9b54f82da28d016aeb0fac9b4c87d0bab011b4c79bc4d4",
+      "runId": "run:thread:mcp%3Alaunch%3A367fc66751effa4261f7a1ec935e86bdb66d0d10711cad0c7ba5a32897aa7132:ordinal:37",
+      "messageId": "message:provider:codex:native-item:msg_0a5e9b54f82da28d016aeb0fac9b4c87d0bab011b4c79bc4d4",
+      "createdBy": "agent",
+      "creationSource": "provider",
+      "type": "assistant_message",
+      "status": "completed",
+      "title": null,
+      "text": "Validated the gzip, exact manifest, and all 31 source hashes/sizes, including the zero-byte input.\n\nBlocked: [existing wrapper](/Users/marcelo/rustuml-reference/bin/reference:31) permits cwd only beneath `scratch/`; the required exact cwd is beneath `work/`.\n\nThe requested directory remains absent. No calls executed or files changed; no results gzip exists. Owner must permit this exact cwd in the wrapper before execution can proceed.",
+      "textTruncated": false,
+      "nextTextOffset": null,
+      "updatedAt": "2026-11-04T10:57:50.862Z"
+    },
+    {
+      "position": 470,
+      "visibility": "local",
+      "sourceThreadId": "mcp:launch:367fc66751effa4261f7a1ec935e86bdb66d0d10711cad0c7ba5a32897aa7132",
+      "itemId": "turn-item:message:message%3Amcp%3Aclient%253A2e9b0b84-32dd-44f6-b8c3-cb0248c27b22%3Athread-send%3A7ad471e2-6c21-4c9e-b9cd-97ed26d412a0",
+      "runId": "run:thread:mcp%3Alaunch%3A367fc66751effa4261f7a1ec935e86bdb66d0d10711cad0c7ba5a32897aa7132:ordinal:38",
+      "messageId": "message:mcp:client%3A2e9b0b84-32dd-44f6-b8c3-cb0248c27b22:thread-send:7ad471e2-6c21-4c9e-b9cd-97ed26d412a0",
+      "createdBy": "agent",
+      "creationSource": "mcp",
+      "type": "user_message",
+      "status": "completed",
+      "title": null,
+      "text": "Resolve cwd setup mismatch without modifying wrapper: parent authorizes operational mapping ONLY from requested /Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra to execution /Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra. Preserve original input bundle/manifest/source bytes unchanged, record original requested argv/cwd/source and actual execution argv/cwd/source plus reason in results environment/mapping. Parent checked all31 sources contain no includes/themes/dirpath/filename/getenv directives; no resources. Original manifest SHA f5bffd6c351c960bcdcb011a846f6e59e3cd16310b1bea002821faa7448efe5c stays unchanged. Use existing uploaded bundle /Users/marcelo/rustuml-reference/scratch/transfer.Uuk73bPN/input.json.gz SHA2a77b7eed3e345673d6f0e1c66717f97de50094e8298e9ef4ea8ac443a834f32. Create execution directory exclusively; if exists stop, no overwrite. All other request requirements unchanged:31 rawpipe calls inclzero/negatives, pinnedheadlesswrapper/JAR GMT+11,60secpercall, rawstatus/streams/hashes/actualJavaargv provenance, no classification/newagents/installs/globalchanges. Preserve first setup rejection with0calls. Return exact result gzip/transport absolute paths and SHA for origin SCP pull. No base64 output needed.",
+      "textTruncated": false,
+      "nextTextOffset": null,
+      "updatedAt": "2026-11-04T10:58:46.612Z"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "account_commit": "cd2e96858835e29e0ca3cd0f30de2a65e6fe29f7",
+  "status": "candidate; independent checker required",
+  "fresh_cases": 56,
+  "before": {
+    "pass": 16,
+    "mismatch": 40,
+    "panic": 0
+  },
+  "after": {
+    "pass": 56,
+    "mismatch": 0,
+    "panic": 0
+  },
+  "cli_equivalence": 56,
+  "main_product": 11181,
+  "main_assisted": 10497,
+  "main_sequence": 1411,
+  "logs": {
+    "/tmp/rustuml-seq-recovery/external-main.log": "14d6f6444d3c6b2cad0bc2a015c5174d58a21aebcba59aa72dbb48abe9b48c33",
+    "/tmp/rustuml-seq-recovery/external-current.log": "f2aa96ea0e452cea8272c8e1c7f95912dc7fdb0b8ad1954f94f6d93c295f5fc2",
+    "/tmp/rustuml-seq-recovery/external-before.log": "2cca8a306724d985c68bd2c587db69663dc44f05d5858bfed0f34d5d963d5665",
+    "/tmp/rustuml-seq-recovery/external-units.log": "ba14a9d2415f12c760edfa4c60c435be67fb1867cf610d859ffa7ba3b4743598"
+  }
+}
