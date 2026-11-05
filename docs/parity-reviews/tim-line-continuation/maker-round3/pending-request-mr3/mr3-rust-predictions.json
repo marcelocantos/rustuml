@@ -1,0 +1,2161 @@
+{
+ "batch_manifest_sha256": "f84459521717326e95590560252eda6ae96e5318e3fcd9e4f8470f41c5d7938c",
+ "binaries": {
+  "d28dd64a9": "68eccd1eae20a24ea75227fa702b3b2322e23adbd31d13286687249677a9e47a",
+  "a5720e095": "dd6aeb8c28e4a98c15f8995fef46a88beb073e886fdc2e1391e177d46de6ca3c",
+  "b0fb43c3e": "97d98cc66db5311404a75caeadd36e86a732467d600c1123b102db003dc1c27a",
+  "93bf53e18": "776b3ed3d68ea9c646f816591019af0cf728803a7aa15929f210d49726b85211",
+  "9834a7194": "ba772acb6c3fbd98f6ad30297ca6fc58ccf67888cec50c13379adc658ff34298"
+ },
+ "rows": [
+  {
+   "name": "mr3_seq_chr30_rsp_after_directive",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "bfc3dee02512c9c5d05f1cb75bf7327824c8b9c52410b0547e6edb47d6f6c998",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_procedure_emits_rs_line",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "a5720e095": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "8d81d9316c19df1ba028f51d661df859c1779e85e57b074724ee03cf563f0378",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "mr3_seq_include_rs_line",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "3720f247dfe7434ffac53b3de68dc1bef9de9458cb8258dc75c2ee5193323eae",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "inc"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "3720f247dfe7434ffac53b3de68dc1bef9de9458cb8258dc75c2ee5193323eae",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "inc"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_rs_line_in_if",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "8d81d9316c19df1ba028f51d661df859c1779e85e57b074724ee03cf563f0378",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "8d81d9316c19df1ba028f51d661df859c1779e85e57b074724ee03cf563f0378",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_end_continued_one_line",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_end_continued_two_lines",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "97768d1e016d0e15bef966ccfdb1cf2a081e39d5c52ff9b7ef75c78f5e53844c",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "97768d1e016d0e15bef966ccfdb1cf2a081e39d5c52ff9b7ef75c78f5e53844c",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "97768d1e016d0e15bef966ccfdb1cf2a081e39d5c52ff9b7ef75c78f5e53844c",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "97768d1e016d0e15bef966ccfdb1cf2a081e39d5c52ff9b7ef75c78f5e53844c",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "97768d1e016d0e15bef966ccfdb1cf2a081e39d5c52ff9b7ef75c78f5e53844c",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "mr3_seq_bad_tail_then_end",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"not a command at all @enduml\"\n"
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"not a command at all \\\\\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_class_link_tail_then_end",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "f9dba3b81fd74c13a858768f6499abafd615f5be897da215a2c6780023be2356",
+     "stdout_bytes": 3396,
+     "texts": [
+      "Ash",
+      "Elm",
+      "feeds @enduml"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2,
+      4
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "f9dba3b81fd74c13a858768f6499abafd615f5be897da215a2c6780023be2356",
+     "stdout_bytes": 3396,
+     "texts": [
+      "Ash",
+      "Elm",
+      "feeds @enduml"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2,
+      4
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "9a15e0a9eefd34dd3649c863d6dd980cbd85beb9945f042a186563c2943a9a44",
+     "stdout_bytes": 2816,
+     "texts": [
+      "Ash",
+      "Elm"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "cc539296a259f2063a247bcdb3a9d2724516654abce5ff8107fdf6fc44e51b2f",
+     "stdout_bytes": 3387,
+     "texts": [
+      "Ash",
+      "Elm",
+      "feeds \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cc539296a259f2063a247bcdb3a9d2724516654abce5ff8107fdf6fc44e51b2f",
+     "stdout_bytes": 3387,
+     "texts": [
+      "Ash",
+      "Elm",
+      "feeds \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "mr3_class_only_link_tail_then_end",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "7501ca2312eaf1d6739eec4be5980a9f70cc61ef0c0cfb753ae60af4d8719414",
+     "stdout_bytes": 3193,
+     "texts": [
+      "Ash",
+      "Ash",
+      "Elm",
+      "Elm",
+      "feeds @enduml"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "65c7dfb6e4846b95e0134154d537ef7f4947e345dc37251d461d0adbc9a67734",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Ash",
+      "Ash",
+      "Elm",
+      "Elm",
+      "feeds \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "65c7dfb6e4846b95e0134154d537ef7f4947e345dc37251d461d0adbc9a67734",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Ash",
+      "Ash",
+      "Elm",
+      "Elm",
+      "feeds \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_chr92_tail_then_tab_end",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "f9568a9cb4f1aee30e1b4d63ddbb1aca494d2b518b045b6b1236e8bd077c29a5",
+     "stdout_bytes": 3290,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "t",
+      "@enduml"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "f08775c8144d7d18f875288519366a93c1d7c6eddbb02a6f050cbb73856f71d1",
+     "stdout_bytes": 3149,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "t \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "f08775c8144d7d18f875288519366a93c1d7c6eddbb02a6f050cbb73856f71d1",
+     "stdout_bytes": 3149,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "t \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_tail_then_end_three_lines",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "c90c269ee739570113bd5caaf8ce4c18e9e85e7c3eb6f7c147b59ada03a33b19",
+     "stdout_bytes": 3651,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one",
+      "tail @enduml"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "c90c269ee739570113bd5caaf8ce4c18e9e85e7c3eb6f7c147b59ada03a33b19",
+     "stdout_bytes": 3651,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one",
+      "tail @enduml"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "06650f2e0cfebb9788f3e51288e869619c3dee8483c0c98c7d6f1df5dd4c9691",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "5e32eb258d6cc34b61229f3e8af2a4c1b6ab0e986a7702f462c2e48247c11e0e",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one",
+      "tail \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "5e32eb258d6cc34b61229f3e8af2a4c1b6ab0e986a7702f462c2e48247c11e0e",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one",
+      "tail \\"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "mr3_seq_tail_then_backslash_end_then_text",
+   "intended_valid": false,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "51f1c994e1da7cc201e323d32e541804eef98726f134f1bba34dd0d3c97c7e8d",
+     "stdout_bytes": 3653,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\enduml",
+      "after"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "51f1c994e1da7cc201e323d32e541804eef98726f134f1bba34dd0d3c97c7e8d",
+     "stdout_bytes": 3653,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\enduml",
+      "after"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "76d8511d7b6a5b8bd61d65b7012cdfef91119d6f76c26ab67d8747654d091a13",
+     "stdout_bytes": 3634,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "after"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_tail_then_option_then_msg",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "f8708d436740d631680b9aac925a6ec6e359e8507dea034c8dcdce0e1401fce4",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      3
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "07b8032d592733ae2a03745bc53a226aea5004c676e56b5e0bd7c3054c289aac",
+     "stdout_bytes": 3630,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "07b8032d592733ae2a03745bc53a226aea5004c676e56b5e0bd7c3054c289aac",
+     "stdout_bytes": 3630,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "70693d6750ef6918b87f405c6b3e82f7ded242752ab0bafb2841a9323fb30466",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "70693d6750ef6918b87f405c6b3e82f7ded242752ab0bafb2841a9323fb30466",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_backslash_end_plain",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_backslash_end_then_more",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "cae4f1713806ead0a84a69f303a0eb4a0d0b0fb06e9a488cefb2d2ee2f7d110a",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "3d087458bcfdda6916070e23b7b0001c6fa3fb288828e12028072c05bc07655b",
+     "stdout_bytes": 3629,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "one",
+      "two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_wrapped_preamble_dropped",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "75456a473af6b16a5bf52ba77ed2ae5b20051f324ecda9f1e35b24fe4708834d",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "WHO",
+      "WHO",
+      "w"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "1ef3481991748719a3e0a9b3fd78d2551886d7827ba0dd535e30d65be23a090f",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "w"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "1ef3481991748719a3e0a9b3fd78d2551886d7827ba0dd535e30d65be23a090f",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "w"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "1ef3481991748719a3e0a9b3fd78d2551886d7827ba0dd535e30d65be23a090f",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "w"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "1ef3481991748719a3e0a9b3fd78d2551886d7827ba0dd535e30d65be23a090f",
+     "stdout_bytes": 3148,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Moa",
+      "Moa",
+      "w"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_wrapped_trailer_dropped",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "552fdff27a7b217aadbf8ca6a6157e9fdfeaba03b33b1292d1dfa4d21512d61a",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "inside"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "afa1f9aaaad8c162e944a973980e8d031cdc3142790a8e1a09583b19364a7770",
+     "stdout_bytes": 3636,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "inside",
+      "outside"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "afa1f9aaaad8c162e944a973980e8d031cdc3142790a8e1a09583b19364a7770",
+     "stdout_bytes": 3636,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "inside",
+      "outside"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "afa1f9aaaad8c162e944a973980e8d031cdc3142790a8e1a09583b19364a7770",
+     "stdout_bytes": 3636,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "inside",
+      "outside"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "afa1f9aaaad8c162e944a973980e8d031cdc3142790a8e1a09583b19364a7770",
+     "stdout_bytes": 3636,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "inside",
+      "outside"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_wrapped_continued_line",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "b32570ac642c1fcfd51d68d46d8b53ea44add59e7d2e53ead3e8d76f7fb08804",
+     "stdout_bytes": 3652,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "first second",
+      "main"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "80ecb9329d4ae476e4a1397f19ba33606fe6bd54c66802dcc45f9097d7e78dfa",
+     "stdout_bytes": 3652,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "first second",
+      "main"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "80ecb9329d4ae476e4a1397f19ba33606fe6bd54c66802dcc45f9097d7e78dfa",
+     "stdout_bytes": 3652,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "first second",
+      "main"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "welcome": false,
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"second\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "9d8a954d6b99f2088b1cc5483e8ecba534af6b8e0f9bc7994ca4ed0513452dee",
+     "stdout_bytes": 6547,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "sec",
+      "sec",
+      "nd",
+      "nd",
+      "first \\",
+      "main"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_wrapped_indented",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "47e6e1e0c377a84306369b01e7eff44305e37d1ca1c20890b2443590021e1997",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "indented"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "47e6e1e0c377a84306369b01e7eff44305e37d1ca1c20890b2443590021e1997",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "indented"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "47e6e1e0c377a84306369b01e7eff44305e37d1ca1c20890b2443590021e1997",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "indented"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "47e6e1e0c377a84306369b01e7eff44305e37d1ca1c20890b2443590021e1997",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "indented"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "47e6e1e0c377a84306369b01e7eff44305e37d1ca1c20890b2443590021e1997",
+     "stdout_bytes": 3152,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "indented"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "mr3_seq_wrapped_comment_header",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "e082072bc3a759db853b3862b94dd4130ef0feb4c285331d8b374b888df0b46e",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "commented"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "welcome": true,
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_seq_wrapped_two_blocks",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "4a5dd56c37bcafef9f62e716d4d636933603cc434e3fa97282d1fb8b26fe8f57",
+     "stdout_bytes": 3162,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "block one"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "4971dd4966a0d4bd5dc67a82f5ffe1340e8669340e940391fb10def683c83002",
+     "stdout_bytes": 3648,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "block one",
+      "block two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "4971dd4966a0d4bd5dc67a82f5ffe1340e8669340e940391fb10def683c83002",
+     "stdout_bytes": 3648,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "block one",
+      "block two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "4971dd4966a0d4bd5dc67a82f5ffe1340e8669340e940391fb10def683c83002",
+     "stdout_bytes": 3648,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "block one",
+      "block two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "4971dd4966a0d4bd5dc67a82f5ffe1340e8669340e940391fb10def683c83002",
+     "stdout_bytes": 3648,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "block one",
+      "block two"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_class_wrapped_continued",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "26b6716444000ce1006dd58bca1f61767fb4c4c93d2c6ac217cb4200e9a24a6d",
+     "stdout_bytes": 1739,
+     "texts": [
+      "«native»",
+      "Rimu"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "7a889ba2c72707b223910089dfdec22624baf2a75c167832886aa1d7cdcec77a",
+     "stdout_bytes": 1739,
+     "texts": [
+      "«native»",
+      "Rimu"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "7a889ba2c72707b223910089dfdec22624baf2a75c167832886aa1d7cdcec77a",
+     "stdout_bytes": 1739,
+     "texts": [
+      "«native»",
+      "Rimu"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "3195e0d7e6a7e486fbd53f8606d2fa775667180df134c2dca928480a02e788e4",
+     "stdout_bytes": 1549,
+     "texts": [
+      "Rimu"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "3195e0d7e6a7e486fbd53f8606d2fa775667180df134c2dca928480a02e788e4",
+     "stdout_bytes": 1549,
+     "texts": [
+      "Rimu"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "mr3_class_raw_tail_control",
+   "intended_valid": true,
+   "builds": {
+    "d28dd64a9": {
+     "exit": 0,
+     "stdout_sha256": "b957e5316434f1bf35cc1c91fe057deb87f289b0bc2c963ce5f815768bfdd756",
+     "stdout_bytes": 3050,
+     "texts": [
+      "«native»",
+      "Rimu",
+      "Kauri"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "a5720e095": {
+     "exit": 0,
+     "stdout_sha256": "b957e5316434f1bf35cc1c91fe057deb87f289b0bc2c963ce5f815768bfdd756",
+     "stdout_bytes": 3050,
+     "texts": [
+      "«native»",
+      "Rimu",
+      "Kauri"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "b957e5316434f1bf35cc1c91fe057deb87f289b0bc2c963ce5f815768bfdd756",
+     "stdout_bytes": 3050,
+     "texts": [
+      "«native»",
+      "Rimu",
+      "Kauri"
+     ],
+     "welcome": false,
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "3e303436d486520f1ba392e3a2f54bcc698f714720413a4026b90aef8f2270d6",
+     "stdout_bytes": 2824,
+     "texts": [
+      "Rimu",
+      "Kauri"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "3e303436d486520f1ba392e3a2f54bcc698f714720413a4026b90aef8f2270d6",
+     "stdout_bytes": 2824,
+     "texts": [
+      "Rimu",
+      "Kauri"
+     ],
+     "welcome": false,
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  }
+ ]
+}
