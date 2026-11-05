@@ -1,0 +1,32 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-9.json and comment-state-consumers/review-10.json (8089ef150) bounded_next_obligations",
+ "base": "merge of parity-recovery-2026-11-03 dcf6d9076 (code identical to 9834a7194) into 8089ef150 (code identical to c3116f0b0): 9d6af0a0e",
+ "sub_mechanism": "obligation 3 (BLOCKING, round-7 loss): class relationship center labels are laid out in the font they are drawn in",
+ "sources": [
+  "PlantUML 71806a23 src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java, SvekEdge.java"
+ ],
+ "java_locations": [
+  "GraphvizImageBuilder 233-241: labelFont = getDefaultStyleDefinitionArrow(link.getStereotype()).getMergedStyle(link.getStyleBuilder()).getFontConfiguration(...) is passed to new SvekEdge(...).",
+  "SvekEdge 279-319: labelOnly = link.getLabel().create0(font, ...) (plus the magic arrow), labelText = labelOnly or merged with the note; the same TextBlock is measured for dot (appendTable at 433, strategy.eat 1163/1187) and drawn (drawU 946)."
+ ],
+ "rust_locations": [
+  "class.rs emission (render relationship, 11527-11551) draws center labels with the arrow style's fontName/fontSize; relationship_center_layout (12804-12855) and synthesize_ortho_edge_labels (12900-12925) measure them with text_render::measure_no_underline(label, 13, false), i.e. sans-serif 13, and label_height(label, 13); the arrow block's content height (11853-11860) also uses sans-serif 13.",
+  "BO c8a_lt_verdana_deva_link: layout width is Lucida Grande's 31.8459 (its synthesized MARK zeroes U+1D167 since 9f33bc3b1; before, Lucida's .notdef kept the box near Verdana's width by chance: 79 vs Java 80) while the drawn Verdana text is 35.2737 = Java. A private probe measuring the layout width in Verdana gives Java's 80."
+ ],
+ "planned_change": [
+  "class.rs: one relationship_label_font(diagram, rel) resolving the arrow style fontName/fontSize exactly as emission does; relationship_center_layout, synthesize_ortho_edge_labels and the arrow block height measure width and height with it (endpoint labels are out of scope)."
+ ],
+ "precommitted_measurement": {
+  "oracle": "BO Java reference; goldens; fresh relayed held-out variant",
+  "expect": [
+   "BO c8a_lt_verdana_deva_link MATCH (viewBox 0 0 80 195).",
+   "Goldens: only class diagrams with center labels under a non-default arrow font family or size can change; predicted no lost match (Java measures with the drawn font); every changed golden listed with its arrow font.",
+   "Relayed renamed held-out variant (other Indic script + U+1D167, other class/object link labels under Verdana/Arial/ArrowFontSize) matches."
+  ]
+ }
+}
