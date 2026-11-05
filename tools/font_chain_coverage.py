@@ -102,7 +102,7 @@ lines = [
     "// Per face: the .notdef advance in 2048ths of an em (glyph 0 of the primary font,",
     "// CTFontGetAdvancesForGlyphs), the BMP runs the JDK simple path cannot map, the runs the",
     "// complex path (CFont.createCompositeFont cascade) maps, the runs the face's own cmap maps",
-    "// (JDK composite slot 0; tools/PrimaryFaceExtract.swift on colossus, the same font files), and",
+    "// (JDK composite slot 0; tools/PrimaryFaceExtract.swift for the face's Java slot), and",
     "// the sfnt facts HarfBuzz 15.0.0's planner reads (font_chain::plan). A face is the one JDK",
     "// measures for a family and style (font_chain::ChainFace::for_style). Faces whose chain runs",
     "// come from the provisional extraction (not the reference host) say so below.",

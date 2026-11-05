@@ -1,0 +1,2 @@
+swift-driver version: 1.148.6 Apple Swift version 6.3 (swiftlang-6.3.0.123.5 clang-2100.0.123.102)
+Target: arm64-apple-macosx28.0

@@ -1094,25 +1094,14 @@ mod tests {
 
     /// Faces whose plan can zero a glyph but whose font file the reference
     /// host's records do not hash yet. The gate fails if this list is stale.
-    /// (Requested from Monkey Man in shared-SVG round 9.)
-    const PENDING_REFERENCE_HASH: &[&str] = &["Verdana-Italic", "Verdana-BoldItalic"];
+    const PENDING_REFERENCE_HASH: &[&str] = &[];
 
-    /// Faces whose chain runs (simple path, composite cascade) come from the
-    /// provisional colossus extraction, not the reference host. The gate
-    /// fails if this list is stale. (A Monkey Man extraction of every style
-    /// was requested in shared-SVG round 9.)
-    const PROVISIONAL_CHAIN: &[&str] = &[
-        "Arial-ItalicMT",
-        "Arial-BoldItalicMT",
-        "Helvetica-Oblique",
-        "Helvetica-BoldOblique",
-        "Verdana-Italic",
-        "Verdana-BoldItalic",
-        "Menlo-Italic",
-        "Menlo-BoldItalic",
-        "CourierNewPS-ItalicMT",
-        "CourierNewPS-BoldItalicMT",
-    ];
+    /// `tools/font-chain-reference/colossus-primary-faces`: the earlier
+    /// Monkey Man hash records (`monkeyman-*.txt`) and the colossus font-file
+    /// hashes, with the SHA256 of its SHA256SUMS.
+    const HASH_RECORDS_DIR: &str = "tools/font-chain-reference/colossus-primary-faces";
+    const HASH_RECORDS_SHA256SUMS_SHA256: &str =
+        "b8895935d746cb127cd52c8f1b39e431031066a4352a8c9df66a954d12eabb08";
 
     /// The faces whose GDEF HarfBuzz 15.0.0 blocklists (their stored table
     /// lengths are listed in `GDEF_BLOCKLIST`).
@@ -1291,8 +1280,8 @@ mod tests {
     /// chain extraction's; every Java slot resolves to its face (derived
     /// italics to their upright face, with identical facts); the
     /// unextracted GPOS `kern` feature cannot change any plan; and every
-    /// face whose plan can zero a glyph has the same font file on the
-    /// reference host (Monkey Man records) as where its own cmap was read.
+    /// face whose plan can zero a glyph has its font file hashed by the
+    /// reference host's records (Monkey Man), equal to colossus's.
     #[test]
     fn coverage_table_is_the_stored_reference_host_extraction() {
         use sha2::{Digest, Sha256};
@@ -1317,12 +1306,9 @@ mod tests {
         };
         let dir = verify(coverage::SOURCE_DIR, coverage::SOURCE_SHA256SUMS_SHA256);
         let primary = verify(coverage::PRIMARY_DIR, coverage::PRIMARY_SHA256SUMS_SHA256);
-        let provisional = verify(
-            coverage::PROVISIONAL_DIR,
-            coverage::PROVISIONAL_SHA256SUMS_SHA256,
-        );
-        let font_hashes = |name: &str| -> HashMap<String, String> {
-            std::fs::read_to_string(primary.join(name))
+        let records = verify(HASH_RECORDS_DIR, HASH_RECORDS_SHA256SUMS_SHA256);
+        let font_hashes = |path: std::path::PathBuf| -> HashMap<String, String> {
+            std::fs::read_to_string(path)
                 .unwrap()
                 .lines()
                 .filter_map(|line| {
@@ -1332,12 +1318,14 @@ mod tests {
                 })
                 .collect()
         };
-        // Every Monkey Man record; where two hash a file they must agree.
+        // Every Monkey Man record (the extraction's own font-hashes.txt and
+        // the earlier relays'); where two hash a file they must agree.
         let mut reference_host = HashMap::new();
         for record in [
-            "monkeyman-hb-static.txt",
-            "monkeyman-round7-font-hash.txt",
-            "monkeyman-round8-font-hash.txt",
+            primary.join("font-hashes.txt"),
+            records.join("monkeyman-hb-static.txt"),
+            records.join("monkeyman-round7-font-hash.txt"),
+            records.join("monkeyman-round8-font-hash.txt"),
         ] {
             for (path, hash) in font_hashes(record) {
                 if let Some(previous) = reference_host.insert(path.clone(), hash.clone()) {
@@ -1345,7 +1333,7 @@ mod tests {
                 }
             }
         }
-        let colossus = font_hashes("colossus-font-files.sha256");
+        let colossus = font_hashes(records.join("colossus-font-files.sha256"));
         // A stored TSV: header facts (key=value fields of #hb_plan and
         // #plan_extra), other header lines, and the S/C/P runs.
         struct Stored {
@@ -1397,7 +1385,6 @@ mod tests {
         let header_line =
             |stored: &Stored, key: &str| -> Vec<String> { stored.header[key].clone() };
         let mut pending = Vec::new();
-        let mut provisional_faces = Vec::new();
         let mut faces_seen = Vec::new();
         for (family, native, style, face, ps) in SLOTS {
             assert_eq!(
@@ -1423,13 +1410,7 @@ mod tests {
                 continue;
             }
             faces_seen.push(face);
-            let chain_dir = if PROVISIONAL_CHAIN.contains(&ps) {
-                provisional_faces.push(ps);
-                &provisional
-            } else {
-                &dir
-            };
-            let chain = read(chain_dir.join(format!("{ps}.tsv")));
+            let chain = read(dir.join(format!("{ps}.tsv")));
             let coverage = face.coverage();
             assert_eq!(header_line(&chain, "#family")[1], ps, "{ps}");
             let notdef = |stored: &Stored| {
@@ -1541,10 +1522,6 @@ mod tests {
         assert_eq!(
             pending, PENDING_REFERENCE_HASH,
             "faces awaiting reference hashes"
-        );
-        assert_eq!(
-            provisional_faces, PROVISIONAL_CHAIN,
-            "provisional chain faces"
         );
         // plantuml_metrics counts monospaced cells: every Menlo and Courier
         // New face's .notdef is its cell (1233 and 1229 units).
