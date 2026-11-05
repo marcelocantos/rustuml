@@ -1,0 +1,4 @@
+@startuml
+participant "क्षत्रिय 𝅧" as P
+P -> P : नमस्ते
+@enduml

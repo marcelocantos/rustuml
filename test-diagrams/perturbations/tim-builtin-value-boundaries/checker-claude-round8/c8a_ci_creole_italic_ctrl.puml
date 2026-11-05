@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+class K
+K : <i>Pier x</i>
+@enduml

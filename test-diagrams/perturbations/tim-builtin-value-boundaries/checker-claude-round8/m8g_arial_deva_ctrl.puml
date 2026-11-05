@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Arial
+class "Pier क" as K
+@enduml
