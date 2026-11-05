@@ -257,8 +257,12 @@ impl StateParser {
     ///   carries its full scope prefix (rare, when authors dot-qualify) is left
     ///   untouched.
     fn qualify(&self, raw: &str) -> String {
+        self.qualify_in(raw, self.current_scope())
+    }
+
+    fn qualify_in(&self, raw: &str, scope: Option<&str>) -> String {
         let raw = raw.trim();
-        match self.current_scope() {
+        match scope {
             None => raw.to_string(),
             Some(scope) => {
                 if raw.starts_with('[') && raw.ends_with(']') {
@@ -285,9 +289,13 @@ impl StateParser {
     /// concurrent-region boundaries, so those scopes retain independent
     /// children.
     fn resolve_state_id(&self, raw: &str) -> String {
+        self.resolve_state_id_in(raw, self.current_scope())
+    }
+
+    fn resolve_state_id_in(&self, raw: &str, scope: Option<&str>) -> String {
         let raw = raw.trim();
         if raw.starts_with('[') && raw.ends_with(']') || raw.contains('.') {
-            return self.qualify(raw);
+            return self.qualify_in(raw, scope);
         }
 
         let mut matches = self.states.iter().filter(|state| {
@@ -296,13 +304,12 @@ impl StateParser {
                 .as_deref()
                 .and_then(|parent| parent.rsplit('.').next())
                 .is_some_and(|segment| segment.starts_with("CONC"));
-            let current_is_concurrent = self
-                .current_scope()
+            let current_is_concurrent = scope
                 .and_then(|scope| scope.rsplit('.').next())
                 .is_some_and(|segment| segment.starts_with("CONC"));
             state.id.rsplit('.').next() == Some(raw)
                 && (!(existing_is_concurrent || current_is_concurrent)
-                    || state.parent.as_deref() == self.current_scope())
+                    || state.parent.as_deref() == scope)
         });
         if let Some(sole) = matches.next()
             && matches.next().is_none()
@@ -310,7 +317,7 @@ impl StateParser {
             return sole.id.clone();
         }
 
-        self.qualify(raw)
+        self.qualify_in(raw, scope)
     }
 
     /// Record where Java creates the newest note entity and resolve its
@@ -358,7 +365,25 @@ impl StateParser {
         (self.current_line, creation_order)
     }
 
-    fn finish(self) -> StateDiagram {
+    fn finish(mut self) -> StateDiagram {
+        // StateDiagramFactory registers CommandFactoryNoteOnEntity for
+        // ParserPass.THREE: an anchor first created by a later line (a pass-two
+        // transition) is known when the note executes.
+        for index in 0..self.notes.len() {
+            let note = &self.notes[index];
+            let anchor = match &note.kind {
+                StateNoteKind::LeftOf(anchor) | StateNoteKind::RightOf(anchor)
+                    if note.anchor_id.is_none() && !anchor.is_empty() =>
+                {
+                    anchor
+                }
+                _ => continue,
+            };
+            let id = self.resolve_state_id_in(anchor, note.parent.as_deref());
+            if self.states.iter().any(|state| state.id == id) {
+                self.notes[index].anchor_id = Some(id);
+            }
+        }
         StateDiagram {
             meta: self.meta,
             direction: self.direction,
@@ -989,6 +1014,24 @@ impl StateParser {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn note_anchors_resolve_in_pass_three_after_later_transitions() {
+        // StateDiagramFactory: CommandFactoryNoteOnEntity runs in ParserPass.THREE.
+        let lines = [
+            "note right of Quay : wet",
+            "state Dock {",
+            "  note left of Crane : tall",
+            "}",
+            "Quay --> Dock",
+            "Dock.Crane --> Quay",
+        ]
+        .map(String::from);
+        let diagram = parse_state(&lines).unwrap();
+        assert_eq!(diagram.notes[0].anchor_id.as_deref(), Some("Quay"));
+        assert_eq!(diagram.notes[1].anchor_id.as_deref(), Some("Dock.Crane"));
+        assert_eq!(diagram.notes[1].parent.as_deref(), Some("Dock"));
+    }
 
     fn parse(input: &str) -> StateDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
