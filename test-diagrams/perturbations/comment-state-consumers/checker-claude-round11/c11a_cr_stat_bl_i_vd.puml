@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam stateFontStyle bold
+state "Wavy <i>Dog kim Vay</i> 9 ovo" as E1
+@enduml

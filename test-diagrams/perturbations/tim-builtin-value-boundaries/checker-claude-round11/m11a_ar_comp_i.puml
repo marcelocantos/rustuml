@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam componentFontStyle italic
+component "Dawn Vow gym kit" as E1
+@enduml

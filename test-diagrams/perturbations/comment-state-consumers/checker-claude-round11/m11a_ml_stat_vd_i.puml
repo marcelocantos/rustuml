@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam stateFontStyle italic
+state "Avowed yak" as E1
+E1 : kindly Wigmore dew
+E1 : vagary DVD
+@enduml

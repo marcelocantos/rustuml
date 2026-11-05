@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+component "Avowed yak\nkindly Wigmore dew" as E1
+@enduml

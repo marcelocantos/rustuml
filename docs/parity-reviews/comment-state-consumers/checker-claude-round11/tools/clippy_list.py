@@ -2,7 +2,7 @@
 Usage: python3 -I clippy_list.py <gates dir> <out.json>"""
 import json, pathlib, sys, collections
 G = pathlib.Path(sys.argv[1]); res = {}
-for r in ["95291dc6b", "e24240b35"]:
+for r in ["5ddf7733c", "97830bd1e"]:
     for k in ["rustuml-render", "rustuml-parser", "rustuml-layout", "rustuml-oracle", "rustuml", "rustuml-math"]:
         diags = []
         for line in open(G / f"{r}.clippy-{k}.json"):

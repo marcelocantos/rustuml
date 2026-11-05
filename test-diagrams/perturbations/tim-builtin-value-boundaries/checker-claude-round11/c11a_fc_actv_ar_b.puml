@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam activityFontStyle bold
+start
+:Avid Dawky Vow 4.7, gym kayak ovo!;
+stop
+@enduml

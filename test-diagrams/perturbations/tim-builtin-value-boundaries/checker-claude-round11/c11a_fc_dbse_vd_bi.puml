@@ -1,0 +1,12 @@
+@startuml
+skinparam defaultFontName Verdana
+<style>
+database {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+database "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+component "Ok" as E2
+E1 --> E2
+@enduml

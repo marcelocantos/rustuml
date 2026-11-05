@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+participant "<b>Rook <i>ovoid vow</i></b> end" as E1
+E1 -> E1 : ok
+@enduml

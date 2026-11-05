@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+participant A
+participant B
+A -> B : Avid Dawky Vow 4.7, gym kayak ovo!
+@enduml

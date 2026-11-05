@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam defaultFontSize 11
+skinparam stateFontStyle italic
+state "Mew Ghyll AVW" as E1
+@enduml

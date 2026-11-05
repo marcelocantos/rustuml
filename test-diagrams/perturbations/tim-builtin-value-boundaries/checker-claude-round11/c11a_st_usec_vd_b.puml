@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam usecaseFontStyle bold
+usecase "Gym Dawk" as E1 <<Vivid kayak Wovo>>
+@enduml

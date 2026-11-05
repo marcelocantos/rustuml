@@ -1,0 +1,60 @@
+   Compiling wait-timeout v0.2.1
+   Compiling quick-error v1.2.3
+   Compiling percent-encoding v2.3.2
+   Compiling bit-vec v0.8.0
+   Compiling utf8-zero v0.8.1
+   Compiling bit-set v0.8.0
+   Compiling ureq v3.3.0
+   Compiling rusty-fork v0.3.1
+   Compiling rand_chacha v0.9.0
+   Compiling rand v0.9.2
+   Compiling rand_xorshift v0.4.0
+   Compiling unarray v0.1.4
+   Compiling proptest v1.10.0
+   Compiling rayon v1.11.0
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling num_cpus v1.17.0
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/879d166f4/crates/rustuml-render)
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/879d166f4/crates/rustuml-oracle)
+warning: `rustuml-parser` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 54.83s
+     Running tests/golden_pairs.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/tgt-gates-879d166f4/release/deps/golden_pairs-88a993b69eca84e7)
+
+running 1 test
+running 12550 golden pairs...
+
+golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped
+  panics: 0, xml diff: 754, other: 0
+  parked (numeric-only, allow-listed): 0 (max dev 0.0000)
+  park candidates (numeric-only, NOT yet parked, still counted as failures): 746 (max dev 441.8783) → see golden_ulp_candidates.txt
+  skip breakdown: parse=0, golden_error=1199, unsupported_kw=0, other=100
+  per-directory failures:
+      437 class
+      113 combo
+       81 edge-cases
+       52 er
+       28 preprocessing
+       17 rendering
+        7 deployment
+        7 state
+        4 creole
+        4 skinparam
+        3 component
+        1 type-detection
+test golden_pairs ... FAILED
+
+failures:
+
+failures:
+    golden_pairs
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.83s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test golden_pairs`

@@ -1,0 +1,386 @@
+{
+ "D0_unmodified": {
+  "mutations": [],
+  "applied": true,
+  "exit": 0,
+  "counts": [
+   "862",
+   "0"
+  ],
+  "failed": [],
+  "build_error": false,
+  "caught": null
+ },
+ "D1_verdana_router_drops_italic": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "            italic,\n            ChainFamily::Verdana,\n",
+    "new": "            false,\n            ChainFamily::Verdana,\n"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "860",
+   "2"
+  ],
+  "failed": [
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "D2_slot_italic_reads_plain": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "            (false, true) => self.italic,",
+    "new": "            (false, true) => self.plain,"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "D3_slot_bold_italic_reads_bold": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "            (true, true) => self.bold_italic,",
+    "new": "            (true, true) => self.bold,"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "D4_verdana_italic_table_is_regular": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "    italic: &VERDANA_ITALIC_ASCII,",
+    "new": "    italic: &VERDANA_ASCII,"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "D5_verdana_bold_italic_table_is_bold": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "    bold_italic: &VERDANA_BOLD_ITALIC_ASCII,",
+    "new": "    bold_italic: &VERDANA_BOLD_ASCII,"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "D6_arial_router_drops_italic": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "            italic,\n            ChainFamily::Arial,\n",
+    "new": "            false,\n            ChainFamily::Arial,\n"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::every_italic_slot_measures_in_its_own_face"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "D7_one_verdana_italic_unit_off": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    720,",
+    "new": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    721,"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "D8_extraction_file_edited": {
+  "mutations": [
+   {
+    "file": "tools/font-chain-reference/ascii-advances-round11/Verdana-Italic.italic.ascii.tsv",
+    "old": "A\t41\t36\t1398.0",
+    "new": "A\t41\t36\t1400.0"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K1_swap_verdana_italic_and_bold_italic_slots": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "    italic: &VERDANA_ITALIC_ASCII,\n    bold_italic: &VERDANA_BOLD_ITALIC_ASCII,",
+    "new": "    italic: &VERDANA_BOLD_ITALIC_ASCII,\n    bold_italic: &VERDANA_ITALIC_ASCII,"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "859",
+   "3"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K2_swap_verdana_italic_and_bold_italic_rows": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302,\n    1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048,\n    1398, 1404, 1430, 1568, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235,\n    1612, 1424, 1400, 1262, 1499, 1398, 2028, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302,\n    1230, 1276, 1067, 1276, 1220, 720, 1273, 1296, 562, 705, 1202, 562, 1993, 1296, 1243, 1276,\n    1276, 874, 1067, 807, 1296, 1210, 1676, 1212, 1210, 1076, 1300, 930, 1300, 1676,\n];",
+    "new": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    700, 824, 1203, 1776, 1456, 2605, 1766, 680, 1113, 1113, 1456, 1776, 740, 983, 740, 1412, 1456,\n    1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 824, 824, 1776, 1776, 1776, 1263, 1974,\n    1590, 1560, 1482, 1700, 1399, 1332, 1661, 1715, 1118, 1137, 1579, 1305, 1941, 1734, 1741, 1501,\n    1741, 1602, 1455, 1396, 1663, 1564, 2311, 1564, 1509, 1417, 1113, 1412, 1113, 1776, 1456, 1456,\n    1368, 1432, 1205, 1432, 1360, 865, 1432, 1459, 700, 825, 1374, 700, 2167, 1459, 1404, 1432,\n    1432, 1018, 1215, 933, 1459, 1329, 2006, 1370, 1333, 1222, 1456, 1113, 1456, 1776,\n];"
+   },
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "const VERDANA_BOLD_ITALIC_ASCII: [u16; 95] = [\n    700, 824, 1203, 1776, 1456, 2605, 1766, 680, 1113, 1113, 1456, 1776, 740, 983, 740, 1412, 1456,\n    1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 1456, 824, 824, 1776, 1776, 1776, 1263, 1974,\n    1590, 1560, 1482, 1700, 1399, 1332, 1661, 1715, 1118, 1137, 1579, 1305, 1941, 1734, 1741, 1501,\n    1741, 1602, 1455, 1396, 1663, 1564, 2311, 1564, 1509, 1417, 1113, 1412, 1113, 1776, 1456, 1456,\n    1368, 1432, 1205, 1432, 1360, 865, 1432, 1459, 700, 825, 1374, 700, 2167, 1459, 1404, 1432,\n    1432, 1018, 1215, 933, 1459, 1329, 2006, 1370, 1333, 1222, 1456, 1113, 1456, 1776,\n];",
+    "new": "const VERDANA_BOLD_ITALIC_ASCII: [u16; 95] = [\n    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302,\n    1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048,\n    1398, 1404, 1430, 1568, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235,\n    1612, 1424, 1400, 1262, 1499, 1398, 2028, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302,\n    1230, 1276, 1067, 1276, 1220, 720, 1273, 1296, 562, 705, 1202, 562, 1993, 1296, 1243, 1276,\n    1276, 874, 1067, 807, 1296, 1210, 1676, 1212, 1210, 1076, 1300, 930, 1300, 1676,\n];"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "860",
+   "2"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K3_swap_arial_italic_and_bold_italic_rows": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "const ARIAL_ITALIC_ASCII: [u16; 95] = [\n    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,\n    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,\n    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,\n    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,\n    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,\n    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,\n];",
+    "new": "const ARIAL_ITALIC_ASCII: [u16; 95] = [\n    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,\n    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,\n    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,\n    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,\n    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,\n    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,\n];"
+   },
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "const ARIAL_BOLD_ITALIC_ASCII: [u16; 95] = [\n    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,\n    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,\n    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,\n    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,\n    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,\n    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,\n];",
+    "new": "const ARIAL_BOLD_ITALIC_ASCII: [u16; 95] = [\n    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,\n    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,\n    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,\n    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,\n    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,\n    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,\n];"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K4_drop_glyph_D_from_verdana_italic_const": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302,\n    1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048,\n    1398, 1404, 1430, 1568, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235,\n    1612, 1424, 1400, 1262, 1499, 1398, 2028, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302,\n    1230, 1276, 1067, 1276, 1220, 720, 1273, 1296, 562, 705, 1202, 562, 1993, 1296, 1243, 1276,\n    1276, 874, 1067, 807, 1296, 1210, 1676, 1212, 1210, 1076, 1300, 930, 1300, 1676,\n];",
+    "new": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    720, 806, 940, 1676, 1302, 2204, 1488, 550, 930, 930, 1302, 1676, 745, 930, 745, 930, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 1302, 930, 930, 1676, 1676, 1676, 1117, 2048, 1398, 1404, 1430, 1295, 1177, 1588, 1539, 862, 931, 1419, 1140, 1726, 1532, 1612, 1235, 1612, 1424, 1400, 1262, 1499, 1398, 2028, 1403, 1260, 1403, 930, 930, 930, 1676, 1302, 1302, 1230, 1276, 1067, 1276, 1220, 720, 1273, 1296, 562, 705, 1202, 562, 1993, 1296, 1243, 1276, 1276, 874, 1067, 807, 1296, 1210, 1676, 1212, 1210, 1076, 1300, 930, 1300, 1676, 1676,\n];"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "860",
+   "2"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K5_drop_row_D_from_verdana_italic_tsv": {
+  "mutations": [
+   {
+    "file": "tools/font-chain-reference/ascii-advances-round11/Verdana-Italic.italic.ascii.tsv",
+    "drop_line_prefix": "A\t44\t"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "860",
+   "2"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K6_drop_row_D_tsv_with_sums_and_pin_rehashed": {
+  "mutations": [
+   {
+    "file": "tools/font-chain-reference/ascii-advances-round11/Verdana-Italic.italic.ascii.tsv",
+    "drop_line_prefix": "A\t44\t"
+   },
+   {
+    "rehash": true
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::ascii_tables_are_the_extracted_faces"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K7_router_slot_arguments_swapped": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "    let table = faces.slot(bold, italic);",
+    "new": "    let table = faces.slot(italic, bold);"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "860",
+   "2"
+  ],
+  "failed": [
+   "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "text_render::tests::verdana_faces_measure_java_widths"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K8_chain_face_drops_italic_only": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "        ChainFace::for_style(family, bold, italic),\n        |c| {",
+    "new": "        ChainFace::for_style(family, bold, false),\n        |c| {"
+   }
+  ],
+  "applied": true,
+  "exit": 101,
+  "counts": [
+   "861",
+   "1"
+  ],
+  "failed": [
+   "text_render::tests::every_italic_slot_measures_in_its_own_face"
+  ],
+  "build_error": false,
+  "caught": true
+ },
+ "K9_consistent_forgery_const_tsv_sums_pin": {
+  "mutations": [
+   {
+    "file": "crates/rustuml-render/src/text_render.rs",
+    "old": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    720,",
+    "new": "const VERDANA_ITALIC_ASCII: [u16; 95] = [\n    721,"
+   },
+   {
+    "file": "tools/font-chain-reference/ascii-advances-round11/Verdana-Italic.italic.ascii.tsv",
+    "old": "A\t20\t3\t720.0",
+    "new": "A\t20\t3\t721.0"
+   },
+   {
+    "rehash": true
+   }
+  ],
+  "applied": true,
+  "exit": 0,
+  "counts": [
+   "862",
+   "0"
+  ],
+  "failed": [],
+  "build_error": false,
+  "caught": false
+ }
+}

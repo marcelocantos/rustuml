@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName Verdana
+<style>
+state {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+state "Gawky Vandyke mop" as E1
+@enduml

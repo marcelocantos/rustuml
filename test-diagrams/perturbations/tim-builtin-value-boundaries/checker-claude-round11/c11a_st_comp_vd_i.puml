@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam componentFontStyle italic
+component "Gym Dawk" as E1 <<Vivid kayak Wovo>>
+@enduml

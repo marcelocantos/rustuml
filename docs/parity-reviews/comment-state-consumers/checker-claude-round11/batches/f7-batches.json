@@ -1,0 +1,94 @@
+{
+ "AR": {
+  "cases": 20,
+  "differ": []
+ },
+ "AU": {
+  "cases": 32,
+  "differ": []
+ },
+ "AW": {
+  "cases": 45,
+  "differ": []
+ },
+ "BB": {
+  "cases": 36,
+  "differ": []
+ },
+ "BC": {
+  "cases": 19,
+  "differ": []
+ },
+ "BE": {
+  "cases": 34,
+  "differ": []
+ },
+ "BF": {
+  "cases": 46,
+  "differ": []
+ },
+ "BG": {
+  "cases": 53,
+  "differ": []
+ },
+ "BH": {
+  "cases": 99,
+  "differ": []
+ },
+ "BI": {
+  "cases": 48,
+  "differ": []
+ },
+ "BJ": {
+  "cases": 120,
+  "differ": []
+ },
+ "BK": {
+  "cases": 49,
+  "differ": []
+ },
+ "BL": {
+  "cases": 142,
+  "differ": []
+ },
+ "BM": {
+  "cases": 26,
+  "differ": []
+ },
+ "BN": {
+  "cases": 63,
+  "differ": []
+ },
+ "BO": {
+  "cases": 81,
+  "differ": []
+ },
+ "BP": {
+  "cases": 60,
+  "differ": []
+ },
+ "BQ": {
+  "cases": 8,
+  "differ": []
+ },
+ "BR": {
+  "cases": 288,
+  "differ": []
+ },
+ "BS": {
+  "cases": 374,
+  "differ": []
+ },
+ "BT": {
+  "cases": 379,
+  "differ": []
+ },
+ "BV": {
+  "cases": 100,
+  "differ": []
+ },
+ "BX": {
+  "cases": 515,
+  "differ": []
+ }
+}

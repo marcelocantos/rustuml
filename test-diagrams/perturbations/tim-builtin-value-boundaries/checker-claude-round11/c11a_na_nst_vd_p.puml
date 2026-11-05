@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+component "Dawky gym" as E1 <<Vöw kayak>>
+@enduml

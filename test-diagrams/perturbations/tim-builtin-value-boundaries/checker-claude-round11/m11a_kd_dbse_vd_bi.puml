@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam databaseFontStyle italic
+database "<b>Ovo vow cove</b>" as E1
+@enduml

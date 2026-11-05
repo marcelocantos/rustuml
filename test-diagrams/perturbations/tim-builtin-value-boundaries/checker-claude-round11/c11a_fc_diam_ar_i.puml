@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam activityDiamondFontStyle italic
+start
+if (Avid Dawky Vow 4.7, gym kayak ovo!) then (yes)
+  :Ok;
+endif
+@enduml

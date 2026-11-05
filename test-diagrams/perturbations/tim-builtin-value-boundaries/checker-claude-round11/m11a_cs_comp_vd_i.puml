@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Verdana
+<style>
+component {
+  FontStyle italic
+}
+</style>
+component "Gawky Vandyke mop" as E1
+@enduml

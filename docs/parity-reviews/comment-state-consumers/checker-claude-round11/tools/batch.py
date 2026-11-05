@@ -9,7 +9,7 @@ import base64, gzip, hashlib, json, pathlib, re, struct, subprocess, sys
 
 W = pathlib.Path(sys.argv[1]); B = pathlib.Path(sys.argv[2]); LABEL = sys.argv[3]
 BINS = [a.split("=", 1) for a in sys.argv[4:]]
-CMP = pathlib.Path.home() / "Library/Caches/rustuml-shared-svg-round10-claude-checker/cmp/target/release/checker-cmp"
+CMP = pathlib.Path.home() / "Library/Caches/rustuml-shared-svg-round11-claude-checker/cmp/target/release/checker-cmp"
 C = re.compile(r"<!--(.*?)-->", re.S)
 DEBUG = "date=1774210426000,tz=AEDT+1100"
 ERRMARK = ["Syntax Error", "Welcome to PlantUML", "An error has occured", "[From string", "(Assumed diagram type:",

@@ -1,0 +1,1420 @@
+{
+ "cases": 34,
+ "trees": {
+  "base": {
+   "java_valid": 30,
+   "strict_match_valid": 0,
+   "viewBox_exact": 10,
+   "comments_exact": 2,
+   "nonzero_exit": 1,
+   "panics": 1,
+   "nonempty_stderr": 1
+  },
+  "merge": {
+   "java_valid": 30,
+   "strict_match_valid": 22,
+   "viewBox_exact": 32,
+   "comments_exact": 24,
+   "nonzero_exit": 2,
+   "panics": 0,
+   "nonempty_stderr": 2
+  },
+  "tip": {
+   "java_valid": 30,
+   "strict_match_valid": 22,
+   "viewBox_exact": 32,
+   "comments_exact": 24,
+   "nonzero_exit": 2,
+   "panics": 0,
+   "nonempty_stderr": 2
+  }
+ },
+ "deltas": {
+  "base->tip": {
+   "gained_match": [
+    "bp_short_entry_d2",
+    "bp_short_exit_d1",
+    "bp_short_exit_d3",
+    "bp_threshold_labels",
+    "bp_wide_entry_d1",
+    "bp_wide_entry_d3",
+    "bp_wide_exit_d2",
+    "no_d1_left_renamed",
+    "no_d2_mid_leaves",
+    "no_d3_deep",
+    "no_outer_note_left_of_image",
+    "no_outer_note_on_leaf_beside_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "no_two_clusters_three_notes",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_strlen_substr",
+    "pua_b_upper_escape_point"
+   ],
+   "viewBox_gained": [
+    "bp_short_entry_d2",
+    "bp_short_exit_d1",
+    "bp_short_exit_d3",
+    "bp_threshold_labels",
+    "bp_wide_entry_d1",
+    "bp_wide_entry_d3",
+    "bp_wide_exit_d2",
+    "no_d1_left_renamed",
+    "no_d2_mid_leaves",
+    "no_d3_deep",
+    "no_outer_note_left_of_image",
+    "no_outer_note_on_leaf_beside_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "no_two_clusters_three_notes",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_strlen_substr",
+    "pua_b_upper_escape_point"
+   ],
+   "output_changed": [
+    "bp_short_entry_d2",
+    "bp_short_exit_d1",
+    "bp_short_exit_d3",
+    "bp_threshold_labels",
+    "bp_wide_entry_d1",
+    "bp_wide_entry_d3",
+    "bp_wide_exit_d2",
+    "fmt_high_eps",
+    "fmt_high_pdf",
+    "fmt_high_png",
+    "fmt_low_eps",
+    "fmt_low_pdf",
+    "fmt_low_png",
+    "fmt_pua_png",
+    "fmt_seq_high_txt",
+    "fmt_seq_low_txt",
+    "no_d1_left_renamed",
+    "no_d2_mid_leaves",
+    "no_d3_deep",
+    "no_outer_note_left_of_image",
+    "no_outer_note_on_leaf_beside_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "no_two_clusters_three_notes",
+    "pua_b_after_lone_high",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_strlen_substr",
+    "pua_b_then_lone_low",
+    "pua_b_upper_escape_point"
+   ],
+   "stderr_changed": [
+    "pua_b_after_lone_high",
+    "pua_b_strlen_substr",
+    "pua_b_then_lone_low"
+   ]
+  },
+  "base->tip_counts": {
+   "gained_match": 22,
+   "viewBox_gained": 22,
+   "output_changed": 33,
+   "stderr_changed": 3
+  },
+  "merge->tip": {},
+  "merge->tip_counts": {},
+  "base->merge": {
+   "gained_match": [
+    "bp_short_entry_d2",
+    "bp_short_exit_d1",
+    "bp_short_exit_d3",
+    "bp_threshold_labels",
+    "bp_wide_entry_d1",
+    "bp_wide_entry_d3",
+    "bp_wide_exit_d2",
+    "no_d1_left_renamed",
+    "no_d2_mid_leaves",
+    "no_d3_deep",
+    "no_outer_note_left_of_image",
+    "no_outer_note_on_leaf_beside_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "no_two_clusters_three_notes",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_strlen_substr",
+    "pua_b_upper_escape_point"
+   ],
+   "viewBox_gained": [
+    "bp_short_entry_d2",
+    "bp_short_exit_d1",
+    "bp_short_exit_d3",
+    "bp_threshold_labels",
+    "bp_wide_entry_d1",
+    "bp_wide_entry_d3",
+    "bp_wide_exit_d2",
+    "no_d1_left_renamed",
+    "no_d2_mid_leaves",
+    "no_d3_deep",
+    "no_outer_note_left_of_image",
+    "no_outer_note_on_leaf_beside_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "no_two_clusters_three_notes",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_strlen_substr",
+    "pua_b_upper_escape_point"
+   ],
+   "output_changed": [
+    "bp_short_entry_d2",
+    "bp_short_exit_d1",
+    "bp_short_exit_d3",
+    "bp_threshold_labels",
+    "bp_wide_entry_d1",
+    "bp_wide_entry_d3",
+    "bp_wide_exit_d2",
+    "fmt_high_eps",
+    "fmt_high_pdf",
+    "fmt_high_png",
+    "fmt_low_eps",
+    "fmt_low_pdf",
+    "fmt_low_png",
+    "fmt_pua_png",
+    "fmt_seq_high_txt",
+    "fmt_seq_low_txt",
+    "no_d1_left_renamed",
+    "no_d2_mid_leaves",
+    "no_d3_deep",
+    "no_outer_note_left_of_image",
+    "no_outer_note_on_leaf_beside_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "no_two_clusters_three_notes",
+    "pua_b_after_lone_high",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_strlen_substr",
+    "pua_b_then_lone_low",
+    "pua_b_upper_escape_point"
+   ],
+   "stderr_changed": [
+    "pua_b_after_lone_high",
+    "pua_b_strlen_substr",
+    "pua_b_then_lone_low"
+   ]
+  },
+  "base->merge_counts": {
+   "gained_match": 22,
+   "viewBox_gained": 22,
+   "output_changed": 33,
+   "stderr_changed": 3
+  }
+ },
+ "per_case": {
+  "bp_short_entry_d2": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 174 389",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 38,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "fa27ccf1ace9b673cf8dc9782f2dac3523297dcf0a475a334079775e3e9c6e35"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "27fc02f26ff3a020e4069734b50fd59710c6aaf2547c2471a2fc85e6d12ae243"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "27fc02f26ff3a020e4069734b50fd59710c6aaf2547c2471a2fc85e6d12ae243"
+   }
+  },
+  "bp_short_exit_d1": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 152 291",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 32,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "6789fbab80dd994772a16f3a6d614ebc90852c98a21e4c3be1d415e928874e59"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "1d1a5e3ec58c87e2b53bea9db3b9e143955e3f7e97a5e99e491cce33a52833a3"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "1d1a5e3ec58c87e2b53bea9db3b9e143955e3f7e97a5e99e491cce33a52833a3"
+   }
+  },
+  "bp_short_exit_d3": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 230 541",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 57,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "867e5e97a86ffff0240e165a45599f9d4eb4942ab74eb4cafab4b026f3b7ddd4"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a6c8a1caf7975741644dce8fd387125e9f21127df4d36b1dddcc8311058b610b"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a6c8a1caf7975741644dce8fd387125e9f21127df4d36b1dddcc8311058b610b"
+   }
+  },
+  "bp_threshold_labels": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 178 315",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 45,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "82c459074dcede2a526f2be34494dc2998934ffe09afa3d2cd0a7b5386a6904f"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0baa08ff56def4fd9015b43b2964421613f27a3815e712c712b7a51a6c38cf90"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0baa08ff56def4fd9015b43b2964421613f27a3815e712c712b7a51a6c38cf90"
+   }
+  },
+  "bp_wide_entry_d1": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 198 366",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 37,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "2888df581ff97921b5234ef14476357235405ab4c5c725b4f2c19dcf80fdb2af"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "318831f6e8a4da33772f745e6e3441f1c19a4be48f5ab16aa010561ec7d85ee8"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "318831f6e8a4da33772f745e6e3441f1c19a4be48f5ab16aa010561ec7d85ee8"
+   }
+  },
+  "bp_wide_entry_d3": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 246 538",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 55,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "04c812fb17667b931424d0963fbeadbc6ebf084a582601e0c8993d9b471702ab"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "900ea75cff17c3c97d4cb8bac53861d8cdae705e8ca7181926a1e5609ca7d710"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "900ea75cff17c3c97d4cb8bac53861d8cdae705e8ca7181926a1e5609ca7d710"
+   }
+  },
+  "bp_wide_exit_d2": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 221 436",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 43,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "8334517da2e9420ea531577d9b069cdfb5b654cafc1e6b03225baf85241e982c"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0a20554d48b7e0625ce652b5bacc5fc6ce467f2e75f73a120cb3d38d428d9f23"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0a20554d48b7e0625ce652b5bacc5fc6ce467f2e75f73a120cb3d38d428d9f23"
+   }
+  },
+  "fmt_high_eps": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "N/A-eps",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "993f22a5edd82b58ccce06ad740b741c7b72019470cea7e081032778c41ec59a"
+   },
+   "merge": {
+    "strict": "N/A-eps",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "d965efb67bf63508a51005243538258a46011454852f747e9b91bdda61a89a05"
+   },
+   "tip": {
+    "strict": "N/A-eps",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "d965efb67bf63508a51005243538258a46011454852f747e9b91bdda61a89a05"
+   }
+  },
+  "fmt_high_pdf": {
+   "java_valid": false,
+   "java_stderr": "java.lang.UnsupportedOperationException: PDF\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.createUGraphic(TextBlockExporter12026.java:267)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:164)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.",
+   "java_viewBox": null,
+   "base": {
+    "strict": "N/A-java-pdf-unavailable",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "976b966bc347ef13b51452062c04d6d2708fe43ab5cd9bd2c8102131a47eb75e"
+   },
+   "merge": {
+    "strict": "N/A-java-pdf-unavailable",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "ca5306859618d5d2693f00cd1d10ebe26807689c1da81c4b088a98d3bce4edb1"
+   },
+   "tip": {
+    "strict": "N/A-java-pdf-unavailable",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "ca5306859618d5d2693f00cd1d10ebe26807689c1da81c4b088a98d3bce4edb1"
+   }
+  },
+  "fmt_high_png": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "14eb4f1117ebf61019a65f13aa5577ca191174a667ffee7c2a821dd2374e7602"
+   },
+   "merge": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "ae9db931c81cd07d53910ba96a63b62ab5ec95ca54558945a11c2718ae5351d4"
+   },
+   "tip": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "ae9db931c81cd07d53910ba96a63b62ab5ec95ca54558945a11c2718ae5351d4"
+   }
+  },
+  "fmt_low_eps": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "N/A-eps",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "61ffb8f6785921dc05261853a8a13ea7e3f2f287a0e1c29aa026d6ff681e48e1"
+   },
+   "merge": {
+    "strict": "N/A-eps",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "ab115f16495ee183c2bf2af0c900b5383bbf5f34ad97085282fd4902d649cfa6"
+   },
+   "tip": {
+    "strict": "N/A-eps",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "ab115f16495ee183c2bf2af0c900b5383bbf5f34ad97085282fd4902d649cfa6"
+   }
+  },
+  "fmt_low_pdf": {
+   "java_valid": false,
+   "java_stderr": "java.lang.UnsupportedOperationException: PDF\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.createUGraphic(TextBlockExporter12026.java:267)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:164)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.",
+   "java_viewBox": null,
+   "base": {
+    "strict": "N/A-java-pdf-unavailable",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "823895b928d03342d4d337d5c80dc12ed1f71a6209546ccf9867415e9c4d5b02"
+   },
+   "merge": {
+    "strict": "N/A-java-pdf-unavailable",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "a42dc2b23ffa3439b0b7e51acf2f8142ffce85962f4871592d33240c8222625e"
+   },
+   "tip": {
+    "strict": "N/A-java-pdf-unavailable",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "a42dc2b23ffa3439b0b7e51acf2f8142ffce85962f4871592d33240c8222625e"
+   }
+  },
+  "fmt_low_png": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "523b0e1480142a313de6b93afb88cb402df755ab5ad68fd69643d895ebff6207"
+   },
+   "merge": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "b38899c5dd7fba8e46235f23b02fbddd2ccf72f90b296f3c32bb7273edd3add0"
+   },
+   "tip": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "b38899c5dd7fba8e46235f23b02fbddd2ccf72f90b296f3c32bb7273edd3add0"
+   }
+  },
+  "fmt_pua_png": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "be6dced41acd035a16cc5b2a1b12e15dc11249298a7818c353faa2fe5d934ac1"
+   },
+   "merge": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "2f716143cc10e36468d626376abd6ec69a6548aee896d72a29688d4d7c2579fc"
+   },
+   "tip": {
+    "strict": "N/A-raster",
+    "ndiff": -1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "2f716143cc10e36468d626376abd6ec69a6548aee896d72a29688d4d7c2579fc"
+   }
+  },
+  "fmt_seq_high_txt": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "141d6bfd21df64dc8a66a9a6f40701e5e20dad228c9216cc836e9a2cd352c01c"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "c82f5c1a140ae8aab19181e97f60e0411e2e058996bcf1c5e23b91b5da25dc8b"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "c82f5c1a140ae8aab19181e97f60e0411e2e058996bcf1c5e23b91b5da25dc8b"
+   }
+  },
+  "fmt_seq_low_txt": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "20f8a466f07617389578b159c364726c4361f02b2e0b972ec3715b7dc4027e02"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "f646eccf8f15839c4fbcbde50835872805015887c44128f1f6725129fbbd7bce"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "f646eccf8f15839c4fbcbde50835872805015887c44128f1f6725129fbbd7bce"
+   }
+  },
+  "fmt_seq_pua_txt": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": null,
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "4bb627668323763666e1b27a757f60531e840953217b57567c1392a52d5d16e4"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "4bb627668323763666e1b27a757f60531e840953217b57567c1392a52d5d16e4"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": null,
+    "viewBox_exact": true,
+    "sha256": "4bb627668323763666e1b27a757f60531e840953217b57567c1392a52d5d16e4"
+   }
+  },
+  "no_d1_left_renamed": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 208 371",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 41,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "18b75fd17f57394d27665136d4d6a4e66c0838b3bbce824bd2dfcffb553bb5e1"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8115f19ae16d8aed7f98b4174653a4ad84870b4e70233ebdea6fe50f0a71bbb2"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8115f19ae16d8aed7f98b4174653a4ad84870b4e70233ebdea6fe50f0a71bbb2"
+   }
+  },
+  "no_d2_mid_leaves": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 245 385",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 45,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "10d7a5a5e39b002036d43e3a825b8ed0bcc508e5b29ecf151925a95ca3642e74"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "842b63d17059f441fee00be39a003c5e92221a2171036ed072f9c898163af281"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "842b63d17059f441fee00be39a003c5e92221a2171036ed072f9c898163af281"
+   }
+  },
+  "no_d3_deep": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 286 514",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 59,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "2d5cc5e1084169e8ee2ff139fd18959b1f021f3029c1fb322c540a02b4c559b4"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2214480a38973411f4eb3522ba0a245e524860424f39f1cfa78a6cfa2287a813"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2214480a38973411f4eb3522ba0a245e524860424f39f1cfa78a6cfa2287a813"
+   }
+  },
+  "no_outer_note_left_of_image": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 183 208",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 21,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "354b96c493546caad93d1abb4b57887a45f3d4467112bf24e0d4bca1d1dd8b00"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5c419f25cb7b45ce8fdafbcb0057bfcb1333e6b16c3fb90a38ff1f51e9c1df3f"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5c419f25cb7b45ce8fdafbcb0057bfcb1333e6b16c3fb90a38ff1f51e9c1df3f"
+   }
+  },
+  "no_outer_note_on_leaf_beside_image": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 183 318",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 27,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "3957e94f27cf6bc3e4a920f0a6da7aa57afa8bf4d34268f4c973b15a53420a9c"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "98f13fbe79024ddbdc090d6d896590e05e8d6c52042e1a232790084464d73c79"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "98f13fbe79024ddbdc090d6d896590e05e8d6c52042e1a232790084464d73c79"
+   }
+  },
+  "no_outer_two_notes_on_image": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 304 318",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 31,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "143a367ee9befd9e967cc47d9b546c50e0a6020441e350a8b2a3d3205eac2197"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ee73cf92b4609acf7eb008cb29665c83f7d6b3cbfaaf3c4fc3465276c7f7be38"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ee73cf92b4609acf7eb008cb29665c83f7d6b3cbfaaf3c4fc3465276c7f7be38"
+   }
+  },
+  "no_root_cluster_note": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 187 401",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 35,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "bea7856228fa809b32ceed9c237155bee0d0697dba5eb32f9b36d02e148181ad"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c0925c31c35aea6b879397ebed891359d1f3ca87f8c66ddb4195cf67332e1b45"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c0925c31c35aea6b879397ebed891359d1f3ca87f8c66ddb4195cf67332e1b45"
+   }
+  },
+  "no_root_two_clusters_notes": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 293 636",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 57,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "c6472b786d8bb9408d657056ca19eb75ce2002fca6b081478319d96cc02fd85f"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a773174fe6f6339fdb1e0608054cbe1e7b5f3fc507eae925e8e7950f94e2ca27"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a773174fe6f6339fdb1e0608054cbe1e7b5f3fc507eae925e8e7950f94e2ca27"
+   }
+  },
+  "no_two_clusters_three_notes": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 451 386",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 62,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "77d780db2462a757eafabc406a4df8750c969bbeed1f45400aec750ea299d341"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5c8b97aada052c4d7f42e842296eb10447d0ad832ff4901c3aa86e9591995921"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5c8b97aada052c4d7f42e842296eb10447d0ad832ff4901c3aa86e9591995921"
+   }
+  },
+  "pua_b_after_lone_high": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83d dbff ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83d dbff ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExpor",
+   "java_viewBox": "0 0 1535 715",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "ef933a1c84051a1153567716afe8c8ac52a7b1994a11bbfbf5b32cfa44c0d7a4"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83d dbff ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83d dbff ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "pua_b_sequence_message": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 138 123",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 10,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "ce9c8e107c45474cc0b32b172be7a104df729901af8805be33fd2e31ef825bc4"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "03454b0f1280777db3b32a8978a3e0522ca3afb094f8511dd5889f210247d377"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "03454b0f1280777db3b32a8978a3e0522ca3afb094f8511dd5889f210247d377"
+   }
+  },
+  "pua_b_size12": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 107 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "8b8e8c98a58b11c17205aa3039a3cc8abd3fac96077cfcdd54f51d2c0b1c5050"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ccf759f605075d508491cc7f73efae1521ab6b0bc214fbed5f16f0b39d6db44d"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ccf759f605075d508491cc7f73efae1521ab6b0bc214fbed5f16f0b39d6db44d"
+   }
+  },
+  "pua_b_size18_bold": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 138 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "39b5245f5da745e1e2284c090b72be949ad3e32648246c1dd9e86c7e6a6be844"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c63505b3267ae003925454f5d0440e43e1f78bd137cd41160d70290f6eaaadd8"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c63505b3267ae003925454f5d0440e43e1f78bd137cd41160d70290f6eaaadd8"
+   }
+  },
+  "pua_b_state_note": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 164 71",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "7f966fb2a73e9636ccacdcfae0f6ce1ce125d589037644e29111d0c127275f39"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8f6d31352c9465681e03ca6fad141d43ed4b51988144e4c8c0949a5c61c26d87"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8f6d31352c9465681e03ca6fad141d43ed4b51988144e4c8c0949a5c61c26d87"
+   }
+  },
+  "pua_b_strlen_substr": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 149 68",
+   "base": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 101,
+    "panic": true,
+    "stderr": "thread 'main' (66564605) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 42 is not a char boundary; it is inside '\\u{10fe80}' (bytes 41..45 of string)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e0f4b0ee31509f68715b46fd1e86f513aa86a76430848321c9a78501f4e17f56"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e0f4b0ee31509f68715b46fd1e86f513aa86a76430848321c9a78501f4e17f56"
+   }
+  },
+  "pua_b_then_lone_low": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:174)\n\tat net.sourceforge.plantu",
+   "java_viewBox": "0 0 1266 715",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "0ca5f7cabdfd648f8aa572322492596bb6271ed01d6332f52e23a9899e304570"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "pua_b_upper_escape_point": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 90 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "6b75891669bd9527f4a50704fe48a66c7b2f2e40a77d677aa22f309c5bcb1fc3"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "57ef4fdab13359cc82b7c919436d88350472ca2f1708bc5641b9acc04ca1a5ca"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "57ef4fdab13359cc82b7c919436d88350472ca2f1708bc5641b9acc04ca1a5ca"
+   }
+  }
+ }
+}

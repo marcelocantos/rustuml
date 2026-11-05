@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+class "Dawn Vow gym kit" as E1
+@enduml
