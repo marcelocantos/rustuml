@@ -1,0 +1,7 @@
+@startyaml
+a: 1.50
+b: 010
+c: ~
+d: yes
+e: 1e3
+@endyaml

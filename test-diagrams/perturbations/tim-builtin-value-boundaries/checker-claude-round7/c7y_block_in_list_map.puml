@@ -1,0 +1,7 @@
+@startyaml
+- name: one
+  text: |
+    hello
+    world
+- name: two
+@endyaml

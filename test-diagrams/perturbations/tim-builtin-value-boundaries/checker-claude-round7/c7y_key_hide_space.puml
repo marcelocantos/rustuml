@@ -1,0 +1,4 @@
+@startyaml
+hide me: x
+k: v
+@endyaml

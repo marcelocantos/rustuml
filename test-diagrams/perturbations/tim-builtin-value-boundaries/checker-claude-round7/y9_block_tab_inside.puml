@@ -1,0 +1,5 @@
+@startyaml
+note: |
+  a	b
+after: x
+@endyaml

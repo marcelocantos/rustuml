@@ -1,0 +1,7 @@
+@startyaml
+head: |
+  first
+  sec	ond
+flag: [x, 'y']
+tail: v
+@endyaml

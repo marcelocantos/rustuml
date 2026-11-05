@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+class "Quay 가-" as Q
+@enduml

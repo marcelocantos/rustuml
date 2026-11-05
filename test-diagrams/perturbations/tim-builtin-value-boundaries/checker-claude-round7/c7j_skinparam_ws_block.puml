@@ -1,0 +1,6 @@
+@startjson
+  skinparam {
+    x y
+  }
+{"a": 1}
+@endjson

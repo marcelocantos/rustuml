@@ -1,0 +1,6 @@
+@startyaml
+note: |
+	x	q
+		y
+next: 1
+@endyaml

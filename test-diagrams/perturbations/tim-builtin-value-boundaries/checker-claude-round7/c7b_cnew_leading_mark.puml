@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+class "𝅧Wharf" as K
+@enduml

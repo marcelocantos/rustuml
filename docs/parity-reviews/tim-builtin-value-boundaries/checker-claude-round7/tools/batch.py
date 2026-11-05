@@ -12,7 +12,8 @@ BINS = [a.split("=", 1) for a in sys.argv[4:]]
 CMP = pathlib.Path.home() / "Library/Caches/rustuml-shared-svg-round7-claude-checker/cmp/target/release/checker-cmp"
 C = re.compile(r"<!--(.*?)-->", re.S)
 DEBUG = "date=1774210426000,tz=AEDT+1100"
-ERRMARK = ["Syntax Error", "Welcome to PlantUML", "An error has occured", "[From string", "(Assumed diagram type:"]
+ERRMARK = ["Syntax Error", "Welcome to PlantUML", "An error has occured", "[From string", "(Assumed diagram type:",
+           "does&#160;not&#160;sound&#160;like&#160;YAML", "does&#160;not&#160;sound&#160;like&#160;JSON", "Your data does not sound like"]
 STDLIB = str(pathlib.Path.home() / "work/github.com/plantuml/plantuml-stdlib/stdlib")
 
 def png_size(b):

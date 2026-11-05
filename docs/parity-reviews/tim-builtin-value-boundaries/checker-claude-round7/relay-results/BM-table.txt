@@ -1,0 +1,29 @@
+c7b_verdana_rtl_space              -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF4/c
+c7b_verdana_rtl_space_ctrl         -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF4/c
+c7b_verdana_tail_space             -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF5/c
+c7b_verdana_tail_space_ctrl        -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF4/c
+c7b_verdanabold_rtl_space          -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF4/c
+c7b_verdanabold_rtl_space_ctrl     -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF4/c
+c7b_verdana_digit_rtl              -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF5/c
+c7b_verdana_digit_rtl_ctrl         -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF4/c
+c7b_verdana_arabic_rtl_space       -tsvg  J0 base:0/MATCH0/- merge:0/MATCH0/c tip:0/MATCH0/c
+c7b_verdana_arabic_rtl_space_ctrl  -tsvg  J0 base:0/MATCH0/- merge:0/MATCH0/c tip:0/MATCH0/c
+c7b_arial_rtl_space                -tsvg  J0 base:0/DIFF5/- merge:0/DIFF4/c tip:0/DIFF4/c
+c7b_arial_rtl_space_ctrl           -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF4/c
+c7b_helv_rtl_space                 -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_helv_rtl_space_ctrl            -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_thai_rlm_digit                 -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_thai_rlm_digit_ctrl            -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_deva_rlm_digit                 -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_deva_rlm_digit_ctrl            -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_cnew_latin_mark                -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_cnew_latin_mark_ctrl           -tsvg  J0 base:0/MATCH0/- merge:0/MATCH0/c tip:0/MATCH0/c
+c7b_cnew_leading_mark              -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_cnew_mc                        -tsvg  J0 base:0/MATCH0/- merge:0/MATCH0/c tip:0/MATCH0/c
+c7b_cnew_thai_run                  -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_cnew_thai_run_ctrl             -tsvg  J0 base:0/DIFF4/- merge:0/DIFF4/c tip:0/DIFF4/c
+c7b_cnewbold_latin_mark            -tsvg  J0 base:0/DIFF5/- merge:0/DIFF5/c tip:0/DIFF5/c
+c7b_cnewbold_latin_mark_ctrl       -tsvg  J0 base:0/MATCH0/- merge:0/MATCH0/c tip:0/MATCH0/c
+base strict 5 / 26
+merge strict 5 / 26
+tip strict 5 / 26

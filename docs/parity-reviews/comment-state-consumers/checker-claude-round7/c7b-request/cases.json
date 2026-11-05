@@ -1,0 +1,235 @@
+{
+ "schema_version": 1,
+ "batch": "C7B",
+ "cases": [
+  {
+   "name": "c7b_verdana_rtl_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "rtl-component",
+    "hebrew-run",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7b_verdana_rtl_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7b_verdana_tail_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "ltr-component",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7b_verdana_tail_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7b_verdanabold_rtl_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "rtl-component",
+    "hebrew-run",
+    "verdana-bold"
+   ]
+  },
+  {
+   "name": "c7b_verdanabold_rtl_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana-bold"
+   ]
+  },
+  {
+   "name": "c7b_verdana_digit_rtl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "en-level-2",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7b_verdana_digit_rtl_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7b_verdana_arabic_rtl_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "rtl-component",
+    "arabic-run",
+    "verdana",
+    "gpos"
+   ]
+  },
+  {
+   "name": "c7b_verdana_arabic_rtl_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7b_arial_rtl_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "rtl-component",
+    "hebrew-run",
+    "arial"
+   ]
+  },
+  {
+   "name": "c7b_arial_rtl_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "arial"
+   ]
+  },
+  {
+   "name": "c7b_helv_rtl_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "rtl-component",
+    "hebrew-run",
+    "helv"
+   ]
+  },
+  {
+   "name": "c7b_helv_rtl_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "helv"
+   ]
+  },
+  {
+   "name": "c7b_thai_rlm_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "rlm",
+    "thai-vs-common",
+    "lucida"
+   ]
+  },
+  {
+   "name": "c7b_thai_rlm_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "lucida"
+   ]
+  },
+  {
+   "name": "c7b_deva_rlm_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "rlm",
+    "indic-vs-common",
+    "lucida"
+   ]
+  },
+  {
+   "name": "c7b_deva_rlm_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "lucida"
+   ]
+  },
+  {
+   "name": "c7b_cnew_latin_mark",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "default-run",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "c7b_cnew_latin_mark_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "c7b_cnew_leading_mark",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "no-base",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "c7b_cnew_mc",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "mc",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "c7b_cnew_thai_run",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "thai-run",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "c7b_cnew_thai_run_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "couriernew"
+   ]
+  },
+  {
+   "name": "c7b_cnewbold_latin_mark",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "couriernew-bold"
+   ]
+  },
+  {
+   "name": "c7b_cnewbold_latin_mark_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "couriernew-bold"
+   ]
+  }
+ ]
+}

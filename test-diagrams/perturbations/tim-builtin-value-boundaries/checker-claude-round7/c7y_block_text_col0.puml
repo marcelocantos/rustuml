@@ -1,0 +1,6 @@
+@startyaml
+gamma: |
+  one
+loose words here
+omega: z
+@endyaml

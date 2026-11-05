@@ -1,0 +1,10 @@
+@startyaml
+alpha: |
+  one
+   two
+beta:
+  gamma: |
+      three
+    four
+  delta: x
+@endyaml

@@ -1,0 +1,3 @@
+@startuml
+class Quay [[http://example.com/q{Tide&#13;Pool}]]
+@enduml

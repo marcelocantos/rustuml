@@ -1,0 +1,3 @@
+@startjson
+{"o": {"k\r": "v\r\n", "m": ["\r"]}}
+@endjson
