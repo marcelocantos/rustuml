@@ -1,0 +1,24 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-10.json and comment-state-consumers/review-11.json (d8242a8dc) bounded_next_obligations",
+ "base": "merge of parity-recovery-2026-11-03 95291dc6b (code identical to 9834a7194) into d8242a8dc (code identical to 14dd5efae): d06667af0",
+ "sub_mechanism": "obligation 2 (gate): the routing of a (family, bold, italic) face into width consumers is pinned by the lib gate for every modelled family's italic and bold-italic slot",
+ "finding": "Checker round-9 drill M15 (text_render.rs family_text_width: ChainFace::for_style(ChainFamily::Arial, bold, italic) -> (.., bold, false)) changes no lib test and no perturbation: Arial's italic and plain coverage agree on every stored input.",
+ "planned_change": [
+  "text_render.rs test: for each family whose faces differ by style (Arial, Helvetica, Verdana, Menlo, Courier New) and each of its four (bold, italic) slots, find from the generated coverage tables (not from a hand list) a probe string on which the slot's face and every other face of the family give different widths through the face's width function; assert that the public consumer path text_render::measure_with_family_and_face(text, size, bold, italic, family name) equals the width in ChainFace::for_style's face, and differs from every other slot's face. A slot with no discriminating code point in the stored data fails the test (so the test cannot pass vacuously when data change).",
+  "Lucida Grande (SansSerif): the derived italic slots are asserted to measure as their upright faces through the same public path on the discriminating strings of the upright faces (CFontManager.registerItalicDerived).",
+  "Drill: M15 and its analogues for Helvetica, Verdana (family_table_text_width / helvetica_text_width call sites), Menlo (mono_text_width_styled) and Courier New (courier_new_text_width), each with italic and bold-italic, fail the new test; unmodified passes."
+ ],
+ "m08_note": "Checker drill M08 (Helvetica.ttc removed from monkeyman-round9/font-hashes.txt with SHA256SUMS and the constant forged consistently) survives because the earlier Monkey Man records (monkeyman-round6) still hash that font file, so the hash record is redundant and no drift escapes. No fix required; recorded.",
+ "regeneration_record": "The exact command that regenerates crates/rustuml-render/src/font_chain_coverage.rs from tools/font-chain-reference/monkeyman-round9 (the checker had to reconstruct it) is written into the generator's docstring and the extraction's README, and re-run to show byte-identical output.",
+ "precommitted_measurement": {
+  "oracle": "mutation drill on a private copy",
+  "expect": [
+   "10 routing mutations (5 families x italic, bold-italic) each fail the new test; the unmodified tree passes; regeneration with the recorded command is byte-identical."
+  ]
+ }
+}
