@@ -711,6 +711,10 @@ const RECTANGLE_MARGIN_Y: f64 = 10.0;
 // `TextBlockUtils.withMargin(..., 1, 0)` before `USymbolComponent2.asSmall`
 // merges it with the label. The wrapper contributes one pixel on each side.
 const STEREOTYPE_MARGIN_X: f64 = 1.0;
+/// The stereotype face: plantuml.skin 79-80 `stereotype { FontStyle italic }`,
+/// the style `EntityImageDescription` builds `fcStereo` from (167-169).
+const STEREOTYPE_FONT_BOLD: bool = false;
+const STEREOTYPE_FONT_ITALIC: bool = true;
 // PlantUML `USymbolDatabase.getMargin()` returns (10, 10, 24, 5).
 const DATABASE_MARGIN_X: f64 = 10.0;
 const DATABASE_MARGIN_TOP: f64 = 24.0;
@@ -1622,6 +1626,7 @@ pub fn render_with_oracle(
                 style.font_size,
                 &style.font_family,
                 style.font_bold,
+                style.font_italic,
             )
         })
         .collect();
@@ -2747,7 +2752,7 @@ pub fn render_with_oracle(
             // block + 15px margin each side), then translate it onto the oracle
             // position via the captured label baseline — exactly as the
             // deployment renderer does for `cloud` nodes.
-            emit_cloud_component(&mut svg, comp, oracle_rect, x, y, fill, &body_style);
+            emit_cloud_component(&mut svg, text_metrics, oracle_rect, x, y, fill, &body_style);
             // Skip the rect body and tab-icon block below.
         } else if matches!(comp.kind, ComponentElementKind::Actor) {
             emit_actor_component(&mut svg, x, y, w, h, fill, &body_style);
@@ -2943,8 +2948,8 @@ pub fn render_with_oracle(
                     font_size: render_style.font_size as u32,
                     font_family: &render_style.font_family,
                     fill: &render_style.font_color,
-                    bold: false,
-                    italic: true,
+                    bold: STEREOTYPE_FONT_BOLD,
+                    italic: STEREOTYPE_FONT_ITALIC,
                     underline: false,
                     skip_underline: false,
                 },
@@ -4114,24 +4119,21 @@ const CLOUD_MARGIN: f64 = 15.0;
 /// the shared text-emission block below, which already honours the oracle's
 /// `text_x`/`text_y`. This mirrors `deployment::emit_cloud_entity` but draws
 /// only the shape (the component path emits the label separately).
+///
+/// Java `USymbolCloud.asSmall` draws the outline around the dimension of the
+/// merged stereotype/label block it is given, the block layout measured, so
+/// the outline takes the element's [`ComponentTextMetrics`] (drawn faces).
 fn emit_cloud_component(
     svg: &mut SvgBuilder,
-    comp: &Component,
+    text_metrics: &ComponentTextMetrics,
     oracle_rect: Option<&EntityRect>,
     fallback_x: f64,
     fallback_y: f64,
     fill: &str,
     body_style: &str,
 ) {
-    let label_w = text_render::measure(&comp.label, FONT_SIZE, false);
-    let (block_w, block_h) = if comp.stereotypes.is_empty() {
-        (label_w, pm::text_height(FONT_SIZE))
-    } else {
-        let stereo = format!("\u{00AB}{}\u{00BB}", comp.stereotypes.join(", "));
-        let stereo_w = text_render::measure(&stereo, FONT_SIZE, false);
-        (label_w.max(stereo_w), pm::text_height(FONT_SIZE) * 2.0)
-    };
-    let width = block_w + 2.0 * CLOUD_MARGIN;
+    let block_h = text_metrics.label_height + text_metrics.stereotype_heights.iter().sum::<f64>();
+    let width = text_metrics.content_width + 2.0 * CLOUD_MARGIN;
     let height = block_h + 2.0 * CLOUD_MARGIN;
     let path = crate::cloud_shape::generate(width, height);
 
@@ -4143,7 +4145,9 @@ fn emit_cloud_component(
     let first_text_x = oracle_rect.and_then(|r| r.text_x_values.first().copied());
     let first_text_y = oracle_rect.and_then(|r| r.text_y_values.first().copied());
     let tx = match first_text_x {
-        Some(label_x) if comp.stereotypes.is_empty() => label_x + label_w / 2.0 - width / 2.0,
+        Some(label_x) if text_metrics.stereotype_widths.is_empty() => {
+            label_x + text_metrics.label_width / 2.0 - width / 2.0
+        }
         Some(_) => fallback_x - path.min_xy().0,
         // `USymbolCloud.asSmall` retains the generated frontier's local
         // coordinate frame when there is no oracle rectangle.
@@ -4635,14 +4639,27 @@ struct ComponentTextMetrics {
     content_width: f64,
 }
 
+/// The merged stereotype/label block measured in the faces it is drawn in.
+/// Java `EntityImageDescription` hands `symbol.asSmall` the `desc` TextBlock
+/// built from the element style's `FontConfiguration` (`Style.getUFont`:
+/// FontStyle gives italic and weight) and the stereotype block built from the
+/// stereotype style's (italic in plantuml.skin); `asSmall` measures and draws
+/// those same blocks, so the label is measured in `label_bold`/`label_italic`
+/// and each stereotype italic, as `render_with_oracle` emits them.
 fn component_text_metrics(
     comp: &Component,
     font_size: f64,
     font_family: &str,
     label_bold: bool,
+    label_italic: bool,
 ) -> ComponentTextMetrics {
-    let label_width =
-        text_render::measure_with_family(&comp.label, font_size, label_bold, font_family);
+    let label_width = text_render::measure_with_family_and_face(
+        &comp.label,
+        font_size,
+        label_bold,
+        label_italic,
+        font_family,
+    );
     let label_height = text_render::label_height_with_family(&comp.label, font_size, font_family);
     let label_first_baseline_ascent =
         text_render::label_first_baseline_ascent_with_family(&comp.label, font_size, font_family);
@@ -4653,7 +4670,15 @@ fn component_text_metrics(
         .collect();
     let stereotype_widths: Vec<f64> = stereotype_labels
         .iter()
-        .map(|label| text_render::measure_with_family(label, font_size, false, font_family))
+        .map(|label| {
+            text_render::measure_with_family_and_face(
+                label,
+                font_size,
+                STEREOTYPE_FONT_BOLD,
+                STEREOTYPE_FONT_ITALIC,
+                font_family,
+            )
+        })
         .collect();
     let stereotype_heights: Vec<f64> = stereotype_labels
         .iter()
@@ -4735,7 +4760,7 @@ fn calc_component_dim_with_symbol_style(
 
 #[cfg(test)]
 fn calc_component_dim(comp: &Component) -> CompDim {
-    let text_metrics = component_text_metrics(comp, FONT_SIZE, "sans-serif", false);
+    let text_metrics = component_text_metrics(comp, FONT_SIZE, "sans-serif", false, false);
     calc_component_dim_with_metrics(comp, &text_metrics)
 }
 
@@ -8844,8 +8869,13 @@ mod tests {
         };
 
         for component in &component_diagram.components {
-            let metrics =
-                super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+            let metrics = super::component_text_metrics(
+                component,
+                super::FONT_SIZE,
+                "sans-serif",
+                false,
+                false,
+            );
             let stereotype_width = metrics.stereotype_widths[0];
             assert!(
                 stereotype_width > metrics.label_width,
@@ -8891,7 +8921,7 @@ mod tests {
             .find(|component| component.id == "MixedNode101")
             .expect("renamed component");
         let metrics =
-            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false, false);
         let dim = super::calc_component_dim_with_metrics(component, &metrics);
         assert!(metrics.label_height > super::LINE_HEIGHT);
         assert_eq!(dim.height, super::COMPONENT_BASE_H + metrics.label_height);
@@ -9296,7 +9326,7 @@ mod tests {
         };
         let component = &component_diagram.components[0];
         let metrics =
-            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false, false);
         assert!(
             metrics.stereotype_widths[0] > metrics.label_width,
             "the perturbation must exercise a stereotype-dominated text block"

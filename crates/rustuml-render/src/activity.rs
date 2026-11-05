@@ -2853,6 +2853,7 @@ fn layout_action_node(text: &str, palette: &Palette) -> LayoutNode {
         &text,
         palette.action_font_size,
         palette.action_text_bold,
+        palette.action_text_italic,
         &palette.action_font_family,
     );
     LayoutNode::Action {
@@ -2894,10 +2895,11 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
             }
             ActivityStep::DeprecatedColorAction(dca) => {
                 let text = action_text_for_family(&dca.text, &palette.action_font_family);
-                let tw = text_render::measure_with_family(
+                let tw = text_render::measure_with_family_and_face(
                     &text,
                     palette.action_font_size,
                     palette.action_text_bold,
+                    palette.action_text_italic,
                     &palette.action_font_family,
                 );
                 let warning = deprecated_warning(&dca.color);
@@ -8873,9 +8875,19 @@ fn action_height(text: &str, pad_y: f64, font_family: &str, font_size: f64) -> f
         .max(ACTION_MIN_HEIGHT)
 }
 
-fn action_text_width(text: &str, font_size: f64, bold: bool, font_family: &str) -> f64 {
+/// Width of an action's text block in the face it is drawn in: Java
+/// `FtileBox` (139-167) sizes the box from the TextBlock built with the
+/// style's `FontConfiguration` (`Style.getUFont`: FontStyle italic and
+/// weight) and draws that block, so `bold` and `italic` are the drawn face's.
+fn action_text_width(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+    font_family: &str,
+) -> f64 {
     if let Some(rows) = action_table_rows(text) {
-        return action_table_col_widths(&rows, font_size, bold, font_family)
+        return action_table_col_widths(&rows, font_size, bold, italic, font_family)
             .iter()
             .sum();
     }
@@ -8884,7 +8896,14 @@ fn action_text_width(text: &str, font_size: f64, bold: bool, font_family: &str) 
     action_label_lines(text)
         .iter()
         .map(|line| {
-            action_line_width_with_family(line, font_size, bold, font_family, &mut number_counters)
+            action_line_width_with_family(
+                line,
+                font_size,
+                bold,
+                italic,
+                font_family,
+                &mut number_counters,
+            )
         })
         .fold(0.0f64, f64::max)
 }
@@ -8933,16 +8952,18 @@ fn action_table_col_widths(
     rows: &[creole::TableRow],
     font_size: f64,
     bold: bool,
+    italic: bool,
     font_family: &str,
 ) -> Vec<f64> {
     let cols = rows.iter().map(|r| r.cells.len()).max().unwrap_or(0);
     let mut widths = vec![0.0_f64; cols];
     for row in rows {
         for (idx, cell) in row.cells.iter().enumerate() {
-            let text_w = text_render::measure_with_family(
+            let text_w = text_render::measure_with_family_and_face(
                 &cell.text,
                 font_size,
                 bold || cell.is_header,
+                italic,
                 font_family,
             );
             widths[idx] = widths[idx].max(text_w + ACTION_TABLE_CELL_PAD_X * 2.0);
@@ -8966,31 +8987,30 @@ fn action_line_width_with_family(
     line: &str,
     font_size: f64,
     bold: bool,
+    italic: bool,
     font_family: &str,
     number_counters: &mut Vec<usize>,
 ) -> f64 {
+    let measure = |text: &str| {
+        text_render::measure_with_family_and_face(text, font_size, bold, italic, font_family)
+    };
     match creole::parse_line(line.trim()) {
         creole::CreoleLine::Bullet { level, content } => {
             number_counters.clear();
             let indent = ACTION_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
-            indent
-                + ACTION_LIST_ITEM_TEXT_X
-                + text_render::measure_with_family(&content, font_size, bold, font_family)
+            indent + ACTION_LIST_ITEM_TEXT_X + measure(&content)
         }
         creole::CreoleLine::Numbered { level, content } => {
             let number = next_action_number(level, number_counters);
             let indent = ACTION_LIST_ITEM_TEXT_X * level.saturating_sub(1) as f64;
             let marker = format!("{number}.");
-            indent
-                + text_render::measure_with_family(&marker, font_size, bold, font_family)
-                + ACTION_LIST_NUMBER_GAP
-                + text_render::measure_with_family(&content, font_size, bold, font_family)
+            indent + measure(&marker) + ACTION_LIST_NUMBER_GAP + measure(&content)
         }
         _ => {
             number_counters.clear();
             // Keep leading whitespace (PlantUML renders it as left padding);
             // only trailing whitespace is stripped.
-            text_render::measure_with_family(line.trim_end(), font_size, bold, font_family)
+            measure(line.trim_end())
         }
     }
 }
@@ -12923,7 +12943,8 @@ fn emit_node_with_repeat_extra(
                 y,
             );
             if let Some(rows) = action_table_rows(text) {
-                let col_widths = action_table_col_widths(&rows, *font_size, *bold, font_family);
+                let col_widths =
+                    action_table_col_widths(&rows, *font_size, *bold, *italic, font_family);
                 let line_h = text_render::label_height_with_family("", *font_size, font_family);
                 let ascent = text_render::label_ascent_with_family("", *font_size, font_family);
                 let table_left = rect_x + *pad_x;
@@ -19316,10 +19337,11 @@ fn emit_repeat(
         let label_text = action_text_for_family(label, &svg.palette.action_font_family);
         let backward_node = LayoutNode::Action {
             text: label_text.clone(),
-            text_width: text_render::measure_with_family(
+            text_width: text_render::measure_with_family_and_face(
                 &label_text,
                 svg.palette.action_font_size,
                 svg.palette.action_text_bold,
+                svg.palette.action_text_italic,
                 &svg.palette.action_font_family,
             ),
             pad_x: svg.palette.action_pad_x,
@@ -34210,10 +34232,11 @@ fn typed_ftile_emit_backward(
 ) {
     let text = action_text_for_family(label, &svg.palette.action_font_family);
     let node = LayoutNode::Action {
-        text_width: text_render::measure_with_family(
+        text_width: text_render::measure_with_family_and_face(
             &text,
             svg.palette.action_font_size,
             svg.palette.action_text_bold,
+            svg.palette.action_text_italic,
             &svg.palette.action_font_family,
         ),
         text,

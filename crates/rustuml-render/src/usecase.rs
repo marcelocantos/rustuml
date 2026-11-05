@@ -27,6 +27,10 @@ const FONT_SIZE: f64 = 14.0;
 const STROKE: &str = "#181818";
 const ENTITY_FILL: &str = "#F1F1F1";
 const TEXT_COLOR: &str = "#000000";
+/// The stereotype face: plantuml.skin 79-80 `stereotype { FontStyle italic }`;
+/// `EntityImageDescription` / `EntityImageUseCase` measure and draw it.
+const STEREOTYPE_FONT_BOLD: bool = false;
+const STEREOTYPE_FONT_ITALIC: bool = true;
 
 const ACTOR_HEAD_R: f64 = 8.0;
 const ACTOR_BODY_LEN: f64 = 27.0;
@@ -172,6 +176,13 @@ fn skin_thickness(
         .unwrap_or_else(|| fc(default))
 }
 
+/// The (bold, italic) face a style `FontStyle` value selects, read as the
+/// component renderer reads it (`apply_component_entity_style`).
+fn usecase_font_face(value: &str) -> (bool, bool) {
+    let value = value.to_ascii_lowercase();
+    (value.contains("bold"), value.contains("italic"))
+}
+
 fn canonical_usecase_font_family(value: &str) -> String {
     let raw = value.trim();
     let quoted = (raw.starts_with('"') && raw.ends_with('"'))
@@ -200,6 +211,11 @@ struct SkinColors {
     actor_font_color: String,
     actor_font_family: String,
     actor_font_size: u32,
+    /// The actor title face (Java `Style.getUFont` FontStyle: weight and
+    /// italic), from `actorFontStyle` (FromSkinparamToStyle addMagic) or a
+    /// style `FontStyle`; measured and drawn alike.
+    actor_font_bold: bool,
+    actor_font_italic: bool,
     actor_stereo_font_color: String,
     uc_fill: Option<String>,
     uc_border: Option<String>,
@@ -207,6 +223,9 @@ struct SkinColors {
     uc_font_color: String,
     uc_font_family: String,
     uc_font_size: u32,
+    /// The use-case body face, as `actor_font_bold`/`actor_font_italic`.
+    uc_font_bold: bool,
+    uc_font_italic: bool,
     uc_stereo_font_color: String,
     arrow_color: String,
     arrow_head_color: String,
@@ -279,6 +298,8 @@ impl SkinColors {
                 &["actorFontSize", "defaultFontSize"],
                 default_font_size,
             ),
+            actor_font_bold: false,
+            actor_font_italic: false,
             actor_stereo_font_color: skin_color(skinparams, "actorStereotypeFontColor")
                 .unwrap_or(actor_font_color),
             uc_fill: skin_fill(skinparams, "usecaseBackgroundColor", gradient_defs),
@@ -296,6 +317,8 @@ impl SkinColors {
                 &["usecaseFontSize", "defaultFontSize"],
                 default_font_size,
             ),
+            uc_font_bold: false,
+            uc_font_italic: false,
             uc_stereo_font_color: skin_color(skinparams, "usecaseStereotypeFontColor")
                 .unwrap_or(uc_font_color),
             // Link styles are rebuilt from each Link's captured StyleBuilder
@@ -389,6 +412,9 @@ impl SkinColors {
         {
             result.actor_font_size = value.round() as u32;
         }
+        if let Some(value) = style.property("fontStyle") {
+            (result.actor_font_bold, result.actor_font_italic) = usecase_font_face(value);
+        }
 
         // Java `EntityImageDescription` uses
         // `forStereotypeItself(stereotype)` for the stereotype text style.
@@ -453,6 +479,9 @@ impl SkinColors {
             && let Ok(value) = value.parse::<f64>()
         {
             result.uc_font_size = value.round() as u32;
+        }
+        if let Some(value) = style.property("fontStyle") {
+            (result.uc_font_bold, result.uc_font_italic) = usecase_font_face(value);
         }
 
         let stereotype_style = cascade.resolve_entity_at_source_line(
@@ -1200,8 +1229,13 @@ fn note_dim(note: &UseCaseNote) -> NoteDim {
 
 fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     let font_size = skin.actor_font_size as f64;
-    let label_w =
-        text_render::measure_with_family(&actor.label, font_size, false, &skin.actor_font_family);
+    let label_w = text_render::measure_with_family_and_face(
+        &actor.label,
+        font_size,
+        skin.actor_font_bold,
+        skin.actor_font_italic,
+        &skin.actor_font_family,
+    );
     let label_h =
         text_render::label_height_with_family(&actor.label, font_size, &skin.actor_font_family);
     let label_first_baseline_ascent = text_render::label_first_baseline_ascent_with_family(
@@ -1213,10 +1247,11 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
         .stereotype
         .as_ref()
         .map(|s| {
-            text_render::measure_with_family(
+            text_render::measure_with_family_and_face(
                 &format!("\u{00AB}{s}\u{00BB}"),
                 skin.actor_font_size as f64,
-                false,
+                STEREOTYPE_FONT_BOLD,
+                STEREOTYPE_FONT_ITALIC,
                 &skin.actor_font_family,
             ) + ACTOR_STEREOTYPE_MARGIN_X * 2.0
         })
@@ -1270,16 +1305,22 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
 
 fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     let font_size = skin.uc_font_size as f64;
-    let label_w =
-        text_render::measure_with_family(&uc.label, font_size, false, &skin.uc_font_family);
+    let label_w = text_render::measure_with_family_and_face(
+        &uc.label,
+        font_size,
+        skin.uc_font_bold,
+        skin.uc_font_italic,
+        &skin.uc_font_family,
+    );
     let stereo_w = uc
         .stereotype
         .as_ref()
         .map(|s| {
-            text_render::measure_with_family(
+            text_render::measure_with_family_and_face(
                 &format!("\u{00AB}{s}\u{00BB}"),
                 font_size,
-                false,
+                STEREOTYPE_FONT_BOLD,
+                STEREOTYPE_FONT_ITALIC,
                 &skin.uc_font_family,
             )
         })
@@ -1291,7 +1332,15 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     };
     let body_widths: Vec<f64> = body_lines
         .iter()
-        .map(|line| text_render::measure_with_family(line, font_size, false, &skin.uc_font_family))
+        .map(|line| {
+            text_render::measure_with_family_and_face(
+                line,
+                font_size,
+                skin.uc_font_bold,
+                skin.uc_font_italic,
+                &skin.uc_font_family,
+            )
+        })
         .collect();
     let body_heights: Vec<f64> = body_lines
         .iter()
@@ -1334,6 +1383,7 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
             0.0,
             font_size,
             &skin.uc_font_family,
+            (STEREOTYPE_FONT_BOLD, STEREOTYPE_FONT_ITALIC),
         ));
     }
     for (line, &top) in body_lines.iter().zip(&body_line_tops) {
@@ -1342,6 +1392,7 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
             body_offset_y + top,
             font_size,
             &skin.uc_font_family,
+            (skin.uc_font_bold, skin.uc_font_italic),
         ));
     }
     let body_x = (block_w - body_block_w) / 2.0;
@@ -1367,11 +1418,14 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     }
 }
 
+/// `base_face` is the (bold, italic) face of the block's `FontConfiguration`;
+/// a Creole run's own bold/italic adds to it (`FontConfiguration.add` 301).
 fn use_case_footprint_atoms(
     content: &str,
     top: f64,
     font_size: f64,
     font_family: &str,
+    base_face: (bool, bool),
 ) -> Vec<FootprintLine> {
     // Java provenance: `BodyFactory.create2` builds the use-case body through
     // `CreoleStripeSimpleParser`, whose `StripeSimple.drawU` emits one
@@ -1420,8 +1474,8 @@ fn use_case_footprint_atoms(
         let width = text_render::measure_with_family_and_face(
             &atom_text,
             size,
-            segment.style.bold,
-            segment.style.italic,
+            segment.style.bold || base_face.0,
+            segment.style.italic || base_face.1,
             family,
         );
         let height = text_render::label_height_with_family(&atom_text, size, family);
@@ -2898,8 +2952,8 @@ fn render_actor(
             font_size: skin.actor_font_size,
             font_family: &skin.actor_font_family,
             fill: &skin.actor_font_color,
-            bold: false,
-            italic: false,
+            bold: skin.actor_font_bold,
+            italic: skin.actor_font_italic,
             underline: false,
             skip_underline: false,
         },
@@ -2925,8 +2979,8 @@ fn render_actor(
                 font_size: skin.actor_font_size,
                 font_family: &skin.actor_font_family,
                 fill: &skin.actor_stereo_font_color,
-                bold: false,
-                italic: true,
+                bold: STEREOTYPE_FONT_BOLD,
+                italic: STEREOTYPE_FONT_ITALIC,
                 underline: false,
                 skip_underline: false,
             },
@@ -3039,8 +3093,8 @@ fn render_use_case(
                 font_size: skin.uc_font_size,
                 font_family: &skin.uc_font_family,
                 fill: &skin.uc_stereo_font_color,
-                bold: false,
-                italic: true,
+                bold: STEREOTYPE_FONT_BOLD,
+                italic: STEREOTYPE_FONT_ITALIC,
                 underline: false,
                 skip_underline: false,
             },
@@ -3075,8 +3129,8 @@ fn render_use_case(
                 font_size: skin.uc_font_size,
                 font_family: &skin.uc_font_family,
                 fill: &skin.uc_font_color,
-                bold: false,
-                italic: false,
+                bold: skin.uc_font_bold,
+                italic: skin.uc_font_italic,
                 underline: false,
                 skip_underline: false,
             },
@@ -3133,10 +3187,11 @@ fn render_use_case(
             }
         };
         for (body_line, line) in uc.description.iter().enumerate() {
-            let lw = text_render::measure_with_family(
+            let lw = text_render::measure_with_family_and_face(
                 line,
                 skin.uc_font_size as f64,
-                false,
+                skin.uc_font_bold,
+                skin.uc_font_italic,
                 &skin.uc_font_family,
             );
             let lx = captured_x
@@ -3187,8 +3242,8 @@ fn render_use_case(
                     font_size: skin.uc_font_size,
                     font_family: &skin.uc_font_family,
                     fill: &skin.uc_font_color,
-                    bold: false,
-                    italic: false,
+                    bold: skin.uc_font_bold,
+                    italic: skin.uc_font_italic,
                     underline: false,
                     skip_underline: false,
                 },
@@ -5046,6 +5101,7 @@ FreshOperator --> FreshCheckpoint
             0.0,
             skin.uc_font_size as f64,
             &skin.uc_font_family,
+            (false, false),
         );
 
         // Java's `CreoleStripeSimpleParser` leaves this plain line in one

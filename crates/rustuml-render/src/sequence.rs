@@ -1321,13 +1321,18 @@ struct ParticipantTextBlock<'a> {
     height: f64,
 }
 impl<'a> ParticipantTextBlock<'a> {
-    fn new(text: &'a str, size: f64, family: &str, bold: bool) -> Self {
+    /// `bold`/`italic` are the face the stripe is drawn in:
+    /// `AbstractTextualComponent` (73-95) measures and draws one TextBlock
+    /// built with the participant style's `FontConfiguration` for the label
+    /// and the stereotype style's UFont (italic) for the stereotype line.
+    fn new(text: &'a str, size: f64, family: &str, bold: bool, italic: bool) -> Self {
         let lines: Vec<_> = text
             .split('\n')
             .map(|line| {
                 // StripeSimple#getAtoms supplies a space for a present empty line.
                 let line = if line.is_empty() { " " } else { line };
-                let width = text_render::measure_with_family(line, size, bold, family);
+                let width =
+                    text_render::measure_with_family_and_face(line, size, bold, italic, family);
                 (
                     line,
                     width,
@@ -4999,6 +5004,7 @@ impl PlantUmlSvg {
                 self.participant_font_size as f64,
                 &self.participant_font_family,
                 !stereotype && self.participant_font_bold,
+                *stereotype || self.participant_font_italic,
             );
             block.draw(
                 &mut self.buf,
@@ -5654,6 +5660,7 @@ impl PlantUmlSvg {
                         self.participant_font_size as f64,
                         &self.participant_font_family,
                         !stereotype && self.participant_font_bold,
+                        *stereotype || self.participant_font_italic,
                     ),
                     *stereotype,
                 )
@@ -7753,6 +7760,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         participant_font_size_f,
                         &participant_font_family,
                         false,
+                        true,
                     )
                     .width
                 })
@@ -7763,6 +7771,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participant_font_size_f,
                 &participant_font_family,
                 participant_font_bold,
+                participant_font_italic,
             );
             let tw = label_block.width;
             let label_height = label_block.height;
@@ -7774,6 +7783,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         participant_font_size_f,
                         &participant_font_family,
                         false,
+                        true,
                     )
                     .height
                 })
@@ -16392,8 +16402,13 @@ mod tests {
     #[test]
     fn participant_display_measures_and_paints_each_stripe() {
         for size in [11, 19] {
-            let block =
-                ParticipantTextBlock::new("Long label\n\nEnd", size as f64, "sans-serif", false);
+            let block = ParticipantTextBlock::new(
+                "Long label\n\nEnd",
+                size as f64,
+                "sans-serif",
+                false,
+                false,
+            );
             assert_eq!(block.lines.len(), 3);
             assert_eq!(block.lines[1].0, " ");
             assert_eq!(
