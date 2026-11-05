@@ -31,6 +31,7 @@
  "evidence/gates/9834a7194.exit": "68a5754a03e9e4f01817fabfeba6c95c21d60ec31621210702084ea87f72e478",
  "evidence/gates/9834a7194.golden_no_oracle.log.tail": "b76635c5af31f5124bca77668776abf8f9846aa426bc3f980d9e412700457f96",
  "evidence/gates/9834a7194.no_oracle_failure_names.txt": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+ "evidence/gates/ac840a3da.guard_cats.txt": "ee329b0778cd54f149dc2ee80ddbe76f7497b8b828e8724eb42ccc476c0ee941",
  "evidence/gates/clippy-summary.json": "e9d239486a1913f588287de790534959f39e7b10e41f87244dfa9823424f94a3",
  "evidence/gates/clippy.out": "43d5dfa2265926a91b80207adbf8e37b589042b30c842ebd2839c62341c30248",
  "evidence/gates/merge.decimal_ratchet.txt": "1998bf62119cfece84512bb365420e985eaf23172cbe414d88fc1b082c792dd0",
