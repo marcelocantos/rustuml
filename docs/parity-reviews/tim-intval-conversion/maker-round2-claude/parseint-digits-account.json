@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-intval-conversion",
+  "sub_mechanism": "Integer.parseInt digit set, sign and overflow (rejection d539f9a08; regression attributed to f663c083d)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_runtime": "Temurin 21.0.13 (docs/parity-reviews/tim-evaluated-event-stream/reference-environment.json); java.lang.Character in JDK 21 uses Unicode 15.0",
+  "java_locations": [
+    "tim/builtin/IntVal.java#executeReturnFunction: Integer.parseInt(values.get(0).toString()), and on NumberFormatException the TIM error 'Cannot convert S to integer.'",
+    "java/lang/Integer.java#parseInt(String,int) (JDK 21): empty string fails; a first char below '0' must be '-' (limit Integer.MIN_VALUE) or '+' and must not be the whole string; each following UTF-16 unit is converted with Character.digit(char, 10), and a negative digit fails; the value is accumulated negatively with the multmin and limit+digit checks, so -2147483648 parses and 2147483648 fails.",
+    "java/lang/Character.java#digit(char,int): for radix 10 a char is a digit when its general category is Nd (DECIMAL_DIGIT_NUMBER) and the result is its decimal value; a surrogate unit is never a digit, so supplementary Nd digits fail."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs#eval_builtin 'intval': text.parse::<i32>() accepts only ASCII digits."
+  ],
+  "causal_divergence": "str::parse::<i32> agrees with Integer.parseInt on sign and overflow but rejects every non-ASCII Nd digit, so %intval(\"+１２３\") and Devanagari or Arabic-Indic digits are fatal TIM errors in Rust and integers in Java.",
+  "invariant": "%intval accepts exactly the strings Integer.parseInt(s, 10) accepts, giving the same value: an optional single leading '+' or '-', then one or more BMP Nd units, each worth its decimal value, with Java's overflow bounds.",
+  "planned_change": "Replace text.parse::<i32>() with java_parse_int, a direct port of Integer.parseInt(s, 10) over UTF-16 units. Character.digit(char, 10) becomes a table of the 37 BMP Nd zero code points in Unicode 15.0; each run of ten has consecutive values. Error text is unchanged.",
+  "perturbation_axes": [
+    "Arabic-Indic, extended Arabic-Indic, Devanagari, Bengali, Thai, fullwidth, Myanmar Tai Laing (U+A9F0) digits",
+    "mixed scripts in one number",
+    "'+' and '-' with Unicode digits; a lone sign; a doubled sign",
+    "MIN_VALUE and MIN_VALUE-1, MAX_VALUE and MAX_VALUE+1, written in non-ASCII digits",
+    "a supplementary Nd digit (U+1D7CE MATHEMATICAL BOLD DIGIT ZERO), which Java rejects",
+    "No (superscript two) and Nl (Roman numeral) characters, which Java rejects"
+  ],
+  "precommitted_measurement": {
+    "oracle": "intval_parses_complete_signed_display_and_preserves_first_error plus a new unit test over the axes; whole-output CLI over tim-intval-conversion/checker6 and fresh probes; status sweep",
+    "expect_fixed": [
+      "perturbations/tim-intval-conversion/checker6/intval_unicode_digits (no longer a new valid-input error)",
+      "perturbations/tim-intval-conversion/checker6/intval_unicode_json"
+    ],
+    "expect": "every intval output identical to the tip except inputs with non-ASCII Nd digits; zero new errors"
+  }
+}

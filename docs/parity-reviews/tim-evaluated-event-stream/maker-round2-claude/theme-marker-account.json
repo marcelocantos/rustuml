@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-evaluated-event-stream",
+  "sub_mechanism": "unshipped-theme marker (rejection d539f9a08, review-4 regression attributed to bdda66260)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/EaterTheme.java#analyze/getTheme: the theme name is evaluated with applyFunctionsAndVariables; getTheme calls ThemeUtils.loadTheme and throws 'Cannot load theme NAME' only when it returns null.",
+    "theme/ThemeUtils.java#loadTheme/loadBundledOrLocalTheme (lines 72-102): with no 'from', the jar resource /themes/puml-theme-NAME.puml is tried first. The pinned jar bundles every name under src/main/resources/themes, including amiga, blueprint, carbon-gray, crt-amber, crt-green, mimeograph, mono, plain and sunlust.",
+    "tim/TContext.java#executeTheme: a loaded theme's lines execute as ordinary TIM input, so their skinparams and styles reach the diagram."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs#try_theme: since bdda66260 a name Rust does not bundle pushes only push_directive_placeholder (ParserOnly(\"\")).",
+    "crates/rustuml-parser/src/preprocess/themes.rs#get_theme_source: the nine names above are deliberately not bundled (licence).",
+    "renderer consumers of the marker: rustuml-render class.rs (plain_theme_uses_legacy_class_icon_and_font_defaults), skinparam.rs (__theme arm), sequence.rs (__theme arm), activity.rs (activity_theme_uses_node_action_padding)."
+  ],
+  "causal_divergence": "Base 9834a7194 emitted 'skinparam __theme NAME' at the directive's source line for every non-empty active theme name; the renderers emulate the effect of the nine Java-bundled themes Rust cannot ship from that marker. bdda66260 moved theme loading to an EvaluatedEvent::Theme that exists only when the source is bundled, so for those nine names Java loads a theme (ThemeUtils finds the jar resource) while Rust now drops every trace of it.",
+  "invariant": "A theme that Java's loadBundledOrLocalTheme loads from its jar but Rust does not bundle leaves the same parser-only marker the base did, at the same source line, and contributes nothing else to identity. Bundled themes keep the evaluated Theme event unchanged.",
+  "planned_change": "In try_theme, when the name (no 'from') is in a JAVA_BUNDLED_UNSHIPPED_THEMES table taken from the pinned jar listing, push EvaluatedEvent::ParserOnly(source_line_marker(line, 'skinparam __theme NAME')). Every other path is unchanged: bundled themes, 'from' themes, unknown names (placeholder), inactive or too-deep directives.",
+  "perturbation_axes": [
+    "each unshipped theme (plain, mono, amiga) across class, sequence and activity",
+    "a theme name computed from a variable",
+    "an unshipped theme inside an inactive !if branch (no marker)",
+    "a bundled theme after an unshipped one (cerulean override gain kept)"
+  ],
+  "precommitted_measurement": {
+    "oracle": "unit test class::tests::plain_theme_uses_legacy_class_icon_and_font_defaults; whole-output CLI on all goldens and perturbations versus the merged base 50f4f5414; the theme_* pairs under checker-claude-shared-svg; golden_no_oracle failure names versus 9834a7194",
+    "expect_fixed": [
+      "class::tests::plain_theme_uses_legacy_class_icon_and_font_defaults passes",
+      "golden edge-cases/edge_theme_plain and theme_plain_class_note return to the base bytes (Verdana, #FFFFFF icon fill)"
+    ],
+    "expect": "no theme output differs from base except where the evaluated Theme event already changed a bundled theme; preproc_complex_theme_override stays a no-oracle pass"
+  }
+}
