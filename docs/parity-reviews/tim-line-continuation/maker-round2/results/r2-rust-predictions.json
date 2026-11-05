@@ -1,0 +1,1732 @@
+[
+ {
+  "name": "r2_seq_tab_end_after_backslash",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "1083cc72c1c43057dbe2463ad371fdd46682750d40d7db5f0de12c47a541ca9e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "1083cc72c1c43057dbe2463ad371fdd46682750d40d7db5f0de12c47a541ca9e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "fbde971ffbe6469b491b94e629b0670b286cfef5e48a1996da1b54dd3881ed9e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late",
+     "@enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_backslash_end_after_backslash",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "1083cc72c1c43057dbe2463ad371fdd46682750d40d7db5f0de12c47a541ca9e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "e652250edf6f2d317de7fd4ad39965b8f694a95041bd468668f9c8c6ccea6fdb",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late \\enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_class_indented_end_after_backslash",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "8131e116c19d8a8f664c6f86e087fd372e30ec91bcdbebcde19533149b54f598",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "2",
+     "2"
+    ],
+    "texts": [
+     "Pine",
+     "Larch",
+     "grows \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "8131e116c19d8a8f664c6f86e087fd372e30ec91bcdbebcde19533149b54f598",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "2",
+     "2"
+    ],
+    "texts": [
+     "Pine",
+     "Larch",
+     "grows \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "d07a11f2c557e74d225ca90f93fbb2ced6745820299fc1124a2ae6fe3bf624da",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "2",
+     "2"
+    ],
+    "texts": [
+     "Pine",
+     "Larch",
+     "grows    @enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_mindmap_indented_end_after_backslash",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "f97910ecd9bed830ac0f612c22cab93a078a035c4b925a23b6478eb67408e15a",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Delta",
+     "Reed \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "f97910ecd9bed830ac0f612c22cab93a078a035c4b925a23b6478eb67408e15a",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Delta",
+     "Reed \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "3aef2ddd100973162befdc2ae9689d7a0b38a1dcf78fac999239245912c01c62",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Delta",
+     "Reed   @endmindmap"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_indented_end_then_more",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "7a694250aebeeaff0e45437e58748cc20c872bf273725ab6a9a19f5dbed74f4e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one   @enduml",
+     "two"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_col0_end_swallowed_then_indented",
+  "intended_valid": false,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   }
+  }
+ },
+ {
+  "name": "r2_seq_named_start_indented_end",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "476507832ceadb8643a11aab2f72554efb01cf11b368a692fae2239dda8c48b7",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one   @enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_indented_start_and_end",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "476507832ceadb8643a11aab2f72554efb01cf11b368a692fae2239dda8c48b7",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "one   @enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_state_indented_end_after_comment",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "14bb31f37c99ff710f82476bc84faad64079cd9043aee5fb0ac32f6b400112c9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Calm",
+     "rest \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "14bb31f37c99ff710f82476bc84faad64079cd9043aee5fb0ac32f6b400112c9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Calm",
+     "rest \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "c7d2e19f372a4f403fb515df8563e1f4a536099ebc5837fcb3e6cbd370f4c2de",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Calm",
+     "rest   @enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_indented_end_crlf",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "1083cc72c1c43057dbe2463ad371fdd46682750d40d7db5f0de12c47a541ca9e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "1083cc72c1c43057dbe2463ad371fdd46682750d40d7db5f0de12c47a541ca9e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "eb5f27b66c794db19f530de175500c148108e9454c5b2cb9f3ac185cbfd7d833",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Wren",
+     "Wren",
+     "Finch",
+     "Finch",
+     "late   @enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_include_tail_then_blank",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "04798813b7f78a04519f07204fc57661182806c12d4c6ab72229df842de477a9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "after"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "04798813b7f78a04519f07204fc57661182806c12d4c6ab72229df842de477a9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "after"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "ba11220e2271fba7522e47544fefd109d3920748ee81ce77e118b79ead956dcf",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift",
+     "after"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "ba11220e2271fba7522e47544fefd109d3920748ee81ce77e118b79ead956dcf",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift",
+     "after"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_include_tail_then_comment",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "04798813b7f78a04519f07204fc57661182806c12d4c6ab72229df842de477a9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "after"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "04798813b7f78a04519f07204fc57661182806c12d4c6ab72229df842de477a9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "after"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "ba11220e2271fba7522e47544fefd109d3920748ee81ce77e118b79ead956dcf",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift",
+     "after"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "10e7d47cbe3383bb0665aef818ee7d9fff02b9e7b518bc60b3a66f72a5d367b1",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift Egret -&gt; Heron : after"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_include_tail_then_if",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "f3d240e7c98de5038eef87b64d6e587edc2296e77c8d2a9c74653a57b21c56c3",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "inside"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "f3d240e7c98de5038eef87b64d6e587edc2296e77c8d2a9c74653a57b21c56c3",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "4"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "inside"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "e13200b57e4a2c24cfab43a097a164b4e22accd89764e7351a6474de430fd107",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "2",
+     "4"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift",
+     "inside"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "b64e478958ca28410e7ea40acd90010a42ba32bb9067442472c1d367528f7d7e",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4",
+     "4"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift Egret -&gt; Heron : inside"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_include_tail_then_include",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "6d5493f6a42648a2a5f45e969944a7fbac53407aee564dae4042005ef31b1d73",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "plain",
+     "main"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "6d5493f6a42648a2a5f45e969944a7fbac53407aee564dae4042005ef31b1d73",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift \\",
+     "plain",
+     "main"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "3c65ae39aaef743d0f6c36b57dc6e1bf6e622cb60c9a732a2f62e201ed3db0aa",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift Egret -&gt; Heron : plain",
+     "main"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "3c65ae39aaef743d0f6c36b57dc6e1bf6e622cb60c9a732a2f62e201ed3db0aa",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "drift Egret -&gt; Heron : plain",
+     "main"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_include_two_tails_then_define",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"and \\\\\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "921958f94e7e2703082235939802d201d326f8c026274aa77ba75e7c0457cbd3",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "one \\",
+     "main"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "800343c35546fdbd205836fed34c41d0d437dd0153a5063f91f7afb3d9af66a3",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "one and",
+     "main"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "e9eab4311069638815187369843fe4f9964a4eeeaf005b73f0a33f618dcc0e60",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3",
+     "3"
+    ],
+    "texts": [
+     "Heron",
+     "Heron",
+     "Egret",
+     "Egret",
+     "one and Egret -&gt; Heron : main"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_class_include_link_tail_before_end",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "3df4e3111e91f38a12a50769e2319128d03b8825a358fa1ff657c831d6e45d5a",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "2",
+     "3"
+    ],
+    "texts": [
+     "Alder",
+     "Rowan",
+     "tail \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "3df4e3111e91f38a12a50769e2319128d03b8825a358fa1ff657c831d6e45d5a",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "2",
+     "3"
+    ],
+    "texts": [
+     "Alder",
+     "Rowan",
+     "tail \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "985198d4d913c27cb87c5dd3f80333b8944fcad3d81f32f380e15ac5c9ad5211",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "2"
+    ],
+    "texts": [
+     "Alder",
+     "Rowan"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "e0453d8443ebbda1da82e659937450fee2382d241bcbef98d6314783b73b8d4d",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "2",
+     "4"
+    ],
+    "texts": [
+     "Alder",
+     "Rowan",
+     "tail @enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_seq_include_tail_no_end",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "12c5b2aeb5b54f81dc16ae80f0cae05593e3e3e3ac7cdb0f74b330b1f41880ec",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ],
+    "texts": [
+     "Egret",
+     "Egret",
+     "Heron",
+     "Heron",
+     "head",
+     "drift \\"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "12c5b2aeb5b54f81dc16ae80f0cae05593e3e3e3ac7cdb0f74b330b1f41880ec",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "2"
+    ],
+    "texts": [
+     "Egret",
+     "Egret",
+     "Heron",
+     "Heron",
+     "head",
+     "drift \\"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "236c3764c325d7007b63bc088c23ace5962717a56270c2a383b518faaca5d819",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1"
+    ],
+    "texts": [
+     "Egret",
+     "Egret",
+     "Heron",
+     "Heron",
+     "head"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "9584776ab8c4e74de820d9ba2bcc7cfeea35ede2dc689eeeac2ef9f9325c1e41",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Egret",
+     "Egret",
+     "Heron",
+     "Heron",
+     "head",
+     "drift @enduml"
+    ]
+   }
+  }
+ },
+ {
+  "name": "r2_component_include_tail_then_variable",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "ad9567c4bc8406c71ffe7d89cd574f76e83cc8b4f89e29c744789363436330e9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "3",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Alder",
+     "Rowan",
+     "Ash",
+     "wire \\",
+     "n3"
+    ]
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "ad9567c4bc8406c71ffe7d89cd574f76e83cc8b4f89e29c744789363436330e9",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "1",
+     "1",
+     "3",
+     "1",
+     "3"
+    ],
+    "texts": [
+     "Alder",
+     "Rowan",
+     "Ash",
+     "wire \\",
+     "n3"
+    ]
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "bee3ec48c84df293771d4026b50a5d96d9bf4181cbfaa6aa3853a9f3753c908f",
+    "stderr": "",
+    "panic": false,
+    "lines": [
+     "2",
+     "2",
+     "3",
+     "2",
+     "3"
+    ],
+    "texts": [
+     "Alder",
+     "Rowan",
+     "Ash",
+     "wire",
+     "n3"
+    ]
+   },
+   "rustuml-tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"[Alder] --> [Rowan] : wire [Rowan] --> [Ash] : n3\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": []
+   }
+  }
+ },
+ {
+  "name": "r2_ditaa_continued_row",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "3c37f4ead00683dea76a750189f8e6cd5b33c4318b999536c2ac7643a4452359",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash \\\\\\n| Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "3c37f4ead00683dea76a750189f8e6cd5b33c4318b999536c2ac7643a4452359",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash \\\\\\n| Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "3c37f4ead00683dea76a750189f8e6cd5b33c4318b999536c2ac7643a4452359",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash \\\\\\n| Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "3c37f4ead00683dea76a750189f8e6cd5b33c4318b999536c2ac7643a4452359",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash \\\\\\n| Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   }
+  }
+ },
+ {
+  "name": "r2_ditaa_continued_row_joined",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "adc3cebbef54559d84e579b167442c43fbb720683a78b75694e3df14a1110f80",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash | Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "adc3cebbef54559d84e579b167442c43fbb720683a78b75694e3df14a1110f80",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash | Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "adc3cebbef54559d84e579b167442c43fbb720683a78b75694e3df14a1110f80",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash | Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "adc3cebbef54559d84e579b167442c43fbb720683a78b75694e3df14a1110f80",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [
+     "@startditaa\\n+--------+\\n| Ash | Elm    |\\n+--------+\\n@endditaa\\n"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   }
+  }
+ },
+ {
+  "name": "r2_uml_ditaa_continued_row",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [],
+    "ast_head": ""
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Welcome to RustUML!",
+     "&#160;",
+     "You can start with a simple UML Diagram like:",
+     "&#160;",
+     "Bob-&gt;Alice:&#160;Hello",
+     "&#160;",
+     "Or",
+     "&#160;",
+     "class&#160;Example",
+     "&#160;",
+     "You will find more information about RustUML syntax on",
+     "https://github.com/marcelocantos/rustuml"
+    ],
+    "ast_rows": [
+     "@startuml\\nditaa\\n+--------+\\n| Ash | Elm    |\\n+--------+\\n@enduml\\n"
+    ],
+    "ast_head": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n  "
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [],
+    "ast_head": ""
+   },
+   "rustuml-tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [],
+    "ast_head": ""
+   }
+  }
+ },
+ {
+  "name": "r2_uml_ditaa_continued_row_joined",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [],
+    "ast_head": ""
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Welcome to RustUML!",
+     "&#160;",
+     "You can start with a simple UML Diagram like:",
+     "&#160;",
+     "Bob-&gt;Alice:&#160;Hello",
+     "&#160;",
+     "Or",
+     "&#160;",
+     "class&#160;Example",
+     "&#160;",
+     "You will find more information about RustUML syntax on",
+     "https://github.com/marcelocantos/rustuml"
+    ],
+    "ast_rows": [
+     "@startuml\\nditaa\\n+--------+\\n| Ash | Elm    |\\n+--------+\\n@enduml\\n"
+    ],
+    "ast_head": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n  "
+   },
+   "rustuml-base": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [],
+    "ast_head": ""
+   },
+   "rustuml-tip": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n",
+    "panic": false,
+    "lines": [],
+    "texts": [],
+    "ast_rows": [],
+    "ast_head": ""
+   }
+  }
+ },
+ {
+  "name": "r2_ditaa_backslash_before_end",
+  "intended_valid": true,
+  "results": {
+   "rustuml-93bf53e18": {
+    "exit": 0,
+    "stdout_sha256": "87a76673276b8a12e279f8a9573256afe8df9c0819746aaa45d99c3b9988ecf1",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Oak"
+    ],
+    "ast_rows": [
+     "@startditaa\\n+-----+\\n| Oak |\\n+-----+ \\\\\\n@endditaa\\n",
+     "Oak"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-9834a7194": {
+    "exit": 0,
+    "stdout_sha256": "87a76673276b8a12e279f8a9573256afe8df9c0819746aaa45d99c3b9988ecf1",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Oak"
+    ],
+    "ast_rows": [
+     "@startditaa\\n+-----+\\n| Oak |\\n+-----+ \\\\\\n@endditaa\\n",
+     "Oak"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-base": {
+    "exit": 0,
+    "stdout_sha256": "87a76673276b8a12e279f8a9573256afe8df9c0819746aaa45d99c3b9988ecf1",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Oak"
+    ],
+    "ast_rows": [
+     "@startditaa\\n+-----+\\n| Oak |\\n+-----+ \\\\\\n@endditaa\\n",
+     "Oak"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   },
+   "rustuml-tip": {
+    "exit": 0,
+    "stdout_sha256": "87a76673276b8a12e279f8a9573256afe8df9c0819746aaa45d99c3b9988ecf1",
+    "stderr": "",
+    "panic": false,
+    "lines": [],
+    "texts": [
+     "Oak"
+    ],
+    "ast_rows": [
+     "@startditaa\\n+-----+\\n| Oak |\\n+-----+ \\\\\\n@endditaa\\n",
+     "Oak"
+    ],
+    "ast_head": "Ditaa(\n    DitaaDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n        "
+   }
+  }
+ }
+]
